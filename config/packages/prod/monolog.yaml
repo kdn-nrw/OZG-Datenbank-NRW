@@ -1,0 +1,35 @@
+monolog:
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: nested
+            excluded_http_codes: [404, 405]
+        nested:
+            type: rotating_file
+            max_files: 14
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        console:
+            type: console
+            process_psr_3_messages: false
+            channels: ["!event", "!doctrine"]
+        deprecation:
+            type: rotating_file
+            max_files: 7
+            path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+        deprecation_filter:
+            type: filter
+            handler: deprecation
+            max_level: info
+            channels: ["php"]
+
+
+        database_filter:
+            type:         fingers_crossed
+            action_level: error
+            handler:      database
+            excluded_http_codes: [404, 405]
+        database:
+            type:      service
+            id:        'mindbase_log.database'

@@ -1,0 +1,12 @@
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+<div>
+    {% for serviceSystem in object.serviceSystems %}
+        {% if loop.index > 1 %}
+            ,
+        {% endif %}
+        {{ serviceSystem.name }}
+    {% endfor %}
+</div>
+{% endblock %}

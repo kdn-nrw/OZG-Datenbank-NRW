@@ -1,0 +1,66 @@
+# https://sonata-project.org/bundles/admin/3-x/doc/reference/dashboard.html
+sonata_admin:
+    dashboard:
+        blocks:
+            - { position: top,  type: App\Block\RecentSolutionsBlock, class: 'col-xs-12', settings: {title: 'app.entity.solution.recent_solutions', translation_domain: 'messages', mode: 'admin'} }
+            - { position: left,  type: sonata.admin.block.admin_list, settings: { groups: [app.ozg_implementation_group, app.settings_group, app.service_group] } }
+            - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [app.implementation_group, mindbase_admin.menu.system] } }
+
+        groups:
+            app.ozg_implementation_group:
+                label: app.menu.ozg_implementation_group
+                label_catalogue: messages
+                icon: '<i class="fa fa-building"></i>'
+                items:
+                    - App\Admin\SolutionAdmin
+                    - App\Admin\PriorityAdmin
+            app.settings_group:
+                label: app.menu.settings_group
+                label_catalogue: messages
+                icon: '<i class="fa fa-wrench"></i>'
+                items:
+                    - App\Admin\SubjectAdmin
+                    - App\Admin\SituationAdmin
+                    - App\Admin\ServiceSystemAdmin
+                    - App\Admin\ServiceAdmin
+            app.service_group:
+                label: app.menu.service_group
+                label_catalogue: messages
+                icon: '<i class="fa fa-building"></i>'
+                items:
+                    - App\Admin\CommuneAdmin
+                    - App\Admin\ServiceProviderAdmin
+                    #- App\Admin\CommuneServiceAdmin
+                    #- App\Admin\ServiceSolutionAdmin
+            app.implementation_group:
+                label: app.menu.implementation_group
+                label_catalogue: messages
+                icon: '<i class="fa fa-building"></i>'
+                items:
+                    - App\Admin\MaturityAdmin
+                    - App\Admin\StatusAdmin
+                    - App\Admin\PortalAdmin
+                    - App\Admin\LaboratoryAdmin
+                    - App\Admin\SpecializedProcedureAdmin
+                    - App\Admin\ManufacturerAdmin
+                    - App\Admin\AuthenticationAdmin
+            mindbase_admin.menu.system:
+                label: mindbase_admin.menu.system
+                #label_catalogue: messages
+                label_catalogue: SonataAdminBundle
+                icon: '<i class="fa fa-cog"></i>'
+                items:
+                    - sonata.user.admin.user
+                    - sonata.user.admin.group
+                    - Mindbase\SettingsBundle\Controller\Admin\SettingAdmin
+                    - Mindbase\EmailBundle\Controller\Admin\EmailTemplateAdmin
+                    - Mindbase\LogBundle\Controller\Admin\SysLogAdmin
+                    - shapecode_cron.cronjob
+                    - shapecode_cron.cronjob_result
+
+sonata_block:
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]
+        App\Block\RecentSolutionsBlock:
+            contexts: [admin]

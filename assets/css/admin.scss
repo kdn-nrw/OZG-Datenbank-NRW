@@ -1,0 +1,16 @@
+body {
+    background-color: lightgray;
+}
+
+body.login-page {
+    background-image: url("../images/login-background.jpg");
+    background-size: cover;
+
+    .login-box {
+        background-color: white;
+
+    }
+    .login-logo, .register-logo {
+        padding-top: 25px;
+    }
+}

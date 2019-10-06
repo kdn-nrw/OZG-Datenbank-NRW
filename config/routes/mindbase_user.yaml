@@ -1,0 +1,3 @@
+_mindbase_admin.sonata_user:
+    resource: '@MindbaseAdminBundle/Resources/config/routing/sonata_user.yaml'
+    prefix:   /

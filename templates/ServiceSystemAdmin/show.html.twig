@@ -1,0 +1,114 @@
+
+{% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
+
+
+{% block show_groups %}
+    {# @var object \App\Entity\ServiceSystem #}
+    <div class="row">
+        {% block field_row %}
+            {% for code in groups %}
+                {% set show_group = admin.showgroups[code] %}
+                <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
+                    <div class="{{ show_group.box_class }}">
+                        <div class="box-header">
+                            <h4 class="box-title">
+                                {% block show_title %}
+                                    {{ 'app.entity.service_system.name'|trans }}: <strong>{{ object.name }}</strong>
+                                    ({{ elements['serviceKey']|render_view_element(object)}})
+                                {% endblock %}
+                            </h4>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-8">
+                                    {{ elements['situation.subject']|render_view_element(object)}}
+                                    &gt;
+                                    {{ elements['situation']|render_view_element(object)}}
+                                </div>
+                                <div class="col-xs-12 col-md-4 text-right">
+                                    {{ elements['status']|render_view_element(object)}}
+                                </div>
+                                <div class="col-xs-12 col-md-8">
+                                </div>
+                                <div class="col-xs-12 col-md-4 text-right">
+                                    {{ elements['priority']|render_view_element(object)}}
+                                </div>
+                            </div>
+                            {% if object.description %}
+                                <div class="item-property">
+                                    {{ object.description|nl2br }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    {% if object.services|length > 0 %}
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h4 class="box-title">
+                                {{ 'app.menu.service'|trans }}
+                            </h4>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-bordered table-condensed">
+                                <tr>
+                                    <th>
+                                        {{ 'app.entity.service.name'|trans }}
+                                    </th>
+                                    <th>
+                                        {{ 'app.entity.service.service_key'|trans }}
+                                    </th>
+                                    <th>
+                                        {{ 'app.entity.service.service_type'|trans }}
+                                    </th>
+                                    <th>
+                                        {{ 'app.entity.service.law_shortcuts'|trans }}
+                                    </th>
+                                    <th>
+                                        {{ 'app.entity.service.relevance1'|trans }}
+                                    </th>
+                                    <th>
+                                        {{ 'app.entity.service.relevance2'|trans }}
+                                    </th>
+                                    <th>
+                                        {{ 'app.entity.service.status'|trans }}
+                                    </th>
+                                </tr>
+                            {% for child in object.services %}
+                                <tr>
+                                    <td>
+                                        {{ child.name }}
+                                    </td>
+                                    <td>
+                                        {{ child.serviceKey }}
+                                    </td>
+                                    <td>
+                                        {{ child.serviceType }}
+                                    </td>
+                                    <td>
+                                        {{ child.lawShortcuts }}
+                                    </td>
+                                    <td>
+                                        {{ child.relevance1 }}
+                                    </td>
+                                    <td>
+                                        {{ child.relevance2 }}
+                                    </td>
+                                    <td>
+                                        {% if child.status %}
+                                            {{ child.status.name }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endblock %}
+
+    </div>
+{% endblock %}

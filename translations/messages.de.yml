@@ -1,0 +1,156 @@
+app:
+  menu:
+    settings_group: OZG Basisdaten
+    service_group: NRW Basisdaten
+    implementation_group: Umsetzung Basisdaten
+    ozg_implementation_group: OZG Umsetzung
+    subject: Themenfeld
+    situation: Lage
+    service_system: Leistungsbündel
+    service: Leistungen
+    commune: Kommunen + Ämter
+    service_provider: IT Dienstleister
+    maturity: Reifegrade
+    status: Status
+    portal: Portal
+    laboratory: Labore
+    specialized_procedure: Fachverfahren
+    solution: Lösungen
+    priority: Prioritäten
+    #service_solution: Dienstleistung-Lösungen
+    office: Ämter
+    authentication: Authentifizierung
+    manufacturer: Hersteller
+    service_solution: Leistung
+  entity:
+    commune:
+      actions:
+        show: Kommune anzeigen
+        edit: Kommune bearbeiten
+        solution_list: Lösungen anzeigen
+        office_list: Ämter anzeigen
+      name: Name
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      contact: Ansprechpartner der Kommune
+      offices: Ämter
+      service_providers: IT Dienstleister
+      group:
+        general_data: Allgemein
+        services_data: Dienstleistungen
+        offices: Ämter
+    service_provider:
+      actions:
+        show: IT Dienstleister anzeigen
+        edit: IT Dienstleister bearbeiten
+      name: Name
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      contact: OZG-Ansprechpartner
+      #solutions: Lösungen
+      communes: Kommunen
+    subject:
+      name: Name
+      situations: Lage
+    situation:
+      name: Name
+      subject: Themenfeld
+      services: Dienstleistungen
+    maturity:
+      name: Name
+      description: Beschreibung
+    office:
+      name: Name
+      description: Beschreibung
+      url: Url
+      contact: Kontakt
+    priority:
+      name: Name
+      level: Level
+      description: Beschreibung
+    status:
+      name: Name
+      description: Beschreibung
+    portal:
+      name: Name
+      description: Beschreibung
+      service_provider: IT Dienstleister
+      url: Url
+    laboratory:
+      name: Name
+      description: Beschreibung
+      service_providers: Teilnehmer IT Dienstleister
+      url: Url
+      participants_other: Teilnehmer sonstige
+    specialized_procedure:
+      name: Name
+      description: Beschreibung
+      url: Url
+      solutions: Lösungen
+      manufacturers: Hersteller
+    service_system:
+      name: OZG Leistung
+      service_key: OZG-ID
+      situation: Lage
+      execution: Kommunal Vollzug
+      contact: Kontakt
+      description: Beschreibung
+      services: Leistungen
+      status: Status
+      priority: Priorität
+    service:
+      name: Leika-Bezeichnung
+      service_key: Leika-ID
+      service_type: Leika-Typ
+      service_system: OZG Leistungsbündel
+      legal_basis: Rechtsgrundlage
+      laws: Gesetze
+      law_shortcuts: Gesetzeskürzel
+      relevance1: SDG1
+      relevance2: SDG2
+      #execution: Kommunal Vollzug
+      status: Status
+      priority: Priorität
+    solution:
+      actions:
+        show: Lösung anzeigen
+        edit: Lösung bearbeiten
+        service_solution_list: Enthaltene Leistungen anzeigen
+      recent_solutions: Aktuelle Lösungen
+      view_all: Alle Lösungen anzeigen
+      no_solution_found: Keine Lösungen gefunden
+      service_provider: IT Dienstleister
+      custom_provider: Anbieter (sonstige)
+      specialized_procedures: Anbindung Fachverfahren
+      portals: Portale
+      communes: Kommenen
+      name: Name
+      description: Beschreibung
+      service_solutions: Enthaltene Leistungen
+      status: Status
+      url: Url
+      contact: Ansprechpartner
+      service_systems: OZG Leistungsbündel
+      authentications: Authentifizierung
+      created_by: Erstellt von
+      created_at: Erstellt am
+      maturity: Reifegrad
+    service_solution:
+      solution: Lösung
+      service: Leistung
+      description: Kommentar
+      status: Status
+      maturity: Reifegrad
+    authentication:
+      name: Methode
+    manufacturer:
+      name: Name
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      specialized_procedures: Anbindung Fachverfahren
