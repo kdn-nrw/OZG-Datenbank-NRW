@@ -9,8 +9,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Mindbase\EntityBundle\Entity\HideableEntityTrait;
 use Mindbase\EntityBundle\Entity\NamedEntityInterface;
 use Mindbase\EntityBundle\Entity\NamedEntityTrait;
-use Mindbase\EntityBundle\Entity\SoftdeletableEntityInterface;
-use Mindbase\EntityBundle\Entity\SoftdeletableEntityTrait;
 
 
 /**
@@ -18,14 +16,12 @@ use Mindbase\EntityBundle\Entity\SoftdeletableEntityTrait;
  *
  * @ORM\Entity(repositoryClass="App\Entity\Repository\CommuneRepository")
  * @ORM\Table(name="ozg_commune")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks
  */
-class Commune extends BaseBlamableEntity implements SoftdeletableEntityInterface, NamedEntityInterface
+class Commune extends BaseBlamableEntity implements NamedEntityInterface
 {
     use NamedEntityTrait;
     use HideableEntityTrait;
-    use SoftdeletableEntityTrait;
     use AddressTrait;
     use UrlTrait;
 
