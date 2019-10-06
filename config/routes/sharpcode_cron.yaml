@@ -1,0 +1,3 @@
+_sharpcode_cron:
+    resource: "@ShapecodeCronBundle/Resources/config/routing.yml"
+    prefix: /admin

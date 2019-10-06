@@ -1,0 +1,29 @@
+<span{% if(is_diff|default(false)) %} class="diff"{% endif %}>{% block name %}{{ field_description.label|trans({}, field_description.translationDomain ?: admin.translationDomain) }}:{% endblock %}</span>
+<strong class="field-value">
+    {%- block field -%}
+        {% apply spaceless %}
+            {% set collapse = field_description.options.collapse|default(false) %}
+            {% if collapse %}
+                <div class="sonata-readmore"
+                      data-readmore-height="{{ collapse.height|default(40) }}"
+                      data-readmore-more="{{ collapse.more|default('read_more')|trans({}, 'SonataAdminBundle') }}"
+                      data-readmore-less="{{ collapse.less|default('read_less')|trans({}, 'SonataAdminBundle') }}">
+                    {% block field_value %}
+                        {% if field_description.options.safe %}{{ value|raw }}{% else %}{{ value|nl2br }}{% endif %}
+                    {% endblock %}
+                </div>
+            {% else %}
+                {{ block('field_value') }}
+            {% endif %}
+        {% endapply %}
+    {%- endblock -%}
+</strong>
+
+{% block field_compare %}
+    {% if(value_compare is defined) %}
+        <td>
+            {% set value = value_compare %}
+            {{ block('field') }}
+        </td>
+    {% endif %}
+{% endblock %}

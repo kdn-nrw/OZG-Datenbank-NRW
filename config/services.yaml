@@ -1,0 +1,238 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+  locale: 'de'
+  locales: ['de']
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  App\Controller\:
+    resource: '../src/Controller'
+    tags: ['controller.service_arguments']
+
+  App\Admin\SubjectAdmin:
+    arguments:
+      - ~
+      - App\Entity\Subject
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.subject
+    public: true
+
+  App\Admin\SituationAdmin:
+    arguments:
+      - ~
+      - App\Entity\Situation
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.situation
+    public: true
+
+  App\Admin\ServiceSystemAdmin:
+    arguments:
+      - ~
+      - App\Entity\ServiceSystem
+      - ~
+    calls:
+      - [setTemplate, ['show', 'ServiceSystemAdmin/show.html.twig']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.service_system
+    public: true
+
+  App\Admin\ServiceAdmin:
+    arguments:
+      - ~
+      - App\Entity\Service
+      - ~
+    calls:
+      - [setTemplate, ['show', 'ServiceAdmin/show.html.twig']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.service
+    public: true
+
+  App\Admin\CommuneAdmin:
+    arguments:
+      - ~
+      - App\Entity\Commune
+      - ~
+    calls:
+      - [addChild, ['@App\Admin\SolutionAdmin', 'communes']]
+      - [addChild, ['@App\Admin\OfficeAdmin', 'commune']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.commune
+    public: true
+
+  App\Admin\ServiceProviderAdmin:
+    arguments:
+      - ~
+      - App\Entity\ServiceProvider
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.service_provider
+    public: true
+
+  App\Admin\ServiceSolutionAdmin:
+    arguments:
+      - ~
+      - App\Entity\ServiceSolution
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.service_solution
+    public: true
+
+  App\Admin\MaturityAdmin:
+    arguments:
+      - ~
+      - App\Entity\Maturity
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.maturity
+    public: true
+
+  App\Admin\StatusAdmin:
+    arguments:
+      - ~
+      - App\Entity\Status
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.status
+    public: true
+
+  App\Admin\PortalAdmin:
+    arguments:
+      - ~
+      - App\Entity\Portal
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.portal
+    public: true
+
+  App\Admin\LaboratoryAdmin:
+    arguments:
+      - ~
+      - App\Entity\Laboratory
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.laboratory
+    public: true
+
+  App\Admin\SpecializedProcedureAdmin:
+    arguments:
+      - ~
+      - App\Entity\SpecializedProcedure
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.specialized_procedure
+    public: true
+
+  App\Admin\SolutionAdmin:
+    arguments:
+      - ~
+      - App\Entity\Solution
+      - ~
+    calls:
+      - [addChild, ['@App\Admin\ServiceSolutionAdmin', 'solution']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.solution
+    public: true
+
+  App\Admin\OfficeAdmin:
+    arguments:
+      - ~
+      - App\Entity\Office
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.office
+    public: true
+
+  App\Admin\PriorityAdmin:
+    arguments:
+      - ~
+      - App\Entity\Priority
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.priority
+    public: true
+
+  App\Admin\AuthenticationAdmin:
+    arguments:
+      - ~
+      - App\Entity\Authentication
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.authentication
+    public: true
+
+  App\Admin\ManufacturerAdmin:
+    arguments:
+      - ~
+      - App\Entity\Manufacturer
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.manufacturer
+    public: true
+
+  App\Event\ConfigureFormFieldsSubscriber:
+    tags:
+      - { name: kernel.event_subscriber }
+
+  App\Entity\SolutionManager:
+    arguments:
+      - '@doctrine'
+
+  App\Block\RecentSolutionsBlock:
+    arguments:
+      - '@sonata.templating'
+      - '@App\Entity\SolutionManager'
+      - '@?sonata.admin.pool'
+    tags:
+      - { name: sonata.block }

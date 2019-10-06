@@ -1,0 +1,2 @@
+_sonata_translation:
+    resource: '@SonataTranslationBundle/Resources/config/routes.yaml'

@@ -1,0 +1,61 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+<td colspan="2">
+    <h4>{% block name %}{{ field_description.label|trans({}, field_description.translationDomain ?: admin.translationDomain) }}:{% endblock %}</h4>
+    {% block field %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <th>{{ 'app.entity.commune.name'|trans }}</th>
+                    <th>{{ 'app.entity.commune.street'|trans }}</th>
+                    <th>{{ 'app.entity.commune.zip_code'|trans }}/{{ 'app.entity.commune.town'|trans }}</th>
+                    <th>{{ 'app.entity.commune.url'|trans }}</th>
+                </tr>
+                {% set route_name = field_description.options.route.name %}
+                {% for element in value%}
+                    <tr>
+                        <td>
+                            {% if field_description.hasassociationadmin
+                                and field_description.associationadmin.hasRoute(route_name)
+                                and field_description.associationadmin.hasAccess(route_name, element) %}
+                                <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, field_description.options.route.parameters) }}">
+                                    {{ element.service.name }}
+                                </a>
+                            {% else %}
+                                {{ element.service.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if element.street %}
+                                {{ element.street }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if element.zipCode %}
+                                {{ element.zipCode }}
+                            {% endif %}
+                            {% if element.town %}
+                                {{ element.town }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if element.url %}
+                                {{ element.url }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endblock %}
+</td>
+
