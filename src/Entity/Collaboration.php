@@ -7,8 +7,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Mindbase\EntityBundle\Entity\HideableEntityTrait;
 use Mindbase\EntityBundle\Entity\NamedEntityInterface;
 use Mindbase\EntityBundle\Entity\NamedEntityTrait;
-use Mindbase\EntityBundle\Entity\SoftdeletableEntityInterface;
-use Mindbase\EntityBundle\Entity\SoftdeletableEntityTrait;
 
 
 /**
@@ -16,14 +14,11 @@ use Mindbase\EntityBundle\Entity\SoftdeletableEntityTrait;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_collaboration")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks
  */
-class Collaboration extends BaseEntity implements SoftdeletableEntityInterface, NamedEntityInterface
+class Collaboration extends BaseEntity implements NamedEntityInterface
 {
     use NamedEntityTrait;
     use HideableEntityTrait;
-    use SoftdeletableEntityTrait;
-
 
 }
