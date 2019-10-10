@@ -23,107 +23,110 @@ file that was distributed with this source code.
             </div>
         {% endif %}
 
-        <div class="panel-body">
-            {#
-            {% sonata_template_box 'This is the recent solutions block.' %}
-            #}
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th>{{ 'app.entity.solution.communes'|trans }}</th>
-                            <th>{{ 'app.entity.solution.service_provider'|trans }}</th>
-                            <th>{{ 'app.entity.solution.url'|trans }}</th>
-                            <th>{{ 'app.entity.solution.service_systems'|trans }}</th>
-                            <th>{{ 'app.entity.solution.maturity'|trans }}</th>
-                            <th>{{ 'app.entity.solution.created_at'|trans }}</th>
-                            <th>{{ 'app.entity.solution.created_by'|trans }}</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for object in pager.getResults() %}
-                        <tr>
-                        {% if context.getSetting('mode') == 'admin' and admin_pool is defined %}
-                            <td>
-                                {% for commune in object.communes %}
-                                    {% if loop.index > 1 %}
-                                        ,
-                                    {% endif %}
-                                    {{ commune.name }}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% if object.serviceProvider %}
-                                    {{ object.serviceProvider.name }}
+        <div class="table-responsive">
+            <table class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>{{ 'app.entity.solution.communes'|trans }}</th>
+                        <th>{{ 'app.entity.solution.service_provider'|trans }}</th>
+                        <th>{{ 'app.entity.solution.url'|trans }}</th>
+                        <th>{{ 'app.entity.solution.service_systems'|trans }}</th>
+                        <th>{{ 'app.entity.solution.maturity'|trans }}</th>
+                        <th>{{ 'app.entity.solution.created_at'|trans }}</th>
+                        <th>{{ 'app.entity.solution.created_by'|trans }}</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for object in pager.getResults() %}
+                    <tr>
+                    {% if context.getSetting('mode') == 'admin' and admin_pool is defined %}
+                        <td>
+                            {% for commune in object.communes %}
+                                {% if loop.index > 1 %}
+                                    ,
                                 {% endif %}
-                            </td>
-                            <td>
-                                {% if object.url %}
-                                    {{ object.url }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% for serviceSystem in object.serviceSystems %}
-                                    {% if loop.index > 1 %}
-                                        ,
-                                    {% endif %}
-                                    {{ serviceSystem.name }}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% if object.maturity %}
-                                    {{ object.maturity.name }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if object.createdAt %}
-                                    {{ object.createdAt|format_date(null, 'de', 'Europe/Berlin', constant('IntlDateFormatter::SHORT')) }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if object.createdBy %}
-                                    {{ object.createdBy.fullname }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a class="list-item-action"
-                                   href="{{ admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin').generateUrl('edit', { 'id': object.id }) }}"
-                                >
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    {#
-                                <span class="label label-{{ object|sonata_status_class }}">
-                                    {% if object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_INVALID') %}
-                                        {{ 'label_object_invalid'|trans({}, 'messages') }}
-                                    {% elseif object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_VALID') %}
-                                        {{ 'label_object_valid'|trans({}, 'messages') }}
-                                    {% elseif object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_MODERATE') %}
-                                        {{ 'label_object_moderate'|trans({}, 'messages') }}
-                                    {% else %}
-                                        {{ 'label_unknown_status'|trans({}, 'messages') }}
-                                    {% endif %}
-                                    </span>#}
+                                {{ commune.name }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if object.serviceProvider %}
+                                {{ object.serviceProvider.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if object.url %}
+                                <a href="{{ object.url }}" target="_blank">
+                                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                                    <span class="sr-only">{{ object.url }}</span>
                                 </a>
-                            </td>
-                        {% else %}
-                            <tr>
-                                <td colspan="5">
-                                    <a href="#">{{ 'app.entity.solution.no_solution_found'|trans({}, 'messages') }}</a>
-                                </td>
-                            </tr>
-                        {% endif %}
-                        </tr>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for serviceSystem in object.serviceSystems %}
+                                {% if loop.index > 1 %}
+                                    ,
+                                {% endif %}
+                                {{ serviceSystem.name }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if object.maturity %}
+                                {{ object.maturity.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if object.createdAt %}
+                                {{ object.createdAt|format_date(null, 'de', 'Europe/Berlin', constant('IntlDateFormatter::SHORT')) }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if object.createdBy %}
+                                {{ object.createdBy.fullname }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="list-item-action"
+                               href="{{ admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin').generateUrl('edit', { 'id': object.id }) }}"
+                            >
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                {#
+                            <span class="label label-{{ object|sonata_status_class }}">
+                                {% if object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_INVALID') %}
+                                    {{ 'label_object_invalid'|trans({}, 'messages') }}
+                                {% elseif object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_VALID') %}
+                                    {{ 'label_object_valid'|trans({}, 'messages') }}
+                                {% elseif object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_MODERATE') %}
+                                    {{ 'label_object_moderate'|trans({}, 'messages') }}
+                                {% else %}
+                                    {{ 'label_unknown_status'|trans({}, 'messages') }}
+                                {% endif %}
+                                </span>#}
+                            </a>
+                        </td>
                     {% else %}
                         <tr>
                             <td colspan="5">
                                 <a href="#">{{ 'app.entity.solution.no_solution_found'|trans({}, 'messages') }}</a>
                             </td>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                    {% endif %}
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">
+                            <a href="#">{{ 'app.entity.solution.no_solution_found'|trans({}, 'messages') }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {#
+            <div class="panel-body">
+            {% sonata_template_box 'This is the recent solutions block.' %}
             </div>
+            #}
         </div>
 
         <div class="panel-footer">

@@ -22,6 +22,8 @@ app:
     authentication: Authentifizierung
     manufacturer: Hersteller
     service_solution: Leistung
+    form_server: Formularserver
+    payment_type: Bezahlverfahren
   entity:
     commune:
       actions:
@@ -127,7 +129,7 @@ app:
       custom_provider: Anbieter (sonstige)
       specialized_procedures: Anbindung Fachverfahren
       portals: Portale
-      communes: Kommenen
+      communes: Kommunen
       name: Name
       description: Beschreibung
       service_solutions: Enthaltene Leistungen
@@ -139,6 +141,8 @@ app:
       created_by: Erstellt von
       created_at: Erstellt am
       maturity: Reifegrad
+      form_servers: Formularserver
+      payment_types: Bezahlverfahren
     service_solution:
       solution: Lösung
       service: Leistung
@@ -154,3 +158,12 @@ app:
       town: Ort
       url: Url
       specialized_procedures: Anbindung Fachverfahren
+    form_server:
+      name: Name
+      url: Url
+      solutions: Lösungen
+    payment_type:
+      name: Name
+      url: Url
+      solutions: Lösungen
+

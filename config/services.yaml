@@ -221,6 +221,28 @@ services:
         label:        app.menu.manufacturer
     public: true
 
+  App\Admin\PaymentTypeAdmin:
+    arguments:
+      - ~
+      - App\Entity\PaymentType
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.payment_type
+    public: true
+
+  App\Admin\FormServerAdmin:
+    arguments:
+      - ~
+      - App\Entity\FormServer
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.form_server
+    public: true
+
   App\Event\ConfigureFormFieldsSubscriber:
     tags:
       - { name: kernel.event_subscriber }

@@ -14,6 +14,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class CommuneAdmin extends AbstractAdmin
@@ -65,7 +66,7 @@ class CommuneAdmin extends AbstractAdmin
                     'required' => false,
                     'label' => $this->labelGroup . 'town'
                 ])
-                ->add('url', TextType::class, [
+                ->add('url', UrlType::class, [
                     'required' => false,
                     'label' => $this->labelGroup . 'url'
                 ])
@@ -138,7 +139,7 @@ class CommuneAdmin extends AbstractAdmin
             ->add('town', null, [
                 'label' => $this->labelGroup . 'town'
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('_action', null, [
@@ -168,7 +169,7 @@ class CommuneAdmin extends AbstractAdmin
             ->add('town', null, [
                 'label' => $this->labelGroup . 'town',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('contact', null, [

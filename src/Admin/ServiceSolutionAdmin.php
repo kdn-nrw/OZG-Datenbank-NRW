@@ -23,12 +23,12 @@ class ServiceSolutionAdmin extends AbstractAdmin
                 'label' => $this->labelGroup . 'service',
                 'property' => 'name',
                 'required' => true,
-            ])
+            ])/*
             ->add('status', ModelType::class, [
                 'label' => $this->labelGroup . 'status',
                 'btn_add' => false,
                 'required' => true,
-            ])
+            ])*/
             ->add('maturity', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -58,11 +58,11 @@ class ServiceSolutionAdmin extends AbstractAdmin
         /*$datagridMapper->add('description',
             null,
             ['label' => $this->labelGroup . 'description']
-        );*/
+        );
         $datagridMapper->add('status',
             null,
             ['label' => $this->labelGroup . 'status']
-        );
+        );*/
         $datagridMapper->add('maturity',
             null,
             ['label' => $this->labelGroup . 'maturity']
@@ -80,13 +80,13 @@ class ServiceSolutionAdmin extends AbstractAdmin
             ])
             /*->add('description', null, [
                 'label' => $this->labelGroup . 'description',
-            ])*/
+            ])
             ->add('status', 'choice', [
                 'label' => $this->labelGroup . 'status',
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
-            ])
+            ])*/
             ->add('maturity', null, [
                 'label' => $this->labelGroup . 'maturity',
             ])
@@ -113,13 +113,13 @@ class ServiceSolutionAdmin extends AbstractAdmin
             ])
             ->add('maturity', null, [
                 'label' => $this->labelGroup . 'maturity',
-            ])
+            ])/*
             ->add('status', 'choice', [
                 'label' => $this->labelGroup . 'status',
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
-            ]);
+            ])*/;
     }
 }
