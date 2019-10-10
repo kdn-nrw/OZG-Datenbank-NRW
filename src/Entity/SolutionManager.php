@@ -27,7 +27,7 @@ class SolutionManager extends BaseEntityManager
         $parameters = [];
         $query = $this->getRepository()
             ->createQueryBuilder('c')
-            ->orderby('c.createdAt', 'DESC');
+            ->orderby('c.id', 'DESC');
 //        if ('public' === $criteria['mode']) {
 //            $criteria['status'] = $criteria['status'] ?? CommentInterface::STATUS_VALID;
 //            $query->andWhere('c.status = :status');

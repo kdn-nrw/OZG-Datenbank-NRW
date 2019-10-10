@@ -14,14 +14,27 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class SolutionAdmin extends AbstractAdmin
 {
+    protected $datagridValues = [
+
+        // display the first page (default = 1)
+        '_page' => 1,
+
+        // reverse order (default = 'ASC')
+        '_sort_order' => 'DESC',
+
+        // name of the ordered field (default = the model's id field, if any)
+        '_sort_by' => 'id',
+    ];
+
     protected $labelGroup = 'app.entity.solution.';
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
-        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+        if (!$childAdmin && !in_array($action, ['edit'])) {
             return;
         }
 
@@ -91,6 +104,22 @@ class SolutionAdmin extends AbstractAdmin
                 'multiple' => true,
                 'by_reference' => false,
             ])
+            ->add('formServers', ModelType::class, [
+                'label' => $this->labelGroup . 'form_servers',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+            ])
+            ->add('paymentTypes', ModelType::class, [
+                'label' => $this->labelGroup . 'payment_types',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+            ])
             ->add('authentications', ModelType::class, [
                 'label' => $this->labelGroup . 'authentications',
                 'btn_add' => false,
@@ -103,7 +132,7 @@ class SolutionAdmin extends AbstractAdmin
                 'label' => 'app.entity.maturity.description',
                 'required' => false,
             ])
-            ->add('url', TextType::class, [
+            ->add('url', UrlType::class, [
                 'required' => false,
                 'label' => $this->labelGroup . 'url'
             ])
@@ -135,10 +164,6 @@ class SolutionAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
         $datagridMapper->add('serviceProvider',
             null,
             ['label' => $this->labelGroup . 'service_provider'],
@@ -148,6 +173,12 @@ class SolutionAdmin extends AbstractAdmin
         $datagridMapper->add('serviceSolutions.service.serviceSystem',
             null,
             ['label' => 'app.entity.service.service_system'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('maturity',
+            null,
+            ['label' => $this->labelGroup . 'maturity'],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -179,11 +210,27 @@ class SolutionAdmin extends AbstractAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('formServers',
+            null,
+            ['label' => $this->labelGroup . 'form_servers'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('paymentTypes',
+            null,
+            ['label' => $this->labelGroup . 'payment_types'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('authentications',
             null,
             ['label' => $this->labelGroup . 'authentications'],
             null,
             ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('name',
+            null,
+            ['label' => $this->labelGroup . 'name']
         );
         $datagridMapper->add('description',
             null,
@@ -196,12 +243,35 @@ class SolutionAdmin extends AbstractAdmin
         $listMapper
             ->add('communes', null, [
                 'label' => $this->labelGroup . 'communes',
+                'template' => 'General/Association/list_many_to_many_nolinks.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'communes'],
+                ]
             ])
             ->add('portals', null, [
                 'label' => $this->labelGroup . 'portals',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'portals'],
+                ]
             ])
             ->add('serviceProvider', null, [
                 'label' => $this->labelGroup . 'service_provider',
+                'template' => 'General/Association/list_many_to_one_nolinks.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceProvider'],
+                ]
             ])
             ->add('serviceSystems', null, [
                 'label' => $this->labelGroup . 'service_systems',
@@ -210,14 +280,24 @@ class SolutionAdmin extends AbstractAdmin
             ])
             ->add('name', null, [
                 'label' => $this->labelGroup . 'name',
-            ])
+            ])/*
             ->add('status', 'choice', [
                 'label' => $this->labelGroup . 'status',
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
+            ])*/
+            ->add('maturity', null, [
+                'label' => $this->labelGroup . 'maturity',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'maturity'],
+                ]
             ])
-            ->add('url', TextType::class, [
+            ->add('url', 'url', [
                 'required' => false,
                 'label' => $this->labelGroup . 'url'
             ])
@@ -247,7 +327,12 @@ class SolutionAdmin extends AbstractAdmin
             ])
             ->add('specializedProcedures', null, [
                 'label' => $this->labelGroup . 'specialized_procedures',
-                //TODO: teplate not working?! 'template' => 'SolutionAdmin/specialized_procedures.html.twig',
+            ])
+            ->add('formServers', null, [
+                'label' => $this->labelGroup . 'form_servers',
+            ])
+            ->add('paymentTypes', null, [
+                'label' => $this->labelGroup . 'payment_types',
             ])
             ->add('authentications', null, [
                 'label' => $this->labelGroup . 'authentications',
@@ -255,7 +340,7 @@ class SolutionAdmin extends AbstractAdmin
             ->add('name', null, [
                 'label' => $this->labelGroup . 'name',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('contact', null, [

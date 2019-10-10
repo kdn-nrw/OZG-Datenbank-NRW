@@ -8,33 +8,29 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class PortalAdmin extends AbstractAdmin
+class PaymentTypeAdmin extends AbstractAdmin
 {
-    protected $labelGroup = 'app.entity.portal.';
+    protected $labelGroup = 'app.entity.payment_type.';
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class, [
-                'label' => $this->labelGroup . 'name'
-            ])
-            ->add('description', TextareaType::class, [
-                'label' => $this->labelGroup . 'description',
-                'required' => false,
-            ])
+            ->add('name', TextType::class, ['label' => $this->labelGroup . 'name'])
             ->add('url', UrlType::class, [
                 'required' => false,
                 'label' => $this->labelGroup . 'url'
             ])
-            ->add('serviceProvider', ModelType::class, [
+            ->add('solutions', ModelType::class, [
+                'label' => $this->labelGroup . 'solutions',
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
-                'label' => $this->labelGroup . 'service_provider',
+                'multiple' => true,
+                'by_reference' => false,
             ])
             ->end();
     }
@@ -45,6 +41,12 @@ class PortalAdmin extends AbstractAdmin
             null,
             ['label' => $this->labelGroup . 'name']
         );
+        $datagridMapper->add('solutions',
+            null,
+            ['label' => $this->labelGroup . 'solutions'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -53,8 +55,11 @@ class PortalAdmin extends AbstractAdmin
             ->addIdentifier('name', null, [
                 'label' => $this->labelGroup . 'name',
             ])
+            ->add('solutions', null, [
+                'label' => $this->labelGroup . 'solutions',
+            ])
             ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url'
+                'label' => $this->labelGroup . 'url',
             ])
             ->add('_action', null, [
                 'actions' => [
@@ -74,15 +79,11 @@ class PortalAdmin extends AbstractAdmin
             ->add('name', null, [
                 'label' => $this->labelGroup . 'name',
             ])
-            ->add('description', null, [
-                'label' => $this->labelGroup . 'description',
-            ])
             ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url'
+                'label' => $this->labelGroup . 'url',
             ])
-            ->add('serviceProvider', null, [
-                'label' => $this->labelGroup . 'service_provider',
-                'template' => 'ServiceAdmin/show_many_to_one.html.twig',
+            ->add('solutions', null, [
+                'label' => $this->labelGroup . 'solutions',
             ]);
     }
 }

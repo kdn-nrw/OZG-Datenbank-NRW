@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class ManufacturerAdmin extends AbstractAdmin
@@ -34,7 +35,7 @@ class ManufacturerAdmin extends AbstractAdmin
                 'required' => false,
                 'label' => $this->labelGroup . 'town'
             ])
-            ->add('url', TextType::class, [
+            ->add('url', UrlType::class, [
                 'required' => false,
                 'label' => $this->labelGroup . 'url'
             ])
@@ -80,7 +81,7 @@ class ManufacturerAdmin extends AbstractAdmin
             ->add('specializedProcedures', null, [
                 'label' => $this->labelGroup . 'specialized_procedures',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('_action', null, [
@@ -110,7 +111,7 @@ class ManufacturerAdmin extends AbstractAdmin
             ->add('town', null, [
                 'label' => $this->labelGroup . 'town',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('specializedProcedures', null, [

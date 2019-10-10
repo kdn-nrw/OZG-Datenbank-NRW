@@ -44,6 +44,8 @@ sonata_admin:
                     - App\Admin\SpecializedProcedureAdmin
                     - App\Admin\ManufacturerAdmin
                     - App\Admin\AuthenticationAdmin
+                    - App\Admin\FormServerAdmin
+                    - App\Admin\PaymentTypeAdmin
             mindbase_admin.menu.system:
                 label: mindbase_admin.menu.system
                 #label_catalogue: messages

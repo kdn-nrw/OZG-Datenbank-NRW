@@ -131,11 +131,35 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      */
     private $authentications;
 
+    /**
+     * @var Maturity|null
+     *
+     * @ORM\ManyToOne(targetEntity="Maturity", cascade={"persist"})
+     * @ORM\JoinColumn(name="maturity_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $maturity;
+
+    /**
+     * @var FormServer[]|Collection
+     * @ORM\ManyToMany(targetEntity="FormServer", mappedBy="solutions")
+     */
+    private $formServers;
+
+    /**
+     * @var PaymentType[]|Collection
+     * @ORM\ManyToMany(targetEntity="PaymentType", mappedBy="solutions")
+     */
+    private $paymentTypes;
+
     public function __construct()
     {
         $this->serviceSolutions = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
+        $this->portals = new ArrayCollection();
+        $this->communes = new ArrayCollection();
         $this->authentications = new ArrayCollection();
+        $this->formServers = new ArrayCollection();
+        $this->paymentTypes = new ArrayCollection();
     }
 
     /**
@@ -195,6 +219,8 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
         if (!$this->serviceSolutions->contains($serviceSolution)) {
             $this->serviceSolutions->add($serviceSolution);
             $serviceSolution->setSolution($this);
+            // update solution maturity
+            $this->updateMaturity();
         }
 
         return $this;
@@ -252,7 +278,23 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      */
     public function getMaturity()
     {
-        $maturity = null;
+        return $this->maturity;
+    }
+
+    /**
+     * @param Maturity|null $maturity
+     */
+    public function setMaturity($maturity): void
+    {
+        $this->maturity = $maturity;
+    }
+
+    /**
+     * Update the solution maturity based on the service solution maturities
+     */
+    protected function updateMaturity()
+    {
+        $maturity = $this->maturity;
         /** @var Maturity $maturity */
         $serviceSolutions = $this->getServiceSolutions();
         foreach ($serviceSolutions as $serviceSolution) {
@@ -262,7 +304,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
                 }
             }
         }
-        return $maturity;
+        $this->maturity = $maturity;
     }
 
     /**
@@ -501,5 +543,110 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
             return 'ID:' . $this->getId();
         }
         return $this->getName();
+    }
+
+    /**
+     * Hook on pre-update operations.
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(): void
+    {
+        $this->updateMaturity();
+    }
+    /**
+     * Hook on pre-persist operations.
+     * @ORM\PrePersist
+     */
+    public function prePersist(): void
+    {
+        $this->updateMaturity();
+    }
+
+    /**
+     * @param FormServer $formServer
+     * @return self
+     */
+    public function addFormServer($formServer)
+    {
+        if (!$this->formServers->contains($formServer)) {
+            $this->formServers->add($formServer);
+            $formServer->addSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param FormServer $formServer
+     * @return self
+     */
+    public function removeFormServer($formServer)
+    {
+        if ($this->formServers->contains($formServer)) {
+            $this->formServers->removeElement($formServer);
+            $formServer->removeSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return FormServer[]|Collection
+     */
+    public function getFormServers()
+    {
+        return $this->formServers;
+    }
+
+    /**
+     * @param FormServer[]|Collection $formServers
+     */
+    public function setFormServers($formServers): void
+    {
+        $this->formServers = $formServers;
+    }
+
+    /**
+     * @param PaymentType $paymentType
+     * @return self
+     */
+    public function addPaymentType($paymentType)
+    {
+        if (!$this->paymentTypes->contains($paymentType)) {
+            $this->paymentTypes->add($paymentType);
+            $paymentType->addSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param PaymentType $paymentType
+     * @return self
+     */
+    public function removePaymentType($paymentType)
+    {
+        if ($this->paymentTypes->contains($paymentType)) {
+            $this->paymentTypes->removeElement($paymentType);
+            $paymentType->removeSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return PaymentType[]|Collection
+     */
+    public function getPaymentTypes()
+    {
+        return $this->paymentTypes;
+    }
+
+    /**
+     * @param PaymentType[]|Collection $paymentTypes
+     */
+    public function setPaymentTypes($paymentTypes): void
+    {
+        $this->paymentTypes = $paymentTypes;
     }
 }

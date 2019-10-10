@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Mindbase\EntityBundle\Entity\HideableEntityTrait;
 use Mindbase\EntityBundle\Entity\NamedEntityInterface;
 use Mindbase\EntityBundle\Entity\NamedEntityTrait;
@@ -42,6 +41,7 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
      * @ORM\ManyToMany(targetEntity="Manufacturer", mappedBy="specializedProcedures")
      */
     private $manufacturers;
+
 
     public function __construct()
     {
@@ -151,5 +151,4 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
     {
         $this->solutions = $solutions;
     }
-
 }

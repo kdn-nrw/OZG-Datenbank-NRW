@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class LaboratoryAdmin extends AbstractAdmin
@@ -25,7 +26,7 @@ class LaboratoryAdmin extends AbstractAdmin
                 'label' => $this->labelGroup . 'description',
                 'required' => false,
             ])
-            ->add('url', TextType::class, [
+            ->add('url', UrlType::class, [
                 'required' => false,
                 'label' => $this->labelGroup . 'url'
             ])
@@ -64,7 +65,7 @@ class LaboratoryAdmin extends AbstractAdmin
             ->addIdentifier('name', null, [
                 'label' => $this->labelGroup . 'name',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('_action', null, [
@@ -88,7 +89,7 @@ class LaboratoryAdmin extends AbstractAdmin
             ->add('description', null, [
                 'label' => $this->labelGroup . 'description',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('participantsOther', null, [

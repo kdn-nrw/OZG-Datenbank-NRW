@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class OfficeAdmin extends AbstractAdmin
@@ -19,7 +20,7 @@ class OfficeAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name', TextType::class, ['label' => $this->labelGroup . 'name'])
-            ->add('url', TextType::class, [
+            ->add('url', UrlType::class, [
                 'required' => false,
                 'label' => $this->labelGroup . 'url'
             ])
@@ -48,7 +49,7 @@ class OfficeAdmin extends AbstractAdmin
             ->add('name', null, [
                 'label' => $this->labelGroup . 'name',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('contact', null, [
@@ -72,7 +73,7 @@ class OfficeAdmin extends AbstractAdmin
             ->add('name', null, [
                 'label' => $this->labelGroup . 'name',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('contact', null, [

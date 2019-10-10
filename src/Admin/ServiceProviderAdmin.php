@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class ServiceProviderAdmin extends AbstractAdmin
@@ -34,7 +35,7 @@ class ServiceProviderAdmin extends AbstractAdmin
                 'required' => false,
                 'label' => $this->labelGroup . 'town'
             ])
-            ->add('url', TextType::class, [
+            ->add('url', UrlType::class, [
                 'required' => false,
                 'label' => $this->labelGroup . 'url'
             ])
@@ -81,7 +82,7 @@ class ServiceProviderAdmin extends AbstractAdmin
             ->addIdentifier('name', null, [
                 'label' => $this->labelGroup . 'name',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('_action', null, [
@@ -111,7 +112,7 @@ class ServiceProviderAdmin extends AbstractAdmin
             ->add('town', null, [
                 'label' => $this->labelGroup . 'town',
             ])
-            ->add('url', null, [
+            ->add('url', 'url', [
                 'label' => $this->labelGroup . 'url',
             ])
             ->add('contact', null, [
