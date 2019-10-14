@@ -5,10 +5,10 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Mindbase\EntityBundle\Entity\HideableEntityTrait;
 use Mindbase\EntityBundle\Entity\NamedEntityInterface;
 use Mindbase\EntityBundle\Entity\NamedEntityTrait;
+use Mindbase\EntityBundle\Entity\SoftdeletableEntityInterface;
 
 
 /**
@@ -88,9 +88,24 @@ class ServiceSystem extends BaseEntity implements NamedEntityInterface
      */
     private $services;
 
+    /**
+     * @var Jurisdiction[]|Collection
+     * @ORM\ManyToMany(targetEntity="Jurisdiction", inversedBy="serviceSystems")
+     * @ORM\JoinTable(name="ozg_service_system_jurisdiction",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="jurisdiction_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $jurisdictions;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->jurisdictions = new ArrayCollection();
     }
 
     /**
@@ -249,6 +264,50 @@ class ServiceSystem extends BaseEntity implements NamedEntityInterface
     public function setServices(Collection $services): void
     {
         $this->services = $services;
+    }
+
+    /**
+     * @param Jurisdiction $jurisdiction
+     * @return self
+     */
+    public function addJurisdiction($jurisdiction)
+    {
+        if (!$this->jurisdictions->contains($jurisdiction)) {
+            $this->jurisdictions->add($jurisdiction);
+            $jurisdiction->addServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Jurisdiction $jurisdiction
+     * @return self
+     */
+    public function removeJurisdiction($jurisdiction)
+    {
+        if ($this->jurisdictions->contains($jurisdiction)) {
+            $this->jurisdictions->removeElement($jurisdiction);
+            $jurisdiction->removeServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Jurisdiction[]|Collection
+     */
+    public function getJurisdictions()
+    {
+        return $this->jurisdictions;
+    }
+
+    /**
+     * @param Jurisdiction[]|Collection $jurisdictions
+     */
+    public function setJurisdictions($jurisdictions): void
+    {
+        $this->jurisdictions = $jurisdictions;
     }
 
 }

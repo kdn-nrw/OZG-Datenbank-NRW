@@ -104,6 +104,7 @@ app:
       services: Leistungen
       status: Status
       priority: Priorität
+      jurisdictions: Zuständigkeiten
     service:
       name: Leika-Bezeichnung
       service_key: Leika-ID
@@ -166,4 +167,6 @@ app:
       name: Name
       url: Url
       solutions: Lösungen
+    jurisdiction:
+      name: Name
 
