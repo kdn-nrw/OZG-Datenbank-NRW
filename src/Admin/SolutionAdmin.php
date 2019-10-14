@@ -251,7 +251,7 @@ class SolutionAdmin extends AbstractAdmin
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'communes'],
                 ]
-            ])
+            ])/*
             ->add('portals', null, [
                 'label' => $this->labelGroup . 'portals',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -261,7 +261,7 @@ class SolutionAdmin extends AbstractAdmin
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'portals'],
                 ]
-            ])
+            ])*/
             ->add('serviceProvider', null, [
                 'label' => $this->labelGroup . 'service_provider',
                 'template' => 'General/Association/list_many_to_one_nolinks.html.twig',
@@ -276,7 +276,19 @@ class SolutionAdmin extends AbstractAdmin
             ->add('serviceSystems', null, [
                 'label' => $this->labelGroup . 'service_systems',
                 //'associated_property' => 'name',
-                'template' => 'SolutionAdmin/list-service-systems.html.twig'
+                'template' => 'SolutionAdmin/list-service-systems.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSystems'],
+                ]
+            ])
+            ->add('jurisdictions', 'string', [
+                'label' => 'app.entity.service_system.jurisdictions',
+                //'associated_property' => 'name',
+                'template' => 'SolutionAdmin/list-jurisdiction.html.twig',
             ])
             ->add('name', null, [
                 'label' => $this->labelGroup . 'name',

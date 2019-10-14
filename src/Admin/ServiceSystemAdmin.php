@@ -55,6 +55,14 @@ class ServiceSystemAdmin extends AbstractAdmin
                 'label' => $this->labelGroup . 'description',
                 'required' => false,
             ])
+            ->add('jurisdictions', ModelType::class, [
+                'label' => $this->labelGroup . 'jurisdictions',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+            ])
             ->add('services', CollectionType::class, [
                 'label' => $this->labelGroup . 'services',
                 'type_options' => [
@@ -78,6 +86,12 @@ class ServiceSystemAdmin extends AbstractAdmin
         $datagridMapper->add('serviceKey', null, [
             'label' => $this->labelGroup . 'service_key'
         ]);
+        $datagridMapper->add('jurisdictions',
+            null,
+            ['label' => $this->labelGroup . 'jurisdictions'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('situation',
             null,
             ['label' => $this->labelGroup . 'situation'],
@@ -110,6 +124,9 @@ class ServiceSystemAdmin extends AbstractAdmin
             ])
             ->add('serviceKey', null, [
                 'label' => $this->labelGroup . 'service_key'
+            ])
+            ->add('jurisdictions', null, [
+                'label' => $this->labelGroup . 'jurisdictions',
             ])
             ->add('situation', null, [
                 'label' => $this->labelGroup . 'situation',
@@ -148,6 +165,9 @@ class ServiceSystemAdmin extends AbstractAdmin
             ->add('serviceKey', null, [
                 'label' => $this->labelGroup . 'service_key',
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
+            ])
+            ->add('jurisdictions', null, [
+                'label' => $this->labelGroup . 'jurisdictions',
             ])
             ->add('situation.subject', null, [
                 'label' => 'app.entity.situation.subject',
