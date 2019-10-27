@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Mindbase\EntityBundle\Entity\HideableEntityTrait;
 use Mindbase\EntityBundle\Entity\NamedEntityInterface;
 use Mindbase\EntityBundle\Entity\NamedEntityTrait;
+use Symfony\Component\VarDumper\VarDumper;
 
 
 /**
@@ -278,6 +279,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      */
     public function getMaturity()
     {
+        $this->updateMaturity();
         return $this->maturity;
     }
 
@@ -295,14 +297,22 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     protected function updateMaturity()
     {
         $maturity = $this->maturity;
+        $groupedMaturities = [];
         /** @var Maturity $maturity */
         $serviceSolutions = $this->getServiceSolutions();
         foreach ($serviceSolutions as $serviceSolution) {
             if (null !== $ssMaturity = $serviceSolution->getMaturity()) {
-                if (null === $maturity || (int) $maturity->getName() > (int) $ssMaturity->getName()) {
+                if (!isset($groupedMaturities[$ssMaturity->getId()])) {
+                    $groupedMaturities[$ssMaturity->getId()] = $ssMaturity;
+                }
+                if (null === $maturity
+                    || (is_numeric($ssMaturity->getName()) && (int) $maturity->getName() > (int) $ssMaturity->getName())) {
                     $maturity = $ssMaturity;
                 }
             }
+        }
+        if (count($groupedMaturities) == 1) {
+            $maturity = current($groupedMaturities);
         }
         $this->maturity = $maturity;
     }

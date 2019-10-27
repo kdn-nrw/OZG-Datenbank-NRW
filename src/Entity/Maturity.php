@@ -21,6 +21,8 @@ class Maturity extends BaseEntity implements NamedEntityInterface
     use NamedEntityTrait;
     use HideableEntityTrait;
 
+    const DEFAULT_ID = 7;
+
     /**
      * ozgrgbeschreibung
      * @var string|null

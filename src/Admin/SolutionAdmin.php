@@ -176,6 +176,18 @@ class SolutionAdmin extends AbstractAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('serviceSolutions.service.serviceSystem.jurisdictions',
+            null,
+            ['label' => 'app.entity.service_system.jurisdictions'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('serviceSolutions.service.serviceSystem.situation.subject',
+            null,
+            ['label' => 'app.entity.situation.subject'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('maturity',
             null,
             ['label' => $this->labelGroup . 'maturity'],
