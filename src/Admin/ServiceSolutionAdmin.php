@@ -2,6 +2,8 @@
 
 namespace App\Admin;
 
+use App\Entity\Maturity;
+use App\Entity\ServiceSolution;
 use App\Entity\Status;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -121,5 +123,18 @@ class ServiceSolutionAdmin extends AbstractAdmin
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])*/;
+    }
+
+    public function getNewInstance()
+    {
+        /** @var ServiceSolution $object */
+        $object = parent::getNewInstance();
+        $defaultMaturity = $this->getModelManager()->find(Maturity::class, Maturity::DEFAULT_ID);
+        if (null !== $defaultMaturity) {
+            /** @var Maturity $defaultMaturity */
+            $object->setMaturity($defaultMaturity);
+        }
+
+        return $object;
     }
 }

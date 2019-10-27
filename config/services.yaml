@@ -210,6 +210,17 @@ services:
         label:        app.menu.authentication
     public: true
 
+  App\Admin\JurisdictionAdmin:
+    arguments:
+      - ~
+      - App\Entity\Jurisdiction
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.menu.jurisdiction
+    public: true
+
   App\Admin\ManufacturerAdmin:
     arguments:
       - ~
