@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
+use App\Entity\Base\HideableEntityTrait;
 
 
 /**

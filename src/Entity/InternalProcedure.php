@@ -2,11 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseNamedEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
 
 
 /**
@@ -16,10 +13,8 @@ use Mindbase\EntityBundle\Entity\NamedEntityTrait;
  * @ORM\Table(name="ozg_internal_procedure")
  * @ORM\HasLifecycleCallbacks
  */
-class InternalProcedure extends BaseEntity implements NamedEntityInterface
+class InternalProcedure extends BaseNamedEntity
 {
-    use NamedEntityTrait;
-    use HideableEntityTrait;
 
     /**
      * ozgrgbeschreibung

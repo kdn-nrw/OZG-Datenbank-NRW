@@ -11,43 +11,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class MaturityAdmin extends AbstractAdmin
+class MaturityAdmin extends AbstractAppAdmin
 {
-    protected $labelGroup = 'app.entity.maturity.';
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class, [
-                'label' => $this->labelGroup . 'name'
-            ])
+            ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
-                'label' => $this->labelGroup . 'description',
                 'required' => false,
             ])
             ->end();
-    }
-
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
-    }
-
-    protected function configureListFields(ListMapper $listMapper)
-    {
-        $listMapper
-            ->addIdentifier('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('_action', null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
     }
 
     /**
@@ -56,11 +29,7 @@ class MaturityAdmin extends AbstractAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('description', null, [
-                'label' => $this->labelGroup . 'description',
-            ]);
+            ->add('name')
+            ->add('description');
     }
 }

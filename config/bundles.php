@@ -29,13 +29,4 @@ return [
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Shapecode\Bundle\CronBundle\ShapecodeCronBundle::class => ['all' => true],
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
-    Mindbase\AdminBundle\MindbaseAdminBundle::class => ['all' => true],
-    Mindbase\SymfonyBundle\MindbaseSymfonyBundle::class => ['all' => true],
-    Mindbase\EntityBundle\MindbaseEntityBundle::class => ['all' => true],
-    Mindbase\LogBundle\MindbaseLogBundle::class => ['all' => true],
-    Mindbase\UserBundle\MindbaseUserBundle::class => ['all' => true],
-    Mindbase\EmailBundle\MindbaseEmailBundle::class => ['all' => true],
-    Mindbase\SettingsBundle\MindbaseSettingsBundle::class => ['all' => true],
-    Mindbase\FormBundle\MindbaseFormBundle::class => ['all' => true],
-    Mindbase\VuejsBundle\MindbaseVuejsBundle::class => ['all' => true],
 ];

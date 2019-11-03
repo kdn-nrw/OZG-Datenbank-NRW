@@ -2,13 +2,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\AppBaseEntity;
+use App\Entity\Base\SoftdeletableEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
 
 
 /**
@@ -18,10 +16,8 @@ use Mindbase\EntityBundle\Entity\NamedEntityTrait;
  * @ORM\Table(name="ozg_commune")
  * @ORM\HasLifecycleCallbacks
  */
-class Commune extends BaseBlamableEntity implements NamedEntityInterface
+class Commune extends AppBaseEntity
 {
-    use NamedEntityTrait;
-    use HideableEntityTrait;
     use AddressTrait;
     use UrlTrait;
 

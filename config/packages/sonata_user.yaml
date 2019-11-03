@@ -1,0 +1,15 @@
+sonata_user:
+  security_acl: false
+  manager_type: orm
+  impersonating:
+    route: sonata_admin_dashboard
+  class:
+    user: App\Entity\User
+    group: App\Entity\Group
+  table:
+    user_group: mb_user_user_group_mm
+  admin:
+    user:
+      class: App\Admin\UserAdmin
+    group:
+      class: App\Admin\GroupAdmin

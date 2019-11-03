@@ -13,7 +13,7 @@
                         <div class="box-header">
                             <h4 class="box-title">
                                 {% block show_title %}
-                                    {{ 'app.entity.service_system.name'|trans }}: <strong>{{ object.name }}</strong>
+                                    {{ 'app.service_system.entity.name'|trans }}: <strong>{{ object.name }}</strong>
                                     ({{ elements['serviceKey']|render_view_element(object)}})
                                 {% endblock %}
                             </h4>
@@ -54,25 +54,25 @@
                             <table class="table table-bordered table-condensed">
                                 <tr>
                                     <th>
-                                        {{ 'app.entity.service.name'|trans }}
+                                        {{ 'app.service.entity.name'|trans }}
                                     </th>
                                     <th>
-                                        {{ 'app.entity.service.service_key'|trans }}
+                                        {{ 'app.service.entity.service_key'|trans }}
                                     </th>
                                     <th>
-                                        {{ 'app.entity.service.service_type'|trans }}
+                                        {{ 'app.service.entity.service_type'|trans }}
                                     </th>
                                     <th>
-                                        {{ 'app.entity.service.law_shortcuts'|trans }}
+                                        {{ 'app.service.entity.law_shortcuts'|trans }}
                                     </th>
                                     <th>
-                                        {{ 'app.entity.service.relevance1'|trans }}
+                                        {{ 'app.service.entity.relevance1'|trans }}
                                     </th>
                                     <th>
-                                        {{ 'app.entity.service.relevance2'|trans }}
+                                        {{ 'app.service.entity.relevance2'|trans }}
                                     </th>
                                     <th>
-                                        {{ 'app.entity.service.status'|trans }}
+                                        {{ 'app.service.entity.status'|trans }}
                                     </th>
                                 </tr>
                             {% for child in object.services %}

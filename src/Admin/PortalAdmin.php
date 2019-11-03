@@ -2,7 +2,6 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -13,50 +12,39 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class PortalAdmin extends AbstractAdmin
+class PortalAdmin extends AbstractAppAdmin
 {
-    protected $labelGroup = 'app.entity.portal.';
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class, [
-                'label' => $this->labelGroup . 'name'
-            ])
+            ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
-                'label' => $this->labelGroup . 'description',
                 'required' => false,
             ])
             ->add('url', UrlType::class, [
-                'required' => false,
-                'label' => $this->labelGroup . 'url'
+                'required' => false
             ])
             ->add('serviceProvider', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
-                'label' => $this->labelGroup . 'service_provider',
             ])
             ->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
+        $datagridMapper->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url'
-            ])
+            ->addIdentifier('name')
+            ->add('url', 'url')
             ->add('_action', null, [
+                'label' => 'app.common.actions',
+                'translation_domain' => 'messages',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -71,17 +59,10 @@ class PortalAdmin extends AbstractAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('description', null, [
-                'label' => $this->labelGroup . 'description',
-            ])
-            ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url'
-            ])
+            ->add('name')
+            ->add('description')
+            ->add('url', 'url')
             ->add('serviceProvider', null, [
-                'label' => $this->labelGroup . 'service_provider',
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
             ]);
     }

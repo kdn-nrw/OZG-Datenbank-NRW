@@ -1,14 +1,9 @@
 <?php
 /**
- * Mindbase 3
  *
- * PHP version 7.2
- *
- * @author    gert.hammes <gert.hammes@brain-appeal.com>
- * @copyright 2019 Brain Appeal GmbH (www.brain-appeal.com)
- * @license
- * @link      https://www.brain-appeal.com/
- * @since     2019-04-18
+ * @author    Gert Hammes <info@gerthammes.de>
+ * @copyright 2019 Gert Hammes
+ * @since     2019-08-15
  */
 
 namespace App\Controller;
@@ -20,11 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class DefaultController
  *
- * @author    gert.hammes <gert.hammes@brain-appeal.com>
- * @copyright 2019 Brain Appeal GmbH (www.brain-appeal.com)
- * @license
- * @link      https://www.brain-appeal.com/
- * @since     2019-04-18
+ * @author    Gert Hammes <info@gerthammes.de>
+ * @copyright 2019 Gert Hammes
+ * @since     2019-08-15
  */
 class DefaultController extends AbstractController
 {

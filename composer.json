@@ -2,32 +2,13 @@
     "type": "project",
     "license": "proprietary",
     "repositories": [
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:mindbase/ansible.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:tools/docker.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/admin-bundle.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/email-bundle.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/entity-bundle.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/form-bundle.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/log-bundle.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/settings-bundle.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/symfony-bundle.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/user-bundle.git" },
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:symfony/mindbase/vuejs-bundle.git" }
+        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:tools/docker.git" }
     ],
     "require": {
         "php": "^7.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "mindbase/admin-bundle": "dev-develop",
-        "mindbase/email-bundle": "dev-develop",
-        "mindbase/entity-bundle": "dev-develop",
-        "mindbase/form-bundle": "dev-develop",
-        "mindbase/log-bundle": "dev-develop",
-        "mindbase/settings-bundle": "dev-develop",
-        "mindbase/symfony-bundle": "dev-develop",
-        "mindbase/user-bundle": "dev-develop",
-        "mindbase/vuejs-bundle": "dev-develop",
         "shapecode/cron-bundle": "^3.2",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",
@@ -39,7 +20,6 @@
         "vich/uploader-bundle": "^1.9"
     },
     "require-dev": {
-        "brainappeal/ansible": "dev-master|dev-develop",
         "brainappeal/docker": "^0.3.8|dev-develop",
         "oomphinc/composer-installers-extender": "^1.1",
         "symfony/browser-kit": "4.3.*",

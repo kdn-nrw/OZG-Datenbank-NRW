@@ -2,11 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseNamedEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
 
 
 /**
@@ -16,10 +13,8 @@ use Mindbase\EntityBundle\Entity\NamedEntityTrait;
  * @ORM\Table(name="ozg_implementation")
  * @ORM\HasLifecycleCallbacks
  */
-class Implementation extends BaseEntity implements NamedEntityInterface
+class Implementation extends BaseNamedEntity
 {
-    use NamedEntityTrait;
-    use HideableEntityTrait;
 
     /**
      * umtzgfinal (ja/nein)
@@ -36,9 +31,9 @@ class Implementation extends BaseEntity implements NamedEntityInterface
      * @ORM\Column(name="is_planned", type="boolean")
      */
     protected $isPlanned = false;
-/*
-fim (ja/nein)
-steckbr (ja/nein)
-fimurl
- */
+    /*
+    fim (ja/nein)
+    steckbr (ja/nein)
+    fimurl
+     */
 }

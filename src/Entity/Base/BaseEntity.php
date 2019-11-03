@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Base;
 
 use Doctrine\ORM\Mapping as ORM;
 use ReflectionClass;
-use Mindbase\EntityBundle\Entity\MindbaseEntityInterface;
-use Mindbase\EntityBundle\Entity\TimestampableEntityInterface;
-use Mindbase\EntityBundle\Entity\TimestampableEntityTrait;
 
 /**
  * Class BaseEntity
  */
-abstract class BaseEntity implements MindbaseEntityInterface, TimestampableEntityInterface
+abstract class BaseEntity implements BaseEntityInterface, TimestampableEntityInterface
 {
     use TimestampableEntityTrait;
 

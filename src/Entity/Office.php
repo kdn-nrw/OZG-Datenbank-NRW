@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseBlamableEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
+use App\Entity\Base\HideableEntityTrait;
+use App\Entity\Base\NamedEntityInterface;
+use App\Entity\Base\NamedEntityTrait;
 
 
 /**
