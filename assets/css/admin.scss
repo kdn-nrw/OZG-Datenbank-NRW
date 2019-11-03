@@ -8,9 +8,13 @@ body.login-page {
 
     .login-box {
         background-color: white;
-
     }
     .login-logo, .register-logo {
         padding-top: 25px;
+
+        img {
+            width: 128px;
+            height: auto;
+        }
     }
 }

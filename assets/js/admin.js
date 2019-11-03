@@ -13,8 +13,3 @@ require('../css/admin.scss');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');
-
-require('@mindbase/vuejs-bundle/Resources/assets/js/mindbase-vuejs').init();
-
-const BrainappealSshKeyManagement = require('@brainappeal/ssh-key-management-bundle/Resources/assets/js/brainappeal-ssh-key-management');
-BrainappealSshKeyManagement.initBrainappealSshKeyManagement();
