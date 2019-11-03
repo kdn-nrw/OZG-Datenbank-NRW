@@ -2,7 +2,6 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -12,20 +11,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class PaymentTypeAdmin extends AbstractAdmin
+class PaymentTypeAdmin extends AbstractAppAdmin
 {
-    protected $labelGroup = 'app.entity.payment_type.';
-
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class, ['label' => $this->labelGroup . 'name'])
+            ->add('name', TextType::class)
             ->add('url', UrlType::class, [
-                'required' => false,
-                'label' => $this->labelGroup . 'url'
+                'required' => false
             ])
             ->add('solutions', ModelType::class, [
-                'label' => $this->labelGroup . 'solutions',
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
@@ -37,13 +32,10 @@ class PaymentTypeAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
+        $datagridMapper->add('name');
         $datagridMapper->add('solutions',
             null,
-            ['label' => $this->labelGroup . 'solutions'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -52,16 +44,13 @@ class PaymentTypeAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('solutions', null, [
-                'label' => $this->labelGroup . 'solutions',
-            ])
+            ->addIdentifier('name')
+            ->add('solutions')
             ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url',
             ])
             ->add('_action', null, [
+                'label' => 'app.common.actions',
+                'translation_domain' => 'messages',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -76,14 +65,9 @@ class PaymentTypeAdmin extends AbstractAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
+            ->add('name')
             ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url',
             ])
-            ->add('solutions', null, [
-                'label' => $this->labelGroup . 'solutions',
-            ]);
+            ->add('solutions');
     }
 }

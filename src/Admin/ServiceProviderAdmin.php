@@ -2,9 +2,6 @@
 
 namespace App\Admin;
 
-use Knp\Menu\ItemInterface as MenuItemInterface;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -15,36 +12,28 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class ServiceProviderAdmin extends AbstractAdmin
+class ServiceProviderAdmin extends AbstractAppAdmin
 {
-    protected $labelGroup = 'app.entity.service_provider.';
-
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class, ['label' => $this->labelGroup . 'name'])
+            ->add('name', TextType::class)
             ->add('street', TextType::class, [
-                'required' => false,
-                'label' => $this->labelGroup . 'street'
+                'required' => false
             ])
             ->add('zipCode', TextType::class, [
-                'required' => false,
-                'label' => $this->labelGroup . 'zip_code'
+                'required' => false
             ])
             ->add('town', TextType::class, [
-                'required' => false,
-                'label' => $this->labelGroup . 'town'
+                'required' => false
             ])
             ->add('url', UrlType::class, [
-                'required' => false,
-                'label' => $this->labelGroup . 'url'
+                'required' => false
             ])
             ->add('contact', TextareaType::class, [
-                'required' => false,
-                'label' => $this->labelGroup . 'contact'
+                'required' => false
             ])
             ->add('communes', ModelType::class, [
-                'label' => $this->labelGroup . 'communes',
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
@@ -56,21 +45,12 @@ class ServiceProviderAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
-        $datagridMapper->add('zipCode',
-            null,
-            ['label' => $this->labelGroup . 'zip_code']
-        );
-        $datagridMapper->add('town',
-            null,
-            ['label' => $this->labelGroup . 'town']
-        );
+        $datagridMapper->add('name');
+        $datagridMapper->add('zipCode');
+        $datagridMapper->add('town');
         $datagridMapper->add('communes',
             null,
-            ['label' => $this->labelGroup . 'communes'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -79,13 +59,12 @@ class ServiceProviderAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
+            ->addIdentifier('name')
             ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url',
             ])
             ->add('_action', null, [
+                'label' => 'app.common.actions',
+                'translation_domain' => 'messages',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -100,26 +79,14 @@ class ServiceProviderAdmin extends AbstractAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('street', null, [
-                'label' => $this->labelGroup . 'street',
-            ])
-            ->add('zipCode', null, [
-                'label' => $this->labelGroup . 'zip_code',
-            ])
-            ->add('town', null, [
-                'label' => $this->labelGroup . 'town',
-            ])
+            ->add('name')
+            ->add('street')
+            ->add('zipCode')
+            ->add('town')
             ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url',
             ])
-            ->add('contact', null, [
-                'label' => $this->labelGroup . 'contact',
-            ])
+            ->add('contact')
             ->add('communes', null, [
-                'label' => $this->labelGroup . 'communes',
                 'template' => 'ServiceProviderAdmin/communes.html.twig',
             ]);
     }

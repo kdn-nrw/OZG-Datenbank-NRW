@@ -17,9 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class CommuneAdmin extends AbstractAdmin
+class CommuneAdmin extends AbstractAppAdmin
 {
-    protected $labelGroup = 'app.entity.commune.';
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
@@ -29,21 +28,21 @@ class CommuneAdmin extends AbstractAdmin
         $admin = $this->isChild() ? $this->getParent() : $this;
         $id = $admin->getRequest()->get('id');
 
-        $menu->addChild($this->labelGroup . 'actions.show', [
+        $menu->addChild('app.commune.actions.show', [
             'uri' => $admin->generateUrl('show', ['id' => $id])
         ]);
 
         if ($this->isGranted('EDIT')) {
-            $menu->addChild($this->labelGroup . 'actions.edit', [
+            $menu->addChild('app.commune.actions.edit', [
                 'uri' => $admin->generateUrl('edit', ['id' => $id])
             ]);
         }
 
         if ($this->isGranted('LIST')) {
-            $menu->addChild($this->labelGroup . 'actions.solution_list', [
+            $menu->addChild('app.commune.actions.solution_list', [
                 'uri' => $admin->getChild(SolutionAdmin::class)->generateUrl('list', ['id' => $id])
             ]);
-            $menu->addChild($this->labelGroup . 'actions.office_list', [
+            $menu->addChild('app.commune.actions.office_list', [
                 'uri' => $admin->getChild(OfficeAdmin::class)->generateUrl('list', ['id' => $id])
             ]);
         }
@@ -52,30 +51,24 @@ class CommuneAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with($this->labelGroup . 'group.general_data')
-                ->add('name', TextType::class, ['label' => $this->labelGroup . 'name'])
+            ->with('app.commune.group.general_data')
+                ->add('name', TextType::class)
                 ->add('street', TextType::class, [
                     'required' => false,
-                    'label' => $this->labelGroup . 'street'
                 ])
                 ->add('zipCode', TextType::class, [
                     'required' => false,
-                    'label' => $this->labelGroup . 'zip_code'
                 ])
                 ->add('town', TextType::class, [
                     'required' => false,
-                    'label' => $this->labelGroup . 'town'
                 ])
                 ->add('url', UrlType::class, [
                     'required' => false,
-                    'label' => $this->labelGroup . 'url'
                 ])
                 ->add('contact', TextareaType::class, [
-                    'label' => $this->labelGroup . 'contact',
                     'required' => false,
                 ])
                 ->add('serviceProviders', ModelType::class, [
-                    'label' => $this->labelGroup . 'service_providers',
                     'btn_add' => false,
                     'placeholder' => '',
                     'required' => false,
@@ -83,9 +76,9 @@ class CommuneAdmin extends AbstractAdmin
                     'by_reference' => false,
                 ])
             ->end()
-            ->with($this->labelGroup . 'group.offices')
+            ->with('app.commune.group.offices')
                 ->add('offices', CollectionType::class, [
-                    'label' => false,//$this->labelGroup . 'offices',
+                    'label' => false,
                     'type_options' => [
                         'delete' => true,
                     ],
@@ -101,27 +94,18 @@ class CommuneAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
-        $datagridMapper->add('zipCode',
-            null,
-            ['label' => $this->labelGroup . 'zip_code']
-        );
-        $datagridMapper->add('town',
-            null,
-            ['label' => $this->labelGroup . 'town']
-        );
+        $datagridMapper->add('name');
+        $datagridMapper->add('zipCode');
+        $datagridMapper->add('town');
         $datagridMapper->add('offices',
             null,
-            ['label' => $this->labelGroup . 'offices'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('serviceProviders',
             null,
-            ['label' => $this->labelGroup . 'service_providers'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -130,19 +114,13 @@ class CommuneAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('zipCode', null, [
-                'label' => $this->labelGroup . 'zip_code'
-            ])
-            ->add('town', null, [
-                'label' => $this->labelGroup . 'town'
-            ])
-            ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url',
-            ])
+            ->addIdentifier('name')
+            ->add('zipCode')
+            ->add('town')
+            ->add('url', 'url')
             ->add('_action', null, [
+                'label' => 'app.common.actions',
+                'translation_domain' => 'messages',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -157,30 +135,14 @@ class CommuneAdmin extends AbstractAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('street', null, [
-                'label' => $this->labelGroup . 'street',
-            ])
-            ->add('zipCode', null, [
-                'label' => $this->labelGroup . 'zip_code',
-            ])
-            ->add('town', null, [
-                'label' => $this->labelGroup . 'town',
-            ])
-            ->add('url', 'url', [
-                'label' => $this->labelGroup . 'url',
-            ])
-            ->add('contact', null, [
-                'label' => $this->labelGroup . 'contact',
-            ])
-            ->add('offices', null, [
-                'label' => $this->labelGroup . 'offices',
-                'template' => 'CommuneAdmin/offices.html.twig',
-            ])
+            ->add('name')
+            ->add('street')
+            ->add('zipCode')
+            ->add('town')
+            ->add('url', 'url')
+            ->add('contact')
+            ->add('offices')
             ->add('serviceProviders', null, [
-                'label' => $this->labelGroup . 'service_providers',
                 'template' => 'General/service-providers.html.twig',
             ]);
     }

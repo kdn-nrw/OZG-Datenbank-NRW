@@ -2,7 +2,6 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -11,17 +10,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class StatusAdmin extends AbstractAdmin
+class StatusAdmin extends AbstractAppAdmin
 {
-    protected $labelGroup = 'app.entity.status.';
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class, [
-                'label' => $this->labelGroup . 'name'
-            ])
+            ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
-                'label' => $this->labelGroup . 'description',
                 'required' => false,
             ])
             ->end();
@@ -29,19 +24,16 @@ class StatusAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
+        $datagridMapper->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
+            ->addIdentifier('name')
             ->add('_action', null, [
+                'label' => 'app.common.actions',
+                'translation_domain' => 'messages',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -56,8 +48,6 @@ class StatusAdmin extends AbstractAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ]);
+            ->add('name');
     }
 }

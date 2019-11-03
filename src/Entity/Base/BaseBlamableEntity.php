@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Entity;
-
-use Mindbase\EntityBundle\Entity\BlameableInterface;
-use Mindbase\EntityBundle\Entity\BlameableTrait;
+namespace App\Entity\Base;
 
 /**
  * Class BaseEntity

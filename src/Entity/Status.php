@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Base\HideableEntityTrait;
+use App\Entity\Base\NamedEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
 
 
 /**
@@ -16,10 +15,8 @@ use Mindbase\EntityBundle\Entity\NamedEntityTrait;
  * @ORM\Table(name="ozg_status")
  * @ORM\HasLifecycleCallbacks
  */
-class Status extends BaseEntity implements NamedEntityInterface
+class Status extends BaseNamedEntity
 {
-    use NamedEntityTrait;
-    use HideableEntityTrait;
 
     /**
      * statuslv

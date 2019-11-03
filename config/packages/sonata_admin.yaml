@@ -1,8 +1,15 @@
 # https://sonata-project.org/bundles/admin/3-x/doc/reference/dashboard.html
 sonata_admin:
+    title_logo: 'template/logo.svg'
+    title: KDN - OZG
+    show_mosaic_button: false
+    security:
+        handler: sonata.admin.security.handler.role
+        role_admin: ROLE_ADMIN
+        role_super_admin: ROLE_SUPER_ADMIN
     dashboard:
         blocks:
-            - { position: top,  type: App\Block\RecentSolutionsBlock, class: 'col-xs-12', settings: {title: 'app.entity.solution.recent_solutions', translation_domain: 'messages', mode: 'admin'} }
+            - { position: top,  type: App\Block\RecentSolutionsBlock, class: 'col-xs-12', settings: {title: 'app.solution.recent_solutions', translation_domain: 'messages', mode: 'admin'} }
             - { position: left,  type: sonata.admin.block.admin_list, settings: { groups: [app.ozg_implementation_group, app.settings_group, app.service_group] } }
             - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [app.implementation_group, mindbase_admin.menu.system] } }
 
@@ -47,16 +54,16 @@ sonata_admin:
                     - App\Admin\FormServerAdmin
                     - App\Admin\PaymentTypeAdmin
             mindbase_admin.menu.system:
-                label: mindbase_admin.menu.system
+                label: app.system_group
                 #label_catalogue: messages
                 label_catalogue: SonataAdminBundle
                 icon: '<i class="fa fa-cog"></i>'
                 items:
                     - sonata.user.admin.user
                     - sonata.user.admin.group
-                    - Mindbase\SettingsBundle\Controller\Admin\SettingAdmin
-                    - Mindbase\EmailBundle\Controller\Admin\EmailTemplateAdmin
-                    - Mindbase\LogBundle\Controller\Admin\SysLogAdmin
+                    #- Mindbase\SettingsBundle\Controller\Admin\SettingAdmin
+                    #- Mindbase\EmailBundle\Controller\Admin\EmailTemplateAdmin
+                    #- Mindbase\LogBundle\Controller\Admin\SysLogAdmin
                     - shapecode_cron.cronjob
                     - shapecode_cron.cronjob_result
 

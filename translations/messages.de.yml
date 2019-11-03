@@ -4,33 +4,24 @@ app:
     service_group: NRW Basisdaten
     implementation_group: Umsetzung Basisdaten
     ozg_implementation_group: OZG Umsetzung
-    subject: Themenfeld
-    situation: Lage
-    service_system: Leistungsbündel
-    service: Leistungen
-    commune: Kommunen + Ämter
-    service_provider: IT Dienstleister
-    maturity: Reifegrade
-    status: Status
-    portal: Portal
-    laboratory: Labore
-    specialized_procedure: Fachverfahren
-    solution: Lösungen
-    priority: Prioritäten
-    #service_solution: Dienstleistung-Lösungen
-    office: Ämter
-    authentication: Authentifizierung
-    manufacturer: Hersteller
-    service_solution: Leistung
-    form_server: Formularserver
-    payment_type: Bezahlverfahren
-  entity:
-    commune:
-      actions:
-        show: Kommune anzeigen
-        edit: Kommune bearbeiten
-        solution_list: Lösungen anzeigen
-        office_list: Ämter anzeigen
+  common:
+    actions: Aktionen
+  authentication:
+    authentication_list: Authentifizierung
+    entity:
+      name: Methode
+  commune:
+    commune_list: Kommunen + Ämter
+    actions:
+      show: Kommune anzeigen
+      edit: Kommune bearbeiten
+      solution_list: Lösungen anzeigen
+      office_list: Ämter anzeigen
+    group:
+      general_data: Allgemein
+      services_data: Dienstleistungen
+      offices: Ämter
+    entity:
       name: Name
       street: Straße, Hausnummer
       zip_code: PLZ
@@ -39,73 +30,67 @@ app:
       contact: Ansprechpartner der Kommune
       offices: Ämter
       service_providers: IT Dienstleister
-      group:
-        general_data: Allgemein
-        services_data: Dienstleistungen
-        offices: Ämter
-    service_provider:
-      actions:
-        show: IT Dienstleister anzeigen
-        edit: IT Dienstleister bearbeiten
+  form_server:
+    form_server_list: Formularserver
+    entity:
       name: Name
-      street: Straße, Hausnummer
-      zip_code: PLZ
-      town: Ort
       url: Url
-      contact: OZG-Ansprechpartner
-      #solutions: Lösungen
-      communes: Kommunen
-    subject:
+      solutions: Lösungen
+  jurisdiction:
+    jurisdiction_list: Zuständigkeiten
+    entity:
       name: Name
-      situations: Lage
-    situation:
-      name: Name
-      subject: Themenfeld
-      services: Dienstleistungen
-    maturity:
-      name: Name
-      description: Beschreibung
-    office:
-      name: Name
-      description: Beschreibung
-      url: Url
-      contact: Kontakt
-    priority:
-      name: Name
-      level: Level
-      description: Beschreibung
-    status:
-      name: Name
-      description: Beschreibung
-    portal:
-      name: Name
-      description: Beschreibung
-      service_provider: IT Dienstleister
-      url: Url
-    laboratory:
+  laboratory:
+    laboratory_list: Labore
+    entity:
       name: Name
       description: Beschreibung
       service_providers: Teilnehmer IT Dienstleister
       url: Url
       participants_other: Teilnehmer sonstige
-    specialized_procedure:
+  manufacturer:
+    manufacturer_list: Hersteller
+    entity:
+      name: Name
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      specialized_procedures: Anbindung Fachverfahren
+  maturity:
+    maturity_list: Reifegrade
+    entity:
+      name: Name
+      description: Beschreibung
+  office:
+    office_list: Ämter
+    entity:
       name: Name
       description: Beschreibung
       url: Url
-      solutions: Lösungen
-      manufacturers: Hersteller
-    service_system:
-      name: OZG Leistung
-      service_key: OZG-ID
-      situation: Lage
-      execution: Kommunal Vollzug
       contact: Kontakt
+  payment_type:
+    payment_type_list: Bezahlverfahren
+    entity:
+      name: Name
+      url: Url
+      solutions: Lösungen
+  portal:
+    portal_list: Portal
+    entity:
+      name: Name
       description: Beschreibung
-      services: Leistungen
-      status: Status
-      priority: Priorität
-      jurisdictions: Zuständigkeiten
-    service:
+      service_provider: IT Dienstleister
+      url: Url
+  priority:
+    priority_list: Prioritäten
+    entity:
+      name: Name
+      level: Level
+      description: Beschreibung
+  service:
+    service_list: Leistungen
+    entity:
       name: Leika-Bezeichnung
       service_key: Leika-ID
       service_type: Leika-Typ
@@ -118,12 +103,55 @@ app:
       #execution: Kommunal Vollzug
       status: Status
       priority: Priorität
-    solution:
-      actions:
-        show: Lösung anzeigen
-        edit: Lösung bearbeiten
-        service_solution_list: Enthaltene Leistungen anzeigen
-      recent_solutions: Aktuelle Lösungen
+  service_provider:
+    service_provider_list: IT Dienstleister
+    actions:
+      show: IT Dienstleister anzeigen
+      edit: IT Dienstleister bearbeiten
+    entity:
+      name: Name
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      contact: OZG-Ansprechpartner
+      #solutions: Lösungen
+      communes: Kommunen
+  service_solution:
+    service_solution_list: Leistung
+    entity:
+      solution: Lösung
+      service: Leistung
+      description: Kommentar
+      status: Status
+      maturity: Reifegrad
+  service_system:
+    service_system_list: Leistungsbündel
+    entity:
+      name: OZG Leistung
+      service_key: OZG-ID
+      situation: Lage
+      execution: Kommunal Vollzug
+      contact: Kontakt
+      description: Beschreibung
+      services: Leistungen
+      status: Status
+      priority: Priorität
+      jurisdictions: Zuständigkeiten
+  situation:
+    situation_list: Lage
+    entity:
+      name: Name
+      subject: Themenfeld
+      services: Dienstleistungen
+  solution:
+    solution_list: Lösungen
+    recent_solutions: Aktuelle Lösungen
+    actions:
+      show: Lösung anzeigen
+      edit: Lösung bearbeiten
+      service_solution_list: Enthaltene Leistungen anzeigen
+    entity:
       view_all: Alle Lösungen anzeigen
       no_solution_found: Keine Lösungen gefunden
       service_provider: IT Dienstleister
@@ -144,29 +172,27 @@ app:
       maturity: Reifegrad
       form_servers: Formularserver
       payment_types: Bezahlverfahren
-    service_solution:
-      solution: Lösung
-      service: Leistung
-      description: Kommentar
-      status: Status
-      maturity: Reifegrad
-    authentication:
-      name: Methode
-    manufacturer:
+  specialized_procedure:
+    specialized_procedure_list: Fachverfahren
+    entity:
       name: Name
-      street: Straße, Hausnummer
-      zip_code: PLZ
-      town: Ort
-      url: Url
-      specialized_procedures: Anbindung Fachverfahren
-    form_server:
-      name: Name
+      description: Beschreibung
       url: Url
       solutions: Lösungen
-    payment_type:
+      manufacturers: Hersteller
+  status:
+    status_list: Status
+    entity:
       name: Name
-      url: Url
-      solutions: Lösungen
-    jurisdiction:
+      description: Beschreibung
+  subject:
+    subject_list: Themenfeld
+    entity:
       name: Name
+      situations: Lage
+  user:
+    user_list: Status
+    entity:
+      firstname: Vorname
+      lastname: Nachname
 

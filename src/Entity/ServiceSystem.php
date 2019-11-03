@@ -2,13 +2,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Base\SoftdeletableEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
-use Mindbase\EntityBundle\Entity\SoftdeletableEntityInterface;
 
 
 /**
@@ -18,10 +16,8 @@ use Mindbase\EntityBundle\Entity\SoftdeletableEntityInterface;
  * @ORM\Table(name="ozg_service_system")
  * @ORM\HasLifecycleCallbacks
  */
-class ServiceSystem extends BaseEntity implements NamedEntityInterface
+class ServiceSystem extends BaseNamedEntity
 {
-    use NamedEntityTrait;
-    use HideableEntityTrait;
 
     /**
      * ozggid

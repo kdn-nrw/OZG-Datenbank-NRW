@@ -15,10 +15,10 @@ file that was distributed with this source code.
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-condensed">
                 <tr>
-                    <th>{{ 'app.entity.service_provider.name'|trans }}</th>
-                    <th>{{ 'app.entity.service_provider.street'|trans }}</th>
-                    <th>{{ 'app.entity.service_provider.zip_code'|trans }}/{{ 'app.entity.service_provider.town'|trans }}</th>
-                    <th>{{ 'app.entity.service_provider.url'|trans }}</th>
+                    <th>{{ 'app.service_provider.entity.name'|trans }}</th>
+                    <th>{{ 'app.service_provider.entity.street'|trans }}</th>
+                    <th>{{ 'app.service_provider.entity.zip_code'|trans }}/{{ 'app.service_provider.entity.town'|trans }}</th>
+                    <th>{{ 'app.service_provider.entity.url'|trans }}</th>
                 </tr>
                 {% set route_name = field_description.options.route.name %}
                 {% for element in value%}

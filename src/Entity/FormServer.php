@@ -2,12 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
 
 
 /**
@@ -17,10 +15,8 @@ use Mindbase\EntityBundle\Entity\NamedEntityTrait;
  * @ORM\Table(name="ozg_form_server")
  * @ORM\HasLifecycleCallbacks
  */
-class FormServer extends BaseEntity implements NamedEntityInterface
+class FormServer extends BaseNamedEntity
 {
-    use NamedEntityTrait;
-    use HideableEntityTrait;
     use UrlTrait;
 
     /**

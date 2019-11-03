@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Import

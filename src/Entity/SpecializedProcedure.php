@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseBlamableEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
+use App\Entity\Base\HideableEntityTrait;
+use App\Entity\Base\NamedEntityInterface;
+use App\Entity\Base\NamedEntityTrait;
 
 
 /**

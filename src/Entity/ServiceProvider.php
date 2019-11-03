@@ -2,13 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Mindbase\EntityBundle\Entity\HideableEntityTrait;
-use Mindbase\EntityBundle\Entity\NamedEntityInterface;
-use Mindbase\EntityBundle\Entity\NamedEntityTrait;
 
 
 /**
@@ -18,10 +15,8 @@ use Mindbase\EntityBundle\Entity\NamedEntityTrait;
  * @ORM\Table(name="ozg_service_provider")
  * @ORM\HasLifecycleCallbacks
  */
-class ServiceProvider extends BaseEntity implements NamedEntityInterface
+class ServiceProvider extends BaseNamedEntity
 {
-    use NamedEntityTrait;
-    use HideableEntityTrait;
     use AddressTrait;
     use UrlTrait;
 

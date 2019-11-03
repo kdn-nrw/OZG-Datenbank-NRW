@@ -2,7 +2,6 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -11,15 +10,13 @@ use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class SubjectAdmin extends AbstractAdmin
+class SubjectAdmin extends AbstractAppAdmin
 {
-    protected $labelGroup = 'app.entity.subject.';
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class, ['label' => $this->labelGroup . 'name'])
+            ->add('name', TextType::class)
             ->add('situations', CollectionType::class, [
-                'label' => $this->labelGroup . 'situations',
                 'type_options' => [
                     'delete' => true,
                 ],
@@ -34,13 +31,10 @@ class SubjectAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
+        $datagridMapper->add('name');
         $datagridMapper->add('situations',
             null,
-            ['label' => $this->labelGroup . 'situations'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -49,13 +43,11 @@ class SubjectAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->addIdentifier('situations', null, [
-                'label' => $this->labelGroup . 'situations',
-            ])
+            ->addIdentifier('name')
+            ->addIdentifier('situations')
             ->add('_action', null, [
+                'label' => 'app.common.actions',
+                'translation_domain' => 'messages',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -70,8 +62,6 @@ class SubjectAdmin extends AbstractAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ]);
+            ->add('name');
     }
 }

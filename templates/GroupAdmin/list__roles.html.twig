@@ -1,0 +1,9 @@
+{% import '@SonataAdmin/CRUD/base_array_macro.html.twig' as list %}
+
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% for role in value %}
+        <span class="label label-default">{{ role }}</span>
+    {% endfor %}
+{% endblock %}

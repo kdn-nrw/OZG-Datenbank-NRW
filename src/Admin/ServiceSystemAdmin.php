@@ -3,7 +3,6 @@
 namespace App\Admin;
 
 use App\Entity\Status;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -14,49 +13,39 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ServiceSystemAdmin extends AbstractAdmin
+class ServiceSystemAdmin extends AbstractAppAdmin
 {
-    protected $labelGroup = 'app.entity.service_system.';
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
             ->add('name', TextType::class, [
-                'label' => $this->labelGroup . 'name',
                 'required' => true,
             ])
             ->add('serviceKey', TextType::class, [
-                'label' => $this->labelGroup . 'service_key',
                 'required' => true,
             ])
             ->add('situation', ModelType::class, [
                 'btn_add' => false,
-                'label' => $this->labelGroup . 'situation',
             ])
             ->add('status', ModelType::class, [
-                'label' => $this->labelGroup . 'status',
                 'btn_add' => false,
                 'required' => true,
             ])
             ->add('priority', ModelType::class, [
-                'label' => $this->labelGroup . 'priority',
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
             ])
             ->add('execution', TextType::class, [
-                'label' => $this->labelGroup . 'execution',
                 'required' => false,
             ])
             ->add('contact', TextareaType::class, [
-                'label' => $this->labelGroup . 'contact',
                 'required' => false,
             ])
             ->add('description', TextareaType::class, [
-                'label' => $this->labelGroup . 'description',
                 'required' => false,
             ])
             ->add('jurisdictions', ModelType::class, [
-                'label' => $this->labelGroup . 'jurisdictions',
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
@@ -64,7 +53,6 @@ class ServiceSystemAdmin extends AbstractAdmin
                 'by_reference' => false,
             ])
             ->add('services', CollectionType::class, [
-                'label' => $this->labelGroup . 'services',
                 'type_options' => [
                     'delete' => true,
                 ],
@@ -79,71 +67,54 @@ class ServiceSystemAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name',
-            null,
-            ['label' => $this->labelGroup . 'name']
-        );
-        $datagridMapper->add('serviceKey', null, [
-            'label' => $this->labelGroup . 'service_key'
-        ]);
+        $datagridMapper->add('name');
+        $datagridMapper->add('serviceKey');
         $datagridMapper->add('jurisdictions',
             null,
-            ['label' => $this->labelGroup . 'jurisdictions'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('situation',
             null,
-            ['label' => $this->labelGroup . 'situation'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('situation.subject',
             null,
-            ['label' => 'app.entity.situation.subject'],
+            ['label' => 'app.situation.entity.subject'],
             null,
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('priority',
             null,
-            ['label' => $this->labelGroup . 'priority'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('status',
-            null,
-            ['label' => $this->labelGroup . 'status']
-        );
+        $datagridMapper->add('status');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name', null, [
-                'label' => $this->labelGroup . 'name',
-            ])
-            ->add('serviceKey', null, [
-                'label' => $this->labelGroup . 'service_key'
-            ])
-            ->add('jurisdictions', null, [
-                'label' => $this->labelGroup . 'jurisdictions',
-            ])
-            ->add('situation', null, [
-                'label' => $this->labelGroup . 'situation',
-            ])
+            ->addIdentifier('name')
+            ->add('serviceKey')
+            ->add('jurisdictions')
+            ->add('situation')
             ->add('situation.subject', null, [
-                'label' => 'app.entity.situation.subject',
+                'label' => 'app.situation.entity.subject',
             ])
-            ->add('priority', null, [
-                'label' => $this->labelGroup . 'priority',
-            ])
+            ->add('priority')
             ->add('status', 'choice', [
-                'label' => $this->labelGroup . 'status',
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
             ])
             ->add('_action', null, [
+                'label' => 'app.common.actions',
+                'translation_domain' => 'messages',
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -159,37 +130,29 @@ class ServiceSystemAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('name', null, [
-                'label' => $this->labelGroup . 'name',
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
             ->add('serviceKey', null, [
-                'label' => $this->labelGroup . 'service_key',
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
-            ->add('jurisdictions', null, [
-                'label' => $this->labelGroup . 'jurisdictions',
-            ])
+            ->add('jurisdictions')
             ->add('situation.subject', null, [
-                'label' => 'app.entity.situation.subject',
+                'label' => 'app.situation.entity.subject',
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
             ])
             ->add('situation', null, [
-                'label' => $this->labelGroup . 'situation',
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
             ])
             ->add('priority', null, [
-                'label' => $this->labelGroup . 'priority',
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
             ->add('status', 'choice', [
-                'label' => $this->labelGroup . 'status',
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
             ->add('description', null, [
-                'label' => $this->labelGroup . 'description',
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ]);
     }
