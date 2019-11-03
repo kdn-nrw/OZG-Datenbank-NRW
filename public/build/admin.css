@@ -1,0 +1,16 @@
+body {
+  background-color: lightgray; }
+
+body.login-page {
+  background-image: url(/build/images/login-background.ce2e6439.jpg);
+  background-size: cover; }
+  body.login-page .login-box {
+    background-color: white; }
+  body.login-page .login-logo, body.login-page .register-logo {
+    padding-top: 25px; }
+    body.login-page .login-logo img, body.login-page .register-logo img {
+      width: 128px;
+      height: auto; }
+
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vYWRtaW4uc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLDJCQUEyQjs7QUFHL0I7RUFDSSwrQ0FBdUQ7RUFDdkQsc0JBQXNCO0VBRjFCO0lBS1EsdUJBQXVCO0VBTC9CO0lBUVEsaUJBQWlCO0lBUnpCO01BV1ksWUFBWTtNQUNaLFlBQVkiLCJmaWxlIjoiYWRtaW4uY3NzIiwic291cmNlc0NvbnRlbnQiOlsiYm9keSB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogbGlnaHRncmF5O1xufVxuXG5ib2R5LmxvZ2luLXBhZ2Uge1xuICAgIGJhY2tncm91bmQtaW1hZ2U6IHVybChcIi4uL2ltYWdlcy9sb2dpbi1iYWNrZ3JvdW5kLmpwZ1wiKTtcbiAgICBiYWNrZ3JvdW5kLXNpemU6IGNvdmVyO1xuXG4gICAgLmxvZ2luLWJveCB7XG4gICAgICAgIGJhY2tncm91bmQtY29sb3I6IHdoaXRlO1xuICAgIH1cbiAgICAubG9naW4tbG9nbywgLnJlZ2lzdGVyLWxvZ28ge1xuICAgICAgICBwYWRkaW5nLXRvcDogMjVweDtcblxuICAgICAgICBpbWcge1xuICAgICAgICAgICAgd2lkdGg6IDEyOHB4O1xuICAgICAgICAgICAgaGVpZ2h0OiBhdXRvO1xuICAgICAgICB9XG4gICAgfVxufVxuIl0sInNvdXJjZVJvb3QiOiIifQ==*/

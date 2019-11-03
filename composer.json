@@ -9,15 +9,28 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "doctrine/doctrine-migrations-bundle": "^2.0",
+        "friendsofsymfony/ckeditor-bundle": "^2.0.2",
+        "jms/serializer-bundle": "^2.4|^3.0",
+        "sensio/framework-extra-bundle": "^5.2",
         "shapecode/cron-bundle": "^3.2",
-        "symfony/console": "4.3.*",
+        "sonata-project/admin-bundle": "^3.46",
+        "sonata-project/doctrine-orm-admin-bundle": "^3.8",
+        "sonata-project/intl-bundle": "^2.5",
+        "sonata-project/translation-bundle": "^2.4",
+        "sonata-project/user-bundle": "^4.3",
+        "stof/doctrine-extensions-bundle": "^1.3",
+        "symfony/apache-pack": "^1.0",
         "symfony/dotenv": "4.3.*",
         "symfony/flex": "^1.1",
-        "symfony/framework-bundle": "4.3.*",
+        "symfony/framework-bundle": "^4.3",
+        "symfony/mailer": "4.3.*",
         "symfony/monolog-bundle": "^3.3",
         "symfony/serializer": "4.3.*",
+        "symfony/swiftmailer-bundle": "^3.2",
+        "symfony/webpack-encore-bundle": "^1.4",
         "symfony/yaml": "4.3.*",
-        "vich/uploader-bundle": "^1.9"
+        "vich/uploader-bundle": "^1.10"
     },
     "require-dev": {
         "brainappeal/docker": "^0.3.8|dev-develop",
@@ -64,6 +77,10 @@
     },
     "conflict": {
         "symfony/symfony": "*"
+    },
+    "suggest": {
+        "symfony/profiler-pack": "Allows easy debugging of application",
+        "symfony/maker-bundle": "Provides creation commands"
     },
     "extra": {
         "symfony": {
