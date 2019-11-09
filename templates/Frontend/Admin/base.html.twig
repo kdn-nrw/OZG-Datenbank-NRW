@@ -39,13 +39,13 @@
                             <label for="custom-filter-{{ filterParamName }}"><i class="fa fa-filter" aria-hidden="true"></i>
                                 Filter: {{ filterMenu.label|trans }}
                             </label>
-                            <select class="form-control" id="custom-filter-{{ filterParamName }}" name="filter[filterParamName][value]"
-                                data-url="{{ path('frontend_app_service_list', {'filter': {(filterParamName): {'value': 'FILTER_VALUE'}}}) }}"
+                            <select class="form-control" id="custom-filter-{{ filterParamName }}" name="filter[filterParamName][value][]"
+                                data-url="{{ path('frontend_app_service_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
                                 onchange="if (this.value) window.location.href=this.dataset.url.replace('FILTER_VALUE', this.value)">
                                 <option value=""{% if not filterMenu.value %} selected="selected"{% endif %}>-</option>
                             {% for filterChoice in filterMenu.choices %}
                                 {% set filterParamName = filterName|replace({'.': '__'}) %}
-                                <option value="{{ filterChoice.id }}"{% if filterChoice.id == filterMenu.value %} selected="selected"{% endif %}>
+                                <option value="{{ filterChoice.id }}"{% if filterChoice.id in filterMenu.value %} selected="selected"{% endif %}>
                                     {{ filterChoice.name }}
                                 </option>
                             {% endfor %}
