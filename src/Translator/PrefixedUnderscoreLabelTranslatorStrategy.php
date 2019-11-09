@@ -24,7 +24,14 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
 
     private $prefix;
 
-    public function setAdminClass(string $adminClassName)
+    /**
+     * Custom field labels
+     *
+     * @var array
+     */
+    private $customLabels = [];
+
+    public function setAdminClass(string $adminClassName, $customLabels = [])
     {
         if (preg_match('/^((.*Bundle|[^\\\\]+)?(\\\\.+)*\\\\)?([^\\\\]+)$/', $adminClassName, $matches) === 1) {
             $bundle = preg_replace('/^(.*)Bundle$/', '$1', str_replace('\\', '', $matches[2]));
@@ -33,6 +40,7 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
             $prefix = empty($bundle) ? $class : $bundle . '\\' . $class;
             $prefix = $snakeCaseConverter->classNameToSnakeCase($prefix) . '.';
             $this->prefix = $prefix;
+            $this->customLabels[$prefix] = $customLabels;
         }
     }
 
@@ -50,6 +58,7 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
             case 'list':
             case 'filter':
             case 'show':
+            case 'export':
                 $context = 'entity';
                 break;
             case 'breadcrumb':
@@ -69,6 +78,9 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
             $key .= $type . '_';
         }
         $key .= $filteredLabel;
+        if ($this->prefix && isset($this->customLabels[$this->prefix][$key])) {
+            return $this->customLabels[$this->prefix][$key];
+        }
         return ($this->prefix ? $this->prefix : '') . $key;
     }
 }

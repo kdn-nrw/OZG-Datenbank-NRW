@@ -20,6 +20,8 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
             ->add('service', ModelAutocompleteType::class, [
                 'property' => 'name',
                 'required' => true,
+            ], [
+                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
             ])/*
             ->add('status', ModelType::class, [
                 'btn_add' => false,
@@ -39,7 +41,9 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
     {
         $datagridMapper->add('service',
             null,
-            [],
+            [
+                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -57,7 +61,9 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('service')
+            ->add('service', null, [
+                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+            ])
             ->add('solution')
             /*->add('description')
             ->add('status', 'choice', [
@@ -83,7 +89,9 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('service')
+            ->add('service', [
+                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+            ])
             ->add('solution')
             ->add('maturity')/*
             ->add('status', 'choice', [

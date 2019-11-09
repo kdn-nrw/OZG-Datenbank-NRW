@@ -53,9 +53,9 @@ security:
             context:             user
             form_login:
                 provider:       fos_userbundle
-                login_path:     /login
+                login_path:    /admin/login
                 use_forward:    false
-                check_path:     /login_check
+                check_path:     /admin/login_check
                 failure_path:   null
             logout:              true
 
@@ -79,5 +79,5 @@ security:
         # Secured part of the site
         # This config requires being logged for the whole site and having the admin role for the admin part.
         # Change these rules to adapt them to your needs
-        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/admin/, role: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }

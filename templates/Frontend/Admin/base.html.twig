@@ -1,0 +1,54 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+
+{% block logo %}
+    {% apply spaceless %}
+        <a class="logo" href="https://www.kdn.de/" target="_blank">
+            {% if 'single_image' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
+                <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
+            {% endif %}
+            {% if 'single_text' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
+                <span>{{ sonata_admin.adminPool.title }}</span>
+            {% endif %}
+        </a>
+    {% endapply %}
+{% endblock %}
+
+{% block sonata_sidebar_search %}
+{% endblock sonata_sidebar_search %}
+
+
+{% block side_bar_nav %}
+    <ul class="sidebar-menu" data-widget="tree">
+        <li class="first treeview active">
+            <a href="#">
+                <i class="fa fa-sitemap" aria-hidden="true"></i>
+                <span>{{ 'app.menu.osg_overview'|trans }}</span>
+                <span class="pull-right-container"><i class="fa pull-right fa-angle-left"></i></span>
+            </a>
+            <ul class="active treeview-menu menu_level_1">
+                <li class="first">
+                    <a href="{{ path('frontend_app_service_list') }}">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                        {{ 'app.service.service_list'|trans }}
+                    </a>
+                    {% if datagrid.filterMenuItems %}
+                        <div class="list-item-filter" style="padding: 5px 5px 5px 15px;color: #fff; white-space: normal;">
+                        {% for filterName, filterMenu in datagrid.filterMenuItems %}
+                            <p><i class="fa fa-filter" aria-hidden="true"></i>
+                                Filter: {{ filterMenu.label|trans }}
+                            </p>
+                            {% for filterChoice in filterMenu.choices %}
+                                {% set filterParamName = filterName|replace({'.': '__'}) %}
+                                <a href="{{ path('frontend_app_service_list', {'filter': {(filterParamName): {'value': filterChoice.id}}}) }}" class="label label-primary">
+                                    {{ filterChoice.name }}
+                                </a>
+                            {% endfor %}
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                </li>
+            </ul>
+        </li>
+    </ul>
+{% endblock side_bar_nav %}

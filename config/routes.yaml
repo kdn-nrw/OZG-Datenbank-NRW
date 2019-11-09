@@ -2,6 +2,14 @@ index:
     path: /
     controller: App\Controller\DefaultController::index
 
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+frontend_app_service_list:
+    path: /leistungen
+    controller: App\Controller\ServiceController::listAction
+
+frontend_app_service_show:
+    path: /leistungen/{id}/show
+    controller: App\Controller\ServiceController::showAction
+
+frontend_app_service_export:
+    path: /leistungen/export
+    controller: App\Controller\ServiceController::exportAction

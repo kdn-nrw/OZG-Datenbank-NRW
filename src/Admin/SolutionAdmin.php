@@ -179,7 +179,10 @@ class SolutionAdmin extends AbstractAppAdmin
         );
         $datagridMapper->add('serviceSolutions.service',
             null,
-            [],
+            [
+                'label' => 'app.service_solution.entity.service',
+                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -299,6 +302,14 @@ class SolutionAdmin extends AbstractAppAdmin
                     'delete' => [],
                 ]
             ]);
+    }
+
+    public function getExportFields()
+    {
+        return [
+            // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions',
+            'serviceProvider', 'customProvider', 'name', 'maturity', 'url', 'status',
+        ];
     }
 
     /**
