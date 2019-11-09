@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Admin;
+namespace App\Admin\Frontend;
 
+use App\Datagrid\CustomDatagrid;
 use App\Entity\Priority;
+use App\Entity\Situation;
 use App\Entity\Status;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\Form\Type\BooleanType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ServiceAdmin extends AbstractAppAdmin
+class ServiceAdmin extends AbstractFrontendAdmin
 {
+
     /**
      * @var string[]
      */
@@ -26,46 +23,16 @@ class ServiceAdmin extends AbstractAppAdmin
         'entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
 
-    protected function configureFormFields(FormMapper $formMapper)
-    {
-        $formMapper
-            ->add('name', TextareaType::class, [
-                'required' => true,
-            ])
-            ->add('serviceKey', TextType::class, [
-                'required' => true,
-            ])
-            ->add('serviceSystem', ModelAutocompleteType::class, [
-                'property' => 'name',
-                'required' => true,
-            ])
-            ->add('status', ModelType::class, [
-                'btn_add' => false,
-                'required' => true,
-            ])
-            ->add('serviceType', TextType::class, [
-                'required' => true,
-            ])
-            ->add('legalBasis', TextareaType::class, [
-                'required' => false,
-            ])
-            ->add('laws', TextareaType::class, [
-                'required' => false,
-            ])
-            ->add('lawShortcuts', TextType::class, [
-                'required' => false,
-            ])
-            ->add('relevance1', BooleanType::class, [
-                'required' => false,
-            ])
-            ->add('relevance2', BooleanType::class, [
-                'required' => false,
-            ])
-            ->end();
-    }
-
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $datagridMapper->add('serviceSystem.situation',
+            null,
+            [
+                'show_filter' => true,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
         $datagridMapper->add('serviceType');
@@ -75,14 +42,14 @@ class ServiceAdmin extends AbstractAppAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('serviceSystem.serviceKey');
         $datagridMapper->add('status');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
-            ->add('serviceKey')
+            ->add('serviceSystem.situation')
             ->add('serviceSystem', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
@@ -92,6 +59,17 @@ class ServiceAdmin extends AbstractAppAdmin
                     ['fieldName' => 'serviceSystem'],
                 ]
             ])
+            ->add('serviceSystem.serviceKey', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'serviceKey'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSystem'],
+                ]
+            ])
+            ->add('name')
+            ->add('serviceKey')
             ->add('serviceType')
             ->add('lawShortcuts')
             ->add('relevance1')
@@ -160,17 +138,33 @@ class ServiceAdmin extends AbstractAppAdmin
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
             ->add('serviceSystem.priority', 'choice', [
-                'label' => 'app.service_system.entity.priority',
                 'editable' => true,
                 'class' => Priority::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('serviceSystem.situation', null, [
-                'label' => 'app.service_system.entity.situation',
-            ])
-            ->add('serviceSystem.situation.subject', null, [
-                'label' => 'app.situation.entity.subject',
-            ]);
+            ->add('serviceSystem.situation')
+            ->add('serviceSystem.situation.subject');
+    }
+
+    public function isGranted($name, $object = null)
+    {
+        if (in_array($name, ['LIST', 'VIEW', 'EXPORT'])) {
+            return true;
+        }
+        return parent::isGranted($name, $object);
+    }
+
+    public function buildDatagrid()
+    {
+        if ($this->datagrid) {
+            return;
+        }
+        parent::buildDatagrid();
+        /** @var CustomDatagrid $datagrid */
+        $datagrid = $this->datagrid;
+        $modelManager = $this->getModelManager();
+        $situations = $modelManager->findBy(Situation::class);
+        $datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
     }
 }

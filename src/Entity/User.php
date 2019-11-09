@@ -57,4 +57,25 @@ class User extends BaseUser
         // Update FOS user roles (array is generated in getter function)
         $this->setRoles($this->getRoles());
     }
+
+    /**
+     * We only use groups for setting the roles. Therefore the roles array must be cleared
+     * before adding the group roles!
+     *
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        //$roles = $this->roles;
+        $roles = [];
+
+        foreach ($this->getGroups() as $group) {
+            $roles = array_merge($roles, $group->getRoles());
+        }
+
+        // we need to make sure to have at least one role
+        $roles[] = static::ROLE_DEFAULT;
+
+        return array_unique($roles);
+    }
 }

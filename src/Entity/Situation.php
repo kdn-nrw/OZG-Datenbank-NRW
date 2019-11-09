@@ -25,8 +25,8 @@ class Situation extends BaseNamedEntity
     private $subject;
 
     /**
-     * @var Service[]|Collection
-     * @ORM\OneToMany(targetEntity="Service", mappedBy="situation")
+     * @var ServiceSystem[]|Collection
+     * @ORM\OneToMany(targetEntity="ServiceSystem", mappedBy="situation")
      */
     private $services;
 

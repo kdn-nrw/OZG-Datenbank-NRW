@@ -81,6 +81,21 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
+  App\Admin\Frontend\ServiceAdmin:
+    arguments:
+      - ~
+      - App\Entity\Service
+      - ~
+    calls:
+      - [setTemplate, ['show', 'ServiceAdmin/show.html.twig']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.service.service_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Admin\CommuneAdmin:
     arguments:
       - ~
@@ -301,3 +316,10 @@ services:
       - '@kernel'
     tags:
       - { name: form.type }
+
+  App\Builder\CustomDatagridBuilder:
+    arguments:
+      - '@form.factory'
+      - '@sonata.admin.builder.filter.factory'
+      - '@sonata.admin.guesser.orm_datagrid_chain'
+      - '%form.type_extension.csrf.enabled%'

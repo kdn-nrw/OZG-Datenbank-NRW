@@ -10,13 +10,11 @@ namespace App\Admin;
 
 
 use App\Entity\Base\NamedEntityInterface;
-use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Translator\LabelTranslatorStrategyInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
@@ -59,9 +57,9 @@ abstract class AbstractAppAdmin extends AbstractAdmin
                     'edit' => [],
                     'delete' => [],
                 ]
-            ])
-        ;
+            ]);
     }
+
     /**
      * @inheritdoc
      */

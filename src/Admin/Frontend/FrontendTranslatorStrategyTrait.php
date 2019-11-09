@@ -3,24 +3,25 @@
  *
  * @author    Gert Hammes <info@gerthammes.de>
  * @copyright 2019 Gert Hammes
- * @since     2019-11-03
+ * @since     2019-11-09
  */
 
-namespace App\Admin;
+namespace App\Admin\Frontend;
 
 
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Sonata\AdminBundle\Translator\LabelTranslatorStrategyInterface;
 
 /**
- * Class AdminTranslatorStrategyTrait
+ * Class FrontendTranslatorStrategyTrait
  *
  * @author    Gert Hammes <info@gerthammes.de>
  * @copyright 2019 Gert Hammes
- * @since     2019-11-03
+ * @since     2019-11-09
  * @property LabelTranslatorStrategyInterface $labelTranslatorStrategy
+ * @property array $customLabels
  */
-trait AdminTranslatorStrategyTrait
+trait FrontendTranslatorStrategyTrait
 {
     /**
      * @var string|null
@@ -28,6 +29,8 @@ trait AdminTranslatorStrategyTrait
     protected $translatorNamingPrefix;
 
     /**
+     * Custom labels for entity fields. Required for sub-entity fields
+     * Example: 'entity.service_system_situation' => 'app.service_system.entity.situation',
      * @var string[]
      */
     protected $customLabels = [];
@@ -46,7 +49,7 @@ trait AdminTranslatorStrategyTrait
     public function getTranslatorNamingPrefix()
     {
         if (null === $this->translatorNamingPrefix) {
-            $this->translatorNamingPrefix = get_class($this);
+            $this->translatorNamingPrefix = str_replace('\\Frontend', '', get_class($this));
         }
         return $this->translatorNamingPrefix;
     }

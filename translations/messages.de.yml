@@ -4,6 +4,7 @@ app:
     service_group: NRW Basisdaten
     implementation_group: Umsetzung Basisdaten
     ozg_implementation_group: OZG Umsetzung
+    osg_overview: OZG Überblick
   common:
     actions: Aktionen
   authentication:

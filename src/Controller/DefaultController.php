@@ -27,7 +27,7 @@ class DefaultController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('sonata_admin_dashboard');
         } else {
-            return $this->redirectToRoute('sonata_user_admin_security_login');
+            return $this->redirectToRoute('frontend_app_service_list');
         }
 //        $response = $this->render('home.html.twig');
 //        $response->setStatusCode(Response::HTTP_NOT_FOUND);
