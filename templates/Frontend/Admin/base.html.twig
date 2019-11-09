@@ -32,23 +32,44 @@
                         <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                         {{ 'app.service.service_list'|trans }}
                     </a>
-                    {% if datagrid.filterMenuItems %}
+                    {% if datagrid is defined and datagrid.filterMenuItems %}
                         <div class="list-item-filter" style="padding: 5px 5px 5px 15px;color: #fff; white-space: normal;">
                         {% for filterName, filterMenu in datagrid.filterMenuItems %}
-                            <p><i class="fa fa-filter" aria-hidden="true"></i>
+                            {% set filterParamName = filterName|replace({'.': '__'}) %}
+                            <label for="custom-filter-{{ filterParamName }}"><i class="fa fa-filter" aria-hidden="true"></i>
                                 Filter: {{ filterMenu.label|trans }}
-                            </p>
+                            </label>
+                            <select class="form-control" id="custom-filter-{{ filterParamName }}" name="filter[filterParamName][value]"
+                                data-url="{{ path('frontend_app_service_list', {'filter': {(filterParamName): {'value': 'FILTER_VALUE'}}}) }}"
+                                onchange="if (this.value) window.location.href=this.dataset.url.replace('FILTER_VALUE', this.value)">
+                                <option value=""{% if not filterMenu.value %} selected="selected"{% endif %}>-</option>
                             {% for filterChoice in filterMenu.choices %}
                                 {% set filterParamName = filterName|replace({'.': '__'}) %}
-                                <a href="{{ path('frontend_app_service_list', {'filter': {(filterParamName): {'value': filterChoice.id}}}) }}" class="label label-primary">
+                                <option value="{{ filterChoice.id }}"{% if filterChoice.id == filterMenu.value %} selected="selected"{% endif %}>
                                     {{ filterChoice.name }}
-                                </a>
+                                </option>
                             {% endfor %}
+                            </select>
                         {% endfor %}
                         </div>
                     {% endif %}
                 </li>
             </ul>
         </li>
+        {% if app.user %}
+        <li class="last">
+            <a href="{{ path('sonata_admin_dashboard') }}">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <span>{{ 'app.menu.dashboard'|trans }}</span>
+            </a>
+        </li>
+        {% else %}
+            <li class="last">
+                <a href="/admin/login">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                    <span>{{ 'app.menu.login'|trans }}</span>
+                </a>
+            </li>
+        {% endif %}
     </ul>
 {% endblock side_bar_nav %}

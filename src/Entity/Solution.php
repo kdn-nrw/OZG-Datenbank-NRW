@@ -3,13 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseBlamableEntity;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\NamedEntityTrait;
-use Symfony\Component\VarDumper\VarDumper;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
 
 /**

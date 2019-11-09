@@ -27,6 +27,9 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
 
     protected $appContext = self::APP_CONTEXT_BE;
 
+    protected $adminBaseRouteName;
+    protected $adminBaseRoutePattern;
+
     /**
      * @param string $appContext
      */
@@ -41,18 +44,22 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
                 throw new \RuntimeException(sprintf('Cannot automatically determine base route name, please define a default `baseRouteName` value for the admin class `%s`', static::class));
             }
 
-            $this->baseRouteName = sprintf('frontend_%s%s_%s',
+            $routeName = sprintf('_%s%s_%s',
                 empty($matches[1]) ? '' : $this->urlize($matches[1]) . '_',
                 $this->urlize($matches[3]),
                 $this->urlize($matches[5])
             );
+            $this->baseRouteName = 'frontend' . $routeName;
 
-            $this->baseRoutePattern = sprintf(
-                '/frontend/%s%s/%s',
+            $routePattern = sprintf(
+                '/%s%s/%s',
                 empty($matches[1]) ? '' : $this->urlize($matches[1], '-').'/',
                 $this->urlize($matches[3], '-'),
                 $this->urlize($matches[5], '-')
             );
+            $this->baseRoutePattern = '/frontend' . $routePattern;
+            $this->adminBaseRouteName = $routeName;
+            $this->adminBaseRoutePattern = $routePattern;
         }
     }
 
@@ -60,5 +67,32 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
     {
         return $this->appContext == self::APP_CONTEXT_FE;
     }
+
+    public function hasRoute($name)
+    {
+        if (in_array($name, ['batch', 'create', 'edit', 'delete'])) {
+            return false;
+        }
+        return parent::hasRoute($name);
+    }
+
+    /*
+     * TODO: use admin routes instead of disabling routes (see hasRoute)
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        if ($this->adminBaseRoutePattern) {
+            $adminRoutesCollection = new RouteCollection(
+                \App\Admin\ServiceAdmin::class,
+                $this->adminBaseRouteName,
+                $this->adminBaseRoutePattern,
+                $this->getBaseControllerName()
+            );
+            $adminRoutesCollection->add('create');
+            $adminRoutesCollection->add('edit');
+            $adminRoutesCollection->add('delete');
+            $adminRoutesCollection->add('batch');
+            $collection->addCollection($adminRoutesCollection);
+        }
+    }*/
 
 }

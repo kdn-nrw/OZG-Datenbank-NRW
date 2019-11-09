@@ -23,10 +23,17 @@ class CustomDatagrid extends Datagrid
     private $filterMenuItems = [];
 
     public function addFilterMenu($filterName, $filterChoices, $label) {
-        $this->filterMenuItems[$filterName] = [
+        $filterItem = [
             'label' => $label,
             'choices' => $filterChoices,
+            'value' => null,
         ];
+        $filterNameInternal = str_replace('.', '__', $filterName);
+        $values = $this->getValues();
+        if (isset($values[$filterNameInternal])) {
+            $filterItem['value'] = $values[$filterNameInternal]['value'];
+        }
+        $this->filterMenuItems[$filterName] = $filterItem;
     }
 
     public function getFilterMenuItems()

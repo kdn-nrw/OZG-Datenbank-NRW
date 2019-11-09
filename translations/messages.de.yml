@@ -5,6 +5,8 @@ app:
     implementation_group: Umsetzung Basisdaten
     ozg_implementation_group: OZG Umsetzung
     osg_overview: OZG Überblick
+    login: Anmelden
+    dashboard: Startseite
   common:
     actions: Aktionen
   authentication:
