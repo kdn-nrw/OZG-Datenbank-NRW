@@ -58,6 +58,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin
                 ],
                 'by_reference' => false,
             ], [
+                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class,
                 'edit' => 'inline',
                 'inline' => 'table',
                 'sortable' => 'position',
