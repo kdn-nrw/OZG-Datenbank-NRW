@@ -30,7 +30,7 @@ class CustomDatagrid extends Datagrid
         ];
         $filterNameInternal = str_replace('.', '__', $filterName);
         $values = $this->getValues();
-        if (isset($values[$filterNameInternal])) {
+        if (isset($values[$filterNameInternal]['value'])) {
             $filterItem['value'] = $values[$filterNameInternal]['value'];
         }
         $this->filterMenuItems[$filterName] = $filterItem;

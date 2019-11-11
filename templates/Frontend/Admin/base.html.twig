@@ -14,6 +14,29 @@
     {% endapply %}
 {% endblock %}
 
+
+{% block sonata_top_nav_menu %}
+    <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+    {% if app.user %}
+        <li>
+            <a href="{{ path('sonata_admin_dashboard') }}">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <span>{{ 'app.menu.dashboard'|trans }}</span>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a href="/admin/login">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <span>{{ 'app.menu.login'|trans }}</span>
+            </a>
+        </li>
+    {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
 {% block sonata_sidebar_search %}
 {% endblock sonata_sidebar_search %}
 
@@ -36,40 +59,43 @@
                         <div class="list-item-filter" style="padding: 5px 5px 5px 15px;color: #fff; white-space: normal;">
                         {% for filterName, filterMenu in datagrid.filterMenuItems %}
                             {% set filterParamName = filterName|replace({'.': '__'}) %}
-                            <label for="custom-filter-{{ filterParamName }}"><i class="fa fa-filter" aria-hidden="true"></i>
-                                Filter: {{ filterMenu.label|trans }}
-                            </label>
-                            <select class="form-control" id="custom-filter-{{ filterParamName }}" name="filter[filterParamName][value][]"
-                                data-url="{{ path('frontend_app_service_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
-                                onchange="if (this.value) window.location.href=this.dataset.url.replace('FILTER_VALUE', this.value)">
-                                <option value=""{% if not filterMenu.value %} selected="selected"{% endif %}>-</option>
-                            {% for filterChoice in filterMenu.choices %}
-                                {% set filterParamName = filterName|replace({'.': '__'}) %}
-                                <option value="{{ filterChoice.id }}"{% if filterChoice.id in filterMenu.value %} selected="selected"{% endif %}>
-                                    {{ filterChoice.name }}
-                                </option>
-                            {% endfor %}
-                            </select>
+                            {% if filterMenu.choices|length > 20 %}
+                                <label for="custom-filter-{{ filterParamName }}"><i class="fa fa-filter" aria-hidden="true"></i>
+                                    Filter: {{ filterMenu.label|trans }}
+                                </label>
+                                <select class="form-control" id="custom-filter-{{ filterParamName }}" name="filter[filterParamName][value][]"
+                                    data-url="{{ path('frontend_app_service_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
+                                    onchange="if (this.value) window.location.href=this.dataset.url.replace('FILTER_VALUE', this.value)">
+                                    <option value=""{% if not filterMenu.value %} selected="selected"{% endif %}>-</option>
+                                {% for filterChoice in filterMenu.choices %}
+                                    {% set filterParamName = filterName|replace({'.': '__'}) %}
+                                    <option value="{{ filterChoice.id }}"{% if filterChoice.id in filterMenu.value %} selected="selected"{% endif %}>
+                                        {{ filterChoice.name }}
+                                    </option>
+                                {% endfor %}
+                                </select>
+                            {% else %}
+                                <div style="color: #fff;font-weight:bold;padding-left: 22px;"><i class="fa fa-filter" aria-hidden="true"></i>
+                                    Filter: {{ filterMenu.label|trans }}
+                                </div>
+                                <ul>
+                                    {% for filterChoice in filterMenu.choices %}
+                                        {% set filterParamName = filterName|replace({'.': '__'}) %}
+                                        <li>
+                                        <a href="#" class="custom-menu-filter-item{% if filterChoice.id in filterMenu.value %} active{% endif %}" onclick="window.location.href=this.dataset.url.replace('FILTER_VALUE', '{{ filterChoice.id }}');return false;"
+                                           data-url="{{ path('frontend_app_service_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
+                                           {% if filterChoice.id in filterMenu.value %} style="color:#fff;font-weight: bold;" {% endif %}>
+                                            {{ filterChoice.name }}
+                                        </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                         {% endfor %}
                         </div>
                     {% endif %}
                 </li>
             </ul>
         </li>
-        {% if app.user %}
-        <li class="last">
-            <a href="{{ path('sonata_admin_dashboard') }}">
-                <i class="fa fa-home" aria-hidden="true"></i>
-                <span>{{ 'app.menu.dashboard'|trans }}</span>
-            </a>
-        </li>
-        {% else %}
-            <li class="last">
-                <a href="/admin/login">
-                    <i class="fa fa-sign-in" aria-hidden="true"></i>
-                    <span>{{ 'app.menu.login'|trans }}</span>
-                </a>
-            </li>
-        {% endif %}
     </ul>
 {% endblock side_bar_nav %}

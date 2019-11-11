@@ -6,6 +6,7 @@ use App\Datagrid\CustomDatagrid;
 use App\Entity\Priority;
 use App\Entity\Situation;
 use App\Entity\Status;
+use App\Entity\Subject;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -18,6 +19,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
      * @var string[]
      */
     protected $customLabels = [
+        'entity.service_system_situation_subject' => 'app.situation.entity.subject',
         'entity.service_system_situation' => 'app.service_system.entity.situation',
         'entity.service_system_service_key' => 'app.service_system.entity.service_key',
         'entity.service_system_priority' => 'app.service_system.entity.priority',
@@ -25,11 +27,17 @@ class ServiceAdmin extends AbstractFrontendAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('serviceSystem.situation',
+        $datagridMapper->add('serviceSystem.situation.subject',
             null,
             [
                 'show_filter' => true,
             ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('serviceSystem.situation',
+            null,
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -49,6 +57,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->add('serviceSystem.situation.subject')
             ->add('serviceSystem.situation')
             ->add('serviceSystem', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -70,10 +79,6 @@ class ServiceAdmin extends AbstractFrontendAdmin
             ])
             ->add('name')
             ->add('serviceKey')
-            ->add('serviceType')
-            ->add('lawShortcuts')
-            ->add('relevance1')
-            ->add('relevance2')
             ->add('status', 'choice', [
                 'editable' => true,
                 'class' => Status::class,
@@ -93,7 +98,8 @@ class ServiceAdmin extends AbstractFrontendAdmin
     public function getExportFields()
     {
         return [
-            'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey', 'name',
+            'serviceSystem.situation.subject', 'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey',
+            'name',
             'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
         ];
     }
@@ -164,7 +170,9 @@ class ServiceAdmin extends AbstractFrontendAdmin
         /** @var CustomDatagrid $datagrid */
         $datagrid = $this->datagrid;
         $modelManager = $this->getModelManager();
-        $situations = $modelManager->findBy(Situation::class);
-        $datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
+        //$situations = $modelManager->findBy(Situation::class);
+        //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
+        $subjects = $modelManager->findBy(Subject::class);
+        $datagrid->addFilterMenu('serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject');
     }
 }
