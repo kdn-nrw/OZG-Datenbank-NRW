@@ -2,6 +2,10 @@ index:
     path: /
     controller: App\Controller\DefaultController::index
 
+app_search_list:
+    path: /suche
+    controller: App\Controller\SearchController::index
+
 frontend_app_service_list:
     path: /leistungen
     controller: App\Controller\ServiceController::listAction
@@ -13,3 +17,15 @@ frontend_app_service_show:
 frontend_app_service_export:
     path: /leistungen/export
     controller: App\Controller\ServiceController::exportAction
+
+frontend_app_implementationproject_list:
+    path: /umsetzungsprojekte
+    controller: App\Controller\ImplementationProjectController::listAction
+
+frontend_app_implementationproject_show:
+    path: /umsetzungsprojekte/{id}/show
+    controller: App\Controller\ImplementationProjectController::showAction
+
+frontend_app_implementationproject_export:
+    path: /umsetzungsprojekte/export
+    controller: App\Controller\ImplementationProjectController::exportAction

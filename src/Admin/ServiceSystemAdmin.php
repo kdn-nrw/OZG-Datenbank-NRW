@@ -15,6 +15,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ServiceSystemAdmin extends AbstractAppAdmin
 {
+    /**
+     * @var string[]
+     */
+    protected $customLabels = [
+        'entity.situation_subject' => 'app.situation.entity.subject',
+    ];
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -58,7 +64,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin
                 ],
                 'by_reference' => false,
             ], [
-                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class,
+                'admin_code' => \App\Admin\ServiceAdmin::class,
                 'edit' => 'inline',
                 'inline' => 'table',
                 'sortable' => 'position',
@@ -84,7 +90,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin
         );
         $datagridMapper->add('situation.subject',
             null,
-            ['label' => 'app.situation.entity.subject'],
+            [],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -104,9 +110,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin
             ->add('serviceKey')
             ->add('jurisdictions')
             ->add('situation')
-            ->add('situation.subject', null, [
-                'label' => 'app.situation.entity.subject',
-            ])
+            ->add('situation.subject')
             ->add('priority')
             ->add('status', 'choice', [
                 'editable' => true,
@@ -138,7 +142,6 @@ class ServiceSystemAdmin extends AbstractAppAdmin
             ])
             ->add('jurisdictions')
             ->add('situation.subject', null, [
-                'label' => 'app.situation.entity.subject',
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
             ])
             ->add('situation', null, [

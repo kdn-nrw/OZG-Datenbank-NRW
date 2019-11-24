@@ -79,18 +79,11 @@ class ServiceAdmin extends AbstractFrontendAdmin
             ])
             ->add('name')
             ->add('serviceKey')
-            ->add('status', 'choice', [
-                'editable' => true,
-                'class' => Status::class,
-                'catalogue' => 'messages',
-            ])
             ->add('_action', null, [
                 'label' => 'app.common.actions',
                 'translation_domain' => 'messages',
                 'actions' => [
                     'show' => [],
-                    'edit' => [],
-                    'delete' => [],
                 ]
             ]);
     }
@@ -138,13 +131,13 @@ class ServiceAdmin extends AbstractFrontendAdmin
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
             ->add('status', 'choice', [
-                'editable' => true,
+                'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
             ->add('serviceSystem.priority', 'choice', [
-                'editable' => true,
+                'editable' => false,
                 'class' => Priority::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',

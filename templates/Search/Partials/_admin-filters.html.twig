@@ -1,0 +1,53 @@
+{% if admin.datagrid.filters %}
+    {% form_theme form get_admin_template('filter', admin.code) %}
+
+    <div class="sonata-filters-box" style="display: {{ admin.datagrid.hasDisplayableFilters ? 'block' : 'none' }}" id="filter-container-{{ admin.uniqid() }}">
+        <form class="sonata-filter-form form-horizontal {{ admin.isChild and 1 == admin.datagrid.filters|length ? 'hide' : '' }}" action="{{ admin.generateUrl('list') }}" method="GET" role="form">
+            {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="col-xs-12">
+                    {% for filter in admin.datagrid.filters %}
+                        {% set filterActive = ((filter.isActive() and filter.options['show_filter'] is null) or (filter.options['show_filter'] is same as(true))) and not admin.isDefaultFilter(filter.formName) %}
+                        {% set filterVisible = filter.options['show_filter'] is same as(true) or filter.options['show_filter'] is null %}
+                        <div class="form-group {% block sonata_list_filter_group_class %}{% endblock %}" id="filter-{{ admin.uniqid }}-{{ filter.name }}" sonata-filter="{{ filterVisible ? 'true' : 'false' }}" style="display: {% if filterActive %}block{% else %}none{% endif %}">
+                            {% if filter.label is not same as(false) %}
+                                <label for="{{ form[filter.formName].children['value'].vars.id }}" class="col-sm-3 control-label">
+                                    {% if loop.index > 1 %}und{% else %}mit{% endif %}
+                                    {{ filter.label|trans({}, filter.translationDomain ?: admin.translationDomain) }}
+                                </label>
+                            {% endif %}
+                            {% set attr = form[filter.formName].children['type'].vars.attr|default({}) %}
+
+                            <div class="col-sm-4 advanced-filter">
+                                {{ form_widget(form[filter.formName].children['type'], {'attr':  attr}) }}
+                            </div>
+
+                            <div class="col-sm-4">
+                                {{ form_widget(form[filter.formName].children['value']) }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-xs-12 col-sm-offset-3">
+                    <input type="hidden" name="filter[_page]" id="filter__page" value="1">
+
+                    {% set foo = form['_page'].setRendered() %}
+                    {{ form_rest(form) }}
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-filter" aria-hidden="true"></i> {{ 'btn_filter'|trans({}, 'SonataAdminBundle') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% for paramKey, paramValue in admin.persistentParameters %}
+                <input type="hidden" name="{{ paramKey }}" value="{{ paramValue }}">
+            {% endfor %}
+        </form>
+    </div>
+{% endif %}

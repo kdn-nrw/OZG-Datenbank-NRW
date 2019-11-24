@@ -181,7 +181,7 @@ class SolutionAdmin extends AbstractAppAdmin
             null,
             [
                 'label' => 'app.service_solution.entity.service',
-                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+                'admin_code' => \App\Admin\ServiceAdmin::class
             ],
             null,
             ['expanded' => false, 'multiple' => true]

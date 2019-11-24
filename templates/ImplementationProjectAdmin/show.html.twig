@@ -3,7 +3,7 @@
 
 
 {% block show_groups %}
-    {# @var object \App\Entity\ServiceSystem #}
+    {# @var object \App\Entity\ImplementationProject #}
     <div class="row">
         {% block field_row %}
             {% for code in groups %}
@@ -13,25 +13,14 @@
                         <div class="box-header">
                             <h4 class="box-title">
                                 {% block show_title %}
-                                    {{ 'app.service_system.entity.name'|trans }}: <strong>{{ object.name }}</strong>
-                                    ({{ elements['serviceKey']|render_view_element(object)}})
+                                    {{ 'app.implementation_project.entity.name'|trans }}: <strong>{{ object.name }}</strong>
                                 {% endblock %}
                             </h4>
                         </div>
                         <div class="box-body">
                             <div class="row">
-                                <div class="col-xs-12 col-md-8">
-                                    {{ elements['situation.subject']|render_view_element(object)}}
-                                    &gt;
-                                    {{ elements['situation']|render_view_element(object)}}
-                                </div>
-                                <div class="col-xs-12 col-md-4 text-right">
+                                <div class="col-xs-12">
                                     {{ elements['status']|render_view_element(object)}}
-                                </div>
-                                <div class="col-xs-12 col-md-8">
-                                </div>
-                                <div class="col-xs-12 col-md-4 text-right">
-                                    {{ elements['priority']|render_view_element(object)}}
                                 </div>
                             </div>
                             {% if object.description %}
@@ -43,7 +32,10 @@
                     </div>
                 </div>
                 <div class="col-xs-12">
-                    {% include 'General/Show/show-services.twig' %}
+                    {% include 'General/Show/show-solutions.twig' %}
+                </div>
+                <div class="col-xs-12">
+                    {% include 'General/Show/show-service-systems.twig' %}
                 </div>
             {% endfor %}
         {% endblock %}

@@ -21,7 +21,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
                 'property' => 'name',
                 'required' => true,
             ], [
-                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+                'admin_code' => \App\Admin\ServiceAdmin::class
             ])/*
             ->add('status', ModelType::class, [
                 'btn_add' => false,
@@ -42,7 +42,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
         $datagridMapper->add('service',
             null,
             [
-                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+                'admin_code' => \App\Admin\ServiceAdmin::class
             ],
             null,
             ['expanded' => false, 'multiple' => true]
@@ -62,7 +62,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
     {
         $listMapper
             ->add('service', null, [
-                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+                'admin_code' => \App\Admin\ServiceAdmin::class
             ])
             ->add('solution')
             /*->add('description')
@@ -90,7 +90,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
     {
         $showMapper
             ->add('service', [
-                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
+                'admin_code' => \App\Admin\ServiceAdmin::class
             ])
             ->add('solution')
             ->add('maturity')/*
