@@ -1,0 +1,76 @@
+{% if object.serviceSystems|length > 0 %}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title">
+                {{ 'app.service_system.service_system_list'|trans }}
+            </h4>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    <th>
+                        {{ 'app.service_system.entity.name'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.service_system.entity.service_key'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.service_system.entity.jurisdictions'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.service_system.entity.situation'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.situation.entity.subject'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.service_system.entity.priority'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.service_system.entity.status'|trans }}
+                    </th>
+                </tr>
+                {% for child in object.serviceSystems %}
+                    {# @var child \App\Entity\ServiceSystem #}
+                    <tr>
+                        <td>
+                            {{ child.name }}
+                        </td>
+                        <td>
+                            {% if child.serviceKey %}
+                                {{ child.serviceKey }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.jurisdictions %}
+                                {% for grandChild in child.jurisdictions %}
+                                    <span class="badge">{{ grandChild.name }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.situation %}
+                                {{ child.situation.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.situation.subject %}
+                                {{ child.situation.subject.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.priority %}
+                                {{ child.priority.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.status %}
+                                {{ child.status.name }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endif %}

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * Class OZG Leistungen
+ * Class OZG service systems
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_system")
@@ -58,7 +58,8 @@ class ServiceSystem extends BaseNamedEntity
     private $contact;
 
     /**
-     * ozgbeschreibung
+     * Description
+     *
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
@@ -98,10 +99,17 @@ class ServiceSystem extends BaseNamedEntity
      */
     private $jurisdictions;
 
+    /**
+     * @var ImplementationProject[]|Collection
+     * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="serviceSystems")
+     */
+    private $implementationProjects;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
+        $this->implementationProjects = new ArrayCollection();
     }
 
     /**
@@ -304,6 +312,50 @@ class ServiceSystem extends BaseNamedEntity
     public function setJurisdictions($jurisdictions): void
     {
         $this->jurisdictions = $jurisdictions;
+    }
+
+    /**
+     * @param ImplementationProject $implementationProject
+     * @return self
+     */
+    public function addImplementationProject($implementationProject)
+    {
+        if (!$this->implementationProjects->contains($implementationProject)) {
+            $this->implementationProjects->add($implementationProject);
+            $implementationProject->addServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ImplementationProject $implementationProject
+     * @return self
+     */
+    public function removeImplementationProject($implementationProject)
+    {
+        if ($this->implementationProjects->contains($implementationProject)) {
+            $this->implementationProjects->removeElement($implementationProject);
+            $implementationProject->removeServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ImplementationProject[]|Collection
+     */
+    public function getImplementationProjects()
+    {
+        return $this->implementationProjects;
+    }
+
+    /**
+     * @param ImplementationProject[]|Collection $implementationProjects
+     */
+    public function setImplementationProjects($implementationProjects): void
+    {
+        $this->implementationProjects = $implementationProjects;
     }
 
 }

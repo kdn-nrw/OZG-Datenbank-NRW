@@ -3,24 +3,24 @@
  *
  * @author    Gert Hammes <info@gerthammes.de>
  * @copyright 2019 Gert Hammes
- * @since     2019-11-08
+ * @since     2019-11-24
  */
 
 namespace App\Controller;
 
 
 use App\Admin\Frontend\AbstractFrontendAdmin;
-use App\Admin\Frontend\ServiceAdmin;
+use App\Admin\Frontend\ImplementationProjectAdmin;
 use Sonata\AdminBundle\Controller\CRUDController;
 
 /**
- * Class ServiceController
+ * Class ImplementationProjectController
  *
  * @author    Gert Hammes <info@gerthammes.de>
  * @copyright 2019 Gert Hammes
- * @since     2019-11-08
+ * @since     2019-11-24
  */
-class ServiceController extends CRUDController
+class ImplementationProjectController extends CRUDController
 {
 
     public function index()
@@ -40,7 +40,7 @@ class ServiceController extends CRUDController
     protected function configure()
     {
         $request = $this->getRequest();
-        $request->attributes->set('_sonata_admin', ServiceAdmin::class);
+        $request->attributes->set('_sonata_admin', ImplementationProjectAdmin::class);
         parent::configure();
         /** @var $admin AbstractFrontendAdmin */
         $admin = $this->admin;

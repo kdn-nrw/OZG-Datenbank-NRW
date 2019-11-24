@@ -53,13 +53,15 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
 
             $routePattern = sprintf(
                 '/%s%s/%s',
-                empty($matches[1]) ? '' : $this->urlize($matches[1], '-').'/',
+                empty($matches[1]) ? '' : $this->urlize($matches[1], '-') . '/',
                 $this->urlize($matches[3], '-'),
                 $this->urlize($matches[5], '-')
             );
             $this->baseRoutePattern = '/frontend' . $routePattern;
             $this->adminBaseRouteName = $routeName;
             $this->adminBaseRoutePattern = $routePattern;
+            $this->setTemplate('list', 'Frontend/Admin/CRUD/list.html.twig');
+            $this->setTemplate('layout', 'Frontend/Admin/base.html.twig');
         }
     }
 

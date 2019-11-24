@@ -29,15 +29,179 @@ services:
   App\Translator\PrefixedUnderscoreLabelTranslatorStrategy:
     public: true
 
-  App\Admin\SubjectAdmin:
+  App\Admin\AuthenticationAdmin:
     arguments:
       - ~
-      - App\Entity\Subject
+      - App\Entity\Authentication
       - ~
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.subject.subject_list
+        label:        app.authentication.authentication_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\CommuneAdmin:
+    arguments:
+      - ~
+      - App\Entity\Commune
+      - ~
+    calls:
+      - [addChild, ['@App\Admin\SolutionAdmin', 'communes']]
+      - [addChild, ['@App\Admin\OfficeAdmin', 'commune']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.commune.commune_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\FormServerAdmin:
+    arguments:
+      - ~
+      - App\Entity\FormServer
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.form_server.form_server_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\ImplementationStatusAdmin:
+    arguments:
+      - ~
+      - App\Entity\ImplementationStatus
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.implementation_status.implementation_status_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\ImplementationProjectAdmin:
+    arguments:
+      - ~
+      - App\Entity\ImplementationProject
+      - ~
+    calls:
+      - [setTemplate, ['show', 'ImplementationProjectAdmin/show.html.twig']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.implementation_project.implementation_project_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\Frontend\ImplementationProjectAdmin:
+    arguments:
+      - ~
+      - App\Entity\ImplementationProject
+      - ~
+    calls:
+      - [setTemplate, ['show', 'ImplementationProjectAdmin/show.html.twig']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.implementation_project.implementation_project_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\JurisdictionAdmin:
+    arguments:
+      - ~
+      - App\Entity\Jurisdiction
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.jurisdiction.jurisdiction_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\LaboratoryAdmin:
+    arguments:
+      - ~
+      - App\Entity\Laboratory
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.laboratory.laboratory_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\ManufacturerAdmin:
+    arguments:
+      - ~
+      - App\Entity\Manufacturer
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.manufacturer.manufacturer_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\MaturityAdmin:
+    arguments:
+      - ~
+      - App\Entity\Maturity
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.maturity.maturity_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\OfficeAdmin:
+    arguments:
+      - ~
+      - App\Entity\Office
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.office.office_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\PaymentTypeAdmin:
+    arguments:
+      - ~
+      - App\Entity\PaymentType
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.payment_type.payment_type_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\PortalAdmin:
+    arguments:
+      - ~
+      - App\Entity\Portal
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.portal.portal_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\PriorityAdmin:
+    arguments:
+      - ~
+      - App\Entity\Priority
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.priority.priority_list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -96,21 +260,6 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\CommuneAdmin:
-    arguments:
-      - ~
-      - App\Entity\Commune
-      - ~
-    calls:
-      - [addChild, ['@App\Admin\SolutionAdmin', 'communes']]
-      - [addChild, ['@App\Admin\OfficeAdmin', 'commune']]
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.commune.commune_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
   App\Admin\ServiceProviderAdmin:
     arguments:
       - ~
@@ -135,18 +284,6 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
-  App\Admin\MaturityAdmin:
-    arguments:
-      - ~
-      - App\Entity\Maturity
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.maturity.maturity_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
   App\Admin\StatusAdmin:
     arguments:
       - ~
@@ -156,30 +293,6 @@ services:
       - name:         sonata.admin
         manager_type: orm
         label:        app.status.status_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\PortalAdmin:
-    arguments:
-      - ~
-      - App\Entity\Portal
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.portal.portal_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\LaboratoryAdmin:
-    arguments:
-      - ~
-      - App\Entity\Laboratory
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.laboratory.laboratory_list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -209,93 +322,21 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
-  App\Admin\OfficeAdmin:
-    arguments:
-      - ~
-      - App\Entity\Office
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.office.office_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\PriorityAdmin:
-    arguments:
-      - ~
-      - App\Entity\Priority
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.priority.priority_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\AuthenticationAdmin:
-    arguments:
-      - ~
-      - App\Entity\Authentication
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.authentication.authentication_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\JurisdictionAdmin:
-    arguments:
-      - ~
-      - App\Entity\Jurisdiction
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.jurisdiction.jurisdiction_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\ManufacturerAdmin:
-    arguments:
-      - ~
-      - App\Entity\Manufacturer
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.manufacturer.manufacturer_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\PaymentTypeAdmin:
-    arguments:
-      - ~
-      - App\Entity\PaymentType
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.payment_type.payment_type_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\FormServerAdmin:
-    arguments:
-      - ~
-      - App\Entity\FormServer
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.form_server.form_server_list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
   App\Entity\SolutionManager:
     arguments:
       - '@doctrine'
+
+  App\Admin\SubjectAdmin:
+    arguments:
+      - ~
+      - App\Entity\Subject
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.subject.subject_list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
 
   App\Block\RecentSolutionsBlock:
     arguments:
@@ -323,3 +364,13 @@ services:
       - '@sonata.admin.builder.filter.factory'
       - '@sonata.admin.guesser.orm_datagrid_chain'
       - '%form.type_extension.csrf.enabled%'
+
+  App\EventListener\MenuBuilderListener:
+    arguments:
+      - '@request_stack'
+    tags:
+      - { name: kernel.event_listener, event: sonata.admin.event.configure.menu.sidebar, method: addMenuItems }
+
+  App\Controller\SearchController:
+    arguments:
+      - '@sonata.admin.pool'

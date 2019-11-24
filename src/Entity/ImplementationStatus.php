@@ -7,13 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * Class Status
+ * Class implementation status
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_status")
+ * @ORM\Table(name="ozg_implementation_status")
  * @ORM\HasLifecycleCallbacks
  */
-class Status extends BaseNamedEntity
+class ImplementationStatus extends BaseNamedEntity
 {
 
     /**

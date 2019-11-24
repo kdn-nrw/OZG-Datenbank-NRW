@@ -152,6 +152,12 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      */
     private $paymentTypes;
 
+    /**
+     * @var ImplementationProject[]|Collection
+     * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="solutions")
+     */
+    private $implementationProjects;
+
     public function __construct()
     {
         $this->serviceSolutions = new ArrayCollection();
@@ -161,6 +167,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
         $this->authentications = new ArrayCollection();
         $this->formServers = new ArrayCollection();
         $this->paymentTypes = new ArrayCollection();
+        $this->implementationProjects = new ArrayCollection();
     }
 
     /**
@@ -658,5 +665,49 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     public function setPaymentTypes($paymentTypes): void
     {
         $this->paymentTypes = $paymentTypes;
+    }
+
+    /**
+     * @param ImplementationProject $implementationProject
+     * @return self
+     */
+    public function addImplementationProject($implementationProject)
+    {
+        if (!$this->implementationProjects->contains($implementationProject)) {
+            $this->implementationProjects->add($implementationProject);
+            $implementationProject->addSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ImplementationProject $implementationProject
+     * @return self
+     */
+    public function removeImplementationProject($implementationProject)
+    {
+        if ($this->implementationProjects->contains($implementationProject)) {
+            $this->implementationProjects->removeElement($implementationProject);
+            $implementationProject->removeSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ImplementationProject[]|Collection
+     */
+    public function getImplementationProjects()
+    {
+        return $this->implementationProjects;
+    }
+
+    /**
+     * @param ImplementationProject[]|Collection $implementationProjects
+     */
+    public function setImplementationProjects($implementationProjects): void
+    {
+        $this->implementationProjects = $implementationProjects;
     }
 }

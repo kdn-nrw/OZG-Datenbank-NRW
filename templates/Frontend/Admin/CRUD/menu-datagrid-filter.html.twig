@@ -1,0 +1,39 @@
+{% if datagrid is defined and datagrid.filterMenuItems %}
+    <div class="list-item-filter" style="padding: 5px 5px 5px 15px;color: #fff; white-space: normal;">
+        {% for filterName, filterMenu in datagrid.filterMenuItems %}
+            {% set filterParamName = filterName|replace({'.': '__'}) %}
+            {% if filterMenu.choices|length > 20 %}
+                <label for="custom-filter-{{ filterParamName }}"><i class="fa fa-filter" aria-hidden="true"></i>
+                    Filter: {{ filterMenu.label|trans }}
+                </label>
+                <select class="form-control" id="custom-filter-{{ filterParamName }}" name="filter[filterParamName][value][]"
+                        data-url="{{ path(menuItem.routePrefix ~ '_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
+                        onchange="if (this.value) window.location.href=this.dataset.url.replace('FILTER_VALUE', this.value)">
+                    <option value=""{% if not filterMenu.value %} selected="selected"{% endif %}>-</option>
+                    {% for filterChoice in filterMenu.choices %}
+                        {% set filterParamName = filterName|replace({'.': '__'}) %}
+                        <option value="{{ filterChoice.id }}"{% if filterChoice.id in filterMenu.value %} selected="selected"{% endif %}>
+                            {{ filterChoice.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <div style="color: #fff;font-weight:bold;padding-left: 22px;"><i class="fa fa-filter" aria-hidden="true"></i>
+                    Filter: {{ filterMenu.label|trans }}
+                </div>
+                <ul>
+                    {% for filterChoice in filterMenu.choices %}
+                        {% set filterParamName = filterName|replace({'.': '__'}) %}
+                        <li>
+                            <a href="#" class="custom-menu-filter-item{% if filterChoice.id in filterMenu.value %} active{% endif %}" onclick="window.location.href=this.dataset.url.replace('FILTER_VALUE', '{{ filterChoice.id }}');return false;"
+                               data-url="{{ path(menuItem.routePrefix ~ '_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
+                                    {% if filterChoice.id in filterMenu.value %} style="color:#fff;font-weight: bold;" {% endif %}>
+                                {{ filterChoice.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
