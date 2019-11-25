@@ -10,7 +10,6 @@ namespace App\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DefaultController
@@ -22,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends AbstractController
 {
 
-    public function index()
+    public function indexAction()
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('sonata_admin_dashboard');

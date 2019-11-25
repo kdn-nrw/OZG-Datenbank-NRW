@@ -11,16 +11,7 @@
         <section class="content-header">
             <div class="box box-primary">
                 <div class="box-body">
-                    <form action="{{ path('app_search_list') }}" method="POST"  id="search-admin-builder" class="form-inline">
-                        <div class="form-group">
-                            <label for="search-entity-type">Zeige mir</label>
-                            <select name="entityType" id="search-entity-type" class="form-control" data-sonata-select2="false">
-                                {% for adminData in adminList %}
-                                    <option value="{{ adminData.id }}" data-admin-id="{{ adminData.internalId }}">{{ adminData.label|trans }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </form>
+                    {% include 'Search/Partials/_search-form.html.twig' %}
                 </div>
             </div>
         </section>
@@ -28,18 +19,33 @@
         <section class="content" id="search-admin-list">
             <div class="search-admin-filters">
                 {% for adminData in adminList %}
-                    <div class="box box-primary search-admin-filter" id="{{ adminData.internalId }}" style="display: none;">
+                    <div class="box box-primary search-admin-filter" id="{{ adminData.internalId }}" style="display: none;" data-filter-route="{{ adminData.filterRoute }}">
                         <div class="box-header" style="display: none">
                             <h4 class="box-title">
                                 {{ adminData.label|trans }}
                             </h4>
                         </div>
                         <div class="box-body">
-                            {% include 'Search/Partials/_admin-filters.html.twig' with {'admin': adminData.admin, 'form': adminData.form} %}
+                            {% include 'Search/Partials/_admin-filters.html.twig' with {'adminData': adminData} %}
                         </div>
                     </div>
                 {% endfor %}
             </div>
+            {% block notice %}
+                {% include '@SonataCore/FlashMessage/render.html.twig' %}
+            {% endblock notice %}
+            {% if showList and searchList %}
+                <div class="box box-primary" id="box-search-list">
+                    <div class="box-header">
+                        <h4 class="box-title">
+                            {{ 'app.search.entity.saved_search_list'|trans }}
+                        </h4>
+                    </div>
+                    <div class="box-body">
+                        {% include 'Search/Partials/_search-list.html.twig' %}
+                    </div>
+                </div>
+            {% endif %}
         </section>
     </div>
 {% endblock %}

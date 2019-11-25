@@ -1,0 +1,19 @@
+{% for search in searchList %}
+    {# @var search \App\Entity\Search #}
+    {% if search.route and (search.showForAll or app.user == search.user) %}
+        <p class="lead">
+            {% if search.parameters %}
+            <a href="{{ path(search.route, search.parameters) }}">
+                {{ search.description }}
+            </a>
+            {% else %}
+                <a href="{{ path(search.route) }}">
+                    {{ search.description }}
+                </a>
+            {% endif %}
+            <a href="{{ path('app_search_edit', {'id': search.id}) }}">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </a>
+        </p>
+    {% endif %}
+{% endfor %}

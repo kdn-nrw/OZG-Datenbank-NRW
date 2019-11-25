@@ -17,7 +17,8 @@ class Status extends BaseNamedEntity
 {
 
     /**
-     * statuslv
+     * Status level (sorting)
+     *
      * @var int
      *
      * @ORM\Column(name="level", type="integer")
@@ -25,7 +26,8 @@ class Status extends BaseNamedEntity
     private $level = 0;
 
     /**
-     * statuslverkl
+     * Description
+     *
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)

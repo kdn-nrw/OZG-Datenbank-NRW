@@ -374,3 +374,4 @@ services:
   App\Controller\SearchController:
     arguments:
       - '@sonata.admin.pool'
+      - '@translator'
