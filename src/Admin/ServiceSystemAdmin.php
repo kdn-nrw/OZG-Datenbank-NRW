@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ServiceSystemAdmin extends AbstractAppAdmin
+class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     /**
      * @var string[]

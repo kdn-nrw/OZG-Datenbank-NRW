@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class CommuneAdmin extends AbstractAppAdmin
+class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {

@@ -1,3 +1,6 @@
+{% set admin = adminData.admin %}
+{% set form = adminData.form %}
+{# @var admin \Sonata\AdminBundle\Admin\AbstractAdmin #}
 {% if admin.datagrid.filters %}
     {% form_theme form get_admin_template('filter', admin.code) %}
 
@@ -7,14 +10,17 @@
 
             <div class="row">
                 <div class="col-xs-12">
+                    {% set withAdvancedFilter = false %}
                     {% for filter in admin.datagrid.filters %}
                         {% set filterActive = ((filter.isActive() and filter.options['show_filter'] is null) or (filter.options['show_filter'] is same as(true))) and not admin.isDefaultFilter(filter.formName) %}
                         {% set filterVisible = filter.options['show_filter'] is same as(true) or filter.options['show_filter'] is null %}
-                        <div class="form-group {% block sonata_list_filter_group_class %}{% endblock %}" id="filter-{{ admin.uniqid }}-{{ filter.name }}" sonata-filter="{{ filterVisible ? 'true' : 'false' }}" style="display: {% if filterActive %}block{% else %}none{% endif %}">
+                        <div class="form-group {% block sonata_list_filter_group_class %}{% endblock %} js-filter-row" id="filter-{{ admin.uniqid }}-{{ filter.name }}" sonata-filter="{{ filterVisible ? 'true' : 'false' }}" style="display: {% if filterActive %}block{% else %}none{% endif %}">
                             {% if filter.label is not same as(false) %}
                                 <label for="{{ form[filter.formName].children['value'].vars.id }}" class="col-sm-3 control-label">
-                                    {% if loop.index > 1 %}und{% else %}mit{% endif %}
+                                    {% if loop.index > 1 %}und mit{% else %}mit{% endif %}
+                                    <span class="js-filter-text">
                                     {{ filter.label|trans({}, filter.translationDomain ?: admin.translationDomain) }}
+                                    </span>
                                 </label>
                             {% endif %}
                             {% set attr = form[filter.formName].children['type'].vars.attr|default({}) %}
@@ -23,10 +29,14 @@
                                 {{ form_widget(form[filter.formName].children['type'], {'attr':  attr}) }}
                             </div>
 
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 js-filter-field">
                                 {{ form_widget(form[filter.formName].children['value']) }}
                             </div>
                         </div>
+
+                        {% if filter.options['advanced_filter'] %}
+                            {% set withAdvancedFilter = true %}
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <div class="col-xs-12 col-sm-offset-3">
@@ -42,6 +52,15 @@
                             </button>
                         </div>
                     </div>
+
+                    {% if withAdvancedFilter %}
+                        <div class="form-group">
+                            <a href="#" data-toggle="advanced-filter">
+                                <i class="fa fa-cogs" aria-hidden="true"></i>
+                                {{ 'btn_advanced_filters'|trans({}, 'SonataAdminBundle') }}
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 

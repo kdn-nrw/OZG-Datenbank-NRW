@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class SolutionAdmin extends AbstractAppAdmin
+class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     protected $datagridValues = [
 

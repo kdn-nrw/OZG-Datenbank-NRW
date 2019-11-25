@@ -1,0 +1,44 @@
+{% form_theme searchForm 'Search/form_layout.html.twig' %}
+{{ form_start(searchForm, {'style': 'horizontal', 'attr': {'class': 'form-search', 'id': 'search-admin-builder'}}) }}
+{% set formIterator = searchForm.getIterator() %}
+
+{{ form_row(searchForm.adminId) }}
+
+<div class="js-search-active-toggle" style="display: none;">
+    {{ form_row(searchForm.showForAll) }}
+</div>
+<div class="form-actions form-actions-search js-search-active-toggle" style="display: none;">
+    <div class="form-group">
+        <div class="col-sm-12 col-sm-offset-3">
+            <button type="submit" id="_submit" name="_submit" class="btn btn-primary">
+                <span class="btn-text">{{ 'app.search.entity.save'|trans }}</span>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="js-form-description">
+    <p class="lead js-search-active-toggle" style="display: none;">
+        <span class="js-text"></span>
+        <span class="js-text-edit" style="display: none;cursor: pointer;">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+        </span>
+    </p>
+    <div class="js-edit" style="display: none;">
+        {{ form_row(searchForm.description) }}
+        <div class="col-sm-9 col-sm-offset-3">
+        <span class="js-update-text" style="cursor: pointer;">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+        </span>
+        </div>
+    </div>
+</div>
+<div class="js-search-fields-rest" style="display: none;">
+{% for field in formIterator %}
+    {{ form_row(field) }}
+{% endfor %}
+</div>
+
+{{ form_widget(searchForm._token) }}
+{{ form_rest(searchForm) }}
+
+{{ form_end(searchForm, {'render_rest': false}) }}

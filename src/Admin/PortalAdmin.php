@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class PortalAdmin extends AbstractAppAdmin
+class PortalAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     protected function configureFormFields(FormMapper $formMapper)
     {

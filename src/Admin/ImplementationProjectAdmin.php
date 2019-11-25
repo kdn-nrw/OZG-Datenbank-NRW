@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ImplementationProjectAdmin extends AbstractAppAdmin
+class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     protected function configureFormFields(FormMapper $formMapper)
     {

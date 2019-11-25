@@ -10,7 +10,7 @@ app:
   common:
     actions: Aktionen
   authentication:
-    authentication_list: Authentifizierung
+    authentication_list: Authentifizierungen
     entity:
       name: Methode
   commune:
@@ -39,6 +39,20 @@ app:
       name: Name
       url: Url
       solutions: Lösungen
+  implementation_project:
+    implementation_project_list: Umsetzungsprojekte
+    entity:
+      name: Umsetzungsprojektname
+      description: Projektinformationen
+      status: Umsetzungsstatus
+      service_systems: Leistungsbündel
+      solutions: Lösungen
+  implementation_status:
+    implementation_status_list: Umsetzungs-Status
+    entity:
+      name: Name
+      level: Level/Sortierung
+      description: Beschreibung
   jurisdiction:
     jurisdiction_list: Zuständigkeiten
     entity:
@@ -91,6 +105,18 @@ app:
       name: Name
       level: Level
       description: Beschreibung
+  search:
+    search_list: Suche
+    entity:
+      admin_id: Zeige mir
+      route: Route
+      query_string: Url-Parameter
+      parameters: Parameter
+      description: Beschreibung
+      show_for_all: Gespeicherte Suche für alle Benutzer anzeigen
+      save: Suche speichern
+      saved_search_list: Gespeicherte Suchen
+      save_success: Die Suche wurde erfolgreich gespeichert
   service:
     service_list: Leistungen
     entity:
@@ -187,6 +213,7 @@ app:
     status_list: Status
     entity:
       name: Name
+      level: Level/Sortierung
       description: Beschreibung
   subject:
     subject_list: Themenfeld
