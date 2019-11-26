@@ -23,6 +23,18 @@ $(document).ready(function () {
                 self.$searchForm.find('.js-text').show();
                 self.updateSearchForm();
             });
+            self.$container.find('.js-delete').on('click', function(evt) {
+                if (!confirm($(this).data('confirm'))) {
+                    evt.preventDefault();
+                }
+            });
+            self.$searchForm.on('submit', function(){
+                $(this).find('.btn').prop('disabled', true);
+                $(this).find('.btn-primary').html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>');
+                if (self.$activeFilter) {
+                    self.$activeFilter.hide();
+                }
+            });
         },
         toggleAdminFilters: function ($entityChoice, isInit) {
             var self = this;
