@@ -64,10 +64,6 @@ class SearchController extends AbstractController
                 'searchList' => $searchList,
                 'searchForm' => $searchForm->createView(),
             ]);
-            /** @var FlashBag $flashBag */
-            $flashBag = $this->get('session')->getFlashBag();
-            $translation = $this->translator->trans('app.search.entity.save_success');
-            $flashBag->add('success', $translation);
             return $response;
         } else {
             return $this->redirectToRoute('frontend_app_service_list');
@@ -75,7 +71,7 @@ class SearchController extends AbstractController
     }
 
     /**
-     * Save the search
+     * Edit the search
      *
      * @param Request $request
      * @param int|null $id
@@ -93,6 +89,35 @@ class SearchController extends AbstractController
                 'searchForm' => $searchForm->createView(),
             ]);
             return $response;
+        } else {
+            return $this->redirectToRoute('frontend_app_service_list');
+        }
+    }
+
+    /**
+     * Edit the search
+     *
+     * @param Request $request
+     * @param int|null $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteAction(Request $request, int $id)
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $search = $this->initSearchModel($id);
+            /** @var UserInterface $currentUser */
+            $currentUser = $this->getUser();
+            $search->setUser($currentUser);
+            if (null !== $search && ($search->getUser() === $currentUser || $search->isShowForAll())) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($search);
+                $em->flush();
+                /** @var FlashBag $flashBag */
+                $flashBag = $this->get('session')->getFlashBag();
+                $translation = $this->translator->trans('app.search.entity.delete_success');
+                $flashBag->add('success', $translation);
+            }
+            return $this->redirectToRoute('app_search_list', []);
         } else {
             return $this->redirectToRoute('frontend_app_service_list');
         }
@@ -185,9 +210,11 @@ class SearchController extends AbstractController
         if ($id) {
             /** @var Search|null $search */
             $search = $this->getDoctrine()->getManager()->find(Search::class, $id);
-            /** @var UserInterface $currentUser */
-            $currentUser = $this->getUser();
-            $search->setUser($currentUser);
+            if (null === $search->getUser()) {
+                /** @var UserInterface $currentUser */
+                $currentUser = $this->getUser();
+                $search->setUser($currentUser);
+            }
         }
         if (null === $search) {
             $search = new Search();

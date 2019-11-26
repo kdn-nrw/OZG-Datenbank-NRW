@@ -16,6 +16,10 @@ app_search_save:
     defaults:
         id: null
 
+app_search_delete:
+    path: /search/delete/{id}
+    controller: App\Controller\SearchController::deleteAction
+
 frontend_app_service_list:
     path: /leistungen
     controller: App\Controller\ServiceController::listAction
