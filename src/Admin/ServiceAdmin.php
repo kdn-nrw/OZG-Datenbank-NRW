@@ -75,6 +75,10 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('serviceSystem.serviceKey',
+            null,
+            ['label' => 'app.service_system.entity.service_key']
+        );
         $datagridMapper->add('status');
     }
 

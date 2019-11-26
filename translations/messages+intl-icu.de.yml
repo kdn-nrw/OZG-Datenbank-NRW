@@ -118,6 +118,11 @@ app:
       saved_search_list: Gespeicherte Suchen
       save_success: Die Suche wurde erfolgreich gespeichert
   service:
+    type_label: "{count, plural,
+        =0 {Keine Leistungen}
+        one {1 Leistung}
+        other {# Leistungen}
+      }"
     service_list: Leistungen
     entity:
       name: Leika-Bezeichnung
@@ -167,6 +172,7 @@ app:
       status: Status
       priority: Priorität
       jurisdictions: Zuständigkeiten
+      references: Referenzen
   situation:
     situation_list: Lage
     entity:

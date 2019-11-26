@@ -102,8 +102,9 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     private $status;
 
     /**
-     * @var ServiceSystem
+     * @var ServiceSystem|null
      * @ORM\ManyToOne(targetEntity="ServiceSystem", inversedBy="services", cascade={"persist"})
+     * @ORM\JoinColumn(name="service_system_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $serviceSystem;
 
@@ -303,7 +304,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
 
 
     /**
-     * @return ServiceSystem
+     * @return ServiceSystem|null
      */
     public function getServiceSystem()
     {
@@ -311,9 +312,9 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     }
 
     /**
-     * @param ServiceSystem $serviceSystem
+     * @param ServiceSystem|null $serviceSystem
      */
-    public function setServiceSystem($serviceSystem): void
+    public function setServiceSystem(?ServiceSystem $serviceSystem)
     {
         $this->serviceSystem = $serviceSystem;
     }
