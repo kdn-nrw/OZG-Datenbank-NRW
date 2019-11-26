@@ -1,0 +1,13 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    {% if object.services %}
+        <div>
+            {% set routePrefix = 'admin_app_service' %}
+            {% set filterParamName = 'serviceSystem__serviceKey' %}
+            <a href="{{ path(routePrefix ~ '_list', {'filter': {(filterParamName): {'value': object.serviceKey}}}) }}" class="label label-primary">
+               {{ 'app.service.type_label'|trans({'count': object.services|length}) }}
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}

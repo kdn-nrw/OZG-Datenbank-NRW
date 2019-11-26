@@ -117,6 +117,10 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
                 'class' => Status::class,
                 'catalogue' => 'messages',
             ])
+            ->add('references', 'string', [
+                'label' => 'app.service_system.entity.references',
+                'template' => 'ServiceSystemAdmin/list-references.html.twig',
+            ])
             ->add('_action', null, [
                 'label' => 'app.common.actions',
                 'translation_domain' => 'messages',
