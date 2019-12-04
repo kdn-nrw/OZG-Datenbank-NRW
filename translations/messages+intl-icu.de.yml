@@ -195,6 +195,9 @@ app:
       custom_provider: Anbieter (sonstige)
       specialized_procedures: Anbindung Fachverfahren
       portals: Portale
+      commune_type: Kommunenauswahl
+      commune_type_all: Lösung für alle Kommunen
+      commune_type_selected: Lösung für ausgewählte Kommunen
       communes: Kommunen
       name: Name
       description: Beschreibung

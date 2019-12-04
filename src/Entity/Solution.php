@@ -20,6 +20,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Solution extends BaseBlamableEntity implements NamedEntityInterface
 {
+    const COMMUNE_TYPE_ALL = 'all';
+    const COMMUNE_TYPE_SELECTED = 'selected';
+
     use NamedEntityTrait;
     use HideableEntityTrait;
 
@@ -103,6 +106,14 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      */
     private $portals;
 
+    /**
+     * Commune selection type
+     *
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $communeType = self::COMMUNE_TYPE_SELECTED;
 
     /**
      * @var Commune[]|Collection
@@ -486,6 +497,22 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommuneType(): string
+    {
+        return empty($this->communeType) ? self::COMMUNE_TYPE_SELECTED : $this->communeType;
+    }
+
+    /**
+     * @param string|null $communeType
+     */
+    public function setCommuneType(?string $communeType): void
+    {
+        $this->communeType = $communeType;
     }
 
     /**

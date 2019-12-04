@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
@@ -80,6 +81,17 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'required' => false,
                 'multiple' => true,
                 'by_reference' => false,
+            ])
+            ->add('communeType', ChoiceFieldMaskType::class, [
+                'choices' => [
+                    'app.solution.entity.commune_type_all' => 'all',
+                    'app.solution.entity.commune_type_selected' => 'selected',
+                ],
+                'map' => [
+                    'all' => [],
+                    'selected' => ['communes'],
+                ],
+                'required' => true,
             ])
             ->add('communes', ModelType::class, [
                 'btn_add' => false,
@@ -231,7 +243,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     {
         $listMapper
             ->add('communes', null, [
-                'template' => 'General/Association/list_many_to_many_nolinks.html.twig',
+                'template' => 'SolutionAdmin/list_communes.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -318,7 +330,10 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('communes')
+            ->add('communes', 'choice', [
+                'associated_property' => 'name',
+                'template' => 'SolutionAdmin/show-communes.html.twig',
+            ])
             ->add('serviceProvider')
             ->add('portals')
             ->add('specializedProcedures')
