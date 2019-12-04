@@ -1,0 +1,17 @@
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+<div>
+    {# @var object \App\Entity\Solution #}
+    {% if object.communeType == constant('App\\Entity\\Solution::COMMUNE_TYPE_ALL') %}
+        <em>{{ 'app.solution.entity.commune_type_all'|trans }}</em>
+    {% else %}
+        {% for commune in object.communes %}
+            {% if loop.index > 1 %}
+                <br>
+            {% endif %}
+            {{ commune.name }}
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

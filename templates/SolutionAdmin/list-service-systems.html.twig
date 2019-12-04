@@ -2,6 +2,7 @@
 
 {% block field %}
 <div>
+    {# @var object \App\Entity\Solution #}
     {% for serviceSystem in object.serviceSystems %}
         {% if loop.index > 1 %}
             ,
