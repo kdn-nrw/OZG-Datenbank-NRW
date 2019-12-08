@@ -34,6 +34,16 @@ class LaboratoryAdmin extends AbstractAppAdmin
             ->add('participantsOther', TextareaType::class, [
                 'required' => false,
             ])
+            ->add('serviceSystems', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+            ])
+            ->add('implementationUrl', UrlType::class, [
+                'required' => false,
+            ])
             ->end();
     }
 
@@ -46,6 +56,12 @@ class LaboratoryAdmin extends AbstractAppAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('serviceSystems',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -53,6 +69,7 @@ class LaboratoryAdmin extends AbstractAppAdmin
         $listMapper
             ->addIdentifier('name')
             ->add('url', 'url')
+            ->add('serviceSystems')
             ->add('_action', null, [
                 'label' => 'app.common.actions',
                 'translation_domain' => 'messages',
@@ -74,6 +91,9 @@ class LaboratoryAdmin extends AbstractAppAdmin
             ->add('description')
             ->add('url', 'url')
             ->add('participantsOther')
+            ->add('serviceProviders', null, [
+                'template' => 'General/service-providers.html.twig',
+            ])
             ->add('serviceProviders', null, [
                 'template' => 'General/service-providers.html.twig',
             ]);

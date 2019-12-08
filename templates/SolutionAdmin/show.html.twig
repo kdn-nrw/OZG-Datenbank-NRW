@@ -1,0 +1,46 @@
+
+{% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
+
+
+{% block show_groups %}
+    {# @var object \App\Entity\Solution #}
+    <div class="row">
+        {% block field_row %}
+            {% for code in groups %}
+                {% set show_group = admin.showgroups[code] %}
+
+                <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
+                    <div class="{{ show_group.box_class }}">
+                        <div class="box-header">
+                            <h4 class="box-title">
+                                {% block show_title %}
+                                    {{ show_group.label|trans({}, show_group.translation_domain|default(admin.translationDomain)) }}
+                                {% endblock %}
+                            </h4>
+                        </div>
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table">
+                                <tbody>
+                                {% for field_name in show_group.fields %}
+                                    {% if field_name not in ['serviceSystems'] %}
+                                    {% block show_field %}
+                                        <tr class="sonata-ba-view-container">
+                                            {% if elements[field_name] is defined %}
+                                                {{ elements[field_name]|render_view_element(object) }}
+                                            {% endif %}
+                                        </tr>
+                                    {% endblock %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    {% include 'General/Show/show-service-systems.twig' %}
+                </div>
+            {% endfor %}
+        {% endblock %}
+
+    </div>
+{% endblock %}

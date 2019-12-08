@@ -33,6 +33,18 @@ app:
       contact: Ansprechpartner der Kommune
       offices: Ämter
       service_providers: IT Dienstleister
+  contact:
+    contact_list: Kontakte
+    entity:
+      first_name: Vorname
+      last_name: Nachname
+      email: E-Mail
+      zipcode: PLZ
+      town: Ort
+      street: Straße
+      position: Position
+      organisation: Firma/Organisation
+      phone_number: Telefon
   form_server:
     form_server_list: Formularserver
     entity:
@@ -65,6 +77,8 @@ app:
       service_providers: Teilnehmer IT Dienstleister
       url: Url
       participants_other: Teilnehmer sonstige
+      service_systems: Leistungsbündel
+      implementation_url: Url OZG Umsetzung
   manufacturer:
     manufacturer_list: Hersteller
     entity:

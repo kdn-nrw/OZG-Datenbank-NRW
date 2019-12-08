@@ -344,10 +344,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->add('url', 'url', [
             ])
             ->add('contact')
-            ->add('serviceSystems', 'choice', [
-                'associated_property' => 'name',
-                'template' => 'SolutionAdmin/show-service-systems.html.twig',
-            ])
+            ->add('serviceSystems')
             ->add('serviceSolutions', null, [
                 'associated_property' => 'service'
             ])

@@ -55,6 +55,7 @@ sonata_admin:
                     - App\Admin\PaymentTypeAdmin
                     - App\Admin\PriorityAdmin
                     - App\Admin\ImplementationStatusAdmin
+                    - App\Admin\ContactAdmin
             app_admin.menu.system:
                 label: app.system_group
                 #label_catalogue: messages

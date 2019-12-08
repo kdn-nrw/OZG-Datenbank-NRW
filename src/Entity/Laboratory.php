@@ -61,9 +61,32 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
      */
     private $serviceProviders;
 
+    /**
+     * @var ServiceSystem[]|Collection
+     * @ORM\ManyToMany(targetEntity="ServiceSystem", inversedBy="laboratories")
+     * @ORM\JoinTable(name="ozg_laboratory_service_system",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="laboratory_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $serviceSystems;
+
+    /**
+     * Implementation url
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $implementationUrl;
+
     public function __construct()
     {
         $this->serviceProviders = new ArrayCollection();
+        $this->serviceSystems = new ArrayCollection();
     }
 
     /**
@@ -156,6 +179,66 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
     public function setServiceProviders($serviceProviders): void
     {
         $this->serviceProviders = $serviceProviders;
+    }
+
+    /**
+     * @param ServiceSystem $serviceSystem
+     * @return self
+     */
+    public function addServiceSystem($serviceSystem)
+    {
+        if (!$this->serviceSystems->contains($serviceSystem)) {
+            $this->serviceSystems->add($serviceSystem);
+            $serviceSystem->addLaboratory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceSystem $serviceSystem
+     * @return self
+     */
+    public function removeServiceSystem($serviceSystem)
+    {
+        if ($this->serviceSystems->contains($serviceSystem)) {
+            $this->serviceSystems->removeElement($serviceSystem);
+            $serviceSystem->removeLaboratory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ServiceSystem[]|Collection
+     */
+    public function getServiceSystems()
+    {
+        return $this->serviceSystems;
+    }
+
+    /**
+     * @param ServiceSystem[]|Collection $serviceSystems
+     */
+    public function setServiceSystems($serviceSystems): void
+    {
+        $this->serviceSystems = $serviceSystems;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImplementationUrl(): ?string
+    {
+        return $this->implementationUrl;
+    }
+
+    /**
+     * @param string|null $implementationUrl
+     */
+    public function setImplementationUrl(?string $implementationUrl): void
+    {
+        $this->implementationUrl = $implementationUrl;
     }
 
 }

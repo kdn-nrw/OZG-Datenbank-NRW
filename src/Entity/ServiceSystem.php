@@ -105,11 +105,18 @@ class ServiceSystem extends BaseNamedEntity
      */
     private $implementationProjects;
 
+    /**
+     * @var Laboratory[]|Collection
+     * @ORM\ManyToMany(targetEntity="Laboratory", mappedBy="serviceSystems")
+     */
+    private $laboratories;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
+        $this->laboratories = new ArrayCollection();
     }
 
     /**
@@ -356,6 +363,50 @@ class ServiceSystem extends BaseNamedEntity
     public function setImplementationProjects($implementationProjects): void
     {
         $this->implementationProjects = $implementationProjects;
+    }
+
+    /**
+     * @param Laboratory $laboratory
+     * @return self
+     */
+    public function addLaboratory($laboratory)
+    {
+        if (!$this->laboratories->contains($laboratory)) {
+            $this->laboratories->add($laboratory);
+            $laboratory->addServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Laboratory $laboratory
+     * @return self
+     */
+    public function removeLaboratory($laboratory)
+    {
+        if ($this->laboratories->contains($laboratory)) {
+            $this->laboratories->removeElement($laboratory);
+            $laboratory->removeServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Laboratory[]|Collection
+     */
+    public function getLaboratories()
+    {
+        return $this->laboratories;
+    }
+
+    /**
+     * @param Laboratory[]|Collection $laboratories
+     */
+    public function setLaboratories($laboratories): void
+    {
+        $this->laboratories = $laboratories;
     }
 
 }
