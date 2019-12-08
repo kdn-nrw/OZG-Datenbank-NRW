@@ -189,4 +189,23 @@ class ImplementationProject extends BaseNamedEntity
     {
         $this->solutions = $solutions;
     }
+
+    /**
+     * @return Laboratory[]
+     */
+    public function getLaboratories()
+    {
+        $items = [];
+        $serviceSystems = $this->getServiceSystems();
+        foreach ($serviceSystems as $serviceSystem) {
+            $laboratories = $serviceSystem->getLaboratories();
+            foreach ($laboratories as $laboratory) {
+                if (!isset($items[$laboratory->getId()])) {
+                    $items[$laboratory->getId()] = $laboratory;
+                }
+            }
+        }
+        return $items;
+
+    }
 }

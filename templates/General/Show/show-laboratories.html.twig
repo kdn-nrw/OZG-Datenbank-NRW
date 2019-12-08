@@ -1,0 +1,48 @@
+{% if object.laboratories|length > 0 %}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title">
+                {{ 'app.laboratory.laboratory_list'|trans }}
+            </h4>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    <th>
+                        {{ 'app.laboratory.entity.name'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.laboratory.entity.url'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.laboratory.entity.description'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.laboratory.entity.participants_other'|trans }}
+                    </th>
+                </tr>
+                {% for child in object.laboratories %}
+                    {# @var child \App\Entity\Laboratory #}
+                    <tr>
+                        <td>
+                            {{ child.name }}
+                        </td>
+                        <td>
+                            {% if child.url %}
+                                {{ child.url }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ child.description|nl2br }}
+                        </td>
+                        <td>
+                            {% if child.participantsOther %}
+                                {{ child.participantsOther }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endif %}
