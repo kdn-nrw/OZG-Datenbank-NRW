@@ -30,6 +30,33 @@ class Subject extends BaseNamedEntity
     }
 
     /**
+     * @param Situation $situation
+     * @return self
+     */
+    public function addSituation($situation)
+    {
+        if (!$this->situations->contains($situation)) {
+            $this->situations->add($situation);
+            $situation->setSubject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Situation $situation
+     * @return self
+     */
+    public function removeSituation($situation)
+    {
+        if ($this->situations->contains($situation)) {
+            $this->situations->removeElement($situation);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Situation[]|Collection
      */
     public function getSituations()

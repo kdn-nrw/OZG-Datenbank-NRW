@@ -4,3 +4,6 @@ app:
   implementation_group: Umsetzung Basisdaten
   ozg_implementation_group: OZG Umsetzung
   system_group: Systemkonfiguration
+  situation:
+    entity:
+      subject_placeholder: Kein Themenfeld ausgewählt

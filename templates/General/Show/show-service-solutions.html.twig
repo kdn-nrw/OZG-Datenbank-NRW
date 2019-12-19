@@ -1,0 +1,38 @@
+{% if entities|length > 0 %}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title">
+                {{ 'app.service_solution.list'|trans }}
+            </h4>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    {% if showSolution %}
+                        {% include 'General/Show/Table/tabe-head-services.html.twig' %}
+                    {% else %}
+                        {% include 'General/Show/Table/tabe-head-services.html.twig' %}
+                    {% endif %}
+                    <th>
+                        {{ 'app.solution.entity.maturity'|trans }}
+                    </th>
+                </tr>
+                {% for serviceSolution in entities %}
+                    {# @var serviceSolution \App\Entity\ServiceSolution #}
+                    <tr>
+                        {% if showSolution %}
+                            {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': serviceSolution.solution} %}
+                        {% else %}
+                            {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': serviceSolution.service} %}
+                        {% endif %}
+                        <td>
+                            {% if serviceSolution.maturity %}
+                                {{ serviceSolution.maturity.name }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endif %}

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Base\SoftdeletableEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,10 +50,17 @@ class ServiceProvider extends BaseNamedEntity
      */
     private $laboratories;
 
+    /**
+     * @var Contact[]|Collection
+     * @ORM\OneToMany(targetEntity="Contact", mappedBy="serviceProvider", cascade={"all"})
+     */
+    private $contacts;
+
     public function __construct()
     {
-        $this->solutions = new ArrayCollection();
         $this->communes = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
+        $this->solutions = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
     }
 
@@ -198,6 +206,52 @@ class ServiceProvider extends BaseNamedEntity
     public function setLaboratories($laboratories): void
     {
         $this->laboratories = $laboratories;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function addContact($contact)
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->setServiceProvider($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function removeContact($contact)
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+            if ($contact instanceof SoftdeletableEntityInterface) {
+                $contact->setDeletedAt(new \DateTime());
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param Contact[]|Collection $contacts
+     */
+    public function setContacts($contacts): void
+    {
+        $this->contacts = $contacts;
     }
 
 }

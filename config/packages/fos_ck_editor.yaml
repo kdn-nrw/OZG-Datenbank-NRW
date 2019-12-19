@@ -1,0 +1,37 @@
+fos_ck_editor:
+  default_config: default
+  configs:
+    default:
+      #https://symfony.com/doc/master/bundles/FOSCKEditorBundle/usage/toolbar.html
+      #toolbar: standard
+      #toolbar: full
+      #toolbar: [ ["Source", "-", "Save"], "/", ["Anchor"], "/", ["Maximize"] ]
+      toolbar:
+        -
+          - Bold
+          - Italic
+          - Underline
+          - Strike
+          - RemoveFormat
+          - NumberedList
+          - BulletedList
+          - Outdent
+          - Indent
+          - Blockquote
+          - CreateDiv
+          - JustifyLeft
+          - JustifyCenter
+          - JustifyRight
+          - JustifyBlock
+          - Link
+          - Unlink
+          - Table
+          - HorizontalRule
+        - /
+        -
+          - Styles
+          - Format
+          - TextColor
+          - Source
+      #uiColor:                "#000000"
+      #extraPlugins:           "wordcount"

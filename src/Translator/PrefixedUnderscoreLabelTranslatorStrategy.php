@@ -22,6 +22,7 @@ use Sonata\AdminBundle\Translator\LabelTranslatorStrategyInterface;
 class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrategyInterface
 {
 
+    private $adminKey;
     private $prefix;
 
     /**
@@ -38,7 +39,11 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
             $class = preg_replace('/^(.*)Admin$/', '$1', $matches[4]);
             $snakeCaseConverter = new SnakeCaseConverter();
             $prefix = empty($bundle) ? $class : $bundle . '\\' . $class;
-            $prefix = $snakeCaseConverter->classNameToSnakeCase($prefix) . '.';
+            $filteredPrefix = $snakeCaseConverter->classNameToSnakeCase($prefix);
+            $parts = explode('.', $filteredPrefix);
+            unset($parts[0]);
+            $this->adminKey = implode('_', $parts);
+            $prefix = $filteredPrefix . '.';
             $this->prefix = $prefix;
             $this->customLabels[$prefix] = $customLabels;
         }
@@ -53,6 +58,20 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
      */
     public function getLabel($label, $context = '', $type = '')
     {
+        $label = str_replace('.', '_', $label);
+        $filteredLabel = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $label));
+        if ($this->adminKey) {
+            $actionLabels = ['list', 'show', 'create', 'edit'];
+            foreach ($actionLabels as $action) {
+                if (strpos($filteredLabel, $this->adminKey . '_' . $action) === 0) {
+                    $filteredLabel = $action;
+                    break;
+                }
+            }
+        }
+        if ($this->adminKey && strpos($filteredLabel, $this->adminKey . '_' . $type) === 0) {
+            $filteredLabel = str_replace($this->adminKey . '_', '', $filteredLabel);
+        }
         switch ($context) {
             case 'form':
             case 'list':
@@ -65,8 +84,6 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
                 $context = '';
                 break;
         }
-        $label = str_replace('.', '_', $label);
-        $filteredLabel = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $label));
         $key = '';
         if (!empty($context)) {
             $key .= $context . '.';
@@ -78,9 +95,17 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
             $key .= $type . '_';
         }
         $key .= $filteredLabel;
+        if ($this->prefix && strpos($key, $this->prefix) !== 0) {
+            $key = $this->prefix . $key;
+        }
+        if (strpos($key, 'service.tabs') !== false) {
+            echo '<pre>$label: '.print_r($label, true).'</pre>';
+            echo '<pre>$key: '.print_r($key, true).'</pre>';
+            die('TEST');//TODO: DEBUG
+        }
         if ($this->prefix && isset($this->customLabels[$this->prefix][$key])) {
             return $this->customLabels[$this->prefix][$key];
         }
-        return ($this->prefix ? $this->prefix : '') . $key;
+        return $key;
     }
 }

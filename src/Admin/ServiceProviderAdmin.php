@@ -2,35 +2,33 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\AddressTrait;
+use App\Admin\Traits\ContactTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class ServiceProviderAdmin extends AbstractAppAdmin
 {
+    use ContactTrait;
+    use AddressTrait;
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class)
-            ->add('street', TextType::class, [
-                'required' => false
+            ->tab('app.service_provider.group.general_data')
+            ->with('general_data', [
+                'label' => false,
+                'box_class' => 'box-tab',
             ])
-            ->add('zipCode', TextType::class, [
-                'required' => false
-            ])
-            ->add('town', TextType::class, [
-                'required' => false
-            ])
-            ->add('url', UrlType::class, [
-                'required' => false
-            ])
-            ->add('contact', TextareaType::class, [
+            ->add('name', TextType::class);
+        $this->addAddressFormFields($formMapper);
+        $formMapper->add('url', UrlType::class, [
                 'required' => false
             ])
             ->add('communes', ModelType::class, [
@@ -39,15 +37,17 @@ class ServiceProviderAdmin extends AbstractAppAdmin
                 'required' => false,
                 'multiple' => true,
                 'by_reference' => false,
-            ])
-            ->end();
+                'choice_translation_domain' => false,
+            ]);
+        $formMapper->end();
+        $formMapper->end();
+        $this->addContactsFormFields($formMapper, true, true);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('zipCode');
-        $datagridMapper->add('town');
+        $this->addAddressDatagridFilters($datagridMapper);
         $datagridMapper->add('communes',
             null,
             [],
@@ -60,17 +60,8 @@ class ServiceProviderAdmin extends AbstractAppAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('url', 'url', [
-            ])
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->add('url', 'url');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**
@@ -78,16 +69,12 @@ class ServiceProviderAdmin extends AbstractAppAdmin
      */
     public function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper
-            ->add('name')
-            ->add('street')
-            ->add('zipCode')
-            ->add('town')
-            ->add('url', 'url', [
-            ])
-            ->add('contact')
-            ->add('communes', null, [
-                'template' => 'ServiceProviderAdmin/communes.html.twig',
+        $showMapper->add('name');
+        $this->addAddressShowFields($showMapper);
+        $showMapper->add('url', 'url');
+        $this->addContactsShowFields($showMapper, true);
+        $showMapper->add('communes', null, [
+                'template' => 'General/Show/show-communes.html.twig',
             ]);
     }
 }

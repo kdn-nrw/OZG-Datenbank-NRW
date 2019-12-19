@@ -2,6 +2,7 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\Traits\ServiceSystemTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
@@ -12,13 +13,13 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class ImplementationProjectAdmin extends AbstractFrontendAdmin
 {
-
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
         $datagridMapper->add('solutions',
-            null,
-            [],
+            null,[
+                'admin_code' => \App\Admin\Frontend\SolutionAdmin::class,
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -50,14 +51,8 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
                 'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
-            ])
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                ]
             ]);
+        $this->addDefaultListActions($listMapper);
     }
 
     /**
@@ -67,7 +62,9 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
     {
         $showMapper
             ->add('name')
-            ->add('solutions')
+            ->add('solutions', null, [
+                'admin_code' => \App\Admin\Frontend\SolutionAdmin::class,
+            ])
             ->add('serviceSystems')
             ->add('description')
             ->add('status', 'choice', [

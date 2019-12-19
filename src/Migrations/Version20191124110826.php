@@ -22,24 +22,27 @@ final class Version20191124110826 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE mb_email_email_log DROP FOREIGN KEY FK_4C32742E8A35C9F3');
-        $this->addSql('CREATE TABLE ozg_implementation_status (id INT AUTO_INCREMENT NOT NULL, level INT NOT NULL, description LONGTEXT DEFAULT NULL, modified_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', created_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', name VARCHAR(255) DEFAULT NULL, hidden TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE ozg_implementation_project (id INT AUTO_INCREMENT NOT NULL, status_id INT DEFAULT NULL, description LONGTEXT DEFAULT NULL, modified_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', created_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', name VARCHAR(255) DEFAULT NULL, hidden TINYINT(1) NOT NULL, INDEX IDX_56C75D246BF700BD (status_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE ozg_implementation_project_service_system (implementation_project_id INT NOT NULL, service_system_id INT NOT NULL, INDEX IDX_A69E4012CC68C60 (implementation_project_id), INDEX IDX_A69E401880415EF (service_system_id), PRIMARY KEY(implementation_project_id, service_system_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE ozg_implementation_project_solution (implementation_project_id INT NOT NULL, solution_id INT NOT NULL, INDEX IDX_73A013EC2CC68C60 (implementation_project_id), INDEX IDX_73A013EC1C0BE183 (solution_id), PRIMARY KEY(implementation_project_id, solution_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('DROP TABLE IF EXISTS ozg_implementation_project_service_system');
+        $this->addSql('DROP TABLE IF EXISTS ozg_implementation_project_solution');
+        $this->addSql('DROP TABLE IF EXISTS ozg_implementation_project');
+        $this->addSql('DROP TABLE IF EXISTS ozg_implementation_status');
+        $this->addSql('CREATE TABLE IF NOT EXISTS ozg_implementation_status (id INT AUTO_INCREMENT NOT NULL, level INT NOT NULL, description LONGTEXT DEFAULT NULL, modified_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', created_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', name VARCHAR(255) DEFAULT NULL, hidden TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE IF NOT EXISTS ozg_implementation_project (id INT AUTO_INCREMENT NOT NULL, status_id INT DEFAULT NULL, description LONGTEXT DEFAULT NULL, modified_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', created_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', name VARCHAR(255) DEFAULT NULL, hidden TINYINT(1) NOT NULL, INDEX IDX_56C75D246BF700BD (status_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE IF NOT EXISTS ozg_implementation_project_service_system (implementation_project_id INT NOT NULL, service_system_id INT NOT NULL, INDEX IDX_A69E4012CC68C60 (implementation_project_id), INDEX IDX_A69E401880415EF (service_system_id), PRIMARY KEY(implementation_project_id, service_system_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE IF NOT EXISTS ozg_implementation_project_solution (implementation_project_id INT NOT NULL, solution_id INT NOT NULL, INDEX IDX_73A013EC2CC68C60 (implementation_project_id), INDEX IDX_73A013EC1C0BE183 (solution_id), PRIMARY KEY(implementation_project_id, solution_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE ozg_implementation_project ADD CONSTRAINT FK_56C75D246BF700BD FOREIGN KEY (status_id) REFERENCES ozg_implementation_status (id) ON DELETE SET NULL');
         $this->addSql('ALTER TABLE ozg_implementation_project_service_system ADD CONSTRAINT FK_A69E4012CC68C60 FOREIGN KEY (implementation_project_id) REFERENCES ozg_implementation_project (id)');
         $this->addSql('ALTER TABLE ozg_implementation_project_service_system ADD CONSTRAINT FK_A69E401880415EF FOREIGN KEY (service_system_id) REFERENCES ozg_service_system (id)');
         $this->addSql('ALTER TABLE ozg_implementation_project_solution ADD CONSTRAINT FK_73A013EC2CC68C60 FOREIGN KEY (implementation_project_id) REFERENCES ozg_implementation_project (id)');
         $this->addSql('ALTER TABLE ozg_implementation_project_solution ADD CONSTRAINT FK_73A013EC1C0BE183 FOREIGN KEY (solution_id) REFERENCES ozg_solution (id)');
-        $this->addSql('DROP TABLE mb_email_email_data');
-        $this->addSql('DROP TABLE mb_email_email_log');
-        $this->addSql('DROP TABLE mb_email_email_template');
-        $this->addSql('DROP TABLE mb_log_sys_log');
-        $this->addSql('DROP TABLE mb_setting_setting');
-        $this->addSql('DROP TABLE ozg_commune_service');
-        $this->addSql('DROP TABLE ozg_form_servers_specialized_procedures');
-        $this->addSql('DROP TABLE ozg_payment_types_specialized_procedures');
+        $this->addSql('DROP TABLE IF EXISTS mb_email_email_data');
+        $this->addSql('DROP TABLE IF EXISTS mb_email_email_log');
+        $this->addSql('DROP TABLE IF EXISTS mb_email_email_template');
+        $this->addSql('DROP TABLE IF EXISTS mb_log_sys_log');
+        $this->addSql('DROP TABLE IF EXISTS mb_setting_setting');
+        $this->addSql('DROP TABLE IF EXISTS ozg_commune_service');
+        $this->addSql('DROP TABLE IF EXISTS ozg_form_servers_specialized_procedures');
+        $this->addSql('DROP TABLE IF EXISTS ozg_payment_types_specialized_procedures');
     }
 
     public function down(Schema $schema) : void

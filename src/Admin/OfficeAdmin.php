@@ -40,16 +40,8 @@ class OfficeAdmin extends AbstractAppAdmin
             ->add('name')
             ->add('url', 'url', [
             ])
-            ->add('contact')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->add('contact');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**

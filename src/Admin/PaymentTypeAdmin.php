@@ -2,10 +2,10 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\SolutionTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -13,50 +13,31 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class PaymentTypeAdmin extends AbstractAppAdmin
 {
+    use SolutionTrait;
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
             ->add('name', TextType::class)
             ->add('url', UrlType::class, [
                 'required' => false
-            ])
-            ->add('solutions', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'required' => false,
-                'multiple' => true,
-                'by_reference' => false,
-            ])
-            ->end();
+            ]);
+        $this->addSolutionsFormFields($formMapper);
+        $formMapper->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('solutions',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addSolutionsDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper
-            ->addIdentifier('name')
-            ->add('solutions')
-            ->add('url', 'url', [
-            ])
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+        $listMapper->addIdentifier('name');
+        $this->addSolutionsListFields($listMapper);
+        $listMapper->add('url', 'url');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**
@@ -66,8 +47,7 @@ class PaymentTypeAdmin extends AbstractAppAdmin
     {
         $showMapper
             ->add('name')
-            ->add('url', 'url', [
-            ])
-            ->add('solutions');
+            ->add('url', 'url');
+        $this->addSolutionsShowFields($showMapper);
     }
 }

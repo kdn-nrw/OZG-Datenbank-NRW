@@ -19,10 +19,10 @@ class ServiceAdmin extends AbstractFrontendAdmin
      * @var string[]
      */
     protected $customLabels = [
-        'entity.service_system_situation_subject' => 'app.situation.entity.subject',
-        'entity.service_system_situation' => 'app.service_system.entity.situation',
-        'entity.service_system_service_key' => 'app.service_system.entity.service_key',
-        'entity.service_system_priority' => 'app.service_system.entity.priority',
+        'app.service.entity.service_system_situation_subject' => 'app.situation.entity.subject',
+        'app.service.entity.service_system_situation' => 'app.service_system.entity.situation',
+        'app.service.entity.service_system_service_key' => 'app.service_system.entity.service_key',
+        'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -78,14 +78,8 @@ class ServiceAdmin extends AbstractFrontendAdmin
                 ]
             ])
             ->add('name')
-            ->add('serviceKey')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                ]
-            ]);
+            ->add('serviceKey');
+        $this->addDefaultListActions($listMapper);
     }
 
     public function getExportFields()

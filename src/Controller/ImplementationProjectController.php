@@ -28,7 +28,7 @@ class ImplementationProjectController extends CRUDController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('sonata_admin_dashboard');
         } else {
-            return $this->redirectToRoute('frontend_app_service_list');
+            return $this->redirectToRoute('frontend_app_implementationproject_list');
         }
     }
 

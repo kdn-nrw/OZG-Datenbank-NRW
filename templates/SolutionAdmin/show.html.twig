@@ -23,13 +23,14 @@
                                 <tbody>
                                 {% for field_name in show_group.fields %}
                                     {% if field_name not in ['serviceSystems'] %}
-                                    {% block show_field %}
-                                        <tr class="sonata-ba-view-container">
-                                            {% if elements[field_name] is defined %}
-                                                {{ elements[field_name]|render_view_element(object) }}
-                                            {% endif %}
-                                        </tr>
-                                    {% endblock %}
+                                        {% block show_field %}
+                                            <tr class="sonata-ba-view-container">
+                                                {% if elements[field_name] is defined %}
+                                                    {{ elements[field_name]|render_view_element(object) }}
+                                                {% endif %}
+                                            </tr>
+                                        {% endblock %}
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
@@ -37,7 +38,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12">
-                    {% include 'General/Show/show-service-systems.twig' %}
+                    {% include 'General/Show/show-service-systems.html.twig' %}
                 </div>
             {% endfor %}
         {% endblock %}

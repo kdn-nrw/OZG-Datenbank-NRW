@@ -55,8 +55,15 @@ class Commune extends AppBaseEntity
      */
     private $solutions;
 
+    /**
+     * @var Contact[]|Collection
+     * @ORM\OneToMany(targetEntity="Contact", mappedBy="commune", cascade={"all"})
+     */
+    private $contacts;
+
     public function __construct()
     {
+        $this->contacts = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->offices = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
@@ -210,6 +217,52 @@ class Commune extends AppBaseEntity
     public function setSolutions($solutions): void
     {
         $this->solutions = $solutions;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function addContact($contact)
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->setCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function removeContact($contact)
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+            if ($contact instanceof SoftdeletableEntityInterface) {
+                $contact->setDeletedAt(new \DateTime());
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param Contact[]|Collection $contacts
+     */
+    public function setContacts($contacts): void
+    {
+        $this->contacts = $contacts;
     }
 
 }

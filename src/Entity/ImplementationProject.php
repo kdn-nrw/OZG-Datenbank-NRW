@@ -37,6 +37,15 @@ class ImplementationProject extends BaseNamedEntity
     private $description = '';
 
     /**
+     * Notes
+     *
+     * @var string|null
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    private $notes = '';
+
+    /**
      * @var ServiceSystem[]|Collection
      * @ORM\ManyToMany(targetEntity="ServiceSystem", inversedBy="implementationProjects")
      * @ORM\JoinTable(name="ozg_implementation_project_service_system",
@@ -64,10 +73,25 @@ class ImplementationProject extends BaseNamedEntity
      */
     private $solutions;
 
+    /**
+     * @var Contact[]|Collection
+     * @ORM\ManyToMany(targetEntity="Contact", inversedBy="implementationProjects")
+     * @ORM\JoinTable(name="ozg_implementation_project_contact",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $contacts;
+
     public function __construct()
     {
         $this->solutions = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     /**
@@ -100,6 +124,22 @@ class ImplementationProject extends BaseNamedEntity
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string|null $notes
+     */
+    public function setNotes(?string $notes): void
+    {
+        $this->notes = $notes;
     }
 
     /**
@@ -206,6 +246,49 @@ class ImplementationProject extends BaseNamedEntity
             }
         }
         return $items;
+    }
 
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function addContact($contact)
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->addImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function removeContact($contact)
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+            $contact->removeImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param Contact[]|Collection $contacts
+     */
+    public function setContacts($contacts): void
+    {
+        $this->contacts = $contacts;
     }
 }

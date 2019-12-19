@@ -2,9 +2,10 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\AddressTrait;
+use App\Admin\Traits\ContactTrait;
 use App\Entity\Commune;
 use Knp\Menu\ItemInterface as MenuItemInterface;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -12,13 +13,15 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
+    use ContactTrait;
+    use AddressTrait;
+
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
@@ -39,10 +42,10 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         }
 
         if ($this->isGranted('LIST')) {
-            $menu->addChild('app.commune.actions.solution_list', [
+            $menu->addChild('app.commune.actions.list', [
                 'uri' => $admin->getChild(SolutionAdmin::class)->generateUrl('list', ['id' => $id])
             ]);
-            $menu->addChild('app.commune.actions.office_list', [
+            $menu->addChild('app.commune.actions.list', [
                 'uri' => $admin->getChild(OfficeAdmin::class)->generateUrl('list', ['id' => $id])
             ]);
         }
@@ -51,29 +54,23 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('app.commune.group.general_data')
-                ->add('name', TextType::class)
-                ->add('street', TextType::class, [
+            ->tab('app.commune.group.general_data')
+            ->with('app.commune.group.general_data', [
+                'label' => false,
+                'box_class' => 'box-tab',
+            ])
+                ->add('name', TextType::class);
+        $this->addAddressFormFields($formMapper);
+        $formMapper->add('url', UrlType::class, [
                     'required' => false,
-                ])
-                ->add('zipCode', TextType::class, [
-                    'required' => false,
-                ])
-                ->add('town', TextType::class, [
-                    'required' => false,
-                ])
-                ->add('url', UrlType::class, [
-                    'required' => false,
-                ])
-                ->add('contact', TextareaType::class, [
-                    'required' => false,
-                ])
-                ->add('serviceProviders', ModelType::class, [
+                ]);
+        $formMapper->add('serviceProviders', ModelType::class, [
                     'btn_add' => false,
                     'placeholder' => '',
                     'required' => false,
                     'multiple' => true,
                     'by_reference' => false,
+                    'choice_translation_domain' => false,
                 ])
             ->end()
             ->with('app.commune.group.offices')
@@ -90,13 +87,15 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 ])
 
             ->end();
+        $formMapper->end();
+        $this->addContactsFormFields($formMapper, true, true);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('zipCode');
-        $datagridMapper->add('town');
+        $this->addAddressDatagridFilters($datagridMapper);
+        $this->addContactsDatagridFilters($datagridMapper);
         $datagridMapper->add('offices',
             null,
             [],
@@ -113,20 +112,9 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper
-            ->addIdentifier('name')
-            ->add('zipCode')
-            ->add('town')
-            ->add('url', 'url')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+        $listMapper->addIdentifier('name');
+        $this->addAddressListFields($listMapper);
+        $this->addDefaultListActions($listMapper);
     }
 
     /**
@@ -134,14 +122,11 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
      */
     public function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper
-            ->add('name')
-            ->add('street')
-            ->add('zipCode')
-            ->add('town')
-            ->add('url', 'url')
-            ->add('contact')
-            ->add('offices')
+        $showMapper->add('name');
+        $this->addAddressShowFields($showMapper);
+        $showMapper->add('url', 'url');
+        $this->addContactsShowFields($showMapper, true);
+        $showMapper->add('offices')
             ->add('serviceProviders', null, [
                 'template' => 'General/service-providers.html.twig',
             ]);

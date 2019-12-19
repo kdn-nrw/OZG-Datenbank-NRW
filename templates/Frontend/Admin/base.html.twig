@@ -53,11 +53,15 @@
                 {% set menuItems = {
                     'service': {
                         'routePrefix': 'frontend_app_service',
-                        'label': 'app.service.service_list'
+                        'label': 'app.service.list'
                     },
                     'implementationproject': {
                         'routePrefix': 'frontend_app_implementationproject',
-                        'label': 'app.implementation_project.implementation_project_list'
+                        'label': 'app.implementation_project.list'
+                    },
+                    'solution': {
+                        'routePrefix': 'frontend_app_solution',
+                        'label': 'app.solution.list'
                     }
                 } %}
                 {% for menuItem in menuItems %}

@@ -2,10 +2,14 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\MinistryStateTrait;
+use App\Entity\Jurisdiction;
 use App\Entity\Status;
+use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
@@ -15,60 +19,105 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
+    use MinistryStateTrait;
+
     /**
      * @var string[]
      */
     protected $customLabels = [
-        'entity.situation_subject' => 'app.situation.entity.subject',
+        'app.service_system.entity.situation_subject' => 'app.situation.entity.subject',
     ];
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class, [
-                'required' => true,
-            ])
-            ->add('serviceKey', TextType::class, [
-                'required' => true,
-            ])
-            ->add('situation', ModelType::class, [
-                'btn_add' => false,
-            ])
-            ->add('status', ModelType::class, [
-                'btn_add' => false,
-                'required' => true,
-            ])
-            ->add('priority', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'required' => false,
-            ])
-            ->add('execution', TextType::class, [
-                'required' => false,
-            ])
-            ->add('contact', TextareaType::class, [
-                'required' => false,
-            ])
-            ->add('description', TextareaType::class, [
-                'required' => false,
-            ])
-            ->add('jurisdictions', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'required' => false,
-                'multiple' => true,
-                'by_reference' => false,
-            ])
-            ->add('services', CollectionType::class, [
-                'type_options' => [
-                    'delete' => true,
-                ],
-                'by_reference' => false,
-            ], [
-                'admin_code' => \App\Admin\ServiceAdmin::class,
-                'edit' => 'inline',
-                'inline' => 'table',
-                'sortable' => 'position',
-            ])
+            ->with('app.service_system.tabs.general', ['tab' => true])
+                ->with('app.service_system.groups.general', [
+                    'label' => false,
+                ])
+                    ->add('name', TextType::class, [
+                        'required' => true,
+                    ])
+                    ->add('serviceKey', TextType::class, [
+                        'required' => true,
+                    ])
+                    ->add('situation', ModelType::class, [
+                        'btn_add' => false,
+                        'choice_translation_domain' => false,
+                    ])
+                    ->add('status', ModelType::class, [
+                        'btn_add' => false,
+                        'required' => true,
+                        'choice_translation_domain' => false,
+                    ])
+                    ->add('priority', ModelType::class, [
+                        'btn_add' => false,
+                        'placeholder' => '',
+                        'required' => false,
+                        'choice_translation_domain' => false,
+                    ])
+                    ->add('contact', TextareaType::class, [
+                        'required' => false,
+                    ])
+                    ->add('description', TextareaType::class, [
+                        'required' => false,
+                    ]);
+        $formMapper->add('laboratories', ModelType::class, [
+            'btn_add' => false,
+            'placeholder' => '',
+            'required' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'choice_translation_domain' => false,
+        ]);
+        $formMapper->add('jurisdictions', ChoiceFieldMaskType::class, [
+                        'choices' => [
+                            'app.jurisdiction.entity.types.country' => Jurisdiction::TYPE_COUNTRY,
+                            'app.jurisdiction.entity.types.state' => Jurisdiction::TYPE_STATE,
+                            'app.jurisdiction.entity.types.commune' => Jurisdiction::TYPE_COMMUNE,
+                        ],
+                        'multiple' => true,
+                        'map' => [
+                            Jurisdiction::TYPE_COUNTRY => [],
+                            Jurisdiction::TYPE_STATE => ['stateMinistries'],
+                            Jurisdiction::TYPE_COMMUNE => ['stateMinistries'],
+                        ],
+                        'required' => true,
+                    ]);/*
+                    ->add('jurisdictions', ModelType::class, [
+                        'btn_add' => false,
+                        'placeholder' => '',
+                        'required' => false,
+                        'multiple' => true,
+                        'by_reference' => false,
+                        'choice_translation_domain' => false,
+                    ]);*/
+        $formMapper->get('jurisdictions')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
+            $this->getModelManager(),
+            Jurisdiction::class
+        ));
+        $this->addStateMinistriesFormFields($formMapper);
+        $formMapper->end()
+            ->end();
+        $formMapper->tab('app.service_system.tabs.services')
+                ->with('app.service_system.entity.services', [
+                    'label' => false,
+                    'box_class' => 'box-tab',
+                    'translation_domain' => 'messages',
+                ])
+                    ->add('services', CollectionType::class, [
+                        'label' => false,
+                        'type_options' => [
+                            'delete' => true,
+                        ],
+                        'by_reference' => false,
+                    ], [
+                        'admin_code' => ServiceAdmin::class,
+                        'edit' => 'inline',
+                        'inline' => 'natural',
+                        'sortable' => 'position',
+                        'ba_custom_hide_fields' => ['serviceSystem',],// 'serviceSolutions'
+                    ])
+                ->end()
             ->end();
     }
 
@@ -76,6 +125,12 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
     {
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
+        $datagridMapper->add('laboratories',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('jurisdictions',
             null,
             [],
@@ -101,6 +156,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('status');
+        $this->addStateMinistriesDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -120,16 +176,8 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ->add('references', 'string', [
                 'label' => 'app.service_system.entity.references',
                 'template' => 'ServiceSystemAdmin/list-references.html.twig',
-            ])
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
             ]);
+        $this->addDefaultListActions($listMapper);
     }
 
     /**
@@ -144,8 +192,10 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ->add('serviceKey', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
-            ->add('jurisdictions')
-            ->add('situation.subject', null, [
+            ->add('jurisdictions');
+        $this->addStateMinistriesShowFields($showMapper);
+        $showMapper->add('laboratories');
+        $showMapper->add('situation.subject', null, [
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
             ])
             ->add('situation', null, [

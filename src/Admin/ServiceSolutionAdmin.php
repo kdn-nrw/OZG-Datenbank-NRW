@@ -16,20 +16,35 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
-            ->add('service', ModelAutocompleteType::class, [
-                'property' => 'name',
-                'required' => true,
-            ], [
-                'admin_code' => \App\Admin\ServiceAdmin::class
-            ])/*
+        $hideFields = $this->getFormHideFields();
+        if (!in_array('service', $hideFields)) {
+            $formMapper
+                ->add('service', ModelAutocompleteType::class, [
+                    'property' => 'name',
+                    'required' => true,
+                ], [
+                    'admin_code' => \App\Admin\ServiceAdmin::class
+                ]);
+        }
+        if (!in_array('solution', $hideFields)) {
+            $formMapper
+                ->add('solution', ModelAutocompleteType::class, [
+                    'property' => ['name', 'description'],
+                    'required' => true,
+                ], [
+                    'admin_code' => \App\Admin\SolutionAdmin::class
+                ]);
+        }
+        $formMapper/*
             ->add('status', ModelType::class, [
                 'btn_add' => false,
                 'required' => true,
+                'choice_translation_domain' => false,
             ])*/
             ->add('maturity', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
+                'choice_translation_domain' => false,
             ])
             /*->add('description', TextareaType::class, [
                 'required' => false,
@@ -64,23 +79,17 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
             ->add('service', null, [
                 'admin_code' => \App\Admin\ServiceAdmin::class
             ])
-            ->add('solution')
+            ->add('solution', null, [
+                'admin_code' => \App\Admin\SolutionAdmin::class
+            ])
             /*->add('description')
             ->add('status', 'choice', [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
             ])*/
-            ->add('maturity')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->add('maturity');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**
@@ -89,10 +98,12 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('service', [
+            ->add('service', null, [
                 'admin_code' => \App\Admin\ServiceAdmin::class
             ])
-            ->add('solution')
+            ->add('solution', null, [
+                'admin_code' => \App\Admin\SolutionAdmin::class
+            ])
             ->add('maturity')/*
             ->add('status', 'choice', [
                 'editable' => true,

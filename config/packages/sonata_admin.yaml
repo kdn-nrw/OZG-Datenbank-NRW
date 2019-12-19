@@ -7,6 +7,18 @@ sonata_admin:
         handler: sonata.admin.security.handler.role
         role_admin: ROLE_ADMIN
         role_super_admin: ROLE_SUPER_ADMIN
+    assets:
+        extra_javascripts:
+            - bundles/fosckeditor/ckeditor.js
+            - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
+            - bundles/sonataformatter/markitup/sets/markdown/set.js
+            - bundles/sonataformatter/markitup/sets/html/set.js
+            - bundles/sonataformatter/markitup/sets/textile/set.js
+        extra_stylesheets:
+            - bundles/sonataformatter/markitup/skins/sonata/style.css
+            - bundles/sonataformatter/markitup/sets/markdown/style.css
+            - bundles/sonataformatter/markitup/sets/html/style.css
+            - bundles/sonataformatter/markitup/sets/textile/style.css
     dashboard:
         blocks:
             - { position: top,  type: App\Block\RecentSolutionsBlock, class: 'col-xs-12', settings: {title: 'app.solution.recent_solutions', translation_domain: 'messages', mode: 'admin'} }
@@ -37,6 +49,7 @@ sonata_admin:
                 items:
                     - App\Admin\CommuneAdmin
                     - App\Admin\ServiceProviderAdmin
+                    - App\Admin\MinistryStateAdmin
                     #- App\Admin\CommuneServiceAdmin
                     #- App\Admin\ServiceSolutionAdmin
             app.implementation_group:
@@ -56,6 +69,8 @@ sonata_admin:
                     - App\Admin\PriorityAdmin
                     - App\Admin\ImplementationStatusAdmin
                     - App\Admin\ContactAdmin
+                    - App\Admin\CategoryAdmin
+                    #- App\Admin\JurisdictionAdmin
             app_admin.menu.system:
                 label: app.system_group
                 #label_catalogue: messages
@@ -67,8 +82,8 @@ sonata_admin:
                     #- Mindbase\SettingsBundle\Controller\Admin\SettingAdmin
                     #- Mindbase\EmailBundle\Controller\Admin\EmailTemplateAdmin
                     #- Mindbase\LogBundle\Controller\Admin\SysLogAdmin
-                    - shapecode_cron.cronjob
-                    - shapecode_cron.cronjob_result
+                    #- shapecode_cron.cronjob
+                    #- shapecode_cron.cronjob_result
 
 sonata_block:
     blocks:

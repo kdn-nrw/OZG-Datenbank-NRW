@@ -22,14 +22,7 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
 {
     use NamedEntityTrait;
     use HideableEntityTrait;
-
-    /**
-     * Url
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $url;
+    use UrlTrait;
 
     /**
      * Description
@@ -87,22 +80,6 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
     {
         $this->serviceProviders = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string|null $url
-     */
-    public function setUrl(?string $url): void
-    {
-        $this->url = $url;
     }
 
     /**

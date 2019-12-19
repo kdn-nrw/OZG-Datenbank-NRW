@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\BooleanType;
+use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -21,47 +22,86 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
      * @var string[]
      */
     protected $customLabels = [
-        'entity.service_system_situation' => 'app.service_system.entity.situation',
-        'entity.service_system_service_key' => 'app.service_system.entity.service_key',
-        'entity.service_system_priority' => 'app.service_system.entity.priority',
+        'app.service.entity.service_system_situation' => 'app.service_system.entity.situation',
+        'app.service.entity.service_system_service_key' => 'app.service_system.entity.service_key',
+        'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $hideFields = $this->getFormHideFields();
         $formMapper
-            ->add('name', TextareaType::class, [
-                'required' => true,
+            ->with('app.service.tabs.general', [
+                'label' => 'app.service.tabs.general',
+                'tab' => true,
             ])
-            ->add('serviceKey', TextType::class, [
-                'required' => true,
-            ])
-            ->add('serviceSystem', ModelAutocompleteType::class, [
+                ->with('app.service.groups.general', [
+                    'label' => false,
+                    'box_class' => 'box-tab',
+                ])
+                    ->add('name', TextareaType::class, [
+                        'required' => true,
+                    ])
+                    ->add('serviceKey', TextType::class, [
+                        'required' => true,
+                    ]);
+
+        if (!in_array('serviceSystem', $hideFields)) {
+            $formMapper->add('serviceSystem', ModelAutocompleteType::class, [
                 'property' => 'name',
                 'required' => true,
-            ])
-            ->add('status', ModelType::class, [
-                'btn_add' => false,
-                'required' => true,
-            ])
-            ->add('serviceType', TextType::class, [
-                'required' => true,
-            ])
-            ->add('legalBasis', TextareaType::class, [
-                'required' => false,
-            ])
-            ->add('laws', TextareaType::class, [
-                'required' => false,
-            ])
-            ->add('lawShortcuts', TextType::class, [
-                'required' => false,
-            ])
-            ->add('relevance1', BooleanType::class, [
-                'required' => false,
-            ])
-            ->add('relevance2', BooleanType::class, [
-                'required' => false,
-            ])
+            ]);
+        }
+        $formMapper
+                    ->add('status', ModelType::class, [
+                        'btn_add' => false,
+                        'required' => true,
+                        'choice_translation_domain' => false,
+                    ])
+                    ->add('serviceType', TextType::class, [
+                        'required' => true,
+                    ])
+                    ->add('legalBasis', TextareaType::class, [
+                        'required' => false,
+                    ])
+                    ->add('laws', TextareaType::class, [
+                        'required' => false,
+                    ])
+                    ->add('lawShortcuts', TextType::class, [
+                        'required' => false,
+                    ])
+                    ->add('relevance1', BooleanType::class, [
+                        'required' => false,
+                    ])
+                    ->add('relevance2', BooleanType::class, [
+                        'required' => false,
+                    ])
+                ->end()
             ->end();
+        if (!in_array('serviceSolutions', $hideFields)) {
+            $formMapper->tab('app.service.tabs.service_solutions', [
+                'label' => 'app.service.tabs.service_solutions',
+                'box_class' => 'box-tab',
+            ])
+                ->with('app.service.entity.service_solutions', [
+                    'label' => false,
+                    'box_class' => 'box-tab',
+                ])
+                ->add('serviceSolutions', CollectionType::class, [
+                    //'label' => false,
+                    'type_options' => [
+                        'delete' => true,
+                    ],
+                    'by_reference' => false,
+                ], [
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    //'sortable' => 'position',
+                    'ba_custom_hide_fields' => ['service'],
+                ])
+                ->end()
+            ->end();
+        }
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -104,16 +144,8 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
-            ])
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
             ]);
+        $this->addDefaultListActions($listMapper);
     }
 
     public function getExportFields()

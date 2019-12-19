@@ -1,0 +1,17 @@
+{# @var child \App\Entity\Solution #}
+<td>
+    {{ child.name }}
+</td>
+<td>
+    {% if child.url %}
+        {{ child.url }}
+    {% endif %}
+</td>
+<td>
+    {{ child.description|nl2br }}
+</td>
+<td>
+    {% if child.contact %}
+        {{ child.contact }}
+    {% endif %}
+</td>

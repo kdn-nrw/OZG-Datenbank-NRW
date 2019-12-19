@@ -28,6 +28,7 @@ class PortalAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
+                'choice_translation_domain' => false,
             ])
             ->end();
     }
@@ -41,16 +42,8 @@ class PortalAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('url', 'url')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->add('url', 'url');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**

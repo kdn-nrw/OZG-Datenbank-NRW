@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\AddressTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -13,20 +14,14 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class ManufacturerAdmin extends AbstractAppAdmin
 {
+    use AddressTrait;
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class)
-            ->add('street', TextType::class, [
-                'required' => false,
-            ])
-            ->add('zipCode', TextType::class, [
-                'required' => false,
-            ])
-            ->add('town', TextType::class, [
-                'required' => false,
-            ])
-            ->add('url', UrlType::class, [
+            ->add('name', TextType::class);
+        $this->addAddressFormFields($formMapper);
+        $formMapper->add('url', UrlType::class, [
                 'required' => false,
             ])
             ->add('specializedProcedures', ModelType::class, [
@@ -35,6 +30,7 @@ class ManufacturerAdmin extends AbstractAppAdmin
                 'required' => false,
                 'multiple' => true,
                 'by_reference' => false,
+                'choice_translation_domain' => false,
             ])
             ->end();
     }
@@ -42,8 +38,7 @@ class ManufacturerAdmin extends AbstractAppAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('zipCode');
-        $datagridMapper->add('town');
+        $this->addAddressDatagridFilters($datagridMapper);
         $datagridMapper->add('specializedProcedures',
             null,
             [],
@@ -57,16 +52,8 @@ class ManufacturerAdmin extends AbstractAppAdmin
         $listMapper
             ->addIdentifier('name')
             ->add('specializedProcedures')
-            ->add('url', 'url')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->add('url', 'url');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**
@@ -74,12 +61,9 @@ class ManufacturerAdmin extends AbstractAppAdmin
      */
     public function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper
-            ->add('name')
-            ->add('street')
-            ->add('zipCode')
-            ->add('town')
-            ->add('url', 'url')
+        $showMapper->add('name');
+        $this->addAddressShowFields($showMapper);
+        $showMapper->add('url', 'url')
             ->add('specializedProcedures');
     }
 }

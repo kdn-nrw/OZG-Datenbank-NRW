@@ -48,16 +48,20 @@ abstract class AbstractAppAdmin extends AbstractAdmin
         if (is_subclass_of($this->getClass(), NamedEntityInterface::class)) {
             $listMapper->addIdentifier('name');
         };
-        $listMapper
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+        $this->addDefaultListActions($listMapper);
+    }
+
+    protected function addDefaultListActions(ListMapper $listMapper)
+    {
+        $listMapper->add('_action', null, [
+            'label' => 'app.common.actions',
+            'translation_domain' => 'messages',
+            'actions' => [
+                'show' => [],
+                'edit' => [],
+                'delete' => [],
+            ]
+        ]);
     }
 
     /**
@@ -71,4 +75,20 @@ abstract class AbstractAppAdmin extends AbstractAdmin
         };
     }
 
+    /**
+     * Get list of fields to be hidden in the form
+     * @return array
+     */
+    final protected function getFormHideFields()
+    {
+        $hideFields = [];
+        $parentFieldDescription = $this->getParentFieldDescription();
+        if (null !== $parentFieldDescription) {
+            $parentOptions = $parentFieldDescription->getOptions();
+            if (!empty($parentOptions['ba_custom_hide_fields'])) {
+                $hideFields = $parentOptions['ba_custom_hide_fields'];
+            }
+        }
+        return $hideFields;
+    }
 }

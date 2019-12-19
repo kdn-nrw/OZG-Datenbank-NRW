@@ -21,6 +21,7 @@ class Office extends BaseBlamableEntity implements NamedEntityInterface
 {
     use NamedEntityTrait;
     use HideableEntityTrait;
+    use UrlTrait;
 
     /**
      * ozgrgbeschreibung
@@ -35,14 +36,6 @@ class Office extends BaseBlamableEntity implements NamedEntityInterface
      * @ORM\ManyToOne(targetEntity="Commune", inversedBy="offices", cascade={"persist"})
      */
     private $commune;
-
-    /**
-     * Url
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $url;
 
     /**
      * Contact
@@ -82,22 +75,6 @@ class Office extends BaseBlamableEntity implements NamedEntityInterface
     public function setCommune($commune): void
     {
         $this->commune = $commune;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string|null $url
-     */
-    public function setUrl(?string $url): void
-    {
-        $this->url = $url;
     }
 
     /**
