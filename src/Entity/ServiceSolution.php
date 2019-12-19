@@ -20,7 +20,7 @@ class ServiceSolution extends BaseEntity
 
     /**
      * @var Service
-     * @ORM\ManyToOne(targetEntity="Service", inversedBy="solutions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Service", inversedBy="serviceSolutions", cascade={"persist"})
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $service;

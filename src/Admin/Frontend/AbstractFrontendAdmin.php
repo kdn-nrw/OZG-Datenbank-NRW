@@ -10,6 +10,7 @@ namespace App\Admin\Frontend;
 
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 
 /**
  * Class AbstractFrontendAdmin
@@ -76,6 +77,17 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
             return false;
         }
         return parent::hasRoute($name);
+    }
+
+    protected function addDefaultListActions(ListMapper $listMapper)
+    {
+        $listMapper->add('_action', null, [
+            'label' => 'app.common.actions',
+            'translation_domain' => 'messages',
+            'actions' => [
+                'show' => [],
+            ]
+        ]);
     }
 
     /*

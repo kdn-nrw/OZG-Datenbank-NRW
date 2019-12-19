@@ -17,19 +17,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Portal extends BaseNamedEntity
 {
+    use UrlTrait;
+
     /**
      * @var ServiceProvider
      * @ORM\ManyToOne(targetEntity="ServiceProvider", inversedBy="solutions", cascade={"persist"})
      */
     private $serviceProvider;
-
-    /**
-     * Url
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $url;
 
     /**
      * Description
@@ -64,22 +58,6 @@ class Portal extends BaseNamedEntity
     public function setServiceProvider($serviceProvider): void
     {
         $this->serviceProvider = $serviceProvider;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string|null $url
-     */
-    public function setUrl(?string $url): void
-    {
-        $this->url = $url;
     }
 
     /**

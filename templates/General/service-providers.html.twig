@@ -28,10 +28,10 @@ file that was distributed with this source code.
                                 and field_description.associationadmin.hasRoute(route_name)
                                 and field_description.associationadmin.hasAccess(route_name, element) %}
                                 <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, field_description.options.route.parameters) }}">
-                                    {{ element.service.name }}
+                                    {{ element.name }}
                                 </a>
                             {% else %}
-                                {{ element.service.name }}
+                                {{ element.name }}
                             {% endif %}
                         </td>
                         <td>

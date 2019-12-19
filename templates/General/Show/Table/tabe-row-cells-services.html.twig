@@ -1,0 +1,24 @@
+{# @var child \App\Entity\Service #}
+<td>
+    {{ child.name }}
+</td>
+<td>
+    {{ child.serviceKey }}
+</td>
+<td>
+    {{ child.serviceType }}
+</td>
+<td>
+    {{ child.lawShortcuts }}
+</td>
+<td>
+    {{ child.relevance1 }}
+</td>
+<td>
+    {{ child.relevance2 }}
+</td>
+<td>
+    {% if child.status %}
+        {{ child.status.name }}
+    {% endif %}
+</td>

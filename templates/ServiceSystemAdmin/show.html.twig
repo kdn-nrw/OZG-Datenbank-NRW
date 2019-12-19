@@ -33,6 +33,16 @@
                                 <div class="col-xs-12 col-md-4 text-right">
                                     {{ elements['priority']|render_view_element(object)}}
                                 </div>
+                                {% if object.jurisdictions|length > 0 %}
+                                    <div class="col-xs-12 col-md-2">
+                                        {{ elements['jurisdictions']|render_view_element(object)}}
+                                    </div>
+                                    <div class="col-xs-12 col-md-10">
+                                        {% if object.stateMinistriesEnabled and object.stateMinistries|length > 0 %}
+                                            {{ elements['stateMinistries']|render_view_element(object)}}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                             </div>
                             {% if object.description %}
                                 <div class="item-property">
@@ -43,7 +53,10 @@
                     </div>
                 </div>
                 <div class="col-xs-12">
-                    {% include 'General/Show/show-services.twig' %}
+                    {% include 'General/Show/show-services.html.twig' %}
+                </div>
+                <div class="col-xs-12">
+                    {% include 'General/Show/show-laboratories.html.twig' %}
                 </div>
             {% endfor %}
         {% endblock %}

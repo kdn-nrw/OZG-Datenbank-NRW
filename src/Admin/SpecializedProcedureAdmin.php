@@ -23,6 +23,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin
                 'required' => false,
                 'multiple' => true,
                 'by_reference' => false,
+                'choice_translation_domain' => false,
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
@@ -45,16 +46,8 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('manufacturers')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->add('manufacturers');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**

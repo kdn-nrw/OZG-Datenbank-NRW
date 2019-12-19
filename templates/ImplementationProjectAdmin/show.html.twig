@@ -31,11 +31,22 @@
                         </div>
                     </div>
                 </div>
+                {% if object.notes %}
                 <div class="col-xs-12">
-                    {% include 'General/Show/show-solutions.twig' %}
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h4 class="box-title">
+                                {{ 'app.implementation_project.entity.notes'|trans }}
+                            </h4>
+                        </div>
+                        <div class="box-body">
+                            {{ object.notes|raw }}
+                        </div>
+                    </div>
                 </div>
+                {% endif %}
                 <div class="col-xs-12">
-                    {% include 'General/Show/show-service-systems.twig' %}
+                    {% include 'General/Show/show-service-systems.html.twig' %}
                 </div>
                 <div class="col-xs-12">
                     {% include 'General/Show/show-laboratories.html.twig' %}

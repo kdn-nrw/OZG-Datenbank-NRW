@@ -43,3 +43,15 @@ frontend_app_implementationproject_show:
 frontend_app_implementationproject_export:
     path: /umsetzungsprojekte/export
     controller: App\Controller\ImplementationProjectController::exportAction
+
+frontend_app_solution_list:
+    path: /loesungen
+    controller: App\Controller\SolutionController::listAction
+
+frontend_app_solution_show:
+    path: /loesungen/{id}/show
+    controller: App\Controller\SolutionController::showAction
+
+frontend_app_solution_export:
+    path: /loesungen/export
+    controller: App\Controller\SolutionController::exportAction

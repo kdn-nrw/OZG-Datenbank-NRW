@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12">
-                    {% include 'General/Show/show-solutions.twig' %}
+                    {% include 'General/Show/show-service-solutions.html.twig' with {'entities': object.serviceSolutions, 'showSolution': true} %}
                 </div>
             {% endfor %}
         {% endblock %}

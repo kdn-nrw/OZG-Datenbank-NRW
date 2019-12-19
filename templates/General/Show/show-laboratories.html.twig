@@ -2,7 +2,7 @@
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
-                {{ 'app.laboratory.laboratory_list'|trans }}
+                {{ 'app.laboratory.list'|trans }}
             </h4>
         </div>
         <div class="box-body">
@@ -16,6 +16,9 @@
                     </th>
                     <th>
                         {{ 'app.laboratory.entity.description'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.laboratory.entity.service_providers'|trans }}
                     </th>
                     <th>
                         {{ 'app.laboratory.entity.participants_other'|trans }}
@@ -34,6 +37,13 @@
                         </td>
                         <td>
                             {{ child.description|nl2br }}
+                        </td>
+                        <td>
+                            {% if child.serviceProviders %}
+                                {% for grandChild in child.serviceProviders %}
+                                    <span class="badge">{{ grandChild.name }}</span>
+                                {% endfor %}
+                            {% endif %}
                         </td>
                         <td>
                             {% if child.participantsOther %}

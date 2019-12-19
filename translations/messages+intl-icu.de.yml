@@ -8,14 +8,31 @@ app:
     login: Anmelden
     dashboard: Startseite
   common:
+    model_list_type:
+      add: Neu
+      edit: Bearbeiten
+      delete: Löschen
+      list: Übersicht
+    add_sub_record: Neuen Eintrag bearbeiten
     actions: Aktionen
   authentication:
-    authentication_list: Authentifizierungen
+    list: Authentifizierungen
+    create: Authentifizierung anlegen
     entity:
       name: Methode
+  category:
+    list: Kategorien
+    create: Kategorie anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+      parent: Ober-Kategorie
+      children: Unter-Kategorien
   commune:
-    commune_list: Kommunen + Ämter
+    list: Kommunen + Ämter
+    create: Kommune anlegen
     actions:
+      list: Kommunen Übersicht
       show: Kommune anzeigen
       edit: Kommune bearbeiten
       solution_list: Lösungen anzeigen
@@ -30,47 +47,83 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      contact: Ansprechpartner der Kommune
+      contacts: Ansprechpartner der Kommune
+      contact: Ansprechpartner der Kommune (alt)
       offices: Ämter
       service_providers: IT Dienstleister
   contact:
-    contact_list: Kontakte
+    list: OZG Adressbuch
+    create: Adresse anlegen
+    groups:
+      person_data: Personendaten
+      address_data: Adressdaten
+      type_data: Kontakttyp
+      organisation: Organisation
+      contact: Kontakt
     entity:
+      gender: Anrede
+      gender_choices:
+        male: Herr
+        female: Frau
+        other: Andere
+      title: Titel
       first_name: Vorname
       last_name: Nachname
       email: E-Mail
-      zipcode: PLZ
+      zip_code: PLZ
       town: Ort
       street: Straße
-      position: Position
-      organisation: Firma/Organisation
+      organisation: Organisation
+      department: Organisationseinheit
+      position: Funktion
       phone_number: Telefon
+      fax_number: Fax
+      mobile_number: Mobil
+      contact_type: Typ
+      contact_type_default: Standard
+      contact_type_commune: Kommune
+      contact_type_service_provider: Dienstleister
+      contact_type_ministry_state: Ministerium (Land)
+      ministry_state: Ministerium (Land)
+      service_provider: Dienstleister
+      commune: Kommune
+      categories: Kategorien
   form_server:
-    form_server_list: Formularserver
+    list: Formularserver
+    create: Formularserver anlegen
     entity:
       name: Name
       url: Url
       solutions: Lösungen
   implementation_project:
-    implementation_project_list: Umsetzungsprojekte
+    list: Umsetzungsprojekte
+    create: Umsetzungsprojekt anlegen
     entity:
       name: Umsetzungsprojektname
       description: Projektinformationen
       status: Umsetzungsstatus
       service_systems: Leistungsbündel
       solutions: Lösungen
+      contacts: Ansprechpartner
+      notes: Notizen
   implementation_status:
-    implementation_status_list: Umsetzungs-Status
+    list: Umsetzungs-Status
+    create: Umsetzungs-Status anlegen
     entity:
       name: Name
       level: Level/Sortierung
       description: Beschreibung
   jurisdiction:
-    jurisdiction_list: Zuständigkeiten
+    list: Zuständigkeiten
     entity:
       name: Name
+      types:
+        country: Bund
+        state: Land
+        commune: Kommunal
   laboratory:
-    laboratory_list: Labore
+    list: Labore
+    create: Labor anlegen
     entity:
       name: Name
       description: Beschreibung
@@ -80,7 +133,8 @@ app:
       service_systems: Leistungsbündel
       implementation_url: Url OZG Umsetzung
   manufacturer:
-    manufacturer_list: Hersteller
+    list: Hersteller
+    create: Hersteller anlegen
     entity:
       name: Name
       street: Straße, Hausnummer
@@ -88,39 +142,59 @@ app:
       town: Ort
       url: Url
       specialized_procedures: Anbindung Fachverfahren
+  ministry_state:
+    list: Ministerien (Land)
+    create: Ministerium anlegen
+    tabs:
+      default: Allgemein
+    entity:
+      name: Name
+      short_name: Kürzel
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      contacts: Ansprechpartner
+      service_systems: Leistungsbündel
   maturity:
-    maturity_list: Reifegrade
+    list: Reifegrade
+    create: Reifegrad anlegen
     entity:
       name: Name
       description: Beschreibung
   office:
-    office_list: Ämter
+    list: Ämter
+    create: Amt anlegen
     entity:
       name: Name
       description: Beschreibung
       url: Url
       contact: Kontakt
   payment_type:
-    payment_type_list: Bezahlverfahren
+    list: Bezahlverfahren
+    create: Bezahlverfahren anlegen
     entity:
       name: Name
       url: Url
       solutions: Lösungen
   portal:
-    portal_list: Portal
+    list: Portal
+    create: Portal anlegen
     entity:
       name: Name
       description: Beschreibung
       service_provider: IT Dienstleister
       url: Url
   priority:
-    priority_list: Prioritäten
+    list: Prioritäten
+    create: Priorität anlegen
     entity:
       name: Name
       level: Level
       description: Beschreibung
   search:
-    search_list: Detailsuche
+    list: Detailsuche
+    create: Suche anlegen
     entity:
       admin_id: Zeige mir
       route: Route
@@ -139,7 +213,15 @@ app:
         one {1 Leistung}
         other {# Leistungen}
       }"
-    service_list: Leistungen
+    list: Leistungen
+    create: Leistung anlegen
+    tabs:
+      general: Allgemein
+      relations: Relationen
+      service_solutions: Lösungen
+    groups:
+      general: Leistung
+      relations: Relationen
     entity:
       name: Leika-Bezeichnung
       service_key: Leika-ID
@@ -150,25 +232,30 @@ app:
       law_shortcuts: Gesetzeskürzel
       relevance1: SDG1
       relevance2: SDG2
-      #execution: Kommunal Vollzug
       status: Status
       priority: Priorität
+      service_solutions: Lösungen
   service_provider:
-    service_provider_list: IT Dienstleister
+    list: IT Dienstleister
+    create: IT Dienstleister anlegen
     actions:
       show: IT Dienstleister anzeigen
       edit: IT Dienstleister bearbeiten
+    group:
+      general_data: Allgemein
     entity:
       name: Name
       street: Straße, Hausnummer
       zip_code: PLZ
       town: Ort
       url: Url
-      contact: OZG-Ansprechpartner
+      contacts: OZG-Ansprechpartner
+      contact: OZG-Ansprechpartner (alt)
       #solutions: Lösungen
       communes: Kommunen
   service_solution:
-    service_solution_list: Leistung
+    list: Leistung
+    create: Leistung anlegen
     entity:
       solution: Lösung
       service: Leistung
@@ -176,12 +263,16 @@ app:
       status: Status
       maturity: Reifegrad
   service_system:
-    service_system_list: Leistungsbündel
+    list: Leistungsbündel
+    create: Leistungsbündel anlegen
+    tabs:
+      general: Allgemein
+      relations: Relationen
+      services: Leistungen
     entity:
       name: OZG Leistung
       service_key: OZG-ID
       situation: Lage
-      execution: Kommunal Vollzug
       contact: Kontakt
       description: Beschreibung
       services: Leistungen
@@ -189,19 +280,28 @@ app:
       priority: Priorität
       jurisdictions: Zuständigkeiten
       references: Referenzen
+      state_ministries: Ministerien (Land)
+      laboratories: Labore
   situation:
-    situation_list: Lage
+    list: Lage
+    create: Lage anlegen
     entity:
       name: Name
       subject: Themenfeld
       services: Dienstleistungen
   solution:
-    solution_list: Lösungen
+    list: Lösungen
+    create: Lösung anlegen
     recent_solutions: Aktuelle Lösungen
     actions:
+      list: Lösungen Übersicht
       show: Lösung anzeigen
       edit: Lösung bearbeiten
       service_solution_list: Enthaltene Leistungen anzeigen
+    tabs:
+      general: Allgemein
+      relations: Relationen
+      services: Leistungen
     entity:
       view_all: Alle Lösungen anzeigen
       no_solution_found: Keine Lösungen gefunden
@@ -218,7 +318,8 @@ app:
       service_solutions: Enthaltene Leistungen
       status: Status
       url: Url
-      contact: Ansprechpartner
+      solution_contacts: Ansprechpartner
+      contact: Ansprechpartner (alt)
       service_systems: OZG Leistungsbündel
       authentications: Authentifizierung
       created_by: Erstellt von
@@ -226,8 +327,10 @@ app:
       maturity: Reifegrad
       form_servers: Formularserver
       payment_types: Bezahlverfahren
+      is_published: Lösung öffentlich sichtbar?
   specialized_procedure:
-    specialized_procedure_list: Fachverfahren
+    list: Fachverfahren
+    create: Fachverfahren anlegen
     entity:
       name: Name
       description: Beschreibung
@@ -235,18 +338,21 @@ app:
       solutions: Lösungen
       manufacturers: Hersteller
   status:
-    status_list: Status
+    list: Status
+    create: Status anlegen
     entity:
       name: Name
       level: Level/Sortierung
       description: Beschreibung
   subject:
-    subject_list: Themenfeld
+    list: Themenfelder
+    create: Themenfeld anlegen
     entity:
       name: Name
       situations: Lage
   user:
-    user_list: Status
+    list: Benutzer
+    create: Benutzer anlegen
     entity:
       firstname: Vorname
       lastname: Nachname

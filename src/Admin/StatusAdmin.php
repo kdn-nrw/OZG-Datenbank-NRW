@@ -33,16 +33,8 @@ class StatusAdmin extends AbstractAppAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->addIdentifier('level')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->addIdentifier('level');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**

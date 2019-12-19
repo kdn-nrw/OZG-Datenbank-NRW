@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\ServiceSystemTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -14,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class LaboratoryAdmin extends AbstractAppAdmin
 {
+    use ServiceSystemTrait;
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -30,18 +33,13 @@ class LaboratoryAdmin extends AbstractAppAdmin
                 'required' => false,
                 'multiple' => true,
                 'by_reference' => false,
+                'choice_translation_domain' => false,
             ])
             ->add('participantsOther', TextareaType::class, [
                 'required' => false,
-            ])
-            ->add('serviceSystems', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'required' => false,
-                'multiple' => true,
-                'by_reference' => false,
-            ])
-            ->add('implementationUrl', UrlType::class, [
+            ]);
+        $this->addServiceSystemsFormFields($formMapper);
+        $formMapper->add('implementationUrl', UrlType::class, [
                 'required' => false,
             ])
             ->end();
@@ -56,29 +54,16 @@ class LaboratoryAdmin extends AbstractAppAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('serviceSystems',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addServiceSystemsDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('url', 'url')
-            ->add('serviceSystems')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->add('url', 'url');
+        $this->addServiceSystemsListFields($listMapper);
+        $this->addDefaultListActions($listMapper);
     }
 
     /**
@@ -90,12 +75,10 @@ class LaboratoryAdmin extends AbstractAppAdmin
             ->add('name')
             ->add('description')
             ->add('url', 'url')
-            ->add('participantsOther')
             ->add('serviceProviders', null, [
                 'template' => 'General/service-providers.html.twig',
             ])
-            ->add('serviceProviders', null, [
-                'template' => 'General/service-providers.html.twig',
-            ]);
+            ->add('participantsOther');
+        $this->addServiceSystemsShowFields($showMapper);
     }
 }

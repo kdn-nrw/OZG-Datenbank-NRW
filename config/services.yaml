@@ -37,7 +37,19 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.authentication.authentication_list
+        label:        app.authentication.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\CategoryAdmin:
+    arguments:
+      - ~
+      - App\Entity\Category
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.category.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -52,7 +64,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.commune.commune_list
+        label:        app.commune.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -64,7 +76,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.contact.contact_list
+        label:        app.contact.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -76,7 +88,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.form_server.form_server_list
+        label:        app.form_server.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -88,7 +100,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.implementation_status.implementation_status_list
+        label:        app.implementation_status.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -102,7 +114,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.implementation_project.implementation_project_list
+        label:        app.implementation_project.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -116,7 +128,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.implementation_project.implementation_project_list
+        label:        app.implementation_project.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
@@ -129,7 +141,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.jurisdiction.jurisdiction_list
+        label:        app.jurisdiction.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -141,7 +153,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.laboratory.laboratory_list
+        label:        app.laboratory.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -153,7 +165,19 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.manufacturer.manufacturer_list
+        label:        app.manufacturer.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\MinistryStateAdmin:
+    arguments:
+      - ~
+      - App\Entity\MinistryState
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.ministry_state.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -165,7 +189,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.maturity.maturity_list
+        label:        app.maturity.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -177,7 +201,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.office.office_list
+        label:        app.office.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -189,7 +213,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.payment_type.payment_type_list
+        label:        app.payment_type.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -201,7 +225,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.portal.portal_list
+        label:        app.portal.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -213,7 +237,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.priority.priority_list
+        label:        app.priority.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -225,7 +249,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.situation.situation_list
+        label:        app.situation.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -239,7 +263,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.service_system.service_system_list
+        label:        app.service_system.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -253,7 +277,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.service.service_list
+        label:        app.service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -267,7 +291,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.service.service_list
+        label:        app.service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
@@ -280,7 +304,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.service_provider.service_provider_list
+        label:        app.service_provider.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -292,7 +316,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.service_solution.service_solution_list
+        label:        app.service_solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -304,7 +328,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.status.status_list
+        label:        app.status.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -316,7 +340,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.specialized_procedure.specialized_procedure_list
+        label:        app.specialized_procedure.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -331,8 +355,23 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.solution.solution_list
+        label:        app.solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\Frontend\SolutionAdmin:
+    arguments:
+      - ~
+      - App\Entity\Solution
+      - ~
+    calls:
+      - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.solution.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Entity\SolutionManager:
@@ -347,7 +386,7 @@ services:
     tags:
       - name:         sonata.admin
         manager_type: orm
-        label:        app.subject.subject_list
+        label:        app.subject.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 

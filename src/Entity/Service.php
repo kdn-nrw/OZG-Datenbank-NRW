@@ -3,12 +3,11 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseBlamableEntity;
+use App\Entity\Base\HideableEntityTrait;
+use App\Entity\Base\NamedEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use App\Entity\Base\HideableEntityTrait;
-use App\Entity\Base\NamedEntityInterface;
 
 
 /**
@@ -110,13 +109,13 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
 
     /**
      * @var ServiceSolution[]|Collection
-     * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="service")
+     * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="service", cascade={"all"})
      */
-    private $solutions;
+    private $serviceSolutions;
 
     public function __construct()
     {
-        $this->solutions = new ArrayCollection();
+        $this->serviceSolutions = new ArrayCollection();
     }
 
     /**
@@ -191,19 +190,46 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     }
 
     /**
-     * @return Solution[]|Collection
+     * @param ServiceSolution $serviceSolution
+     * @return self
      */
-    public function getSolutions()
+    public function addServiceSolution($serviceSolution)
     {
-        return $this->solutions;
+        if (!$this->serviceSolutions->contains($serviceSolution)) {
+            $this->serviceSolutions->add($serviceSolution);
+            $serviceSolution->setService($this);
+        }
+
+        return $this;
     }
 
     /**
-     * @param Solution[]|Collection $solutions
+     * @param ServiceSolution $serviceSolution
+     * @return self
      */
-    public function setSolutions($solutions): void
+    public function removeServiceSolution($serviceSolution)
     {
-        $this->solutions = $solutions;
+        if ($this->serviceSolutions->contains($serviceSolution)) {
+            $this->serviceSolutions->removeElement($serviceSolution);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ServiceSolution[]|Collection
+     */
+    public function getServiceSolutions()
+    {
+        return $this->serviceSolutions;
+    }
+
+    /**
+     * @param ServiceSolution[]|Collection $serviceSolutions
+     */
+    public function setServiceSolutions($serviceSolutions): void
+    {
+        $this->serviceSolutions = $serviceSolutions;
     }
 
     /**
@@ -328,7 +354,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     {
         $name = $this->getName();
         if (null === $name) {
-            return 'NULL';
+            return '';
         }
         return $name;
     }

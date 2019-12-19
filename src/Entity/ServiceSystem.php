@@ -36,14 +36,6 @@ class ServiceSystem extends BaseNamedEntity
      */
     private $status;
 
-    /**
-     * ozgvollzug
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $execution;
-
     // name => ozglstg
     /*
     ozgschl
@@ -81,7 +73,7 @@ class ServiceSystem extends BaseNamedEntity
 
     /**
      * @var Service[]|Collection
-     * @ORM\OneToMany(targetEntity="Service", mappedBy="serviceSystem")
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="serviceSystem", cascade={"persist"})
      */
     private $services;
 
@@ -111,12 +103,19 @@ class ServiceSystem extends BaseNamedEntity
      */
     private $laboratories;
 
+    /**
+     * @var MinistryState[]|Collection
+     * @ORM\ManyToMany(targetEntity="MinistryState", mappedBy="serviceSystems")
+     */
+    private $stateMinistries;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
+        $this->stateMinistries = new ArrayCollection();
     }
 
     /**
@@ -197,22 +196,6 @@ class ServiceSystem extends BaseNamedEntity
     public function setStatus(?Status $status): void
     {
         $this->status = $status;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getExecution(): ?string
-    {
-        return $this->execution;
-    }
-
-    /**
-     * @param string|null $execution
-     */
-    public function setExecution(?string $execution): void
-    {
-        $this->execution = $execution;
     }
 
     /**
@@ -321,6 +304,18 @@ class ServiceSystem extends BaseNamedEntity
         $this->jurisdictions = $jurisdictions;
     }
 
+    public function getStateMinistriesEnabled()
+    {
+        $enabled = false;
+        $jurisdictions = $this->getJurisdictions();
+        foreach ($jurisdictions as $jurisdiction) {
+            if (in_array($jurisdiction->getId(), [Jurisdiction::TYPE_STATE, Jurisdiction::TYPE_COMMUNE])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @param ImplementationProject $implementationProject
      * @return self
@@ -409,4 +404,48 @@ class ServiceSystem extends BaseNamedEntity
         $this->laboratories = $laboratories;
     }
 
+
+    /**
+     * @param MinistryState $stateMinistry
+     * @return self
+     */
+    public function addStateMinistry($stateMinistry)
+    {
+        if (!$this->stateMinistries->contains($stateMinistry)) {
+            $this->stateMinistries->add($stateMinistry);
+            $stateMinistry->addServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param MinistryState $stateMinistry
+     * @return self
+     */
+    public function removeStateMinistry($stateMinistry)
+    {
+        if ($this->stateMinistries->contains($stateMinistry)) {
+            $this->stateMinistries->removeElement($stateMinistry);
+            $stateMinistry->removeServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return MinistryState[]|Collection
+     */
+    public function getStateMinistries()
+    {
+        return $this->stateMinistries;
+    }
+
+    /**
+     * @param MinistryState[]|Collection $stateMinistries
+     */
+    public function setStateMinistries($stateMinistries): void
+    {
+        $this->stateMinistries = $stateMinistries;
+    }
 }

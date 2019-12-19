@@ -5,7 +5,7 @@ namespace App\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -14,12 +14,24 @@ class SituationAdmin extends AbstractAppAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
-            ->add('name', TextType::class)
-            ->add('subject', ModelType::class, [
+        $hideFields = $this->getFormHideFields();
+        $formMapper->add('name', TextType::class);
+        if (!in_array('subject', $hideFields)) {
+            $formMapper->add('subject', ModelListType::class, [
+                'btn_add'       => 'app.common.model_list_type.add',       //Specify a custom label
+                'btn_list'      => 'app.common.model_list_type.list',      //which will be translated
+                'btn_delete'    => false,              //or hide the button.
+                'btn_edit'      => 'app.common.model_list_type.edit',             //Hide add and show edit button when value is set
+                'btn_catalogue' => 'messages', //Custom translation domain for buttons
+            ], [
+                'placeholder' => 'app.situation.entity.subject_placeholder',
+            ]);
+            /*$formMapper->add('subject', ModelType::class, [
                 'btn_add' => false,
-            ])
-            ->end();
+                'choice_translation_domain' => false,
+            ]);*/
+        }
+        $formMapper->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -37,16 +49,8 @@ class SituationAdmin extends AbstractAppAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('subject')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->add('subject');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**

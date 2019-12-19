@@ -25,6 +25,7 @@ class SubjectAdmin extends AbstractAppAdmin
                 'edit' => 'inline',
                 'inline' => 'table',
                 'sortable' => 'position',
+                'ba_custom_hide_fields' => ['subject'],
             ])
             ->end();
     }
@@ -44,16 +45,8 @@ class SubjectAdmin extends AbstractAppAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->addIdentifier('situations')
-            ->add('_action', null, [
-                'label' => 'app.common.actions',
-                'translation_domain' => 'messages',
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ]
-            ]);
+            ->addIdentifier('situations');
+        $this->addDefaultListActions($listMapper);
     }
 
     /**

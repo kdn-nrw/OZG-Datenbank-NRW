@@ -25,6 +25,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
 
     use NamedEntityTrait;
     use HideableEntityTrait;
+    use UrlTrait;
 
     /**
      * @var ServiceProvider
@@ -60,14 +61,6 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="solution", cascade={"all"})
      */
     private $serviceSolutions;
-
-    /**
-     * Url
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $url;
 
     /**
      * Contact
@@ -168,6 +161,28 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="solutions")
      */
     private $implementationProjects;
+    /**
+     * Solution is published
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="is_published", type="boolean")
+     */
+    protected $isPublished = false;
+
+    /**
+     * @var Contact[]|Collection
+     * @ORM\ManyToMany(targetEntity="Contact", inversedBy="solutions")
+     * @ORM\JoinTable(name="ozg_solution_contact",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $solutionContacts;
 
     public function __construct()
     {
@@ -179,6 +194,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
         $this->formServers = new ArrayCollection();
         $this->paymentTypes = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
+        $this->solutionContacts = new ArrayCollection();
     }
 
     /**
@@ -324,7 +340,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
                     $groupedMaturities[$ssMaturity->getId()] = $ssMaturity;
                 }
                 if (null === $maturity
-                    || (is_numeric($ssMaturity->getName()) && (int) $maturity->getName() > (int) $ssMaturity->getName())) {
+                    || (is_numeric($ssMaturity->getName()) && (int)$maturity->getName() > (int)$ssMaturity->getName())) {
                     $maturity = $ssMaturity;
                 }
             }
@@ -393,22 +409,6 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     public function setCustomProvider(?string $customProvider): void
     {
         $this->customProvider = $customProvider;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string|null $url
-     */
-    public function setUrl(?string $url): void
-    {
-        $this->url = $url;
     }
 
     /**
@@ -576,37 +576,6 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     }
 
     /**
-     * Get name
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        $name = $this->getName();
-        if (null === $name) {
-            return 'ID:' . $this->getId();
-        }
-        return $this->getName();
-    }
-
-    /**
-     * Hook on pre-update operations.
-     * @ORM\PreUpdate
-     */
-    public function preUpdate(): void
-    {
-        $this->updateMaturity();
-    }
-    /**
-     * Hook on pre-persist operations.
-     * @ORM\PrePersist
-     */
-    public function prePersist(): void
-    {
-        $this->updateMaturity();
-    }
-
-    /**
      * @param FormServer $formServer
      * @return self
      */
@@ -736,5 +705,107 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     public function setImplementationProjects($implementationProjects): void
     {
         $this->implementationProjects = $implementationProjects;
+    }
+
+    public function getDisplayName()
+    {
+        $label = $this->getName();
+        if (empty($label)) {
+            $label = $this->getId();
+            if (empty($label)) {
+                $label = 'Neue Lösung';
+            } else {
+                $label = 'ID:' . $label;
+            }
+        }
+        return $label;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished(): bool
+    {
+        return (bool) $this->isPublished;
+    }
+
+    /**
+     * @param bool $isPublished
+     */
+    public function setIsPublished(bool $isPublished): void
+    {
+        $this->isPublished = $isPublished;
+    }
+
+    /**
+     * @param Contact $solutionContact
+     * @return self
+     */
+    public function addSolutionContact($solutionContact)
+    {
+        if (!$this->solutionContacts->contains($solutionContact)) {
+            $this->solutionContacts->add($solutionContact);
+            $solutionContact->addSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $solutionContact
+     * @return self
+     */
+    public function removeSolutionContact($solutionContact)
+    {
+        if ($this->solutionContacts->contains($solutionContact)) {
+            $this->solutionContacts->removeElement($solutionContact);
+            $solutionContact->removeSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getSolutionContacts()
+    {
+        return $this->solutionContacts;
+    }
+
+    /**
+     * @param Contact[]|Collection $solutionContacts
+     */
+    public function setSolutionContacts($solutionContacts): void
+    {
+        $this->solutionContacts = $solutionContacts;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getDisplayName();
+    }
+
+    /**
+     * Hook on pre-update operations.
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(): void
+    {
+        $this->updateMaturity();
+    }
+
+    /**
+     * Hook on pre-persist operations.
+     * @ORM\PrePersist
+     */
+    public function prePersist(): void
+    {
+        $this->updateMaturity();
     }
 }

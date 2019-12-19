@@ -41,7 +41,7 @@ class MenuBuilderListener
         $groupNode = $menu->getChild('app.ozg_implementation_group');
 
         $child = $groupNode->addChild('search', [
-            'label' => 'app.search.search_list',
+            'label' => 'app.search.list',
             'route' => 'app_search_list',
             /*'extras' => [
                 'routes' => [

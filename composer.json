@@ -10,12 +10,13 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "doctrine/doctrine-migrations-bundle": "^2.0",
-        "friendsofsymfony/ckeditor-bundle": "^2.0.2",
+        "friendsofsymfony/ckeditor-bundle": "^1.2.0",
         "jms/serializer-bundle": "^2.4|^3.0",
         "sensio/framework-extra-bundle": "^5.2",
         "shapecode/cron-bundle": "^3.2",
         "sonata-project/admin-bundle": "^3.46",
         "sonata-project/doctrine-orm-admin-bundle": "^3.8",
+        "sonata-project/formatter-bundle": "^4.1",
         "sonata-project/intl-bundle": "^2.5",
         "sonata-project/translation-bundle": "^2.4",
         "sonata-project/user-bundle": "^4.3",
@@ -56,6 +57,7 @@
         }
     },
     "replace": {
+        "egeloen/ckeditor-bundle": "*",
         "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
