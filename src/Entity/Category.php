@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -13,8 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_category")
  */
-class Category extends BaseNamedEntity
+class Category extends BaseNamedEntity implements ImportEntityInterface
 {
+    use ImportTrait;
 
     /**
      * Description
@@ -51,9 +53,16 @@ class Category extends BaseNamedEntity
      */
     private $parent;
 
+    /**
+     * @var Contact[]|Collection
+     * @ORM\ManyToMany(targetEntity="Contact", mappedBy="categories")
+     */
+    private $contacts;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     /**
@@ -131,6 +140,50 @@ class Category extends BaseNamedEntity
         if ($parent->getId() !== $this->getId()) {
             $this->parent = $parent;
         }
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function addContact($contact)
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function removeContact($contact)
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+            $contact->removeCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param Contact[]|Collection $contacts
+     */
+    public function setContacts($contacts): void
+    {
+        $this->contacts = $contacts;
     }
 
     public function __toString(): string

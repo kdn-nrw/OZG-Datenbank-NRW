@@ -4,35 +4,59 @@ parameters:
   # environment variables are not available yet.
   # You should not need to change this value.
   env(DATABASE_URL): ''
+  env(DATABASE_URL_CMS): ''
 
 doctrine:
   dbal:
-    # configure these for your database server
-    driver: 'pdo_mysql'
-    server_version: '5.7'
-    charset: utf8mb4
-    default_table_options:
-      charset: utf8mb4
-      collate: utf8mb4_unicode_ci
+    connections:
+      default:
+        # configure these for your database server
+        driver: 'pdo_mysql'
+        server_version: '5.7'
+        charset: utf8mb4
+        default_table_options:
+          charset: utf8mb4
+          collate: utf8mb4_unicode_ci
+        url: '%env(resolve:DATABASE_URL)%'
+      cms:
+        # configure these for your database server
+        driver: 'pdo_mysql'
+        server_version: '5.7'
+        charset: utf8
+        default_table_options:
+          charset: utf8
+          collate: utf8_general_ci
+        url: '%env(resolve:DATABASE_URL_CMS)%'
     types:
       datetime: App\Types\UTCDateTimeType
-    url: '%env(resolve:DATABASE_URL)%'
   orm:
     auto_generate_proxy_classes: true
-    naming_strategy: doctrine.orm.naming_strategy.underscore
-    auto_mapping: true
+    default_entity_manager: default
+    entity_managers:
+      default:
+        connection: default
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        dql:
+          datetime_functions:
+            FROM_UNIXTIME: DoctrineExtensions\Query\Mysql\FromUnixtime
+            WEEKDAY: DoctrineExtensions\Query\Mysql\WeekDay
+            YEAR: DoctrineExtensions\Query\Mysql\Year
+            DATE: DoctrineExtensions\Query\Mysql\Date
+        filters:
+          softdeleteable:
+            class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+            enabled: true
+        mappings:
+          SonataUserBundle: null
+          FOSUserBundle: null
+          App:
+            is_bundle: false
+            type: annotation
+            dir: '%kernel.project_dir%/src/Entity'
+            prefix: 'App\Entity'
+            alias: App
+      cms:
+        connection: cms
     resolve_target_entities:
       Symfony\Component\Security\Core\User\UserInterface: App\Entity\User
-    filters:
-      softdeleteable:
-        class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
-        enabled: true
-    mappings:
-      SonataUserBundle: null
-      FOSUserBundle: null
-      App:
-        is_bundle: false
-        type: annotation
-        dir: '%kernel.project_dir%/src/Entity'
-        prefix: 'App\Entity'
-        alias: App

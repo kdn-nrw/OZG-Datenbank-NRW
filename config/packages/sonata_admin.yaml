@@ -70,6 +70,7 @@ sonata_admin:
                     - App\Admin\ImplementationStatusAdmin
                     - App\Admin\ContactAdmin
                     - App\Admin\CategoryAdmin
+                    - App\Admin\MailingAdmin
                     #- App\Admin\JurisdictionAdmin
             app_admin.menu.system:
                 label: app.system_group
