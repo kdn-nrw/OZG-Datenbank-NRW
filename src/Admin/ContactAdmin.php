@@ -30,6 +30,7 @@ class ContactAdmin extends AbstractAppAdmin
                         'app.contact.entity.gender_choices.male'  => Contact::GENDER_MALE,
                         'app.contact.entity.gender_choices.female' => Contact::GENDER_FEMALE,
                         'app.contact.entity.gender_choices.other' => Contact::GENDER_OTHER,
+                        'app.contact.entity.gender_choices.unknown' => Contact::GENDER_UNKNOWN,
                     ],
                     'required' => false,
                 ])
@@ -47,16 +48,18 @@ class ContactAdmin extends AbstractAppAdmin
             ->with('app.contact.groups.type_data', ['class' => 'col-md-6'])
                 ->add('contactType', ChoiceFieldMaskType::class, [
                     'choices' => [
-                        'app.contact.entity.contact_type_default' => Contact::CONTACT_TYPE_DEFAULT,
-                        'app.contact.entity.contact_type_commune' => Contact::CONTACT_TYPE_COMMUNE,
-                        'app.contact.entity.contact_type_service_provider' => Contact::CONTACT_TYPE_SERVICE_PROVIDER,
-                        'app.contact.entity.contact_type_ministry_state' => Contact::CONTACT_TYPE_MINISTRY_STATE,
+                        'app.contact.entity.contact_type_choices.default' => Contact::CONTACT_TYPE_DEFAULT,
+                        'app.contact.entity.contact_type_choices.commune' => Contact::CONTACT_TYPE_COMMUNE,
+                        'app.contact.entity.contact_type_choices.service_provider' => Contact::CONTACT_TYPE_SERVICE_PROVIDER,
+                        'app.contact.entity.contact_type_choices.ministry_state' => Contact::CONTACT_TYPE_MINISTRY_STATE,
+                        'app.contact.entity.contact_type_choices.cms_address' => Contact::CONTACT_TYPE_IMPORT_CMS,
                     ],
                     'map' => [
                         Contact::CONTACT_TYPE_DEFAULT => [],
                         Contact::CONTACT_TYPE_COMMUNE => ['commune'],
                         Contact::CONTACT_TYPE_SERVICE_PROVIDER => ['serviceProvider'],
                         Contact::CONTACT_TYPE_MINISTRY_STATE => ['ministryState'],
+                        Contact::CONTACT_TYPE_IMPORT_CMS => [],
                     ],
                     'required' => true,
                 ])
@@ -112,7 +115,9 @@ class ContactAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $datagridMapper->add('firstName');
         $datagridMapper->add('lastName');
+        $datagridMapper->add('email');
         $datagridMapper->add('organisation');
         $this->addCategoriesDatagridFilters($datagridMapper);
         $this->addAddressDatagridFilters($datagridMapper);

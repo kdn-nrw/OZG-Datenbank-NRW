@@ -66,6 +66,7 @@ app:
         male: Herr
         female: Frau
         other: Andere
+        unknown: n.a.
       title: Titel
       first_name: Vorname
       last_name: Nachname
@@ -80,10 +81,12 @@ app:
       fax_number: Fax
       mobile_number: Mobil
       contact_type: Typ
-      contact_type_default: Standard
-      contact_type_commune: Kommune
-      contact_type_service_provider: Dienstleister
-      contact_type_ministry_state: Ministerium (Land)
+      contact_type_choices:
+        default: Standard
+        commune: Kommune
+        service_provider: Dienstleister
+        ministry_state: Ministerium (Land)
+        cms_address: Informationsverteiler
       ministry_state: Ministerium (Land)
       service_provider: Dienstleister
       commune: Kommune
@@ -132,6 +135,33 @@ app:
       participants_other: Teilnehmer sonstige
       service_systems: Leistungsbündel
       implementation_url: Url OZG Umsetzung
+  mailing:
+    list: Mailing
+    create: Mailing erstellen
+    tabs:
+      default: Allgemein
+    entity:
+      created_at: Erstellt am
+      subject: Betreff
+      status: Status
+      status_choices:
+        new: In Vorbereitung
+        prepared: Für Versand vorbereitet
+        active: Versand läuft
+        finished: Beendet
+        cancelled: Abgebrochen
+      text_plain: Inhalt
+      start_at: Versand ab
+      send_start_at: Versandstart
+      send_end_at: Versandende
+      mailing_contacts: Kontakte
+      state_ministries: Ministerien (Land)
+      service_providers: IT Dienstleister
+      communes: Kommunen
+      categories: Kategorien
+      recipient_count: '# Empfänger'
+      sent_count: '# verschickt'
+      exclude_contacts: Blacklist
   manufacturer:
     list: Hersteller
     create: Hersteller anlegen

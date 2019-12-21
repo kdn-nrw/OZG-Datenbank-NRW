@@ -16,20 +16,23 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_contact")
  * @ORM\HasLifecycleCallbacks
  */
-class Contact extends BaseEntity
+class Contact extends BaseEntity implements ImportEntityInterface
 {
     const CONTACT_TYPE_DEFAULT = 'default';
     const CONTACT_TYPE_COMMUNE = 'commune';
     const CONTACT_TYPE_SERVICE_PROVIDER = 'service_provider';
     const CONTACT_TYPE_MINISTRY_STATE = 'ministry_state';
+    const CONTACT_TYPE_IMPORT_CMS = 'cms_address';
 
     const GENDER_MALE = 0;
     const GENDER_FEMALE = 1;
     const GENDER_OTHER = 2;
+    const GENDER_UNKNOWN = 3;
 
     use CategoryTrait;
     use HideableEntityTrait;
     use AddressTrait;
+    use ImportTrait;
 
     /**
      * Commune selection type
@@ -42,9 +45,9 @@ class Contact extends BaseEntity
 
     /**
      * @ORM\Column(type="integer", name="gender", nullable=true)
-     * @var int|null
+     * @var int
      */
-    private $gender;
+    private $gender = self::GENDER_UNKNOWN;
 
     /**
      * @ORM\Column(type="string", name="title", length=100, nullable=true)
@@ -141,7 +144,7 @@ class Contact extends BaseEntity
 
     /**
      * @var Category[]|Collection
-     * @ORM\ManyToMany(targetEntity="Category")
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="contacts")
      * @ORM\JoinTable(name="ozg_contact_category",
      *     joinColumns={
      *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
@@ -183,10 +186,13 @@ class Contact extends BaseEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getGender(): ?int
+    public function getGender(): int
     {
+        if (null === $this->gender || $this->gender < 0) {
+            $this->gender = self::GENDER_UNKNOWN;
+        }
         return $this->gender;
     }
 
@@ -195,6 +201,9 @@ class Contact extends BaseEntity
      */
     public function setGender(?int $gender): void
     {
+        if (null === $this->gender || $this->gender < 0) {
+            $this->gender = self::GENDER_UNKNOWN;
+        }
         $this->gender = $gender;
     }
 
