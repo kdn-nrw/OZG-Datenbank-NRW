@@ -34,7 +34,7 @@
 
                     return defaultFieldId;
                 };
-                if (val && typeof val.isArray === 'undefined') {
+                if (val && typeof val.isArray !== 'undefined' && val.isArray) {
                     var showFields = [];
                     val.forEach(function(item){
                         if (map[item]) {
@@ -55,12 +55,19 @@
                             jQuery(fieldContainer).find('[required="required"]').attr('data-required', 'required').removeAttr("required");
                         }
                     });
-                } else if (map[val]) {
-                    jQuery.each(map[val], function (i, field) {
+                } else {
+                    jQuery.each(allFields, function (i, field) {
                         var fieldContainer = controlGroupIdFunc(field);
-                        jQuery(fieldContainer).show();
-                        jQuery(fieldContainer).find('[data-required="required"]').attr("required", "required");
+                        jQuery(fieldContainer).hide();
+                        jQuery(fieldContainer).find('[required="required"]').attr('data-required', 'required').removeAttr("required");
                     });
+                    if (map[val]) {
+                        jQuery.each(map[val], function (i, field) {
+                            var fieldContainer = controlGroupIdFunc(field);
+                            jQuery(fieldContainer).show();
+                            jQuery(fieldContainer).find('[data-required="required"]').attr("required", "required");
+                        });
+                    }
                 }
             }
 

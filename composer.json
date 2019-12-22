@@ -14,7 +14,7 @@
         "jms/serializer-bundle": "^2.4|^3.0",
         "sensio/framework-extra-bundle": "^5.2",
         "shapecode/cron-bundle": "^3.2",
-        "sonata-project/admin-bundle": "^3.46",
+        "sonata-project/admin-bundle": "^3.56.1",
         "sonata-project/doctrine-orm-admin-bundle": "^3.8",
         "sonata-project/formatter-bundle": "^4.1",
         "sonata-project/intl-bundle": "^2.5",
@@ -24,12 +24,11 @@
         "symfony/apache-pack": "^1.0",
         "symfony/dotenv": "4.3.*",
         "symfony/flex": "^1.1",
-        "symfony/framework-bundle": "^4.3",
         "symfony/mailer": "4.3.*",
         "symfony/monolog-bundle": "^3.3",
         "symfony/serializer": "4.3.*",
-        "symfony/swiftmailer-bundle": "^3.2",
-        "symfony/webpack-encore-bundle": "^1.4",
+        "symfony/swiftmailer-bundle": "^3.4",
+        "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "4.3.*",
         "vich/uploader-bundle": "^1.10"
     },
@@ -87,7 +86,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "4.3.*"
+            "require": "4.4.*"
         },
         "installer-types": ["brainappeal-dev"],
         "installer-paths": {

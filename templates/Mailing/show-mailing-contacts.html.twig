@@ -1,0 +1,45 @@
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+<div>
+    {# @var object \App\Entity\Mailing #}
+    {% if object.mailingContacts|length > 0 %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-condensed">
+            <tr>
+                <th></th>
+                <th>{{ 'app.mailing_contact.entity.contact'|trans }}</th>
+                <th>{{ 'app.mailing_contact.entity.send_status'|trans }}</th>
+                <th>{{ 'app.mailing_contact.entity.sent_at'|trans }}</th>
+                <th>{{ 'app.mailing_contact.entity.send_attempts'|trans }}</th>
+            </tr>
+        {% for child in object.mailingContacts %}
+            <tr>
+                <td>
+                    {{ loop.index }}
+                </td>
+                <td>
+                    {% if child.contact %}
+                        <a href="mailto:{{ child.contact.email }}">{{ child.contact ~ '' }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ child.sendStatusLabel|trans }}
+                </td>
+                <td>
+                    {% if child.sentAt %}
+                        {{ child.sentAt|date("d.m.Y H:i:s", "Europe/Berlin") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not child.sentAt %}
+                        {{ child.sendAttempts }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -427,14 +427,22 @@ class Contact extends BaseEntity implements ImportEntityInterface
 
     public function getDisplayName(): string
     {
-        $name = trim((string) $this->getFirstName() . ' ' . (string) $this->getLastName());
-        $title = $this->getTitle();
-        if ($title) {
-            $name = $title . ' ' . $name;
-        }
+        $name = $this->getFullName();
         $organisation = $this->getOrganisation();
         if ($organisation) {
             $name .= ' ('.$organisation.')';
+        }
+        return $name;
+    }
+
+    public function getFullName(): string
+    {
+        $name = trim((string) $this->getFirstName() . ' ' . (string) $this->getLastName());
+        if ($name) {
+            $title = $this->getTitle();
+            if ($title) {
+                $name = $title . ' ' . $name;
+            }
         }
         return $name;
     }
