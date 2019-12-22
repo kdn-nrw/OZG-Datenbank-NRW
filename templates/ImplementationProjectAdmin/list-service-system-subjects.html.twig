@@ -2,14 +2,13 @@
 
 {% block field %}
     <div>
-        {% for serviceSystem in object.serviceSystems %}
+        {# @var object \App\Entity\ImplementationProject #}
+        {% for child in object.subjects %}
             {# @var serviceSystem \App\Entity\ServiceSystem #}
             {% if loop.index > 1 %}
                 <br>
             {% endif %}
-            {% if serviceSystem.situation and serviceSystem.situation.subject %}
-                {{ serviceSystem.situation.subject }}
-            {% endif %}
+            {{ child.name }}
         {% endfor %}
     </div>
 {% endblock %}

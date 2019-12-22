@@ -187,6 +187,26 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
+     * Returns the subjects of the referenced service systems
+     *
+     * @return Subject[]
+     */
+    public function getSubjects()
+    {
+        $subjects = [];
+        $serviceSystems = $this->getServiceSystems();
+        foreach ($serviceSystems as $serviceSystem) {
+            if (null !== $serviceSystem->getSituation()
+                && null !== $subject = $serviceSystem->getSituation()->getSubject()) {
+                if (!isset($subjects[$subject->getId()])) {
+                    $subjects[$subject->getId()] = $subject;
+                }
+            }
+        }
+        return $subjects;
+    }
+
+    /**
      * @param Solution $solution
      * @return self
      */
