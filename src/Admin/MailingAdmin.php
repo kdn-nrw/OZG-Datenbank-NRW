@@ -4,10 +4,13 @@ namespace App\Admin;
 
 use App\Admin\Traits\CategoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
+use App\Entity\Contact;
 use App\Entity\Mailing;
+use App\Entity\MailingContact;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -26,10 +29,31 @@ class MailingAdmin extends AbstractAppAdmin
     {
         $now = new \DateTime();
         $formMapper
-            ->tab('app.mailing.tabs.default')
-            ->with('general', [
-                'label' => false,
-            ])
+            ->with('app.mailing.groups.default')
+                ->add('subject', TextType::class)
+                ->add('greetingType', ChoiceFieldMaskType::class, [
+                    'choices' => [
+                        'app.mailing.entity.greeting_type_choices.none' => Mailing::GREETING_TYPE_NONE,
+                        'app.mailing.entity.greeting_type_choices.prepend' => Mailing::GREETING_TYPE_PREPEND,
+                    ],
+                    'map' => [
+                        Mailing::GREETING_TYPE_NONE => ['textPlain'],
+                        Mailing::GREETING_TYPE_PREPEND => ['greeting', 'textPlain'],
+                    ],
+                    'required' => true,
+                ])
+                ->add('greeting', TextType::class, [
+                    'label' => false,
+                    'mapped' => false,
+                    'disabled' => true,
+                    'data' => 'Sehr geehrte(r) Frau/Herr Mustermann,',
+                ])
+                ->add('textPlain', TextareaType::class, [
+                    'required' => true,
+                ]);
+        $formMapper->end();
+        $formMapper->with('app.mailing.groups.options', ['class' => 'col-md-6']);
+        $formMapper
             ->add('status', ChoiceType::class, [
                 'choices' => [
                     'app.mailing.entity.status_choices.new' => Mailing::STATUS_NEW,
@@ -38,10 +62,6 @@ class MailingAdmin extends AbstractAppAdmin
                     'app.mailing.entity.status_choices.finished' => Mailing::STATUS_FINISHED,
                     'app.mailing.entity.status_choices.cancelled' => Mailing::STATUS_CANCELLED,
                 ],
-                'required' => true,
-            ])
-            ->add('subject', TextType::class)
-            ->add('textPlain', TextareaType::class, [
                 'required' => true,
             ])
             ->add('startAt', DateTimePickerType::class, [
@@ -53,6 +73,8 @@ class MailingAdmin extends AbstractAppAdmin
                 'dp_minute_stepping' => 5,
                 'required' => false,
             ]);
+        $formMapper->end();
+        $formMapper->with('app.mailing.groups.recipients', ['class' => 'col-md-6']);
         $this->addStateMinistriesFormFields($formMapper);
         $formMapper->add('serviceProviders', ModelType::class, [
             'btn_add' => false,
@@ -78,6 +100,7 @@ class MailingAdmin extends AbstractAppAdmin
             'multiple' => true,
             //'choice_translation_domain' => false,
         ]);
+        $formMapper->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -135,11 +158,107 @@ class MailingAdmin extends AbstractAppAdmin
             ->add('sendEndAt')
             ->add('sentCount')
             ->add('recipientCount')
-            ->add('mailingContacts')
+            ->add('mailingContacts', null, [
+                'template' => 'Mailing/show-mailing-contacts.html.twig',
+            ])
             ->add('excludeContacts')
             ->add('serviceProviders')
             ->add('communes');
         $this->addStateMinistriesShowFields($showMapper);
         $this->addCategoriesShowFields($showMapper);
+    }
+
+    public function preUpdate($object)
+    {
+        /** @var Mailing $object */
+        if (!in_array($object->getStatus(), [
+            Mailing::STATUS_FINISHED,
+            Mailing::STATUS_CANCELLED,
+        ])) {
+            $this->updateMailingContacts($object);
+        }
+        $object->updateSentCount();
+    }
+
+    public function prePersist($object)
+    {
+        /** @var Mailing $object */
+        if (!in_array($object->getStatus(), [
+            Mailing::STATUS_FINISHED,
+            Mailing::STATUS_CANCELLED,
+        ])) {
+            $this->updateMailingContacts($object);
+            //$this->updateSentCount();
+        }
+    }
+
+    /**
+     * Update the mailing contact list; add all contacts of selected categories, state ministries, service providers
+     * and communes
+     * @param Mailing $object
+     */
+    public function updateMailingContacts(Mailing $object)
+    {
+        $categories = $object->getCategories();
+        foreach ($categories as $child) {
+            $contacts = $child->getContacts();
+            foreach ($contacts as $contact) {
+                $this->addContactToMailingOnce($object, $contact);
+            }
+        }
+        $stateMinistries = $object->getStateMinistries();
+        foreach ($stateMinistries as $child) {
+            $contacts = $child->getContacts();
+            foreach ($contacts as $contact) {
+                $this->addContactToMailingOnce($object, $contact);
+            }
+        }
+        $serviceProviders = $object->getServiceProviders();
+        foreach ($serviceProviders as $child) {
+            $contacts = $child->getContacts();
+            foreach ($contacts as $contact) {
+                $this->addContactToMailingOnce($object, $contact);
+            }
+        }
+        $communes = $object->getCommunes();
+        foreach ($communes as $child) {
+            $contacts = $child->getContacts();
+            foreach ($contacts as $contact) {
+                $this->addContactToMailingOnce($object, $contact);
+            }
+        }
+        $mailingContacts = $object->getMailingContacts();
+        foreach ($mailingContacts as $child) {
+            if ($object->contactIsBlacklisted($child->getContact())) {
+                $this->modelManager->delete($child);
+                $object->removeMailingContact($child);
+            }
+        }
+        $object->setRecipientCount(count($mailingContacts));
+    }
+
+    /**
+     * Add the given contact to the mailing; check if contact already exists before adding
+     * Contacts set in excludeContacts will be skipped
+     *
+     * @param Mailing $object
+     * @param Contact $contact
+     */
+    private function addContactToMailingOnce(Mailing $object, Contact $contact) {
+
+        if (!$object->contactIsBlacklisted($contact)) {
+            $contactIds = $object->getContactIds();
+            if (!in_array($contact->getId(), $contactIds)) {
+                $mailingContact = new MailingContact();
+                $mailingContact->setSendStatus(Mailing::STATUS_NEW);
+                if (in_array($object->getStatus(), [Mailing::STATUS_PREPARED])) {
+                    $mailingContact->setSendStatus(Mailing::STATUS_PREPARED);
+                }
+                $mailingContact->setMailing($object);
+                $mailingContact->setContact($contact);
+                $this->modelManager->create($mailingContact);
+                $object->addMailingContact($mailingContact);
+            }
+        }
     }
 }

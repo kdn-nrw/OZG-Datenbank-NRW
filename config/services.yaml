@@ -6,6 +6,11 @@
 parameters:
   locale: 'de'
   locales: ['de']
+  env(APP_MAILER_DEBUG): 'false'
+  env(APP_MAILER_DEBUG_RECIPIENT): 'info@gerthammes.de'
+  env(APP_MAILER_FROM_MAIL): 'info@gerthammes.de'
+  env(APP_MAILER_FROM_NAME): 'OZG Plattform'
+  env(APP_MAILER_ADMIN_MAIL): 'info@gerthammes.de'
 
 services:
   # default configuration for services in *this* file
@@ -439,3 +444,11 @@ services:
     arguments:
       - '@sonata.admin.pool'
       - '@translator'
+
+  App\Service\Mailer\BaseMailer:
+    arguments:
+      $fromEmail: '%env(string:APP_MAILER_FROM_MAIL)%'
+      $fromName: '%env(string:APP_MAILER_FROM_NAME)%'
+      $adminEmail: '%env(string:APP_MAILER_ADMIN_MAIL)%'
+      $isDebug: '%env(bool:APP_MAILER_DEBUG)%'
+      $debugEmail: '%env(string:APP_MAILER_DEBUG_RECIPIENT)%'

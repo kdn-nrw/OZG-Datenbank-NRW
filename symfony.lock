@@ -221,6 +221,9 @@
     "oomphinc/composer-installers-extender": {
         "version": "v1.1.2"
     },
+    "php": {
+        "version": "7.2"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -682,6 +685,12 @@
         "files": [
             "config/packages/twig_extensions.yaml"
         ]
+    },
+    "twig/extra-bundle": {
+        "version": "v3.0.0"
+    },
+    "twig/intl-extra": {
+        "version": "v3.0.0"
     },
     "twig/twig": {
         "version": "v2.7.2"

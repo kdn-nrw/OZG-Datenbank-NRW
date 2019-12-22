@@ -45,6 +45,8 @@ final class Version20191220135238 extends AbstractMigration
         $this->addSql('ALTER TABLE ozg_mailing_contact ADD CONSTRAINT FK_B65310F1E7A1254A FOREIGN KEY (contact_id) REFERENCES ozg_contact (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE ozg_category ADD import_id INT DEFAULT NULL, ADD import_source VARCHAR(100) DEFAULT NULL');
         $this->addSql('ALTER TABLE ozg_contact ADD import_id INT DEFAULT NULL, ADD import_source VARCHAR(100) DEFAULT NULL');
+        $this->addSql('ALTER TABLE ozg_mailing ADD greeting_type VARCHAR(20) DEFAULT NULL');
+        $this->addSql('ALTER TABLE ozg_mailing_contact ADD send_attempts INT NOT NULL');
     }
 
     public function down(Schema $schema) : void

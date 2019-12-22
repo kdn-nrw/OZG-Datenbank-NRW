@@ -138,8 +138,10 @@ app:
   mailing:
     list: Mailing
     create: Mailing erstellen
-    tabs:
-      default: Allgemein
+    groups:
+      default: Inhalt
+      recipients: Empfänger
+      options: Versand
     entity:
       created_at: Erstellt am
       subject: Betreff
@@ -150,6 +152,11 @@ app:
         active: Versand läuft
         finished: Beendet
         cancelled: Abgebrochen
+      greeting_type: Anrede
+      greeting_type_choices:
+        none: Ohne Anrede
+        prepend: Anrede voranstellen
+      greeting_example: Sehr geehrte(r) Frau/Herr Mustermann,
       text_plain: Inhalt
       start_at: Versand ab
       send_start_at: Versandstart
@@ -162,6 +169,17 @@ app:
       recipient_count: '# Empfänger'
       sent_count: '# verschickt'
       exclude_contacts: Blacklist
+  mailing_contact:
+    list: Mailing Kontakte
+    create: Mailing Kontakt anlegen
+    entity:
+      contact: Kontakt
+      sent_at: Verschickt am
+      send_status: Versandstatus
+      send_attempts: '# Versuche'
+      status_choices:
+        failed: Fehlgeschlagen
+        disabled: Deaktiviert
   manufacturer:
     list: Hersteller
     create: Hersteller anlegen

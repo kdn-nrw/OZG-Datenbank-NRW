@@ -4,3 +4,5 @@ twig:
     strict_variables: '%kernel.debug%'
     form_themes:
         - '@SonataFormatter/Form/formatter.html.twig'
+    paths:
+        '%kernel.project_dir%/vendor/vich/uploader-bundle/templates': VichUploader

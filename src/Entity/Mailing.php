@@ -15,10 +15,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_mailing")
- * @ORM\HasLifecycleCallbacks
  */
 class Mailing extends BaseBlamableEntity
 {
+    const GREETING_TYPE_NONE = 'none';
+    const GREETING_TYPE_PREPEND = 'prepend';
+
     const STATUS_NEW = 0;
     const STATUS_PREPARED = 1;
     const STATUS_ACTIVE = 2;
@@ -34,6 +36,13 @@ class Mailing extends BaseBlamableEntity
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $subject;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $greetingType = self::GREETING_TYPE_NONE;
 
     /**
      * @var string|null
@@ -67,14 +76,7 @@ class Mailing extends BaseBlamableEntity
      * @ORM\Column(type="integer", name="status")
      * @var int
      */
-    private $status = self::STATUS_NEW;
-
-    /**
-     * Internal storage for contact ids; prevent adding contacts to mailing more than once
-     *
-     * @var int[]|null
-     */
-    private $contactIds;
+    private $status = self::STATUS_PREPARED;
 
     /**
      * @var MailingContact[]|Collection
@@ -164,6 +166,18 @@ class Mailing extends BaseBlamableEntity
      */
     private $excludeContacts;
 
+    /**
+     * Internal storage for contact ids; prevent adding contacts to mailing more than once
+     *
+     * @var int[]|null
+     */
+    private $contactIds;
+
+    /**
+     * @var string[]|null
+     */
+    private $blacklistEmails;
+
     public function __construct()
     {
         $this->mailingContacts = new ArrayCollection();
@@ -175,7 +189,7 @@ class Mailing extends BaseBlamableEntity
     }
 
     /**
-     * Set name
+     * Set subject
      *
      * @param string $subject
      * @return $this
@@ -188,13 +202,35 @@ class Mailing extends BaseBlamableEntity
     }
 
     /**
-     * Get name
+     * Get subject
      *
      * @return string
      */
     public function getSubject(): ?string
     {
         return $this->subject;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGreetingType(): string
+    {
+        if (empty($this->greetingType)) {
+            $this->greetingType = self::GREETING_TYPE_NONE;
+        }
+        return $this->greetingType;
+    }
+
+    /**
+     * @param string|null $greetingType
+     */
+    public function setGreetingType(?string $greetingType): void
+    {
+        if (empty($this->greetingType)) {
+            $this->greetingType = self::GREETING_TYPE_NONE;
+        }
+        $this->greetingType = $greetingType;
     }
 
     /**
@@ -222,6 +258,9 @@ class Mailing extends BaseBlamableEntity
         if (!$this->mailingContacts->contains($mailingContact)) {
             $this->mailingContacts->add($mailingContact);
             $mailingContact->setMailing($this);
+            if (null !== $this->contactIds) {
+                $this->contactIds[] = $mailingContact->getContact()->getId();
+            }
         }
 
         return $this;
@@ -318,6 +357,17 @@ class Mailing extends BaseBlamableEntity
     public function setStatus(int $status): void
     {
         $this->status = (int)$status;
+    }
+
+    /**
+     * Finish mailing
+     */
+    public function finish()
+    {
+        $now = new \DateTime();
+        $now->setTimezone(new \DateTimeZone('UTC'));
+        $this->setSendEndAt($now);
+        $this->setStatus(Mailing::STATUS_FINISHED);
     }
 
 
@@ -522,65 +572,23 @@ class Mailing extends BaseBlamableEntity
     }
 
     /**
-     * Update the mailing contact list; add all contacts of selected categories, state ministries, service providers
-     * and communes
-     */
-    public function updateMailingContacts()
-    {
-        $categories = $this->getCategories();
-        foreach ($categories as $child) {
-            $contacts = $child->getContacts();
-            foreach ($contacts as $contact) {
-                $this->addContactToMailingOnce($contact);
-            }
-        }
-        $stateMinistries = $this->getStateMinistries();
-        foreach ($stateMinistries as $child) {
-            $contacts = $child->getContacts();
-            foreach ($contacts as $contact) {
-                $this->addContactToMailingOnce($contact);
-            }
-        }
-        $serviceProviders = $this->getServiceProviders();
-        foreach ($serviceProviders as $child) {
-            $contacts = $child->getContacts();
-            foreach ($contacts as $contact) {
-                $this->addContactToMailingOnce($contact);
-            }
-        }
-        $communes = $this->getCommunes();
-        foreach ($communes as $child) {
-            $contacts = $child->getContacts();
-            foreach ($contacts as $contact) {
-                $this->addContactToMailingOnce($contact);
-            }
-        }
-        $mailingContacts = $this->getMailingContacts();
-        $this->setRecipientCount(count($mailingContacts));
-    }
-
-    /**
-     * Add the given contact to the mailing; check if contact already exists before adding
+     * Returns true if given contact is blacklisted for this mailing; false otherwise
+     *
      * @param Contact $contact
+     * @return bool
      */
-    private function addContactToMailingOnce(Contact $contact) {
-        if (null === $this->contactIds) {
-            $this->contactIds = [];
-            $mailingContacts = $this->getMailingContacts();
-            foreach ($mailingContacts as $child) {
-                if (null !== $mc = $child->getContact()) {
-                    $this->contactIds[] = $mc->getId();
+    public function contactIsBlacklisted(Contact $contact)
+    {
+        if (null === $this->blacklistEmails) {
+            $this->blacklistEmails = [];
+            foreach ($this->excludeContacts as $excludeContact) {
+                $email = strtolower($excludeContact->getEmail());
+                if (!in_array($email, $this->blacklistEmails)) {
+                    $this->blacklistEmails[] = $email;
                 }
             }
         }
-        if (!in_array($contact->getId(), $this->contactIds)) {
-            $this->contactIds[] = $contact->getId();
-            $mailingContact = new MailingContact();
-            $mailingContact->setSendStatus($this->getStatus());
-            $mailingContact->setMailing($this);
-            $mailingContact->setContact($contact);
-            $this->addMailingContact($mailingContact);
-        }
+        return in_array(strtolower($contact->getEmail()), $this->blacklistEmails);
     }
 
     /**
@@ -591,41 +599,32 @@ class Mailing extends BaseBlamableEntity
         $sentCount = 0;
         $mailingContacts = $this->getMailingContacts();
         foreach ($mailingContacts as $mailingContact) {
-            if ($mailingContact->getSendStatus() === self::STATUS_FINISHED) {
+            if (!$mailingContact->isHidden() && $mailingContact->getSendStatus() === self::STATUS_FINISHED) {
                 ++$sentCount;
             }
         }
-        $this->setSentCount($sentCount);
+        $this->setSentCount(min($sentCount, count($mailingContacts)));
     }
 
     /**
-     * Hook on pre-update operations.
-     * @ORM\PreUpdate
+     * @return int[]|null
      */
-    public function preUpdate(): void
+    public function getContactIds(): ?array
     {
-        if (!in_array($this->getStatus(), [
-            self::STATUS_FINISHED,
-            self::STATUS_CANCELLED,
-        ])) {
-            $this->updateMailingContacts();
-            $this->updateSentCount();
+        if (null === $this->contactIds) {
+            $this->contactIds = [];
+            $mailingContacts = $this->getMailingContacts();
+            $mailingIsActive = $this->getStatus() === self::STATUS_PREPARED || $this->getStatus() === self::STATUS_ACTIVE;
+            foreach ($mailingContacts as $child) {
+                if ($mailingIsActive && $child->getSendStatus() === self::STATUS_NEW) {
+                    $child->setSendStatus(self::STATUS_PREPARED);
+                }
+                if (null !== $mc = $child->getContact()) {
+                    $this->contactIds[] = $mc->getId();
+                }
+            }
         }
-    }
-
-    /**
-     * Hook on pre-persist operations.
-     * @ORM\PrePersist
-     */
-    public function prePersist(): void
-    {
-        if (!in_array($this->getStatus(), [
-            self::STATUS_FINISHED,
-            self::STATUS_CANCELLED,
-        ])) {
-            $this->updateMailingContacts();
-            //$this->updateSentCount();
-        }
+        return $this->contactIds;
     }
 
     /**
