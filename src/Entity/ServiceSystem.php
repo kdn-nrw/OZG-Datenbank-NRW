@@ -306,7 +306,6 @@ class ServiceSystem extends BaseNamedEntity
 
     public function getStateMinistriesEnabled()
     {
-        $enabled = false;
         $jurisdictions = $this->getJurisdictions();
         foreach ($jurisdictions as $jurisdiction) {
             if (in_array($jurisdiction->getId(), [Jurisdiction::TYPE_STATE, Jurisdiction::TYPE_COMMUNE])) {
@@ -403,7 +402,6 @@ class ServiceSystem extends BaseNamedEntity
     {
         $this->laboratories = $laboratories;
     }
-
 
     /**
      * @param MinistryState $stateMinistry

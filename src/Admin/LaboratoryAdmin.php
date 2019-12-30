@@ -2,7 +2,7 @@
 
 namespace App\Admin;
 
-use App\Admin\Traits\ServiceSystemTrait;
+use App\Admin\Traits\ServiceTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class LaboratoryAdmin extends AbstractAppAdmin
 {
-    use ServiceSystemTrait;
+    use ServiceTrait;
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -38,7 +38,7 @@ class LaboratoryAdmin extends AbstractAppAdmin
             ->add('participantsOther', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addServiceSystemsFormFields($formMapper);
+        $this->addServicesFormFields($formMapper);
         $formMapper->add('implementationUrl', UrlType::class, [
                 'required' => false,
             ])
@@ -54,7 +54,7 @@ class LaboratoryAdmin extends AbstractAppAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $this->addServiceSystemsDatagridFilters($datagridMapper);
+        $this->addServicesDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -62,7 +62,7 @@ class LaboratoryAdmin extends AbstractAppAdmin
         $listMapper
             ->addIdentifier('name')
             ->add('url', 'url');
-        $this->addServiceSystemsListFields($listMapper);
+        $this->addServicesListFields($listMapper);
         $this->addDefaultListActions($listMapper);
     }
 
@@ -79,6 +79,6 @@ class LaboratoryAdmin extends AbstractAppAdmin
                 'template' => 'General/service-providers.html.twig',
             ])
             ->add('participantsOther');
-        $this->addServiceSystemsShowFields($showMapper);
+        $this->addServicesShowFields($showMapper);
     }
 }

@@ -113,8 +113,15 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      */
     private $serviceSolutions;
 
+    /**
+     * @var Laboratory[]|Collection
+     * @ORM\ManyToMany(targetEntity="Laboratory", mappedBy="services")
+     */
+    private $laboratories;
+
     public function __construct()
     {
+        $this->laboratories = new ArrayCollection();
         $this->serviceSolutions = new ArrayCollection();
     }
 
@@ -343,6 +350,50 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     public function setServiceSystem(?ServiceSystem $serviceSystem)
     {
         $this->serviceSystem = $serviceSystem;
+    }
+
+    /**
+     * @param Laboratory $laboratory
+     * @return self
+     */
+    public function addLaboratory($laboratory)
+    {
+        if (!$this->laboratories->contains($laboratory)) {
+            $this->laboratories->add($laboratory);
+            $laboratory->addService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Laboratory $laboratory
+     * @return self
+     */
+    public function removeLaboratory($laboratory)
+    {
+        if ($this->laboratories->contains($laboratory)) {
+            $this->laboratories->removeElement($laboratory);
+            $laboratory->removeService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Laboratory[]|Collection
+     */
+    public function getLaboratories()
+    {
+        return $this->laboratories;
+    }
+
+    /**
+     * @param Laboratory[]|Collection $laboratories
+     */
+    public function setLaboratories($laboratories): void
+    {
+        $this->laboratories = $laboratories;
     }
 
     /**

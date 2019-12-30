@@ -134,6 +134,7 @@ app:
       url: Url
       participants_other: Teilnehmer sonstige
       service_systems: Leistungsbündel
+      services: Leistungen
       implementation_url: Url OZG Umsetzung
   mailing:
     list: Mailing
@@ -283,6 +284,7 @@ app:
       status: Status
       priority: Priorität
       service_solutions: Lösungen
+      laboratories: Labore
   service_provider:
     list: IT Dienstleister
     create: IT Dienstleister anlegen
@@ -302,8 +304,8 @@ app:
       #solutions: Lösungen
       communes: Kommunen
   service_solution:
-    list: Leistung
-    create: Leistung anlegen
+    list: Lösung für Leistung
+    create: Lösung für Leistung anlegen
     entity:
       solution: Lösung
       service: Leistung
