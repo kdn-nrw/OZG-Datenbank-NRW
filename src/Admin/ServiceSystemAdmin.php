@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
+    //use LaboratoryTrait;
     use MinistryStateTrait;
 
     /**
@@ -61,14 +62,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
                     ->add('description', TextareaType::class, [
                         'required' => false,
                     ]);
-        $formMapper->add('laboratories', ModelType::class, [
-            'btn_add' => false,
-            'placeholder' => '',
-            'required' => false,
-            'multiple' => true,
-            'by_reference' => false,
-            'choice_translation_domain' => false,
-        ]);
+        //$this->addLaboratoriesFormFields($formMapper);
         $formMapper->add('jurisdictions', ChoiceFieldMaskType::class, [
                         'choices' => [
                             'app.jurisdiction.entity.types.country' => Jurisdiction::TYPE_COUNTRY,
@@ -125,12 +119,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
     {
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
-        $datagridMapper->add('laboratories',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        //$this->addLaboratoriesDatagridFilters($datagridMapper);
         $datagridMapper->add('jurisdictions',
             null,
             [],
@@ -194,7 +183,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ])
             ->add('jurisdictions');
         $this->addStateMinistriesShowFields($showMapper);
-        $showMapper->add('laboratories');
+        //$this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('situation.subject', null, [
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
             ])

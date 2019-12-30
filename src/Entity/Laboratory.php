@@ -55,6 +55,20 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
     private $serviceProviders;
 
     /**
+     * @var Service[]|Collection
+     * @ORM\ManyToMany(targetEntity="Service", inversedBy="laboratories")
+     * @ORM\JoinTable(name="ozg_laboratory_service",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="laboratory_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $services;
+
+    /**
      * @var ServiceSystem[]|Collection
      * @ORM\ManyToMany(targetEntity="ServiceSystem", inversedBy="laboratories")
      * @ORM\JoinTable(name="ozg_laboratory_service_system",
@@ -80,6 +94,7 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
     {
         $this->serviceProviders = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     /**
@@ -216,6 +231,50 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
     public function setImplementationUrl(?string $implementationUrl): void
     {
         $this->implementationUrl = $implementationUrl;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function addService($service)
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->addLaboratory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function removeService($service)
+    {
+        if ($this->services->contains($service)) {
+            $this->services->removeElement($service);
+            $service->removeLaboratory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Service[]|Collection
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    /**
+     * @param Service[]|Collection $services
+     */
+    public function setServices(Collection $services): void
+    {
+        $this->services = $services;
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\LaboratoryTrait;
 use App\Entity\Priority;
 use App\Entity\Status;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -18,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
+    use LaboratoryTrait;
     /**
      * @var string[]
      */
@@ -52,6 +54,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'required' => true,
             ]);
         }
+        $this->addLaboratoriesFormFields($formMapper);
         $formMapper
                     ->add('status', ModelType::class, [
                         'btn_add' => false,
@@ -120,6 +123,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ['label' => 'app.service_system.entity.service_key']
         );
         $datagridMapper->add('status');
+        $this->addLaboratoriesDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -208,5 +212,6 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->add('serviceSystem.situation.subject', null, [
                 'label' => 'app.situation.entity.subject',
             ]);
+        $this->addLaboratoriesShowFields($showMapper);
     }
 }

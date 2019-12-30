@@ -2,14 +2,18 @@
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
-                {{ 'app.service_solution.list'|trans }}
+                {% if showSolution %}
+                    {{ 'app.solution.list'|trans }}
+                {% else %}
+                    {{ 'app.service_solution.list'|trans }}
+                {% endif %}
             </h4>
         </div>
         <div class="box-body">
             <table class="table table-bordered table-condensed">
                 <tr>
                     {% if showSolution %}
-                        {% include 'General/Show/Table/tabe-head-services.html.twig' %}
+                        {% include 'General/Show/Table/tabe-head-solutions.html.twig' %}
                     {% else %}
                         {% include 'General/Show/Table/tabe-head-services.html.twig' %}
                     {% endif %}

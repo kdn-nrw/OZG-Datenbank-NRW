@@ -2,9 +2,6 @@
 
 namespace App\Admin\Traits;
 
-use App\Admin\CategoryAdmin;
-use App\Admin\ServiceSystemAdmin;
-use App\Admin\SolutionAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
