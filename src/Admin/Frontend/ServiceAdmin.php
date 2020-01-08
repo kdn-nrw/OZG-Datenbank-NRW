@@ -19,8 +19,8 @@ class ServiceAdmin extends AbstractFrontendAdmin
      * @var string[]
      */
     protected $customLabels = [
-        'app.service.entity.service_system_situation_subject' => 'app.situation.entity.subject',
         'app.service.entity.service_system_situation' => 'app.service_system.entity.situation',
+        'app.service.entity.service_system_situation_subject' => 'app.situation.entity.subject',
         'app.service.entity.service_system_service_key' => 'app.service_system.entity.service_key',
         'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
@@ -57,7 +57,18 @@ class ServiceAdmin extends AbstractFrontendAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('serviceSystem.situation.subject')
+            ->add('serviceSystem.situation.subject', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSystem'],
+                    ['fieldName' => 'situation'],
+                    ['fieldName' => 'subject'],
+                ]
+            ])
             ->add('serviceSystem.situation')
             ->add('serviceSystem', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable

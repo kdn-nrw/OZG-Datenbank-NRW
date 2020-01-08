@@ -109,7 +109,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
 
     /**
      * @var ServiceSolution[]|Collection
-     * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="service", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="service", cascade={"all"}, orphanRemoval=true)
      */
     private $serviceSolutions;
 

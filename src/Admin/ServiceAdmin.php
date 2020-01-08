@@ -25,6 +25,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
      */
     protected $customLabels = [
         'app.service.entity.service_system_situation' => 'app.service_system.entity.situation',
+        'app.service.entity.service_system_situation_subject' => 'app.situation.entity.subject',
         'app.service.entity.service_system_service_key' => 'app.service_system.entity.service_key',
         'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
@@ -122,6 +123,14 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             null,
             ['label' => 'app.service_system.entity.service_key']
         );
+        $datagridMapper->add('serviceSystem.situation.subject',
+            null,
+            [
+                'show_filter' => true,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('status');
         $this->addLaboratoriesDatagridFilters($datagridMapper);
     }
@@ -138,6 +147,18 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 ],
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'serviceSystem'],
+                ]
+            ])
+            ->add('serviceSystem.situation.subject', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSystem'],
+                    ['fieldName' => 'situation'],
+                    ['fieldName' => 'subject'],
                 ]
             ])
             ->add('serviceType')
@@ -206,12 +227,8 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('serviceSystem.situation', null, [
-                'label' => 'app.service_system.entity.situation',
-            ])
-            ->add('serviceSystem.situation.subject', null, [
-                'label' => 'app.situation.entity.subject',
-            ]);
+            ->add('serviceSystem.situation')
+            ->add('serviceSystem.situation.subject');
         $this->addLaboratoriesShowFields($showMapper);
     }
 }

@@ -109,8 +109,15 @@ class ServiceSystem extends BaseNamedEntity
      */
     private $stateMinistries;
 
+    /**
+     * @var Bureau[]|Collection
+     * @ORM\ManyToMany(targetEntity="Bureau", mappedBy="serviceSystems")
+     */
+    private $bureaus;
+
     public function __construct()
     {
+        $this->bureaus = new ArrayCollection();
         $this->services = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
@@ -212,6 +219,49 @@ class ServiceSystem extends BaseNamedEntity
     public function setPriority(?Priority $priority): void
     {
         $this->priority = $priority;
+    }
+    /**
+     * @param Bureau $bureau
+     * @return self
+     */
+    public function addBureau($bureau)
+    {
+        if (!$this->bureaus->contains($bureau)) {
+            $this->bureaus->add($bureau);
+            $bureau->addServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Bureau $bureau
+     * @return self
+     */
+    public function removeBureau($bureau)
+    {
+        if ($this->bureaus->contains($bureau)) {
+            $this->bureaus->removeElement($bureau);
+            $bureau->removeServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Bureau[]|Collection
+     */
+    public function getBureaus()
+    {
+        return $this->bureaus;
+    }
+
+    /**
+     * @param Bureau[]|Collection $bureaus
+     */
+    public function setBureaus($bureaus): void
+    {
+        $this->bureaus = $bureaus;
     }
 
     /**

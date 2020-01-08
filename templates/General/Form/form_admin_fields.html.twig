@@ -34,7 +34,7 @@
 
                     return defaultFieldId;
                 };
-                if (val && typeof val.isArray !== 'undefined' && val.isArray) {
+                if (val && (typeof val === 'object' || typeof val.isArray !== 'undefined' && val.isArray)) {
                     var showFields = [];
                     val.forEach(function(item){
                         if (map[item]) {

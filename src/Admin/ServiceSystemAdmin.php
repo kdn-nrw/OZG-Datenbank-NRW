@@ -72,8 +72,8 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
                         'multiple' => true,
                         'map' => [
                             Jurisdiction::TYPE_COUNTRY => [],
-                            Jurisdiction::TYPE_STATE => ['stateMinistries'],
-                            Jurisdiction::TYPE_COMMUNE => ['stateMinistries'],
+                            Jurisdiction::TYPE_STATE => ['stateMinistries', 'bureaus'],
+                            Jurisdiction::TYPE_COMMUNE => ['stateMinistries', 'bureaus'],
                         ],
                         'required' => true,
                     ]);/*
@@ -90,6 +90,16 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             Jurisdiction::class
         ));
         $this->addStateMinistriesFormFields($formMapper);
+        $formMapper
+            ->add('bureaus', ModelType::class, [
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ]
+            );
         $formMapper->end()
             ->end();
         $formMapper->tab('app.service_system.tabs.services')
@@ -146,6 +156,12 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
         );
         $datagridMapper->add('status');
         $this->addStateMinistriesDatagridFilters($datagridMapper);
+        $datagridMapper->add('bureaus',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -183,6 +199,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ])
             ->add('jurisdictions');
         $this->addStateMinistriesShowFields($showMapper);
+        $showMapper->add('bureaus');
         //$this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('situation.subject', null, [
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
