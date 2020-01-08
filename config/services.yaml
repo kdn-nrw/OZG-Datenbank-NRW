@@ -75,9 +75,6 @@ services:
       - ~
       - App\Entity\Commune
       - ~
-    calls:
-      - [addChild, ['@App\Admin\SolutionAdmin', 'communes']]
-      - [addChild, ['@App\Admin\OfficeAdmin', 'commune']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -219,18 +216,6 @@ services:
       - name:         sonata.admin
         manager_type: orm
         label:        app.maturity.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
-
-  App\Admin\OfficeAdmin:
-    arguments:
-      - ~
-      - App\Entity\Office
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.office.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 

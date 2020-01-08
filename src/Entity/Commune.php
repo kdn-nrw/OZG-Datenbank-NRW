@@ -32,6 +32,7 @@ class Commune extends AppBaseEntity
     /**
      * @var Office[]|Collection
      * @ORM\OneToMany(targetEntity="Office", mappedBy="commune", cascade={"all"}, orphanRemoval=true)
+     * @deprecated
      */
     private $offices;
 
@@ -88,6 +89,7 @@ class Commune extends AppBaseEntity
     /**
      * @param Office $office
      * @return self
+     * @deprecated
      */
     public function addOffice($office)
     {
@@ -102,6 +104,7 @@ class Commune extends AppBaseEntity
     /**
      * @param Office $office
      * @return self
+     * @deprecated
      */
     public function removeOffice($office)
     {
@@ -117,6 +120,7 @@ class Commune extends AppBaseEntity
 
     /**
      * @return Office[]|Collection
+     * @deprecated
      */
     public function getOffices()
     {
@@ -125,6 +129,7 @@ class Commune extends AppBaseEntity
 
     /**
      * @param Office[]|Collection $offices
+     * @deprecated
      */
     public function setOffices($offices): void
     {
