@@ -36,18 +36,16 @@ app:
       parent: Ober-Kategorie
       children: Unter-Kategorien
   commune:
-    list: Kommunen + Ämter
+    list: Kommunen
     create: Kommune anlegen
     actions:
       list: Kommunen Übersicht
       show: Kommune anzeigen
       edit: Kommune bearbeiten
       solution_list: Lösungen anzeigen
-      office_list: Ämter anzeigen
     group:
       general_data: Allgemein
       services_data: Dienstleistungen
-      offices: Ämter
     entity:
       name: Name
       street: Straße, Hausnummer
@@ -56,7 +54,6 @@ app:
       url: Url
       contacts: Ansprechpartner der Kommune
       contact: Ansprechpartner der Kommune (alt)
-      offices: Ämter
       service_providers: IT Dienstleister
   contact:
     list: OZG Adressbuch
@@ -218,14 +215,6 @@ app:
     entity:
       name: Name
       description: Beschreibung
-  office:
-    list: Ämter
-    create: Amt anlegen
-    entity:
-      name: Name
-      description: Beschreibung
-      url: Url
-      contact: Kontakt
   payment_type:
     list: Bezahlverfahren
     create: Bezahlverfahren anlegen
