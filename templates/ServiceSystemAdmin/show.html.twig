@@ -1,6 +1,4 @@
-
 {% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
-
 
 {% block show_groups %}
     {# @var object \App\Entity\ServiceSystem #}
@@ -37,9 +35,14 @@
                                     <div class="col-xs-12 col-md-2">
                                         {{ elements['jurisdictions']|render_view_element(object)}}
                                     </div>
-                                    <div class="col-xs-12 col-md-10">
+                                    <div class="col-xs-12 col-md-5 col-lg-4 col-xl-3">
                                         {% if object.stateMinistriesEnabled and object.stateMinistries|length > 0 %}
                                             {{ elements['stateMinistries']|render_view_element(object)}}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-xs-12 col-md-5 col-lg-4 col-xl-3">
+                                        {% if object.stateMinistriesEnabled and object.bureaus|length > 0 %}
+                                            {{ elements['bureaus']|render_view_element(object)}}
                                         {% endif %}
                                     </div>
                                 {% endif %}

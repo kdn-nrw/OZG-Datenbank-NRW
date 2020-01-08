@@ -31,7 +31,7 @@ class Commune extends AppBaseEntity
 
     /**
      * @var Office[]|Collection
-     * @ORM\OneToMany(targetEntity="Office", mappedBy="commune", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="Office", mappedBy="commune", cascade={"all"}, orphanRemoval=true)
      */
     private $offices;
 

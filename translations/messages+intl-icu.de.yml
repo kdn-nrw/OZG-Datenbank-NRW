@@ -20,6 +20,13 @@ app:
     create: Authentifizierung anlegen
     entity:
       name: Methode
+  bureau:
+    list: Fachlichkeit
+    create: Fachlichkeit anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+      service_systems: Leistungsbündel
   category:
     list: Kategorien
     create: Kategorie anlegen
@@ -332,6 +339,7 @@ app:
       references: Referenzen
       state_ministries: Ministerien (Land)
       laboratories: Labore
+      bureaus: Fachlichkeiten
   situation:
     list: Lage
     create: Lage anlegen

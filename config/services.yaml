@@ -46,6 +46,18 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
+  App\Admin\BureauAdmin:
+    arguments:
+      - ~
+      - App\Entity\Bureau
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.bureau.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
   App\Admin\CategoryAdmin:
     arguments:
       - ~
