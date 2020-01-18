@@ -2,8 +2,20 @@
 
 {% block field %}
 <div>
-    {# @var object \App\Entity\Mailing #}
-    {% if object.mailingContacts|length > 0 %}
+    {% if value|length > 0 %}
+        {% set childAdmin = admin.child('App\\Admin\\MailingContactAdmin') %}
+        {% set route_name = 'list' %}
+        {% if childAdmin
+            and childAdmin.hasRoute(route_name)
+            and childAdmin.hasAccess(route_name) %}
+            <p>
+                <a class="list-item-action"
+                   href="{{ childAdmin.generateUrl('list', { 'childId': object.id }) }}"
+                >
+                    {{ 'app.mailing.actions.contact_list'|trans }}
+                </a>
+            </p>
+        {% endif %}
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-condensed">
             <tr>
@@ -12,8 +24,11 @@
                 <th>{{ 'app.mailing_contact.entity.send_status'|trans }}</th>
                 <th>{{ 'app.mailing_contact.entity.sent_at'|trans }}</th>
                 <th>{{ 'app.mailing_contact.entity.send_attempts'|trans }}</th>
+                <th></th>
             </tr>
-        {% for child in object.mailingContacts %}
+        {% set route_name = field_description.options.route.name %}
+        {% for child in value %}
+            {# @var child \App\Entity\MailingContact #}
             <tr>
                 <td>
                     {{ loop.index }}
@@ -34,6 +49,15 @@
                 <td>
                     {% if not child.sentAt %}
                         {{ child.sendAttempts }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if childAdmin
+                        and childAdmin.hasRoute(route_name)
+                        and childAdmin.hasAccess(route_name, child) %}
+                        <a href="{{ childAdmin.generateObjectUrl(route_name, child, field_description.options.route.parameters) }}">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
                     {% endif %}
                 </td>
             </tr>

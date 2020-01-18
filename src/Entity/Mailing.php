@@ -31,6 +31,18 @@ class Mailing extends BaseBlamableEntity
     use HideableEntityTrait;
 
     /**
+     * @ORM\Column(type="string", name="sender_name", length=255, nullable=true)
+     * @var string|null
+     */
+    private $senderName;
+
+    /**
+     * @ORM\Column(type="string", name="email", length=255, nullable=true)
+     * @var string|null
+     */
+    protected $senderEmail;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -80,7 +92,7 @@ class Mailing extends BaseBlamableEntity
 
     /**
      * @var MailingContact[]|Collection
-     * @ORM\OneToMany(targetEntity="MailingContact", mappedBy="mailing", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="MailingContact", mappedBy="mailing", cascade={"all"}, orphanRemoval=true)
      */
     private $mailingContacts;
 
@@ -186,6 +198,44 @@ class Mailing extends BaseBlamableEntity
         $this->communes = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->excludeContacts = new ArrayCollection();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSenderName(): ?string
+    {
+        if (!$this->senderName) {
+            $this->senderName = 'OZG Plattform';
+        }
+        return $this->senderName;
+    }
+
+    /**
+     * @param string|null $senderName
+     */
+    public function setSenderName(?string $senderName): void
+    {
+        $this->senderName = $senderName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSenderEmail(): ?string
+    {
+        if (!$this->senderEmail) {
+            $this->senderEmail = 'geschaeftsstelle@kdn.de';
+        }
+        return $this->senderEmail;
+    }
+
+    /**
+     * @param string|null $senderEmail
+     */
+    public function setSenderEmail(?string $senderEmail): void
+    {
+        $this->senderEmail = $senderEmail;
     }
 
     /**

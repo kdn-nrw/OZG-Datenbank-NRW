@@ -1,4 +1,14 @@
 {% if entities|length > 0 %}
+    {% set isAdminMode = admin_pool is defined %}
+    {% set refAdmin = null %}
+    {% if isAdminMode and showSolution %}
+        {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
+    {% elseif isAdminMode  %}
+        {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceAdmin') %}
+    {% endif %}
+    {# @var refAdmin \App\Admin\AbstractAppAdmin #}
+    {% set route_name = 'edit' %}
+    {% set createEditLink = refAdmin is not null and route_name and refAdmin.hasRoute(route_name) and refAdmin.hasAccess(route_name) %}
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
@@ -17,23 +27,36 @@
                     {% else %}
                         {% include 'General/Show/Table/tabe-head-services.html.twig' %}
                     {% endif %}
+                    {% if createEditLink %}
                     <th>
                         {{ 'app.solution.entity.maturity'|trans }}
                     </th>
+                    {% endif %}
                 </tr>
-                {% for serviceSolution in entities %}
-                    {# @var serviceSolution \App\Entity\ServiceSolution #}
+                {% for child in entities %}
+                    {# @var child \App\Entity\ServiceSolution #}
                     <tr>
                         {% if showSolution %}
-                            {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': serviceSolution.solution} %}
+                            {% set editObjectId = child.solution.id %}
+                            {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
                         {% else %}
-                            {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': serviceSolution.service} %}
+                            {% set editObjectId = child.service.id %}
+                            {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}
                         {% endif %}
                         <td>
-                            {% if serviceSolution.maturity %}
-                                {{ serviceSolution.maturity.name }}
+                            {% if child.maturity %}
+                                {{ child.maturity.name }}
                             {% endif %}
                         </td>
+                        {% if createEditLink and editObjectId %}
+                        <td>
+                            {% if refAdmin.hasAccess(route_name, child) %}
+                                <a href="{{ refAdmin.generateUrl(route_name, { 'id': editObjectId }) }}">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </table>

@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
@@ -98,7 +99,7 @@ class ContactAdmin extends AbstractAppAdmin
             $this->addCategoriesFormFields($formMapper);
             $formMapper->end();
             $formMapper->with('app.contact.groups.contact', ['class' => 'col-md-6'])
-                ->add('email', TextType::class, [
+                ->add('email', EmailType::class, [
                     'required' => false,
                 ])
                 ->add('phoneNumber', TextType::class, [

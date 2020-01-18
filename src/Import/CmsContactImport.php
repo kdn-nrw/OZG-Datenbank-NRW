@@ -45,6 +45,7 @@ class CmsContactImport
         $stmt = $connection->query($sql);
         $mapObjects = $this->getMappedObjects(Contact::class);
         $rowCount = 0;
+        $importedIds = [];
         while ($row = $stmt->fetch()) {
             /** @noinspection PhpUnhandledExceptionInspection */
             $importObject = $this->getLocalObjectForRemote($mapObjects, $row, Contact::class);
@@ -65,14 +66,22 @@ class CmsContactImport
             if (!$importObject->getId()) {
                 $em->persist($importObject);
             }
+            ++$rowCount;
+            $importedIds[] = $row['uid'];
             if ($rowCount > 50) {
                 $em->flush();
                 $rowCount = 0;
+                $sql = 'UPDATE typo3kdn.tt_address SET hidden = 1 WHERE uid IN ('.implode(',', $importedIds).')';
+                $connection->executeUpdate($sql);
+                $importedIds = [];
             }
-            ++$rowCount;
+        }
+        if (!empty($importedIds)) {
+            $sql = 'UPDATE typo3kdn.tt_address SET hidden = 1 WHERE uid IN ('.implode(',', $importedIds).')';
+            $connection->executeUpdate($sql);
         }
         $em->flush();
-        $this->deleteUnmatchedItems($mapObjects);
+        //$this->deleteUnmatchedItems($mapObjects);
 
         return $mapObjects;
     }

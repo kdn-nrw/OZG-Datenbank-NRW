@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Import\CmsContactImport;
 use App\Service\Mailer\MailingSender;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,7 +47,7 @@ class MailingSendCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): void
     {
-        $limit = max(1, min(500, (int) $input->getOption('limit')));
+        $limit = max(1, min(500, (int)$input->getOption('limit')));
         $this->mailingSender->run($limit);
     }
 }

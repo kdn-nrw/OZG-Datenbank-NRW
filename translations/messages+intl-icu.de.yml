@@ -4,7 +4,8 @@ app:
     service_group: NRW Basisdaten
     implementation_group: Umsetzung Basisdaten
     ozg_implementation_group: OZG Umsetzung
-    osg_overview: OZG Überblick
+    basic_group: Basisdienste
+    ozg_overview: OZG Überblick
     login: Anmelden
     dashboard: Startseite
   common:
@@ -15,11 +16,18 @@ app:
       list: Übersicht
     add_sub_record: Neuen Eintrag bearbeiten
     actions: Aktionen
+  analog_service:
+    list: Analoge Dienste
+    create: Analogen Dienst anlegen
+    entity:
+      name: Name
+      solutions: Lösungen
   authentication:
     list: Authentifizierungen
     create: Authentifizierung anlegen
     entity:
       name: Methode
+      solutions: Lösungen
   bureau:
     list: Fachlichkeit
     create: Fachlichkeit anlegen
@@ -143,12 +151,21 @@ app:
   mailing:
     list: Mailing
     create: Mailing erstellen
+    actions:
+      list: Mailing Übersicht
+      show: Mailing anzeigen
+      edit: Mailing bearbeiten
+      contact_list: Mailing Kontakte verwalten
     groups:
       default: Inhalt
       recipients: Empfänger
       options: Versand
+    validation:
+      invalid_sender_domain: Als Absender-E-Mail sind nur Adressen @kdn.de erlaubt!
     entity:
       created_at: Erstellt am
+      sender_name: Name des Absenders
+      sender_email: E-Mail des Absenders
       subject: Betreff
       status: Status
       status_choices:
@@ -215,6 +232,12 @@ app:
     entity:
       name: Name
       description: Beschreibung
+  open_data:
+    list: Open Data
+    create: Open Data anlegen
+    entity:
+      name: Name
+      solutions: Lösungen
   payment_type:
     list: Bezahlverfahren
     create: Bezahlverfahren anlegen
@@ -369,6 +392,8 @@ app:
       contact: Ansprechpartner (alt)
       service_systems: OZG Leistungsbündel
       authentications: Authentifizierung
+      analog_services: Analoge Dienste
+      open_data_items: Open Data
       created_by: Erstellt von
       created_at: Erstellt am
       maturity: Reifegrad
