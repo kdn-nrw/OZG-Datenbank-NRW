@@ -167,6 +167,22 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                         'by_reference' => false,
                         'choice_translation_domain' => false,
                     ])
+                    ->add('analogServices', ModelType::class, [
+                        'btn_add' => false,
+                        'placeholder' => '',
+                        'required' => false,
+                        'multiple' => true,
+                        'by_reference' => false,
+                        'choice_translation_domain' => false,
+                    ])
+                    ->add('openDataItems', ModelType::class, [
+                        'btn_add' => false,
+                        'placeholder' => '',
+                        'required' => false,
+                        'multiple' => true,
+                        'by_reference' => false,
+                        'choice_translation_domain' => false,
+                    ])
                 ->end()
             ->end()
             ->tab('app.solution.tabs.services')
@@ -262,6 +278,18 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('authentications',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('analogServices',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('openDataItems',
             null,
             [],
             null,
@@ -364,6 +392,8 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->add('formServers')
             ->add('paymentTypes')
             ->add('authentications')
+            ->add('analogServices')
+            ->add('openDataItems')
             ->add('name')
             ->add('url', 'url');
         $showMapper

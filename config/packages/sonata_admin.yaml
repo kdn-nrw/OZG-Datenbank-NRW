@@ -56,7 +56,7 @@ sonata_admin:
             app.implementation_group:
                 label: app.menu.implementation_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-building"></i>'
+                icon: '<i class="fa fa-object-group"></i>'
                 items:
                     - App\Admin\MaturityAdmin
                     - App\Admin\StatusAdmin
@@ -64,15 +64,22 @@ sonata_admin:
                     - App\Admin\LaboratoryAdmin
                     - App\Admin\SpecializedProcedureAdmin
                     - App\Admin\ManufacturerAdmin
-                    - App\Admin\AuthenticationAdmin
                     - App\Admin\FormServerAdmin
-                    - App\Admin\PaymentTypeAdmin
                     - App\Admin\PriorityAdmin
                     - App\Admin\ImplementationStatusAdmin
                     - App\Admin\ContactAdmin
                     - App\Admin\CategoryAdmin
                     - App\Admin\MailingAdmin
                     #- App\Admin\JurisdictionAdmin
+            app_admin.menu.basic:
+                label: app.menu.basic_group
+                label_catalogue: messages
+                icon: '<i class="fa fa-object-group"></i>'
+                items:
+                    - App\Admin\PaymentTypeAdmin
+                    - App\Admin\AuthenticationAdmin
+                    - App\Admin\AnalogServiceAdmin
+                    - App\Admin\OpenDataAdmin
             app_admin.menu.system:
                 label: app.system_group
                 #label_catalogue: messages

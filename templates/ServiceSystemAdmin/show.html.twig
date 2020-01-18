@@ -55,9 +55,11 @@
                         </div>
                     </div>
                 </div>
+                {% if elements['services'] is defined %}
                 <div class="col-xs-12">
-                    {% include 'General/Show/show-services.html.twig' %}
+                    {% include 'General/Show/show-services.html.twig' with {'object': object, 'field_description': elements['services']} %}
                 </div>
+                {% endif %}
                 {#
                 <div class="col-xs-12">
                     {% include 'General/Show/show-laboratories.html.twig' %}

@@ -22,7 +22,7 @@
                             <table class="table">
                                 <tbody>
                                 {% for field_name in show_group.fields %}
-                                    {% if field_name not in ['serviceSystems'] %}
+                                    {% if field_name not in ['serviceSystems', 'serviceSolutions'] %}
                                         {% block show_field %}
                                             <tr class="sonata-ba-view-container">
                                                 {% if elements[field_name] is defined %}
@@ -40,6 +40,11 @@
                 <div class="col-xs-12">
                     {% include 'General/Show/show-service-systems.html.twig' %}
                 </div>
+                {% if elements['serviceSolutions'] is defined %}
+                    <div class="col-xs-12">
+                        {% include 'General/Show/show-service-solutions.html.twig' with {'entities': object.serviceSolutions, 'showSolution': false} %}
+                    </div>
+                {% endif %}
             {% endfor %}
         {% endblock %}
 

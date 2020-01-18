@@ -34,6 +34,18 @@ services:
   App\Translator\PrefixedUnderscoreLabelTranslatorStrategy:
     public: true
 
+  App\Admin\AnalogServiceAdmin:
+    arguments:
+      - ~
+      - App\Entity\AnalogService
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.analog_service.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
   App\Admin\AuthenticationAdmin:
     arguments:
       - ~
@@ -188,10 +200,24 @@ services:
       - ~
       - App\Entity\Mailing
       - ~
+    calls:
+      - [addChild, ['@App\Admin\MailingContactAdmin', 'mailing']]
     tags:
       - name:         sonata.admin
         manager_type: orm
         label:        app.mailing.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\MailingContactAdmin:
+    arguments:
+      - ~
+      - App\Entity\MailingContact
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.mailing_contact.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -216,6 +242,18 @@ services:
       - name:         sonata.admin
         manager_type: orm
         label:        app.maturity.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\OpenDataAdmin:
+    arguments:
+      - ~
+      - App\Entity\OpenData
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.open_data.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 

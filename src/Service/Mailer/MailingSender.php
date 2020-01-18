@@ -6,6 +6,7 @@ use App\Entity\Mailing;
 use App\Entity\MailingContact;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\VarDumper\VarDumper;
 
 class MailingSender
 {
@@ -111,6 +112,9 @@ class MailingSender
         if ($mailing->getGreetingType() === Mailing::GREETING_TYPE_PREPEND) {
             $greeting = $mailer->getGreeting($contact);
             $plainText = $greeting . "\n\n" . $plainText;
+        }
+        if ($senderEmail = $mailing->getSenderEmail()) {
+            $email->from($mailer->createAddress($senderEmail, $mailing->getSenderName()));
         }
         //->cc('cc@example.com')
         //->bcc('bcc@example.com')

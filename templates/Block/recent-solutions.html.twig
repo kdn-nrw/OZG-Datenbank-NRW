@@ -7,6 +7,11 @@ file that was distributed with this source code.
 {% extends sonata_block.templates.block_base %}
 
 {% block block %}
+    {% set isAdminMode = context.getSetting('mode') == 'admin' and admin_pool is defined %}
+    {% set refAdmin = null %}
+    {% if isAdminMode %}
+        {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
+    {% endif %}
     <div class="panel panel-default {{ settings.class }}">
         {% if settings.title is not empty %}
             <div class="panel-heading">
@@ -40,7 +45,7 @@ file that was distributed with this source code.
                 <tbody>
                 {% for object in pager.getResults() %}
                     <tr>
-                    {% if context.getSetting('mode') == 'admin' and admin_pool is defined %}
+                    {% if isAdminMode %}
                         <td>
                             {% for commune in object.communes %}
                                 {% if loop.index > 1 %}
@@ -87,34 +92,20 @@ file that was distributed with this source code.
                         </td>
                         <td>
                             <a class="list-item-action"
-                               href="{{ admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin').generateUrl('edit', { 'id': object.id }) }}"
+                               href="{{ refAdmin.generateUrl('edit', { 'id': object.id }) }}"
                             >
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                {#
-                            <span class="label label-{{ object|sonata_status_class }}">
-                                {% if object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_INVALID') %}
-                                    {{ 'label_object_invalid'|trans({}, 'messages') }}
-                                {% elseif object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_VALID') %}
-                                    {{ 'label_object_valid'|trans({}, 'messages') }}
-                                {% elseif object.status == constant('Sonata\\NewsBundle\\Model\\CommentInterface::STATUS_MODERATE') %}
-                                    {{ 'label_object_moderate'|trans({}, 'messages') }}
-                                {% else %}
-                                    {{ 'label_unknown_status'|trans({}, 'messages') }}
-                                {% endif %}
-                                </span>#}
                             </a>
                         </td>
                     {% else %}
-                        <tr>
-                            <td colspan="5">
-                                <a href="#">{{ 'app.solution.entity.no_solution_found'|trans({}, 'messages') }}</a>
-                            </td>
-                        </tr>
+                        <td colspan="8">
+                            <a href="#">{{ 'app.solution.entity.no_solution_found'|trans({}, 'messages') }}</a>
+                        </td>
                     {% endif %}
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="5">
+                        <td colspan="8">
                             <a href="#">{{ 'app.solution.entity.no_solution_found'|trans({}, 'messages') }}</a>
                         </td>
                     </tr>
@@ -130,9 +121,9 @@ file that was distributed with this source code.
         </div>
 
         <div class="panel-footer">
-            {% if context.getSetting('mode') == 'admin' and admin_pool is defined %}
+            {% if isAdminMode %}
                 <div style="margin: 0 auto;max-width: 240px;">
-                <a href="{{ admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin').generateUrl('list') }}"
+                <a href="{{ refAdmin.generateUrl('list') }}"
                    class="btn btn-primary btn-block"
                 >
                     <i class="fa fa-list"></i>

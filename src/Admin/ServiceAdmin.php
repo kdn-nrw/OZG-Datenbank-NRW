@@ -228,7 +228,8 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
             ->add('serviceSystem.situation')
-            ->add('serviceSystem.situation.subject');
+            ->add('serviceSystem.situation.subject')
+            ->add('serviceSolutions');
         $this->addLaboratoriesShowFields($showMapper);
     }
 }

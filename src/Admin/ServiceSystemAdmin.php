@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 use App\Admin\Traits\MinistryStateTrait;
+use App\Admin\Traits\ServiceTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\Status;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
@@ -10,16 +11,16 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
 class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
-    //use LaboratoryTrait;
+    use ServiceTrait;
     use MinistryStateTrait;
 
     /**
@@ -108,7 +109,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
                     'box_class' => 'box-tab',
                     'translation_domain' => 'messages',
                 ])
-                    ->add('services', CollectionType::class, [
+                    /*->add('services', CollectionType::class, [
                         'label' => false,
                         'type_options' => [
                             'delete' => true,
@@ -120,7 +121,19 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
                         'inline' => 'natural',
                         'sortable' => 'position',
                         'ba_custom_hide_fields' => ['serviceSystem',],// 'serviceSolutions'
-                    ])
+                    ])*/
+                    ->add('services', ModelAutocompleteType::class, [
+                            'btn_add' => 'app.common.model_list_type.add',
+                            'property' => 'name',
+                            'placeholder' => '',
+                            'required' => false,
+                            'multiple' => true,
+                            'by_reference' => false,
+                            'btn_catalogue' => 'messages',
+                        ], [
+                            'admin_code' => ServiceAdmin::class,
+                        ]
+                    )
                 ->end()
             ->end();
     }
@@ -200,6 +213,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ->add('jurisdictions');
         $this->addStateMinistriesShowFields($showMapper);
         $showMapper->add('bureaus');
+        $this->addServicesShowFields($showMapper);
         //$this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('situation.subject', null, [
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',

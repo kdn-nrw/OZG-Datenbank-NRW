@@ -58,7 +58,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
 
     /**
      * @var ServiceSolution[]|Collection
-     * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="solution", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="solution", cascade={"all"}, orphanRemoval=true)
      */
     private $serviceSolutions;
 
@@ -137,6 +137,34 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     private $authentications;
 
     /**
+     * @var AnalogService[]|Collection
+     * @ORM\ManyToMany(targetEntity="AnalogService", inversedBy="solutions")
+     * @ORM\JoinTable(name="ozg_solution_analog_service",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="analog_service_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $analogServices;
+
+    /**
+     * @var OpenData[]|Collection
+     * @ORM\ManyToMany(targetEntity="OpenData", inversedBy="solutions")
+     * @ORM\JoinTable(name="ozg_solution_open_data",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="open_data_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $openDataItems;
+
+    /**
      * @var Maturity|null
      *
      * @ORM\ManyToOne(targetEntity="Maturity", cascade={"persist"})
@@ -190,8 +218,10 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
         $this->specializedProcedures = new ArrayCollection();
         $this->portals = new ArrayCollection();
         $this->communes = new ArrayCollection();
+        $this->analogServices = new ArrayCollection();
         $this->authentications = new ArrayCollection();
         $this->formServers = new ArrayCollection();
+        $this->openDataItems = new ArrayCollection();
         $this->paymentTypes = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
         $this->solutionContacts = new ArrayCollection();
@@ -573,6 +603,94 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     public function setAuthentications($authentications): void
     {
         $this->authentications = $authentications;
+    }
+
+    /**
+     * @param AnalogService $analogService
+     * @return self
+     */
+    public function addAnalogService($analogService)
+    {
+        if (!$this->analogServices->contains($analogService)) {
+            $this->analogServices->add($analogService);
+            $analogService->addSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param AnalogService $analogService
+     * @return self
+     */
+    public function removeAnalogService($analogService)
+    {
+        if ($this->analogServices->contains($analogService)) {
+            $this->analogServices->removeElement($analogService);
+            $analogService->removeSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return AnalogService[]|Collection
+     */
+    public function getAnalogServices()
+    {
+        return $this->analogServices;
+    }
+
+    /**
+     * @param AnalogService[]|Collection $analogServices
+     */
+    public function setAnalogServices($analogServices): void
+    {
+        $this->analogServices = $analogServices;
+    }
+
+    /**
+     * @param OpenData $openData
+     * @return self
+     */
+    public function addOpenDataItem($openData)
+    {
+        if (!$this->openDataItems->contains($openData)) {
+            $this->openDataItems->add($openData);
+            $openData->addSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param OpenData $openData
+     * @return self
+     */
+    public function removeOpenDataItem($openData)
+    {
+        if ($this->openDataItems->contains($openData)) {
+            $this->openDataItems->removeElement($openData);
+            $openData->removeSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return OpenData[]|Collection
+     */
+    public function getOpenDataItems()
+    {
+        return $this->openDataItems;
+    }
+
+    /**
+     * @param OpenData[]|Collection $openDataItems
+     */
+    public function setOpenDataItems($openDataItems): void
+    {
+        $this->openDataItems = $openDataItems;
     }
 
     /**

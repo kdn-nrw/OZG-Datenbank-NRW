@@ -10,7 +10,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class AuthenticationAdmin extends AbstractAppAdmin
+class OpenDataAdmin extends AbstractAppAdmin
 {
     use SolutionTrait;
 

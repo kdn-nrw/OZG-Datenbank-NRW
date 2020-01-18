@@ -7,6 +7,9 @@ use App\Admin\Traits\MinistryStateTrait;
 use App\Entity\Contact;
 use App\Entity\Mailing;
 use App\Entity\MailingContact;
+use App\Validator\Constraints\MailingSenderEmail;
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -15,7 +18,9 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
+use Sonata\Form\Validator\ErrorElement;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -24,6 +29,32 @@ class MailingAdmin extends AbstractAppAdmin
 {
     use CategoryTrait;
     use MinistryStateTrait;
+
+    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+            return;
+        }
+
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        $id = $admin->getRequest()->get('id');
+
+        $menu->addChild('app.mailing.actions.show', [
+            'uri' => $admin->generateUrl('show', ['id' => $id])
+        ]);
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('app.mailing.actions.edit', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id])
+            ]);
+        }
+
+        if ($this->isGranted('LIST')) {
+            $menu->addChild('app.mailing.actions.contact_list', [
+                'uri' => $admin->getChild(MailingContactAdmin::class)->generateUrl('list', ['id' => $id])
+            ]);
+        }
+    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -54,6 +85,15 @@ class MailingAdmin extends AbstractAppAdmin
         $formMapper->end();
         $formMapper->with('app.mailing.groups.options', ['class' => 'col-md-6']);
         $formMapper
+            ->add('senderName', TextType::class, [
+                'required' => true,
+                'empty_data' => 'KDN OZG Plattform',
+            ])
+            ->add('senderEmail', EmailType::class, [
+                'required' => true,
+                'empty_data' => 'geschaeftsstelle@kdn.de',
+                'help' => 'Bitte verwenden Sie nur Adressen ...@kdn.de als Absender. Ansonsten landen die E-Mails sehr wahrscheinlich beim Empfänger im Spam-Ordner.',
+            ])
             ->add('status', ChoiceType::class, [
                 'choices' => [
                     'app.mailing.entity.status_choices.new' => Mailing::STATUS_NEW,
@@ -101,6 +141,15 @@ class MailingAdmin extends AbstractAppAdmin
             //'choice_translation_domain' => false,
         ]);
         $formMapper->end();
+    }
+
+    public function validate(ErrorElement $errorElement, $object)
+    {
+        $errorElement
+            ->with('senderEmail')
+                ->addConstraint(new MailingSenderEmail())
+            ->end()
+    ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
