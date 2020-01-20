@@ -64,8 +64,8 @@ app:
       contact: Ansprechpartner der Kommune (alt)
       service_providers: IT Dienstleister
   contact:
-    list: OZG Adressbuch
-    create: Adresse anlegen
+    list: Kontakte
+    create: Kontakt anlegen
     groups:
       person_data: Personendaten
       address_data: Adressdaten

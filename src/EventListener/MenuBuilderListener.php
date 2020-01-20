@@ -59,5 +59,32 @@ class MenuBuilderListener
         if (in_array($currentRoute, $childAsCurrentRoutes)) {
             $child->setCurrent(true);
         }
+
+        $groupNode = $menu->getChild('app.implementation_group');
+        $childContact = $groupNode->getChild('app.contact.list');
+        if (null !== $childContact) {
+            $groupNode->removeChild('app.contact.list');
+            $childContact->setExtras([
+                'icon' => '<i class="fa fa-address-card" aria-hidden="true"></i>',
+            ]);
+            $newChildren = [];
+            $children = $menu->getChildren();
+            $wasAdded = false;
+            foreach ($children as $child) {
+                $newChildren[$child->getName()] = $child;
+                if ($child->getName() === 'app.service_group') {
+                    $newChildren[$childContact->getName()] = $childContact;
+                    $wasAdded = true;
+                }
+            }
+            if (!$wasAdded) {
+                $newChildren[$childContact->getName()] = $childContact;
+            }
+            if (strpos($currentRoute, 'admin_app_contact') !== false) {
+                $childContact->setCurrent(true);
+            }
+
+            $menu->setChildren($newChildren);
+        }
     }
 }
