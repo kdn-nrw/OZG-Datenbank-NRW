@@ -87,11 +87,41 @@ class ImplementationProject extends BaseNamedEntity
      */
     private $contacts;
 
+    /**
+     * @var Contact[]|Collection
+     * @ORM\ManyToMany(targetEntity="Contact")
+     * @ORM\JoinTable(name="ozg_implementation_project_contact_interested",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $interestedContacts;
+
+    /**
+     * @var Contact[]|Collection
+     * @ORM\ManyToMany(targetEntity="Contact")
+     * @ORM\JoinTable(name="ozg_implementation_project_contact_participation",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $participationContacts;
+
     public function __construct()
     {
         $this->solutions = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->interestedContacts = new ArrayCollection();
+        $this->participationContacts = new ArrayCollection();
     }
 
     /**
@@ -146,7 +176,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function addServiceSystem($serviceSystem)
+    public function addServiceSystem($serviceSystem): self
     {
         if (!$this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->add($serviceSystem);
@@ -160,7 +190,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function removeServiceSystem($serviceSystem)
+    public function removeServiceSystem($serviceSystem): self
     {
         if ($this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->removeElement($serviceSystem);
@@ -191,7 +221,7 @@ class ImplementationProject extends BaseNamedEntity
      *
      * @return Subject[]
      */
-    public function getSubjects()
+    public function getSubjects(): array
     {
         $subjects = [];
         $serviceSystems = $this->getServiceSystems();
@@ -210,7 +240,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution)
+    public function addSolution($solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -224,7 +254,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution)
+    public function removeSolution($solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
@@ -253,7 +283,7 @@ class ImplementationProject extends BaseNamedEntity
     /**
      * @return Laboratory[]
      */
-    public function getLaboratories()
+    public function getLaboratories(): array
     {
         $items = [];
         $serviceSystems = $this->getServiceSystems();
@@ -272,7 +302,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Contact $contact
      * @return self
      */
-    public function addContact($contact)
+    public function addContact($contact): self
     {
         if (!$this->contacts->contains($contact)) {
             $this->contacts->add($contact);
@@ -286,7 +316,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Contact $contact
      * @return self
      */
-    public function removeContact($contact)
+    public function removeContact($contact): self
     {
         if ($this->contacts->contains($contact)) {
             $this->contacts->removeElement($contact);
@@ -310,5 +340,93 @@ class ImplementationProject extends BaseNamedEntity
     public function setContacts($contacts): void
     {
         $this->contacts = $contacts;
+    }
+
+    /**
+     * @param Contact $interestedContact
+     * @return self
+     */
+    public function addInterestedContact($interestedContact): self
+    {
+        if (!$this->interestedContacts->contains($interestedContact)) {
+            $this->interestedContacts->add($interestedContact);
+            //$interestedContact->addImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $interestedContact
+     * @return self
+     */
+    public function removeInterestedContact($interestedContact): self
+    {
+        if ($this->interestedContacts->contains($interestedContact)) {
+            $this->interestedContacts->removeElement($interestedContact);
+            //$interestedContact->removeImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getInterestedContacts()
+    {
+        return $this->interestedContacts;
+    }
+
+    /**
+     * @param Contact[]|Collection $interestedContacts
+     */
+    public function setInterestedContacts($interestedContacts): void
+    {
+        $this->interestedContacts = $interestedContacts;
+    }
+
+    /**
+     * @param Contact $participationContact
+     * @return self
+     */
+    public function addParticipationContact($participationContact): self
+    {
+        if (!$this->participationContacts->contains($participationContact)) {
+            $this->participationContacts->add($participationContact);
+            //$participationContact->addImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $participationContact
+     * @return self
+     */
+    public function removeParticipationContact($participationContact): self
+    {
+        if ($this->participationContacts->contains($participationContact)) {
+            $this->participationContacts->removeElement($participationContact);
+            //$participationContact->removeImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getParticipationContacts()
+    {
+        return $this->participationContacts;
+    }
+
+    /**
+     * @param Contact[]|Collection $participationContacts
+     */
+    public function setParticipationContacts($participationContacts): void
+    {
+        $this->participationContacts = $participationContacts;
     }
 }

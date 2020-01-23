@@ -13,36 +13,46 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 trait ContactTrait
 {
-    protected function addContactsFormFields(FormMapper $formMapper, $addOldField = false, $editable = false, $fieldName = 'contacts')
+    protected function addContactsFormFields(
+        FormMapper $formMapper,
+        $addOldField = false,
+        $editable = false,
+        $fieldName = 'contacts',
+        $addTab = true
+    ): void
     {
         if ($editable) {
-            $formMapper
-                ->tab('app.contact.list')
-                ->with('app.contact.list', [
-                    'label' => false,
-                    'box_class' => 'box-tab',
-                ])
-                    ->add($fieldName, CollectionType::class, [
-                        //'label' => false,
-                        'type_options' => [
-                            'delete' => true,
-                        ],
-                        'by_reference' => false,
-                    ], [
-                        'admin_code' => ContactAdmin::class,
-                        'edit' => 'inline',
-                        'inline' => 'natural',
-                        //'sortable' => 'position',
-                        'ba_custom_hide_fields' => ['contactType'],
+            if ($addTab) {
+                $formMapper
+                    ->tab('app.contact.list')
+                    ->with('app.contact.list', [
+                        'label' => false,
+                        'box_class' => 'box-tab',
                     ]);
+            }
+            $formMapper->add($fieldName, CollectionType::class, [
+                    //'label' => false,
+                    'type_options' => [
+                        'delete' => true,
+                    ],
+                    'by_reference' => false,
+                ], [
+                    'admin_code' => ContactAdmin::class,
+                    'edit' => 'inline',
+                    'inline' => 'natural',
+                    //'sortable' => 'position',
+                    'ba_custom_hide_fields' => ['contactType'],
+                ]);
 
             if ($addOldField) {
                 $formMapper->add('contact', TextareaType::class, [
                     'required' => false,
                 ]);
             }
-            $formMapper->end();
-            $formMapper->end();
+            if ($addTab) {
+                $formMapper->end();
+                $formMapper->end();
+            }
         } else {
             $formMapper->add($fieldName, ModelType::class, [
                 'btn_add' => false,
@@ -60,9 +70,9 @@ trait ContactTrait
         }
     }
 
-    protected function addContactsDatagridFilters(DatagridMapper $datagridMapper)
+    protected function addContactsDatagridFilters(DatagridMapper $datagridMapper, $fieldName = 'contacts'): void
     {
-        $datagridMapper->add('contacts',
+        $datagridMapper->add($fieldName,
             null, [
                 'admin_code' => ContactAdmin::class,
             ],
@@ -71,10 +81,10 @@ trait ContactTrait
         );
     }
 
-    protected function addContactsListFields(ListMapper $listMapper)
+    protected function addContactsListFields(ListMapper $listMapper, $fieldName = 'contacts'): void
     {
         $listMapper
-            ->add('contacts', null, [
+            ->add($fieldName, null, [
                 'admin_code' => ContactAdmin::class,
             ]);
     }
@@ -82,10 +92,10 @@ trait ContactTrait
     /**
      * @inheritdoc
      */
-    public function addContactsShowFields(ShowMapper $showMapper, $addOldField = false)
+    public function addContactsShowFields(ShowMapper $showMapper, $addOldField = false, $fieldName = 'contacts'): void
     {
         $showMapper
-            ->add('contacts', null, [
+            ->add($fieldName, null, [
                 'admin_code' => ContactAdmin::class,
             ]);
         if ($addOldField) {

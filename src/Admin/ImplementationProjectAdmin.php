@@ -40,7 +40,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
             ]);
-        $this->addContactsFormFields($formMapper, false, false);
+        $this->addContactsFormFields($formMapper, false, false, 'contacts', false);
+        $this->addContactsFormFields($formMapper, false, false, 'interestedContacts', false);
+        $this->addContactsFormFields($formMapper, false, false, 'participationContacts', false);
         $formMapper->end();
     }
 
@@ -56,6 +58,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('status');
+        $this->addContactsDatagridFilters($datagridMapper);
+        $this->addContactsDatagridFilters($datagridMapper, 'interestedContacts');
+        $this->addContactsDatagridFilters($datagridMapper, 'participationContacts');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -89,6 +94,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
             ->add('notes', 'html');
         $this->addSolutionsShowFields($showMapper);
         $this->addContactsShowFields($showMapper);
+        $this->addContactsShowFields($showMapper, false, 'interestedContacts');
+        $this->addContactsShowFields($showMapper, false, 'participationContacts');
         $this->addServiceSystemsShowFields($showMapper);
     }
 }
