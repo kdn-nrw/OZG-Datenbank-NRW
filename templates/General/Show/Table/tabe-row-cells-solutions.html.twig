@@ -1,6 +1,16 @@
 {# @var child \App\Entity\Solution #}
 <td>
-    {{ child.name }}
+    {% if elementUrl %}
+        <a href="{{ elementUrl }}">
+            {% if child.name %}
+                {{ child.name }}
+            {% else %}
+                #{{ child.id }}
+            {% endif %}
+        </a>
+    {% else %}
+        {{ child.name }}
+    {% endif %}
 </td>
 <td>
     {% if child.url %}
