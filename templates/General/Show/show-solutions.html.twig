@@ -1,22 +1,27 @@
-{% if object.solutions|length > 0 %}
-    <div class="box box-primary">
-        <div class="box-header">
-            <h4 class="box-title">
-                {{ 'app.solution.list'|trans }}
-            </h4>
-        </div>
-        <div class="box-body">
-            <table class="table table-bordered table-condensed">
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+    {% set route_name = field_description.options.route.name %}
+    {% if value|length > 0 %}
+
+        <table class="table table-bordered table-condensed">
+            <tr>
+                {% include 'General/Show/Table/tabe-head-solutions.html.twig' %}
+            </tr>
+            {% for element in value %}
+                {# @var element \App\Entity\Solution #}
                 <tr>
-                    {% include 'General/Show/Table/tabe-head-services.html.twig' %}
+                    {% set editUrl = null %}
+                    {% if field_description.hasassociationadmin
+                        and field_description.associationadmin.hasRoute(route_name)
+                        and field_description.associationadmin.hasAccess(route_name, element) %}
+                        {% set editUrl = field_description.associationadmin.generateObjectUrl(route_name, element, field_description.options.route.parameters) %}
+                    {% else %}
+                        {{ element|render_relation_element(field_description) }}
+                    {% endif %}
+                    {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': element, 'elementUrl': editUrl} %}
                 </tr>
-                {% for child in object.solutions %}
-                    {# @var child \App\Entity\Solution #}
-                    <tr>
-                        {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child} %}
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
-{% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

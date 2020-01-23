@@ -28,6 +28,23 @@
                                     {{ object.description|nl2br }}
                                 </div>
                             {% endif %}
+
+                            <table class="table">
+                                <tbody>
+                                {% set excludeFields = ['name', 'status', 'description', 'notes'] %}
+                                {% for field_name in show_group.fields %}
+                                    {% block show_field %}
+                                        {% if elements[field_name] is defined and field_name not in excludeFields %}
+                                            <tr class="sonata-ba-view-container">
+                                                {% if elements[field_name] is defined %}
+                                                    {{ elements[field_name]|render_view_element(object) }}
+                                                {% endif %}
+                                            </tr>
+                                        {% endif %}
+                                    {% endblock %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
