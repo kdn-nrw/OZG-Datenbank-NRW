@@ -3,16 +3,19 @@
 namespace App\Admin;
 
 use App\Admin\Traits\LaboratoryTrait;
+use App\Entity\Jurisdiction;
 use App\Entity\Priority;
 use App\Entity\Status;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -79,8 +82,31 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                     ])
                     ->add('relevance2', BooleanType::class, [
                         'required' => false,
-                    ])
-                ->end()
+                    ]);
+
+        $formMapper
+            /*->add('inheritBureaus', BooleanType::class, [
+                'label' => 'app.service.entity.inherit_bureaus.yes',
+                'required' => false,
+            ])*/
+            ->add('inheritBureaus', ChoiceType::class, [
+                'choices' => [
+                    'app.service.entity.inherit_bureaus.no' => false,
+                    'app.service.entity.inherit_bureaus.yes' => true,
+                ],
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('bureaus', ModelType::class, [
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ]
+            );
+        $formMapper->end()
             ->end();
         if (!in_array('serviceSolutions', $hideFields)) {
             $formMapper->tab('app.service.tabs.service_solutions', [
@@ -133,6 +159,12 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         );
         $datagridMapper->add('status');
         $this->addLaboratoriesDatagridFilters($datagridMapper);
+        $datagridMapper->add('bureaus',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -230,6 +262,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->add('serviceSystem.situation')
             ->add('serviceSystem.situation.subject')
             ->add('serviceSolutions');
+        $showMapper->add('bureaus');
         $this->addLaboratoriesShowFields($showMapper);
     }
 }

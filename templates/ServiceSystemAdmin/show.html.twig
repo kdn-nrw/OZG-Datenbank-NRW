@@ -40,11 +40,13 @@
                                             {{ elements['stateMinistries']|render_view_element(object)}}
                                         {% endif %}
                                     </div>
+                                    {% if elements['bureaus'] is defined %}
                                     <div class="col-xs-12 col-md-5 col-lg-4 col-xl-3">
                                         {% if object.stateMinistriesEnabled and object.bureaus|length > 0 %}
                                             {{ elements['bureaus']|render_view_element(object)}}
                                         {% endif %}
                                     </div>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             {% if object.description %}

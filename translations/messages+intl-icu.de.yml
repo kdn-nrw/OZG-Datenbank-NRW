@@ -307,6 +307,10 @@ app:
       priority: Priorität
       service_solutions: Lösungen
       laboratories: Labore
+      bureaus: Fachlichkeiten
+      inherit_bureaus: Fachlichkeiten von OZG-Leistung übernehmen
+      inherit_bureaus.yes: Fachlichkeiten der Leika-Leistung mit Fachlichkeiten der OZG-Leistung erweitern
+      inherit_bureaus.no: Fachlichkeiten der OZG-Leistun nicht übernehmen
   service_provider:
     list: IT Dienstleister
     create: IT Dienstleister anlegen

@@ -92,9 +92,9 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
 
     public function __construct()
     {
+        $this->services = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
-        $this->services = new ArrayCollection();
     }
 
     /**
@@ -237,7 +237,7 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
      * @param Service $service
      * @return self
      */
-    public function addService($service)
+    public function addService($service): self
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
@@ -251,7 +251,7 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
      * @param Service $service
      * @return self
      */
-    public function removeService($service)
+    public function removeService($service): self
     {
         if ($this->services->contains($service)) {
             $this->services->removeElement($service);

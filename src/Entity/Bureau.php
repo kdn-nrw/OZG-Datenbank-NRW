@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_bureau")
- * @ORM\HasLifecycleCallbacks
  */
 class Bureau extends BaseNamedEntity
 {
@@ -40,8 +39,23 @@ class Bureau extends BaseNamedEntity
      */
     private $serviceSystems;
 
+    /**
+     * @var Service[]|Collection
+     * @ORM\ManyToMany(targetEntity="Service", inversedBy="bureaus")
+     * @ORM\JoinTable(name="ozg_bureau_service",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="bureau_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $services;
+
     public function __construct()
     {
+        $this->services = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
     }
 
@@ -65,7 +79,7 @@ class Bureau extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function addServiceSystem($serviceSystem)
+    public function addServiceSystem($serviceSystem): self
     {
         if (!$this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->add($serviceSystem);
@@ -79,7 +93,7 @@ class Bureau extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function removeServiceSystem($serviceSystem)
+    public function removeServiceSystem($serviceSystem): self
     {
         if ($this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->removeElement($serviceSystem);
@@ -103,5 +117,49 @@ class Bureau extends BaseNamedEntity
     public function setServiceSystems($serviceSystems): void
     {
         $this->serviceSystems = $serviceSystems;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function addService($service): self
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->addBureau($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function removeService($service): self
+    {
+        if ($this->services->contains($service)) {
+            $this->services->removeElement($service);
+            $service->removeBureau($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Service[]|Collection
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    /**
+     * @param Service[]|Collection $services
+     */
+    public function setServices(Collection $services): void
+    {
+        $this->services = $services;
     }
 }
