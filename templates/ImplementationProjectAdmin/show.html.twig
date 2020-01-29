@@ -31,7 +31,7 @@
 
                             <table class="table">
                                 <tbody>
-                                {% set excludeFields = ['name', 'status', 'description', 'notes'] %}
+                                {% set excludeFields = ['name', 'status', 'description', 'notes', 'serviceSystems', 'solutions'] %}
                                 {% for field_name in show_group.fields %}
                                     {% block show_field %}
                                         {% if elements[field_name] is defined and field_name not in excludeFields %}
@@ -62,9 +62,16 @@
                     </div>
                 </div>
                 {% endif %}
+                {% if elements['solutions'] %}
+                    <div class="col-xs-12">
+                        {{ elements['solutions']|render_view_element(object) }}
+                    </div>
+                {% endif %}
+                {% if elements['serviceSystems'] %}
                 <div class="col-xs-12">
                     {% include 'General/Show/show-service-systems.html.twig' %}
                 </div>
+                {% endif %}
             {% endfor %}
         {% endblock %}
 

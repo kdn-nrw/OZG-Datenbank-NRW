@@ -57,9 +57,6 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
                         'required' => false,
                         'choice_translation_domain' => false,
                     ])
-                    ->add('contact', TextareaType::class, [
-                        'required' => false,
-                    ])
                     ->add('description', TextareaType::class, [
                         'required' => false,
                     ]);

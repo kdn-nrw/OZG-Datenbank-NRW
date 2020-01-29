@@ -46,7 +46,7 @@ class Import extends BaseEntity
     private $situationImportId = 0;
 
     /**
-     * OZG-Leistungsbündel
+     * OZG-Leistungen
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)

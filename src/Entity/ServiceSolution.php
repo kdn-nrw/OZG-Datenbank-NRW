@@ -59,7 +59,7 @@ class ServiceSolution extends BaseEntity
     /**
      * @return Service
      */
-    public function getService()
+    public function getService(): Service
     {
         return $this->service;
     }
@@ -75,7 +75,7 @@ class ServiceSolution extends BaseEntity
     /**
      * @return Solution
      */
-    public function getSolution()
+    public function getSolution(): Solution
     {
         return $this->solution;
     }
@@ -123,7 +123,7 @@ class ServiceSolution extends BaseEntity
     /**
      * @return Maturity|null
      */
-    public function getMaturity()
+    public function getMaturity(): ?Maturity
     {
         return $this->maturity;
     }
@@ -145,17 +145,17 @@ class ServiceSolution extends BaseEntity
     {
         $service = $this->getService();
         if (null === $service) {
-            $name = $this->getId();
+            $name = (string) $this->getId();
         } else {
             $name = '';
             $serviceSystem = $service->getServiceSystem();
             if (null !== $serviceSystem) {
-                $name = 'Leistungsbündel ' . $serviceSystem->getName() .': Leistung ';
+                $name = 'OZG-Leistung ' . $serviceSystem->getName() .': Leika-Leistung ';
             }
-            $name .= $service->getName();
+            $name .= (string) $service->getName();
         }
         if (null !== $maturity = $this->getMaturity()) {
-            $name .= ' (Reifegrad: '.$this->getMaturity()->getName().')';
+            $name .= ' (Reifegrad: '.$maturity->getName().')';
         }
         return $name;
     }

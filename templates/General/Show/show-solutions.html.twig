@@ -1,9 +1,12 @@
-{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
-
-{% block field %}
-    {% set route_name = field_description.options.route.name %}
-    {% if value|length > 0 %}
-
+{% if value|length > 0 %}
+{% set route_name = field_description.options.route.name %}
+<div class="box box-primary">
+    <div class="box-header">
+        <h4 class="box-title">
+            {{ 'app.solution.list'|trans }}
+        </h4>
+    </div>
+    <div class="box-body">
         <table class="table table-bordered table-condensed">
             <tr>
                 {% include 'General/Show/Table/tabe-head-solutions.html.twig' %}
@@ -23,5 +26,6 @@
                 </tr>
             {% endfor %}
         </table>
-    {% endif %}
-{% endblock %}
+    </div>
+</div>
+{% endif %}
