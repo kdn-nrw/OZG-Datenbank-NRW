@@ -34,7 +34,7 @@ app:
     entity:
       name: Name
       description: Beschreibung
-      service_systems: Leistungsbündel
+      service_systems: OZG-Leistungen
   category:
     list: Kategorien
     create: Kategorie anlegen
@@ -117,7 +117,7 @@ app:
       name: Umsetzungsprojektname
       description: Projektinformationen
       status: Umsetzungsstatus
-      service_systems: Leistungsbündel
+      service_systems: OZG-Leistungen
       solutions: Lösungen
       contacts: Ansprechpartner
       notes: Notizen
@@ -147,7 +147,7 @@ app:
       service_providers: Teilnehmer IT Dienstleister
       url: Url
       participants_other: Teilnehmer sonstige
-      service_systems: Leistungsbündel
+      service_systems: OZG-Leistungen
       services: Leistungen
       implementation_url: Url OZG Umsetzung
   mailing:
@@ -227,7 +227,7 @@ app:
       town: Ort
       url: Url
       contacts: Ansprechpartner
-      service_systems: Leistungsbündel
+      service_systems: OZG-Leistungen
   maturity:
     list: Reifegrade
     create: Reifegrad anlegen
@@ -279,12 +279,12 @@ app:
       delete_confirm: Wollen Sie die gespeicherte Suche wirklich löschen?
   service:
     type_label: "{count, plural,
-        =0 {Keine Leistungen}
-        one {1 Leistung}
-        other {# Leistungen}
+        =0 {Keine Leika-Leistungen}
+        one {1 Leika-Leistung}
+        other {# Leika-Leistungen}
       }"
-    list: Leistungen
-    create: Leistung anlegen
+    list: Leika-Leistungen
+    create: Leika-Leistungen anlegen
     tabs:
       general: Allgemein
       relations: Relationen
@@ -296,7 +296,7 @@ app:
       name: Leika-Bezeichnung
       service_key: Leika-ID
       service_type: Leika-Typ
-      service_system: OZG Leistungsbündel
+      service_system: OZG-Leistung
       legal_basis: Rechtsgrundlage
       laws: Gesetze
       law_shortcuts: Gesetzeskürzel
@@ -334,19 +334,19 @@ app:
       status: Status
       maturity: Reifegrad
   service_system:
-    list: Leistungsbündel
-    create: Leistungsbündel anlegen
+    list: OZG-Leistungen
+    create: OZG-Leistung anlegen
     tabs:
       general: Allgemein
       relations: Relationen
-      services: Leistungen
+      services: Leika-Leistungen
     entity:
       name: OZG Leistung
       service_key: OZG-ID
       situation: Lage
       contact: Kontakt
       description: Beschreibung
-      services: Leistungen
+      services: Leika-Leistungen
       status: Status
       priority: Priorität
       jurisdictions: Zuständigkeiten
@@ -369,11 +369,11 @@ app:
       list: Lösungen Übersicht
       show: Lösung anzeigen
       edit: Lösung bearbeiten
-      service_solution_list: Enthaltene Leistungen anzeigen
+      service_solution_list: Enthaltene Leika-Leistungen anzeigen
     tabs:
       general: Allgemein
       relations: Relationen
-      services: Leistungen
+      services: Leika-Leistungen
     entity:
       view_all: Alle Lösungen anzeigen
       no_solution_found: Keine Lösungen gefunden
@@ -387,12 +387,12 @@ app:
       communes: Kommunen
       name: Name
       description: Beschreibung
-      service_solutions: Enthaltene Leistungen
+      service_solutions: Enthaltene Leika-Leistungen
       status: Status
       url: Url
       solution_contacts: Ansprechpartner
       contact: Ansprechpartner (alt)
-      service_systems: OZG Leistungsbündel
+      service_systems: OZG-Leistungen
       authentications: Authentifizierung
       analog_services: Analoge Dienste
       open_data_items: Open Data
