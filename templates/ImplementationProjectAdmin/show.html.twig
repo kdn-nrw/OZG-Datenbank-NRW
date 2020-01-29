@@ -62,6 +62,11 @@
                     </div>
                 </div>
                 {% endif %}
+                {% if elements['laboratories'] is defined %}
+                    <div class="col-xs-12">
+                        {% include 'General/Show/show-laboratories.html.twig' with {'object': object, 'field_description': elements['laboratories']} %}
+                    </div>
+                {% endif %}
                 {% if elements['solutions'] %}
                     <div class="col-xs-12">
                         {{ elements['solutions']|render_view_element(object) }}

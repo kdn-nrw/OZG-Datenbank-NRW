@@ -356,7 +356,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      * @param Laboratory $laboratory
      * @return self
      */
-    public function addLaboratory($laboratory)
+    public function addLaboratory($laboratory): self
     {
         if (!$this->laboratories->contains($laboratory)) {
             $this->laboratories->add($laboratory);
@@ -370,7 +370,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      * @param Laboratory $laboratory
      * @return self
      */
-    public function removeLaboratory($laboratory)
+    public function removeLaboratory($laboratory): self
     {
         if ($this->laboratories->contains($laboratory)) {
             $this->laboratories->removeElement($laboratory);
@@ -403,7 +403,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      */
     public function __toString(): string
     {
-        $name = $this->getName();
+        $name = (string) $this->getName();
         if (null === $name) {
             return '';
         }

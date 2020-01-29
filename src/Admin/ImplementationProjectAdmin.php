@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 use App\Admin\Traits\ContactTrait;
+use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationStatus;
@@ -19,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     use ContactTrait;
+    use LaboratoryTrait;
     use SolutionTrait;
     use ServiceSystemTrait;
 
@@ -30,7 +32,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $formMapper
             ->add('description', TextareaType::class, [
                 'required' => false,
-            ])
+            ]);
+        $this->addLaboratoriesFormFields($formMapper);
+        $formMapper
             ->add('status', ModelType::class, [
                 'btn_add' => false,
                 'required' => true,
@@ -49,6 +53,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
+        $this->addLaboratoriesDatagridFilters($datagridMapper);
         $this->addSolutionsDatagridFilters($datagridMapper);
         $this->addServiceSystemsDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSystems.situation.subject',
@@ -92,6 +97,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
             ->add('notes', 'html');
+        $this->addLaboratoriesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
         $this->addContactsShowFields($showMapper);
         $this->addContactsShowFields($showMapper, false, 'interestedContacts');

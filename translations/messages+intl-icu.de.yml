@@ -123,6 +123,7 @@ app:
       notes: Notizen
       interested_contacts: An Mitarbeit interessiert
       participation_contacts: Mitarbeit zugesichert
+      laboratories: Digitalisierungslabore
   implementation_status:
     list: Umsetzungs-Status
     create: Umsetzungs-Status anlegen
