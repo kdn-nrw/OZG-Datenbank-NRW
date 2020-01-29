@@ -8,7 +8,6 @@
 
 namespace App\Entity\Base;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,7 +31,8 @@ trait NamedEntityTrait
      * Set name
      *
      * @param string $name
-     * @return $this
+     * @return self
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     public function setName(?string $name)
     {
@@ -58,10 +58,10 @@ trait NamedEntityTrait
      */
     public function __toString(): string
     {
-        $name = $this->getName();
+        $name = (string) $this->getName();
         if (null === $name) {
             return 'NULL';
         }
-        return $this->getName();
+        return $name;
     }
 }

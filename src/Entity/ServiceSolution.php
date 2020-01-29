@@ -19,14 +19,14 @@ class ServiceSolution extends BaseEntity
     use HideableEntityTrait;
 
     /**
-     * @var Service
+     * @var Service|null
      * @ORM\ManyToOne(targetEntity="Service", inversedBy="serviceSolutions", cascade={"persist"})
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $service;
 
     /**
-     * @var Solution
+     * @var Solution|null
      * @ORM\ManyToOne(targetEntity="Solution", inversedBy="serviceSolutions", cascade={"persist"})
      * @ORM\JoinColumn(name="solution_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -57,9 +57,9 @@ class ServiceSolution extends BaseEntity
     private $maturity;
 
     /**
-     * @return Service
+     * @return Service|null
      */
-    public function getService(): Service
+    public function getService(): ?Service
     {
         return $this->service;
     }
@@ -73,9 +73,9 @@ class ServiceSolution extends BaseEntity
     }
 
     /**
-     * @return Solution
+     * @return Solution|null
      */
-    public function getSolution(): Solution
+    public function getSolution(): ?Solution
     {
         return $this->solution;
     }
@@ -152,7 +152,7 @@ class ServiceSolution extends BaseEntity
             if (null !== $serviceSystem) {
                 $name = 'OZG-Leistung ' . $serviceSystem->getName() .': Leika-Leistung ';
             }
-            $name .= (string) $service->getName();
+            $name .= $service->getName();
         }
         if (null !== $maturity = $this->getMaturity()) {
             $name .= ' (Reifegrad: '.$maturity->getName().')';

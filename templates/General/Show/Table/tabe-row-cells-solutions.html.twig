@@ -1,6 +1,6 @@
 {# @var child \App\Entity\Solution #}
 <td>
-    {% if elementUrl %}
+    {% if elementUrl is defined and elementUrl %}
         <a href="{{ elementUrl }}">
             {% if child.name %}
                 {{ child.name }}

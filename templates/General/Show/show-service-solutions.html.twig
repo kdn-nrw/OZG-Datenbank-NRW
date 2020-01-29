@@ -38,7 +38,7 @@
                     <tr>
                         {% if showSolution %}
                             {% set editObjectId = child.solution.id %}
-                            {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
+                            {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution, 'elementUrl': null} %}
                         {% else %}
                             {% set editObjectId = child.service.id %}
                             {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}

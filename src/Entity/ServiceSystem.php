@@ -59,7 +59,7 @@ class ServiceSystem extends BaseNamedEntity
     private $description = '';
 
     /**
-     * @var Situation
+     * @var Situation|null
      * @ORM\ManyToOne(targetEntity="Situation", inversedBy="services", cascade={"persist"})
      */
     private $situation;
@@ -174,9 +174,9 @@ class ServiceSystem extends BaseNamedEntity
     }
 
     /**
-     * @return Situation
+     * @return Situation|null
      */
-    public function getSituation()
+    public function getSituation(): ?Situation
     {
         return $this->situation;
     }
@@ -220,11 +220,12 @@ class ServiceSystem extends BaseNamedEntity
     {
         $this->priority = $priority;
     }
+
     /**
      * @param Bureau $bureau
      * @return self
      */
-    public function addBureau($bureau)
+    public function addBureau($bureau): self
     {
         if (!$this->bureaus->contains($bureau)) {
             $this->bureaus->add($bureau);
@@ -238,7 +239,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param Bureau $bureau
      * @return self
      */
-    public function removeBureau($bureau)
+    public function removeBureau($bureau): self
     {
         if ($this->bureaus->contains($bureau)) {
             $this->bureaus->removeElement($bureau);
@@ -268,7 +269,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param Service $service
      * @return self
      */
-    public function addService($service)
+    public function addService($service): self
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
@@ -282,7 +283,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param Service $service
      * @return self
      */
-    public function removeService($service)
+    public function removeService($service): self
     {
         if ($this->services->contains($service)) {
             $this->services->removeElement($service);
@@ -314,7 +315,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param Jurisdiction $jurisdiction
      * @return self
      */
-    public function addJurisdiction($jurisdiction)
+    public function addJurisdiction($jurisdiction): self
     {
         if (!$this->jurisdictions->contains($jurisdiction)) {
             $this->jurisdictions->add($jurisdiction);
@@ -328,7 +329,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param Jurisdiction $jurisdiction
      * @return self
      */
-    public function removeJurisdiction($jurisdiction)
+    public function removeJurisdiction($jurisdiction): self
     {
         if ($this->jurisdictions->contains($jurisdiction)) {
             $this->jurisdictions->removeElement($jurisdiction);
@@ -354,11 +355,16 @@ class ServiceSystem extends BaseNamedEntity
         $this->jurisdictions = $jurisdictions;
     }
 
-    public function getStateMinistriesEnabled()
+    /**
+     * Returns true if the state ministries property is active
+     *
+     * @return bool
+     */
+    public function getStateMinistriesEnabled(): bool
     {
         $jurisdictions = $this->getJurisdictions();
         foreach ($jurisdictions as $jurisdiction) {
-            if (in_array($jurisdiction->getId(), [Jurisdiction::TYPE_STATE, Jurisdiction::TYPE_COMMUNE])) {
+            if (in_array($jurisdiction->getId(), [Jurisdiction::TYPE_STATE, Jurisdiction::TYPE_COMMUNE], false)) {
                 return true;
             }
         }
@@ -369,7 +375,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function addImplementationProject($implementationProject)
+    public function addImplementationProject($implementationProject): self
     {
         if (!$this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->add($implementationProject);
@@ -383,7 +389,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function removeImplementationProject($implementationProject)
+    public function removeImplementationProject($implementationProject): self
     {
         if ($this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->removeElement($implementationProject);
@@ -413,7 +419,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param Laboratory $laboratory
      * @return self
      */
-    public function addLaboratory($laboratory)
+    public function addLaboratory($laboratory): self
     {
         if (!$this->laboratories->contains($laboratory)) {
             $this->laboratories->add($laboratory);
@@ -427,7 +433,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param Laboratory $laboratory
      * @return self
      */
-    public function removeLaboratory($laboratory)
+    public function removeLaboratory($laboratory): self
     {
         if ($this->laboratories->contains($laboratory)) {
             $this->laboratories->removeElement($laboratory);
@@ -457,7 +463,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param MinistryState $stateMinistry
      * @return self
      */
-    public function addStateMinistry($stateMinistry)
+    public function addStateMinistry($stateMinistry): self
     {
         if (!$this->stateMinistries->contains($stateMinistry)) {
             $this->stateMinistries->add($stateMinistry);
@@ -471,7 +477,7 @@ class ServiceSystem extends BaseNamedEntity
      * @param MinistryState $stateMinistry
      * @return self
      */
-    public function removeStateMinistry($stateMinistry)
+    public function removeStateMinistry($stateMinistry): self
     {
         if ($this->stateMinistries->contains($stateMinistry)) {
             $this->stateMinistries->removeElement($stateMinistry);

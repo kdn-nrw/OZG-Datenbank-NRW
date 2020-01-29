@@ -25,6 +25,8 @@ interface NamedEntityInterface
 
     /**
      * @param string|null $name
+     * @return self
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     public function setName(?string $name);
 

@@ -42,6 +42,11 @@
                                     {{ object.description|nl2br }}
                                 </div>
                             {% endif %}
+                            {% if elements['bureaus'] is defined %}
+                                <div class="item-property">
+                                    {{ elements['bureaus']|render_view_element(object)}}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

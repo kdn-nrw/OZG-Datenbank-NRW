@@ -119,8 +119,23 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      */
     private $laboratories;
 
+    /**
+     * @var Bureau[]|Collection
+     * @ORM\ManyToMany(targetEntity="Bureau", mappedBy="services")
+     */
+    private $bureaus;
+
+    /**
+     * Toggle inheritance of bureaus from service system
+     * @var bool
+     *
+     * @ORM\Column(name="inherit_bureaus", type="boolean")
+     */
+    protected $inheritBureaus = true;
+
     public function __construct()
     {
+        $this->bureaus = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
         $this->serviceSolutions = new ArrayCollection();
     }
@@ -129,7 +144,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      * Set name
      *
      * @param string $name
-     * @return $this
+     * @return self
      */
     public function setName(?string $name)
     {
@@ -200,7 +215,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      * @param ServiceSolution $serviceSolution
      * @return self
      */
-    public function addServiceSolution($serviceSolution)
+    public function addServiceSolution($serviceSolution): self
     {
         if (!$this->serviceSolutions->contains($serviceSolution)) {
             $this->serviceSolutions->add($serviceSolution);
@@ -214,7 +229,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      * @param ServiceSolution $serviceSolution
      * @return self
      */
-    public function removeServiceSolution($serviceSolution)
+    public function removeServiceSolution($serviceSolution): self
     {
         if ($this->serviceSolutions->contains($serviceSolution)) {
             $this->serviceSolutions->removeElement($serviceSolution);
@@ -339,7 +354,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     /**
      * @return ServiceSystem|null
      */
-    public function getServiceSystem()
+    public function getServiceSystem(): ?ServiceSystem
     {
         return $this->serviceSystem;
     }
@@ -394,6 +409,72 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     public function setLaboratories($laboratories): void
     {
         $this->laboratories = $laboratories;
+    }
+
+    /**
+     * @param Bureau $bureau
+     * @return self
+     */
+    public function addBureau($bureau): self
+    {
+        if (!$this->bureaus->contains($bureau)) {
+            $this->bureaus->add($bureau);
+            $bureau->addService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Bureau $bureau
+     * @return self
+     */
+    public function removeBureau($bureau): self
+    {
+        if ($this->bureaus->contains($bureau)) {
+            $this->bureaus->removeElement($bureau);
+            $bureau->removeService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Bureau[]|Collection
+     */
+    public function getBureaus()
+    {
+        if ($this->isInheritBureaus() && null !== $serviceSystem = $this->getServiceSystem()) {
+            $ssBureaus = $serviceSystem->getBureaus();
+            foreach ($ssBureaus as $bureau) {
+                $this->addBureau($bureau);
+            }
+        }
+        return $this->bureaus;
+    }
+
+    /**
+     * @param Bureau[]|Collection $bureaus
+     */
+    public function setBureaus($bureaus): void
+    {
+        $this->bureaus = $bureaus;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInheritBureaus(): bool
+    {
+        return $this->inheritBureaus;
+    }
+
+    /**
+     * @param bool $inheritBureaus
+     */
+    public function setInheritBureaus(bool $inheritBureaus): void
+    {
+        $this->inheritBureaus = $inheritBureaus;
     }
 
     /**
