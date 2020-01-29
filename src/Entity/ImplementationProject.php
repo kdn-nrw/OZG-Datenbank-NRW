@@ -115,9 +115,24 @@ class ImplementationProject extends BaseNamedEntity
      */
     private $participationContacts;
 
+    /**
+     * @var Laboratory[]|Collection
+     * @ORM\ManyToMany(targetEntity="Laboratory")
+     * @ORM\JoinTable(name="ozg_implementation_project_laboratory",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="laboratory_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $laboratories;
+
     public function __construct()
     {
         $this->solutions = new ArrayCollection();
+        $this->laboratories = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->interestedContacts = new ArrayCollection();
@@ -281,24 +296,6 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @return Laboratory[]
-     */
-    public function getLaboratories(): array
-    {
-        $items = [];
-        $serviceSystems = $this->getServiceSystems();
-        foreach ($serviceSystems as $serviceSystem) {
-            $laboratories = $serviceSystem->getLaboratories();
-            foreach ($laboratories as $laboratory) {
-                if (!isset($items[$laboratory->getId()])) {
-                    $items[$laboratory->getId()] = $laboratory;
-                }
-            }
-        }
-        return $items;
-    }
-
-    /**
      * @param Contact $contact
      * @return self
      */
@@ -428,5 +425,67 @@ class ImplementationProject extends BaseNamedEntity
     public function setParticipationContacts($participationContacts): void
     {
         $this->participationContacts = $participationContacts;
+    }
+
+    /**
+     * @param Laboratory $laboratory
+     * @return self
+     */
+    public function addLaboratory($laboratory): self
+    {
+        if (!$this->laboratories->contains($laboratory)) {
+            $this->laboratories->add($laboratory);
+            //$laboratory->addService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Laboratory $laboratory
+     * @return self
+     */
+    public function removeLaboratory($laboratory): self
+    {
+        if ($this->laboratories->contains($laboratory)) {
+            $this->laboratories->removeElement($laboratory);
+            //$laboratory->removeImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Laboratory[]|Collection
+     */
+    public function getLaboratories()
+    {
+        return $this->laboratories;
+    }
+
+    /**
+     * @return Laboratory[]
+     * /
+    public function getLaboratories(): array
+    {
+        $items = [];
+        $serviceSystems = $this->getServiceSystems();
+        foreach ($serviceSystems as $serviceSystem) {
+            $laboratories = $serviceSystem->getLaboratories();
+            foreach ($laboratories as $laboratory) {
+                if (!isset($items[$laboratory->getId()])) {
+                    $items[$laboratory->getId()] = $laboratory;
+                }
+            }
+        }
+        return $items;
+    }*/
+
+    /**
+     * @param Laboratory[]|Collection $laboratories
+     */
+    public function setLaboratories($laboratories): void
+    {
+        $this->laboratories = $laboratories;
     }
 }
