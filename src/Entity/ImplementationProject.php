@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,6 +36,13 @@ class ImplementationProject extends BaseNamedEntity
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description = '';
+
+    /**
+     * @var null|DateTime
+     *
+     * @ORM\Column(nullable=true, type="datetime", name="project_start_at")
+     */
+    protected $projectStartAt;
 
     /**
      * Notes
@@ -169,6 +177,22 @@ class ImplementationProject extends BaseNamedEntity
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getProjectStartAt(): ?DateTime
+    {
+        return $this->projectStartAt;
+    }
+
+    /**
+     * @param DateTime|null $projectStartAt
+     */
+    public function setProjectStartAt(?DateTime $projectStartAt): void
+    {
+        $this->projectStartAt = $projectStartAt;
     }
 
     /**
@@ -466,20 +490,20 @@ class ImplementationProject extends BaseNamedEntity
     /**
      * @return Laboratory[]
      * /
-    public function getLaboratories(): array
-    {
-        $items = [];
-        $serviceSystems = $this->getServiceSystems();
-        foreach ($serviceSystems as $serviceSystem) {
-            $laboratories = $serviceSystem->getLaboratories();
-            foreach ($laboratories as $laboratory) {
-                if (!isset($items[$laboratory->getId()])) {
-                    $items[$laboratory->getId()] = $laboratory;
-                }
-            }
-        }
-        return $items;
-    }*/
+     * public function getLaboratories(): array
+     * {
+     * $items = [];
+     * $serviceSystems = $this->getServiceSystems();
+     * foreach ($serviceSystems as $serviceSystem) {
+     * $laboratories = $serviceSystem->getLaboratories();
+     * foreach ($laboratories as $laboratory) {
+     * if (!isset($items[$laboratory->getId()])) {
+     * $items[$laboratory->getId()] = $laboratory;
+     * }
+     * }
+     * }
+     * return $items;
+     * }*/
 
     /**
      * @param Laboratory[]|Collection $laboratories

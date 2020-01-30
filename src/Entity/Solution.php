@@ -20,15 +20,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Solution extends BaseBlamableEntity implements NamedEntityInterface
 {
-    const COMMUNE_TYPE_ALL = 'all';
-    const COMMUNE_TYPE_SELECTED = 'selected';
+    public const COMMUNE_TYPE_ALL = 'all';
+    public const COMMUNE_TYPE_SELECTED = 'selected';
 
     use NamedEntityTrait;
     use HideableEntityTrait;
     use UrlTrait;
 
     /**
-     * @var ServiceProvider
+     * @var ServiceProvider|null
      * @ORM\ManyToOne(targetEntity="ServiceProvider", inversedBy="solutions", cascade={"persist"})
      */
     private $serviceProvider;
@@ -260,9 +260,9 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     }
 
     /**
-     * @return ServiceProvider
+     * @return ServiceProvider|null
      */
-    public function getServiceProvider()
+    public function getServiceProvider(): ?ServiceProvider
     {
         return $this->serviceProvider;
     }
@@ -279,7 +279,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param ServiceSolution $serviceSolution
      * @return self
      */
-    public function addServiceSolution($serviceSolution)
+    public function addServiceSolution($serviceSolution): self
     {
         if (!$this->serviceSolutions->contains($serviceSolution)) {
             $this->serviceSolutions->add($serviceSolution);
@@ -295,7 +295,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param ServiceSolution $serviceSolution
      * @return self
      */
-    public function removeServiceSolution($serviceSolution)
+    public function removeServiceSolution($serviceSolution): self
     {
         if ($this->serviceSolutions->contains($serviceSolution)) {
             $this->serviceSolutions->removeElement($serviceSolution);
@@ -341,7 +341,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     /**
      * @return Maturity|null
      */
-    public function getMaturity()
+    public function getMaturity(): ?Maturity
     {
         $this->updateMaturity();
         return $this->maturity;
@@ -375,7 +375,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
                 }
             }
         }
-        if (count($groupedMaturities) == 1) {
+        if (count($groupedMaturities) === 1) {
             $maturity = current($groupedMaturities);
         }
         $this->maturity = $maturity;
@@ -385,7 +385,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function addSpecializedProcedure($specializedProcedure)
+    public function addSpecializedProcedure($specializedProcedure): self
     {
         if (!$this->specializedProcedures->contains($specializedProcedure)) {
             $this->specializedProcedures->add($specializedProcedure);
@@ -399,7 +399,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function removeSpecializedProcedure($specializedProcedure)
+    public function removeSpecializedProcedure($specializedProcedure): self
     {
         if ($this->specializedProcedures->contains($specializedProcedure)) {
             $this->specializedProcedures->removeElement($specializedProcedure);
@@ -461,7 +461,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param Portal $portal
      * @return self
      */
-    public function addPortal($portal)
+    public function addPortal($portal): self
     {
         if (!$this->portals->contains($portal)) {
             $this->portals->add($portal);
@@ -475,7 +475,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param Portal $portal
      * @return self
      */
-    public function removePortal($portal)
+    public function removePortal($portal): self
     {
         if ($this->portals->contains($portal)) {
             $this->portals->removeElement($portal);
@@ -505,7 +505,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param Commune $commune
      * @return self
      */
-    public function addCommune($commune)
+    public function addCommune($commune): self
     {
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
@@ -519,7 +519,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param Commune $commune
      * @return self
      */
-    public function removeCommune($commune)
+    public function removeCommune($commune): self
     {
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);
@@ -565,7 +565,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param Authentication $authentication
      * @return self
      */
-    public function addAuthentication($authentication)
+    public function addAuthentication($authentication): self
     {
         if (!$this->authentications->contains($authentication)) {
             $this->authentications->add($authentication);
@@ -579,7 +579,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param Authentication $authentication
      * @return self
      */
-    public function removeAuthentication($authentication)
+    public function removeAuthentication($authentication): self
     {
         if ($this->authentications->contains($authentication)) {
             $this->authentications->removeElement($authentication);
@@ -609,7 +609,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param AnalogService $analogService
      * @return self
      */
-    public function addAnalogService($analogService)
+    public function addAnalogService($analogService): self
     {
         if (!$this->analogServices->contains($analogService)) {
             $this->analogServices->add($analogService);
@@ -623,7 +623,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param AnalogService $analogService
      * @return self
      */
-    public function removeAnalogService($analogService)
+    public function removeAnalogService($analogService): self
     {
         if ($this->analogServices->contains($analogService)) {
             $this->analogServices->removeElement($analogService);
@@ -653,7 +653,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param OpenData $openData
      * @return self
      */
-    public function addOpenDataItem($openData)
+    public function addOpenDataItem($openData): self
     {
         if (!$this->openDataItems->contains($openData)) {
             $this->openDataItems->add($openData);
@@ -667,7 +667,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param OpenData $openData
      * @return self
      */
-    public function removeOpenDataItem($openData)
+    public function removeOpenDataItem($openData): self
     {
         if ($this->openDataItems->contains($openData)) {
             $this->openDataItems->removeElement($openData);
@@ -697,7 +697,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param FormServer $formServer
      * @return self
      */
-    public function addFormServer($formServer)
+    public function addFormServer($formServer): self
     {
         if (!$this->formServers->contains($formServer)) {
             $this->formServers->add($formServer);
@@ -711,7 +711,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param FormServer $formServer
      * @return self
      */
-    public function removeFormServer($formServer)
+    public function removeFormServer($formServer): self
     {
         if ($this->formServers->contains($formServer)) {
             $this->formServers->removeElement($formServer);
@@ -741,7 +741,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param PaymentType $paymentType
      * @return self
      */
-    public function addPaymentType($paymentType)
+    public function addPaymentType($paymentType): self
     {
         if (!$this->paymentTypes->contains($paymentType)) {
             $this->paymentTypes->add($paymentType);
@@ -755,7 +755,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param PaymentType $paymentType
      * @return self
      */
-    public function removePaymentType($paymentType)
+    public function removePaymentType($paymentType): self
     {
         if ($this->paymentTypes->contains($paymentType)) {
             $this->paymentTypes->removeElement($paymentType);
@@ -785,7 +785,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function addImplementationProject($implementationProject)
+    public function addImplementationProject($implementationProject): self
     {
         if (!$this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->add($implementationProject);
@@ -799,7 +799,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function removeImplementationProject($implementationProject)
+    public function removeImplementationProject($implementationProject): self
     {
         if ($this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->removeElement($implementationProject);
@@ -825,11 +825,14 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
         $this->implementationProjects = $implementationProjects;
     }
 
-    public function getDisplayName()
+    /**
+     * @return string
+     */
+    public function getDisplayName(): string
     {
-        $label = $this->getName();
+        $label = (string) $this->getName();
         if (empty($label)) {
-            $label = $this->getId();
+            $label = (string) $this->getId();
             if (empty($label)) {
                 $label = 'Neue Lösung';
             } else {
@@ -859,7 +862,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param Contact $solutionContact
      * @return self
      */
-    public function addSolutionContact($solutionContact)
+    public function addSolutionContact($solutionContact): self
     {
         if (!$this->solutionContacts->contains($solutionContact)) {
             $this->solutionContacts->add($solutionContact);
@@ -873,7 +876,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * @param Contact $solutionContact
      * @return self
      */
-    public function removeSolutionContact($solutionContact)
+    public function removeSolutionContact($solutionContact): self
     {
         if ($this->solutionContacts->contains($solutionContact)) {
             $this->solutionContacts->removeElement($solutionContact);
