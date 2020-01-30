@@ -30,7 +30,7 @@ trait NamedEntityTrait
     /**
      * Set name
      *
-     * @param string $name
+     * @param string|null $name
      * @return self
      * @noinspection ReturnTypeCanBeDeclaredInspection
      */
@@ -44,7 +44,7 @@ trait NamedEntityTrait
     /**
      * Get name
      *
-     * @return string
+     * @return string|null
      */
     public function getName(): ?string
     {

@@ -4,6 +4,7 @@ namespace App\Admin;
 
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\ServiceTrait;
+use App\Admin\Traits\SolutionTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\Status;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
@@ -20,8 +21,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
-    use ServiceTrait;
     use MinistryStateTrait;
+    use ServiceTrait;
+    use SolutionTrait;
 
     /**
      * @var string[]
@@ -90,14 +92,14 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
         $this->addStateMinistriesFormFields($formMapper);
         $formMapper
             ->add('bureaus', ModelType::class, [
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'multiple' => true,
-                    'by_reference' => false,
-                    'choice_translation_domain' => false,
-                ]
-            );
+                'label' => 'app.service_system.entity.bureaus_form',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ]);
         $formMapper->end()
             ->end();
         $formMapper->tab('app.service_system.tabs.services')
@@ -133,6 +135,28 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
                     )
                 ->end()
             ->end();
+
+        $formMapper->tab('app.service_system.tabs.solutions')
+            ->with('app.service_system.entity.solutions', [
+                'label' => false,
+                'box_class' => 'box-tab',
+                'translation_domain' => 'messages',
+            ])
+            ->add('solutions', ModelType::class,
+                [
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ],
+                [
+                    'admin_code' => SolutionAdmin::class,
+                ]
+            )
+            ->end()
+        ->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -166,6 +190,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
         );
         $datagridMapper->add('status');
         $this->addStateMinistriesDatagridFilters($datagridMapper);
+        $this->addSolutionsDatagridFilters($datagridMapper);
         $datagridMapper->add('bureaus',
             null,
             [],
@@ -211,6 +236,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
         $this->addStateMinistriesShowFields($showMapper);
         $showMapper->add('bureaus');
         $this->addServicesShowFields($showMapper);
+        $this->addSolutionsShowFields($showMapper);
         //$this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('situation.subject', null, [
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',

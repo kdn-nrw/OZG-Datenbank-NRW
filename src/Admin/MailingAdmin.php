@@ -8,10 +8,12 @@ use App\Entity\Contact;
 use App\Entity\Mailing;
 use App\Entity\MailingContact;
 use App\Validator\Constraints\MailingSenderEmail;
+use DateTime;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
@@ -37,28 +39,30 @@ class MailingAdmin extends AbstractAppAdmin
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        $id = $admin->getRequest()->get('id');
+        if (null !== $admin) {
+            $id = $admin->getRequest()->get('id');
 
-        $menu->addChild('app.mailing.actions.show', [
-            'uri' => $admin->generateUrl('show', ['id' => $id])
-        ]);
-
-        if ($this->isGranted('EDIT')) {
-            $menu->addChild('app.mailing.actions.edit', [
-                'uri' => $admin->generateUrl('edit', ['id' => $id])
+            $menu->addChild('app.mailing.actions.show', [
+                'uri' => $admin->generateUrl('show', ['id' => $id])
             ]);
-        }
 
-        if ($this->isGranted('LIST')) {
-            $menu->addChild('app.mailing.actions.contact_list', [
-                'uri' => $admin->getChild(MailingContactAdmin::class)->generateUrl('list', ['id' => $id])
-            ]);
+            if ($this->isGranted('EDIT')) {
+                $menu->addChild('app.mailing.actions.edit', [
+                    'uri' => $admin->generateUrl('edit', ['id' => $id])
+                ]);
+            }
+
+            if ($this->isGranted('LIST')) {
+                $menu->addChild('app.mailing.actions.contact_list', [
+                    'uri' => $admin->getChild(MailingContactAdmin::class)->generateUrl('list', ['id' => $id])
+                ]);
+            }
         }
     }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         $formMapper
             ->with('app.mailing.groups.default')
                 ->add('subject', TextType::class)
@@ -223,7 +227,7 @@ class MailingAdmin extends AbstractAppAdmin
         if (!in_array($object->getStatus(), [
             Mailing::STATUS_FINISHED,
             Mailing::STATUS_CANCELLED,
-        ])) {
+        ], false)) {
             $this->updateMailingContacts($object);
         }
         $object->updateSentCount();
@@ -235,7 +239,7 @@ class MailingAdmin extends AbstractAppAdmin
         if (!in_array($object->getStatus(), [
             Mailing::STATUS_FINISHED,
             Mailing::STATUS_CANCELLED,
-        ])) {
+        ], false)) {
             $this->updateMailingContacts($object);
             //$this->updateSentCount();
         }
@@ -279,7 +283,11 @@ class MailingAdmin extends AbstractAppAdmin
         $mailingContacts = $object->getMailingContacts();
         foreach ($mailingContacts as $child) {
             if ($object->contactIsBlacklisted($child->getContact())) {
-                $this->modelManager->delete($child);
+                try {
+                    $this->modelManager->delete($child);
+                } catch (ModelManagerException $e) {
+                    unset($e);
+                }
                 $object->removeMailingContact($child);
             }
         }
@@ -293,19 +301,24 @@ class MailingAdmin extends AbstractAppAdmin
      * @param Mailing $object
      * @param Contact $contact
      */
-    private function addContactToMailingOnce(Mailing $object, Contact $contact) {
+    private function addContactToMailingOnce(Mailing $object, Contact $contact): void
+    {
 
         if (!$object->contactIsBlacklisted($contact)) {
             $contactIds = $object->getContactIds();
-            if (!in_array($contact->getId(), $contactIds)) {
+            if (!in_array($contact->getId(), $contactIds, false)) {
                 $mailingContact = new MailingContact();
                 $mailingContact->setSendStatus(Mailing::STATUS_NEW);
-                if (in_array($object->getStatus(), [Mailing::STATUS_PREPARED])) {
+                if ($object->getStatus() === Mailing::STATUS_PREPARED) {
                     $mailingContact->setSendStatus(Mailing::STATUS_PREPARED);
                 }
                 $mailingContact->setMailing($object);
                 $mailingContact->setContact($contact);
-                $this->modelManager->create($mailingContact);
+                try {
+                    $this->modelManager->create($mailingContact);
+                } catch (ModelManagerException $e) {
+                    unset($e);
+                }
                 $object->addMailingContact($mailingContact);
             }
         }

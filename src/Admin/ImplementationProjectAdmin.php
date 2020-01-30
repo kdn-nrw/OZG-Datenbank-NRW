@@ -7,11 +7,13 @@ use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationStatus;
+use DateTime;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\DatePickerType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,6 +28,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $now = new DateTime();
+        $maxYear = (int) $now->format('Y') + 2;
         $formMapper->add('name', TextType::class);
         $this->addSolutionsFormFields($formMapper);
         $this->addServiceSystemsFormFields($formMapper);
@@ -39,6 +43,14 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
                 'btn_add' => false,
                 'required' => true,
                 'choice_translation_domain' => false,
+            ])
+            ->add('projectStartAt', DatePickerType::class, [
+                //'years' => range(2018, (int)$now->format('Y') + 2),
+                'dp_min_date' => new DateTime('2018-01-01 00:00:00'),
+                'dp_max_date' => new DateTime($maxYear .'-12-31 23:59:59'),
+                'dp_use_current' => false,
+                'datepicker_use_button' => true,
+                'required' => false,
             ])
             ->add('notes', SimpleFormatterType::class, [
                 'format' => 'richhtml',
@@ -63,6 +75,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('status');
+        $datagridMapper->add('projectStartAt');
         $this->addContactsDatagridFilters($datagridMapper);
         $this->addContactsDatagridFilters($datagridMapper, 'interestedContacts');
         $this->addContactsDatagridFilters($datagridMapper, 'participationContacts');
@@ -72,14 +85,18 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
     {
         $listMapper
             ->addIdentifier('name');
-        $this->addSolutionsListFields($listMapper);
-        $this->addServiceSystemsListFields($listMapper);
         $listMapper
             ->add('status', 'choice', [
                 'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
             ]);
+        $listMapper->add('projectStartAt', null, [
+            // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
+            'pattern' => 'MMMM yyyy',
+        ]);
+        $this->addServiceSystemsListFields($listMapper);
+        //$this->addSolutionsListFields($listMapper);
         $this->addDefaultListActions($listMapper);
     }
 
@@ -91,10 +108,13 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $showMapper->add('name')
             ->add('description')
             ->add('status', 'choice', [
-                'editable' => true,
+                //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
-                'template' => 'ServiceAdmin/show_choice.html.twig',
+            ])
+            ->add('projectStartAt', null, [
+                // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
+                'pattern' => 'MMMM yyyy',
             ])
             ->add('notes', 'html');
         $this->addLaboratoriesShowFields($showMapper);

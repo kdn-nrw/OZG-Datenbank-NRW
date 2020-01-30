@@ -2,7 +2,6 @@
 
 namespace App\Admin\Frontend;
 
-use App\Admin\Traits\ServiceSystemTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
@@ -18,7 +17,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         $datagridMapper->add('name');
         $datagridMapper->add('solutions',
             null,[
-                'admin_code' => \App\Admin\Frontend\SolutionAdmin::class,
+                'admin_code' => SolutionAdmin::class,
             ],
             null,
             ['expanded' => false, 'multiple' => true]
@@ -63,7 +62,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         $showMapper
             ->add('name')
             ->add('solutions', null, [
-                'admin_code' => \App\Admin\Frontend\SolutionAdmin::class,
+                'admin_code' => SolutionAdmin::class,
             ])
             ->add('serviceSystems')
             ->add('description')

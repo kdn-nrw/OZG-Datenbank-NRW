@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\SoftdeletableEntityInterface;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -115,13 +116,28 @@ class ServiceSystem extends BaseNamedEntity
      */
     private $bureaus;
 
+    /**
+     * @var Solution[]|Collection
+     * @ORM\ManyToMany(targetEntity="Solution")
+     * @ORM\JoinTable(name="ozg_service_system_solution",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $solutions;
+
     public function __construct()
     {
         $this->bureaus = new ArrayCollection();
-        $this->services = new ArrayCollection();
-        $this->jurisdictions = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
+        $this->jurisdictions = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
+        $this->services = new ArrayCollection();
+        $this->solutions = new ArrayCollection();
         $this->stateMinistries = new ArrayCollection();
     }
 
@@ -288,7 +304,7 @@ class ServiceSystem extends BaseNamedEntity
         if ($this->services->contains($service)) {
             $this->services->removeElement($service);
             if ($service instanceof SoftdeletableEntityInterface) {
-                $service->setDeletedAt(new \DateTime());
+                $service->setDeletedAt(new DateTime());
             }
         }
 
@@ -309,6 +325,50 @@ class ServiceSystem extends BaseNamedEntity
     public function setServices(Collection $services): void
     {
         $this->services = $services;
+    }
+
+    /**
+     * @param Solution $solution
+     * @return self
+     */
+    public function addSolution($solution): self
+    {
+        if (!$this->solutions->contains($solution)) {
+            $this->solutions->add($solution);
+            //$solution->addServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Solution $solution
+     * @return self
+     */
+    public function removeSolution($solution): self
+    {
+        if ($this->solutions->contains($solution)) {
+            $this->solutions->removeElement($solution);
+            //$solution->removeServiceSystem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Solution[]|Collection
+     */
+    public function getSolutions()
+    {
+        return $this->solutions;
+    }
+
+    /**
+     * @param Solution[]|Collection $solutions
+     */
+    public function setSolutions($solutions): void
+    {
+        $this->solutions = $solutions;
     }
 
     /**

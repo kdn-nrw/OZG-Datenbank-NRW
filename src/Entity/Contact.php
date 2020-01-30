@@ -18,16 +18,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Contact extends BaseEntity implements ImportEntityInterface
 {
-    const CONTACT_TYPE_DEFAULT = 'default';
-    const CONTACT_TYPE_COMMUNE = 'commune';
-    const CONTACT_TYPE_SERVICE_PROVIDER = 'service_provider';
-    const CONTACT_TYPE_MINISTRY_STATE = 'ministry_state';
-    const CONTACT_TYPE_IMPORT_CMS = 'cms_address';
+    public const CONTACT_TYPE_DEFAULT = 'default';
+    public const CONTACT_TYPE_COMMUNE = 'commune';
+    public const CONTACT_TYPE_SERVICE_PROVIDER = 'service_provider';
+    public const CONTACT_TYPE_MINISTRY_STATE = 'ministry_state';
+    public const CONTACT_TYPE_IMPORT_CMS = 'cms_address';
 
-    const GENDER_MALE = 0;
-    const GENDER_FEMALE = 1;
-    const GENDER_OTHER = 2;
-    const GENDER_UNKNOWN = 3;
+    public const GENDER_MALE = 0;
+    public const GENDER_FEMALE = 1;
+    public const GENDER_OTHER = 2;
+    public const GENDER_UNKNOWN = 3;
 
     use CategoryTrait;
     use HideableEntityTrait;
@@ -201,10 +201,11 @@ class Contact extends BaseEntity implements ImportEntityInterface
      */
     public function setGender(?int $gender): void
     {
-        if (null === $this->gender || $this->gender < 0) {
+        if (null === $gender || $gender < 0) {
             $this->gender = self::GENDER_UNKNOWN;
+        } else {
+            $this->gender = $gender;
         }
-        $this->gender = $gender;
     }
 
     /**
@@ -382,7 +383,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
     public function setMinistryState(?MinistryState $ministryState): void
     {
         $this->ministryState = $ministryState;
-        if (empty($this->organisation)) {
+        if (null !== $ministryState && empty($this->organisation)) {
             $this->organisation = $ministryState->getName();
         }
     }
@@ -401,7 +402,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
     public function setServiceProvider(?ServiceProvider $serviceProvider): void
     {
         $this->serviceProvider = $serviceProvider;
-        if (empty($this->organisation)) {
+        if (null !== $serviceProvider && empty($this->organisation)) {
             $this->organisation = $serviceProvider->getName();
         }
     }
@@ -420,7 +421,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
     public function setCommune(?Commune $commune): void
     {
         $this->commune = $commune;
-        if (empty($this->organisation)) {
+        if (null !== $commune && empty($this->organisation)) {
             $this->organisation = $commune->getName();
         }
     }
@@ -437,7 +438,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
 
     public function getFullName(): string
     {
-        $name = trim((string) $this->getFirstName() . ' ' . (string) $this->getLastName());
+        $name = trim($this->getFirstName() . ' ' . $this->getLastName());
         if ($name) {
             $title = $this->getTitle();
             if ($title) {
@@ -451,7 +452,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution)
+    public function addSolution($solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -465,7 +466,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution)
+    public function removeSolution($solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
@@ -495,7 +496,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function addImplementationProject($implementationProject)
+    public function addImplementationProject($implementationProject): self
     {
         if (!$this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->add($implementationProject);
@@ -509,7 +510,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function removeImplementationProject($implementationProject)
+    public function removeImplementationProject($implementationProject): self
     {
         if ($this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->removeElement($implementationProject);

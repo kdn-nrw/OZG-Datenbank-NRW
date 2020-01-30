@@ -2,14 +2,10 @@
 <td>
     {% if elementUrl is defined and elementUrl %}
         <a href="{{ elementUrl }}">
-            {% if child.name %}
-                {{ child.name }}
-            {% else %}
-                #{{ child.id }}
-            {% endif %}
+            {{ child.displayName }}
         </a>
     {% else %}
-        {{ child.name }}
+        {{ child.displayName }}
     {% endif %}
 </td>
 <td>
@@ -21,7 +17,20 @@
     {{ child.description|nl2br }}
 </td>
 <td>
+    {% set contactCount = child.solutionContacts|length%}
+    {% if contactCount > 0 %}
+        {% for contact in child.solutionContacts %}
+            {# @var contact \App\Entity\Contact #}
+            {% if loop.index > 1 %}
+                ,
+            {% endif %}
+            {{ contact ~ '' }}
+        {% endfor %}
+    {% endif %}
     {% if child.contact %}
+        {% if contactCount > 0 %}
+            ,
+        {% endif %}
         {{ child.contact }}
     {% endif %}
 </td>

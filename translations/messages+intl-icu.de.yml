@@ -116,6 +116,7 @@ app:
     entity:
       name: Umsetzungsprojektname
       description: Projektinformationen
+      project_start_at: Projektstart
       status: Umsetzungsstatus
       service_systems: OZG-Leistungen
       solutions: Lösungen
@@ -345,6 +346,7 @@ app:
       general: Allgemein
       relations: Relationen
       services: Leika-Leistungen
+      solutions: Lösungen
     entity:
       name: OZG Leistung
       service_key: OZG-ID
@@ -359,6 +361,8 @@ app:
       state_ministries: Ministerien (Land)
       laboratories: Labore
       bureaus: Fachlichkeiten
+      bureaus_form: Fachlichkeiten (werden an Leika-Leistungen vererbt)
+      solutions: Lösungen
   situation:
     list: Lage
     create: Lage anlegen
