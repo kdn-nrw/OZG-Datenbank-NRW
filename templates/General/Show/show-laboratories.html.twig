@@ -1,15 +1,25 @@
-{% if object.laboratories|length > 0 %}
+{% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
-    {% set route_name = field_description.options.route.name %}
-    {% set createEditLink = route_name and field_description.hasassociationadmin
-        and field_description.associationadmin.hasRoute(route_name) and field_description.associationadmin.hasAccess(route_name) %}
+    {% set refAdmin = null %}
+    {% if not field_description.hasassociationadmin %}
+        {% set isAdminMode = (context is not defined or context.getSetting('mode') == 'admin') and admin_pool is defined %}
+        {% if isAdminMode %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\LaboratoryAdmin') %}
+        {% endif %}
+    {% else %}
+        {% set refAdmin = field_description.associationadmin %}
+    {% endif %}
+    {% set editRouteName = field_description.options.route.name %}
+    {% set createEditLink = editRouteName and refAdmin is not null and refAdmin.hasRoute(editRouteName) and refAdmin.hasAccess(editRouteName) %}
+    {% set showRouteName = 'show' %}
+    {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
                 {{ 'app.laboratory.list'|trans }}
             </h4>
         </div>
-        <div class="box-body">
+        <div class="box-body table-responsive no-padding">
             <table class="table table-bordered table-condensed">
                 <tr>
                     <th>
@@ -31,11 +41,17 @@
                         <th></th>
                     {% endif %}
                 </tr>
-                {% for child in object.laboratories %}
+                {% for child in entities %}
                     {# @var child \App\Entity\Laboratory #}
                     <tr>
                         <td>
-                            {{ child.name }}
+                            {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
+                            <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
+                                    {{ child.name }}
+                                </a>
+                            {% else %}
+                                {{ child.name }}
+                            {% endif %}
                         </td>
                         <td>
                             {% if child.url %}
@@ -59,8 +75,13 @@
                         </td>
                         {% if createEditLink %}
                         <td>
-                            {% if field_description.associationadmin.hasAccess(route_name, child) %}
-                                <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, child, field_description.options.route.parameters) }}">
+                            {% if refAdmin.hasAccess(editRouteName, child) %}
+                                {% if field_description.options.route.parameters %}
+                                    {% set editParameters = field_description.options.route.parameters %}
+                                {% else %}
+                                    {% set editParameters = {'id': child.id} %}
+                                {% endif %}
+                                <a href="{{ refAdmin.generateObjectUrl(editRouteName, child, editParameters) }}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
                             {% endif %}

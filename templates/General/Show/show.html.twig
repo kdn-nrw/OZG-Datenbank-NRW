@@ -1,0 +1,77 @@
+{% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
+
+{% block show_groups %}
+    {# @var object \App\Entity\Base\BaseEntity #}
+    <div class="row">
+        {% block field_row %}
+            {% for code in groups %}
+                {% set show_group = admin.showgroups[code] %}
+
+                {% block app_show_default_fields %}
+                    <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
+                        <div class="{{ show_group.box_class }}">
+                            <div class="box-header">
+                                <h4 class="box-title">
+                                    {% block show_title %}
+                                        {{ show_group.label|trans({}, show_group.translation_domain|default(admin.translationDomain)) }}
+                                    {% endblock %}
+                                </h4>
+                            </div>
+                            <div class="box-body{% block app_show_custom_box_body_classes %} table-responsive no-padding{% endblock %}">
+                                {% block app_show_custom_fields_top %}
+                                {% endblock %}
+                                <table class="table">
+                                    <tbody>
+                                    {% for field_name in show_group.fields %}
+                                        {% block show_field %}
+                                            {% if field_name not in ['serviceSystems', 'laboratories', 'services', 'solutions', 'serviceProviders',] %}
+                                                <tr class="sonata-ba-view-container">
+                                                    {% if elements[field_name] is defined %}
+                                                        {{ elements[field_name]|render_view_element(object) }}
+                                                    {% endif %}
+                                                </tr>
+                                            {% endif %}
+                                        {% endblock %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endblock %}
+                {% block app_show_custom_fields %}
+                    {% if elements['serviceSystems'] is defined %}
+                        <div class="col-xs-12">
+                            {# {{ elements['serviceSystems']|render_view_element(object) }} #}
+                            {% include 'General/Show/show-service-systems.html.twig' with {'entities': object.serviceSystems, 'field_description': elements['serviceSystems']} %}
+                        </div>
+                    {% endif %}
+                    {% if elements['services'] is defined %}
+                        <div class="col-xs-12">
+                            {% include 'General/Show/show-services.html.twig' with {'entities': object.services, 'field_description': elements['services']} %}
+                        </div>
+                    {% endif %}
+                    {% if elements['laboratories'] is defined %}
+                        <div class="col-xs-12">
+                            {# {{ elements['laboratories']|render_view_element(object) }} #}
+                            {% include 'General/Show/show-laboratories.html.twig' with {'entities': object.laboratories, 'field_description': elements['laboratories']} %}
+                        </div>
+                    {% endif %}
+                    {% if elements['solutions'] is defined %}
+                        <div class="col-xs-12">
+                            {# {{ elements['solutions']|render_view_element(object) }} #}
+                            {% include 'General/Show/show-solutions.html.twig' with {'entities': object.solutions, 'field_description': elements['solutions']} %}
+                        </div>
+                    {% endif %}
+                    {% if elements['serviceProviders'] is defined %}
+                        <div class="col-xs-12">
+                            {# {{ elements['solutions']|render_view_element(object) }} #}
+                            {% include 'General/Show/show-service-providers.html.twig' with {'entities': object.serviceProviders, 'field_description': elements['serviceProviders']} %}
+                        </div>
+                    {% endif %}
+                {% endblock %}
+            {% endfor %}
+        {% endblock %}
+
+    </div>
+{% endblock %}

@@ -50,7 +50,6 @@ trait LaboratoryTrait
         $showMapper
             ->add('laboratories', null,[
                 'admin_code' => LaboratoryAdmin::class,
-                //'template' => 'General/Show/show-laboratories.twig',
             ]);
     }
 }

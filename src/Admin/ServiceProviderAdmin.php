@@ -73,8 +73,6 @@ class ServiceProviderAdmin extends AbstractAppAdmin
         $this->addAddressShowFields($showMapper);
         $showMapper->add('url', 'url');
         $this->addContactsShowFields($showMapper, true);
-        $showMapper->add('communes', null, [
-                'template' => 'General/Show/show-communes.html.twig',
-            ]);
+        $showMapper->add('communes');
     }
 }

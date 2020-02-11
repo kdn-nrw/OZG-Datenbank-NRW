@@ -353,6 +353,8 @@ services:
       - ~
       - App\Entity\ServiceProvider
       - ~
+    calls:
+      - [setTemplate, ['show', 'ServiceProviderAdmin/show.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm

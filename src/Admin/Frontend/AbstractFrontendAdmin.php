@@ -8,9 +8,9 @@
 
 namespace App\Admin\Frontend;
 
-
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class AbstractFrontendAdmin
@@ -23,13 +23,18 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
 {
     use FrontendTranslatorStrategyTrait;
 
-    const APP_CONTEXT_BE = 'backend';
-    const APP_CONTEXT_FE = 'frontend';
+    public const APP_CONTEXT_BE = 'backend';
+    public const APP_CONTEXT_FE = 'frontend';
 
     protected $appContext = self::APP_CONTEXT_BE;
 
     protected $adminBaseRouteName;
     protected $adminBaseRoutePattern;
+    /**
+     * Label for the default show group header
+     * @var string
+     */
+    protected $defaultShowGroupLabel = 'object_name';
 
     /**
      * @param string $appContext
@@ -66,9 +71,9 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
         }
     }
 
-    protected function isFrontend()
+    protected function isFrontend(): bool
     {
-        return $this->appContext == self::APP_CONTEXT_FE;
+        return $this->appContext === self::APP_CONTEXT_FE;
     }
 
     public function hasRoute($name)
@@ -79,7 +84,7 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
         return parent::hasRoute($name);
     }
 
-    protected function addDefaultListActions(ListMapper $listMapper)
+    protected function addDefaultListActions(ListMapper $listMapper): void
     {
         $listMapper->add('_action', null, [
             'label' => 'app.common.actions',
@@ -88,6 +93,29 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
                 'show' => [],
             ]
         ]);
+    }
+
+    /**
+     * Override the label for the default group by calling this function before any fields have been added
+     * The label should be overridden, of the
+     *
+     * @param ShowMapper $show
+     */
+    final protected function setDefaultShowGroupLabel(ShowMapper $show): void
+    {
+        $groups = $this->getShowGroups();
+        if (!$groups) {
+            $translatorStrategy = $this->getLabelTranslatorStrategy();
+            $show->with('default', [
+                'auto_created' => true,
+                'label' => $translatorStrategy->getLabel($this->defaultShowGroupLabel)
+            ]);
+        }
+    }
+
+    protected function configureShowFields(ShowMapper $show)
+    {
+        $this->setDefaultShowGroupLabel($show);
     }
 
     /*

@@ -1,79 +1,39 @@
+{% extends 'General/Show/show.html.twig' %}
 
-{% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
+{% block show_title %}
+    {{ 'app.implementation_project.entity.name'|trans }}: <strong>{{ object.name }}</strong>
+{% endblock %}
 
+{% block app_show_custom_box_body_classes %}{% endblock %}
 
-{% block show_groups %}
-    {# @var object \App\Entity\ImplementationProject #}
-    <div class="row">
-        {% block field_row %}
-            {% for code in groups %}
-                {% set show_group = admin.showgroups[code] %}
-                <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
-                    <div class="{{ show_group.box_class }}">
-                        <div class="box-header">
-                            <h4 class="box-title">
-                                {% block show_title %}
-                                    {{ 'app.implementation_project.entity.name'|trans }}: <strong>{{ object.name }}</strong>
-                                {% endblock %}
-                            </h4>
-                        </div>
-                        <div class="box-body">
-                            {% if object.description %}
-                                <p class="item-property">
-                                    {{ object.description|nl2br }}
-                                </p>
-                            {% endif %}
+{% block show_field %}
+    {% if field_name not in ['name', 'description', 'notes', 'serviceSystems', 'solutions',] %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
 
-                            <table class="table">
-                                <tbody>
-                                {% set excludeFields = ['name', 'description', 'notes', 'serviceSystems', 'solutions'] %}
-                                {% for field_name in show_group.fields %}
-                                    {% block show_field %}
-                                        {% if elements[field_name] is defined and field_name not in excludeFields %}
-                                            <tr class="sonata-ba-view-container">
-                                                {% if elements[field_name] is defined %}
-                                                    {{ elements[field_name]|render_view_element(object) }}
-                                                {% endif %}
-                                            </tr>
-                                        {% endif %}
-                                    {% endblock %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+{% block app_show_custom_fields_top %}
+    {% if object.description %}
+        <p class="item-property">
+            {{ object.description|nl2br }}
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block app_show_custom_fields %}
+    {% if object.notes %}
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">
+                        {{ 'app.implementation_project.entity.notes'|trans }}
+                    </h4>
                 </div>
-                {% if object.notes %}
-                <div class="col-xs-12">
-                    <div class="box box-primary">
-                        <div class="box-header">
-                            <h4 class="box-title">
-                                {{ 'app.implementation_project.entity.notes'|trans }}
-                            </h4>
-                        </div>
-                        <div class="box-body">
-                            {{ object.notes|raw }}
-                        </div>
-                    </div>
+                <div class="box-body">
+                    {{ object.notes|raw }}
                 </div>
-                {% endif %}
-                {% if elements['solutions'] %}
-                    <div class="col-xs-12">
-                        {{ elements['solutions']|render_view_element(object) }}
-                    </div>
-                {% endif %}
-                {% if elements['serviceSystems'] %}
-                <div class="col-xs-12">
-                    {% include 'General/Show/show-service-systems.html.twig' %}
-                </div>
-                {% endif %}
-                {% if elements['laboratories'] is defined %}
-                    <div class="col-xs-12">
-                        {% include 'General/Show/show-laboratories.html.twig' with {'object': object, 'field_description': elements['laboratories']} %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% endblock %}
-
-    </div>
+            </div>
+        </div>
+    {% endif %}
+    {{ parent() }}
 {% endblock %}

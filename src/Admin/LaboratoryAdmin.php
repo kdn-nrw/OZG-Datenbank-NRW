@@ -75,9 +75,7 @@ class LaboratoryAdmin extends AbstractAppAdmin
             ->add('name')
             ->add('description')
             ->add('url', 'url')
-            ->add('serviceProviders', null, [
-                'template' => 'General/service-providers.html.twig',
-            ])
+            ->add('serviceProviders')
             ->add('participantsOther');
         $this->addServicesShowFields($showMapper);
     }
