@@ -30,7 +30,10 @@ class SolutionAdmin extends AbstractFrontendAdmin
         );
         $datagridMapper->add('serviceSolutions.service.serviceSystem',
             null,
-            ['label' => 'app.service.entity.service_system'],
+            [
+                'label' => 'app.service.entity.service_system',
+                'admin_code' => ServiceSystemAdmin::class,
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -168,6 +171,7 @@ class SolutionAdmin extends AbstractFrontendAdmin
                 ]
             ])
             ->add('serviceSystems', null, [
+                'admin_code' => ServiceSystemAdmin::class,
                 //'associated_property' => 'name',
                 'template' => 'SolutionAdmin/list-service-systems.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -232,7 +236,9 @@ class SolutionAdmin extends AbstractFrontendAdmin
             ->add('url', 'url', [
             ])
             ->add('contact')
-            ->add('serviceSystems')
+            ->add('serviceSystems', null, [
+                'admin_code' => ServiceSystemAdmin::class,
+            ])
             ->add('serviceSolutions', null, [
                 'associated_property' => 'service'
             ])

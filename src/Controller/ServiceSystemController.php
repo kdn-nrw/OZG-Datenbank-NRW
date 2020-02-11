@@ -2,25 +2,25 @@
 /**
  *
  * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
- * @since     2019-11-08
+ * @copyright 2020 Gert Hammes
+ * @since     2020-11-02
  */
 
 namespace App\Controller;
 
 
 use App\Admin\Frontend\AbstractFrontendAdmin;
-use App\Admin\Frontend\ServiceAdmin;
+use App\Admin\Frontend\ServiceSystemAdmin;
 use Sonata\AdminBundle\Controller\CRUDController;
 
 /**
- * Class ServiceController
+ * Class ServiceSystemController
  *
  * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
- * @since     2019-11-08
+ * @copyright 2020 Gert Hammes
+ * @since     2020-11-02
  */
-class ServiceController extends CRUDController
+class ServiceSystemController extends CRUDController
 {
 
     public function index()
@@ -28,7 +28,7 @@ class ServiceController extends CRUDController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('sonata_admin_dashboard');
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_servicesystem_list');
     }
 
     /**
@@ -39,7 +39,7 @@ class ServiceController extends CRUDController
     protected function configure()
     {
         $request = $this->getRequest();
-        $request->attributes->set('_sonata_admin', ServiceAdmin::class);
+        $request->attributes->set('_sonata_admin', ServiceSystemAdmin::class);
         parent::configure();
         /** @var $admin AbstractFrontendAdmin */
         $admin = $this->admin;

@@ -64,7 +64,9 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
             ])
-            ->add('serviceSystems')
+            ->add('serviceSystems', null, [
+                'admin_code' => ServiceSystemAdmin::class,
+            ])
             ->add('description')
             ->add('status', 'choice', [
                 'editable' => false,

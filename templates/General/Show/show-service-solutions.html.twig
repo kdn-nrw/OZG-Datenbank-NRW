@@ -1,10 +1,18 @@
 {% if entities|length > 0 %}
-    {% set isAdminMode = (context is not defined or context.getSetting('mode') == 'admin') and admin_pool is defined %}
+    {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
     {% set refAdmin = null %}
-    {% if isAdminMode and showSolution %}
-        {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
-    {% elseif isAdminMode  %}
-        {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceAdmin') %}
+    {% if showSolution %}
+        {% if isAdminMode %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
+        {% else %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\SolutionAdmin') %}
+        {% endif %}
+    {% else  %}
+        {% if isAdminMode %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceAdmin') %}
+        {% else %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\ServiceAdmin') %}
+        {% endif %}
     {% endif %}
     {# @var refAdmin \App\Admin\AbstractAppAdmin #}
     {% set route_name = 'edit' %}

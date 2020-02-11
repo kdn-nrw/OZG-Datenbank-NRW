@@ -319,6 +319,21 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
+  App\Admin\Frontend\ServiceSystemAdmin:
+    arguments:
+      - ~
+      - App\Entity\ServiceSystem
+      - ~
+    calls:
+      - [setTemplate, ['show', 'ServiceSystemAdmin/show.html.twig']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.service_system.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Admin\ServiceAdmin:
     arguments:
       - ~

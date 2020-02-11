@@ -10,7 +10,6 @@ namespace App\Admin;
 
 
 use App\Entity\Base\NamedEntityInterface;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -24,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  * @copyright 2019 Gert Hammes
  * @since     2019-08-15
  */
-abstract class AbstractAppAdmin extends AbstractAdmin
+abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
 {
     use AdminTranslatorStrategyTrait;
 
