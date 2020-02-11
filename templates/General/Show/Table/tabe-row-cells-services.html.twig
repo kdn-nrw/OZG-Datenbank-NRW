@@ -1,6 +1,12 @@
 {# @var child \App\Entity\Service #}
 <td>
-    {{ child.name }}
+    {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
+        <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
+            {{ child.name }}
+        </a>
+    {% else %}
+        {{ child.name }}
+    {% endif %}
 </td>
 <td>
     {{ child.serviceKey }}

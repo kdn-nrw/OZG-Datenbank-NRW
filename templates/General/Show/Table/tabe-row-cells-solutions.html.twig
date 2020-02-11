@@ -1,7 +1,7 @@
 {# @var child \App\Entity\Solution #}
 <td>
-    {% if elementUrl is defined and elementUrl %}
-        <a href="{{ elementUrl }}">
+    {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
+        <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
             {{ child.displayName }}
         </a>
     {% else %}

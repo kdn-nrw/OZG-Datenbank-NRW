@@ -17,18 +17,21 @@ app:
     add_sub_record: Neuen Eintrag bearbeiten
     actions: Aktionen
   analog_service:
+    object_name: Analoger Dienst
     list: Analoge Dienste
     create: Analogen Dienst anlegen
     entity:
       name: Name
       solutions: Lösungen
   authentication:
+    object_name: Authentifizierung
     list: Authentifizierungen
     create: Authentifizierung anlegen
     entity:
       name: Methode
       solutions: Lösungen
   bureau:
+    object_name: Fachlichkeit
     list: Fachlichkeit
     create: Fachlichkeit anlegen
     entity:
@@ -36,6 +39,7 @@ app:
       description: Beschreibung
       service_systems: OZG-Leistungen
   category:
+    object_name: Kategorie
     list: Kategorien
     create: Kategorie anlegen
     entity:
@@ -44,6 +48,7 @@ app:
       parent: Ober-Kategorie
       children: Unter-Kategorien
   commune:
+    object_name: Kommune
     list: Kommunen
     create: Kommune anlegen
     actions:
@@ -64,6 +69,7 @@ app:
       contact: Ansprechpartner der Kommune (alt)
       service_providers: IT Dienstleister
   contact:
+    object_name: Kontakt
     list: Kontakte
     create: Kontakt anlegen
     groups:
@@ -104,6 +110,7 @@ app:
       commune: Kommune
       categories: Kategorien
   form_server:
+    object_name: Formularserver
     list: Formularserver
     create: Formularserver anlegen
     entity:
@@ -111,6 +118,7 @@ app:
       url: Url
       solutions: Lösungen
   implementation_project:
+    object_name: Umsetzungsprojekt
     list: Umsetzungsprojekte
     create: Umsetzungsprojekt anlegen
     entity:
@@ -126,6 +134,7 @@ app:
       participation_contacts: Mitarbeit zugesichert
       laboratories: Digitalisierungslabore
   implementation_status:
+    object_name: Umsetzungs-Status
     list: Umsetzungs-Status
     create: Umsetzungs-Status anlegen
     entity:
@@ -133,7 +142,9 @@ app:
       level: Level/Sortierung
       description: Beschreibung
   jurisdiction:
+    object_name: Zuständigkeit-Status
     list: Zuständigkeiten
+    create: Zuständigkeit anlegen
     entity:
       name: Name
       types:
@@ -141,6 +152,7 @@ app:
         state: Land
         commune: Kommunal
   laboratory:
+    object_name: Labor
     list: Labore
     create: Labor anlegen
     entity:
@@ -153,6 +165,7 @@ app:
       services: Leistungen
       implementation_url: Url OZG Umsetzung
   mailing:
+    object_name: Mailing
     list: Mailing
     create: Mailing erstellen
     actions:
@@ -196,6 +209,7 @@ app:
       sent_count: '# verschickt'
       exclude_contacts: Blacklist
   mailing_contact:
+    object_name: Mailing Kontakt
     list: Mailing Kontakte
     create: Mailing Kontakt anlegen
     entity:
@@ -207,6 +221,7 @@ app:
         failed: Fehlgeschlagen
         disabled: Deaktiviert
   manufacturer:
+    object_name: Hersteller
     list: Hersteller
     create: Hersteller anlegen
     entity:
@@ -217,6 +232,7 @@ app:
       url: Url
       specialized_procedures: Anbindung Fachverfahren
   ministry_state:
+    object_name: Ministerium
     list: Ministerien (Land)
     create: Ministerium anlegen
     tabs:
@@ -231,18 +247,21 @@ app:
       contacts: Ansprechpartner
       service_systems: OZG-Leistungen
   maturity:
+    object_name: Reifegrad
     list: Reifegrade
     create: Reifegrad anlegen
     entity:
       name: Name
       description: Beschreibung
   open_data:
+    object_name: Open Data
     list: Open Data
     create: Open Data anlegen
     entity:
       name: Name
       solutions: Lösungen
   payment_type:
+    object_name: Bezahlverfahren
     list: Bezahlverfahren
     create: Bezahlverfahren anlegen
     entity:
@@ -250,6 +269,7 @@ app:
       url: Url
       solutions: Lösungen
   portal:
+    object_name: Portal
     list: Portal
     create: Portal anlegen
     entity:
@@ -258,6 +278,7 @@ app:
       service_provider: IT Dienstleister
       url: Url
   priority:
+    object_name: Priorität
     list: Prioritäten
     create: Priorität anlegen
     entity:
@@ -265,6 +286,7 @@ app:
       level: Level
       description: Beschreibung
   search:
+    object_name: Suche
     list: Detailsuche
     create: Suche anlegen
     entity:
@@ -285,6 +307,7 @@ app:
         one {1 Leika-Leistung}
         other {# Leika-Leistungen}
       }"
+    object_name: Leika-Leistung
     list: Leika-Leistungen
     create: Leika-Leistungen anlegen
     tabs:
@@ -311,8 +334,9 @@ app:
       bureaus: Fachlichkeiten
       inherit_bureaus: Fachlichkeiten von OZG-Leistung übernehmen
       inherit_bureaus.yes: Fachlichkeiten der Leika-Leistung mit Fachlichkeiten der OZG-Leistung erweitern
-      inherit_bureaus.no: Fachlichkeiten der OZG-Leistun nicht übernehmen
+      inherit_bureaus.no: Fachlichkeiten der OZG-Leistung nicht übernehmen
   service_provider:
+    object_name: IT Dienstleister
     list: IT Dienstleister
     create: IT Dienstleister anlegen
     actions:
@@ -331,6 +355,7 @@ app:
       #solutions: Lösungen
       communes: Kommunen
   service_solution:
+    object_name: Lösung für Leistung
     list: Lösung für Leistung
     create: Lösung für Leistung anlegen
     entity:
@@ -340,6 +365,7 @@ app:
       status: Status
       maturity: Reifegrad
   service_system:
+    object_name: OZG-Leistung
     list: OZG-Leistungen
     create: OZG-Leistung anlegen
     tabs:
@@ -364,6 +390,7 @@ app:
       bureaus_form: Fachlichkeiten (werden an Leika-Leistungen vererbt)
       solutions: Lösungen
   situation:
+    object_name: Lage
     list: Lage
     create: Lage anlegen
     entity:
@@ -371,6 +398,7 @@ app:
       subject: Themenfeld
       services: Dienstleistungen
   solution:
+    object_name: Lösung
     list: Lösungen
     create: Lösung anlegen
     recent_solutions: Aktuelle Lösungen
@@ -412,6 +440,7 @@ app:
       payment_types: Bezahlverfahren
       is_published: Lösung öffentlich sichtbar?
   specialized_procedure:
+    object_name: Fachverfahren
     list: Fachverfahren
     create: Fachverfahren anlegen
     entity:
@@ -421,6 +450,7 @@ app:
       solutions: Lösungen
       manufacturers: Hersteller
   status:
+    object_name: Status
     list: Status
     create: Status anlegen
     entity:
@@ -428,12 +458,14 @@ app:
       level: Level/Sortierung
       description: Beschreibung
   subject:
+    object_name: Themenfeld
     list: Themenfelder
     create: Themenfeld anlegen
     entity:
       name: Name
       situations: Lage
   user:
+    object_name: Benutzer
     list: Benutzer
     create: Benutzer anlegen
     entity:

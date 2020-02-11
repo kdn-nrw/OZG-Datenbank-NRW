@@ -1,5 +1,5 @@
 {% if entities|length > 0 %}
-    {% set isAdminMode = admin_pool is defined %}
+    {% set isAdminMode = (context is not defined or context.getSetting('mode') == 'admin') and admin_pool is defined %}
     {% set refAdmin = null %}
     {% if isAdminMode and showSolution %}
         {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
@@ -8,7 +8,9 @@
     {% endif %}
     {# @var refAdmin \App\Admin\AbstractAppAdmin #}
     {% set route_name = 'edit' %}
-    {% set createEditLink = refAdmin is not null and route_name and refAdmin.hasRoute(route_name) and refAdmin.hasAccess(route_name) %}
+    {% set createEditLink = refAdmin is not null and refAdmin.hasRoute(route_name) and refAdmin.hasAccess(route_name) %}
+    {% set showRouteName = 'show' %}
+    {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
@@ -19,7 +21,7 @@
                 {% endif %}
             </h4>
         </div>
-        <div class="box-body">
+        <div class="box-body table-responsive no-padding">
             <table class="table table-bordered table-condensed">
                 <tr>
                     {% if showSolution %}
@@ -38,7 +40,7 @@
                     <tr>
                         {% if showSolution %}
                             {% set editObjectId = child.solution.id %}
-                            {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution, 'elementUrl': null} %}
+                            {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
                         {% else %}
                             {% set editObjectId = child.service.id %}
                             {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}

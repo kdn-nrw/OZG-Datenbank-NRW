@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 use App\Admin\Traits\ContactTrait;
+use App\Admin\Traits\ServiceSystemTrait;
 use App\Entity\Status;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -22,6 +23,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     use ContactTrait;
+    use ServiceSystemTrait;
+
     protected $datagridValues = [
 
         // display the first page (default = 1)
@@ -36,27 +39,29 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
-        if (!$childAdmin && !in_array($action, ['edit'])) {
+        if (!$childAdmin && $action !== 'edit') {
             return;
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        $id = $admin->getRequest()->get('id');
+        if (null !== $admin) {
+            $id = $admin->getRequest()->get('id');
 
-        $menu->addChild('app.solution.actions.show', [
-            'uri' => $admin->generateUrl('show', ['id' => $id])
-        ]);
-
-        if ($this->isGranted('EDIT')) {
-            $menu->addChild('app.solution.actions.edit', [
-                'uri' => $admin->generateUrl('edit', ['id' => $id])
+            $menu->addChild('app.solution.actions.show', [
+                'uri' => $admin->generateUrl('show', ['id' => $id])
             ]);
-        }
 
-        if ($this->isGranted('LIST')) {
-            $menu->addChild('app.solution.actions.list', [
-                'uri' => $admin->getChild(ServiceSolutionAdmin::class)->generateUrl('list', ['id' => $id])
-            ]);
+            if ($this->isGranted('EDIT')) {
+                $menu->addChild('app.solution.actions.edit', [
+                    'uri' => $admin->generateUrl('edit', ['id' => $id])
+                ]);
+            }
+
+            if ($this->isGranted('LIST')) {
+                $menu->addChild('app.solution.actions.list', [
+                    'uri' => $admin->getChild(ServiceSolutionAdmin::class)->generateUrl('list', ['id' => $id])
+                ]);
+            }
         }
     }
 
@@ -91,7 +96,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                         'required' => false
                     ]);
             $this->addContactsFormFields($formMapper, true, false, 'solutionContacts');
-            $formMapper->add('isPublished', CheckboxType::class, [
+        $formMapper->add('isPublished', CheckboxType::class, [
                         'required' => false,
                     ])
                     /*
@@ -399,7 +404,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $showMapper
             ->add('contact')
             ->add('solutionContacts');
-        $showMapper->add('serviceSystems')
+
+        $this->addServiceSystemsShowFields($showMapper);
+        $showMapper
             ->add('serviceSolutions', null, [
                 'associated_property' => 'service'
             ])

@@ -98,11 +98,6 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
         if ($this->prefix && strpos($key, $this->prefix) !== 0) {
             $key = $this->prefix . $key;
         }
-        if (strpos($key, 'service.tabs') !== false) {
-            echo '<pre>$label: '.print_r($label, true).'</pre>';
-            echo '<pre>$key: '.print_r($key, true).'</pre>';
-            die('TEST');//TODO: DEBUG
-        }
         if ($this->prefix && isset($this->customLabels[$this->prefix][$key])) {
             return $this->customLabels[$this->prefix][$key];
         }

@@ -4,7 +4,7 @@
     {% if not field_description.hasassociationadmin %}
         {% set isAdminMode = (context is not defined or context.getSetting('mode') == 'admin') and admin_pool is defined %}
         {% if isAdminMode %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceAdmin') %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceProviderAdmin') %}
         {% endif %}
     {% else %}
         {% set refAdmin = field_description.associationadmin %}
@@ -16,22 +16,50 @@
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
-                {{ 'app.service.list'|trans }}
+                {{ 'app.service_provider.list'|trans }}
             </h4>
         </div>
         <div class="box-body table-responsive no-padding">
             <table class="table table-bordered table-condensed">
                 <tr>
-                    {% include 'General/Show/Table/tabe-head-services.html.twig' %}
+                    <th>{{ 'app.service_provider.entity.name'|trans }}</th>
+                    <th>{{ 'app.service_provider.entity.street'|trans }}</th>
+                    <th>{{ 'app.service_provider.entity.zip_code'|trans }}/{{ 'app.service_provider.entity.town'|trans }}</th>
+                    <th>{{ 'app.service_provider.entity.url'|trans }}</th>
                     {% if createEditLink %}
-                    <th></th>
+                        <th></th>
                     {% endif %}
                 </tr>
                 {% for child in entities %}
-                    {# @var child \App\Entity\Service #}
+                    {# @var child \App\Entity\ServiceProvider #}
                     <tr>
-                        {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child} %}
-
+                        <td>
+                            {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
+                                <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
+                                    {{ child.name }}
+                                </a>
+                            {% else %}
+                                {{ child.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.street %}
+                                {{ child.street }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.zipCode %}
+                                {{ child.zipCode }}
+                            {% endif %}
+                            {% if child.town %}
+                                {{ child.town }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.url %}
+                                {{ child.url }}
+                            {% endif %}
+                        </td>
                         {% if createEditLink %}
                             <td>
                                 {% if refAdmin.hasAccess(editRouteName, child) %}
@@ -52,3 +80,4 @@
         </div>
     </div>
 {% endif %}
+

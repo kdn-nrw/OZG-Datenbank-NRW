@@ -1,90 +1,80 @@
+{% extends 'General/Show/show.html.twig' %}
 
-{% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
 
-
-{% block show_groups %}
+{% block app_show_default_fields %}
     {# @var object \App\Entity\Service #}
-    <div class="row">
-        {% block field_row %}
-            {% for code in groups %}
-                {% set show_group = admin.showgroups[code] %}
-                <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
-                    <div class="{{ show_group.box_class }}">
-                        <div class="box-header">
-                            <h4 class="box-title">
-                                {% block show_title %}
-                                    {{ 'app.service.entity.name'|trans }}: <strong>{{ object.name }}</strong>
-                                    ({{ elements['serviceKey']|render_view_element(object)}})
-                                {% endblock %}
-                            </h4>
-                        </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-8">
-                                    {{ elements['serviceSystem.situation.subject']|render_view_element(object)}}
-                                    &gt;
-                                    {{ elements['serviceSystem.situation']|render_view_element(object)}}
-                                    &gt;
-                                    {{ elements['serviceSystem']|render_view_element(object)}}
-                                </div>
-                                <div class="col-xs-12 col-md-4 text-right">
-                                    {{ elements['status']|render_view_element(object)}}
-                                </div>
-                                <div class="col-xs-12 col-md-8">
-                                    {{ elements['serviceType']|render_view_element(object)}}
-                                </div>
-                                <div class="col-xs-12 col-md-4 text-right">
-                                    {{ elements['serviceSystem.priority']|render_view_element(object)}}
-                                </div>
-                            </div>
-                            {% if object.description %}
-                                <div class="item-property">
-                                    {{ object.description|nl2br }}
-                                </div>
-                            {% endif %}
-                            {% if elements['bureaus'] is defined %}
-                                <div class="item-property">
-                                    {{ elements['bureaus']|render_view_element(object)}}
-                                </div>
-                            {% endif %}
-                        </div>
+    <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
+        <div class="{{ show_group.box_class }}">
+            <div class="box-header">
+                <h4 class="box-title">
+                    {% block show_title %}
+                        {{ 'app.service.entity.name'|trans }}: <strong>{{ object.name }}</strong>
+                        ({{ elements['serviceKey']|render_view_element(object)}})
+                    {% endblock %}
+                </h4>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-8">
+                        {{ elements['serviceSystem.situation.subject']|render_view_element(object)}}
+                        &gt;
+                        {{ elements['serviceSystem.situation']|render_view_element(object)}}
+                        &gt;
+                        {{ elements['serviceSystem']|render_view_element(object)}}
+                    </div>
+                    <div class="col-xs-12 col-md-4 text-right">
+                        {{ elements['status']|render_view_element(object)}}
+                    </div>
+                    <div class="col-xs-12 col-md-8">
+                        {{ elements['serviceType']|render_view_element(object)}}
+                    </div>
+                    <div class="col-xs-12 col-md-4 text-right">
+                        {{ elements['serviceSystem.priority']|render_view_element(object)}}
                     </div>
                 </div>
-                <div class="col-xs-12">
-                    <div class="box box-primary">
-                        <div class="box-header">
-                            <h4 class="box-title">
-                                {{ 'app.service.entity.legal_basis'|trans }}/{{ 'app.service.entity.laws'|trans }}
-                            </h4>
-                        </div>
-                        <div class="box-body">
-                            <dl class="dl-horizontal">
-                                <dt>{{ 'app.service.entity.legal_basis'|trans }}</dt>
-                                <dd>{{ object.legalBasis }}</dd>
-                                <dt>{{ 'app.service.entity.laws'|trans }}</dt>
-                                <dd>{{ object.laws }}</dd>
-                                <dt>{{ 'app.service.entity.law_shortcuts'|trans }}</dt>
-                                <dd>{{ object.lawShortcuts }}</dd>
-                                <dt>{{ 'app.service.entity.relevance1'|trans }}</dt>
-                                <dd>{% if object.relevance1 %}Ja{% else %}Nein{% endif %}</dd>
-                                <dt>{{ 'app.service.entity.relevance2'|trans }}</dt>
-                                <dd>{% if object.relevance2 %}Ja{% else %}Nein{% endif %}</dd>
-                            </dl>
-                        </div>
+                {% if object.description %}
+                    <div class="item-property">
+                        {{ object.description|nl2br }}
                     </div>
-                </div>
-                {% if elements['serviceSolutions'] is defined %}
-                <div class="col-xs-12">
-                    {% include 'General/Show/show-service-solutions.html.twig' with {'entities': object.serviceSolutions, 'showSolution': true} %}
-                </div>
                 {% endif %}
-                {% if elements['laboratories'] is defined %}
-                <div class="col-xs-12">
-                    {% include 'General/Show/show-laboratories.html.twig' with {'object': object, 'field_description': elements['laboratories']} %}
-                </div>
+                {% if elements['bureaus'] is defined %}
+                    <div class="item-property">
+                        {{ elements['bureaus']|render_view_element(object)}}
+                    </div>
                 {% endif %}
-            {% endfor %}
-        {% endblock %}
-
+            </div>
+        </div>
     </div>
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h4 class="box-title">
+                    {{ 'app.service.entity.legal_basis'|trans }}/{{ 'app.service.entity.laws'|trans }}
+                </h4>
+            </div>
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>{{ 'app.service.entity.legal_basis'|trans }}</dt>
+                    <dd>{{ object.legalBasis }}</dd>
+                    <dt>{{ 'app.service.entity.laws'|trans }}</dt>
+                    <dd>{{ object.laws }}</dd>
+                    <dt>{{ 'app.service.entity.law_shortcuts'|trans }}</dt>
+                    <dd>{{ object.lawShortcuts }}</dd>
+                    <dt>{{ 'app.service.entity.relevance1'|trans }}</dt>
+                    <dd>{% if object.relevance1 %}Ja{% else %}Nein{% endif %}</dd>
+                    <dt>{{ 'app.service.entity.relevance2'|trans }}</dt>
+                    <dd>{% if object.relevance2 %}Ja{% else %}Nein{% endif %}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block app_show_custom_fields %}
+    {% if elements['serviceSolutions'] is defined %}
+        <div class="col-xs-12">
+            {% include 'General/Show/show-service-solutions.html.twig' with {'entities': object.serviceSolutions, 'showSolution': true} %}
+        </div>
+    {% endif %}
+    {{ parent() }}
 {% endblock %}
