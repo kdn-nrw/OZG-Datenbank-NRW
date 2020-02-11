@@ -2,7 +2,7 @@
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
     {% set refAdmin = null %}
     {% if not field_description.hasassociationadmin %}
-        {% set isAdminMode = (context is not defined or context.getSetting('mode') == 'admin') and admin_pool is defined %}
+        {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
         {% if isAdminMode %}
             {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\CommuneAdmin') %}
         {% endif %}

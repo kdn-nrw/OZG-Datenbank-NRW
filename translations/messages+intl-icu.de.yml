@@ -310,6 +310,8 @@ app:
     object_name: Leika-Leistung
     list: Leika-Leistungen
     create: Leika-Leistungen anlegen
+    frontend:
+      list: Leika-Katalog
     tabs:
       general: Allgemein
       relations: Relationen

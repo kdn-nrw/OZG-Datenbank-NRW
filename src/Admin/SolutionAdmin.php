@@ -220,7 +220,10 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         );
         $datagridMapper->add('serviceSolutions.service.serviceSystem',
             null,
-            ['label' => 'app.service.entity.service_system'],
+            [
+                'label' => 'app.service.entity.service_system',
+                'admin_code' => ServiceSystemAdmin::class,
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -337,6 +340,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 ]
             ])
             ->add('serviceSystems', null, [
+                'admin_code' => ServiceSystemAdmin::class,
                 //'associated_property' => 'name',
                 'template' => 'SolutionAdmin/list-service-systems.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable

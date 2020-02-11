@@ -8,7 +8,7 @@
 
 namespace App\Admin\Frontend;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
+use App\Admin\AbstractContextAwareAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
@@ -19,14 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
  * @copyright 2019 Gert Hammes
  * @since     2019-11-09
  */
-abstract class AbstractFrontendAdmin extends AbstractAdmin
+abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin
 {
     use FrontendTranslatorStrategyTrait;
-
-    public const APP_CONTEXT_BE = 'backend';
-    public const APP_CONTEXT_FE = 'frontend';
-
-    protected $appContext = self::APP_CONTEXT_BE;
 
     protected $adminBaseRouteName;
     protected $adminBaseRoutePattern;
@@ -35,6 +30,8 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
      * @var string
      */
     protected $defaultShowGroupLabel = 'object_name';
+
+    protected $appContext = self::APP_CONTEXT_FE;
 
     /**
      * @param string $appContext
@@ -69,11 +66,6 @@ abstract class AbstractFrontendAdmin extends AbstractAdmin
             $this->setTemplate('list', 'Frontend/Admin/CRUD/list.html.twig');
             $this->setTemplate('layout', 'Frontend/Admin/base.html.twig');
         }
-    }
-
-    protected function isFrontend(): bool
-    {
-        return $this->appContext === self::APP_CONTEXT_FE;
     }
 
     public function hasRoute($name)

@@ -4,7 +4,6 @@ namespace App\Admin\Frontend;
 
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Priority;
-use App\Entity\Situation;
 use App\Entity\Status;
 use App\Entity\Subject;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -46,7 +45,9 @@ class ServiceAdmin extends AbstractFrontendAdmin
         $datagridMapper->add('serviceType');
         $datagridMapper->add('serviceSystem',
             null,
-            [],
+            [
+                'admin_code' => ServiceSystemAdmin::class,
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -71,6 +72,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
             ])
             ->add('serviceSystem.situation')
             ->add('serviceSystem', null, [
+                'admin_code' => ServiceSystemAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -115,6 +117,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
             ->add('serviceSystem', null, [
+                'admin_code' => ServiceSystemAdmin::class,
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
             ])
             ->add('serviceType', null, [

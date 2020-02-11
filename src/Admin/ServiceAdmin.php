@@ -56,6 +56,8 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             $formMapper->add('serviceSystem', ModelAutocompleteType::class, [
                 'property' => 'name',
                 'required' => true,
+            ], [
+                'admin_code' => \App\Admin\ServiceSystemAdmin::class
             ]);
         }
         $this->addLaboratoriesFormFields($formMapper);
@@ -140,8 +142,9 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $datagridMapper->add('serviceKey');
         $datagridMapper->add('serviceType');
         $datagridMapper->add('serviceSystem',
-            null,
-            [],
+            null, [
+                'admin_code' => ServiceSystemAdmin::class,
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -173,6 +176,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->addIdentifier('name')
             ->add('serviceKey')
             ->add('serviceSystem', null, [
+                'admin_code' => ServiceSystemAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -226,6 +230,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
             ->add('serviceSystem', null, [
+                'admin_code' => ServiceSystemAdmin::class,
                 'template' => 'ServiceAdmin/show_many_to_one.html.twig',
             ])
             ->add('serviceType', null, [
