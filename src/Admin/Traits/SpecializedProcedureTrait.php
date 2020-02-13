@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Admin\Traits;
+
+use App\Admin\SpecializedProcedureAdmin;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Show\ShowMapper;
+
+trait SpecializedProcedureTrait
+{
+    protected function addSpecializedProceduresFormFields(FormMapper $formMapper)
+    {
+        $formMapper->add('specializedProcedures', ModelType::class, [
+            'btn_add' => false,
+            'placeholder' => '',
+            'required' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'choice_translation_domain' => false,
+        ]);
+    }
+
+    protected function addSpecializedProceduresDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper->add('specializedProcedures',
+            null, [
+                'admin_code' => SpecializedProcedureAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+    }
+
+    protected function addSpecializedProceduresListFields(ListMapper $listMapper)
+    {
+        $listMapper
+            ->add('specializedProcedures', null,[
+                'admin_code' => SpecializedProcedureAdmin::class,
+            ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addSpecializedProceduresShowFields(ShowMapper $showMapper)
+    {
+        $showMapper
+            ->add('specializedProcedures', null,[
+                'admin_code' => SpecializedProcedureAdmin::class,
+            ]);
+    }
+}

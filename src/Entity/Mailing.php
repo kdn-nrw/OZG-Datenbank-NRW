@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Base\BaseBlamableEntity;
 use App\Entity\Base\HideableEntityTrait;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,14 +19,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Mailing extends BaseBlamableEntity
 {
-    const GREETING_TYPE_NONE = 'none';
-    const GREETING_TYPE_PREPEND = 'prepend';
+    public const GREETING_TYPE_NONE = 'none';
+    public const GREETING_TYPE_PREPEND = 'prepend';
 
-    const STATUS_NEW = 0;
-    const STATUS_PREPARED = 1;
-    const STATUS_ACTIVE = 2;
-    const STATUS_FINISHED = 8;
-    const STATUS_CANCELLED = 9;
+    public const STATUS_NEW = 0;
+    public const STATUS_PREPARED = 1;
+    public const STATUS_ACTIVE = 2;
+    public const STATUS_FINISHED = 8;
+    public const STATUS_CANCELLED = 9;
 
     use CategoryTrait;
     use HideableEntityTrait;
@@ -192,12 +193,12 @@ class Mailing extends BaseBlamableEntity
 
     public function __construct()
     {
-        $this->mailingContacts = new ArrayCollection();
-        $this->stateMinistries = new ArrayCollection();
-        $this->serviceProviders = new ArrayCollection();
-        $this->communes = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->communes = new ArrayCollection();
         $this->excludeContacts = new ArrayCollection();
+        $this->mailingContacts = new ArrayCollection();
+        $this->serviceProviders = new ArrayCollection();
+        $this->stateMinistries = new ArrayCollection();
     }
 
     /**
@@ -242,9 +243,9 @@ class Mailing extends BaseBlamableEntity
      * Set subject
      *
      * @param string $subject
-     * @return $this
+     * @return self
      */
-    public function setSubject(?string $subject)
+    public function setSubject(?string $subject): self
     {
         $this->subject = $subject;
 
@@ -279,8 +280,9 @@ class Mailing extends BaseBlamableEntity
     {
         if (empty($this->greetingType)) {
             $this->greetingType = self::GREETING_TYPE_NONE;
+        } else {
+            $this->greetingType = $greetingType;
         }
-        $this->greetingType = $greetingType;
     }
 
     /**
@@ -303,7 +305,7 @@ class Mailing extends BaseBlamableEntity
      * @param MailingContact $mailingContact
      * @return self
      */
-    public function addMailingContact($mailingContact)
+    public function addMailingContact($mailingContact): self
     {
         if (!$this->mailingContacts->contains($mailingContact)) {
             $this->mailingContacts->add($mailingContact);
@@ -320,7 +322,7 @@ class Mailing extends BaseBlamableEntity
      * @param MailingContact $mailingContact
      * @return self
      */
-    public function removeMailingContact($mailingContact)
+    public function removeMailingContact($mailingContact): self
     {
         if ($this->mailingContacts->contains($mailingContact)) {
             $this->mailingContacts->removeElement($mailingContact);
@@ -398,13 +400,13 @@ class Mailing extends BaseBlamableEntity
      */
     public function getStatus(): int
     {
-        return (int)$this->status;
+        return $this->status;
     }
 
     /**
-     * @param int $status
+     * @param int|null $status
      */
-    public function setStatus(int $status): void
+    public function setStatus(?int $status): void
     {
         $this->status = (int)$status;
     }
@@ -412,12 +414,12 @@ class Mailing extends BaseBlamableEntity
     /**
      * Finish mailing
      */
-    public function finish()
+    public function finish(): void
     {
-        $now = new \DateTime();
-        $now->setTimezone(new \DateTimeZone('UTC'));
+        $now = new DateTime();
+        $now->setTimezone(new DateTimeZone('UTC'));
         $this->setSendEndAt($now);
-        $this->setStatus(Mailing::STATUS_FINISHED);
+        $this->setStatus(self::STATUS_FINISHED);
     }
 
 
@@ -425,7 +427,7 @@ class Mailing extends BaseBlamableEntity
      * @param MinistryState $stateMinistry
      * @return self
      */
-    public function addStateMinistry($stateMinistry)
+    public function addStateMinistry($stateMinistry): self
     {
         if (!$this->stateMinistries->contains($stateMinistry)) {
             $this->stateMinistries->add($stateMinistry);
@@ -438,7 +440,7 @@ class Mailing extends BaseBlamableEntity
      * @param MinistryState $stateMinistry
      * @return self
      */
-    public function removeStateMinistry($stateMinistry)
+    public function removeStateMinistry($stateMinistry): self
     {
         if ($this->stateMinistries->contains($stateMinistry)) {
             $this->stateMinistries->removeElement($stateMinistry);
@@ -467,7 +469,7 @@ class Mailing extends BaseBlamableEntity
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function addServiceProvider($serviceProvider)
+    public function addServiceProvider($serviceProvider): self
     {
         if (!$this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->add($serviceProvider);
@@ -480,7 +482,7 @@ class Mailing extends BaseBlamableEntity
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function removeServiceProvider($serviceProvider)
+    public function removeServiceProvider($serviceProvider): self
     {
         if ($this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->removeElement($serviceProvider);
@@ -509,7 +511,7 @@ class Mailing extends BaseBlamableEntity
      * @param Commune $commune
      * @return self
      */
-    public function addCommune($commune)
+    public function addCommune($commune): self
     {
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
@@ -522,7 +524,7 @@ class Mailing extends BaseBlamableEntity
      * @param Commune $commune
      * @return self
      */
-    public function removeCommune($commune)
+    public function removeCommune($commune): self
     {
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);
@@ -583,7 +585,7 @@ class Mailing extends BaseBlamableEntity
      * @param Contact $excludeContact
      * @return self
      */
-    public function addExcludeContact($excludeContact)
+    public function addExcludeContact($excludeContact): self
     {
         if (!$this->excludeContacts->contains($excludeContact)) {
             $this->excludeContacts->add($excludeContact);
@@ -596,7 +598,7 @@ class Mailing extends BaseBlamableEntity
      * @param Contact $excludeContact
      * @return self
      */
-    public function removeExcludeContact($excludeContact)
+    public function removeExcludeContact($excludeContact): self
     {
         if ($this->excludeContacts->contains($excludeContact)) {
             $this->excludeContacts->removeElement($excludeContact);
@@ -627,24 +629,24 @@ class Mailing extends BaseBlamableEntity
      * @param Contact $contact
      * @return bool
      */
-    public function contactIsBlacklisted(Contact $contact)
+    public function contactIsBlacklisted(Contact $contact): bool
     {
         if (null === $this->blacklistEmails) {
             $this->blacklistEmails = [];
             foreach ($this->excludeContacts as $excludeContact) {
                 $email = strtolower($excludeContact->getEmail());
-                if (!in_array($email, $this->blacklistEmails)) {
+                if (!in_array($email, $this->blacklistEmails, false)) {
                     $this->blacklistEmails[] = $email;
                 }
             }
         }
-        return in_array(strtolower($contact->getEmail()), $this->blacklistEmails);
+        return in_array(strtolower($contact->getEmail()), $this->blacklistEmails, false);
     }
 
     /**
      * Update number of sent mails
      */
-    public function updateSentCount()
+    public function updateSentCount(): void
     {
         $sentCount = 0;
         $mailingContacts = $this->getMailingContacts();

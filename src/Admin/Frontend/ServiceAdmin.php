@@ -79,7 +79,10 @@ class ServiceAdmin extends AbstractFrontendAdmin
                 ],
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'serviceSystem'],
-                ]
+                ],
+                'route' => [
+                    'name' => 'show',
+                ],
             ])
             ->add('serviceSystem.serviceKey', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable

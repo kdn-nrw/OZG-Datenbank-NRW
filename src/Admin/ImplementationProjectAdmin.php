@@ -84,17 +84,16 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name');
-        $listMapper
+            ->addIdentifier('name')
             ->add('status', 'choice', [
                 'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
+            ])
+            ->add('projectStartAt', null, [
+                // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
+                'pattern' => 'MMMM yyyy',
             ]);
-        $listMapper->add('projectStartAt', null, [
-            // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
-            'pattern' => 'MMMM yyyy',
-        ]);
         $this->addServiceSystemsListFields($listMapper);
         //$this->addSolutionsListFields($listMapper);
         $this->addDefaultListActions($listMapper);

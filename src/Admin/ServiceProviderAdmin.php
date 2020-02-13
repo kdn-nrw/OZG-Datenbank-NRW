@@ -3,11 +3,12 @@
 namespace App\Admin;
 
 use App\Admin\Traits\AddressTrait;
+use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ContactTrait;
+use App\Admin\Traits\SpecializedProcedureTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -15,8 +16,10 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class ServiceProviderAdmin extends AbstractAppAdmin
 {
+    use CommuneTrait;
     use ContactTrait;
     use AddressTrait;
+    use SpecializedProcedureTrait;
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -30,30 +33,20 @@ class ServiceProviderAdmin extends AbstractAppAdmin
         $this->addAddressFormFields($formMapper);
         $formMapper->add('url', UrlType::class, [
                 'required' => false
-            ])
-            ->add('communes', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'required' => false,
-                'multiple' => true,
-                'by_reference' => false,
-                'choice_translation_domain' => false,
             ]);
+        $this->addCommunesFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
         $this->addContactsFormFields($formMapper, true, true);
+        $this->addSpecializedProceduresFormFields($formMapper);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
         $this->addAddressDatagridFilters($datagridMapper);
-        $datagridMapper->add('communes',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addCommunesDatagridFilters($datagridMapper);
+        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -73,6 +66,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin
         $this->addAddressShowFields($showMapper);
         $showMapper->add('url', 'url');
         $this->addContactsShowFields($showMapper, true);
-        $showMapper->add('communes');
+        $this->addCommunesShowFields($showMapper);
+        $this->addSpecializedProceduresShowFields($showMapper);
     }
 }

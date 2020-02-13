@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\ServiceTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -16,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 class LaboratoryAdmin extends AbstractAppAdmin
 {
     use ServiceTrait;
+    use ServiceProviderTrait;
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -26,15 +28,9 @@ class LaboratoryAdmin extends AbstractAppAdmin
             ])
             ->add('url', UrlType::class, [
                 'required' => false,
-            ])
-            ->add('serviceProviders', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'required' => false,
-                'multiple' => true,
-                'by_reference' => false,
-                'choice_translation_domain' => false,
-            ])
+            ]);
+        $this->addServiceProvidersFormFields($formMapper);
+        $formMapper
             ->add('participantsOther', TextareaType::class, [
                 'required' => false,
             ]);
@@ -48,12 +44,7 @@ class LaboratoryAdmin extends AbstractAppAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('serviceProviders',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addServiceProvidersDatagridFilters($datagridMapper);
         $this->addServicesDatagridFilters($datagridMapper);
     }
 
@@ -75,8 +66,8 @@ class LaboratoryAdmin extends AbstractAppAdmin
             ->add('name')
             ->add('description')
             ->add('url', 'url')
-            ->add('serviceProviders')
             ->add('participantsOther');
+        $this->addServiceProvidersShowFields($showMapper);
         $this->addServicesShowFields($showMapper);
     }
 }

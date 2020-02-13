@@ -24,7 +24,9 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         );
         $datagridMapper->add('serviceSystems',
             null,
-            [],
+            [
+                'admin_code' => ServiceSystemAdmin::class,
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -35,6 +37,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('status');
+        $datagridMapper->add('projectStartAt');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -50,6 +53,10 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
                 'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
+            ])
+            ->add('projectStartAt', null, [
+                // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
+                'pattern' => 'MMMM yyyy',
             ]);
         $this->addDefaultListActions($listMapper);
     }
@@ -72,8 +79,12 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
                 'editable' => false,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
-                'template' => 'ServiceAdmin/show_choice.html.twig',
-            ]);
+            ])
+            ->add('projectStartAt', null, [
+                // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
+                'pattern' => 'MMMM yyyy',
+            ])
+            ->add('notes', 'html');
     }
 
     public function isGranted($name, $object = null)

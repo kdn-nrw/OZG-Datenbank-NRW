@@ -2,10 +2,12 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\CommuneTrait;
+use App\Admin\Traits\ManufaturerTrait;
+use App\Admin\Traits\ServiceProviderTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -13,40 +15,37 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class SpecializedProcedureAdmin extends AbstractAppAdmin
 {
+    use CommuneTrait;
+    use ManufaturerTrait;
+    use ServiceProviderTrait;
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', TextType::class)
-            ->add('manufacturers', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'required' => false,
-                'multiple' => true,
-                'by_reference' => false,
-                'choice_translation_domain' => false,
-            ])
+            ->add('name', TextType::class);
+        $this->addManufaturersFormFields($formMapper);
+        $formMapper
             ->add('description', TextareaType::class, [
                 'required' => false,
-            ])
-            ->end();
+            ]);
+        $this->addServiceProvidersFormFields($formMapper);
+        $this->addCommunesFormFields($formMapper);
+        $formMapper->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('manufacturers',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addManufaturersDatagridFilters($datagridMapper);
+        $this->addCommunesDatagridFilters($datagridMapper);
+        $this->addServiceProvidersDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
-            ->add('manufacturers');
+            ->addIdentifier('name');
+        $this->addManufaturersListFields($listMapper);
         $this->addDefaultListActions($listMapper);
     }
 
@@ -57,7 +56,9 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin
     {
         $showMapper
             ->add('name')
-            ->add('description')
-            ->add('manufacturers');
+            ->add('description');
+        $this->addManufaturersShowFields($showMapper);
+        $this->addServiceProvidersShowFields($showMapper);
+        $this->addCommunesShowFields($showMapper);
     }
 }
