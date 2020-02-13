@@ -6,6 +6,7 @@ use App\Admin\Traits\LaboratoryTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\Priority;
 use App\Entity\Status;
+use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -41,50 +42,78 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'label' => 'app.service.tabs.general',
                 'tab' => true,
             ])
-                ->with('app.service.groups.general', [
-                    'label' => false,
-                    'box_class' => 'box-tab',
-                ])
-                    ->add('name', TextareaType::class, [
-                        'required' => true,
-                    ])
-                    ->add('serviceKey', TextType::class, [
-                        'required' => true,
-                    ]);
+            ->with('app.service.groups.general', [
+                'label' => false,
+                'box_class' => 'box-tab',
+            ])
+            ->add('name', TextareaType::class, [
+                'required' => true,
+            ])
+            ->add('serviceKey', TextType::class, [
+                'required' => true,
+            ]);
 
-        if (!in_array('serviceSystem', $hideFields)) {
+        if (!in_array('serviceSystem', $hideFields, false)) {
             $formMapper->add('serviceSystem', ModelAutocompleteType::class, [
                 'property' => 'name',
                 'required' => true,
             ], [
-                'admin_code' => \App\Admin\ServiceSystemAdmin::class
+                'admin_code' => ServiceSystemAdmin::class
             ]);
         }
         $this->addLaboratoriesFormFields($formMapper);
         $formMapper
-                    ->add('status', ModelType::class, [
-                        'btn_add' => false,
-                        'required' => true,
-                        'choice_translation_domain' => false,
-                    ])
-                    ->add('serviceType', TextType::class, [
-                        'required' => true,
-                    ])
-                    ->add('legalBasis', TextareaType::class, [
-                        'required' => false,
-                    ])
-                    ->add('laws', TextareaType::class, [
-                        'required' => false,
-                    ])
-                    ->add('lawShortcuts', TextType::class, [
-                        'required' => false,
-                    ])
-                    ->add('relevance1', BooleanType::class, [
-                        'required' => false,
-                    ])
-                    ->add('relevance2', BooleanType::class, [
-                        'required' => false,
-                    ]);
+            ->add('status', ModelType::class, [
+                'btn_add' => false,
+                'required' => true,
+                'choice_translation_domain' => false,
+            ])
+            ->add('serviceType', TextType::class, [
+                'required' => true,
+            ])
+            ->add('legalBasis', TextareaType::class, [
+                'required' => false,
+            ])
+            ->add('laws', TextareaType::class, [
+                'required' => false,
+            ])
+            ->add('lawShortcuts', TextType::class, [
+                'required' => false,
+            ])
+            ->add('relevance1', BooleanType::class, [
+                'required' => false,
+            ])
+            ->add('relevance2', BooleanType::class, [
+                'required' => false,
+            ]);
+
+        $formMapper
+            ->add('inheritJurisdictions', ChoiceType::class, [
+                'choices' => [
+                    'app.service.entity.inherit_jurisdictions.no' => false,
+                    'app.service.entity.inherit_jurisdictions.yes' => true,
+                ],
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('jurisdictions', ChoiceFieldMaskType::class, [
+                'choices' => [
+                    'app.jurisdiction.entity.types.country' => Jurisdiction::TYPE_COUNTRY,
+                    'app.jurisdiction.entity.types.state' => Jurisdiction::TYPE_STATE,
+                    'app.jurisdiction.entity.types.commune' => Jurisdiction::TYPE_COMMUNE,
+                ],
+                'multiple' => true,
+                'map' => [
+                    Jurisdiction::TYPE_COUNTRY => [],
+                    Jurisdiction::TYPE_STATE => ['inheritBureaus', 'bureaus'],
+                    Jurisdiction::TYPE_COMMUNE => ['inheritBureaus', 'bureaus'],
+                ],
+                'required' => true,
+            ]);
+        $formMapper->get('jurisdictions')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
+            $this->getModelManager(),
+            Jurisdiction::class
+        ));
 
         $formMapper
             /*->add('inheritBureaus', BooleanType::class, [
@@ -110,7 +139,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             );
         $formMapper->end()
             ->end();
-        if (!in_array('serviceSolutions', $hideFields)) {
+        if (!in_array('serviceSolutions', $hideFields, false)) {
             $formMapper->tab('app.service.tabs.service_solutions', [
                 'label' => 'app.service.tabs.service_solutions',
                 'box_class' => 'box-tab',
@@ -132,7 +161,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                     'ba_custom_hide_fields' => ['service'],
                 ])
                 ->end()
-            ->end();
+                ->end();
         }
     }
 
@@ -162,6 +191,12 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         );
         $datagridMapper->add('status');
         $this->addLaboratoriesDatagridFilters($datagridMapper);
+        $datagridMapper->add('jurisdictions',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('bureaus',
             null,
             [],
@@ -266,8 +301,9 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ])
             ->add('serviceSystem.situation')
             ->add('serviceSystem.situation.subject')
-            ->add('serviceSolutions');
-        $showMapper->add('bureaus');
+            ->add('serviceSolutions')
+            ->add('jurisdictions')
+            ->add('bureaus');
         $this->addLaboratoriesShowFields($showMapper);
     }
 }

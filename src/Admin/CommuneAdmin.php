@@ -7,14 +7,10 @@ use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Commune;
-use Knp\Menu\ItemInterface as MenuItemInterface;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
@@ -40,10 +36,10 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                     'required' => false,
                 ]);
         $this->addServiceProvidersFormFields($formMapper);
+        $this->addSpecializedProceduresFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
         $this->addContactsFormFields($formMapper, true, true);
-        $this->addSpecializedProceduresFormFields($formMapper);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -73,6 +69,11 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $this->addContactsShowFields($showMapper, true);
         $this->addServiceProvidersShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);
+        $showMapper->add('specializedProcedures.manufacturers', null, [
+            'label' => 'app.specialized_procedure.entity.manufacturers',
+            'admin_code' => ManufacturerAdmin::class,
+            'template' => 'CommuneAdmin/show-specialized-procedures-manufacturers.html.twig',
+        ]);
     }
 
     public function toString($object)

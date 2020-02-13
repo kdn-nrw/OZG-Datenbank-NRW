@@ -17,9 +17,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Jurisdiction extends BaseNamedEntity
 {
-    const TYPE_COUNTRY = 1;
-    const TYPE_STATE = 2;
-    const TYPE_COMMUNE = 3;
+    public const TYPE_COUNTRY = 1;
+    public const TYPE_STATE = 2;
+    public const TYPE_COMMUNE = 3;
+
+    /**
+     * @var Service[]|Collection
+     * @ORM\ManyToMany(targetEntity="Service", mappedBy="jurisdictions")
+     */
+    private $services;
 
     /**
      * @var ServiceSystem[]|Collection
@@ -30,13 +36,14 @@ class Jurisdiction extends BaseNamedEntity
     public function __construct()
     {
         $this->serviceSystems = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     /**
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function addServiceSystem($serviceSystem)
+    public function addServiceSystem($serviceSystem): self
     {
         if (!$this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->add($serviceSystem);
@@ -50,7 +57,7 @@ class Jurisdiction extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function removeServiceSystem($serviceSystem)
+    public function removeServiceSystem($serviceSystem): self
     {
         if ($this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->removeElement($serviceSystem);
@@ -76,6 +83,50 @@ class Jurisdiction extends BaseNamedEntity
         $this->serviceSystems = $serviceSystems;
     }
 
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function addService($service): self
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->addJurisdiction($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function removeService($service): self
+    {
+        if ($this->services->contains($service)) {
+            $this->services->removeElement($service);
+            $service->removeJurisdiction($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Service[]|Collection
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
+     * @param Service[]|Collection $services
+     */
+    public function setServices($services): void
+    {
+        $this->services = $services;
+    }
     /*
     public static function createForType($type)
     {

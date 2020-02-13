@@ -9,6 +9,11 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+/**
+ * Trait CommuneTrait
+ * @package App\Admin\Traits
+ * @property array $customShowFields
+ */
 trait CommuneTrait
 {
     protected function addCommunesFormFields(FormMapper $formMapper)
@@ -51,5 +56,6 @@ trait CommuneTrait
             ->add('communes', null,[
                 'admin_code' => CommuneAdmin::class,
             ]);
+        $this->customShowFields[] = 'communes';
     }
 }

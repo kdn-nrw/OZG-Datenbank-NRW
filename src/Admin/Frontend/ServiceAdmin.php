@@ -53,6 +53,18 @@ class ServiceAdmin extends AbstractFrontendAdmin
         );
         $datagridMapper->add('serviceSystem.serviceKey');
         $datagridMapper->add('status');
+        $datagridMapper->add('jurisdictions',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('bureaus',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -154,7 +166,10 @@ class ServiceAdmin extends AbstractFrontendAdmin
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
             ->add('serviceSystem.situation')
-            ->add('serviceSystem.situation.subject');
+            ->add('serviceSystem.situation.subject')
+            //->add('serviceSolutions') => TODO: add filter for public solutions!
+            ->add('jurisdictions')
+            ->add('bureaus');
     }
 
     public function isGranted($name, $object = null)

@@ -22,9 +22,10 @@
                                 {% endblock %}
                                 <table class="table">
                                     <tbody>
+                                    {% set excludeCustomFields = admin.customShowFields %}
                                     {% for field_name in show_group.fields %}
                                         {% block show_field %}
-                                            {% if field_name not in ['serviceSystems', 'laboratories', 'services', 'solutions', 'serviceProviders',] %}
+                                            {% if field_name not in excludeCustomFields %}
                                                 <tr class="sonata-ba-view-container">
                                                     {% if elements[field_name] is defined %}
                                                         {{ elements[field_name]|render_view_element(object) }}
@@ -40,38 +41,29 @@
                     </div>
                 {% endblock %}
                 {% block app_show_custom_fields %}
-                    {% if elements['serviceSystems'] is defined %}
-                        <div class="col-xs-12">
-                            {# {{ elements['serviceSystems']|render_view_element(object) }} #}
-                            {% include 'General/Show/show-service-systems.html.twig' with {'entities': object.serviceSystems, 'field_description': elements['serviceSystems']} %}
-                        </div>
-                    {% endif %}
-                    {% if elements['services'] is defined %}
-                        <div class="col-xs-12">
-                            {% include 'General/Show/show-services.html.twig' with {'entities': object.services, 'field_description': elements['services']} %}
-                        </div>
-                    {% endif %}
-                    {% if elements['laboratories'] is defined %}
-                        <div class="col-xs-12">
-                            {# {{ elements['laboratories']|render_view_element(object) }} #}
-                            {% include 'General/Show/show-laboratories.html.twig' with {'entities': object.laboratories, 'field_description': elements['laboratories']} %}
-                        </div>
-                    {% endif %}
-                    {% if elements['solutions'] is defined %}
-                        <div class="col-xs-12">
-                            {# {{ elements['solutions']|render_view_element(object) }} #}
-                            {% include 'General/Show/show-solutions.html.twig' with {'entities': object.solutions, 'field_description': elements['solutions']} %}
-                        </div>
-                    {% endif %}
-                    {% if elements['serviceProviders'] is defined %}
-                        <div class="col-xs-12">
-                            {# {{ elements['solutions']|render_view_element(object) }} #}
-                            {% include 'General/Show/show-service-providers.html.twig' with {'entities': object.serviceProviders, 'field_description': elements['serviceProviders']} %}
-                        </div>
-                    {% endif %}
+                    {% set customFields = admin.customShowFields %}
+                    {% for field_name in show_group.fields %}
+                        {% if field_name in customFields %}
+                            <div class="col-xs-12">
+                                {# {{ elements['field_name']|render_view_element(object) }} #}
+                                {% if field_name == 'serviceSystems' %}
+                                    {% include 'General/Show/show-service-systems.html.twig' with {'entities': object.serviceSystems, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'services' %}
+                                    {% include 'General/Show/show-services.html.twig' with {'entities': object.services, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'laboratories' %}
+                                    {% include 'General/Show/show-laboratories.html.twig' with {'entities': object.laboratories, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'solutions' %}
+                                    {% include 'General/Show/show-solutions.html.twig' with {'entities': object.solutions, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'serviceProviders' %}
+                                    {% include 'General/Show/show-service-providers.html.twig' with {'entities': object.serviceProviders, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'communes' %}
+                                    {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'field_description': elements[field_name]} %}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 {% endblock %}
             {% endfor %}
         {% endblock %}
-
     </div>
 {% endblock %}

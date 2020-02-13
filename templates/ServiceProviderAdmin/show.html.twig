@@ -1,18 +1,1 @@
 {% extends 'General/Show/show.html.twig' %}
-
-{% block show_field %}
-    {% set excludeFields = ['communes',] %}
-    {% if field_name not in excludeFields %}
-        {{ parent() }}
-    {% endif %}
-{% endblock %}
-
-{% block app_show_custom_fields %}
-    {% if elements['communes'] is defined %}
-        <div class="col-xs-12">
-            {# {{ elements['solutions']|render_view_element(object) }} #}
-            {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'field_description': elements['communes']} %}
-        </div>
-    {% endif %}
-    {{ parent() }}
-{% endblock %}

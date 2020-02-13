@@ -68,6 +68,7 @@ app:
       contacts: Ansprechpartner der Kommune
       contact: Ansprechpartner der Kommune (alt)
       service_providers: IT Dienstleister
+      specialized_procedures: Fachverfahren
   contact:
     object_name: Kontakt
     list: Kontakte
@@ -337,6 +338,10 @@ app:
       inherit_bureaus: Fachlichkeiten von OZG-Leistung übernehmen
       inherit_bureaus.yes: Fachlichkeiten der Leika-Leistung mit Fachlichkeiten der OZG-Leistung erweitern
       inherit_bureaus.no: Fachlichkeiten der OZG-Leistung nicht übernehmen
+      jurisdictions: Zuständigkeiten
+      inherit_jurisdictions: Zuständigkeiten von OZG-Leistung übernehmen
+      inherit_jurisdictions.yes: Zuständigkeiten der Leika-Leistung mit Zuständigkeiten der OZG-Leistung erweitern
+      inherit_jurisdictions.no: Zuständigkeiten der OZG-Leistung nicht übernehmen
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister
@@ -356,6 +361,7 @@ app:
       contact: OZG-Ansprechpartner (alt)
       #solutions: Lösungen
       communes: Kommunen
+      specialized_procedures: Fachverfahren
   service_solution:
     object_name: Lösung für Leistung
     list: Lösung für Leistung
@@ -385,6 +391,7 @@ app:
       status: Status
       priority: Priorität
       jurisdictions: Zuständigkeiten
+      jurisdictions_form: Zuständigkeiten (werden an Leika-Leistungen vererbt)
       references: Referenzen
       state_ministries: Ministerien (Land)
       laboratories: Labore
@@ -451,6 +458,8 @@ app:
       url: Url
       solutions: Lösungen
       manufacturers: Hersteller
+      service_providers: IT Dienstleister
+      communes: Kommunen
   status:
     object_name: Status
     list: Status
