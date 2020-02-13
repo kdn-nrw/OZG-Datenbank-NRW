@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Entity\Status;
@@ -22,6 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
+    use CommuneTrait;
     use ContactTrait;
     use ServiceSystemTrait;
 
@@ -131,15 +133,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                             'selected' => ['communes'],
                         ],
                         'required' => true,
-                    ])
-                    ->add('communes', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ])
+                    ]);
+                $this->addCommunesFormFields($formMapper);
+                $formMapper
                     ->add('specializedProcedures', ModelType::class, [
                         'btn_add' => false,
                         'placeholder' => '',
@@ -261,12 +257,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('communes',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addCommunesDatagridFilters($datagridMapper);
         $datagridMapper->add('specializedProcedures',
             null,
             [],
@@ -396,6 +387,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'template' => 'SolutionAdmin/show-communes.html.twig',
             ])
             ->add('serviceProvider')
+            ->add('customProvider')
             ->add('portals')
             ->add('specializedProcedures')
             ->add('formServers')
@@ -404,8 +396,8 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->add('analogServices')
             ->add('openDataItems')
             ->add('name')
-            ->add('url', 'url');
-        $showMapper
+            ->add('description')
+            ->add('url', 'url')
             ->add('contact')
             ->add('solutionContacts');
 

@@ -227,14 +227,17 @@ class SolutionAdmin extends AbstractFrontendAdmin
                 'template' => 'SolutionAdmin/show-communes.html.twig',
             ])
             ->add('serviceProvider')
+            ->add('customProvider')
             ->add('portals')
             ->add('specializedProcedures')
             ->add('formServers')
             ->add('paymentTypes')
             ->add('authentications')
+            ->add('analogServices')
+            ->add('openDataItems')
             ->add('name')
-            ->add('url', 'url', [
-            ])
+            ->add('description')
+            ->add('url', 'url')
             ->add('contact')
             ->add('serviceSystems', null, [
                 'admin_code' => ServiceSystemAdmin::class,

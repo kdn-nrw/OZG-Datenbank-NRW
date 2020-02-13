@@ -62,12 +62,19 @@ class Commune extends AppBaseEntity
      */
     private $contacts;
 
+    /**
+     * @var SpecializedProcedure[]|Collection
+     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="communes")
+     */
+    private $specializedProcedures;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->offices = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
+        $this->specializedProcedures = new ArrayCollection();
     }
 
     /**
@@ -268,6 +275,50 @@ class Commune extends AppBaseEntity
     public function setContacts($contacts): void
     {
         $this->contacts = $contacts;
+    }
+
+    /**
+     * @param SpecializedProcedure $specializedProcedure
+     * @return self
+     */
+    public function addSpecializedProcedure($specializedProcedure): self
+    {
+        if (!$this->specializedProcedures->contains($specializedProcedure)) {
+            $this->specializedProcedures->add($specializedProcedure);
+            $specializedProcedure->addCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param SpecializedProcedure $specializedProcedure
+     * @return self
+     */
+    public function removeSpecializedProcedure($specializedProcedure): self
+    {
+        if ($this->specializedProcedures->contains($specializedProcedure)) {
+            $this->specializedProcedures->removeElement($specializedProcedure);
+            $specializedProcedure->removeCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return SpecializedProcedure[]|Collection
+     */
+    public function getSpecializedProcedures()
+    {
+        return $this->specializedProcedures;
+    }
+
+    /**
+     * @param SpecializedProcedure[]|Collection $specializedProcedures
+     */
+    public function setSpecializedProcedures($specializedProcedures): void
+    {
+        $this->specializedProcedures = $specializedProcedures;
     }
 
 }

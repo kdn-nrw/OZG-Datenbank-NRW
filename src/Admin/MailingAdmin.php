@@ -3,7 +3,9 @@
 namespace App\Admin;
 
 use App\Admin\Traits\CategoryTrait;
+use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\MinistryStateTrait;
+use App\Admin\Traits\ServiceProviderTrait;
 use App\Entity\Contact;
 use App\Entity\Mailing;
 use App\Entity\MailingContact;
@@ -30,7 +32,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class MailingAdmin extends AbstractAppAdmin
 {
     use CategoryTrait;
+    use CommuneTrait;
     use MinistryStateTrait;
+    use ServiceProviderTrait;
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
@@ -120,22 +124,8 @@ class MailingAdmin extends AbstractAppAdmin
         $formMapper->end();
         $formMapper->with('app.mailing.groups.recipients', ['class' => 'col-md-6']);
         $this->addStateMinistriesFormFields($formMapper);
-        $formMapper->add('serviceProviders', ModelType::class, [
-            'btn_add' => false,
-            'placeholder' => '',
-            'required' => false,
-            'multiple' => true,
-            'by_reference' => false,
-            'choice_translation_domain' => false,
-        ]);
-        $formMapper->add('communes', ModelType::class, [
-            'btn_add' => false,
-            'placeholder' => '',
-            'required' => false,
-            'multiple' => true,
-            'by_reference' => false,
-            'choice_translation_domain' => false,
-        ]);
+        $this->addServiceProvidersFormFields($formMapper);
+        $this->addCommunesFormFields($formMapper);
         $this->addCategoriesFormFields($formMapper);
         $formMapper->add('excludeContacts', ModelAutocompleteType::class, [
             'property' => ['firstName', 'lastName', 'email', 'organisation'],
@@ -152,8 +142,7 @@ class MailingAdmin extends AbstractAppAdmin
         $errorElement
             ->with('senderEmail')
                 ->addConstraint(new MailingSenderEmail())
-            ->end()
-    ;
+            ->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -161,6 +150,8 @@ class MailingAdmin extends AbstractAppAdmin
         $datagridMapper->add('subject');
         $this->addCategoriesDatagridFilters($datagridMapper);
         $this->addStateMinistriesDatagridFilters($datagridMapper);
+        $this->addCommunesDatagridFilters($datagridMapper);
+        $this->addServiceProvidersDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -214,9 +205,9 @@ class MailingAdmin extends AbstractAppAdmin
             ->add('mailingContacts', null, [
                 'template' => 'Mailing/show-mailing-contacts.html.twig',
             ])
-            ->add('excludeContacts')
-            ->add('serviceProviders')
-            ->add('communes');
+            ->add('excludeContacts');
+        $this->addServiceProvidersShowFields($showMapper);
+        $this->addCommunesShowFields($showMapper);
         $this->addStateMinistriesShowFields($showMapper);
         $this->addCategoriesShowFields($showMapper);
     }

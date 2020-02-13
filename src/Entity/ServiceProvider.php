@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\SoftdeletableEntityInterface;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -56,12 +57,19 @@ class ServiceProvider extends BaseNamedEntity
      */
     private $contacts;
 
+    /**
+     * @var SpecializedProcedure[]|Collection
+     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="communes")
+     */
+    private $specializedProcedures;
+
     public function __construct()
     {
         $this->communes = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
+        $this->specializedProcedures = new ArrayCollection();
     }
 
     /**
@@ -83,7 +91,7 @@ class ServiceProvider extends BaseNamedEntity
     /**
      * @param Solution $solution
      */
-    public function addSolution($solution)
+    public function addSolution($solution): void
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -94,12 +102,12 @@ class ServiceProvider extends BaseNamedEntity
     /**
      * @param Solution $solution
      */
-    public function removeSolution($solution)
+    public function removeSolution($solution): void
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
             if ($solution instanceof SoftdeletableEntityInterface) {
-                $solution->setDeletedAt(new \DateTime());
+                $solution->setDeletedAt(new DateTime());
             }
         }
     }
@@ -124,7 +132,7 @@ class ServiceProvider extends BaseNamedEntity
      * @param Commune $commune
      * @return ServiceProvider
      */
-    public function addCommune($commune)
+    public function addCommune($commune): ServiceProvider
     {
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
@@ -138,7 +146,7 @@ class ServiceProvider extends BaseNamedEntity
      * @param Commune $commune
      * @return ServiceProvider
      */
-    public function removeCommune($commune)
+    public function removeCommune($commune): ServiceProvider
     {
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);
@@ -168,7 +176,7 @@ class ServiceProvider extends BaseNamedEntity
      * @param Laboratory $laboratory
      * @return ServiceProvider
      */
-    public function addLaboratory($laboratory)
+    public function addLaboratory($laboratory): ServiceProvider
     {
         if (!$this->laboratories->contains($laboratory)) {
             $this->laboratories->add($laboratory);
@@ -182,7 +190,7 @@ class ServiceProvider extends BaseNamedEntity
      * @param Laboratory $laboratory
      * @return ServiceProvider
      */
-    public function removeLaboratory($laboratory)
+    public function removeLaboratory($laboratory): ServiceProvider
     {
         if ($this->laboratories->contains($laboratory)) {
             $this->laboratories->removeElement($laboratory);
@@ -212,7 +220,7 @@ class ServiceProvider extends BaseNamedEntity
      * @param Contact $contact
      * @return self
      */
-    public function addContact($contact)
+    public function addContact($contact): self
     {
         if (!$this->contacts->contains($contact)) {
             $this->contacts->add($contact);
@@ -226,12 +234,12 @@ class ServiceProvider extends BaseNamedEntity
      * @param Contact $contact
      * @return self
      */
-    public function removeContact($contact)
+    public function removeContact($contact): self
     {
         if ($this->contacts->contains($contact)) {
             $this->contacts->removeElement($contact);
             if ($contact instanceof SoftdeletableEntityInterface) {
-                $contact->setDeletedAt(new \DateTime());
+                $contact->setDeletedAt(new DateTime());
             }
         }
 
@@ -252,6 +260,50 @@ class ServiceProvider extends BaseNamedEntity
     public function setContacts($contacts): void
     {
         $this->contacts = $contacts;
+    }
+
+    /**
+     * @param SpecializedProcedure $specializedProcedure
+     * @return self
+     */
+    public function addSpecializedProcedure($specializedProcedure): self
+    {
+        if (!$this->specializedProcedures->contains($specializedProcedure)) {
+            $this->specializedProcedures->add($specializedProcedure);
+            $specializedProcedure->addServiceProvider($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param SpecializedProcedure $specializedProcedure
+     * @return self
+     */
+    public function removeSpecializedProcedure($specializedProcedure): self
+    {
+        if ($this->specializedProcedures->contains($specializedProcedure)) {
+            $this->specializedProcedures->removeElement($specializedProcedure);
+            $specializedProcedure->removeServiceProvider($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return SpecializedProcedure[]|Collection
+     */
+    public function getSpecializedProcedures()
+    {
+        return $this->specializedProcedures;
+    }
+
+    /**
+     * @param SpecializedProcedure[]|Collection $specializedProcedures
+     */
+    public function setSpecializedProcedures($specializedProcedures): void
+    {
+        $this->specializedProcedures = $specializedProcedures;
     }
 
 }
