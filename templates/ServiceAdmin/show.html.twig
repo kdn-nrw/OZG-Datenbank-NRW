@@ -37,10 +37,15 @@
                         {{ object.description|nl2br }}
                     </div>
                 {% endif %}
-                {% if elements['bureaus'] is defined %}
+                {% if object.jurisdictions|length > 0 %}
                     <div class="item-property">
-                        {{ elements['bureaus']|render_view_element(object)}}
+                        {{ elements['jurisdictions']|render_view_element(object)}}
                     </div>
+                    {% if elements['bureaus'] is defined %}
+                        <div class="item-property">
+                            {{ elements['bureaus']|render_view_element(object)}}
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

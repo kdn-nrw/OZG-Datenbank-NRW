@@ -35,10 +35,10 @@ class ServiceProviderAdmin extends AbstractAppAdmin
                 'required' => false
             ]);
         $this->addCommunesFormFields($formMapper);
+        $this->addSpecializedProceduresFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
         $this->addContactsFormFields($formMapper, true, true);
-        $this->addSpecializedProceduresFormFields($formMapper);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -68,5 +68,10 @@ class ServiceProviderAdmin extends AbstractAppAdmin
         $this->addContactsShowFields($showMapper, true);
         $this->addCommunesShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);
+        $showMapper->add('specializedProcedures.manufacturers', null, [
+            'label' => 'app.specialized_procedure.entity.manufacturers',
+            'admin_code' => ManufacturerAdmin::class,
+            'template' => 'CommuneAdmin/show-specialized-procedures-manufacturers.html.twig',
+        ]);
     }
 }

@@ -64,27 +64,28 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
                     ]);
         //$this->addLaboratoriesFormFields($formMapper);
         $formMapper->add('jurisdictions', ChoiceFieldMaskType::class, [
-                        'choices' => [
-                            'app.jurisdiction.entity.types.country' => Jurisdiction::TYPE_COUNTRY,
-                            'app.jurisdiction.entity.types.state' => Jurisdiction::TYPE_STATE,
-                            'app.jurisdiction.entity.types.commune' => Jurisdiction::TYPE_COMMUNE,
-                        ],
-                        'multiple' => true,
-                        'map' => [
-                            Jurisdiction::TYPE_COUNTRY => [],
-                            Jurisdiction::TYPE_STATE => ['stateMinistries', 'bureaus'],
-                            Jurisdiction::TYPE_COMMUNE => ['stateMinistries', 'bureaus'],
-                        ],
-                        'required' => true,
-                    ]);/*
-                    ->add('jurisdictions', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ]);*/
+            'label' => 'app.service_system.entity.jurisdictions_form',
+            'choices' => [
+                'app.jurisdiction.entity.types.country' => Jurisdiction::TYPE_COUNTRY,
+                'app.jurisdiction.entity.types.state' => Jurisdiction::TYPE_STATE,
+                'app.jurisdiction.entity.types.commune' => Jurisdiction::TYPE_COMMUNE,
+            ],
+            'multiple' => true,
+            'map' => [
+                Jurisdiction::TYPE_COUNTRY => [],
+                Jurisdiction::TYPE_STATE => ['stateMinistries', 'bureaus'],
+                Jurisdiction::TYPE_COMMUNE => ['stateMinistries', 'bureaus'],
+            ],
+            'required' => true,
+        ]);/*
+        ->add('jurisdictions', ModelType::class, [
+            'btn_add' => false,
+            'placeholder' => '',
+            'required' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'choice_translation_domain' => false,
+        ]);*/
         $formMapper->get('jurisdictions')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
             $this->getModelManager(),
             Jurisdiction::class

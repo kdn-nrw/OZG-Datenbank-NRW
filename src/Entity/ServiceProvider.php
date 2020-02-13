@@ -59,7 +59,8 @@ class ServiceProvider extends BaseNamedEntity
 
     /**
      * @var SpecializedProcedure[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="communes")
+     * @ORM\ManyToMany(targetEntity="SpecializedProcedure", mappedBy="serviceProviders")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $specializedProcedures;
 
@@ -304,6 +305,25 @@ class ServiceProvider extends BaseNamedEntity
     public function setSpecializedProcedures($specializedProcedures): void
     {
         $this->specializedProcedures = $specializedProcedures;
+    }
+
+    /**
+     * Returns the unique manufacturer list with the manufacturer determined through the specialized procedures
+     * @return ArrayCollection
+     */
+    public function getManufacturers()
+    {
+        $manufacturers = new ArrayCollection();
+        $specializedProcedures = $this->getSpecializedProcedures();
+        foreach ($specializedProcedures as $specializedProcedure) {
+            $spManufacturers = $specializedProcedure->getManufacturers();
+            foreach ($spManufacturers as $manufacturer) {
+                if (!$manufacturers->contains($manufacturer)) {
+                    $manufacturers->add($manufacturer);
+                }
+            }
+        }
+        return $manufacturers;
     }
 
 }

@@ -120,6 +120,28 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     private $laboratories;
 
     /**
+     * @var Jurisdiction[]|Collection
+     * @ORM\ManyToMany(targetEntity="Jurisdiction", inversedBy="services")
+     * @ORM\JoinTable(name="ozg_service_jurisdiction",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="jurisdiction_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $jurisdictions;
+
+    /**
+     * Toggle inheritance of jurisdictions from service system
+     * @var bool
+     *
+     * @ORM\Column(name="inherit_jurisdictions", type="boolean")
+     */
+    protected $inheritJurisdictions = true;
+
+    /**
      * @var Bureau[]|Collection
      * @ORM\ManyToMany(targetEntity="Bureau", mappedBy="services")
      */
@@ -137,6 +159,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     {
         $this->bureaus = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
+        $this->jurisdictions = new ArrayCollection();
         $this->serviceSolutions = new ArrayCollection();
     }
 
@@ -145,6 +168,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      *
      * @param string $name
      * @return self
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     public function setName(?string $name)
     {
@@ -475,6 +499,72 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     public function setInheritBureaus(bool $inheritBureaus): void
     {
         $this->inheritBureaus = $inheritBureaus;
+    }
+
+    /**
+     * @param Jurisdiction $jurisdiction
+     * @return self
+     */
+    public function addJurisdiction($jurisdiction): self
+    {
+        if (!$this->jurisdictions->contains($jurisdiction)) {
+            $this->jurisdictions->add($jurisdiction);
+            $jurisdiction->addService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Jurisdiction $jurisdiction
+     * @return self
+     */
+    public function removeJurisdiction($jurisdiction): self
+    {
+        if ($this->jurisdictions->contains($jurisdiction)) {
+            $this->jurisdictions->removeElement($jurisdiction);
+            $jurisdiction->removeService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Jurisdiction[]|Collection
+     */
+    public function getJurisdictions()
+    {
+        if ($this->isInheritJurisdictions() && null !== $serviceSystem = $this->getServiceSystem()) {
+            $ssJurisdictions = $serviceSystem->getJurisdictions();
+            foreach ($ssJurisdictions as $bureau) {
+                $this->addJurisdiction($bureau);
+            }
+        }
+        return $this->jurisdictions;
+    }
+
+    /**
+     * @param Jurisdiction[]|Collection $jurisdictions
+     */
+    public function setJurisdictions($jurisdictions): void
+    {
+        $this->jurisdictions = $jurisdictions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInheritJurisdictions(): bool
+    {
+        return $this->inheritJurisdictions;
+    }
+
+    /**
+     * @param bool $inheritJurisdictions
+     */
+    public function setInheritJurisdictions(bool $inheritJurisdictions): void
+    {
+        $this->inheritJurisdictions = $inheritJurisdictions;
     }
 
     /**

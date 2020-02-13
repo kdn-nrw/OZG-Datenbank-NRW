@@ -1,0 +1,35 @@
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+    {% set entities = object.manufacturers %}
+    {% if entities|length > 0 %}
+    <ul class="sonata-ba-show-many-to-many">
+        {# @var object \App\Entity\Commune #}
+        {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+        {% set refAdmin = null %}
+        {% if not field_description.hasassociationadmin %}
+            {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
+            {% if isAdminMode %}
+                {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ManufacturerAdmin') %}
+            {% endif %}
+        {% else %}
+            {% set refAdmin = field_description.associationadmin %}
+        {% endif %}
+        {% set editRouteName = field_description.options.route.name %}
+        {% set createEditLink = editRouteName and refAdmin is not null and refAdmin.hasRoute(editRouteName) and refAdmin.hasAccess(editRouteName) %}
+        {% set showRouteName = 'show' %}
+        {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+        {% for child in object.manufacturers %}
+            <li>
+                {% if createEditLink and refAdmin.hasAccess(editRouteName, child) %}
+                    <a href="{{ refAdmin.generateObjectUrl(editRouteName, child, {'id': child.id}) }}">
+                        {{ child.name }}
+                    </a>
+                {% else %}
+                    {{ child.name }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}
