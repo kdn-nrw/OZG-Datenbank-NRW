@@ -173,6 +173,12 @@
     "knplabs/knp-menu-bundle": {
         "version": "v2.3.0"
     },
+    "markbaker/complex": {
+        "version": "1.4.7"
+    },
+    "markbaker/matrix": {
+        "version": "1.2.0"
+    },
     "mindbase/admin-bundle": {
         "version": "dev-master"
     },
@@ -218,6 +224,9 @@
     "php": {
         "version": "7.2"
     },
+    "phpoffice/phpspreadsheet": {
+        "version": "1.10.1"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -226,6 +235,9 @@
     },
     "psr/log": {
         "version": "1.1.0"
+    },
+    "psr/simple-cache": {
+        "version": "1.0.1"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

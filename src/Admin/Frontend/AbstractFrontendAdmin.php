@@ -34,6 +34,11 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin
     protected $appContext = self::APP_CONTEXT_FE;
 
     /**
+     * Exclude fields in export
+     */
+    protected $excludeExportFields = ['createdBy', 'modifiedBy', 'hidden'];
+
+    /**
      * @param string $appContext
      */
     public function setAppContext(string $appContext): void
@@ -128,5 +133,14 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin
             $collection->addCollection($adminRoutesCollection);
         }
     }*/
+
+    /**
+     * @return array
+     */
+    protected function getExportExcludeFields(): array
+    {
+        die('TEST2');
+        return $this->excludeExportFields;
+    }
 
 }

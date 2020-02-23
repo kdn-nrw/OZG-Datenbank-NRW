@@ -279,6 +279,24 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     }
 
     /**
+     * Returns the published service solutions
+     *
+     * @return ServiceSolution[]|Collection
+     */
+    public function getPublishedServiceSolutions()
+    {
+        $publishedServiceSolutions = new ArrayCollection();
+        $serviceSolutions = $this->getServiceSolutions();
+        foreach ($serviceSolutions as $serviceSolution) {
+            $solution = $serviceSolution->getSolution();
+            if (null !== $solution && $solution->isPublished()) {
+                $publishedServiceSolutions->add($serviceSolution);
+            }
+        }
+        return $publishedServiceSolutions;
+    }
+
+    /**
      * @return string|null
      */
     public function getServiceType(): ?string
@@ -355,7 +373,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      */
     public function setRelevance1(?bool $relevance1): void
     {
-        $this->relevance1 = (bool) $relevance1;
+        $this->relevance1 = (bool)$relevance1;
     }
 
     /**
@@ -371,7 +389,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      */
     public function setRelevance2(?bool $relevance2): void
     {
-        $this->relevance2 = (bool) $relevance2;
+        $this->relevance2 = (bool)$relevance2;
     }
 
 
@@ -574,7 +592,7 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      */
     public function __toString(): string
     {
-        $name = (string) $this->getName();
+        $name = (string)$this->getName();
         if (null === $name) {
             return '';
         }

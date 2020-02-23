@@ -57,4 +57,29 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin
         return $this->customShowFields;
     }
 
+    /**
+     * @return array
+     */
+    public function getExportFields()
+    {
+        $fields = parent::getExportFields();
+        $excludeFields = $this->getExportExcludeFields();
+        if (!empty($excludeFields)) {
+            $fields = array_diff($fields, $excludeFields);
+        }
+        return $fields;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExportExcludeFields(): array
+    {
+        return [];
+    }
+
+    public function getExportFormats()
+    {
+        return ['xlsx'];
+    }
 }

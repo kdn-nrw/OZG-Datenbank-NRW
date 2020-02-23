@@ -21,6 +21,14 @@ use Sonata\AdminBundle\Translator\LabelTranslatorStrategyInterface;
  */
 class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrategyInterface
 {
+    private static $commonTranslations = [
+        'id' => 'app.common.fields.id',
+        'createdAt' => 'app.common.fields.created_at',
+        'modifiedAt' => 'app.common.fields.modified_at',
+        'hidden' => 'app.common.fields.hidden',
+        'createdBy' => 'app.common.fields.created_by',
+        'modifiedBy' => 'app.common.fields.modified_by',
+    ];
 
     private $adminKey;
     private $prefix;
@@ -58,6 +66,9 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
      */
     public function getLabel($label, $context = '', $type = '')
     {
+        if (array_key_exists($label, self::$commonTranslations)) {
+            return self::$commonTranslations[$label];
+        }
         $label = str_replace('.', '_', $label);
         $filteredLabel = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $label));
         if ($this->adminKey) {
@@ -88,7 +99,7 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
         if (!empty($context)) {
             $key .= $context . '.';
         }
-        if ($type == 'label' || $type == 'link') {
+        if ($type === 'label' || $type === 'link') {
             $type = '';
         }
         if (!empty($type)) {

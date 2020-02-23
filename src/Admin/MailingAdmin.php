@@ -5,7 +5,7 @@ namespace App\Admin;
 use App\Admin\Traits\CategoryTrait;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\MinistryStateTrait;
-use App\Admin\Traits\ServiceProviderTrait;
+use App\Admin\Traits\OrganisationTrait;
 use App\Entity\Contact;
 use App\Entity\Mailing;
 use App\Entity\MailingContact;
@@ -19,7 +19,6 @@ use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Validator\ErrorElement;
@@ -32,9 +31,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class MailingAdmin extends AbstractAppAdmin
 {
     use CategoryTrait;
-    use CommuneTrait;
-    use MinistryStateTrait;
-    use ServiceProviderTrait;
+    use OrganisationTrait;
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
@@ -123,9 +120,7 @@ class MailingAdmin extends AbstractAppAdmin
             ]);
         $formMapper->end();
         $formMapper->with('app.mailing.groups.recipients', ['class' => 'col-md-6']);
-        $this->addStateMinistriesFormFields($formMapper);
-        $this->addServiceProvidersFormFields($formMapper);
-        $this->addCommunesFormFields($formMapper);
+        $this->addOrganisationsFormFields($formMapper);
         $this->addCategoriesFormFields($formMapper);
         $formMapper->add('excludeContacts', ModelAutocompleteType::class, [
             'property' => ['firstName', 'lastName', 'email', 'organisation'],
@@ -149,9 +144,7 @@ class MailingAdmin extends AbstractAppAdmin
     {
         $datagridMapper->add('subject');
         $this->addCategoriesDatagridFilters($datagridMapper);
-        $this->addStateMinistriesDatagridFilters($datagridMapper);
-        $this->addCommunesDatagridFilters($datagridMapper);
-        $this->addServiceProvidersDatagridFilters($datagridMapper);
+        $this->addOrganisationsDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -206,9 +199,7 @@ class MailingAdmin extends AbstractAppAdmin
                 'template' => 'Mailing/show-mailing-contacts.html.twig',
             ])
             ->add('excludeContacts');
-        $this->addServiceProvidersShowFields($showMapper);
-        $this->addCommunesShowFields($showMapper);
-        $this->addStateMinistriesShowFields($showMapper);
+        $this->addOrganisationsShowFields($showMapper);
         $this->addCategoriesShowFields($showMapper);
     }
 
@@ -241,7 +232,7 @@ class MailingAdmin extends AbstractAppAdmin
      * and communes
      * @param Mailing $object
      */
-    public function updateMailingContacts(Mailing $object)
+    public function updateMailingContacts(Mailing $object): void
     {
         $categories = $object->getCategories();
         foreach ($categories as $child) {
@@ -250,22 +241,8 @@ class MailingAdmin extends AbstractAppAdmin
                 $this->addContactToMailingOnce($object, $contact);
             }
         }
-        $stateMinistries = $object->getStateMinistries();
-        foreach ($stateMinistries as $child) {
-            $contacts = $child->getContacts();
-            foreach ($contacts as $contact) {
-                $this->addContactToMailingOnce($object, $contact);
-            }
-        }
-        $serviceProviders = $object->getServiceProviders();
-        foreach ($serviceProviders as $child) {
-            $contacts = $child->getContacts();
-            foreach ($contacts as $contact) {
-                $this->addContactToMailingOnce($object, $contact);
-            }
-        }
-        $communes = $object->getCommunes();
-        foreach ($communes as $child) {
+        $organisations = $object->getOrganisations();
+        foreach ($organisations as $child) {
             $contacts = $child->getContacts();
             foreach ($contacts as $contact) {
                 $this->addContactToMailingOnce($object, $contact);

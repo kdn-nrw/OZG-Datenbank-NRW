@@ -16,6 +16,13 @@ app:
       list: Übersicht
     add_sub_record: Neuen Eintrag bearbeiten
     actions: Aktionen
+    fields:
+      id: ID
+      created_at: Erstellt am
+      modified_at: Geändert am
+      hidden: Versteckt
+      created_by: Erstellt von
+      modified_by: Geändert von
   analog_service:
     object_name: Analoger Dienst
     list: Analoge Dienste
@@ -57,9 +64,10 @@ app:
       edit: Kommune bearbeiten
       solution_list: Lösungen anzeigen
     group:
-      general_data: Allgemein
+      general_data: Basisdaten
       services_data: Dienstleistungen
     entity:
+      organisation: Organisation
       name: Name
       street: Straße, Hausnummer
       zip_code: PLZ
@@ -94,6 +102,9 @@ app:
       town: Ort
       street: Straße
       organisation: Organisation
+      organisation_form: Organisation (extern/Name)
+      organisation_entity: Organisation
+      organisation_entity_form: Organisation (interne Referenz)
       department: Organisationseinheit
       position: Funktion
       phone_number: Telefon
@@ -131,8 +142,8 @@ app:
       solutions: Lösungen
       contacts: Ansprechpartner
       notes: Notizen
-      interested_contacts: An Mitarbeit interessiert
-      participation_contacts: Mitarbeit zugesichert
+      interested_organisations: An Mitarbeit interessiert
+      participation_organisations: Mitarbeit zugesichert
       laboratories: Digitalisierungslabore
   implementation_status:
     object_name: Umsetzungs-Status
@@ -202,9 +213,7 @@ app:
       send_start_at: Versandstart
       send_end_at: Versandende
       mailing_contacts: Kontakte
-      state_ministries: Ministerien (Land)
-      service_providers: IT Dienstleister
-      communes: Kommunen
+      organisations: Organisationen
       categories: Kategorien
       recipient_count: '# Empfänger'
       sent_count: '# verschickt'
@@ -226,6 +235,7 @@ app:
     list: Hersteller
     create: Hersteller anlegen
     entity:
+      organisation: Organisation
       name: Name
       street: Straße, Hausnummer
       zip_code: PLZ
@@ -239,6 +249,7 @@ app:
     tabs:
       default: Allgemein
     entity:
+      organisation: Organisation
       name: Name
       short_name: Kürzel
       street: Straße, Hausnummer
@@ -261,6 +272,33 @@ app:
     entity:
       name: Name
       solutions: Lösungen
+  organisation:
+    object_name: Organisation
+    list: Organisationen
+    create: Organisation anlegen
+    groups:
+      basic_data: Basisdaten
+      address_data: Adressdaten
+      type_data: Organisationstyp
+      contacts: Ansprechpartner
+    entity:
+      name: Name
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      contacts: OZG-Ansprechpartner
+      organization_type: Typ
+      organization_type_choices:
+        default: Standard
+        commune: Kommune
+        service_provider: Dienstleister
+        ministry_state: Ministerium (Land)
+        manufacturer: Hersteller
+      commune: Kommune
+      ministry_state: Ministerium (Land)
+      service_provider: Dienstleister
+      manufacturer: Hersteller
   payment_type:
     object_name: Bezahlverfahren
     list: Bezahlverfahren
@@ -328,6 +366,7 @@ app:
       legal_basis: Rechtsgrundlage
       laws: Gesetze
       law_shortcuts: Gesetzeskürzel
+      description: Beschreibung
       relevance1: SDG1
       relevance2: SDG2
       status: Status
@@ -350,14 +389,15 @@ app:
       show: IT Dienstleister anzeigen
       edit: IT Dienstleister bearbeiten
     group:
-      general_data: Allgemein
+      general_data: Basisdaten
+      reference_data: Referenzen
     entity:
+      organisation: Organisation
       name: Name
       street: Straße, Hausnummer
       zip_code: PLZ
       town: Ort
       url: Url
-      contacts: OZG-Ansprechpartner
       contact: OZG-Ansprechpartner (alt)
       #solutions: Lösungen
       communes: Kommunen

@@ -370,10 +370,17 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     public function getExportFields()
     {
-        return [
+        $fields = parent::getExportFields();
+        $additionalFields = [
             // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions',
             'serviceProvider', 'customProvider', 'name', 'maturity', 'url', 'status',
         ];
+        foreach ($additionalFields as $field) {
+            if (!in_array($field, $fields, false)) {
+                $fields[] = $field;
+            }
+        }
+        return $fields;
     }
 
     /**

@@ -96,32 +96,32 @@ class ImplementationProject extends BaseNamedEntity
     private $contacts;
 
     /**
-     * @var Contact[]|Collection
-     * @ORM\ManyToMany(targetEntity="Contact")
-     * @ORM\JoinTable(name="ozg_implementation_project_contact_interested",
+     * @var Organisation[]|Collection
+     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\JoinTable(name="ozg_implementation_project_organisation_interested",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      *   }
      * )
      */
-    private $interestedContacts;
+    private $interestedOrganisations;
 
     /**
-     * @var Contact[]|Collection
-     * @ORM\ManyToMany(targetEntity="Contact")
-     * @ORM\JoinTable(name="ozg_implementation_project_contact_participation",
+     * @var Organisation[]|Collection
+     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\JoinTable(name="ozg_implementation_project_organisation_participation",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      *   }
      * )
      */
-    private $participationContacts;
+    private $participationOrganisations;
 
     /**
      * @var Laboratory[]|Collection
@@ -143,8 +143,8 @@ class ImplementationProject extends BaseNamedEntity
         $this->laboratories = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
         $this->contacts = new ArrayCollection();
-        $this->interestedContacts = new ArrayCollection();
-        $this->participationContacts = new ArrayCollection();
+        $this->interestedOrganisations = new ArrayCollection();
+        $this->participationOrganisations = new ArrayCollection();
     }
 
     /**
@@ -364,72 +364,28 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @param Contact $interestedContact
+     * @param Contact $interestedOrganisation
      * @return self
      */
-    public function addInterestedContact($interestedContact): self
+    public function addInterestedOrganisation($interestedOrganisation): self
     {
-        if (!$this->interestedContacts->contains($interestedContact)) {
-            $this->interestedContacts->add($interestedContact);
-            //$interestedContact->addImplementationProject($this);
+        if (!$this->interestedOrganisations->contains($interestedOrganisation)) {
+            $this->interestedOrganisations->add($interestedOrganisation);
+            //$interestedOrganisation->addImplementationProject($this);
         }
 
         return $this;
     }
 
     /**
-     * @param Contact $interestedContact
+     * @param Contact $interestedOrganisation
      * @return self
      */
-    public function removeInterestedContact($interestedContact): self
+    public function removeInterestedOrganisation($interestedOrganisation): self
     {
-        if ($this->interestedContacts->contains($interestedContact)) {
-            $this->interestedContacts->removeElement($interestedContact);
-            //$interestedContact->removeImplementationProject($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Contact[]|Collection
-     */
-    public function getInterestedContacts()
-    {
-        return $this->interestedContacts;
-    }
-
-    /**
-     * @param Contact[]|Collection $interestedContacts
-     */
-    public function setInterestedContacts($interestedContacts): void
-    {
-        $this->interestedContacts = $interestedContacts;
-    }
-
-    /**
-     * @param Contact $participationContact
-     * @return self
-     */
-    public function addParticipationContact($participationContact): self
-    {
-        if (!$this->participationContacts->contains($participationContact)) {
-            $this->participationContacts->add($participationContact);
-            //$participationContact->addImplementationProject($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Contact $participationContact
-     * @return self
-     */
-    public function removeParticipationContact($participationContact): self
-    {
-        if ($this->participationContacts->contains($participationContact)) {
-            $this->participationContacts->removeElement($participationContact);
-            //$participationContact->removeImplementationProject($this);
+        if ($this->interestedOrganisations->contains($interestedOrganisation)) {
+            $this->interestedOrganisations->removeElement($interestedOrganisation);
+            //$interestedOrganisation->removeImplementationProject($this);
         }
 
         return $this;
@@ -438,17 +394,61 @@ class ImplementationProject extends BaseNamedEntity
     /**
      * @return Contact[]|Collection
      */
-    public function getParticipationContacts()
+    public function getInterestedOrganisations()
     {
-        return $this->participationContacts;
+        return $this->interestedOrganisations;
     }
 
     /**
-     * @param Contact[]|Collection $participationContacts
+     * @param Contact[]|Collection $interestedOrganisations
      */
-    public function setParticipationContacts($participationContacts): void
+    public function setInterestedOrganisations($interestedOrganisations): void
     {
-        $this->participationContacts = $participationContacts;
+        $this->interestedOrganisations = $interestedOrganisations;
+    }
+
+    /**
+     * @param Contact $participationOrganisation
+     * @return self
+     */
+    public function addParticipationOrganisation($participationOrganisation): self
+    {
+        if (!$this->participationOrganisations->contains($participationOrganisation)) {
+            $this->participationOrganisations->add($participationOrganisation);
+            //$participationOrganisation->addImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $participationOrganisation
+     * @return self
+     */
+    public function removeParticipationOrganisation($participationOrganisation): self
+    {
+        if ($this->participationOrganisations->contains($participationOrganisation)) {
+            $this->participationOrganisations->removeElement($participationOrganisation);
+            //$participationOrganisation->removeImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getParticipationOrganisations()
+    {
+        return $this->participationOrganisations;
+    }
+
+    /**
+     * @param Contact[]|Collection $participationOrganisations
+     */
+    public function setParticipationOrganisations($participationOrganisations): void
+    {
+        $this->participationOrganisations = $participationOrganisations;
     }
 
     /**

@@ -4,9 +4,12 @@ namespace App\Service\Mailer;
 
 use App\Entity\Mailing;
 use App\Entity\MailingContact;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\VarDumper\VarDumper;
 
 class MailingSender
 {
@@ -34,17 +37,17 @@ class MailingSender
      * Send mailing emails
      *
      * @param int $limit
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function run($limit = 50)
+    public function run($limit = 50): void
     {
         /** @var EntityManager $em */
         $em = $this->registry->getManager();
         $qb = $em->createQueryBuilder();
 
-        $now = new \DateTime();
-        $now->setTimezone(new \DateTimeZone('UTC'));
+        $now = new DateTime();
+        $now->setTimezone(new DateTimeZone('UTC'));
         $qb->select(['m'])
             ->from(Mailing::class, 'm')
             ->where('m.status IN (:statusList)')
@@ -67,14 +70,14 @@ class MailingSender
                 $mailing->setStatus(Mailing::STATUS_ACTIVE);
             }
             if (null === $mailing->getSendStartAt()) {
-                $now = new \DateTime();
-                $now->setTimezone(new \DateTimeZone('UTC'));
+                $now = new DateTime();
+                $now->setTimezone(new DateTimeZone('UTC'));
                 $mailing->setSendStartAt($now);
             }
             $mailingContacts = $mailing->getMailingContacts();
             $setStatusFinished = true;
             foreach ($mailingContacts as $mc) {
-                if (!$mc->isHidden() && in_array($mc->getSendStatus(), $activeContactStatus)) {
+                if (!$mc->isHidden() && in_array($mc->getSendStatus(), $activeContactStatus, false)) {
                     if (!$mailing->contactIsBlacklisted($mc->getContact())) {
                         $isSent = $this->sendEmailForMailingContact($mailing, $mc);
                         if ($isSent) {
@@ -97,11 +100,12 @@ class MailingSender
                 $mailing->setSendEndAt(null);
             }
             $mailing->updateSentCount();
+            /** @noinspection DisconnectedForeachInstructionInspection */
             $em->flush();
         }
     }
 
-    private function sendEmailForMailingContact(Mailing $mailing, MailingContact $mailingContact)
+    private function sendEmailForMailingContact(Mailing $mailing, MailingContact $mailingContact): bool
     {
         $mailer = $this->mailer;
         $email = $mailer->createMessage();

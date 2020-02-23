@@ -77,8 +77,10 @@
 
 {% block app_show_custom_fields %}
     {% if elements['serviceSolutions'] is defined %}
+        {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
+        {% set displayServiceSolutions = isAdminMode ? object.serviceSolutions : object.publishedServiceSolutions %}
         <div class="col-xs-12">
-            {% include 'General/Show/show-service-solutions.html.twig' with {'entities': object.serviceSolutions, 'showSolution': true} %}
+            {% include 'General/Show/show-service-solutions.html.twig' with {'entities': displayServiceSolutions, 'showSolution': true} %}
         </div>
     {% endif %}
     {{ parent() }}
