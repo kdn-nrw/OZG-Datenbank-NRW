@@ -94,10 +94,17 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
 
     public function getExportFields()
     {
-        return [
+        $fields = parent::getExportFields();
+        $additionalFields = [
             'name', 'serviceKey', 'situation', 'situation.subject',
             'priority', 'status',
         ];
+        foreach ($additionalFields as $field) {
+            if (!in_array($field, $fields, false)) {
+                $fields[] = $field;
+            }
+        }
+        return $fields;
     }
 
     /**

@@ -3,23 +3,29 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
-use App\Entity\Base\SoftdeletableEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * Class Ministerium Land
+ * Class MinistryState
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_ministry_state")
- * @ORM\HasLifecycleCallbacks
  */
-class MinistryState extends BaseNamedEntity
+class MinistryState extends BaseNamedEntity implements OrganisationEntityInterface
 {
     use AddressTrait;
     use UrlTrait;
+    use OrganisationTrait;
+
+    /**
+     * @var Organisation
+     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="ministryState")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    private $organisation;
 
     /**
      * Short name
@@ -28,12 +34,6 @@ class MinistryState extends BaseNamedEntity
      * @ORM\Column(type="string", name="short_name", length=255, nullable=true)
      */
     private $shortName;
-
-    /**
-     * @var Contact[]|Collection
-     * @ORM\OneToMany(targetEntity="Contact", mappedBy="ministryState", cascade={"all"})
-     */
-    private $contacts;
 
     /**
      * @var ServiceSystem[]|Collection
@@ -51,8 +51,16 @@ class MinistryState extends BaseNamedEntity
 
     public function __construct()
     {
-        $this->contacts = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
+    }
+
+    /**
+     * @param Organisation $organisation
+     */
+    public function setOrganisation(Organisation $organisation): void
+    {
+        $this->organisation = $organisation;
+        $this->organisation->setMinistryState($this);
     }
 
     /**
@@ -72,56 +80,10 @@ class MinistryState extends BaseNamedEntity
     }
 
     /**
-     * @param Contact $contact
-     * @return self
-     */
-    public function addContact($contact)
-    {
-        if (!$this->contacts->contains($contact)) {
-            $this->contacts->add($contact);
-            $contact->setMinistryState($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Contact $contact
-     * @return self
-     */
-    public function removeContact($contact)
-    {
-        if ($this->contacts->contains($contact)) {
-            $this->contacts->removeElement($contact);
-            if ($contact instanceof SoftdeletableEntityInterface) {
-                $contact->setDeletedAt(new \DateTime());
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Contact[]|Collection
-     */
-    public function getContacts()
-    {
-        return $this->contacts;
-    }
-
-    /**
-     * @param Contact[]|Collection $contacts
-     */
-    public function setContacts($contacts): void
-    {
-        $this->contacts = $contacts;
-    }
-
-    /**
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function addServiceSystem($serviceSystem)
+    public function addServiceSystem($serviceSystem): self
     {
         if (!$this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->add($serviceSystem);
@@ -135,7 +97,7 @@ class MinistryState extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function removeServiceSystem($serviceSystem)
+    public function removeServiceSystem($serviceSystem): self
     {
         if ($this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->removeElement($serviceSystem);

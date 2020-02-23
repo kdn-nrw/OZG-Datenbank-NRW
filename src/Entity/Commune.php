@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Base\AppBaseEntity;
 use App\Entity\Base\SoftdeletableEntityInterface;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,12 +15,19 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="App\Entity\Repository\CommuneRepository")
  * @ORM\Table(name="ozg_commune")
- * @ORM\HasLifecycleCallbacks
  */
-class Commune extends AppBaseEntity
+class Commune extends AppBaseEntity implements OrganisationEntityInterface
 {
     use AddressTrait;
     use UrlTrait;
+    use OrganisationTrait;
+
+    /**
+     * @var Organisation
+     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="commune")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    private $organisation;
 
     /**
      * Contact persons
@@ -57,12 +65,6 @@ class Commune extends AppBaseEntity
     private $solutions;
 
     /**
-     * @var Contact[]|Collection
-     * @ORM\OneToMany(targetEntity="Contact", mappedBy="commune", cascade={"all"})
-     */
-    private $contacts;
-
-    /**
      * @var SpecializedProcedure[]|Collection
      * @ORM\ManyToMany(targetEntity="SpecializedProcedure", mappedBy="communes")
      * @ORM\OrderBy({"name" = "ASC"})
@@ -71,11 +73,20 @@ class Commune extends AppBaseEntity
 
     public function __construct()
     {
-        $this->contacts = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->offices = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
+    }
+
+    /**
+     * @param Organisation $organisation
+     */
+    public function setOrganisation(Organisation $organisation): void
+    {
+        $this->organisation = $organisation;
+        $this->organisation->setCommune($this);
+        $this->organisation->setFromReference($this);
     }
 
     /**
@@ -99,7 +110,7 @@ class Commune extends AppBaseEntity
      * @return self
      * @deprecated
      */
-    public function addOffice($office)
+    public function addOffice($office): self
     {
         if (!$this->offices->contains($office)) {
             $this->offices->add($office);
@@ -114,12 +125,12 @@ class Commune extends AppBaseEntity
      * @return self
      * @deprecated
      */
-    public function removeOffice($office)
+    public function removeOffice($office): self
     {
         if ($this->offices->contains($office)) {
             $this->offices->removeElement($office);
             if ($office instanceof SoftdeletableEntityInterface) {
-                $office->setDeletedAt(new \DateTime());
+                $office->setDeletedAt(new DateTime());
             }
         }
 
@@ -148,7 +159,7 @@ class Commune extends AppBaseEntity
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function addServiceProvider($serviceProvider)
+    public function addServiceProvider($serviceProvider): self
     {
         if (!$this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->add($serviceProvider);
@@ -162,7 +173,7 @@ class Commune extends AppBaseEntity
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function removeServiceProvider($serviceProvider)
+    public function removeServiceProvider($serviceProvider): self
     {
         if ($this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->removeElement($serviceProvider);
@@ -192,7 +203,7 @@ class Commune extends AppBaseEntity
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution)
+    public function addSolution($solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -206,7 +217,7 @@ class Commune extends AppBaseEntity
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution)
+    public function removeSolution($solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
@@ -230,52 +241,6 @@ class Commune extends AppBaseEntity
     public function setSolutions($solutions): void
     {
         $this->solutions = $solutions;
-    }
-
-    /**
-     * @param Contact $contact
-     * @return self
-     */
-    public function addContact($contact)
-    {
-        if (!$this->contacts->contains($contact)) {
-            $this->contacts->add($contact);
-            $contact->setCommune($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Contact $contact
-     * @return self
-     */
-    public function removeContact($contact)
-    {
-        if ($this->contacts->contains($contact)) {
-            $this->contacts->removeElement($contact);
-            if ($contact instanceof SoftdeletableEntityInterface) {
-                $contact->setDeletedAt(new \DateTime());
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Contact[]|Collection
-     */
-    public function getContacts()
-    {
-        return $this->contacts;
-    }
-
-    /**
-     * @param Contact[]|Collection $contacts
-     */
-    public function setContacts($contacts): void
-    {
-        $this->contacts = $contacts;
     }
 
     /**
@@ -326,7 +291,7 @@ class Commune extends AppBaseEntity
      * Returns the unique manufacturer list with the manufacturer determined through the specialized procedures
      * @return ArrayCollection
      */
-    public function getManufacturers()
+    public function getManufacturers(): ArrayCollection
     {
         $manufacturers = new ArrayCollection();
         $specializedProcedures = $this->getSpecializedProcedures();

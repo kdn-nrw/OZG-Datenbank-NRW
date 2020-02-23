@@ -98,46 +98,18 @@ class Mailing extends BaseBlamableEntity
     private $mailingContacts;
 
     /**
-     * @var MinistryState[]|Collection
-     * @ORM\ManyToMany(targetEntity="MinistryState")
-     * @ORM\JoinTable(name="ozg_mailing_ministry_state",
+     * @var Organisation[]|Collection
+     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\JoinTable(name="ozg_mailing_organisation",
      *     joinColumns={
      *     @ORM\JoinColumn(name="mailing_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id", onDelete="CASCADE")
+     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */
-    private $stateMinistries;
-
-    /**
-     * @var ServiceProvider[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceProvider")
-     * @ORM\JoinTable(name="ozg_mailing_service_provider",
-     *     joinColumns={
-     *     @ORM\JoinColumn(name="mailing_id", referencedColumnName="id", onDelete="CASCADE")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", onDelete="CASCADE")
-     *   }
-     * )
-     */
-    private $serviceProviders;
-
-    /**
-     * @var Commune[]|Collection
-     * @ORM\ManyToMany(targetEntity="Commune")
-     * @ORM\JoinTable(name="ozg_mailing_commune",
-     *     joinColumns={
-     *     @ORM\JoinColumn(name="mailing_id", referencedColumnName="id", onDelete="CASCADE")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id", onDelete="CASCADE")
-     *   }
-     * )
-     */
-    private $communes;
+    private $organisations;
 
     /**
      * @var Category[]|Collection
@@ -194,11 +166,9 @@ class Mailing extends BaseBlamableEntity
     public function __construct()
     {
         $this->categories = new ArrayCollection();
-        $this->communes = new ArrayCollection();
         $this->excludeContacts = new ArrayCollection();
         $this->mailingContacts = new ArrayCollection();
-        $this->serviceProviders = new ArrayCollection();
-        $this->stateMinistries = new ArrayCollection();
+        $this->organisations = new ArrayCollection();
     }
 
     /**
@@ -424,129 +394,45 @@ class Mailing extends BaseBlamableEntity
 
 
     /**
-     * @param MinistryState $stateMinistry
+     * @param Organisation $organisation
      * @return self
      */
-    public function addStateMinistry($stateMinistry): self
+    public function addOrganisation($organisation): self
     {
-        if (!$this->stateMinistries->contains($stateMinistry)) {
-            $this->stateMinistries->add($stateMinistry);
+        if (!$this->organisations->contains($organisation)) {
+            $this->organisations->add($organisation);
         }
 
         return $this;
     }
 
     /**
-     * @param MinistryState $stateMinistry
+     * @param Organisation $organisation
      * @return self
      */
-    public function removeStateMinistry($stateMinistry): self
+    public function removeOrganisation($organisation): self
     {
-        if ($this->stateMinistries->contains($stateMinistry)) {
-            $this->stateMinistries->removeElement($stateMinistry);
+        if ($this->organisations->contains($organisation)) {
+            $this->organisations->removeElement($organisation);
         }
 
         return $this;
     }
 
     /**
-     * @return MinistryState[]|Collection
+     * @return Organisation[]|Collection
      */
-    public function getStateMinistries()
+    public function getOrganisations()
     {
-        return $this->stateMinistries;
+        return $this->organisations;
     }
 
     /**
-     * @param MinistryState[]|Collection $stateMinistries
+     * @param Organisation[]|Collection $organisations
      */
-    public function setStateMinistries($stateMinistries): void
+    public function setOrganisations($organisations): void
     {
-        $this->stateMinistries = $stateMinistries;
-    }
-
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @return self
-     */
-    public function addServiceProvider($serviceProvider): self
-    {
-        if (!$this->serviceProviders->contains($serviceProvider)) {
-            $this->serviceProviders->add($serviceProvider);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @return self
-     */
-    public function removeServiceProvider($serviceProvider): self
-    {
-        if ($this->serviceProviders->contains($serviceProvider)) {
-            $this->serviceProviders->removeElement($serviceProvider);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return ServiceProvider[]|Collection
-     */
-    public function getServiceProviders()
-    {
-        return $this->serviceProviders;
-    }
-
-    /**
-     * @param ServiceProvider[]|Collection $serviceProviders
-     */
-    public function setServiceProviders($serviceProviders): void
-    {
-        $this->serviceProviders = $serviceProviders;
-    }
-
-    /**
-     * @param Commune $commune
-     * @return self
-     */
-    public function addCommune($commune): self
-    {
-        if (!$this->communes->contains($commune)) {
-            $this->communes->add($commune);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Commune $commune
-     * @return self
-     */
-    public function removeCommune($commune): self
-    {
-        if ($this->communes->contains($commune)) {
-            $this->communes->removeElement($commune);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Commune[]|Collection
-     */
-    public function getCommunes()
-    {
-        return $this->communes;
-    }
-
-    /**
-     * @param Commune[]|Collection $communes
-     */
-    public function setCommunes($communes): void
-    {
-        $this->communes = $communes;
+        $this->organisations = $organisations;
     }
 
     /**

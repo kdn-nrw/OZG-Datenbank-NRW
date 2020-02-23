@@ -94,6 +94,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
                 ],
                 'route' => [
                     'name' => 'show',
+                    'parameters' => [],
                 ],
             ])
             ->add('serviceSystem.serviceKey', null, [
@@ -112,11 +113,17 @@ class ServiceAdmin extends AbstractFrontendAdmin
 
     public function getExportFields()
     {
-        return [
+        $fields = parent::getExportFields();
+        $additionalFields = [
             'serviceSystem.situation.subject', 'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey',
-            'name',
-            'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
+            'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
         ];
+        foreach ($additionalFields as $field) {
+            if (!in_array($field, $fields, false)) {
+                $fields[] = $field;
+            }
+        }
+        return $fields;
     }
 
     /**
@@ -167,7 +174,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
             ])
             ->add('serviceSystem.situation')
             ->add('serviceSystem.situation.subject')
-            //->add('serviceSolutions') => TODO: add filter for public solutions!
+            ->add('serviceSolutions')
             ->add('jurisdictions')
             ->add('bureaus');
     }

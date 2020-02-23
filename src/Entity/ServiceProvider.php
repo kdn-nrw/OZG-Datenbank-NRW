@@ -11,16 +11,23 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * Class Dienstleister
+ * Class ServiceProvider
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_provider")
- * @ORM\HasLifecycleCallbacks
  */
-class ServiceProvider extends BaseNamedEntity
+class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInterface
 {
     use AddressTrait;
     use UrlTrait;
+    use OrganisationTrait;
+
+    /**
+     * @var Organisation
+     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="serviceProvider")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    private $organisation;
 
     /**
      * Contact
@@ -52,12 +59,6 @@ class ServiceProvider extends BaseNamedEntity
     private $laboratories;
 
     /**
-     * @var Contact[]|Collection
-     * @ORM\OneToMany(targetEntity="Contact", mappedBy="serviceProvider", cascade={"all"})
-     */
-    private $contacts;
-
-    /**
      * @var SpecializedProcedure[]|Collection
      * @ORM\ManyToMany(targetEntity="SpecializedProcedure", mappedBy="serviceProviders")
      * @ORM\OrderBy({"name" = "ASC"})
@@ -67,10 +68,18 @@ class ServiceProvider extends BaseNamedEntity
     public function __construct()
     {
         $this->communes = new ArrayCollection();
-        $this->contacts = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
+    }
+
+    /**
+     * @param Organisation $organisation
+     */
+    public function setOrganisation(Organisation $organisation): void
+    {
+        $this->organisation = $organisation;
+        $this->organisation->setServiceProvider($this);
     }
 
     /**
@@ -218,52 +227,6 @@ class ServiceProvider extends BaseNamedEntity
     }
 
     /**
-     * @param Contact $contact
-     * @return self
-     */
-    public function addContact($contact): self
-    {
-        if (!$this->contacts->contains($contact)) {
-            $this->contacts->add($contact);
-            $contact->setServiceProvider($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Contact $contact
-     * @return self
-     */
-    public function removeContact($contact): self
-    {
-        if ($this->contacts->contains($contact)) {
-            $this->contacts->removeElement($contact);
-            if ($contact instanceof SoftdeletableEntityInterface) {
-                $contact->setDeletedAt(new DateTime());
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Contact[]|Collection
-     */
-    public function getContacts()
-    {
-        return $this->contacts;
-    }
-
-    /**
-     * @param Contact[]|Collection $contacts
-     */
-    public function setContacts($contacts): void
-    {
-        $this->contacts = $contacts;
-    }
-
-    /**
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
@@ -311,7 +274,7 @@ class ServiceProvider extends BaseNamedEntity
      * Returns the unique manufacturer list with the manufacturer determined through the specialized procedures
      * @return ArrayCollection
      */
-    public function getManufacturers()
+    public function getManufacturers(): ArrayCollection
     {
         $manufacturers = new ArrayCollection();
         $specializedProcedures = $this->getSpecializedProcedures();

@@ -8,7 +8,6 @@ use App\Entity\Contact;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -26,92 +25,74 @@ class ContactAdmin extends AbstractAppAdmin
         $hideFields = $this->getFormHideFields();
         $formMapper
             ->with('app.contact.groups.person_data', ['class' => 'col-md-6'])
-                ->add('gender', ChoiceType::class, [
-                    'choices' => [
-                        'app.contact.entity.gender_choices.male'  => Contact::GENDER_MALE,
-                        'app.contact.entity.gender_choices.female' => Contact::GENDER_FEMALE,
-                        'app.contact.entity.gender_choices.other' => Contact::GENDER_OTHER,
-                        'app.contact.entity.gender_choices.unknown' => Contact::GENDER_UNKNOWN,
-                    ],
-                    'required' => false,
-                ])
-                ->add('title', TextType::class, [
-                    'required' => false,
-                ])
-                ->add('firstName', TextType::class)
-                ->add('lastName', TextType::class)
+            ->add('gender', ChoiceType::class, [
+                'choices' => [
+                    'app.contact.entity.gender_choices.male' => Contact::GENDER_MALE,
+                    'app.contact.entity.gender_choices.female' => Contact::GENDER_FEMALE,
+                    'app.contact.entity.gender_choices.other' => Contact::GENDER_OTHER,
+                    'app.contact.entity.gender_choices.unknown' => Contact::GENDER_UNKNOWN,
+                ],
+                'required' => false,
+            ])
+            ->add('title', TextType::class, [
+                'required' => false,
+            ])
+            ->add('firstName', TextType::class)
+            ->add('lastName', TextType::class)
             ->end()
             ->with('app.contact.groups.address_data', ['class' => 'col-md-6']);
         $this->addAddressFormFields($formMapper);
         $formMapper->end();
-        if (!in_array('contactType', $hideFields)) {
-        $formMapper
-            ->with('app.contact.groups.type_data', ['class' => 'col-md-6'])
-                ->add('contactType', ChoiceFieldMaskType::class, [
-                    'choices' => [
-                        'app.contact.entity.contact_type_choices.default' => Contact::CONTACT_TYPE_DEFAULT,
-                        'app.contact.entity.contact_type_choices.commune' => Contact::CONTACT_TYPE_COMMUNE,
-                        'app.contact.entity.contact_type_choices.service_provider' => Contact::CONTACT_TYPE_SERVICE_PROVIDER,
-                        'app.contact.entity.contact_type_choices.ministry_state' => Contact::CONTACT_TYPE_MINISTRY_STATE,
-                        'app.contact.entity.contact_type_choices.cms_address' => Contact::CONTACT_TYPE_IMPORT_CMS,
-                    ],
-                    'map' => [
-                        Contact::CONTACT_TYPE_DEFAULT => [],
-                        Contact::CONTACT_TYPE_COMMUNE => ['commune'],
-                        Contact::CONTACT_TYPE_SERVICE_PROVIDER => ['serviceProvider'],
-                        Contact::CONTACT_TYPE_MINISTRY_STATE => ['ministryState'],
-                        Contact::CONTACT_TYPE_IMPORT_CMS => [],
-                    ],
-                    'required' => true,
-                ])
-                ->add('commune', ModelType::class, [
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'choice_translation_domain' => false,
-                ])
-                ->add('serviceProvider', ModelType::class, [
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'choice_translation_domain' => false,
-                ])
-                ->add('ministryState', ModelType::class, [
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'choice_translation_domain' => false,
-                ]);
-            $formMapper->end();
-        }
         $formMapper
             ->end()
-            ->with('app.contact.groups.organisation', ['class' => 'col-md-6'])
-                ->add('organisation', TextType::class, [
+            ->with('app.contact.groups.organisation', ['class' => 'col-md-6']);
+        if (!in_array('organisationEntity', $hideFields, false)) {
+            $formMapper->add('organisationEntity', ModelType::class, [
+                    'label' => 'app.contact.entity.organisation_entity_form',
+                    'btn_add' => false,
+                    'placeholder' => '',
                     'required' => false,
-                ])
-                ->add('department', TextType::class, [
-                    'required' => false,
-                ])
-                ->add('position', TextType::class, [
+                    'choice_translation_domain' => false,
+                ]);
+        }
+        if (!in_array('organisationEntity', $hideFields, false)) {
+            $formMapper->add('organisation', TextType::class, [
+                    'label' => 'app.contact.entity.organisation_form',
                     'required' => false,
                 ]);
-            $this->addCategoriesFormFields($formMapper);
-            $formMapper->end();
-            $formMapper->with('app.contact.groups.contact', ['class' => 'col-md-6'])
-                ->add('email', EmailType::class, [
-                    'required' => false,
-                ])
-                ->add('phoneNumber', TextType::class, [
-                    'required' => false,
-                ])
-                ->add('faxNumber', TextType::class, [
-                    'required' => false,
-                ])
-                ->add('mobileNumber', TextType::class, [
-                    'required' => false,
-                ])
-            ->end();
+        }
+        $formMapper
+            ->add('department', TextType::class, [
+                'required' => false,
+            ])
+            ->add('position', TextType::class, [
+                'required' => false,
+            ]);
+        $this->addCategoriesFormFields($formMapper);
+        $formMapper->end();
+        $formMapper->with('app.contact.groups.contact', ['class' => 'col-md-6'])
+            ->add('email', EmailType::class, [
+                'required' => false,
+            ])
+            ->add('phoneNumber', TextType::class, [
+                'required' => false,
+            ])
+            ->add('faxNumber', TextType::class, [
+                'required' => false,
+            ])
+            ->add('mobileNumber', TextType::class, [
+                'required' => false,
+            ]);
+        if (!in_array('contactType', $hideFields, false)) {
+            $formMapper->add('contactType', ChoiceType::class, [
+                'choices' => [
+                    'app.contact.entity.contact_type_choices.default' => Contact::CONTACT_TYPE_DEFAULT,
+                    'app.contact.entity.contact_type_choices.cms_address' => Contact::CONTACT_TYPE_IMPORT_CMS,
+                ],
+                'required' => true,
+            ]);
+        }
+        $formMapper->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -130,9 +111,9 @@ class ContactAdmin extends AbstractAppAdmin
             ->add('gender', 'choice', [
                 'editable' => false,
                 'choices' => [
-                    Contact::GENDER_MALE  => 'app.contact.entity.gender_choices.male',
-                    Contact::GENDER_FEMALE  => 'app.contact.entity.gender_choices.female',
-                    Contact::GENDER_OTHER  => 'app.contact.entity.gender_choices.other',
+                    Contact::GENDER_MALE => 'app.contact.entity.gender_choices.male',
+                    Contact::GENDER_FEMALE => 'app.contact.entity.gender_choices.female',
+                    Contact::GENDER_OTHER => 'app.contact.entity.gender_choices.other',
                 ],
                 'catalogue' => 'messages',
             ])
@@ -155,9 +136,9 @@ class ContactAdmin extends AbstractAppAdmin
             ->add('gender', 'choice', [
                 'editable' => false,
                 'choices' => [
-                    Contact::GENDER_MALE  => 'app.contact.entity.gender_choices.male',
-                    Contact::GENDER_FEMALE  => 'app.contact.entity.gender_choices.female',
-                    Contact::GENDER_OTHER  => 'app.contact.entity.gender_choices.other',
+                    Contact::GENDER_MALE => 'app.contact.entity.gender_choices.male',
+                    Contact::GENDER_FEMALE => 'app.contact.entity.gender_choices.female',
+                    Contact::GENDER_OTHER => 'app.contact.entity.gender_choices.other',
                 ],
                 'catalogue' => 'messages',
             ])

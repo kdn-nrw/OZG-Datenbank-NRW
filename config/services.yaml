@@ -257,6 +257,18 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
+  App\Admin\OrganisationAdmin:
+    arguments:
+      - ~
+      - App\Entity\Organisation
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.organisation.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
   App\Admin\PaymentTypeAdmin:
     arguments:
       - ~
@@ -504,3 +516,10 @@ services:
       $adminEmail: '%env(string:APP_MAILER_ADMIN_MAIL)%'
       $isDebug: '%env(bool:APP_MAILER_DEBUG)%'
       $debugEmail: '%env(string:APP_MAILER_DEBUG_RECIPIENT)%'
+
+  App\Exporter\Writer\XlsxWriter:
+    arguments:
+      - '%sonata.exporter.writer.xls.filename%'
+      - '%sonata.exporter.writer.xls.show_headers%'
+    tags:
+      - { name: sonata.exporter.writer}

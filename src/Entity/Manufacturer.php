@@ -13,12 +13,19 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_manufacturer")
- * @ORM\HasLifecycleCallbacks
  */
-class Manufacturer extends BaseNamedEntity
+class Manufacturer extends BaseNamedEntity implements OrganisationEntityInterface
 {
     use AddressTrait;
     use UrlTrait;
+    use OrganisationTrait;
+
+    /**
+     * @var Organisation
+     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="manufacturer")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    private $organisation;
 
     /**
      * @var SpecializedProcedure[]|Collection
@@ -40,10 +47,19 @@ class Manufacturer extends BaseNamedEntity
     }
 
     /**
+     * @param Organisation $organisation
+     */
+    public function setOrganisation(Organisation $organisation): void
+    {
+        $this->organisation = $organisation;
+        $this->organisation->setManufacturer($this);
+    }
+
+    /**
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function addSpecializedProcedure($specializedProcedure)
+    public function addSpecializedProcedure($specializedProcedure): self
     {
         if (!$this->specializedProcedures->contains($specializedProcedure)) {
             $this->specializedProcedures->add($specializedProcedure);
@@ -57,7 +73,7 @@ class Manufacturer extends BaseNamedEntity
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function removeSpecializedProcedure($specializedProcedure)
+    public function removeSpecializedProcedure($specializedProcedure): self
     {
         if ($this->specializedProcedures->contains($specializedProcedure)) {
             $this->specializedProcedures->removeElement($specializedProcedure);

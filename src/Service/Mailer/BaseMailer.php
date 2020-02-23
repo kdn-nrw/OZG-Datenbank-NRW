@@ -5,11 +5,11 @@ namespace App\Service\Mailer;
 use App\Entity\Contact;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\NamedAddress;
 
 class BaseMailer
 {
@@ -72,11 +72,11 @@ class BaseMailer
     }
 
     /**
-     * @param Address|NamedAddress|string|null $fromAddresses
+     * @param Address|string|null $fromAddresses
      *
      * @return Email
      */
-    public function createMessage($fromAddresses = null)
+    public function createMessage($fromAddresses = null): Email
     {
         $email = new Email();
         if ($fromAddresses) {
@@ -92,10 +92,10 @@ class BaseMailer
      * @param string|null $name
      * @return Address
      */
-    public function createAddress(string $email, ?string $name)
+    public function createAddress(string $email, ?string $name): Address
     {
         if ($name) {
-            $address = new NamedAddress($email, $name);
+            $address = new Address($email, $name);
         } else {
             $address = new Address($email);
         }
@@ -108,9 +108,9 @@ class BaseMailer
      * @param Email $message
      * @return bool
      */
-    public function sendMessage(Email $message)
+    public function sendMessage(Email $message): bool
     {
-        /** @var \Symfony\Component\Mailer\Mailer $mailer */
+        /** @var Mailer $mailer */
         $mailer = $this->mailerInterface;
         /** @var SentMessage $sentEmail */
         try {
@@ -148,7 +148,7 @@ class BaseMailer
      * @param Email $message
      * @return array
      */
-    private function getDebugTable(Email $message)
+    private function getDebugTable(Email $message): array
     {
         return [
             'To' => $this->formatAndMergeRecipients($message->getTo()),
@@ -162,15 +162,13 @@ class BaseMailer
      * @param string $glue
      * @return string
      */
-    private function formatAndMergeRecipients($recipients, $glue = ', ')
+    private function formatAndMergeRecipients($recipients, $glue = ', '): string
     {
         $recipientArray = [];
         if (!empty($recipients)) {
             foreach ($recipients as $key => $value) {
-                if ($value instanceof NamedAddress) {
-                    $recipientArray[] = $value->getEncodedNamedAddress();
-                } elseif ($value instanceof Address) {
-                    $recipientArray[] = $value->getAddress();
+                if ($value instanceof Address) {
+                    $recipientArray[] = $value->toString();
                 } elseif (!is_numeric($key)) {
                     $recipientArray[] = sprintf('"%s" <%s>', $value, $key);
                 } else {
@@ -186,7 +184,7 @@ class BaseMailer
      * @param array $debugTable
      * @return string
      */
-    private function formatDebugTablePlain($debugTable)
+    private function formatDebugTablePlain($debugTable): string
     {
         $debugOutput = PHP_EOL . PHP_EOL . PHP_EOL;
         $debugOutput .= str_pad('', 60, '-', STR_PAD_LEFT) . PHP_EOL;
@@ -219,7 +217,7 @@ class BaseMailer
                     break;
                 default:
                     $appendTitleAndName = false;
-                break;
+                    break;
             }
             if ($appendTitleAndName) {
                 $title = $contact->getTitle();

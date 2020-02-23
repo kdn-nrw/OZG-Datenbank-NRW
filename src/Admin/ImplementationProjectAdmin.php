@@ -4,6 +4,7 @@ namespace App\Admin;
 
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\LaboratoryTrait;
+use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationStatus;
@@ -23,6 +24,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
 {
     use ContactTrait;
     use LaboratoryTrait;
+    use OrganisationTrait;
     use SolutionTrait;
     use ServiceSystemTrait;
 
@@ -57,8 +59,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
                 'ckeditor_context' => 'default', // optional
             ]);
         $this->addContactsFormFields($formMapper, false, false, 'contacts', false);
-        $this->addContactsFormFields($formMapper, false, false, 'interestedContacts', false);
-        $this->addContactsFormFields($formMapper, false, false, 'participationContacts', false);
+        $this->addOrganisationsFormFields($formMapper, 'interestedOrganisations');
+        $this->addOrganisationsFormFields($formMapper, 'participationOrganisations');
         $formMapper->end();
     }
 
@@ -77,8 +79,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $datagridMapper->add('status');
         $datagridMapper->add('projectStartAt');
         $this->addContactsDatagridFilters($datagridMapper);
-        $this->addContactsDatagridFilters($datagridMapper, 'interestedContacts');
-        $this->addContactsDatagridFilters($datagridMapper, 'participationContacts');
+        $this->addOrganisationsDatagridFilters($datagridMapper, 'interestedOrganisations');
+        $this->addOrganisationsDatagridFilters($datagridMapper, 'participationOrganisations');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -119,8 +121,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addLaboratoriesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
         $this->addContactsShowFields($showMapper);
-        $this->addContactsShowFields($showMapper, false, 'interestedContacts');
-        $this->addContactsShowFields($showMapper, false, 'participationContacts');
+        $this->addOrganisationsShowFields($showMapper, 'interestedOrganisations');
+        $this->addOrganisationsShowFields($showMapper,  'participationOrganisations');
         $this->addServiceSystemsShowFields($showMapper);
     }
 }

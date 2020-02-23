@@ -246,10 +246,17 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     public function getExportFields()
     {
-        return [
-            'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey', 'name',
-            'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
+        $fields = parent::getExportFields();
+        $additionalFields = [
+            'serviceSystem.situation.subject', 'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey',
+            'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
         ];
+        foreach ($additionalFields as $field) {
+            if (!in_array($field, $fields, false)) {
+                $fields[] = $field;
+            }
+        }
+        return $fields;
     }
 
     /**

@@ -19,9 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Contact extends BaseEntity implements ImportEntityInterface
 {
     public const CONTACT_TYPE_DEFAULT = 'default';
-    public const CONTACT_TYPE_COMMUNE = 'commune';
-    public const CONTACT_TYPE_SERVICE_PROVIDER = 'service_provider';
-    public const CONTACT_TYPE_MINISTRY_STATE = 'ministry_state';
     public const CONTACT_TYPE_IMPORT_CMS = 'cms_address';
 
     public const GENDER_MALE = 0;
@@ -110,25 +107,11 @@ class Contact extends BaseEntity implements ImportEntityInterface
     private $mobileNumber;
 
     /**
-     * @var MinistryState|null
-     * @ORM\ManyToOne(targetEntity="MinistryState", inversedBy="contacts", cascade={"persist"})
-     * @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id", nullable=true)
+     * @var Organisation|null
+     * @ORM\ManyToOne(targetEntity="Organisation", inversedBy="contacts", cascade={"persist"})
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
      */
-    private $ministryState;
-
-    /**
-     * @var ServiceProvider|null
-     * @ORM\ManyToOne(targetEntity="ServiceProvider", inversedBy="contacts", cascade={"persist"})
-     * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", nullable=true)
-     */
-    private $serviceProvider;
-
-    /**
-     * @var Commune|null
-     * @ORM\ManyToOne(targetEntity="Commune", inversedBy="contacts", cascade={"persist"})
-     * @ORM\JoinColumn(name="commune_id", referencedColumnName="id", nullable=true)
-     */
-    private $commune;
+    private $organisationEntity;
 
     /**
      * @var Solution[]|Collection
@@ -370,59 +353,21 @@ class Contact extends BaseEntity implements ImportEntityInterface
     }
 
     /**
-     * @return MinistryState|null
+     * @return Organisation|null
      */
-    public function getMinistryState(): ?MinistryState
+    public function getOrganisationEntity(): ?Organisation
     {
-        return $this->ministryState;
+        return $this->organisationEntity;
     }
 
     /**
-     * @param MinistryState|null $ministryState
+     * @param Organisation|null $organisationEntity
      */
-    public function setMinistryState(?MinistryState $ministryState): void
+    public function setOrganisationEntity(?Organisation $organisationEntity): void
     {
-        $this->ministryState = $ministryState;
-        if (null !== $ministryState && empty($this->organisation)) {
-            $this->organisation = $ministryState->getName();
-        }
-    }
-
-    /**
-     * @return ServiceProvider|null
-     */
-    public function getServiceProvider(): ?ServiceProvider
-    {
-        return $this->serviceProvider;
-    }
-
-    /**
-     * @param ServiceProvider|null $serviceProvider
-     */
-    public function setServiceProvider(?ServiceProvider $serviceProvider): void
-    {
-        $this->serviceProvider = $serviceProvider;
-        if (null !== $serviceProvider && empty($this->organisation)) {
-            $this->organisation = $serviceProvider->getName();
-        }
-    }
-
-    /**
-     * @return Commune|null
-     */
-    public function getCommune(): ?Commune
-    {
-        return $this->commune;
-    }
-
-    /**
-     * @param Commune|null $commune
-     */
-    public function setCommune(?Commune $commune): void
-    {
-        $this->commune = $commune;
-        if (null !== $commune && empty($this->organisation)) {
-            $this->organisation = $commune->getName();
+        $this->organisationEntity = $organisationEntity;
+        if (null !== $organisationEntity && empty($this->organisation)) {
+            $this->organisation = $organisationEntity->getName();
         }
     }
 
@@ -431,7 +376,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
         $name = $this->getFullName();
         $organisation = $this->getOrganisation();
         if ($organisation) {
-            $name .= ' ('.$organisation.')';
+            $name .= ' (' . $organisation . ')';
         }
         return $name;
     }

@@ -33,7 +33,7 @@ class AnalogService extends BaseNamedEntity
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution)
+    public function addSolution($solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -47,7 +47,7 @@ class AnalogService extends BaseNamedEntity
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution)
+    public function removeSolution($solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
