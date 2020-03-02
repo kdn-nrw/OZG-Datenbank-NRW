@@ -282,4 +282,10 @@ class SolutionAdmin extends AbstractFrontendAdmin
         $subjects = $modelManager->findBy(Subject::class);
         $datagrid->addFilterMenu('serviceSolutions.service.serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject');
     }
+
+
+    protected function getRoutePrefix(): string
+    {
+        return 'frontend_app_solution';
+    }
 }

@@ -52,6 +52,8 @@
                                     {% include 'General/Show/show-services.html.twig' with {'entities': object.services, 'field_description': elements[field_name]} %}
                                 {% elseif field_name == 'laboratories' %}
                                     {% include 'General/Show/show-laboratories.html.twig' with {'entities': object.laboratories, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'publishedSolutions' %}
+                                    {% include 'General/Show/show-solutions.html.twig' with {'entities': object.publishedSolutions, 'field_description': elements[field_name]} %}
                                 {% elseif field_name == 'solutions' %}
                                     {% include 'General/Show/show-solutions.html.twig' with {'entities': object.solutions, 'field_description': elements[field_name]} %}
                                 {% elseif field_name == 'serviceProviders' %}

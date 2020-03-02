@@ -1,8 +1,8 @@
 {% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
     {% set refAdmin = null %}
+    {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
     {% if not field_description.hasassociationadmin %}
-        {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
         {% if isAdminMode %}
             {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
         {% else %}
@@ -14,7 +14,7 @@
     {% set editRouteName = field_description.options.route.name %}
     {% set createEditLink = editRouteName and refAdmin is not null and refAdmin.hasRoute(editRouteName) and refAdmin.hasAccess(editRouteName) %}
     {% set showRouteName = 'show' %}
-    {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+    {% set listEnableShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
 <div class="box box-primary">
     <div class="box-header">
         <h4 class="box-title">
@@ -31,6 +31,7 @@
             </tr>
             {% for child in entities %}
                 {# @var child \App\Entity\Solution #}
+                {% set createShowLink = listEnableShowLink and (isAdminMode or child.isPublished) %}
                 <tr>
                     {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' %}
                     {% if createEditLink %}

@@ -68,7 +68,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
     {
         $showMapper
             ->add('name')
-            ->add('solutions', null, [
+            ->add('publishedSolutions', null, [
                 'admin_code' => SolutionAdmin::class,
             ])
             ->add('serviceSystems', null, [
@@ -108,5 +108,11 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
         $subjects = $modelManager->findBy(Subject::class);
         $datagrid->addFilterMenu('serviceSystems.situation.subject', $subjects, 'app.situation.entity.subject');
+    }
+
+
+    protected function getRoutePrefix(): string
+    {
+        return 'frontend_app_implementationproject';
     }
 }

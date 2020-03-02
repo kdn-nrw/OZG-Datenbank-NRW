@@ -306,6 +306,20 @@ class ImplementationProject extends BaseNamedEntity
     /**
      * @return Solution[]|Collection
      */
+    public function getPublishedSolutions()
+    {
+        $publishedSolutions = new ArrayCollection();
+        foreach ($this->solutions as $solution) {
+            if ($solution->isPublished()) {
+                $publishedSolutions->add($solution);
+            }
+        }
+        return $publishedSolutions;
+    }
+
+    /**
+     * @return Solution[]|Collection
+     */
     public function getSolutions()
     {
         return $this->solutions;
