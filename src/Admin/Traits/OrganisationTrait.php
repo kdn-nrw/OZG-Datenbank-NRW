@@ -14,7 +14,7 @@ trait OrganisationTrait
     protected function addOrganisationsFormFields(FormMapper $formMapper, $fieldName = 'organisations')
     {
         $formMapper->add($fieldName, ModelAutocompleteType::class, [
-            'btn_add' => 'app.common.model_list_type.add',
+            'btn_add' => false,//'app.common.model_list_type.add',
             'property' => 'name',
             'placeholder' => '',
             'required' => false,

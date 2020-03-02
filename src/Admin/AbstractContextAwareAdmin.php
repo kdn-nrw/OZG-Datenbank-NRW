@@ -24,7 +24,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin
     public const APP_CONTEXT_BE = 'backend';
     public const APP_CONTEXT_FE = 'frontend';
 
-    protected $customShowFields = ['serviceSystems', 'laboratories', 'services', 'solutions', 'serviceProviders',];
+    protected $customShowFields = ['serviceSystems', 'laboratories', 'services', 'publishedSolutions', 'solutions', 'serviceProviders',];
 
     protected $appContext = self::APP_CONTEXT_BE;
 

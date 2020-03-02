@@ -18,7 +18,7 @@
     {% set route_name = 'edit' %}
     {% set createEditLink = refAdmin is not null and refAdmin.hasRoute(route_name) and refAdmin.hasAccess(route_name) %}
     {% set showRouteName = 'show' %}
-    {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+    {% set listEnableShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
@@ -47,9 +47,11 @@
                     {# @var child \App\Entity\ServiceSolution #}
                     <tr>
                         {% if showSolution %}
+                            {% set createShowLink = listEnableShowLink and (isAdminMode or child.solution.isPublished) %}
                             {% set editObjectId = child.solution.id %}
                             {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
                         {% else %}
+                            {% set createShowLink = listEnableShowLink %}
                             {% set editObjectId = child.service.id %}
                             {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}
                         {% endif %}

@@ -9,8 +9,10 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\AbstractContextAwareAdmin;
+use RuntimeException;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface as RoutingUrlGeneratorInterface;
 
 /**
  * Class AbstractFrontendAdmin
@@ -49,7 +51,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin
             // Build route base name for frontend admin view
             // @see \Sonata\AdminBundle\Admin\AbstractAdmin::getBaseRouteName
             if (!$matches) {
-                throw new \RuntimeException(sprintf('Cannot automatically determine base route name, please define a default `baseRouteName` value for the admin class `%s`', static::class));
+                throw new RuntimeException(sprintf('Cannot automatically determine base route name, please define a default `baseRouteName` value for the admin class `%s`', static::class));
             }
 
             $routeName = sprintf('_%s%s_%s',
@@ -139,8 +141,17 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin
      */
     protected function getExportExcludeFields(): array
     {
-        die('TEST2');
         return $this->excludeExportFields;
     }
 
+    public function generateUrl($name, array $parameters = [], $absolute = RoutingUrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        if (in_array($name, ['show', 'list', 'export'], false)) {
+            $route = $this->getRoutePrefix() . '_' . $name;
+            return $this->routeGenerator->generate($route, $parameters, $absolute);
+        }
+        return parent::generateUrl($name, $parameters, $absolute);
+    }
+
+    abstract protected function getRoutePrefix(): string;
 }
