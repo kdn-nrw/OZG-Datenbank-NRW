@@ -24,8 +24,8 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="serviceProvider")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="serviceProvider", cascade={"all"})
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
 
