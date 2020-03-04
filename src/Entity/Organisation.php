@@ -53,29 +53,29 @@ class Organisation extends BaseNamedEntity
 
     /**
      * @var MinistryState|null
-     * @ORM\OneToOne(targetEntity="MinistryState", mappedBy="organisation", cascade={"persist"})
-     * @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="MinistryState", mappedBy="organisation", cascade={"all"})
+     * @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $ministryState;
 
     /**
      * @var ServiceProvider|null
-     * @ORM\OneToOne(targetEntity="ServiceProvider", mappedBy="organisation", cascade={"persist"})
-     * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="ServiceProvider", mappedBy="organisation", cascade={"all"})
+     * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $serviceProvider;
 
     /**
      * @var Manufacturer|null
-     * @ORM\OneToOne(targetEntity="Manufacturer", mappedBy="organisation", cascade={"persist"})
-     * @ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="Manufacturer", mappedBy="organisation", cascade={"all"})
+     * @ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $manufacturer;
 
     /**
      * @var Commune|null
-     * @ORM\OneToOne(targetEntity="Commune", mappedBy="organisation", cascade={"persist"})
-     * @ORM\JoinColumn(name="commune_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="Commune", mappedBy="organisation", cascade={"all"})
+     * @ORM\JoinColumn(name="commune_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $commune;
 

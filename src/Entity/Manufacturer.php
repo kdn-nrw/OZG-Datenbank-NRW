@@ -22,8 +22,8 @@ class Manufacturer extends BaseNamedEntity implements OrganisationEntityInterfac
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="manufacturer")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="manufacturer", cascade={"all"})
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
 

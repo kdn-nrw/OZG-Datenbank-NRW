@@ -24,8 +24,8 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="commune")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="commune", cascade={"all"})
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
 
