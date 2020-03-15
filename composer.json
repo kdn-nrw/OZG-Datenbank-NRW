@@ -1,9 +1,6 @@
 {
     "type": "project",
     "license": "proprietary",
-    "repositories": [
-        { "type": "vcs", "url": "git@gitlab.brain-appeal.net:tools/docker.git" }
-    ],
     "require": {
         "php": "^7.2",
         "ext-ctype": "*",
@@ -34,7 +31,6 @@
         "vich/uploader-bundle": "^1.10"
     },
     "require-dev": {
-        "brainappeal/docker": "^0.3.8|dev-develop",
         "oomphinc/composer-installers-extender": "^1.1",
         "symfony/browser-kit": "^4.3",
         "symfony/phpunit-bridge": "^4.3",
