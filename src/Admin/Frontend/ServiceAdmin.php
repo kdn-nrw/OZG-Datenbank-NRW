@@ -65,6 +65,18 @@ class ServiceAdmin extends AbstractFrontendAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('specializedProcedures',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('ruleAuthorities',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -176,7 +188,11 @@ class ServiceAdmin extends AbstractFrontendAdmin
             ->add('serviceSystem.situation.subject')
             ->add('serviceSolutions')
             ->add('jurisdictions')
-            ->add('bureaus');
+            ->add('bureaus')
+            ->add('specializedProcedures')
+            ->add('ruleAuthorities')
+            ->add('authorityBureaus')
+            ->add('authorityStateMinistries');
     }
 
     public function isGranted($name, $object = null)

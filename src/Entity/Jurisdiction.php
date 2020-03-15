@@ -83,7 +83,6 @@ class Jurisdiction extends BaseNamedEntity
         $this->serviceSystems = $serviceSystems;
     }
 
-
     /**
      * @param Service $service
      * @return self

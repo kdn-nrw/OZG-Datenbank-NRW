@@ -122,6 +122,9 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
             ->add('jurisdictions')
             ->add('stateMinistries')
             ->add('bureaus')
+            ->add('ruleAuthorities')
+            ->add('authorityBureaus')
+            ->add('authorityStateMinistries')
             ->add('services', null,[
                 'admin_code' => ServiceAdmin::class,
             ])

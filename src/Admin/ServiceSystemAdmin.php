@@ -76,18 +76,10 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             'map' => [
                 Jurisdiction::TYPE_COUNTRY => [],
                 Jurisdiction::TYPE_STATE => ['stateMinistries', 'bureaus'],
-                Jurisdiction::TYPE_COMMUNE => ['stateMinistries', 'bureaus'],
+                Jurisdiction::TYPE_COMMUNE => ['bureaus'],
             ],
             'required' => true,
-        ]);/*
-        ->add('jurisdictions', ModelType::class, [
-            'btn_add' => false,
-            'placeholder' => '',
-            'required' => false,
-            'multiple' => true,
-            'by_reference' => false,
-            'choice_translation_domain' => false,
-        ]);*/
+        ]);
         $formMapper->get('jurisdictions')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
             $this->getModelManager(),
             Jurisdiction::class
@@ -96,6 +88,44 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
         $formMapper
             ->add('bureaus', ModelType::class, [
                 'label' => 'app.service_system.entity.bureaus_form',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ]);
+        $formMapper->add('ruleAuthorities', ChoiceFieldMaskType::class, [
+            'label' => 'app.service_system.entity.rule_authorities_form',
+            'choices' => [
+                'app.jurisdiction.entity.types.country' => Jurisdiction::TYPE_COUNTRY,
+                'app.jurisdiction.entity.types.state' => Jurisdiction::TYPE_STATE,
+                'app.jurisdiction.entity.types.commune' => Jurisdiction::TYPE_COMMUNE,
+            ],
+            'multiple' => true,
+            'map' => [
+                Jurisdiction::TYPE_COUNTRY => [],
+                Jurisdiction::TYPE_STATE => ['authorityStateMinistries', 'authorityBureaus'],
+                Jurisdiction::TYPE_COMMUNE => ['authorityBureaus'],
+            ],
+            'required' => true,
+        ]);
+        $formMapper->get('ruleAuthorities')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
+            $this->getModelManager(),
+            Jurisdiction::class
+        ));
+        $formMapper
+            ->add('authorityStateMinistries', ModelType::class, [
+                'label' => 'app.service_system.entity.authority_state_ministries',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ])
+            ->add('authorityBureaus', ModelType::class, [
+                'label' => 'app.service_system.entity.authority_bureaus_form',
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
@@ -270,6 +300,9 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ->add('jurisdictions');
         $this->addStateMinistriesShowFields($showMapper);
         $showMapper->add('bureaus');
+        $showMapper->add('ruleAuthorities');
+        $showMapper->add('authorityBureaus');
+        $showMapper->add('authorityStateMinistries');
         $this->addServicesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
         //$this->addLaboratoriesShowFields($showMapper);

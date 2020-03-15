@@ -49,9 +49,16 @@ class MinistryState extends BaseNamedEntity implements OrganisationEntityInterfa
      */
     private $serviceSystems;
 
+    /**
+     * @var Service[]|Collection
+     * @ORM\ManyToMany(targetEntity="Service", mappedBy="stateMinistries")
+     */
+    private $serviceAuthorities;
+
     public function __construct()
     {
         $this->serviceSystems = new ArrayCollection();
+        $this->serviceAuthorities = new ArrayCollection();
     }
 
     /**
@@ -121,6 +128,50 @@ class MinistryState extends BaseNamedEntity implements OrganisationEntityInterfa
     public function setServiceSystems($serviceSystems): void
     {
         $this->serviceSystems = $serviceSystems;
+    }
+
+    /**
+     * @param Service $serviceAuthority
+     * @return self
+     */
+    public function addServiceAuthority($serviceAuthority): self
+    {
+        if (!$this->serviceAuthorities->contains($serviceAuthority)) {
+            $this->serviceAuthorities->add($serviceAuthority);
+            $serviceAuthority->addStateMinistry($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Service $serviceAuthority
+     * @return self
+     */
+    public function removeServiceAuthority($serviceAuthority): self
+    {
+        if ($this->serviceAuthorities->contains($serviceAuthority)) {
+            $this->serviceAuthorities->removeElement($serviceAuthority);
+            $serviceAuthority->removeStateMinistry($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Service[]|Collection
+     */
+    public function getServiceAuthorities()
+    {
+        return $this->serviceAuthorities;
+    }
+
+    /**
+     * @param Service[]|Collection $serviceAuthorities
+     */
+    public function setServiceAuthorities($serviceAuthorities): void
+    {
+        $this->serviceAuthorities = $serviceAuthorities;
     }
 
 }

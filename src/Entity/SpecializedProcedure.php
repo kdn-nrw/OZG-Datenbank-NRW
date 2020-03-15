@@ -71,6 +71,12 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
      */
     private $communes;
 
+    /**
+     * @var Service[]|Collection
+     * @ORM\ManyToMany(targetEntity="Service", mappedBy="specializedProcedures")
+     */
+    private $services;
+
 
     public function __construct()
     {
@@ -78,6 +84,7 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
         $this->manufacturers = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
         $this->solutions = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
     /**
      * @return string|null
@@ -269,5 +276,49 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
     public function setCommunes($communes): void
     {
         $this->communes = $communes;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function addService($service): self
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->addSpecializedProcedure($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function removeService($service): self
+    {
+        if ($this->services->contains($service)) {
+            $this->services->removeElement($service);
+            $service->removeSpecializedProcedure($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Service[]|Collection
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
+     * @param Service[]|Collection $services
+     */
+    public function setServices($services): void
+    {
+        $this->services = $services;
     }
 }

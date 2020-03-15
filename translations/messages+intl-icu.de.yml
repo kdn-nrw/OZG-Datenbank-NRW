@@ -381,6 +381,23 @@ app:
       inherit_jurisdictions: Zuständigkeiten von OZG-Leistung übernehmen
       inherit_jurisdictions.yes: Zuständigkeiten der Leika-Leistung mit Zuständigkeiten der OZG-Leistung erweitern
       inherit_jurisdictions.no: Zuständigkeiten der OZG-Leistung nicht übernehmen
+      state_ministries: Ministerien (Land)
+      inherit_state_ministries: Ministerien (Land) von OZG-Leistung übernehmen
+      inherit_state_ministries.yes: Ministerien (Land) der Leika-Leistung mit Ministerien (Land) der OZG-Leistung erweitern
+      inherit_state_ministries.no: Ministerien (Land) der OZG-Leistung nicht übernehmen
+      specialized_procedures: Fachverfahren
+      rule_authorities: Regelkompetenz
+      authority_bureaus: Regelkompetenz Fachlichkeiten
+      authority_state_ministries: Regelkompetenz  Ministerien (Land)
+      inherit_rule_authorities: Regelkompetenz von OZG-Leistung übernehmen
+      inherit_rule_authorities.yes: Regelkompetenz der Leika-Leistung mit Regelkompetenz der OZG-Leistung erweitern
+      inherit_rule_authorities.no: Regelkompetenz der OZG-Leistung nicht übernehmen
+      authority_inherit_bureaus: Regelkompetenz Fachlichkeiten von OZG-Leistung übernehmen
+      authority_inherit_bureaus.yes: Regelkompetenz Fachlichkeiten der Leika-Leistung mit Regelkompetenz Fachlichkeiten der OZG-Leistung erweitern
+      authority_inherit_bureaus.no: Regelkompetenz Fachlichkeiten der OZG-Leistung nicht übernehmen
+      authority_inherit_state_ministries: Regelkompetenz Ministerien (Land) von OZG-Leistung übernehmen
+      authority_inherit_state_ministries.yes: Regelkompetenz Ministerien (Land) der Leika-Leistung mit Regelkompetenz  Ministerien (Land) der OZG-Leistung erweitern
+      authority_inherit_state_ministries.no: Regelkompetenz Ministerien (Land) der OZG-Leistung nicht übernehmen
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister
@@ -438,6 +455,12 @@ app:
       bureaus: Fachlichkeiten
       bureaus_form: Fachlichkeiten (werden an Leika-Leistungen vererbt)
       solutions: Lösungen
+      rule_authorities: Regelkompetenz
+      rule_authorities_form: Regelkompetenz (werden an Leika-Leistungen vererbt)
+      authority_bureaus: Regelkompetenz Fachlichkeiten
+      authority_state_ministries: Regelkompetenz Ministerien (Land)
+      authority_bureaus_form: Regelkompetenz Fachlichkeiten (werden an Leika-Leistungen vererbt)
+      authority_state_ministries_form: Regelkompetenz Ministerien (Land) (werden an Leika-Leistungen vererbt)
   situation:
     object_name: Lage
     list: Lage

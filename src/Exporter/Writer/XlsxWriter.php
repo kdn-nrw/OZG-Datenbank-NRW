@@ -16,7 +16,7 @@ use Sonata\Exporter\Writer\TypedWriterInterface;
 
 class XlsxWriter implements TypedWriterInterface
 {
-    const LABEL_COLUMN = 1;
+    public const LABEL_COLUMN = 1;
     /** @var  Spreadsheet */
     private $phpExcelObject;
     /** @var array */
@@ -84,12 +84,12 @@ class XlsxWriter implements TypedWriterInterface
     }
 
     /**
-     *  Set labels
+     * Set labels
      * @param $data
      *
      * @return void
      */
-    protected function init($data)
+    protected function init($data): void
     {
         if ($this->position > 2) {
             return;
@@ -118,9 +118,9 @@ class XlsxWriter implements TypedWriterInterface
      * @param int $number
      * @return string
      */
-    public static function formatColumnName($number)
+    public static function formatColumnName($number): string
     {
-        for ($char = ""; $number >= 0; $number = intval($number / 26) - 1) {
+        for ($char = ""; $number >= 0; $number = (int)($number / 26) - 1) {
             $char = chr($number % 26 + 0x41) . $char;
         }
         return $char;
@@ -129,7 +129,7 @@ class XlsxWriter implements TypedWriterInterface
     /**
      * @return Worksheet
      */
-    private function getActiveSheet()
+    private function getActiveSheet(): Worksheet
     {
         return $this->phpExcelObject->setActiveSheetIndex(0);
     }
@@ -137,7 +137,7 @@ class XlsxWriter implements TypedWriterInterface
     /**
      * Makes header bold
      */
-    private function setBoldLabels()
+    private function setBoldLabels(): void
     {
         $this->getActiveSheet()->getStyle(
             sprintf(
@@ -153,7 +153,7 @@ class XlsxWriter implements TypedWriterInterface
      * @param string $column
      * @param string $value
      */
-    private function setCellValue($column, $value)
+    private function setCellValue($column, $value): void
     {
         $this->getActiveSheet()->setCellValue($column, $value);
     }
@@ -163,7 +163,7 @@ class XlsxWriter implements TypedWriterInterface
      * @param string $column
      * @param string $value
      */
-    private function setHeader($column, $value)
+    private function setHeader($column, $value): void
     {
         $this->setCellValue($column . self::LABEL_COLUMN, $value);
         $this->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -175,7 +175,7 @@ class XlsxWriter implements TypedWriterInterface
      * @param string $name
      * @return string
      */
-    private function getColumn($name)
+    private function getColumn($name): string
     {
         return $this->headerColumns[$name] . $this->position;
     }

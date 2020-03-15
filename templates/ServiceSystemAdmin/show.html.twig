@@ -1,6 +1,7 @@
 {% extends 'General/Show/show.html.twig' %}
 
 {% block app_show_default_fields %}
+    {# @var object \App\Entity\ServiceSystem #}
     <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
         <div class="{{ show_group.box_class }}">
             <div class="box-header">
@@ -26,23 +27,8 @@
                     <div class="col-xs-12 col-md-4 text-right">
                         {{ elements['priority']|render_view_element(object)}}
                     </div>
-                    {% if object.jurisdictions|length > 0 %}
-                        <div class="col-xs-12 col-md-2">
-                            {{ elements['jurisdictions']|render_view_element(object)}}
-                        </div>
-                        <div class="col-xs-12 col-md-5 col-lg-4 col-xl-3">
-                            {% if object.stateMinistriesEnabled and object.stateMinistries|length > 0 %}
-                                {{ elements['stateMinistries']|render_view_element(object)}}
-                            {% endif %}
-                        </div>
-                        {% if elements['bureaus'] is defined %}
-                            <div class="col-xs-12 col-md-5 col-lg-4 col-xl-3">
-                                {% if object.stateMinistriesEnabled and object.bureaus|length > 0 %}
-                                    {{ elements['bureaus']|render_view_element(object)}}
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    {% endif %}
+                    {% include 'General/Show/Partials/show-jurisdictions.html.twig' %}
+                    {% include 'General/Show/Partials/show-rule-authorities.html.twig' %}
                 </div>
                 {% if object.description %}
                     <div class="item-property">

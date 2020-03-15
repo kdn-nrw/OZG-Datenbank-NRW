@@ -5,6 +5,7 @@ namespace App\Admin;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\ServiceSystemTrait;
+use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Status;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -26,6 +27,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     use CommuneTrait;
     use ContactTrait;
     use ServiceSystemTrait;
+    use SpecializedProcedureTrait;
 
     protected $datagridValues = [
 
@@ -135,15 +137,8 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                         'required' => true,
                     ]);
                 $this->addCommunesFormFields($formMapper);
+                $this->addSpecializedProceduresFormFields($formMapper);
                 $formMapper
-                    ->add('specializedProcedures', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ])
                     ->add('formServers', ModelType::class, [
                         'btn_add' => false,
                         'placeholder' => '',
@@ -258,12 +253,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ['expanded' => false, 'multiple' => true]
         );
         $this->addCommunesDatagridFilters($datagridMapper);
-        $datagridMapper->add('specializedProcedures',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
         $datagridMapper->add('formServers',
             null,
             [],
@@ -395,8 +385,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ])
             ->add('serviceProvider')
             ->add('customProvider')
-            ->add('portals')
-            ->add('specializedProcedures')
+            ->add('portals');
+        $this->addSpecializedProceduresShowFields($showMapper);
+        $showMapper
             ->add('formServers')
             ->add('paymentTypes')
             ->add('authentications')

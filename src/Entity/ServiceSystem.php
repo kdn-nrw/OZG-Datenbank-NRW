@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\SoftdeletableEntityInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,16 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_service_system")
  * @ORM\HasLifecycleCallbacks
  */
-class ServiceSystem extends BaseNamedEntity
+class ServiceSystem extends AbstractService
 {
-
-    /**
-     * ozggid
-     * @var string|null
-     *
-     * @ORM\Column(type="string", name="service_key", length=255, nullable=true)
-     */
-    private $serviceKey;
 
     /**
      * Status
@@ -49,15 +40,6 @@ class ServiceSystem extends BaseNamedEntity
      * @ORM\Column(type="text", nullable=true)
      */
     private $contact;
-
-    /**
-     * Description
-     *
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    private $description = '';
 
     /**
      * @var Situation|null
@@ -130,31 +112,60 @@ class ServiceSystem extends BaseNamedEntity
      */
     private $solutions;
 
+    /**
+     * @var Jurisdiction[]|Collection
+     * @ORM\ManyToMany(targetEntity="Jurisdiction")
+     * @ORM\JoinTable(name="ozg_service_system_rule_authority",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="jurisdiction_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $ruleAuthorities;
+
+    /**
+     * @var MinistryState[]|Collection
+     * @ORM\ManyToMany(targetEntity="MinistryState")
+     * @ORM\JoinTable(name="ozg_service_system_authority_ministry_state",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $authorityStateMinistries;
+
+    /**
+     * @var Bureau[]|Collection
+     * @ORM\ManyToMany(targetEntity="Bureau")
+     * @ORM\JoinTable(name="ozg_service_system_authority_bureau",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="bureau_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $authorityBureaus;
+
     public function __construct()
     {
+        $this->authorityBureaus = new ArrayCollection();
+        $this->authorityStateMinistries = new ArrayCollection();
         $this->bureaus = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
+        $this->ruleAuthorities = new ArrayCollection();
         $this->services = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->stateMinistries = new ArrayCollection();
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getServiceKey(): ?string
-    {
-        return $this->serviceKey;
-    }
-
-    /**
-     * @param string|null $serviceKey
-     */
-    public function setServiceKey(?string $serviceKey): void
-    {
-        $this->serviceKey = $serviceKey;
     }
 
     /**
@@ -171,22 +182,6 @@ class ServiceSystem extends BaseNamedEntity
     public function setContact(?string $contact): void
     {
         $this->contact = $contact;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
     }
 
     /**
@@ -416,22 +411,6 @@ class ServiceSystem extends BaseNamedEntity
     }
 
     /**
-     * Returns true if the state ministries property is active
-     *
-     * @return bool
-     */
-    public function getStateMinistriesEnabled(): bool
-    {
-        $jurisdictions = $this->getJurisdictions();
-        foreach ($jurisdictions as $jurisdiction) {
-            if (in_array($jurisdiction->getId(), [Jurisdiction::TYPE_STATE, Jurisdiction::TYPE_COMMUNE], false)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @param ImplementationProject $implementationProject
      * @return self
      */
@@ -561,5 +540,123 @@ class ServiceSystem extends BaseNamedEntity
     public function setStateMinistries($stateMinistries): void
     {
         $this->stateMinistries = $stateMinistries;
+    }
+
+    /**
+     * @param Jurisdiction $ruleAuthority
+     * @return self
+     */
+    public function addRuleAuthority($ruleAuthority): self
+    {
+        if (!$this->ruleAuthorities->contains($ruleAuthority)) {
+            $this->ruleAuthorities->add($ruleAuthority);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Jurisdiction $ruleAuthority
+     * @return self
+     */
+    public function removeRuleAuthority($ruleAuthority): self
+    {
+        if ($this->ruleAuthorities->contains($ruleAuthority)) {
+            $this->ruleAuthorities->removeElement($ruleAuthority);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Jurisdiction[]|Collection
+     */
+    public function getRuleAuthorities()
+    {
+        return $this->ruleAuthorities;
+    }
+
+    /**
+     * @param Jurisdiction[]|Collection $ruleAuthorities
+     */
+    public function setRuleAuthorities($ruleAuthorities): void
+    {
+        $this->ruleAuthorities = $ruleAuthorities;
+    }
+
+    /**
+     * @param MinistryState $authorityStateMinistry
+     * @return self
+     */
+    public function addAuthorityStateMinistry($authorityStateMinistry): self
+    {
+        if (!$this->authorityStateMinistries->contains($authorityStateMinistry)) {
+            $this->authorityStateMinistries->add($authorityStateMinistry);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param MinistryState $authorityStateMinistry
+     * @return self
+     */
+    public function removeAuthorityStateMinistry($authorityStateMinistry): self
+    {
+        if ($this->authorityStateMinistries->contains($authorityStateMinistry)) {
+            $this->authorityStateMinistries->removeElement($authorityStateMinistry);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return MinistryState[]|Collection
+     */
+    public function getAuthorityStateMinistries()
+    {
+        return $this->authorityStateMinistries;
+    }
+
+    /**
+     * @param MinistryState[]|Collection $authorityStateMinistries
+     */
+    public function setAuthorityStateMinistries($authorityStateMinistries): void
+    {
+        $this->authorityStateMinistries = $authorityStateMinistries;
+    }
+
+    /**
+     * @param Bureau $authorityBureau
+     * @return self
+     */
+    public function addAuthorityBureau($authorityBureau): self
+    {
+        if (!$this->authorityBureaus->contains($authorityBureau)) {
+            $this->authorityBureaus->add($authorityBureau);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Bureau $authorityBureau
+     * @return self
+     */
+    public function removeAuthorityBureau($authorityBureau): self
+    {
+        if ($this->authorityBureaus->contains($authorityBureau)) {
+            $this->authorityBureaus->removeElement($authorityBureau);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Bureau[]|Collection
+     */
+    public function getAuthorityBureaus()
+    {
+        return $this->authorityBureaus;
     }
 }

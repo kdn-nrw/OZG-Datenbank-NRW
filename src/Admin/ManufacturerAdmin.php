@@ -5,13 +5,13 @@ namespace App\Admin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
+use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Contact;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 
@@ -21,6 +21,7 @@ class ManufacturerAdmin extends AbstractAppAdmin
     use AddressTrait;
     use ContactTrait;
     use OrganisationOneToOneTrait;
+    use SpecializedProcedureTrait;
 
     /**
      * @var string[]
@@ -36,15 +37,8 @@ class ManufacturerAdmin extends AbstractAppAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $this->addOrganisationOneToOneFormFields($formMapper);
+        $this->addSpecializedProceduresFormFields($formMapper);
         $formMapper
-            ->add('specializedProcedures', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'required' => false,
-                'multiple' => true,
-                'by_reference' => false,
-                'choice_translation_domain' => false,
-            ])
             ->end();
     }
 
@@ -87,19 +81,15 @@ class ManufacturerAdmin extends AbstractAppAdmin
     {
         $datagridMapper->add('name');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $datagridMapper->add('specializedProcedures',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
-            ->add('specializedProcedures')
+            ->addIdentifier('name');
+        $this->addSpecializedProceduresListFields($listMapper);
+        $listMapper
             ->add('organisation.url', 'url');
         $this->addDefaultListActions($listMapper);
     }
@@ -111,6 +101,6 @@ class ManufacturerAdmin extends AbstractAppAdmin
     {
         $showMapper->add('name');
         $this->addOrganisationOneToOneShowFields($showMapper);
-        $showMapper->add('specializedProcedures');
+        $this->addSpecializedProceduresShowFields($showMapper);
     }
 }
