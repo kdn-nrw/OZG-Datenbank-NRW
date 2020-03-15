@@ -8,10 +8,10 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> mindbase/admin-bundle ###
+###> DEV ###
 /.idea/
+/docker-compose.yml
 /doc-dev-local/
-###< mindbase/admin-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
