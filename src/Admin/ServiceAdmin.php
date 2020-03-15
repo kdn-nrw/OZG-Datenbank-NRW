@@ -3,6 +3,8 @@
 namespace App\Admin;
 
 use App\Admin\Traits\LaboratoryTrait;
+use App\Admin\Traits\MinistryStateTrait;
+use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\Priority;
 use App\Entity\Status;
@@ -24,6 +26,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     use LaboratoryTrait;
+    use SpecializedProcedureTrait;
+    use MinistryStateTrait;
+
     /**
      * @var string[]
      */
@@ -105,7 +110,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'multiple' => true,
                 'map' => [
                     Jurisdiction::TYPE_COUNTRY => [],
-                    Jurisdiction::TYPE_STATE => ['inheritBureaus', 'bureaus'],
+                    Jurisdiction::TYPE_STATE => ['inheritStateMinistries', 'stateMinistries', 'inheritBureaus', 'bureaus'],
                     Jurisdiction::TYPE_COMMUNE => ['inheritBureaus', 'bureaus'],
                 ],
                 'required' => true,
@@ -116,10 +121,23 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         ));
 
         $formMapper
-            /*->add('inheritBureaus', BooleanType::class, [
-                'label' => 'app.service.entity.inherit_bureaus.yes',
-                'required' => false,
-            ])*/
+            ->add('inheritStateMinistries', ChoiceType::class, [
+                'choices' => [
+                    'app.service.entity.inherit_state_ministries.no' => false,
+                    'app.service.entity.inherit_state_ministries.yes' => true,
+                ],
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('stateMinistries', ModelType::class, [
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ]
+            )
             ->add('inheritBureaus', ChoiceType::class, [
                 'choices' => [
                     'app.service.entity.inherit_bureaus.no' => false,
@@ -137,6 +155,70 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                     'choice_translation_domain' => false,
                 ]
             );
+        $formMapper
+            ->add('inheritRuleAuthorities', ChoiceType::class, [
+                'choices' => [
+                    'app.service.entity.inherit_rule_authorities.no' => false,
+                    'app.service.entity.inherit_rule_authorities.yes' => true,
+                ],
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('ruleAuthorities', ChoiceFieldMaskType::class, [
+                'choices' => [
+                    'app.jurisdiction.entity.types.country' => Jurisdiction::TYPE_COUNTRY,
+                    'app.jurisdiction.entity.types.state' => Jurisdiction::TYPE_STATE,
+                    'app.jurisdiction.entity.types.commune' => Jurisdiction::TYPE_COMMUNE,
+                ],
+                'multiple' => true,
+                'map' => [
+                    Jurisdiction::TYPE_COUNTRY => [],
+                    Jurisdiction::TYPE_STATE => ['authorityInheritStateMinistries', 'authorityStateMinistries', 'authorityInheritBureaus', 'authorityBureaus'],
+                    Jurisdiction::TYPE_COMMUNE => ['authorityInheritBureaus', 'authorityBureaus'],
+                ],
+                'required' => true,
+            ]);
+        $formMapper->get('ruleAuthorities')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
+            $this->getModelManager(),
+            Jurisdiction::class
+        ));
+
+        $formMapper
+            ->add('authorityInheritStateMinistries', ChoiceType::class, [
+                'choices' => [
+                    'app.service.entity.authority_inherit_state_ministries.no' => false,
+                    'app.service.entity.authority_inherit_state_ministries.yes' => true,
+                ],
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('authorityStateMinistries', ModelType::class, [
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ]
+            )
+            ->add('authorityInheritBureaus', ChoiceType::class, [
+                'choices' => [
+                    'app.service.entity.authority_inherit_bureaus.no' => false,
+                    'app.service.entity.authority_inherit_bureaus.yes' => true,
+                ],
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('authorityBureaus', ModelType::class, [
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ]
+            );
+        $this->addSpecializedProceduresFormFields($formMapper);
         $formMapper->end()
             ->end();
         if (!in_array('serviceSolutions', $hideFields, false)) {
@@ -203,6 +285,14 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
+        $datagridMapper->add('ruleAuthorities',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $this->addStateMinistriesDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -310,7 +400,12 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->add('serviceSystem.situation.subject')
             ->add('serviceSolutions')
             ->add('jurisdictions')
-            ->add('bureaus');
+            ->add('bureaus')
+            ->add('ruleAuthorities')
+            ->add('authorityBureaus')
+            ->add('authorityStateMinistries');
         $this->addLaboratoriesShowFields($showMapper);
+        $this->addSpecializedProceduresShowFields($showMapper);
+        $this->addStateMinistriesShowFields($showMapper);
     }
 }

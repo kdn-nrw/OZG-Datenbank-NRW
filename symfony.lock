@@ -1,7 +1,4 @@
 {
-    "brainappeal/docker": {
-        "version": "v0.3.3"
-    },
     "cocur/slugify": {
         "version": "v3.2"
     },

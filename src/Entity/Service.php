@@ -2,9 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Base\BaseBlamableEntity;
-use App\Entity\Base\HideableEntityTrait;
-use App\Entity\Base\NamedEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,33 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_service")
  * @ORM\HasLifecycleCallbacks
  */
-class Service extends BaseBlamableEntity implements NamedEntityInterface
+class Service extends AbstractService
 {
-    use HideableEntityTrait;
-
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=1024, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * Leika-ID
-     * @var string|null
-     *
-     * @ORM\Column(type="string", name="service_key", length=255, nullable=true)
-     */
-    private $serviceKey;
-
-    /**
-     * ozgbeschreibung
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    private $description = '';
 
     /**
      * LeiKa-Typ
@@ -142,6 +114,28 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     protected $inheritJurisdictions = true;
 
     /**
+     * @var MinistryState[]|Collection
+     * @ORM\ManyToMany(targetEntity="MinistryState")
+     * @ORM\JoinTable(name="ozg_service_ministry_state",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $stateMinistries;
+
+    /**
+     * Toggle inheritance of bureaus from service system
+     * @var bool
+     *
+     * @ORM\Column(name="inherit_state_ministries", type="boolean")
+     */
+    protected $inheritStateMinistries = true;
+
+    /**
      * @var Bureau[]|Collection
      * @ORM\ManyToMany(targetEntity="Bureau", mappedBy="services")
      */
@@ -155,68 +149,97 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
      */
     protected $inheritBureaus = true;
 
+    /**
+     * Toggle inheritance of rule authorities from service system
+     * @var bool
+     *
+     * @ORM\Column(name="inherit_rule_authorities", type="boolean")
+     */
+    protected $inheritRuleAuthorities = true;
+
+    /**
+     * @var SpecializedProcedure[]|Collection
+     * @ORM\ManyToMany(targetEntity="SpecializedProcedure", inversedBy="services")
+     * @ORM\JoinTable(name="ozg_service_specialized_procedures",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="specialized_procedure_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $specializedProcedures;
+
+    /**
+     * @var Jurisdiction[]|Collection
+     * @ORM\ManyToMany(targetEntity="Jurisdiction")
+     * @ORM\JoinTable(name="ozg_service_rule_authority",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="jurisdiction_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $ruleAuthorities;
+
+    /**
+     * @var MinistryState[]|Collection
+     * @ORM\ManyToMany(targetEntity="MinistryState", inversedBy="serviceAuthorities")
+     * @ORM\JoinTable(name="ozg_service_authority_ministry_state",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $authorityStateMinistries;
+
+    /**
+     * Toggle inheritance of state ministries from service system
+     * @var bool
+     *
+     * @ORM\Column(name="authority_inherit_state_ministries", type="boolean")
+     */
+    protected $authorityInheritStateMinistries = true;
+
+    /**
+     * @var Bureau[]|Collection
+     * @ORM\ManyToMany(targetEntity="Bureau")
+     * @ORM\JoinTable(name="ozg_service_authority_bureau",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="bureau_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $authorityBureaus;
+
+    /**
+     * Toggle inheritance of bureaus from service system
+     * @var bool
+     *
+     * @ORM\Column(name="authority_inherit_bureaus", type="boolean")
+     */
+    protected $authorityInheritBureaus = true;
+
     public function __construct()
     {
+        $this->authorityBureaus = new ArrayCollection();
+        $this->authorityStateMinistries = new ArrayCollection();
         $this->bureaus = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
+        $this->ruleAuthorities = new ArrayCollection();
         $this->serviceSolutions = new ArrayCollection();
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return self
-     * @noinspection ReturnTypeCanBeDeclaredInspection
-     */
-    public function setName(?string $name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getServiceKey(): ?string
-    {
-        return $this->serviceKey;
-    }
-
-    /**
-     * @param string|null $serviceKey
-     */
-    public function setServiceKey(?string $serviceKey): void
-    {
-        $this->serviceKey = $serviceKey;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
+        $this->specializedProcedures = new ArrayCollection();
+        $this->stateMinistries = new ArrayCollection();
     }
 
     /**
@@ -454,6 +477,72 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     }
 
     /**
+     * @param Jurisdiction $jurisdiction
+     * @return self
+     */
+    public function addJurisdiction($jurisdiction): self
+    {
+        if (!$this->jurisdictions->contains($jurisdiction)) {
+            $this->jurisdictions->add($jurisdiction);
+            $jurisdiction->addService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Jurisdiction $jurisdiction
+     * @return self
+     */
+    public function removeJurisdiction($jurisdiction): self
+    {
+        if ($this->jurisdictions->contains($jurisdiction)) {
+            $this->jurisdictions->removeElement($jurisdiction);
+            $jurisdiction->removeService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Jurisdiction[]|Collection
+     */
+    public function getJurisdictions()
+    {
+        if ($this->isInheritJurisdictions() && null !== $serviceSystem = $this->getServiceSystem()) {
+            $ssJurisdictions = $serviceSystem->getJurisdictions();
+            foreach ($ssJurisdictions as $jurisdiction) {
+                $this->addJurisdiction($jurisdiction);
+            }
+        }
+        return $this->jurisdictions;
+    }
+
+    /**
+     * @param Jurisdiction[]|Collection $jurisdictions
+     */
+    public function setJurisdictions($jurisdictions): void
+    {
+        $this->jurisdictions = $jurisdictions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInheritJurisdictions(): bool
+    {
+        return $this->inheritJurisdictions;
+    }
+
+    /**
+     * @param bool $inheritJurisdictions
+     */
+    public function setInheritJurisdictions(bool $inheritJurisdictions): void
+    {
+        $this->inheritJurisdictions = $inheritJurisdictions;
+    }
+
+    /**
      * @param Bureau $bureau
      * @return self
      */
@@ -520,28 +609,134 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     }
 
     /**
-     * @param Jurisdiction $jurisdiction
+     * @param MinistryState $stateMinistry
      * @return self
      */
-    public function addJurisdiction($jurisdiction): self
+    public function addStateMinistry($stateMinistry): self
     {
-        if (!$this->jurisdictions->contains($jurisdiction)) {
-            $this->jurisdictions->add($jurisdiction);
-            $jurisdiction->addService($this);
+        if (!$this->stateMinistries->contains($stateMinistry)) {
+            $this->stateMinistries->add($stateMinistry);
         }
 
         return $this;
     }
 
     /**
-     * @param Jurisdiction $jurisdiction
+     * @param MinistryState $stateMinistry
      * @return self
      */
-    public function removeJurisdiction($jurisdiction): self
+    public function removeStateMinistry($stateMinistry): self
     {
-        if ($this->jurisdictions->contains($jurisdiction)) {
-            $this->jurisdictions->removeElement($jurisdiction);
-            $jurisdiction->removeService($this);
+        if ($this->stateMinistries->contains($stateMinistry)) {
+            $this->stateMinistries->removeElement($stateMinistry);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return MinistryState[]|Collection
+     */
+    public function getStateMinistries()
+    {
+        if ($this->isInheritStateMinistries() && null !== $serviceSystem = $this->getServiceSystem()) {
+            $parentEntities = $serviceSystem->getStateMinistries();
+            foreach ($parentEntities as $entity) {
+                $this->addStateMinistry($entity);
+            }
+        }
+        return $this->stateMinistries;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInheritStateMinistries(): bool
+    {
+        return $this->inheritStateMinistries;
+    }
+
+    /**
+     * @param bool $inheritStateMinistries
+     */
+    public function setInheritStateMinistries(bool $inheritStateMinistries): void
+    {
+        $this->inheritStateMinistries = $inheritStateMinistries;
+    }
+
+    /**
+     * @param MinistryState[]|Collection $stateMinistries
+     */
+    public function setStateMinistries($stateMinistries): void
+    {
+        $this->stateMinistries = $stateMinistries;
+    }
+
+    /**
+     * @param SpecializedProcedure $specializedProcedure
+     * @return self
+     */
+    public function addSpecializedProcedure($specializedProcedure): self
+    {
+        if (!$this->specializedProcedures->contains($specializedProcedure)) {
+            $this->specializedProcedures->add($specializedProcedure);
+            $specializedProcedure->addService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param SpecializedProcedure $specializedProcedure
+     * @return self
+     */
+    public function removeSpecializedProcedure($specializedProcedure): self
+    {
+        if ($this->specializedProcedures->contains($specializedProcedure)) {
+            $this->specializedProcedures->removeElement($specializedProcedure);
+            $specializedProcedure->removeService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return SpecializedProcedure[]|Collection
+     */
+    public function getSpecializedProcedures()
+    {
+        return $this->specializedProcedures;
+    }
+
+    /**
+     * @param SpecializedProcedure[]|Collection $specializedProcedures
+     */
+    public function setSpecializedProcedures($specializedProcedures): void
+    {
+        $this->specializedProcedures = $specializedProcedures;
+    }
+
+    /**
+     * @param Jurisdiction $ruleAuthority
+     * @return self
+     */
+    public function addRuleAuthority($ruleAuthority): self
+    {
+        if (!$this->ruleAuthorities->contains($ruleAuthority)) {
+            $this->ruleAuthorities->add($ruleAuthority);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Jurisdiction $ruleAuthority
+     * @return self
+     */
+    public function removeRuleAuthority($ruleAuthority): self
+    {
+        if ($this->ruleAuthorities->contains($ruleAuthority)) {
+            $this->ruleAuthorities->removeElement($ruleAuthority);
         }
 
         return $this;
@@ -550,53 +745,169 @@ class Service extends BaseBlamableEntity implements NamedEntityInterface
     /**
      * @return Jurisdiction[]|Collection
      */
-    public function getJurisdictions()
+    public function getRuleAuthorities()
     {
-        if ($this->isInheritJurisdictions() && null !== $serviceSystem = $this->getServiceSystem()) {
-            $ssJurisdictions = $serviceSystem->getJurisdictions();
-            foreach ($ssJurisdictions as $bureau) {
-                $this->addJurisdiction($bureau);
+        if ($this->isInheritRuleAuthorities() && null !== $serviceSystem = $this->getServiceSystem()) {
+            $ssRuleAuthorities = $serviceSystem->getRuleAuthorities();
+            foreach ($ssRuleAuthorities as $ruleAuthority) {
+                $this->addRuleAuthority($ruleAuthority);
             }
         }
-        return $this->jurisdictions;
+        return $this->ruleAuthorities;
     }
 
     /**
-     * @param Jurisdiction[]|Collection $jurisdictions
+     * @param Jurisdiction[]|Collection $ruleAuthorities
      */
-    public function setJurisdictions($jurisdictions): void
+    public function setRuleAuthorities($ruleAuthorities): void
     {
-        $this->jurisdictions = $jurisdictions;
+        $this->ruleAuthorities = $ruleAuthorities;
     }
 
     /**
      * @return bool
      */
-    public function isInheritJurisdictions(): bool
+    public function isInheritRuleAuthorities(): bool
     {
-        return $this->inheritJurisdictions;
+        return $this->inheritRuleAuthorities;
     }
 
     /**
-     * @param bool $inheritJurisdictions
+     * @param bool $inheritRuleAuthorities
      */
-    public function setInheritJurisdictions(bool $inheritJurisdictions): void
+    public function setInheritRuleAuthorities(bool $inheritRuleAuthorities): void
     {
-        $this->inheritJurisdictions = $inheritJurisdictions;
+        $this->inheritRuleAuthorities = $inheritRuleAuthorities;
     }
 
     /**
-     * Get name
-     *
-     * @return string
+     * @param MinistryState $authorityStateMinistry
+     * @return self
      */
-    public function __toString(): string
+    public function addAuthorityStateMinistry($authorityStateMinistry): self
     {
-        $name = (string)$this->getName();
-        if (null === $name) {
-            return '';
+        if (!$this->authorityStateMinistries->contains($authorityStateMinistry)) {
+            $this->authorityStateMinistries->add($authorityStateMinistry);
+            $authorityStateMinistry->addServiceAuthority($this);
         }
-        return $name;
+
+        return $this;
+    }
+
+    /**
+     * @param MinistryState $authorityStateMinistry
+     * @return self
+     */
+    public function removeAuthorityStateMinistry($authorityStateMinistry): self
+    {
+        if ($this->authorityStateMinistries->contains($authorityStateMinistry)) {
+            $this->authorityStateMinistries->removeElement($authorityStateMinistry);
+            $authorityStateMinistry->removeServiceAuthority($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return MinistryState[]|Collection
+     */
+    public function getAuthorityStateMinistries()
+    {
+        if ($this->isAuthorityInheritStateMinistries() && null !== $serviceSystem = $this->getServiceSystem()) {
+            $parentEntities = $serviceSystem->getAuthorityStateMinistries();
+            foreach ($parentEntities as $entity) {
+                $this->addAuthorityStateMinistry($entity);
+            }
+        }
+        return $this->authorityStateMinistries;
+    }
+
+    /**
+     * @param MinistryState[]|Collection $authorityStateMinistries
+     */
+    public function setAuthorityStateMinistries($authorityStateMinistries): void
+    {
+        $this->authorityStateMinistries = $authorityStateMinistries;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthorityInheritStateMinistries(): bool
+    {
+        return $this->authorityInheritStateMinistries;
+    }
+
+    /**
+     * @param bool $authorityInheritStateMinistries
+     */
+    public function setAuthorityInheritStateMinistries(bool $authorityInheritStateMinistries): void
+    {
+        $this->authorityInheritStateMinistries = $authorityInheritStateMinistries;
+    }
+
+    /**
+     * @param Bureau $authorityBureau
+     * @return self
+     */
+    public function addAuthorityBureau($authorityBureau): self
+    {
+        if (!$this->authorityBureaus->contains($authorityBureau)) {
+            $this->authorityBureaus->add($authorityBureau);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Bureau $authorityBureau
+     * @return self
+     */
+    public function removeAuthorityBureau($authorityBureau): self
+    {
+        if ($this->authorityBureaus->contains($authorityBureau)) {
+            $this->authorityBureaus->removeElement($authorityBureau);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Bureau[]|Collection
+     */
+    public function getAuthorityBureaus()
+    {
+        if ($this->isAuthorityInheritBureaus() && null !== $serviceSystem = $this->getServiceSystem()) {
+            $parentEntities = $serviceSystem->getAuthorityBureaus();
+            foreach ($parentEntities as $entity) {
+                $this->addAuthorityBureau($entity);
+            }
+        }
+        return $this->authorityBureaus;
+    }
+
+    /**
+     * @param Bureau[]|Collection $authorityBureaus
+     */
+    public function setAuthorityBureaus($authorityBureaus): void
+    {
+        $this->authorityBureaus = $authorityBureaus;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthorityInheritBureaus(): bool
+    {
+        return $this->authorityInheritBureaus;
+    }
+
+    /**
+     * @param bool $authorityInheritBureaus
+     */
+    public function setAuthorityInheritBureaus(bool $authorityInheritBureaus): void
+    {
+        $this->authorityInheritBureaus = $authorityInheritBureaus;
     }
 
 }
