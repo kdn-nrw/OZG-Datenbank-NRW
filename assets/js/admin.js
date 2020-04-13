@@ -13,3 +13,14 @@ require('../css/admin.scss');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');
+
+
+jQuery(document).ready(function() {
+    let $chartContainers = $('.mb-chart-container');
+    if ($chartContainers.length > 0) {
+        import('./modules/chart').then(({ default: baChart }) => {
+            baChart.setUpList($chartContainers);
+
+        }).catch(error => 'An error occurred while loading the chart component');
+    }
+});

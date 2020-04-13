@@ -2,14 +2,17 @@
 
 namespace App;
 
+use App\Statistics\ChartStatisticsProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
-class Kernel extends BaseKernel
+class Kernel extends BaseKernel implements CompilerPassInterface
 {
     use MicroKernelTrait;
 
@@ -49,5 +52,21 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
+    }
+    public function process(ContainerBuilder $container)
+    {
+        // in this method you can manipulate the service container:
+        // for example, changing some container service:
+        //$container->getDefinition('app.some_private_service')->setPublic(true);
+        $definition = $container->findDefinition(\App\Statistics\ProviderLoader::class);
+
+        $container->registerForAutoconfiguration(ChartStatisticsProviderInterface::class)
+            ->addTag('custom_statistics.provider')
+        ;
+
+        // or processing tagged services:
+        foreach ($container->findTaggedServiceIds('custom_statistics.provider') as $id => $tags) {
+            $definition->addMethodCall('addProvider', array(new Reference($id)));
+        }
     }
 }

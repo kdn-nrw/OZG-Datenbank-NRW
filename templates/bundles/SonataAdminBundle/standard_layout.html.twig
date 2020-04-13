@@ -6,11 +6,6 @@
     {% block encore_stylesheets %}
         {# 'admin' must match the first argument to addEntry() in webpack.config.js #}
         {{ encore_entry_link_tags('admin') }}
-
-        <!--
-            Renders a link tag (if your module requires any CSS)
-            <link rel="stylesheet" href="/build/admin.css">
-         -->
     {% endblock %}
 {% endblock %}
 
@@ -22,11 +17,5 @@
         {% for js in encore_entry_js_files('admin') %}
             <script src="{{ asset(js) }}" type="text/javascript" defer></script>
         {% endfor %}
-
-        <!--
-            Renders app.js & a webpack runtime.js file
-            <script src="/build/runtime.js"></script>
-            <script src="/build/admin.js"></script>
-        -->
     {% endblock %}
 {% endblock %}

@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Entity\Manager;
 
+use App\Entity\Solution;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
 use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
@@ -19,7 +20,7 @@ class SolutionManager extends BaseEntityManager
         parent::__construct(Solution::class, $registry);
     }
 
-    public function getPager(array $criteria, $page, $limit = 10, array $sort = [])
+    public function getPager(array $criteria, $page, $limit = 10, array $sort = []): Pager
     {
         if (!isset($criteria['mode'])) {
             $criteria['mode'] = 'public';
@@ -28,11 +29,13 @@ class SolutionManager extends BaseEntityManager
         $query = $this->getRepository()
             ->createQueryBuilder('c')
             ->orderby('c.id', 'DESC');
-//        if ('public' === $criteria['mode']) {
-//            $criteria['status'] = $criteria['status'] ?? CommentInterface::STATUS_VALID;
-//            $query->andWhere('c.status = :status');
-//            $parameters['status'] = $criteria['status'];
-//        }
+        if ('public' === $criteria['mode']) {
+            /** @var \Doctrine\ORM\QueryBuilder $query */
+            $query->andWhere(
+                $query->expr()->eq($query->getRootAliases()[0] . '.isPublished', ':isPublished')
+            );
+            $query->setParameter('isPublished', 1);
+        }
         if (!empty($parameters)) {
             $query->setParameters($parameters);
         }

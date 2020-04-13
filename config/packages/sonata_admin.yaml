@@ -10,6 +10,29 @@ sonata_admin:
     templates:
         show: 'General/Show/show.html.twig'
     assets:
+#        javascripts:
+#            - bundles/sonatacore/vendor/jquery/dist/jquery.min.js
+#            - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
+#            - bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js
+#            - bundles/sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min.js
+#            - bundles/sonatacore/vendor/moment/min/moment.min.js
+#            - bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min.js
+#            - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+#            - bundles/sonataadmin/vendor/jquery-form/jquery.form.js
+#            - bundles/sonataadmin/jquery/jquery.confirmExit.js
+#            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js
+#            - bundles/sonatacore/vendor/select2/select2.min.js
+#            - bundles/sonataadmin/vendor/admin-lte/dist/js/app.min.js
+#            - bundles/sonataadmin/vendor/iCheck/icheck.min.js
+#            - bundles/sonataadmin/vendor/slimScroll/jquery.slimscroll.min.js
+#            - bundles/sonataadmin/vendor/waypoints/lib/jquery.waypoints.min.js
+#            - bundles/sonataadmin/vendor/waypoints/lib/shortcuts/sticky.min.js
+#            - bundles/sonataadmin/vendor/readmore-js/readmore.min.js
+#            - bundles/sonataadmin/vendor/masonry/dist/masonry.pkgd.min.js
+#            - bundles/sonataadmin/Admin.js
+#            - bundles/sonataadmin/treeview.js
+#            - bundles/sonataadmin/sidebar.js
+#            - bundles/sonatacore/js/base.js
         extra_javascripts:
             - bundles/fosckeditor/ckeditor.js
             - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
@@ -23,9 +46,93 @@ sonata_admin:
             - bundles/sonataformatter/markitup/sets/textile/style.css
     dashboard:
         blocks:
-            - { position: top,  type: App\Block\RecentSolutionsBlock, class: 'col-xs-12', settings: {title: 'app.solution.recent_solutions', translation_domain: 'messages', mode: 'admin'} }
+            -
+                position: top
+                type: App\Block\RecentSolutionsBlock
+                class: 'col-xs-12'
+                settings:
+                    title: 'app.solution.recent_solutions'
+                    translation_domain: 'messages'
+                    mode: 'admin'
+                    code:  App\Admin\SolutionAdmin
+                    code_public: App\Admin\Frontend\SolutionAdmin
+                    disable_public: true
+            -
+                position: top
+                type: App\Block\StatisticsBlock
+                class: 'col-xs-12 col-lg-6'
+                settings:
+                    title: 'app.statistics.solution_maturity'
+                    translation_domain: 'messages'
+                    mode: 'admin'
+                    provider: App\Statistics\Provider\SolutionMaturityChartProvider
+            -
+                position: top
+                type: App\Block\StatisticsBlock
+                class: 'col-xs-12 col-lg-6'
+                settings:
+                    title: 'app.statistics.solution_status'
+                    translation_domain: 'messages'
+                    mode: 'admin'
+                    provider: App\Statistics\Provider\SolutionStatusChartProvider
+
             - { position: left,  type: sonata.admin.block.admin_list, settings: { groups: [app.ozg_implementation_group, app.settings_group, app.service_group] } }
             - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [app.implementation_group, app_admin.menu.system] } }
+            -
+                class:    col-xs-6 col-lg-3
+                position: top                        # zone in the dashboard
+                type:     sonata.admin.block.stats   # block id
+                settings:
+                    code:  App\Admin\SolutionAdmin    # admin code - service id
+                    icon:  fa-lightbulb-o                  # font awesome icon
+                    text:  app.block.solution.online            # static text or translation message
+                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
+                    filters:                         # filter values
+                        status: { value: 4 }
+            -
+                class:    col-xs-6 col-lg-3
+                position: top                        # zone in the dashboard
+                type:     sonata.admin.block.stats   # block id
+                settings:
+                    code:  App\Admin\SolutionAdmin    # admin code - service id
+                    icon:  fa-lightbulb-o                  # font awesome icon
+                    text:  app.block.solution.partially_online            # static text or translation message
+                    color: bg-yellow                 # colors: bg-green, bg-red and bg-aqua
+                    filters:                         # filter values
+                        status: { value: 5 }
+            -
+                class:    col-xs-6 col-lg-3
+                position: top                        # zone in the dashboard
+                type:     sonata.admin.block.stats   # block id
+                settings:
+                    code:  App\Admin\SolutionAdmin    # admin code - service id
+                    icon:  fa-lightbulb-o                  # font awesome icon
+                    text:  app.block.solution.offline            # static text or translation message
+                    color: bg-red                 # colors: bg-green, bg-red and bg-aqua
+                    filters:                         # filter values
+                        status: { value: 1 }
+            -
+                class:    col-xs-6 col-lg-3
+                position: top                        # zone in the dashboard
+                type:     sonata.admin.block.stats   # block id
+                settings:
+                    code:  App\Admin\SolutionAdmin    # admin code - service id
+                    icon:  fa-lightbulb-o                  # font awesome icon
+                    text:  app.block.solution.maturity_4
+                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
+                    filters:                         # filter values
+                        maturity: { value:  [5] } # Maturity ID 5 => Label: '4'
+            -
+                class:    col-xs-6 col-lg-3
+                position: top                        # zone in the dashboard
+                type:     sonata.admin.block.stats   # block id
+                settings:
+                    code:  App\Admin\ImplementationProjectAdmin    # admin code - service id
+                    icon:  fa-wrench                  # font awesome icon
+                    text:  app.block.implementation_projects
+                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
+                    #filters:                         # filter values
+                    #    status: { value: 4 }
 
         groups:
             app.ozg_implementation_group:
@@ -102,4 +209,6 @@ sonata_block:
         sonata.admin.block.admin_list:
             contexts: [admin]
         App\Block\RecentSolutionsBlock:
+            contexts: [admin]
+        App\Block\StatisticsBlock:
             contexts: [admin]

@@ -455,7 +455,11 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Entity\SolutionManager:
+  App\Entity\Manager\SolutionManager:
+    arguments:
+      - '@doctrine'
+
+  App\Entity\Manager\ServiceManager:
     arguments:
       - '@doctrine'
 
@@ -474,7 +478,15 @@ services:
   App\Block\RecentSolutionsBlock:
     arguments:
       - '@sonata.templating'
-      - '@App\Entity\SolutionManager'
+      - '@App\Entity\Manager\SolutionManager'
+      - '@?sonata.admin.pool'
+    tags:
+      - { name: sonata.block }
+
+  App\Block\StatisticsBlock:
+    arguments:
+      - '@sonata.templating'
+      - '@App\Statistics\ProviderLoader'
       - '@?sonata.admin.pool'
     tags:
       - { name: sonata.block }
@@ -523,3 +535,22 @@ services:
       - '%sonata.exporter.writer.xls.show_headers%'
     tags:
       - { name: sonata.exporter.writer}
+
+  App\Statistics\Provider\SolutionMaturityChartProvider:
+    tags:
+      - { name: custom_statistics.provider }
+
+  App\Statistics\Provider\SolutionStatusChartProvider:
+    tags:
+      - { name: custom_statistics.provider }
+
+  App\Statistics\Provider\ServiceStatusChartProvider:
+    tags:
+      - { name: custom_statistics.provider }
+
+
+  App\Controller\DashboardController:
+    arguments:
+      - '%sonata.admin.configuration.dashboard_blocks%'
+      - '@sonata.admin.global_template_registry'
+      - '@sonata.admin.pool'
