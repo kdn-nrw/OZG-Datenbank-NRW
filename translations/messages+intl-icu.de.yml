@@ -8,6 +8,13 @@ app:
     ozg_overview: OZG Überblick
     login: Anmelden
     dashboard: Startseite
+  block:
+    solution:
+      online: 'Lösungen: Online'
+      partially_online: 'Lösungen: Teilweise online'
+      offline: 'Lösungen: offline'
+      maturity_4: 'Lösungen: Reifegrad 4'
+    implementation_projects: Umsetzungsprojekte
   common:
     model_list_type:
       add: Neu
@@ -523,6 +530,10 @@ app:
       manufacturers: Hersteller
       service_providers: IT Dienstleister
       communes: Kommunen
+  statistics:
+    solution_maturity: 'Lösungen: Reifegrade'
+    solution_status: 'Lösungen: Status'
+    service_status: 'Leika-Leistungen: Status'
   status:
     object_name: Status
     list: Status

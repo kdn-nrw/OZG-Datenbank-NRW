@@ -7,11 +7,6 @@ file that was distributed with this source code.
 {% extends sonata_block.templates.block_base %}
 
 {% block block %}
-    {% set isAdminMode = context is defined and context.getSetting('mode') == 'admin' and admin_pool is defined %}
-    {% set refAdmin = null %}
-    {% if isAdminMode %}
-        {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
-    {% endif %}
     <div class="panel panel-default {{ settings.class }}">
         {% if settings.title is not empty %}
             <div class="panel-heading">
@@ -27,7 +22,7 @@ file that was distributed with this source code.
                 </h4>
             </div>
         {% endif %}
-
+        {% set colCount = isAdminMode ? 8 : 7 %}
         <div class="table-responsive">
             <table class="table table-striped table-condensed">
                 <thead>
@@ -39,13 +34,14 @@ file that was distributed with this source code.
                         <th>{{ 'app.solution.entity.maturity'|trans }}</th>
                         <th>{{ 'app.solution.entity.created_at'|trans }}</th>
                         <th>{{ 'app.solution.entity.created_by'|trans }}</th>
+                        {% if isAdminMode %}
                         <th>&nbsp;</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
                 {% for object in pager.getResults() %}
                     <tr>
-                    {% if isAdminMode %}
                         <td>
                             {% for commune in object.communes %}
                                 {% if loop.index > 1 %}
@@ -90,47 +86,44 @@ file that was distributed with this source code.
                                 {{ object.createdBy.fullname }}
                             {% endif %}
                         </td>
+                        {% if isAdminMode %}
                         <td>
                             <a class="list-item-action"
-                               href="{{ refAdmin.generateUrl('edit', { 'id': object.id }) }}"
+                               href="{{ admin.generateUrl('edit', { 'id': object.id }) }}"
                             >
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                         </td>
-                    {% else %}
-                        <td colspan="8">
-                            <a href="#">{{ 'app.solution.entity.no_solution_found'|trans({}, 'messages') }}</a>
-                        </td>
-                    {% endif %}
+                        {% endif %}
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="8">
+                        <td colspan="{{ colCount }}">
                             <a href="#">{{ 'app.solution.entity.no_solution_found'|trans({}, 'messages') }}</a>
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-
-            {#
-            <div class="panel-body">
-            {% sonata_template_box 'This is the recent solutions block.' %}
-            </div>
-            #}
         </div>
 
+        {#
+        <div class="panel-body">
+        {% sonata_template_box 'This is the recent solutions block.' %}
+        </div>
+        #}
+
+        {% if admin %}
         <div class="panel-footer">
-            {% if isAdminMode %}
                 <div style="margin: 0 auto;max-width: 240px;">
-                <a href="{{ refAdmin.generateUrl('list') }}"
+                <a href="{{ admin.generateUrl('list') }}"
                    class="btn btn-primary btn-block"
                 >
                     <i class="fa fa-list"></i>
                     {{ 'app.solution.entity.view_all'|trans({}, 'messages') }}
                 </a>
                 </div>
-            {% endif %}
         </div>
+        {% endif %}
     </div>
 {% endblock %}

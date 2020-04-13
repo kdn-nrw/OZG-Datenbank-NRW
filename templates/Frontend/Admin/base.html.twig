@@ -1,5 +1,11 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 
+{% block meta_tags %}
+    {{ parent() }}
+    <meta charset="index,follow">
+    <meta name="description" content="Das Onlinezugangsgesetz (OZG) – die Kommunen in NRW und ihre IT-Dienstleister präsentieren hier ihre Lösungen und gemeinsamen Digitalisierungsprojekte. Bald sind alle Online-Dienste der kommunalen Verwaltung im Portalverbund – für ganz Nordrhein-Westfalen.">
+    <meta name="keywords" content="OZG,Onlinezugangsgesetz,NRW,kommunal,Kommunen,Städte,Gemeinden,Landkreise,Landschaftsverbände,Nordrhein-Westfalen,Dienste,Services,Leika,Portal,Portalverbund,IT,Digitalisierung,E-Government,Öffentliche,Verwaltung,Themenfeld,Digitalisierungslabor,XÖV,FIM">
+{% endblock %}
 
 {% block logo %}
     {% apply spaceless %}
@@ -14,6 +20,51 @@
     {% endapply %}
 {% endblock %}
 
+{% block sonata_breadcrumb %}
+    <div class="hidden-xs">
+        {% if _breadcrumb is not empty or action is defined %}
+            <ol class="nav navbar-top-links breadcrumb">
+                {% if _breadcrumb is empty %}
+                    {% if action is defined %}
+                        {% for menu in breadcrumbs_builder.breadcrumbs(admin, action) %}
+                            {%- set translation_domain = menu.extra('translation_domain', 'messages') -%}
+                            {%- set label = menu.label -%}
+                            {%- if translation_domain is not same as(false) -%}
+                                {%- set label = label|trans(menu.extra('translation_params', {}), translation_domain) -%}
+                            {%- endif -%}
+
+                            {% if not loop.last %}
+                                <li>
+                                    {% if menu.uri is not empty %}
+                                        {# MOD: change home menu link to / in frontend #}
+                                        {% if menu.uri == '/admin/dashboard' %}
+                                            {% set href = '/' %}
+                                        {% else %}
+                                            {% set href = menu.uri %}
+                                        {% endif %}
+                                        <a href="{{ href }}">
+                                            {% if menu.extra('safe_label', true) %}
+                                                {{- label|raw -}}
+                                            {% else %}
+                                                {{- label|truncate(100) -}}
+                                            {% endif %}
+                                        </a>
+                                    {% else %}
+                                        <span>{{ label|truncate(100) }}</span>
+                                    {% endif %}
+                                </li>
+                            {% else %}
+                                <li class="active"><span>{{ label|truncate(100) }}</span></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    {{ _breadcrumb|raw }}
+                {% endif %}
+            </ol>
+        {% endif %}
+    </div>
+{% endblock sonata_breadcrumb %}
 
 {% block sonata_top_nav_menu %}
     <div class="navbar-custom-menu">
@@ -51,13 +102,13 @@
             </a>
             <ul class="active treeview-menu menu_level_1">
                 {% set menuItems = {
-                    'service': {
-                        'routePrefix': 'frontend_app_service',
-                        'label': 'app.service.frontend.list'
-                    },
                     'service_system': {
                         'routePrefix': 'frontend_app_servicesystem',
                         'label': 'app.service_system.list'
+                    },
+                    'service': {
+                        'routePrefix': 'frontend_app_service',
+                        'label': 'app.service.frontend.list'
                     },
                     'implementationproject': {
                         'routePrefix': 'frontend_app_implementationproject',
@@ -68,14 +119,16 @@
                         'label': 'app.solution.list'
                     }
                 } %}
+                {% set hasActive = false %}
                 {% for menuItem in menuItems %}
-                    {% set miActive = menuItem.routePrefix in app.request.attributes.get('_route') %}
+                    {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
                     <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
                         <a href="{{ path(menuItem.routePrefix ~ '_list') }}">
                             <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                             {{ menuItem.label|trans }}
                         </a>
                         {% if miActive %}
+                            {% set hasActive = true %}
                             {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
                         {% endif %}
                     </li>

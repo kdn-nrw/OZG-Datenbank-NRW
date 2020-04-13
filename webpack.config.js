@@ -89,5 +89,14 @@ Encore
     //.enableReactPreset()
     //.addEntry('admin', './assets/js/admin.js')
 ;
+// export the final configuration
+let webpackConfig = Encore.getWebpackConfig();
+
+webpackConfig.stats.errors = true;
+webpackConfig.stats.errorDetails = true;
+
+if (Encore.isProduction()) {
+    webpackConfig.optimization.minimize = true;
+}
 
 module.exports = Encore.getWebpackConfig();

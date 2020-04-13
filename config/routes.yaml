@@ -1,6 +1,7 @@
 index:
     path: /
-    controller: App\Controller\DefaultController::indexAction
+    #controller: App\Controller\DefaultController::indexAction
+    controller: App\Controller\DashboardController::indexAction
 
 app_search_list:
     path: /search
@@ -15,6 +16,10 @@ app_search_save:
     controller: App\Controller\SearchController::saveAction
     defaults:
         id: null
+
+app_statistics_chart:
+    path: /statistics/chart/{key}
+    controller: App\Controller\StatisticsController::chartAction
 
 app_search_delete:
     path: /search/delete/{id}

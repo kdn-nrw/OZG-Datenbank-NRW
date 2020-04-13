@@ -39,20 +39,27 @@ class MenuBuilderListener
     {
         $menu = $event->getMenu();
         $groupNode = $menu->getChild('app.ozg_implementation_group');
-
-        $child = $groupNode->addChild('search', [
-            'label' => 'app.search.list',
-            'route' => 'app_search_list',
-            /*'extras' => [
-                'routes' => [
-                    [
-                        'route' => 'app_search_list',
+        if (null !== $groupNode) {
+            $childSolution = $groupNode->getChild('app.solution.list');
+            if (null !== $childSolution) {
+                $childSolution->setExtras([
+                    'icon' => '<i class="fa fa-lightbulb-o" aria-hidden="true"></i>',
+                ]);
+            }
+            $child = $groupNode->addChild('search', [
+                'label' => 'app.search.list',
+                'route' => 'app_search_list',
+                /*'extras' => [
+                    'routes' => [
+                        [
+                            'route' => 'app_search_list',
+                        ],
                     ],
-                ],
-            ],*/
-        ])->setExtras([
-            'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
-        ]);
+                ],*/
+            ])->setExtras([
+                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+            ]);
+        }
         // standard controller route is not marked as current in menu
         $currentRoute = $this->requestStack->getMasterRequest()->get('_route');
         $childAsCurrentRoutes = ['app_search_list'];

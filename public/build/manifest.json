@@ -1,5 +1,7 @@
 {
   "build/0.js": "/build/0.js",
+  "build/1.js": "/build/1.js",
+  "build/2.js": "/build/2.js",
   "build/admin.css": "/build/admin.css",
   "build/admin.js": "/build/admin.js",
   "build/runtime.js": "/build/runtime.js",

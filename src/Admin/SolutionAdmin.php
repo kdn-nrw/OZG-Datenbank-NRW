@@ -352,9 +352,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                     ['fieldName' => 'maturity'],
                 ]
             ])
-            ->add('url', 'url', [
-                'required' => false
-            ]);
+            ->add('url', 'url');
         $this->addDefaultListActions($listMapper);
     }
 

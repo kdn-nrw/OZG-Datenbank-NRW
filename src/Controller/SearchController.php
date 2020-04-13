@@ -65,9 +65,8 @@ class SearchController extends AbstractController
                 'searchForm' => $searchForm->createView(),
             ]);
             return $response;
-        } else {
-            return $this->redirectToRoute('frontend_app_service_list');
         }
+        return $this->redirectToRoute('frontend_app_service_list');
     }
 
     /**
@@ -89,9 +88,8 @@ class SearchController extends AbstractController
                 'searchForm' => $searchForm->createView(),
             ]);
             return $response;
-        } else {
-            return $this->redirectToRoute('frontend_app_service_list');
         }
+        return $this->redirectToRoute('frontend_app_service_list');
     }
 
     /**
@@ -118,9 +116,8 @@ class SearchController extends AbstractController
                 $flashBag->add('success', $translation);
             }
             return $this->redirectToRoute('app_search_list', []);
-        } else {
-            return $this->redirectToRoute('frontend_app_service_list');
         }
+        return $this->redirectToRoute('frontend_app_service_list');
     }
 
     /**
@@ -155,16 +152,15 @@ class SearchController extends AbstractController
                 $flashBag->add('success', $translation);
             }
             return $this->redirectToRoute('app_search_list', []);
-        } else {
-            return $this->redirectToRoute('frontend_app_service_list');
         }
+        return $this->redirectToRoute('frontend_app_service_list');
     }
 
     /**
      * Creates the admin list with she searchable admins
      * @return array
      */
-    private function createAdminList()
+    private function createAdminList(): array
     {
         $adminServiceIds = $this->adminPool->getAdminServiceIds();
         $adminList = [];
@@ -202,9 +198,9 @@ class SearchController extends AbstractController
      * Initializes the search model
      *
      * @param int|null $id
-     * @return Search|null
+     * @return Search
      */
-    private function initSearchModel(?int $id)
+    private function initSearchModel(?int $id): Search
     {
         $search = null;
         if ($id) {
