@@ -1,4 +1,6 @@
 app:
+  frontend:
+    page_title: 'OZG NRW kommunal – Onlinedienste zum Onlinezugangsgesetz'
   menu:
     settings_group: OZG Basisdaten
     service_group: NRW Basisdaten
@@ -14,7 +16,11 @@ app:
       partially_online: 'Lösungen: Teilweise online'
       offline: 'Lösungen: offline'
       maturity_4: 'Lösungen: Reifegrad 4'
-    implementation_projects: Umsetzungsprojekte
+    implementation_project:
+      total: 'gemeinsame kommunale Umsetzungsprojekte in NRW'
+    service_system:
+      total: 'OZG-Leistungen insgesamt'
+      communal_execution: 'OZG-Leistungen, die in NRW im kommunalen Vollzug liegen'
   common:
     model_list_type:
       add: Neu
@@ -72,7 +78,7 @@ app:
       solution_list: Lösungen anzeigen
     group:
       general_data: Basisdaten
-      services_data: Dienstleistungen
+      reference_data: Referenzen
     entity:
       organisation: Organisation
       name: Name
@@ -84,6 +90,7 @@ app:
       contact: Ansprechpartner der Kommune (alt)
       service_providers: IT Dienstleister
       specialized_procedures: Fachverfahren
+      portals: Portale
   contact:
     object_name: Kontakt
     list: Kontakte
@@ -132,10 +139,25 @@ app:
     object_name: Formularserver
     list: Formularserver
     create: Formularserver anlegen
+    tabs:
+      general: Allgemein
+      solutions: Lösungen
     entity:
       name: Name
       url: Url
-      solutions: Lösungen
+      form_server_solutions: Lösungen
+  form_server_solution:
+    object_name: Formularserver - Lösung
+    list: Formularserver - Lösungen
+    create: Formularserver-Lösung anlegen
+    entity:
+      form_server: Formularserver
+      solution: Lösung
+      article_number: Artikelnummer
+      assistant_type: Assistententyp
+      article_key: Identifikationsnummer
+      status: Status
+      usable_as_print_template: Druckvorlage geeignet
   implementation_project:
     object_name: Umsetzungsprojekt
     list: Umsetzungsprojekte
@@ -316,7 +338,7 @@ app:
       solutions: Lösungen
   portal:
     object_name: Portal
-    list: Portal
+    list: Portale
     create: Portal anlegen
     entity:
       name: Name
@@ -393,18 +415,18 @@ app:
       inherit_state_ministries.yes: Ministerien (Land) der Leika-Leistung mit Ministerien (Land) der OZG-Leistung erweitern
       inherit_state_ministries.no: Ministerien (Land) der OZG-Leistung nicht übernehmen
       specialized_procedures: Fachverfahren
-      rule_authorities: Regelkompetenz
-      authority_bureaus: Regelkompetenz Fachlichkeiten
-      authority_state_ministries: Regelkompetenz  Ministerien (Land)
-      inherit_rule_authorities: Regelkompetenz von OZG-Leistung übernehmen
-      inherit_rule_authorities.yes: Regelkompetenz der Leika-Leistung mit Regelkompetenz der OZG-Leistung erweitern
-      inherit_rule_authorities.no: Regelkompetenz der OZG-Leistung nicht übernehmen
-      authority_inherit_bureaus: Regelkompetenz Fachlichkeiten von OZG-Leistung übernehmen
-      authority_inherit_bureaus.yes: Regelkompetenz Fachlichkeiten der Leika-Leistung mit Regelkompetenz Fachlichkeiten der OZG-Leistung erweitern
-      authority_inherit_bureaus.no: Regelkompetenz Fachlichkeiten der OZG-Leistung nicht übernehmen
-      authority_inherit_state_ministries: Regelkompetenz Ministerien (Land) von OZG-Leistung übernehmen
-      authority_inherit_state_ministries.yes: Regelkompetenz Ministerien (Land) der Leika-Leistung mit Regelkompetenz  Ministerien (Land) der OZG-Leistung erweitern
-      authority_inherit_state_ministries.no: Regelkompetenz Ministerien (Land) der OZG-Leistung nicht übernehmen
+      rule_authorities: Regelungskompetenz
+      authority_bureaus: Regelungskompetenz Fachlichkeiten
+      authority_state_ministries: Regelungskompetenz  Ministerien (Land)
+      inherit_rule_authorities: Regelungskompetenz von OZG-Leistung übernehmen
+      inherit_rule_authorities.yes: Regelungskompetenz der Leika-Leistung mit Regelungskompetenz der OZG-Leistung erweitern
+      inherit_rule_authorities.no: Regelungskompetenz der OZG-Leistung nicht übernehmen
+      authority_inherit_bureaus: Regelungskompetenz Fachlichkeiten von OZG-Leistung übernehmen
+      authority_inherit_bureaus.yes: Regelungskompetenz Fachlichkeiten der Leika-Leistung mit Regelungskompetenz Fachlichkeiten der OZG-Leistung erweitern
+      authority_inherit_bureaus.no: Regelungskompetenz Fachlichkeiten der OZG-Leistung nicht übernehmen
+      authority_inherit_state_ministries: Regelungskompetenz Ministerien (Land) von OZG-Leistung übernehmen
+      authority_inherit_state_ministries.yes: Regelungskompetenz Ministerien (Land) der Leika-Leistung mit Regelungskompetenz  Ministerien (Land) der OZG-Leistung erweitern
+      authority_inherit_state_ministries.no: Regelungskompetenz Ministerien (Land) der OZG-Leistung nicht übernehmen
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister
@@ -462,12 +484,12 @@ app:
       bureaus: Fachlichkeiten
       bureaus_form: Fachlichkeiten (werden an Leika-Leistungen vererbt)
       solutions: Lösungen
-      rule_authorities: Regelkompetenz
-      rule_authorities_form: Regelkompetenz (werden an Leika-Leistungen vererbt)
-      authority_bureaus: Regelkompetenz Fachlichkeiten
-      authority_state_ministries: Regelkompetenz Ministerien (Land)
-      authority_bureaus_form: Regelkompetenz Fachlichkeiten (werden an Leika-Leistungen vererbt)
-      authority_state_ministries_form: Regelkompetenz Ministerien (Land) (werden an Leika-Leistungen vererbt)
+      rule_authorities: Regelungskompetenz
+      rule_authorities_form: Regelungskompetenz (werden an Leika-Leistungen vererbt)
+      authority_bureaus: Regelungskompetenz Fachlichkeiten
+      authority_state_ministries: Regelungskompetenz Ministerien (Land)
+      authority_bureaus_form: Regelungskompetenz Fachlichkeiten (werden an Leika-Leistungen vererbt)
+      authority_state_ministries_form: Regelungskompetenz Ministerien (Land) (werden an Leika-Leistungen vererbt)
   situation:
     object_name: Lage
     list: Lage
@@ -489,6 +511,7 @@ app:
     tabs:
       general: Allgemein
       relations: Relationen
+      form_servers: Formularserver
       services: Leika-Leistungen
     entity:
       view_all: Alle Lösungen anzeigen
@@ -515,7 +538,7 @@ app:
       created_by: Erstellt von
       created_at: Erstellt am
       maturity: Reifegrad
-      form_servers: Formularserver
+      form_server_solutions: Formularserver
       payment_types: Bezahlverfahren
       is_published: Lösung öffentlich sichtbar?
   specialized_procedure:

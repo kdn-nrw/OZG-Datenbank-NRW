@@ -39,8 +39,15 @@ class Portal extends BaseNamedEntity
      */
     private $solutions;
 
+    /**
+     * @var Commune[]|Collection
+     * @ORM\ManyToMany(targetEntity="Commune", mappedBy="portals")
+     */
+    private $communes;
+
     public function __construct()
     {
+        $this->communes = new ArrayCollection();
         $this->solutions = new ArrayCollection();
     }
 
@@ -80,7 +87,7 @@ class Portal extends BaseNamedEntity
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution)
+    public function addSolution($solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -94,7 +101,7 @@ class Portal extends BaseNamedEntity
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution)
+    public function removeSolution($solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
@@ -118,5 +125,49 @@ class Portal extends BaseNamedEntity
     public function setSolutions($solutions): void
     {
         $this->solutions = $solutions;
+    }
+
+    /**
+     * @param Commune $commune
+     * @return self
+     */
+    public function addCommune($commune): self
+    {
+        if (!$this->communes->contains($commune)) {
+            $this->communes->add($commune);
+            $commune->addPortal($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Commune $commune
+     * @return self
+     */
+    public function removeCommune($commune): self
+    {
+        if ($this->communes->contains($commune)) {
+            $this->communes->removeElement($commune);
+            $commune->removePortal($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Commune[]|Collection
+     */
+    public function getCommunes()
+    {
+        return $this->communes;
+    }
+
+    /**
+     * @param Commune[]|Collection $communes
+     */
+    public function setCommunes($communes): void
+    {
+        $this->communes = $communes;
     }
 }

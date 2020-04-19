@@ -4,6 +4,7 @@ namespace App\Admin;
 
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ContactTrait;
+use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Status;
@@ -26,6 +27,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     use CommuneTrait;
     use ContactTrait;
+    use PortalTrait;
     use ServiceSystemTrait;
     use SpecializedProcedureTrait;
 
@@ -39,6 +41,13 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
         // name of the ordered field (default = the model's id field, if any)
         '_sort_by' => 'id',
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $customLabels = [
+        'app.solution.entity.form_server_solutions_form_server' => 'app.solution.entity.form_server_solutions',
     ];
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
@@ -100,7 +109,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                         'required' => false
                     ]);
             $this->addContactsFormFields($formMapper, true, false, 'solutionContacts');
-        $formMapper->add('isPublished', CheckboxType::class, [
+            $formMapper->add('isPublished', CheckboxType::class, [
                         'required' => false,
                     ])
                     /*
@@ -116,15 +125,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->tab('app.solution.tabs.relations')
                 ->with('relations', [
                     'label' => false,
-                ])
-                    ->add('portals', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ])
+                ]);
+            $this->addPortalsFormFields($formMapper);
+            $formMapper
                     ->add('communeType', ChoiceFieldMaskType::class, [
                         'choices' => [
                             'app.solution.entity.commune_type_all' => 'all',
@@ -139,14 +142,6 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 $this->addCommunesFormFields($formMapper);
                 $this->addSpecializedProceduresFormFields($formMapper);
                 $formMapper
-                    ->add('formServers', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ])
                     ->add('paymentTypes', ModelType::class, [
                         'btn_add' => false,
                         'placeholder' => '',
@@ -178,6 +173,24 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                         'multiple' => true,
                         'by_reference' => false,
                         'choice_translation_domain' => false,
+                    ])
+                ->end()
+            ->end()
+            ->tab('app.solution.tabs.form_servers')
+                ->with('form_server_solutions', [
+                    'label' => false,
+                ])
+                    ->add('formServerSolutions', CollectionType::class, [
+                        'label' => false,
+                        'type_options' => [
+                            'delete' => true,
+                        ],
+                        'by_reference' => false,
+                    ], [
+                        'edit' => 'inline',
+                        'inline' => 'table',
+                        'sortable' => 'position',
+                        'ba_custom_hide_fields' => ['solution'],
                     ])
                 ->end()
             ->end()
@@ -246,15 +259,10 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('status');
-        $datagridMapper->add('portals',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addPortalsDatagridFilters($datagridMapper);
         $this->addCommunesDatagridFilters($datagridMapper);
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);
-        $datagridMapper->add('formServers',
+        $datagridMapper->add('formServerSolutions.formServer',
             null,
             [],
             null,
@@ -300,16 +308,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'communes'],
                 ]
-            ])/*
-            ->add('portals', null, [
-                'sortable' => true, // IMPORTANT! make the column sortable
-                'sort_field_mapping' => [
-                    'fieldName' => 'name'
-                ],
-                'sort_parent_association_mappings' => [
-                    ['fieldName' => 'portals'],
-                ]
-            ])*/
+            ])
             ->add('serviceProvider', null, [
                 'template' => 'General/Association/list_many_to_one_nolinks.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -382,11 +381,13 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'template' => 'SolutionAdmin/show-communes.html.twig',
             ])
             ->add('serviceProvider')
-            ->add('customProvider')
-            ->add('portals');
+            ->add('customProvider');
+        $this->addPortalsShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);
         $showMapper
-            ->add('formServers')
+            ->add('formServerSolutions', null, [
+                'associated_property' => 'formServer'
+            ])
             ->add('paymentTypes')
             ->add('authentications')
             ->add('analogServices')
@@ -408,5 +409,8 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ]);
+        $this->customShowFields[] = 'serviceSystems';
+        $this->customShowFields[] = 'serviceSolutions';
+        $this->customShowFields[] = 'formServerSolutions';
     }
 }

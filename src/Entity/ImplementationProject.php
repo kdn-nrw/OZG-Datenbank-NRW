@@ -68,6 +68,20 @@ class ImplementationProject extends BaseNamedEntity
     private $serviceSystems;
 
     /**
+     * @var Service[]|Collection
+     * @ORM\ManyToMany(targetEntity="Service", inversedBy="implementationProjects")
+     * @ORM\JoinTable(name="ozg_implementation_project_service",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $services;
+
+    /**
      * @var Solution[]|Collection
      * @ORM\ManyToMany(targetEntity="Solution", inversedBy="implementationProjects")
      * @ORM\JoinTable(name="ozg_implementation_project_solution",
@@ -141,6 +155,7 @@ class ImplementationProject extends BaseNamedEntity
     {
         $this->solutions = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
+        $this->services = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->interestedOrganisations = new ArrayCollection();
@@ -253,6 +268,50 @@ class ImplementationProject extends BaseNamedEntity
     public function setServiceSystems($serviceSystems): void
     {
         $this->serviceSystems = $serviceSystems;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function addService($service): self
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->addImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Service $service
+     * @return self
+     */
+    public function removeService($service): self
+    {
+        if ($this->services->contains($service)) {
+            $this->services->removeElement($service);
+            $service->removeImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Service[]|Collection
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    /**
+     * @param Service[]|Collection $services
+     */
+    public function setServices(Collection $services): void
+    {
+        $this->services = $services;
     }
 
     /**

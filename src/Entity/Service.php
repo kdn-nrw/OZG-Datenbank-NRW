@@ -229,11 +229,18 @@ class Service extends AbstractService
      */
     protected $authorityInheritBureaus = true;
 
+    /**
+     * @var ImplementationProject[]|Collection
+     * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="services")
+     */
+    private $implementationProjects;
+
     public function __construct()
     {
         $this->authorityBureaus = new ArrayCollection();
         $this->authorityStateMinistries = new ArrayCollection();
         $this->bureaus = new ArrayCollection();
+        $this->implementationProjects = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
         $this->ruleAuthorities = new ArrayCollection();
@@ -427,7 +434,7 @@ class Service extends AbstractService
     /**
      * @param ServiceSystem|null $serviceSystem
      */
-    public function setServiceSystem(?ServiceSystem $serviceSystem)
+    public function setServiceSystem(?ServiceSystem $serviceSystem): void
     {
         $this->serviceSystem = $serviceSystem;
     }
@@ -908,6 +915,50 @@ class Service extends AbstractService
     public function setAuthorityInheritBureaus(bool $authorityInheritBureaus): void
     {
         $this->authorityInheritBureaus = $authorityInheritBureaus;
+    }
+
+    /**
+     * @param ImplementationProject $implementationProject
+     * @return self
+     */
+    public function addImplementationProject($implementationProject): self
+    {
+        if (!$this->implementationProjects->contains($implementationProject)) {
+            $this->implementationProjects->add($implementationProject);
+            $implementationProject->addService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ImplementationProject $implementationProject
+     * @return self
+     */
+    public function removeImplementationProject($implementationProject): self
+    {
+        if ($this->implementationProjects->contains($implementationProject)) {
+            $this->implementationProjects->removeElement($implementationProject);
+            $implementationProject->removeService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ImplementationProject[]|Collection
+     */
+    public function getImplementationProjects()
+    {
+        return $this->implementationProjects;
+    }
+
+    /**
+     * @param ImplementationProject[]|Collection $implementationProjects
+     */
+    public function setImplementationProjects($implementationProjects): void
+    {
+        $this->implementationProjects = $implementationProjects;
     }
 
 }

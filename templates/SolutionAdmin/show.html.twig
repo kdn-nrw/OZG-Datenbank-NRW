@@ -1,13 +1,12 @@
 {% extends 'General/Show/show.html.twig' %}
 
-{% block show_field %}
-    {% if field_name not in ['serviceSystems', 'serviceSolutions'] %}
-        {{ parent() }}
-    {% endif %}
-{% endblock %}
-
 {% block app_show_custom_fields %}
     {{ parent() }}
+    {% if elements['formServerSolutions'] is defined %}
+        <div class="col-xs-12">
+            {% include 'General/Show/show-form-server-solutions.html.twig' with {'entities': object.formServerSolutions, 'showSolution': false} %}
+        </div>
+    {% endif %}
     {% if elements['serviceSolutions'] is defined %}
         <div class="col-xs-12">
             {% include 'General/Show/show-service-solutions.html.twig' with {'entities': object.serviceSolutions, 'showSolution': false} %}

@@ -111,10 +111,24 @@ services:
       - ~
       - App\Entity\FormServer
       - ~
+    calls:
+      - [setTemplate, ['show', 'FormServerAdmin/show.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
         label:        app.form_server.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\FormServerSolutionAdmin:
+    arguments:
+      - ~
+      - App\Entity\FormServerSolution
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.form_server_solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
@@ -432,6 +446,7 @@ services:
       - ~
     calls:
       - [addChild, ['@App\Admin\ServiceSolutionAdmin', 'solution']]
+      - [addChild, ['@App\Admin\FormServerSolutionAdmin', 'solution']]
       - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
     tags:
       - name:         sonata.admin

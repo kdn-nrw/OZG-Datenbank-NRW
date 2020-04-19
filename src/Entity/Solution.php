@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Entity\Base\BaseBlamableEntity;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
-use App\Entity\Base\NamedEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,14 +17,21 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_solution")
  * @ORM\HasLifecycleCallbacks
  */
-class Solution extends BaseBlamableEntity implements NamedEntityInterface
+class Solution extends BaseBlamableEntity implements NamedEntityInterface, ImportEntityInterface
 {
     public const COMMUNE_TYPE_ALL = 'all';
     public const COMMUNE_TYPE_SELECTED = 'selected';
 
-    use NamedEntityTrait;
     use HideableEntityTrait;
     use UrlTrait;
+    use ImportTrait;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
+    protected $name;
 
     /**
      * @var ServiceProvider|null
@@ -83,7 +89,6 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
      * )
      */
     private $specializedProcedures;
-
 
     /**
      * @var Portal[]|Collection
@@ -173,10 +178,10 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     private $maturity;
 
     /**
-     * @var FormServer[]|Collection
-     * @ORM\ManyToMany(targetEntity="FormServer", mappedBy="solutions")
+     * @var FormServerSolution[]|Collection
+     * @ORM\OneToMany(targetEntity="FormServerSolution", mappedBy="solution", cascade={"all"}, orphanRemoval=true)
      */
-    private $formServers;
+    private $formServerSolutions;
 
     /**
      * @var PaymentType[]|Collection
@@ -220,11 +225,35 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
         $this->communes = new ArrayCollection();
         $this->analogServices = new ArrayCollection();
         $this->authentications = new ArrayCollection();
-        $this->formServers = new ArrayCollection();
+        $this->formServerSolutions = new ArrayCollection();
         $this->openDataItems = new ArrayCollection();
         $this->paymentTypes = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
         $this->solutionContacts = new ArrayCollection();
+    }
+
+    /**
+     * Set name
+     *
+     * @param string|null $name
+     * @return self
+     * @noinspection ReturnTypeCanBeDeclaredInspection
+     */
+    public function setName(?string $name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 
     /**
@@ -358,7 +387,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     /**
      * Update the solution maturity based on the service solution maturities
      */
-    protected function updateMaturity()
+    protected function updateMaturity(): void
     {
         $maturity = $this->maturity;
         $groupedMaturities = [];
@@ -694,47 +723,46 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface
     }
 
     /**
-     * @param FormServer $formServer
+     * @param FormServerSolution $formServerSolution
      * @return self
      */
-    public function addFormServer($formServer): self
+    public function addFormServerSolution(FormServerSolution $formServerSolution): self
     {
-        if (!$this->formServers->contains($formServer)) {
-            $this->formServers->add($formServer);
-            $formServer->addSolution($this);
+        if (!$this->formServerSolutions->contains($formServerSolution)) {
+            $this->formServerSolutions->add($formServerSolution);
+            $formServerSolution->setSolution($this);
         }
 
         return $this;
     }
 
     /**
-     * @param FormServer $formServer
+     * @param FormServerSolution $formServerSolution
      * @return self
      */
-    public function removeFormServer($formServer): self
+    public function removeFormServerSolution($formServerSolution): self
     {
-        if ($this->formServers->contains($formServer)) {
-            $this->formServers->removeElement($formServer);
-            $formServer->removeSolution($this);
+        if ($this->formServerSolutions->contains($formServerSolution)) {
+            $this->formServerSolutions->removeElement($formServerSolution);
         }
 
         return $this;
     }
 
     /**
-     * @return FormServer[]|Collection
+     * @return FormServerSolution[]|Collection
      */
-    public function getFormServers()
+    public function getFormServerSolutions()
     {
-        return $this->formServers;
+        return $this->formServerSolutions;
     }
 
     /**
-     * @param FormServer[]|Collection $formServers
+     * @param FormServerSolution[]|Collection $formServerSolutions
      */
-    public function setFormServers($formServers): void
+    public function setFormServerSolutions($formServerSolutions): void
     {
-        $this->formServers = $formServers;
+        $this->formServerSolutions = $formServerSolutions;
     }
 
     /**

@@ -58,6 +58,39 @@ sonata_admin:
                     code_public: App\Admin\Frontend\SolutionAdmin
                     disable_public: true
             -
+                class:    col-xs-12 col-sm-6 col-lg-4
+                position: top                        # zone in the dashboard
+                type:     sonata.admin.block.stats   # block id
+                settings:
+                    code:  App\Admin\Frontend\ServiceSystemAdmin    # admin code - service id
+                    icon:  fa-tasks                  # font awesome icon
+                    text:  app.block.service_system.total
+                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
+                    #filters:                         # filter values
+                    #    status: { value: 4 }
+            -
+                class:    col-xs-12 col-sm-6 col-lg-4
+                position: top                        # zone in the dashboard
+                type:     sonata.admin.block.stats   # block id
+                settings:
+                    code:  App\Admin\Frontend\ServiceSystemAdmin    # admin code - service id
+                    icon:  fa-tasks                  # font awesome icon
+                    text:  app.block.service_system.communal_execution
+                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
+                    filters:                         # filter values
+                        jurisdictions: { value:  [3] }
+            -
+                class:    col-xs-12 col-sm-6 col-lg-4
+                position: top                        # zone in the dashboard
+                type:     sonata.admin.block.stats   # block id
+                settings:
+                    code:  App\Admin\ImplementationProjectAdmin    # admin code - service id
+                    icon:  fa-wrench                  # font awesome icon
+                    text:  app.block.implementation_project.total
+                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
+                    #filters:                         # filter values
+                    #    status: { value: 4 }
+            -
                 position: top
                 type: App\Block\StatisticsBlock
                 class: 'col-xs-12 col-lg-6'
@@ -122,17 +155,6 @@ sonata_admin:
                     color: bg-green                 # colors: bg-green, bg-red and bg-aqua
                     filters:                         # filter values
                         maturity: { value:  [5] } # Maturity ID 5 => Label: '4'
-            -
-                class:    col-xs-6 col-lg-3
-                position: top                        # zone in the dashboard
-                type:     sonata.admin.block.stats   # block id
-                settings:
-                    code:  App\Admin\ImplementationProjectAdmin    # admin code - service id
-                    icon:  fa-wrench                  # font awesome icon
-                    text:  app.block.implementation_projects
-                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
-                    #filters:                         # filter values
-                    #    status: { value: 4 }
 
         groups:
             app.ozg_implementation_group:

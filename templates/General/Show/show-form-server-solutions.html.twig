@@ -9,9 +9,8 @@
         {% endif %}
     {% else  %}
         {% if isAdminMode %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceAdmin') %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\FormServerAdmin') %}
         {% else %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\ServiceAdmin') %}
         {% endif %}
     {% endif %}
     {# @var refAdmin \App\Admin\AbstractAppAdmin #}
@@ -23,9 +22,9 @@
         <div class="box-header">
             <h4 class="box-title">
                 {% if showSolution %}
-                    {{ 'app.solution.list'|trans }}
+                    {{ 'app.form_server.entity.form_server_solutions'|trans }}
                 {% else %}
-                    {{ 'app.service_solution.list'|trans }}
+                    {{ 'app.solution.entity.form_server_solutions'|trans }}
                 {% endif %}
             </h4>
         </div>
@@ -35,10 +34,22 @@
                     {% if showSolution %}
                         {% include 'General/Show/Table/tabe-head-solutions.html.twig' %}
                     {% else %}
-                        {% include 'General/Show/Table/tabe-head-services.html.twig' %}
+                        {% include 'General/Show/Table/tabe-head-form-servers.html.twig' %}
                     {% endif %}
                     <th>
-                        {{ 'app.solution.entity.maturity'|trans }}
+                        {{ 'app.form_server_solution.entity.status'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.form_server_solution.entity.article_number'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.form_server_solution.entity.assistant_type'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.form_server_solution.entity.article_key'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.form_server_solution.entity.usable_as_print_template'|trans }}
                     </th>
                     {% if createEditLink %}
                         <th>
@@ -46,7 +57,7 @@
                     {% endif %}
                 </tr>
                 {% for child in entities %}
-                    {# @var child \App\Entity\ServiceSolution #}
+                    {# @var child \App\Entity\FormServerSolution #}
                     <tr>
                         {% if showSolution %}
                             {% set createShowLink = listEnableShowLink and (isAdminMode or child.solution.isPublished) %}
@@ -54,13 +65,25 @@
                             {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
                         {% else %}
                             {% set createShowLink = listEnableShowLink %}
-                            {% set editObjectId = child.service.id %}
-                            {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}
+                            {% set editObjectId = child.formServer.id %}
+                            {% include 'General/Show/Table/tabe-row-cells-form-servers.html.twig' with {'child': child.formServer} %}
                         {% endif %}
                         <td>
-                            {% if child.maturity %}
-                                {{ child.maturity.name }}
+                            {% if child.status %}
+                                {{ child.status.name }}
                             {% endif %}
+                        </td>
+                        <td>
+                            {{ child.articleNumber }}
+                        </td>
+                        <td>
+                            {{ child.assistantType }}
+                        </td>
+                        <td>
+                            {{ child.articleKey }}
+                        </td>
+                        <td>
+                            {{ child.usableAsPrintTemplate ? 'Ja' : 'Nein' }}
                         </td>
                         {% if createEditLink and editObjectId %}
                         <td>
