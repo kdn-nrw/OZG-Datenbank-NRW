@@ -71,10 +71,25 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface
      */
     private $specializedProcedures;
 
+    /**
+     * @var Portal[]|Collection
+     * @ORM\ManyToMany(targetEntity="Portal", inversedBy="communes")
+     * @ORM\JoinTable(name="ozg_commune_portals",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="portal_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $portals;
+
     public function __construct()
     {
         $this->solutions = new ArrayCollection();
         $this->offices = new ArrayCollection();
+        $this->portals = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
     }
@@ -285,6 +300,50 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface
     public function setSpecializedProcedures($specializedProcedures): void
     {
         $this->specializedProcedures = $specializedProcedures;
+    }
+
+    /**
+     * @param Portal $portal
+     * @return self
+     */
+    public function addPortal($portal): self
+    {
+        if (!$this->portals->contains($portal)) {
+            $this->portals->add($portal);
+            $portal->addCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Portal $portal
+     * @return self
+     */
+    public function removePortal($portal): self
+    {
+        if ($this->portals->contains($portal)) {
+            $this->portals->removeElement($portal);
+            $portal->removeCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Portal[]|Collection
+     */
+    public function getPortals()
+    {
+        return $this->portals;
+    }
+
+    /**
+     * @param Portal[]|Collection $portals
+     */
+    public function setPortals($portals): void
+    {
+        $this->portals = $portals;
     }
 
     /**

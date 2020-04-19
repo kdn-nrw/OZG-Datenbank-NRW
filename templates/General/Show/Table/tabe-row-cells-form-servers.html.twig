@@ -1,0 +1,13 @@
+{# @var child \App\Entity\FormServer #}
+<td>
+    {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
+        <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
+            {{ child.name }}
+        </a>
+    {% else %}
+        {{ child.name }}
+    {% endif %}
+</td>
+<td>
+    {{ child.url }}
+</td>

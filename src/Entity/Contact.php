@@ -267,7 +267,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
     /**
      * @param string|null $organisation
      */
-    public function setOrganisation(?string $organisation)
+    public function setOrganisation(?string $organisation): void
     {
         $this->organisation = $organisation;
     }

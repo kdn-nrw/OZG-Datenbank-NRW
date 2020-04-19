@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * Class Formularserver
+ * Class form server
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_form_server")
@@ -20,65 +20,56 @@ class FormServer extends BaseNamedEntity
     use UrlTrait;
 
     /**
-     * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", inversedBy="formServers")
-     * @ORM\JoinTable(name="ozg_form_servers_solutions",
-     *     joinColumns={
-     *     @ORM\JoinColumn(name="form_server_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
-     *   }
-     * )
+     * @var FormServerSolution[]|Collection
+     * @ORM\OneToMany(targetEntity="FormServerSolution", mappedBy="formServer", cascade={"all"}, orphanRemoval=true)
      */
-    private $solutions;
+    private $formServerSolutions;
 
     public function __construct()
     {
-        $this->solutions = new ArrayCollection();
+        $this->formServerSolutions = new ArrayCollection();
     }
 
     /**
-     * @param Solution $solution
+     * @param FormServerSolution $formServerSolution
      * @return self
      */
-    public function addSolution($solution)
+    public function addFormServerSolution(FormServerSolution $formServerSolution): self
     {
-        if (!$this->solutions->contains($solution)) {
-            $this->solutions->add($solution);
-            $solution->addFormServer($this);
+        if (!$this->formServerSolutions->contains($formServerSolution)) {
+            $this->formServerSolutions->add($formServerSolution);
+            $formServerSolution->setFormServer($this);
         }
 
         return $this;
     }
 
     /**
-     * @param Solution $solution
+     * @param FormServerSolution $formServerSolution
      * @return self
      */
-    public function removeSolution($solution)
+    public function removeFormServerSolution($formServerSolution): self
     {
-        if ($this->solutions->contains($solution)) {
-            $this->solutions->removeElement($solution);
-            $solution->removeFormServer($this);
+        if ($this->formServerSolutions->contains($formServerSolution)) {
+            $this->formServerSolutions->removeElement($formServerSolution);
         }
 
         return $this;
     }
 
     /**
-     * @return Solution[]|Collection
+     * @return FormServerSolution[]|Collection
      */
-    public function getSolutions()
+    public function getFormServerSolutions()
     {
-        return $this->solutions;
+        return $this->formServerSolutions;
     }
 
     /**
-     * @param Solution[]|Collection $solutions
+     * @param FormServerSolution[]|Collection $formServerSolutions
      */
-    public function setSolutions($solutions): void
+    public function setFormServerSolutions($formServerSolutions): void
     {
-        $this->solutions = $solutions;
+        $this->formServerSolutions = $formServerSolutions;
     }
 }

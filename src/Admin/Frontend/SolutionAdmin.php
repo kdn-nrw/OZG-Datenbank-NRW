@@ -18,6 +18,7 @@ class SolutionAdmin extends AbstractFrontendAdmin
      * @var string[]
      */
     protected $customLabels = [
+        'app.solution.entity.form_server_solutions_form_server' => 'app.solution.entity.form_server_solutions',
     ];
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -83,7 +84,7 @@ class SolutionAdmin extends AbstractFrontendAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('formServers',
+        $datagridMapper->add('formServerSolutions.formServer',
             null,
             [],
             null,
@@ -96,6 +97,12 @@ class SolutionAdmin extends AbstractFrontendAdmin
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('authentications',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('analogServices',
             null,
             [],
             null,
@@ -237,7 +244,7 @@ class SolutionAdmin extends AbstractFrontendAdmin
             ->add('customProvider')
             ->add('portals')
             ->add('specializedProcedures')
-            ->add('formServers')
+            ->add('formServerSolutions')
             ->add('paymentTypes')
             ->add('authentications')
             ->add('analogServices')
@@ -258,6 +265,9 @@ class SolutionAdmin extends AbstractFrontendAdmin
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ]);
+        $this->customShowFields[] = 'serviceSystems';
+        $this->customShowFields[] = 'serviceSolutions';
+        $this->customShowFields[] = 'formServerSolutions';
     }
 
     public function isGranted($name, $object = null)

@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Maturity extends BaseNamedEntity
 {
 
-    const DEFAULT_ID = 7;
+    public const DEFAULT_ID = 1;
 
     /**
      * ozgrgbeschreibung

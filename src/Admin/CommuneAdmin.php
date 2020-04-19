@@ -5,6 +5,7 @@ namespace App\Admin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
+use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Commune;
@@ -23,6 +24,7 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     use AddressTrait;
     use ContactTrait;
     use OrganisationOneToOneTrait;
+    use PortalTrait;
     use ServiceProviderTrait;
     use SpecializedProcedureTrait;
 
@@ -47,10 +49,11 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $this->addOrganisationOneToOneFormFields($formMapper);
         $formMapper->end();
         $formMapper->with('services_data', [
-            'label' => 'app.commune.group.services_data',
+            'label' => 'app.commune.group.reference_data',
         ]);
         $this->addServiceProvidersFormFields($formMapper);
         $this->addSpecializedProceduresFormFields($formMapper);
+        $this->addPortalsFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
     }
@@ -96,6 +99,7 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
         $this->addServiceProvidersDatagridFilters($datagridMapper);
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);
+        $this->addPortalsDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -117,6 +121,7 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $this->addContactsShowFields($showMapper, true, 'organisation.contacts');
         $this->addServiceProvidersShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);
+        $this->addPortalsShowFields($showMapper);
         $showMapper->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,

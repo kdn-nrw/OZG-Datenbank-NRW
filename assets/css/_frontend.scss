@@ -1,0 +1,10 @@
+.app-fe {
+    .page-title {
+        padding: 15px;
+        + li {
+            &::before {
+                display: none;
+            }
+        }
+    }
+}

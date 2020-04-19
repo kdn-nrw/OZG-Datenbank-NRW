@@ -2,6 +2,7 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\OrganisationAdmin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
@@ -70,9 +71,15 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
             ->add('name')
             ->add('publishedSolutions', null, [
                 'admin_code' => SolutionAdmin::class,
+                'route' => [
+                    'name' => 'show',
+                ],
             ])
             ->add('serviceSystems', null, [
                 'admin_code' => ServiceSystemAdmin::class,
+                'route' => [
+                    'name' => 'show',
+                ],
             ])
             ->add('description')
             ->add('status', 'choice', [
@@ -83,6 +90,16 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
             ->add('projectStartAt', null, [
                 // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
                 'pattern' => 'MMMM yyyy',
+            ])
+            ->add('interestedOrganisations', null, [
+                'route' => [
+                    'name' => 'show',
+                ],
+            ])
+            ->add('participationOrganisations', null, [
+                'route' => [
+                    'name' => 'show',
+                ],
             ])
             ->add('notes', 'html');
     }

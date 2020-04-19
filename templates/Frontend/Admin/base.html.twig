@@ -7,6 +7,13 @@
     <meta name="keywords" content="OZG,Onlinezugangsgesetz,NRW,kommunal,Kommunen,Städte,Gemeinden,Landkreise,Landschaftsverbände,Nordrhein-Westfalen,Dienste,Services,Leika,Portal,Portalverbund,IT,Digitalisierung,E-Government,Öffentliche,Verwaltung,Themenfeld,Digitalisierungslabor,XÖV,FIM">
 {% endblock %}
 
+{% block body_attributes -%}
+    class="sonata-bc skin-black app-fe fixed
+    {% if app.request.cookies.get('sonata_sidebar_hide') -%}
+        sidebar-collapse
+    {%- endif -%}"
+{%- endblock -%}
+
 {% block logo %}
     {% apply spaceless %}
         <a class="logo" href="https://www.kdn.de/" target="_blank">
@@ -22,8 +29,9 @@
 
 {% block sonata_breadcrumb %}
     <div class="hidden-xs">
+        <ol class="nav navbar-top-links breadcrumb">
+            <li class="page-title"><strong>{{ 'app.frontend.page_title'|trans }}</strong></li>
         {% if _breadcrumb is not empty or action is defined %}
-            <ol class="nav navbar-top-links breadcrumb">
                 {% if _breadcrumb is empty %}
                     {% if action is defined %}
                         {% for menu in breadcrumbs_builder.breadcrumbs(admin, action) %}
@@ -61,8 +69,8 @@
                 {% else %}
                     {{ _breadcrumb|raw }}
                 {% endif %}
-            </ol>
         {% endif %}
+        </ol>
     </div>
 {% endblock sonata_breadcrumb %}
 

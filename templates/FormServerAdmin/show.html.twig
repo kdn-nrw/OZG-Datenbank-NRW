@@ -1,0 +1,10 @@
+{% extends 'General/Show/show.html.twig' %}
+
+{% block app_show_custom_fields %}
+    {{ parent() }}
+    {% if elements['formServerSolutions'] is defined %}
+        <div class="col-xs-12">
+            {% include 'General/Show/show-form-server-solutions.html.twig' with {'entities': object.formServerSolutions, 'showSolution': true} %}
+        </div>
+    {% endif %}
+{% endblock %}

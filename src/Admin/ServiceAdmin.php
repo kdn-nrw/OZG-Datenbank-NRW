@@ -37,6 +37,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         'app.service.entity.service_system_situation_subject' => 'app.situation.entity.subject',
         'app.service.entity.service_system_service_key' => 'app.service_system.entity.service_key',
         'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
+        'app.service.entity.service_solutions_solution' => 'app.service.entity.service_solutions',
     ];
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -293,6 +294,13 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ['expanded' => false, 'multiple' => true]
         );
         $this->addStateMinistriesDatagridFilters($datagridMapper);
+        $datagridMapper->add('serviceSolutions.solution',
+            null, [
+                'admin_code' => SolutionAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
