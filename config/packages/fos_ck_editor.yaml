@@ -1,5 +1,7 @@
 fos_ck_editor:
   default_config: default
+  base_path: "build/third-party/ckeditor"
+  js_path:   "build/third-party/ckeditor/ckeditor.js"
   configs:
     default:
       #https://symfony.com/doc/master/bundles/FOSCKEditorBundle/usage/toolbar.html

@@ -45,4 +45,12 @@ class ServiceController extends CRUDController
         $admin = $this->admin;
         $admin->setAppContext(AbstractFrontendAdmin::APP_CONTEXT_FE);
     }
+
+    public function getChoicesAction()
+    {
+        $data = [
+            'bla' => 'blubb',
+        ];
+        return $this->json($data);
+    }
 }

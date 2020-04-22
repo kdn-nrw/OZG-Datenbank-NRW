@@ -165,6 +165,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'ImplementationProjectAdmin/show.html.twig']]
+      - [setTemplate, ['list', 'ImplementationProjectAdmin/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -381,6 +382,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'ServiceAdmin/show.html.twig']]
+      - [setTemplate, ['list', 'ServiceAdmin/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -462,6 +464,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
+      - [setTemplate, ['list', 'SolutionAdmin/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -566,6 +569,5 @@ services:
 
   App\Controller\DashboardController:
     arguments:
-      - '%sonata.admin.configuration.dashboard_blocks%'
       - '@sonata.admin.global_template_registry'
       - '@sonata.admin.pool'

@@ -23,10 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DashboardController extends AbstractController
 {
-    /**
-     * @var array
-     */
-    private $dashboardBlocks;
 
     /**
      * @var TemplateRegistryInterface
@@ -39,44 +35,25 @@ class DashboardController extends AbstractController
     private $pool;
 
     public function __construct(
-        array $dashboardBlocks,
         TemplateRegistryInterface $templateRegistry,
         Pool $pool
     ) {
-        $this->dashboardBlocks = $dashboardBlocks;
         $this->templateRegistry = $templateRegistry;
         $this->pool = $pool;
     }
 
     public function indexAction(Request $request): Response
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return $this->redirectToRoute('sonata_admin_dashboard');
-        }
-        $blocks = [
-            'top' => [],
-            'left' => [],
-            'center' => [],
-            'right' => [],
-            'bottom' => [],
-        ];
-        foreach ($this->dashboardBlocks as $block) {
-            if (empty($block['settings']['disable_public'])) {
-                if (isset($block['settings']['mode'])) {
-                    $block['settings']['mode'] = 'public';
-                }
-                $blocks[$block['position']][] = $block;
-            }
-        }
+//        if ($this->isGranted('ROLE_ADMIN')) {
+//            return $this->redirectToRoute('sonata_admin_dashboard');
+//        }
 
         $parameters = [
             'base_template' => $request->isXmlHttpRequest() ?
                 $this->templateRegistry->getTemplate('ajax') :
                 'Frontend/Admin/base.html.twig',
             'admin_pool' => $this->pool,
-            'blocks' => $blocks,
         ];
-
-        return $this->render($this->templateRegistry->getTemplate('dashboard'), $parameters);
+        return $this->render('Frontend/dashboard.html.twig', $parameters);
     }
 }

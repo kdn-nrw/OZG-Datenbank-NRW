@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\Maturity;
 use App\Import\SolutionImporter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -48,6 +49,12 @@ class SolutionImportCommand extends Command
                 InputArgument::REQUIRED,
                 'the form server id'
             )
+            ->addArgument(
+                'maturity-id',
+                InputArgument::OPTIONAL,
+                'the form server id',
+                Maturity::DEFAULT_ID
+            )
             ->setHelp('Imports the solutions from a CSV file in the given directory;'
                 . PHP_EOL . 'If you want to get more detailed information, use the --verbose option.');
     }
@@ -58,7 +65,10 @@ class SolutionImportCommand extends Command
         $io->title($this->getDescription());
         $directory = $input->getArgument('directory');
         $formServerId = (int)$input->getArgument('form-server-id');
+        $maturityId = (int)$input->getArgument('maturity-id');
         $this->importer->setOutput($output);
-        $this->importer->run($directory, $formServerId);
+        $this->importer->setMaturityById($maturityId);
+        $this->importer->setFormServerById($formServerId);
+        $this->importer->run($directory);
     }
 }

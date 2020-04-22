@@ -1,6 +1,0 @@
-# Read the documentation: https://symfony.com/doc/current/bundles/FOSCKEditorBundle/index.html
-
-fos_ck_editor:
-    # ...
-    base_path: "build/third-party/ckeditor"
-    js_path:   "build/third-party/ckeditor/ckeditor.js"

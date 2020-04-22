@@ -33,6 +33,11 @@ frontend_app_service_show:
     path: /leistungen/{id}/show
     controller: App\Controller\ServiceController::showAction
 
+app_service_choices:
+    path: /service/choices
+    controller: App\Controller\ServiceController::getChoicesAction
+    methods: [POST]
+
 frontend_app_service_export:
     path: /leistungen/export
     controller: App\Controller\ServiceController::exportAction
