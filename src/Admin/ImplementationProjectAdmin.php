@@ -6,9 +6,13 @@ use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\ServiceSystemTrait;
+use App\Admin\Traits\ServiceTrait;
 use App\Admin\Traits\SolutionTrait;
+use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
+use App\Entity\Service;
 use DateTime;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -26,15 +30,20 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
     use LaboratoryTrait;
     use OrganisationTrait;
     use SolutionTrait;
+    use ServiceTrait;
     use ServiceSystemTrait;
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $formMapper
+            ->with('app.implementation_project.tabs.general', ['tab' => true])
+            ->with('general', [
+                'label' => false,
+            ]);
         $now = new DateTime();
-        $maxYear = (int) $now->format('Y') + 2;
+        $maxYear = (int)$now->format('Y') + 2;
         $formMapper->add('name', TextType::class);
         $this->addSolutionsFormFields($formMapper);
-        $this->addServiceSystemsFormFields($formMapper);
         $formMapper
             ->add('description', TextareaType::class, [
                 'required' => false,
@@ -49,7 +58,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
             ->add('projectStartAt', DatePickerType::class, [
                 //'years' => range(2018, (int)$now->format('Y') + 2),
                 'dp_min_date' => new DateTime('2018-01-01 00:00:00'),
-                'dp_max_date' => new DateTime($maxYear .'-12-31 23:59:59'),
+                'dp_max_date' => new DateTime($maxYear . '-12-31 23:59:59'),
                 'dp_use_current' => false,
                 'datepicker_use_button' => true,
                 'required' => false,
@@ -61,7 +70,73 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addContactsFormFields($formMapper, false, false, 'contacts', false);
         $this->addOrganisationsFormFields($formMapper, 'interestedOrganisations');
         $this->addOrganisationsFormFields($formMapper, 'participationOrganisations');
+        $formMapper->end()
+            ->end()
+            ->tab('app.implementation_project.tabs.services')
+            ->with('service_solutions', [
+                'label' => false,
+            ]);
+        $this->addServiceFormFields($formMapper);
         $formMapper->end();
+        $formMapper->end();
+    }
+
+    private function addServiceFormFields(FormMapper $formMapper): void
+    {
+        $formMapper
+            ->add('serviceSystems', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+                'attr' => [
+                    //'data-sonata-select2' => 'false',
+                    'class' => 'ba-advancedselect-select ba-field-servicesystem',
+                    'data-reload-selector' => '.ba-field-services',
+                ]
+            ],
+                [
+                    'admin_code' => ServiceSystemAdmin::class,
+                ]
+            );
+
+        $em = $this->modelManager->getEntityManager(Service::class);
+
+        /** @var ImplementationProject $subject */
+        $subject = $this->getSubject();
+        $serviceSystems = $subject->getServiceSystems();
+        if (count($serviceSystems) > 0) {
+            /** @var QueryBuilder $queryBuilder */
+            $queryBuilder = $em->createQueryBuilder('s')
+                ->select('s')
+                ->from(Service::class, 's')
+                ->where('s.serviceSystem IN(:serviceSystems)')
+                ->setParameter('serviceSystems', $serviceSystems)
+                ->orderBy('s.name', 'ASC');
+        } else {
+            $queryBuilder = null;
+        }
+        $formMapper
+            ->add('services', ModelType::class, [
+                'property' => 'name',
+                'placeholder' => '',
+                'query' => $queryBuilder,
+                'required' => false,
+                'multiple' => true,
+                'choice_translation_domain' => false,
+                'group_by' => 'serviceSystem',
+                'attr' => [
+                    //'data-sonata-select2' => 'false',
+                    'class' => 'ba-advancedselect-select ba-field-services',
+                    'data-url' => $this->routeGenerator->generate('app_service_choices')
+                ]
+            ],
+                [
+                    'admin_code' => ServiceAdmin::class,
+                ]
+            );
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -70,6 +145,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addLaboratoriesDatagridFilters($datagridMapper);
         $this->addSolutionsDatagridFilters($datagridMapper);
         $this->addServiceSystemsDatagridFilters($datagridMapper);
+        $this->addServicesDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSystems.situation.subject',
             null,
             ['label' => 'app.situation.entity.subject'],
@@ -122,7 +198,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addSolutionsShowFields($showMapper);
         $this->addContactsShowFields($showMapper);
         $this->addOrganisationsShowFields($showMapper, 'interestedOrganisations');
-        $this->addOrganisationsShowFields($showMapper,  'participationOrganisations');
+        $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
         $this->addServiceSystemsShowFields($showMapper);
+        $this->addServicesShowFields($showMapper);
     }
 }

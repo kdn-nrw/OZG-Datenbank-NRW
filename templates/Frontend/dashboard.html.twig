@@ -1,0 +1,66 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends base_template %}
+
+{% block title %}{{ 'title_dashboard'|trans({}, 'SonataAdminBundle') }}{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            {% include 'Frontend/Admin/Partials/_dashboard-content-top.html.twig' %}
+        </div>
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+            {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
+                'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
+                'icon':  'fa-tasks',
+                'text':  'app.block.service_system.total',
+                'color': 'bg-green',
+            }) }}
+        </div>
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+            {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
+                'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
+                'icon':  'fa-tasks',
+                'text':  'app.block.service_system.communal_execution',
+                'color': 'bg-green',
+                'filters': {
+                    'jurisdictions': { 'value':  [3] }
+                }
+            }) }}
+        </div>
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+            {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
+                'code':  'App\\Admin\\Frontend\\ImplementationProjectAdmin',
+                'icon':  'fa-wrench',
+                'text':  'app.block.implementation_project.total',
+                'color': 'bg-green'
+            }) }}
+        </div>
+        <div class="col-xs-12 col-lg-6">
+            {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+                'title': 'app.statistics.solution_maturity',
+                'translation_domain': 'messages',
+                'mode': 'admin',
+                'provider':  'App\\Statistics\\Provider\\SolutionMaturityChartProvider'
+            }) }}
+        </div>
+        <div class="col-xs-12 col-lg-6">
+            {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+                'title': 'app.statistics.solution_status',
+                'translation_domain': 'messages',
+                'mode': 'admin',
+                'provider':  'App\\Statistics\\Provider\\SolutionStatusChartProvider'
+            }) }}
+        </div>
+    </div>
+
+{% endblock %}

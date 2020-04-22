@@ -16,7 +16,7 @@
 
 {% block logo %}
     {% apply spaceless %}
-        <a class="logo" href="https://www.kdn.de/" target="_blank">
+        <a class="logo" href="/" target="_blank">
             {% if 'single_image' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
                 <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
             {% endif %}
@@ -141,6 +141,18 @@
                         {% endif %}
                     </li>
                 {% endfor %}
+                <li>
+                    <a href="https://www.kdn.de/meta-menue/impressum/" target="_blank">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                        Impressum
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.kdn.de/meta-menue/datenschutz/" target="_blank">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                        Datenschutz
+                    </a>
+                </li>
             </ul>
         </li>
     </ul>

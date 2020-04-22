@@ -162,12 +162,16 @@ app:
     object_name: Umsetzungsprojekt
     list: Umsetzungsprojekte
     create: Umsetzungsprojekt anlegen
+    tabs:
+      general: Allgemein
+      services: Leistungen
     entity:
       name: Umsetzungsprojektname
       description: Projektinformationen
       project_start_at: Projektstart
       status: Umsetzungsstatus
       service_systems: OZG-Leistungen
+      services: Leika-Leistungen
       solutions: Lösungen
       contacts: Ansprechpartner
       notes: Notizen

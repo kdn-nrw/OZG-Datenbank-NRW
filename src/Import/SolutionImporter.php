@@ -23,6 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SolutionImporter implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
+
     /**
      * @var array
      */
@@ -43,6 +44,16 @@ class SolutionImporter implements LoggerAwareInterface
      * @var \Doctrine\Common\Persistence\ManagerRegistry|ManagerRegistry
      */
     private $registry;
+
+    /**
+     * @var FormServer
+     */
+    private $formServer;
+
+    /**
+     * @var Maturity
+     */
+    private $maturity;
 
     /**
      * @var OutputInterface
@@ -66,12 +77,35 @@ class SolutionImporter implements LoggerAwareInterface
     }
 
     /**
+     * Initialize maturity entity by id
+     *
+     * @param int $id
+     */
+    public function setMaturityById(int $id): void
+    {
+        /** @var EntityManager $em */
+        $em = $this->registry->getManager();
+        $this->maturity = $em->getRepository(Maturity::class)->find($id);
+    }
+
+    /**
+     * Initialize form server entity by id
+     *
+     * @param int $id
+     */
+    public function setFormServerById(int $id): void
+    {
+        /** @var EntityManager $em */
+        $em = $this->registry->getManager();
+        $this->formServer = $em->getRepository(FormServer::class)->find($id);
+    }
+
+    /**
      * Run file import
      *
      * @param string $directory Absolute path to directory with CSV file(s)
-     * @param int $formServerId The form server id
      */
-    public function run(string $directory, int $formServerId): void
+    public function run(string $directory): void
     {
         $this->debug(sprintf('Starting import for directory %s', $directory));
         if (!is_dir($directory) || !is_readable($directory)) {
@@ -89,7 +123,7 @@ class SolutionImporter implements LoggerAwareInterface
                     $data = file_get_contents($file);
                     if (!empty($data)) {
                         $rows = $this->getRowsFromCsvData($data);
-                        $this->processImportRows($rows, $formServerId);
+                        $this->processImportRows($rows);
                     }
                 }
             }
@@ -101,40 +135,42 @@ class SolutionImporter implements LoggerAwareInterface
      * Process content of the given CSV import rows
      *
      * @param array $rows The imported rows
-     * @param int $formServerId Form server id for imported records
      */
-    private function processImportRows(array $rows, int $formServerId): void
+    private function processImportRows(array $rows): void
     {
         /** @var EntityManager $em */
         $em = $this->registry->getManager();
         $expressionBuilder = $em->getExpressionBuilder();
         $status = $em->getRepository(Status::class)->find(self::IMPORT_STATUS_ID);
-        $formServer = $em->getRepository(FormServer::class)->find($formServerId);
-        $defaultMaturity = $em->getRepository(Maturity::class)->find(Maturity::DEFAULT_ID);
-        if (null === $status || null === $formServer || null === $defaultMaturity) {
+        $formServer = $this->formServer;
+        $maturity = $this->maturity;
+        if (null === $status || null === $formServer || null === $maturity) {
             $message = 'The default import values are not valid: ';
             if (null === $status) {
-                $message .= ' default status is null ['.self::IMPORT_STATUS_ID.'];';
+                $message .= ' default status is null [' . self::IMPORT_STATUS_ID . '];';
             }
-            if (null === $formServer || null === $defaultMaturity) {
-                $message .= ' default form server is null ['.$formServerId.'];';
+            if (null === $formServer || null === $maturity) {
+                $message .= ' default form server is null;';
             }
-            if (null === $defaultMaturity) {
-                $message .= ' default maturity is null ['.Maturity::DEFAULT_ID.'];';
+            if (null === $maturity) {
+                $message .= ' default maturity is null;';
             }
             $this->getLogger()->error($message);
             return;
         }
         $rowOffset = 0;
         /** @var Status $status */
-        /** @var FormServer $formServer */
-        /** @var Maturity $defaultMaturity */
         foreach ($rows as $importRow) {
             $solutionProperties = $importRow[Solution::class];
+            $importId = (int)$solutionProperties['importId'];
             $solution = $this->findEntityByConditions(Solution::class, [
-                $expressionBuilder->eq('LOWER(e.name)', ':name')
-                ], [
-                    'name' => $solutionProperties['name']
+                //$expressionBuilder->eq('LOWER(e.name)', ':name'),
+                $expressionBuilder->eq('e.importSource', ':importSource'),
+                $expressionBuilder->eq('e.importId', ':importId'),
+            ], [
+                    //'name' => $solutionProperties['name'],
+                    'importSource' => 'solution_importer',
+                    'importId' => $importId,
                 ]
             );
             $formServerSolution = null;
@@ -143,11 +179,12 @@ class SolutionImporter implements LoggerAwareInterface
                 $solution->setStatus($status);
                 $solution->setImportSource('solution_importer');
                 if (!empty($solutionProperties['importId'])) {
-                    $solution->setImportId((int) $solutionProperties['importId']);
+                    $solution->setImportId((int)$solutionProperties['importId']);
                 }
                 $em->persist($solution);
             } else {
                 /** @var Solution $solution */
+                $solution->setHidden(false);
                 $formServerSolutions = $solution->getFormServerSolutions();
                 foreach ($formServerSolutions as $entity) {
                     if ($entity->getFormServer() === $formServer) {
@@ -158,8 +195,9 @@ class SolutionImporter implements LoggerAwareInterface
             }
             $this->debug('Saving solution: ' . $solutionProperties['name'] . ' [' . ($solution->getId() ?: 'NEW') . ']');
             $solution->setName($solutionProperties['name']);
+            $solution->setMaturity($this->maturity);
             $this->addSpecializedProcedures($solution, $solutionProperties['specializedProcedures']);
-            $this->addServiceSolutions($solution, $solutionProperties['serviceSolutions'], $defaultMaturity);
+            $this->addServiceSolutions($solution, $solutionProperties['serviceSolutions']);
             if (null === $formServerSolution) {
                 $formServerSolution = new FormServerSolution();
                 $formServerSolution->setFormServer($formServer);
@@ -169,16 +207,16 @@ class SolutionImporter implements LoggerAwareInterface
             }
             $properties = $importRow[FormServerSolution::class];
             if (!empty($properties['articleNumber'])) {
-                $formServerSolution->setArticleNumber((string) $properties['articleNumber']);
+                $formServerSolution->setArticleNumber((string)$properties['articleNumber']);
             }
             if (!empty($properties['assistantType'])) {
-                $formServerSolution->setAssistantType((string) $properties['assistantType']);
+                $formServerSolution->setAssistantType((string)$properties['assistantType']);
             }
             if (!empty($properties['articleKey'])) {
-                $formServerSolution->setArticleKey((string) $properties['articleKey']);
+                $formServerSolution->setArticleKey((string)$properties['articleKey']);
             }
             if (array_key_exists('usableAsPrintTemplate', $properties)) {
-                $formServerSolution->setUsableAsPrintTemplate((bool) $properties['usableAsPrintTemplate']);
+                $formServerSolution->setUsableAsPrintTemplate((bool)$properties['usableAsPrintTemplate']);
             }
             ++$rowOffset;
             if ($rowOffset % 100 === 0) {
@@ -197,7 +235,7 @@ class SolutionImporter implements LoggerAwareInterface
             $importEntity = $this->findEntityByConditions(SpecializedProcedure::class, [
                 $expressionBuilder->eq('LOWER(e.name)', ':name')
             ], [
-                    'name' => $importValue
+                    'name' => trim($importValue)
                 ]
             );
             if (null !== $importEntity) {
@@ -207,7 +245,14 @@ class SolutionImporter implements LoggerAwareInterface
         }
     }
 
-    private function addServiceSolutions(Solution $solution, array $importValues, Maturity $defaultMaturity)
+    /**
+     * Add service solution entities to solution
+     *
+     * @param Solution $solution
+     * @param array $importValues
+     * @throws \Doctrine\ORM\ORMException
+     */
+    private function addServiceSolutions(Solution $solution, array $importValues): void
     {
         /** @var EntityManager $em */
         $em = $this->registry->getManager();
@@ -219,7 +264,7 @@ class SolutionImporter implements LoggerAwareInterface
             $service = $this->findEntityByConditions(Service::class, [
                 $expressionBuilder->eq('LOWER(e.serviceKey)', ':value')
             ], [
-                    'value' => $importValue
+                    'value' => trim($importValue)
                 ]
             );
             if (null !== $service) {
@@ -236,10 +281,11 @@ class SolutionImporter implements LoggerAwareInterface
                     $serviceSolution = new ServiceSolution();
                     $serviceSolution->setService($service);
                     $serviceSolution->setSolution($solution);
-                    $serviceSolution->setMaturity($defaultMaturity);
+                    $serviceSolution->setMaturity($this->maturity);
                     $em->persist($serviceSolution);
-                    /** @var ServiceSolution $serviceSolution */
                     $solution->addServiceSolution($serviceSolution);
+                } else {
+                    $serviceSolution->setMaturity($this->maturity);
                 }
             }
         }
@@ -297,8 +343,8 @@ class SolutionImporter implements LoggerAwareInterface
             } else {
                 $headers[] = strtolower(
                     str_replace(['/', ' ', '-'],
-                    '_',
-                    $parser->cleanStringValue($parser->formatString($header)))
+                        '_',
+                        $parser->cleanStringValue($parser->formatString($header)))
                 );
             }
         }
@@ -332,7 +378,7 @@ class SolutionImporter implements LoggerAwareInterface
         $parser = new DataParser();
         foreach (self::FIELD_MAP as $srcField => $fieldData) {
             $val = null;
-            if (!empty($fieldData['required']) && (!isset($row[$srcField]) || (string) $row[$srcField] === '')) {
+            if (!empty($fieldData['required']) && (!isset($row[$srcField]) || (string)$row[$srcField] === '')) {
                 return null;
             }
             $trgField = $fieldData['field'];
@@ -369,7 +415,7 @@ class SolutionImporter implements LoggerAwareInterface
         $repository = $this->registry->getRepository($entityClass);
         $qb = $repository->createQueryBuilder('e')
             ->orderBy('e.id', 'ASC');
-        $andX = $or = $qb->expr()->andX();
+        $andX = $qb->expr()->andX();
         foreach ($expressions as $expr) {
             $andX->add($expr);
         }
