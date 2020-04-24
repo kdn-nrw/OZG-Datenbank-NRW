@@ -1,4 +1,13 @@
 <?php
+/**
+ * This file is part of the KDN OZG package.
+ *
+ * @author    Gert Hammes <info@gerthammes.de>
+ * @copyright 2019 Gert Hammes
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace App\Statistics;
 
@@ -38,7 +47,7 @@ abstract class AbstractStatisticsProvider
         $lccClass = strtolower($string);
         $this->translationPrefix = str_replace('\\', '.', strtolower($lccClass));
         $tmpKey = str_replace('\\', '-', strtolower($lccClass));
-        $this->key = str_replace(['_', 'brain-appeal', 'mindbase', '-provider'], ['-', 'ba', 'mb', ''], $tmpKey);
+        $this->key = str_replace(['_', '-provider'], ['-', ''], $tmpKey);
     }
 
     /**

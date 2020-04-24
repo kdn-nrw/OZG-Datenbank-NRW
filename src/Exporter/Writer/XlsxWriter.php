@@ -1,10 +1,12 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
-
+<?php
 /**
- * Created by PhpStorm.
- * User: markokunic
- * Date: 4/21/17
- * Time: 3:35 PM
+ * This file is part of the KDN OZG package.
+ *
+ * @author    Gert Hammes <info@gerthammes.de>
+ * @copyright 2019 Gert Hammes
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Exporter\Writer;
