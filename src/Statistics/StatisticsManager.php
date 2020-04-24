@@ -1,26 +1,18 @@
 <?php
 /**
- * Mindbase 3
+ * This file is part of the KDN OZG package.
  *
- * PHP version 5.6
+ * @author    Gert Hammes <info@gerthammes.de>
+ * @copyright 2019 Gert Hammes
  *
- * @author    Gert Hammes <gert.hammes@brain-appeal.com>
- * @copyright 2018 Brain Appeal GmbH (www.brain-appeal.com)
- * @license
- * @link      http://www.brain-appeal.com/
- * @since     2018-01-22
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Statistics;
 
 /**
  * Statistics provider manager
- *
- * @author    Gert Hammes <gert.hammes@brain-appeal.com>
- * @copyright 2018 Brain Appeal GmbH (www.brain-appeal.com)
- * @license
- * @link      http://www.brain-appeal.com/
- * @since     2018-01-22
  */
 final class StatisticsManager
 {

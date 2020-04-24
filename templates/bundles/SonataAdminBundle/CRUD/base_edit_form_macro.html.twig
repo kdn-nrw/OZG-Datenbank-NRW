@@ -1,3 +1,9 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
 {% macro render_groups(admin, form, groups, has_tab) %}
     <div class="row">
     {% for code in groups|filter(code => admin.formgroups[code] is defined) %}
