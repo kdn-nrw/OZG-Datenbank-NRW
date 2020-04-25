@@ -95,6 +95,9 @@ let webpackConfig = Encore.getWebpackConfig();
 webpackConfig.stats.errors = true;
 webpackConfig.stats.errorDetails = true;
 
+webpackConfig.externals = {
+    jquery: 'jQuery'
+}
 if (Encore.isProduction()) {
     webpackConfig.optimization.minimize = true;
 }

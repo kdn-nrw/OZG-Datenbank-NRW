@@ -1,9 +1,11 @@
 {
-  "build/0.js": "/build/0.js",
-  "build/1.js": "/build/1.js",
-  "build/2.js": "/build/2.js",
-  "build/admin.css": "/build/admin.css",
-  "build/admin.js": "/build/admin.js",
-  "build/runtime.js": "/build/runtime.js",
-  "build/images/login-background.jpg": "/build/images/login-background.ce2e6439.jpg"
+  "build/0.a8f62ab2.js": "/build/0.a8f62ab2.js",
+  "build/1.c46fab52.js": "/build/1.c46fab52.js",
+  "build/2.3abcebff.js": "/build/2.3abcebff.js",
+  "build/3.f11fa50a.js": "/build/3.f11fa50a.js",
+  "build/4.d49b45b1.js": "/build/4.d49b45b1.js",
+  "build/admin.css": "/build/admin.5ac65922.css",
+  "build/admin.js": "/build/admin.91a1ce10.js",
+  "build/runtime.js": "/build/runtime.f7c078ec.js",
+  "build/images/login-background.jpg": "/build/images/login-background.a9acdc44.jpg"
 }

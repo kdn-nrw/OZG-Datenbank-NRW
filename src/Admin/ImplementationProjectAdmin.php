@@ -31,6 +31,8 @@ use Sonata\Form\Type\DatePickerType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 
 class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableAdminInterface
@@ -101,9 +103,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
                 'by_reference' => false,
                 'choice_translation_domain' => false,
                 'attr' => [
-                    //'data-sonata-select2' => 'false',
-                    'class' => 'ba-advancedselect-select ba-field-servicesystem',
-                    'data-reload-selector' => '.ba-field-services',
+                    'data-sonata-select2' => 'false',
+                    'class' => 'js-advanced-select ba-field-servicesystem',
+                    'data-reload-selector' => 'select.ba-field-services',
                 ]
             ],
                 [
@@ -115,37 +117,42 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
 
         /** @var ImplementationProject $subject */
         $subject = $this->getSubject();
-        $serviceSystems = $subject->getServiceSystems();
-        if (count($serviceSystems) > 0) {
-            /** @var QueryBuilder $queryBuilder */
-            $queryBuilder = $em->createQueryBuilder('s')
-                ->select('s')
-                ->from(Service::class, 's')
-                ->where('s.serviceSystem IN(:serviceSystems)')
-                ->setParameter('serviceSystems', $serviceSystems)
-                ->orderBy('s.name', 'ASC');
-        } else {
-            $queryBuilder = null;
-        }
         $formMapper
             ->add('services', ModelType::class, [
                 'property' => 'name',
                 'placeholder' => '',
-                'query' => $queryBuilder,
+                //'query' => $queryBuilder,
                 'required' => false,
                 'multiple' => true,
                 'choice_translation_domain' => false,
-                'group_by' => 'serviceSystem',
+                //'group_by' => 'serviceSystem',
                 'attr' => [
-                    //'data-sonata-select2' => 'false',
-                    'class' => 'ba-advancedselect-select ba-field-services',
-                    'data-url' => $this->routeGenerator->generate('app_service_choices')
+                    'data-sonata-select2' => 'false',
+                    'class' => 'js-advanced-select ba-field-services',
+                    'data-url' => $this->routeGenerator->generate('app_service_choices'),
+                    'data-entity-id' => $subject->getId()
                 ]
             ],
                 [
                     'admin_code' => ServiceAdmin::class,
                 ]
             );
+        $formMapper->getFormBuilder()->addEventListener(FormEvents::POST_SET_DATA,
+            static function (FormEvent $event) use ($formMapper, $subject, $em) {
+                $serviceSystems = $subject->getServiceSystems();
+                if (count($serviceSystems) > 0) {
+                    /** @var QueryBuilder $queryBuilder */
+                    $queryBuilder = $em->createQueryBuilder('s')
+                        ->select('s')
+                        ->from(Service::class, 's')
+                        ->where('s.serviceSystem IN(:serviceSystems)')
+                        ->setParameter('serviceSystems', $serviceSystems)
+                        ->orderBy('s.name', 'ASC');
+                } else {
+                    $queryBuilder = null;
+                }
+                $formMapper->get('services')->setAttribute('query', $queryBuilder);
+        });
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
