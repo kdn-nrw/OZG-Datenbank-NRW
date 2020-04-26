@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+let ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -66,7 +67,15 @@ Encore
             path: 'assets/config'
         };
     })
-
+    // Only include moment localisation for de.js and en.js:
+    //.addPlugin(new ContextReplacementPlugin(/moment[\/\\]locale$/, /de\.|en\./))
+    .addExternals( {
+        jquery: 'jQuery',
+        // load moment as external resource
+        // https://dnasir.com/2018/06/07/webpack-moment-and-cdns/
+         'moment': 'window.moment',      // for the standard moment imports
+         '../moment': 'window.moment'    // for moment imports by locale files
+    })
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
 
@@ -95,9 +104,6 @@ let webpackConfig = Encore.getWebpackConfig();
 webpackConfig.stats.errors = true;
 webpackConfig.stats.errorDetails = true;
 
-webpackConfig.externals = {
-    jquery: 'jQuery'
-}
 if (Encore.isProduction()) {
     webpackConfig.optimization.minimize = true;
 }
