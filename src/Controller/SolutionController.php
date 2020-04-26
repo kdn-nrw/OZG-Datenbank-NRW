@@ -12,8 +12,8 @@
 namespace App\Controller;
 
 
+use App\Admin\ContextAwareAdminInterface;
 use App\Admin\Frontend\AbstractFrontendAdmin;
-use App\Admin\Frontend\ImplementationProjectAdmin;
 use App\Admin\Frontend\SolutionAdmin;
 use Sonata\AdminBundle\Controller\CRUDController;
 
@@ -47,6 +47,6 @@ class SolutionController extends CRUDController
         parent::configure();
         /** @var $admin AbstractFrontendAdmin */
         $admin = $this->admin;
-        $admin->setAppContext(AbstractFrontendAdmin::APP_CONTEXT_FE);
+        $admin->setAppContext(ContextAwareAdminInterface::APP_CONTEXT_FE);
     }
 }

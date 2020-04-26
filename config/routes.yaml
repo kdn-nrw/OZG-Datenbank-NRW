@@ -4,26 +4,30 @@ index:
     controller: App\Controller\DashboardController::indexAction
 
 app_search_list:
-    path: /search
+    path: /admin/saved-search
     controller: App\Controller\SearchController::indexAction
 
 app_search_edit:
-    path: /search/edit/{id}
+    path: /admin/saved-search/edit/{id}
     controller: App\Controller\SearchController::editAction
 
 app_search_save:
-    path: /search/save/{id}
+    path: /admin/saved-search/save/{id}
     controller: App\Controller\SearchController::saveAction
     defaults:
         id: null
 
+app_frontend_global_search:
+    path: /search
+    controller: App\Action\SearchAction
+
+app_search_delete:
+    path: /admin/saved-search/delete/{id}
+    controller: App\Controller\SearchController::deleteAction
+
 app_statistics_chart:
     path: /statistics/chart/{key}
     controller: App\Controller\StatisticsController::chartAction
-
-app_search_delete:
-    path: /search/delete/{id}
-    controller: App\Controller\SearchController::deleteAction
 
 frontend_app_service_list:
     path: /leistungen
