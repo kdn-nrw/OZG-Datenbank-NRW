@@ -122,22 +122,6 @@ class SolutionAdmin extends AbstractFrontendAdmin
     }
 
     /**
-     * Exclude unpublished objects
-     * @param string $context
-     * @return \Doctrine\ORM\QueryBuilder|\Sonata\AdminBundle\Datagrid\ProxyQueryInterface
-     */
-    public function createQuery($context = 'list')
-    {
-        $query = parent::createQuery($context);
-        /** @var \Doctrine\ORM\QueryBuilder $query */
-        $query->andWhere(
-            $query->expr()->eq($query->getRootAliases()[0] . '.isPublished', ':isPublished')
-        );
-        $query->setParameter('isPublished', 1);
-        return $query;
-    }
-
-    /**
      * Exclude unpublished object
      *
      * @param int $id
@@ -300,6 +284,60 @@ class SolutionAdmin extends AbstractFrontendAdmin
         //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
         $subjects = $modelManager->findBy(Subject::class);
         $datagrid->addFilterMenu('serviceSolutions.service.serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject');
+    }
+
+    /**
+     * Exclude unpublished objects
+     * @param string $context
+     * @return \Doctrine\ORM\QueryBuilder|\Sonata\AdminBundle\Datagrid\ProxyQueryInterface
+     */
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+        // Fix Sonata-Bug https://github.com/sonata-project/SonataAdminBundle/issues/3368
+        // When global search is executed, the filter query will be concatenated with the additional
+        // conditions in this function with OR (instead of AND)
+        // This means all extra conditions will be ignored and we have to execute the full search query here
+        // @see \Sonata\AdminBundle\Search\SearchHandler::search
+        $reqSearchTerm = null;
+        if ($this->hasRequest()) {
+            /** @noinspection NullPointerExceptionInspection */
+            $reqSearchTerm = $this->getRequest()->get('q');
+        } elseif (isset($_REQUEST['q'])) {
+            $reqSearchTerm = $_REQUEST['q'];
+        }
+        if ($reqSearchTerm) {
+            $searchTerm = strtolower(trim(strip_tags($reqSearchTerm)));
+            /** @var \Doctrine\ORM\QueryBuilder $subQueryBuilder */
+            $subQueryBuilder = $this->getModelManager()->createQuery(Solution::class, 's');
+            $subQueryBuilder->select('s.id')
+                ->where(
+                    $subQueryBuilder->expr()->andX(
+                        's.isPublished = :isPublished',
+                        's.name LIKE :term'
+                    )
+                );
+            $subQueryBuilder->setParameter('isPublished', 1);
+            $subQueryBuilder->setParameter('term', '%'.$searchTerm.'%');
+            $result = $subQueryBuilder->getQuery()->getArrayResult();
+            if (!empty($result)) {
+                $idList = array_column($result, 'id');
+            } else {
+                $idList = [0];
+            }
+            /** @var \Doctrine\ORM\QueryBuilder $query */
+            $query->andWhere(
+                $query->getRootAliases()[0] . ' IN (:idList)'
+            );
+            $query->setParameter('idList', $idList);
+        } else {
+            /** @var \Doctrine\ORM\QueryBuilder $query */
+            $query->andWhere(
+                $query->expr()->eq($query->getRootAliases()[0] . '.isPublished', ':isPublished')
+            );
+            $query->setParameter('isPublished', 1);
+        }
+        return $query;
     }
 
 

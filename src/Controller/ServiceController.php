@@ -12,9 +12,9 @@
 namespace App\Controller;
 
 
+use App\Admin\ContextAwareAdminInterface;
 use App\Admin\Frontend\AbstractFrontendAdmin;
 use App\Admin\Frontend\ServiceAdmin;
-use App\Entity\Service;
 use App\Entity\ServiceSystem;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Controller\CRUDController;
@@ -50,7 +50,7 @@ class ServiceController extends CRUDController
         parent::configure();
         /** @var $admin AbstractFrontendAdmin */
         $admin = $this->admin;
-        $admin->setAppContext(AbstractFrontendAdmin::APP_CONTEXT_FE);
+        $admin->setAppContext(ContextAwareAdminInterface::APP_CONTEXT_FE);
     }
 
     public function getChoicesAction(Request $request)

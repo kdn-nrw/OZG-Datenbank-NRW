@@ -12,6 +12,7 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\AbstractContextAwareAdmin;
+use App\Admin\ContextAwareAdminInterface;
 use RuntimeException;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -36,7 +37,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin
      */
     protected $defaultShowGroupLabel = 'object_name';
 
-    protected $appContext = self::APP_CONTEXT_FE;
+    protected $appContext = ContextAwareAdminInterface::APP_CONTEXT_FE;
 
     /**
      * Exclude fields in export

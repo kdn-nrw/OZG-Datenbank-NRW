@@ -571,3 +571,11 @@ services:
     arguments:
       - '@sonata.admin.global_template_registry'
       - '@sonata.admin.pool'
+
+  App\Action\SearchAction:
+    arguments:
+      - '@sonata.admin.pool'
+      - '@sonata.admin.search.handler'
+      - '@twig'
+    autowire: false
+    public: true

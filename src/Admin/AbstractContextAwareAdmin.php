@@ -21,15 +21,11 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
  * @copyright 2020 Gert Hammes
  * @since     2020-02-11
  */
-abstract class AbstractContextAwareAdmin extends AbstractAdmin
+abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface
 {
-
-    public const APP_CONTEXT_BE = 'backend';
-    public const APP_CONTEXT_FE = 'frontend';
-
     protected $customShowFields = ['serviceSystems', 'laboratories', 'services', 'publishedSolutions', 'solutions', 'serviceProviders',];
 
-    protected $appContext = self::APP_CONTEXT_BE;
+    protected $appContext = ContextAwareAdminInterface::APP_CONTEXT_BE;
 
     /**
      * @param string $appContext
@@ -49,7 +45,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin
 
     protected function isFrontend(): bool
     {
-        return $this->appContext === self::APP_CONTEXT_FE;
+        return $this->appContext === ContextAwareAdminInterface::APP_CONTEXT_FE;
     }
 
     /**

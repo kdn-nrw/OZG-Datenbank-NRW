@@ -103,6 +103,18 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block sonata_sidebar_search %}
+    {% if sonata_admin.adminPool.getOption('search') %}
+        <form action="{{ path('app_frontend_global_search') }}" method="GET" class="sidebar-form" role="search">
+            <div class="input-group custom-search-form">
+                <input type="text" name="q" value="{{ app.request.get('q') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
+                <span class="input-group-btn">
+                    <button class="btn btn-flat" type="submit">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+    {% endif %}
 {% endblock sonata_sidebar_search %}
 
 

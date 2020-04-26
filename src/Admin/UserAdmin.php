@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 /**
  * User admin
  */
-class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
+class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin implements ContextAwareAdminInterface
 {
     use AdminTranslatorStrategyTrait;
     /**
@@ -127,6 +127,14 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
             ])
             ->end()
             ->end();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppContext(): string
+    {
+        return ContextAwareAdminInterface::APP_CONTEXT_BE;
     }
 
 }

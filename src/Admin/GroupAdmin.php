@@ -18,7 +18,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 /**
  * Group admin
  */
-class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
+class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin implements ContextAwareAdminInterface
 {
     /**
      * @param ListMapper $listMapper
@@ -47,5 +47,12 @@ class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getAppContext(): string
+    {
+        return ContextAwareAdminInterface::APP_CONTEXT_BE;
+    }
 
 }
