@@ -201,7 +201,9 @@ class ServiceAdmin extends AbstractFrontendAdmin
             ->add('specializedProcedures')
             ->add('ruleAuthorities')
             ->add('authorityBureaus')
-            ->add('authorityStateMinistries');
+            ->add('authorityStateMinistries')
+            ->add('laboratories')
+            ->add('stateMinistries');
     }
 
     public function isGranted($name, $object = null)
