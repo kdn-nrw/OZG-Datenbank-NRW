@@ -10,7 +10,7 @@ file that was distributed with this source code.
         <div class="col-xs-12 col-md-2">
             {{ elements['jurisdictions']|render_view_element(object)}}
         </div>
-        {% if object.stateMinistriesEnabled and object.stateMinistries|length > 0 %}
+        {% if object.stateMinistriesEnabled and object.stateMinistries|length > 0 and elements['stateMinistries'] is defined %}
             <div class="col-xs-12 col-md-5 col-lg-4 col-xl-3">
                 {{ elements['stateMinistries']|render_view_element(object)}}
             </div>
