@@ -245,7 +245,6 @@ class SolutionAdmin extends AbstractFrontendAdmin
             ->add('name')
             ->add('description')
             ->add('url', 'url')
-            ->add('contact')
             ->add('serviceSystems', null, [
                 'admin_code' => ServiceSystemAdmin::class,
             ])

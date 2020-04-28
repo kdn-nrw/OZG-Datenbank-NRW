@@ -23,6 +23,7 @@ file that was distributed with this source code.
 <td>
     {{ child.description|nl2br }}
 </td>
+{% if showContacts %}
 <td>
     {% set contactCount = child.solutionContacts|length%}
     {% if contactCount > 0 %}
@@ -41,3 +42,4 @@ file that was distributed with this source code.
         {{ child.contact }}
     {% endif %}
 </td>
+{% endif %}
