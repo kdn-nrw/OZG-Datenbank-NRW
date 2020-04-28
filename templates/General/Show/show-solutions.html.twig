@@ -21,6 +21,7 @@ file that was distributed with this source code.
     {% set createEditLink = editRouteName and refAdmin is not null and refAdmin.hasRoute(editRouteName) and refAdmin.hasAccess(editRouteName) %}
     {% set showRouteName = 'show' %}
     {% set listEnableShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+    {% set showContacts = isAdminMode %}
 <div class="box box-primary">
     <div class="box-header">
         <h4 class="box-title">
