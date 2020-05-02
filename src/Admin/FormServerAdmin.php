@@ -64,6 +64,7 @@ class FormServerAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('formServerSolutions.solution',
             null, [

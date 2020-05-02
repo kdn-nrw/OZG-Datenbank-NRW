@@ -12,12 +12,11 @@
 namespace App\Entity\Base;
 
 use Doctrine\ORM\Mapping as ORM;
-use ReflectionClass;
 
 /**
  * Class BaseEntity
  */
-abstract class BaseEntity implements BaseEntityInterface, TimestampableEntityInterface
+abstract class BaseEntity implements BaseEntityInterface
 {
     use TimestampableEntityTrait;
 
@@ -42,21 +41,10 @@ abstract class BaseEntity implements BaseEntityInterface, TimestampableEntityInt
      * @param int|null $id
      * @return self
      */
-    public function setId(?int $id)
+    public function setId(?int $id): self
     {
         $this->id = $id;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        $reflectionClass = new ReflectionClass($this);
-        $classShortName = $reflectionClass->getShortName();
-
-        return sprintf('%s(%d)', $classShortName, $this->getId());
     }
 }

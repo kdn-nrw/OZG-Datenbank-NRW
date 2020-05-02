@@ -106,6 +106,7 @@ class ContactAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('firstName');
         $datagridMapper->add('lastName');
         $datagridMapper->add('email');

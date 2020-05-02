@@ -65,6 +65,7 @@ class MailingContactAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('mailing');
         $datagridMapper->add('contact');
         $datagridMapper->add('sendStatus');

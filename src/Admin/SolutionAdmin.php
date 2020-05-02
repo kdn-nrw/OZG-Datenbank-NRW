@@ -225,6 +225,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('serviceProvider',
             null,
             [],

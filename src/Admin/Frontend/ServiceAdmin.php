@@ -35,6 +35,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('serviceSystem.situation.subject',
             null,
             [

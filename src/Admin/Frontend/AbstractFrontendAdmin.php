@@ -40,6 +40,13 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin
     protected $appContext = ContextAwareAdminInterface::APP_CONTEXT_FE;
 
     /**
+     * Action list for the search result.
+     *
+     * @var string[]
+     */
+    protected $searchResultActions = ['show'];
+
+    /**
      * Exclude fields in export
      */
     protected $excludeExportFields = ['createdBy', 'modifiedBy', 'hidden'];
@@ -142,6 +149,23 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin
             $collection->addCollection($adminRoutesCollection);
         }
     }*/
+
+    public function update($object)
+    {
+        // disable update in frontend completely!
+        return $object;
+    }
+
+    public function create($object)
+    {
+        // disable create in frontend completely!
+        return $object;
+    }
+
+    public function delete($object)
+    {
+        // disable delete in frontend completely!
+    }
 
     /**
      * @return array

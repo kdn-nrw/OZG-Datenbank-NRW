@@ -43,6 +43,7 @@ class CategoryAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
     }
 

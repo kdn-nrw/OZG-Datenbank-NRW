@@ -12,7 +12,12 @@
 namespace App\Admin;
 
 
+use App\Entity\Repository\SearchIndexRepository;
+use App\Entity\SearchIndexWord;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
 /**
  * Class AbstractContextAwareAdmin
@@ -67,6 +72,41 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
             $fields = array_diff($fields, $excludeFields);
         }
         return $fields;
+    }
+
+    /**
+     * Add- custom query condition for full text data grid filter field
+     * @param DatagridMapper $datagridMapper
+     */
+    protected function addFullTextDatagridFilter(DatagridMapper $datagridMapper)
+    {
+        $modelManager = $this->getModelManager();
+        $entityClass = $this->getClass();
+        $appContext = $this->getAppContext();
+        $datagridMapper
+            ->add('fullText', CallbackFilter::class, [
+                'callback' => static function($queryBuilder, $alias, $field, $value) use ($modelManager, $entityClass, $appContext) {
+                    if (!$value['value']) {
+                        return false;
+                    }
+                    /** @var \Sonata\DoctrineORMAdminBundle\Model\ModelManager $modelManager */
+                    $indexRepository = $modelManager->getEntityManager(SearchIndexWord::class)->getRepository(SearchIndexWord::class);
+                    /** @var SearchIndexRepository $indexRepository */
+                    $matchingRecordIds = $indexRepository->findMatchingIndexRecords($entityClass, $appContext, $value['value']);
+                    if (null !== $matchingRecordIds) {
+
+                        $queryBuilder
+                            ->andWhere( $alias . ' IN(:matchingRecordIds)')
+                            ->setParameter('matchingRecordIds', $matchingRecordIds);
+
+                        return true;
+                    }
+                    return false;
+                },
+                'label' => 'app.common.full_text_search',
+                'field_type' => SearchType::class,
+                'show_filter' => true,
+            ]);
     }
 
     /**

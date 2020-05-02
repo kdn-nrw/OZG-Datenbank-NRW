@@ -44,6 +44,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addManufaturersDatagridFilters($datagridMapper);
         $this->addCommunesDatagridFilters($datagridMapper);

@@ -29,6 +29,7 @@ app:
       list: Übersicht
     add_sub_record: Neuen Eintrag bearbeiten
     actions: Aktionen
+    full_text_search: Volltextsuche
     fields:
       id: ID
       created_at: Erstellt am

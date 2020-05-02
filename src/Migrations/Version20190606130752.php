@@ -24,34 +24,6 @@ final class Version20190606130752 extends AbstractMigration
 
         $this->addSql('DELETE FROM migration_versions WHERE version < ' . $this->version->getVersion());
 
-        $this->addSql('ALTER TABLE mb_bulk_mailing_recipient DROP FOREIGN KEY FK_E6E1A5F536DA3A46');
-        $this->addSql('ALTER TABLE mb_content DROP FOREIGN KEY FK_5AA94029140AB620');
-        $this->addSql('ALTER TABLE mb_pdf_option_value DROP FOREIGN KEY FK_FAAD3992EEC521A');
-        $this->addSql('ALTER TABLE mb_pdf_option_definition DROP FOREIGN KEY FK_85EC0045D823E37A');
-        $this->addSql('ALTER TABLE mb_pdf_section_upload DROP FOREIGN KEY FK_87E9AE37D823E37A');
-        $this->addSql('ALTER TABLE mb_pdf_template_section_mapping DROP FOREIGN KEY FK_81420BDED823E37A');
-        $this->addSql('ALTER TABLE mb_pdf_section DROP FOREIGN KEY FK_FF9266F1A6F3C8D0');
-        $this->addSql('ALTER TABLE mb_pdf_section DROP FOREIGN KEY FK_FF9266F1E3B88341');
-        $this->addSql('ALTER TABLE mb_pdf_template_section_mapping DROP FOREIGN KEY FK_81420BDE5DA0FB8');
-        $this->addSql('ALTER TABLE mb_pdf_template_upload DROP FOREIGN KEY FK_FB37DE505DA0FB8');
-        $this->addSql('ALTER TABLE mb_pdf_option_value DROP FOREIGN KEY FK_FAAD3992C5896DEA');
-        $this->addSql('ALTER TABLE mb_pdf_template DROP FOREIGN KEY FK_6DBDC3FCA6F3C8D0');
-        $this->addSql('ALTER TABLE mb_pdf_template DROP FOREIGN KEY FK_6DBDC3FCE3B88341');
-        $this->addSql('ALTER TABLE mb_bulk_mailing DROP FOREIGN KEY FK_5BE8652325F94802');
-        $this->addSql('ALTER TABLE mb_bulk_mailing DROP FOREIGN KEY FK_5BE86523DE12AB56');
-        $this->addSql('ALTER TABLE mb_content DROP FOREIGN KEY FK_5AA9402925F94802');
-        $this->addSql('ALTER TABLE mb_content DROP FOREIGN KEY FK_5AA94029DE12AB56');
-        $this->addSql('ALTER TABLE mb_content_page DROP FOREIGN KEY FK_8817004225F94802');
-        $this->addSql('ALTER TABLE mb_content_page DROP FOREIGN KEY FK_88170042DE12AB56');
-        $this->addSql('ALTER TABLE mb_mail_queue DROP FOREIGN KEY FK_C13092AD25F94802');
-        $this->addSql('ALTER TABLE mb_mail_queue DROP FOREIGN KEY FK_C13092ADDE12AB56');
-        $this->addSql('ALTER TABLE mb_pdf_section DROP FOREIGN KEY FK_FF9266F125F94802');
-        $this->addSql('ALTER TABLE mb_pdf_section DROP FOREIGN KEY FK_FF9266F1DE12AB56');
-        $this->addSql('ALTER TABLE mb_pdf_template DROP FOREIGN KEY FK_6DBDC3FC25F94802');
-        $this->addSql('ALTER TABLE mb_pdf_template DROP FOREIGN KEY FK_6DBDC3FCDE12AB56');
-        $this->addSql('ALTER TABLE mb_setting DROP FOREIGN KEY FK_3B18C81825F94802');
-        $this->addSql('ALTER TABLE mb_setting DROP FOREIGN KEY FK_3B18C818DE12AB56');
-        $this->addSql('ALTER TABLE mb_sshkeymanagement_user_key DROP FOREIGN KEY FK_F935BE35A76ED395');
         $this->addSql('ALTER TABLE mb_user_permissions DROP FOREIGN KEY FK_8068E14C25F94802');
         $this->addSql('ALTER TABLE mb_user_permissions DROP FOREIGN KEY FK_8068E14CDE12AB56');
         $this->addSql('ALTER TABLE mb_user_role DROP FOREIGN KEY FK_466E8BB825F94802');
@@ -98,30 +70,6 @@ final class Version20190606130752 extends AbstractMigration
         $this->addSql('ALTER TABLE mb_user_user_group_mm RENAME INDEX idx_3174b559a76ed395 TO IDX_F81FC676A76ED395');
         $this->addSql('CREATE INDEX IDX_F81FC676FE54D947 ON mb_user_user_group_mm (group_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_50CF03C5E237E06 ON mb_user_group (name)');
-
-        $this->addSql('ALTER TABLE mb_sshkeymanagement_server_authentication CHANGE hidden hidden TINYINT(1) NOT NULL, CHANGE deleted_at next_synchronization DATETIME DEFAULT NULL');
-        $this->addSql('ALTER TABLE mb_sshkeymanagement_server DROP deleted_at, CHANGE hidden hidden TINYINT(1) NOT NULL');
-        $this->addSql('ALTER TABLE mb_sshkeymanagement_user_key DROP deleted_at, CHANGE hidden hidden TINYINT(1) NOT NULL');
-        $this->addSql('ALTER TABLE mb_sshkeymanagement_user_key ADD CONSTRAINT FK_F935BE35A76ED395 FOREIGN KEY (user_id) REFERENCES mb_user_user (id)');
-
-
-        $this->addSql('DROP TABLE mb_bulk_mailing');
-        $this->addSql('DROP TABLE mb_bulk_mailing_recipient');
-        $this->addSql('DROP TABLE mb_content');
-        $this->addSql('DROP TABLE mb_content_page');
-        $this->addSql('DROP TABLE mb_mail_queue');
-        $this->addSql('DROP TABLE mb_message_template');
-        $this->addSql('DROP TABLE mb_pdf_option_definition');
-        $this->addSql('DROP TABLE mb_pdf_option_value');
-        $this->addSql('DROP TABLE mb_pdf_section');
-        $this->addSql('DROP TABLE mb_pdf_section_upload');
-        $this->addSql('DROP TABLE mb_pdf_template');
-        $this->addSql('DROP TABLE mb_pdf_template_section_mapping');
-        $this->addSql('DROP TABLE mb_pdf_template_upload');
-        $this->addSql('DROP TABLE mb_setting');
-        $this->addSql('DROP TABLE mb_sys_log');
-        $this->addSql('DROP TABLE mb_user_permissions');
-        $this->addSql('DROP TABLE mb_user_role_permission_mm');
 
     }
 

@@ -157,6 +157,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addLaboratoriesDatagridFilters($datagridMapper);
         $this->addSolutionsDatagridFilters($datagridMapper);

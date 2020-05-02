@@ -52,6 +52,7 @@ class LaboratoryAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addServiceProvidersDatagridFilters($datagridMapper);
         $this->addServicesDatagridFilters($datagridMapper);

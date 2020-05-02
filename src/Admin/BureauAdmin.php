@@ -37,6 +37,7 @@ class BureauAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addServiceSystemsDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSystems.situation.subject',
