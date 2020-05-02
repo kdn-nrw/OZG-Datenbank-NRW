@@ -14,8 +14,13 @@ namespace App\Admin;
 
 use App\Entity\Repository\SearchIndexRepository;
 use App\Entity\SearchIndexWord;
+use App\Exporter\Source\CustomQuerySourceIterator;
+use Doctrine\ORM\Query;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
@@ -61,12 +66,103 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         return $this->customShowFields;
     }
 
+    public function getDataSourceIterator()
+    {
+        $datagrid = $this->getDatagrid();
+        /** @noinspection NullPointerExceptionInspection */
+        $datagrid->buildPager();
+
+        $fields = [];
+
+        foreach ($this->getExportFields() as $key => $field) {
+            $label = $this->getTranslationLabel($field, 'export', 'label');
+            $transLabel = $this->trans($label);
+
+            // NEXT_MAJOR: Remove this hack, because all field labels will be translated with the major release
+            // No translation key exists
+            if ($transLabel === $label) {
+                $fields[$key] = $field;
+            } else {
+                $fields[$transLabel] = $field;
+            }
+        }
+        /** @noinspection NullPointerExceptionInspection */
+        return $this->getCustomDataSourceIterator($datagrid, $fields);
+    }
+
+    /**
+     * Create custom query source iterator for exporting collection variables
+     *
+     * @param DatagridInterface $datagrid
+     * @param array $fields
+     *
+     * @return CustomQuerySourceIterator
+     * @see \Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator
+     */
+    private function getCustomDataSourceIterator(DatagridInterface $datagrid, array $fields): CustomQuerySourceIterator
+    {
+        ini_set('max_execution_time', 0);
+        $datagrid->buildPager();
+        $query = $datagrid->getQuery();
+
+        $query->select('DISTINCT '.current($query->getRootAliases()));
+        $query->setFirstResult(null);
+        $query->setMaxResults(null);
+
+        if ($query instanceof ProxyQueryInterface) {
+            $sortBy = $query->getSortBy();
+
+            if (!empty($sortBy)) {
+                $query->addOrderBy($sortBy, $query->getSortOrder());
+                $query = $query->getQuery();
+                $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
+            } else {
+                $query = $query->getQuery();
+            }
+        }
+        /** @var \Doctrine\ORM\Query $query */
+        $container = $this->getConfigurationPool()->getContainer();
+        $cacheDir = null;
+        if (null !== $container) {
+            $cacheDir = $container->getParameter('kernel.cache_dir');
+        }
+
+        return new CustomQuerySourceIterator(
+            $query,
+            $fields,
+            $cacheDir,
+            $this->getAppContext(),
+            'd.m.Y H:i:s'
+        );
+    }
+
     /**
      * @return array
      */
     public function getExportFields()
     {
-        $fields = parent::getExportFields();
+        $preFields = ['id', 'createdAt', 'modifiedAt', 'createdBy'];
+        $defaultFields = parent::getExportFields();
+        $fields = [];
+        foreach ($preFields as $field) {
+            if (in_array($field, $defaultFields, false)) {
+                $fields[] = $field;
+            }
+        }
+        foreach ($defaultFields as $field) {
+            if (!in_array($field, $fields, false)) {
+                $fields[] = $field;
+            }
+        }
+        $show = $this->getShow();
+        if (null !== $show) {
+            $showFields = array_keys($show->getElements());
+            foreach ($showFields as $field) {
+                if (!in_array($field, $fields, false)) {
+                    $fields[] = $field;
+                }
+            }
+        }
         $excludeFields = $this->getExportExcludeFields();
         if (!empty($excludeFields)) {
             $fields = array_diff($fields, $excludeFields);
@@ -114,7 +210,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
      */
     protected function getExportExcludeFields(): array
     {
-        return [];
+        return ['hidden'];
     }
 
     public function getExportFormats()
