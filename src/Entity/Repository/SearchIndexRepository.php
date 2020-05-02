@@ -12,6 +12,7 @@
 namespace App\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 
 class SearchIndexRepository extends EntityRepository
 {
@@ -82,7 +83,6 @@ class SearchIndexRepository extends EntityRepository
      * @param string $context
      * @param int $entityId
      * @return string|null Date time string or null
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getRecordLastIndexTime(string $entityClass, string $context, int $entityId): ?string
     {
@@ -100,7 +100,11 @@ class SearchIndexRepository extends EntityRepository
             )
             ->setMaxResults(1)
             ->getQuery();
-        $result = $query->getOneOrNullResult();
+        try {
+            $result = $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $result = null;
+        }
         return null !== $result ? current($result) : null;
     }
 }
