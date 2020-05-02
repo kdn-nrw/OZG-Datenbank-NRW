@@ -104,6 +104,7 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
         $this->addServiceProvidersDatagridFilters($datagridMapper);

@@ -24,6 +24,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
 {
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('solutions',
             null,[

@@ -68,6 +68,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $defaultFields = $this->getDefaultFields('filter');
         foreach ($defaultFields as $field => $fieldConfig) {
             $filterOptions = $fieldConfig['filterOptions'] ?? [];

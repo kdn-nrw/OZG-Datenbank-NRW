@@ -235,6 +235,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
         //$this->addLaboratoriesDatagridFilters($datagridMapper);
