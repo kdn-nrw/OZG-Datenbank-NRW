@@ -58,7 +58,6 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
         $current = $this->iterator->current();
 
         $data = $this->getItemData($current[0]);
-        unset($data['_tstamp']);
 
         $this->query->getEntityManager()->getUnitOfWork()->detach($current[0]);
 

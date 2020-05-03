@@ -67,6 +67,19 @@ class CustomEntityValueProvider
     private $context;
 
     /**
+     * Temporary cache for data records
+     * Store data in groups of 200 records. Because the cache is updated in the indexing process the entities are
+     * all updated at the same time and normally the cache entry will be valid
+     * Since the records are only used in the export and the exported items are usually exported by sorted by id,
+     * this will speed up the export process
+     * Additionally this reduces he number of cache files
+     * If sorted by any other field than id, the export will be a little slower
+     *
+     * @var array
+     */
+    private $dataGroupCache = [];
+
+    /**
      * @param array $fields Fields to export
      * @param string|null $cacheDir
      * @param string $context
@@ -124,6 +137,7 @@ class CustomEntityValueProvider
     {
         if ($objectOrArray instanceof BaseEntity) {
             $data = $this->getCacheItemData($objectOrArray);
+            unset($data['_tstamp']);
         } else {
             $data = $this->processData($objectOrArray);
         }
@@ -139,6 +153,7 @@ class CustomEntityValueProvider
      */
     public function getCacheItemData(BaseEntity $objectOrArray, $forceUpdate = false)
     {
+        $itemId = $objectOrArray->getId();
         if (null !== $modifiedAt = $objectOrArray->getModifiedAt()) {
             $tstamp = $modifiedAt->getTimestamp();
             $lastChanged = $tstamp;
@@ -146,25 +161,35 @@ class CustomEntityValueProvider
             $tstamp = time();
             $lastChanged = strtotime('-2 weeks');
         }
-        $key = str_replace('\\', '.', get_class($objectOrArray)) . '..' . $objectOrArray->getId();
+        // First check if the given record is in the list of cached records
+        if (!$forceUpdate && isset($this->dataGroupCache[$itemId]) &&
+            !empty($this->dataGroupCache[$itemId]['_tstamp']) &&
+            $this->dataGroupCache[$itemId]['_tstamp'] >= $lastChanged) {
+            return $this->dataGroupCache[$itemId];
+        }
+        $itemGroup = (int) floor($itemId/200);
+        $key = str_replace('\\', '.', get_class($objectOrArray)) . '..' . $itemGroup;
         try {
             $item = $this->cache->getItem(self::CACHE_PREFIX . $this->context . rawurlencode($key));
             if (!$forceUpdate && $item->isHit()) {
                 $data = $item->get();
-                if (!empty($data['_tstamp']) && $data['_tstamp'] >= $lastChanged) {
-                    return $data;
+                $this->dataGroupCache = $data;
+                if (!empty($data[$itemId]) && !empty($data[$itemId]['_tstamp']) &&
+                    $data[$itemId]['_tstamp'] >= $lastChanged) {
+                    return $data[$itemId];
                 }
             }
         } catch (InvalidArgumentException $e) {
             $item = null;
             unset($e);
         }
-        $data = $this->processData($objectOrArray);
-        $data['_tstamp'] = $tstamp;
+        $data[$itemId] = $this->processData($objectOrArray);
+        $data[$itemId]['_tstamp'] = $tstamp;
         if ($item) {
             $this->cache->save($item->set($data));
+            $this->dataGroupCache = $data;
         }
-        return $data;
+        return $data[$itemId];
     }
 
     /**
