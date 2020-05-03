@@ -13,6 +13,15 @@ file that was distributed with this source code.
         <div class="col-xs-12">
             {% include 'Frontend/Admin/Partials/_dashboard-content-top.html.twig' %}
         </div>
+        <div class="col-xs-12">
+            {{ sonata_block_render({ 'type': 'App\\Block\\RecentSolutionsBlock' }, {
+                'code':  'App\\Admin\\Frontend\\SolutionAdmin',
+                'translation_domain':  'messages',
+                'mode':  'public',
+                'mode':  'public',
+                'title':  'app.solution.recent_solutions'
+            }) }}
+        </div>
         <div class="col-xs-12 col-sm-6 col-lg-4">
             {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
                 'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
@@ -50,12 +59,22 @@ file that was distributed with this source code.
         </div>
         <div class="col-xs-12 col-lg-6">
             {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+                'title': 'app.statistics.implementation_project_status',
+                'translation_domain': 'messages',
+                'mode': 'admin',
+                'provider':  'App\\Statistics\\Provider\\ImplementationProjectStatusChartProvider'
+            }) }}
+        </div>
+        {#
+        <div class="col-xs-12 col-lg-6">
+            {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
                 'title': 'app.statistics.solution_status',
                 'translation_domain': 'messages',
                 'mode': 'admin',
                 'provider':  'App\\Statistics\\Provider\\SolutionStatusChartProvider'
             }) }}
         </div>
+        #}
     </div>
 
 {% endblock %}

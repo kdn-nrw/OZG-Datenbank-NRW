@@ -51,8 +51,7 @@ class RecentSolutionsBlock extends AbstractBlockService
     {
         $mode = $blockContext->getSetting('mode');
         $isAdminMode = 'admin' === $blockContext->getSetting('mode');
-        $codeKey = $isAdminMode ? 'code' : 'code_public';
-        $admin = $this->adminPool->getAdminByAdminCode($blockContext->getSetting($codeKey));
+        $admin = $this->adminPool->getAdminByAdminCode($blockContext->getSetting('code'));
         $criteria = [
             'mode' => $mode,
         ];
@@ -81,7 +80,6 @@ class RecentSolutionsBlock extends AbstractBlockService
             'class' => null,
             'code' => false,
             'code_public' => false,
-            'disable_public' => false,
             'template' => 'Block/recent-solutions.html.twig',
         ]);
     }

@@ -13,6 +13,7 @@ namespace App\Admin;
 
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
+use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\Priority;
@@ -35,8 +36,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     use LaboratoryTrait;
-    use SpecializedProcedureTrait;
     use MinistryStateTrait;
+    use PortalTrait;
+    use SpecializedProcedureTrait;
 
     /**
      * @var string[]
@@ -229,6 +231,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 ]
             );
         $this->addSpecializedProceduresFormFields($formMapper);
+        $this->addPortalsFormFields($formMapper);
         $formMapper->end()
             ->end();
         if (!in_array('serviceSolutions', $hideFields, false)) {
@@ -297,6 +300,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ['expanded' => false, 'multiple' => true]
         );
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);
+        $this->addPortalsDatagridFilters($datagridMapper);
         $datagridMapper->add('ruleAuthorities',
             null,
             [],
@@ -424,6 +428,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->add('authorityStateMinistries');
         $this->addLaboratoriesShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);
+        $this->addPortalsShowFields($showMapper);
         $this->addStateMinistriesShowFields($showMapper);
     }
 }

@@ -24,17 +24,21 @@ file that was distributed with this source code.
                     {% endfor %}
                 </select>
             {% else %}
-                <div style="color: #fff;font-weight:bold;padding-left: 22px;"><i class="fa fa-filter" aria-hidden="true"></i>
+                {% set iconPath = 'subject' in filterName ? '/img/icons/subject/16/' : null %}
+                <div class="filter-menu-headline"><i class="fa fa-filter" aria-hidden="true"></i>
                     Filter: {{ filterMenu.label|trans }}
                 </div>
-                <ul>
+                <ul class="filter-menu{% if iconPath %} has-icon{% endif %}">
                     {% for filterChoice in filterMenu.choices %}
                         {% set filterParamName = filterName|replace({'.': '__'}) %}
-                        <li>
-                            <a href="#" class="custom-menu-filter-item{% if filterChoice.id in filterMenu.value %} active{% endif %}" onclick="window.location.href=this.dataset.url.replace('FILTER_VALUE', '{{ filterChoice.id }}');return false;"
+                        <li class="filter-menu-item{% if iconPath %} has-icon{% endif %}">
+                            <a href="#" class="custom-menu-filter-link{% if filterChoice.id in filterMenu.value %} active{% endif %}" onclick="window.location.href=this.dataset.url.replace('FILTER_VALUE', '{{ filterChoice.id }}');return false;"
                                data-url="{{ path(menuItem.routePrefix ~ '_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
                                     {% if filterChoice.id in filterMenu.value %} style="color:#fff;font-weight: bold;" {% endif %}>
-                                {{ filterChoice.name }}
+                                {% if iconPath %}
+                                    <img src="{{ iconPath ~ filterChoice.id ~ '.png' }}" class="icon" alt="{{ filterChoice.name }}">
+                                {% endif %}
+                                <span class="item-label">{{ filterChoice.name }}</span>
                             </a>
                         </li>
                     {% endfor %}

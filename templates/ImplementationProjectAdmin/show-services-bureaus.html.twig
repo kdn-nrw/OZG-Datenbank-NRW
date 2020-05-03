@@ -7,8 +7,8 @@ file that was distributed with this source code.
 {% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
 
 {% block field %}
-    {# @var object \App\Entity\Commune #}
-    {% set entities = object.manufacturers %}
+    {# @var object \App\Entity\ImplementationProject #}
+    {% set entities = object.bureaus %}
     {% if entities|length > 0 %}
     <ul class="sonata-ba-show-many-to-many">
         {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
@@ -16,7 +16,7 @@ file that was distributed with this source code.
         {% if not field_description.hasassociationadmin %}
             {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
             {% if isAdminMode %}
-                {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ManufacturerAdmin') %}
+                {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\BureauAdmin') %}
             {% endif %}
         {% else %}
             {% set refAdmin = field_description.associationadmin %}

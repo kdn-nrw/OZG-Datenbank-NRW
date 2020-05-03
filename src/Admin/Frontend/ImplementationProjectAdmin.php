@@ -11,7 +11,8 @@
 
 namespace App\Admin\Frontend;
 
-use App\Admin\OrganisationAdmin;
+use App\Admin\BureauAdmin;
+use App\Admin\PortalAdmin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
@@ -27,7 +28,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('solutions',
-            null,[
+            null, [
                 'admin_code' => SolutionAdmin::class,
             ],
             null,
@@ -49,6 +50,18 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         );
         $datagridMapper->add('status');
         $datagridMapper->add('projectStartAt');
+        $datagridMapper->add('services.bureaus',
+            null,
+            ['label' => 'app.implementation_project.entity.services_bureaus'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('services.portals',
+            null,
+            ['label' => 'app.implementation_project.entity.services_portals'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -91,6 +104,12 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
                     'name' => 'show',
                 ],
             ])
+            ->add('services', null, [
+                'admin_code' => ServiceAdmin::class,
+                'route' => [
+                    'name' => 'show',
+                ],
+            ])
             ->add('description')
             ->add('status', 'choice', [
                 'editable' => false,
@@ -112,6 +131,16 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
                 ],
             ])
             ->add('notes', 'html');
+        $showMapper->add('bureaus', null, [
+            'label' => 'app.implementation_project.entity.services_bureaus',
+            'admin_code' => BureauAdmin::class,
+            'template' => 'ImplementationProjectAdmin/show-services-bureaus.html.twig',
+        ]);
+        $showMapper->add('portals', null, [
+            'label' => 'app.implementation_project.entity.services_portals',
+            'admin_code' => PortalAdmin::class,
+            'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
+        ]);
     }
 
     public function isGranted($name, $object = null)

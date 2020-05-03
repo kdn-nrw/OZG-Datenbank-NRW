@@ -55,8 +55,6 @@ sonata_admin:
                     translation_domain: 'messages'
                     mode: 'admin'
                     code:  App\Admin\SolutionAdmin
-                    code_public: App\Admin\Frontend\SolutionAdmin
-                    disable_public: true
             -
                 class:    col-xs-12 col-sm-6 col-lg-4
                 position: top                        # zone in the dashboard
@@ -108,6 +106,15 @@ sonata_admin:
                     translation_domain: 'messages'
                     mode: 'admin'
                     provider: App\Statistics\Provider\SolutionStatusChartProvider
+            -
+                position: top
+                type: App\Block\StatisticsBlock
+                class: 'col-xs-12 col-lg-6'
+                settings:
+                    title: 'app.statistics.implementation_project_status'
+                    translation_domain: 'messages'
+                    mode: 'admin'
+                    provider: App\Statistics\Provider\ImplementationProjectStatusChartProvider
 
             - { position: left,  type: sonata.admin.block.admin_list, settings: { groups: [app.ozg_implementation_group, app.settings_group, app.service_group] } }
             - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [app.implementation_group, app_admin.menu.system] } }

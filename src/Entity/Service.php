@@ -244,6 +244,20 @@ class Service extends AbstractService
      */
     private $implementationProjects;
 
+    /**
+     * @var Portal[]|Collection
+     * @ORM\ManyToMany(targetEntity="Portal")
+     * @ORM\JoinTable(name="ozg_services_portals",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="portal_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $portals;
+
     public function __construct()
     {
         $this->authorityBureaus = new ArrayCollection();
@@ -252,6 +266,7 @@ class Service extends AbstractService
         $this->implementationProjects = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
+        $this->portals = new ArrayCollection();
         $this->ruleAuthorities = new ArrayCollection();
         $this->serviceSolutions = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
@@ -968,6 +983,48 @@ class Service extends AbstractService
     public function setImplementationProjects($implementationProjects): void
     {
         $this->implementationProjects = $implementationProjects;
+    }
+
+    /**
+     * @param Portal $portal
+     * @return self
+     */
+    public function addPortal($portal): self
+    {
+        if (!$this->portals->contains($portal)) {
+            $this->portals->add($portal);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Portal $portal
+     * @return self
+     */
+    public function removePortal($portal): self
+    {
+        if ($this->portals->contains($portal)) {
+            $this->portals->removeElement($portal);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Portal[]|Collection
+     */
+    public function getPortals()
+    {
+        return $this->portals;
+    }
+
+    /**
+     * @param Portal[]|Collection $portals
+     */
+    public function setPortals($portals): void
+    {
+        $this->portals = $portals;
     }
 
 }
