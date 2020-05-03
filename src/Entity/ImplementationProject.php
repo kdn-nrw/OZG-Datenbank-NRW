@@ -594,4 +594,44 @@ class ImplementationProject extends BaseNamedEntity
     {
         $this->laboratories = $laboratories;
     }
+
+    /**
+     * Returns the distinct bureaus assigned to the referenced services
+     *
+     * @return array
+     */
+    public function getBureaus(): array
+    {
+        $distinctEntities = [];
+        $services = $this->getServices();
+        foreach ($services as $service) {
+            $serviceBureaus = $service->getBureaus();
+            foreach ($serviceBureaus as $entity) {
+                if (!isset($distinctEntities[$entity->getId()])) {
+                    $distinctEntities[$entity->getId()] = $entity;
+                }
+            }
+        }
+        return $distinctEntities;
+    }
+
+    /**
+     * Returns the distinct portals assigned to the referenced services
+     *
+     * @return array
+     */
+    public function getPortals(): array
+    {
+        $distinctEntities = [];
+        $services = $this->getServices();
+        foreach ($services as $service) {
+            $servicePortals = $service->getPortals();
+            foreach ($servicePortals as $entity) {
+                if (!isset($distinctEntities[$entity->getId()])) {
+                    $distinctEntities[$entity->getId()] = $entity;
+                }
+            }
+        }
+        return $distinctEntities;
+    }
 }

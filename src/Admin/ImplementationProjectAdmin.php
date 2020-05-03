@@ -174,6 +174,18 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addContactsDatagridFilters($datagridMapper);
         $this->addOrganisationsDatagridFilters($datagridMapper, 'interestedOrganisations');
         $this->addOrganisationsDatagridFilters($datagridMapper, 'participationOrganisations');
+        $datagridMapper->add('services.bureaus',
+            null,
+            ['label' => 'app.implementation_project.entity.services_bureaus'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('services.portals',
+            null,
+            ['label' => 'app.implementation_project.entity.services_portals'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -218,5 +230,15 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
         $this->addServiceSystemsShowFields($showMapper);
         $this->addServicesShowFields($showMapper);
+        $showMapper->add('bureaus', null, [
+            'label' => 'app.implementation_project.entity.services_bureaus',
+            'admin_code' => BureauAdmin::class,
+            'template' => 'ImplementationProjectAdmin/show-services-bureaus.html.twig',
+        ]);
+        $showMapper->add('portals', null, [
+            'label' => 'app.implementation_project.entity.services_portals',
+            'admin_code' => PortalAdmin::class,
+            'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
+        ]);
     }
 }

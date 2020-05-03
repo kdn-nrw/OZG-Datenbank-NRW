@@ -33,10 +33,10 @@ file that was distributed with this source code.
                         <th>{{ 'app.solution.entity.service_systems'|trans }}</th>
                         <th>{{ 'app.solution.entity.maturity'|trans }}</th>
                         <th>{{ 'app.solution.entity.created_at'|trans }}</th>
-                        <th>{{ 'app.solution.entity.created_by'|trans }}</th>
                         {% if isAdminMode %}
-                        <th>&nbsp;</th>
+                            <th>{{ 'app.solution.entity.created_by'|trans }}</th>
                         {% endif %}
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,19 +81,27 @@ file that was distributed with this source code.
                                 {{ object.createdAt|format_date(null, 'de', 'Europe/Berlin', constant('IntlDateFormatter::SHORT')) }}
                             {% endif %}
                         </td>
-                        <td>
-                            {% if object.createdBy %}
-                                {{ object.createdBy.fullname }}
-                            {% endif %}
-                        </td>
                         {% if isAdminMode %}
-                        <td>
-                            <a class="list-item-action"
-                               href="{{ admin.generateUrl('edit', { 'id': object.id }) }}"
-                            >
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </a>
-                        </td>
+                            <td>
+                                {% if object.createdBy %}
+                                    {{ object.createdBy.fullname }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a class="list-item-action"
+                                   href="{{ admin.generateUrl('edit', { 'id': object.id }) }}"
+                                >
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        {% else %}
+                            <td>
+                                <a class="list-item-action"
+                                   href="{{ admin.generateUrl('show', { 'id': object.id }) }}"
+                                >
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </a>
+                            </td>
                         {% endif %}
                     </tr>
                 {% else %}

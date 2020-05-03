@@ -473,6 +473,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Entity\Manager\ImplementationProjectManager:
+    arguments:
+      - '@doctrine'
+
   App\Entity\Manager\SolutionManager:
     arguments:
       - '@doctrine'
@@ -559,6 +563,10 @@ services:
       - { name: custom_statistics.provider }
 
   App\Statistics\Provider\SolutionStatusChartProvider:
+    tags:
+      - { name: custom_statistics.provider }
+
+  App\Statistics\Provider\ImplementationProjectStatusChartProvider:
     tags:
       - { name: custom_statistics.provider }
 

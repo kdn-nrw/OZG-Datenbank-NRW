@@ -19,8 +19,8 @@ app:
     implementation_project:
       total: 'gemeinsame kommunale Umsetzungsprojekte in NRW'
     service_system:
-      total: 'OZG-Leistungen insgesamt'
-      communal_execution: 'OZG-Leistungen, die in NRW im kommunalen Vollzug liegen'
+      total: 'OZG-Leistungen insgesamt (Bund-Länder-Kommunen)'
+      communal_execution: 'OZG-Leistungen in NRW im kommunalen Vollzug'
   common:
     model_list_type:
       add: Neu
@@ -179,6 +179,8 @@ app:
       interested_organisations: An Mitarbeit interessiert
       participation_organisations: Mitarbeit zugesichert
       laboratories: Digitalisierungslabore
+      services_bureaus: Fachlichkeiten
+      services_portals: voraussichtliches Zielportal
   implementation_status:
     object_name: Umsetzungs-Status
     list: Umsetzungs-Status
@@ -420,6 +422,7 @@ app:
       inherit_state_ministries.yes: Ministerien (Land) der Leika-Leistung mit Ministerien (Land) der OZG-Leistung erweitern
       inherit_state_ministries.no: Ministerien (Land) der OZG-Leistung nicht übernehmen
       specialized_procedures: Fachverfahren
+      portals: Portale
       rule_authorities: Regelungskompetenz
       authority_bureaus: Regelungskompetenz Fachlichkeiten
       authority_state_ministries: Regelungskompetenz  Ministerien (Land)
@@ -487,7 +490,7 @@ app:
       state_ministries: Ministerien (Land)
       laboratories: Labore
       bureaus: Fachlichkeiten
-      bureaus_form: Fachlichkeiten (werden an Leika-Leistungen vererbt)
+      bureaus_form: Fachlichkeiten (werden an Leika-Leistungen vererbt und auf Umsetzungsprojekten angezeigt)
       solutions: Lösungen
       rule_authorities: Regelungskompetenz
       rule_authorities_form: Regelungskompetenz (werden an Leika-Leistungen vererbt)
@@ -507,7 +510,7 @@ app:
     object_name: Lösung
     list: Lösungen
     create: Lösung anlegen
-    recent_solutions: Aktuelle Lösungen
+    recent_solutions: Neu eingepflegte Lösungen
     actions:
       list: Lösungen Übersicht
       show: Lösung anzeigen
@@ -562,6 +565,7 @@ app:
     solution_maturity: 'Lösungen: Reifegrade'
     solution_status: 'Lösungen: Status'
     service_status: 'Leika-Leistungen: Status'
+    implementation_project_status: 'Umsetzungsprojekte: Status'
   status:
     object_name: Status
     list: Status
