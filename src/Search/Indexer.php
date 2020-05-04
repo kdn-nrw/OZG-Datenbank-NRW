@@ -75,7 +75,16 @@ class Indexer
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function run(int $limit): void
+    /**
+     * Run the search indexing process
+     *
+     * @param int $limit
+     * @return int Number of update records
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function run(int $limit): int
     {
         $count = 0;
         $adminClasses = $this->getAdminClasses();
@@ -85,6 +94,7 @@ class Indexer
                 break;
             }
         }
+        return $count;
     }
 
     /**

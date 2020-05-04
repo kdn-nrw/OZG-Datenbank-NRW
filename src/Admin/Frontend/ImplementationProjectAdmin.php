@@ -52,13 +52,13 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         $datagridMapper->add('projectStartAt');
         $datagridMapper->add('services.bureaus',
             null,
-            ['label' => 'app.implementation_project.entity.services_bureaus'],
+            ['label' => 'app.implementation_project.entity.bureaus'],
             null,
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('services.portals',
             null,
-            ['label' => 'app.implementation_project.entity.services_portals'],
+            ['label' => 'app.implementation_project.entity.portals'],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -132,12 +132,10 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
             ])
             ->add('notes', 'html');
         $showMapper->add('bureaus', null, [
-            'label' => 'app.implementation_project.entity.services_bureaus',
             'admin_code' => BureauAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-bureaus.html.twig',
         ]);
         $showMapper->add('portals', null, [
-            'label' => 'app.implementation_project.entity.services_portals',
             'admin_code' => PortalAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
         ]);
@@ -145,7 +143,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
 
     public function isGranted($name, $object = null)
     {
-        if (in_array($name, ['LIST', 'VIEW', 'SHOW'])) {//, 'EXPORT'
+        if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;
         }
         return parent::isGranted($name, $object);

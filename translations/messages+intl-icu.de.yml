@@ -179,8 +179,8 @@ app:
       interested_organisations: An Mitarbeit interessiert
       participation_organisations: Mitarbeit zugesichert
       laboratories: Digitalisierungslabore
-      services_bureaus: Fachlichkeiten
-      services_portals: voraussichtliches Zielportal
+      bureaus: Fachlichkeiten
+      portals: voraussichtliches Zielportal
   implementation_status:
     object_name: Umsetzungs-Status
     list: Umsetzungs-Status

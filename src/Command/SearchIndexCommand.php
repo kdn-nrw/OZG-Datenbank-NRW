@@ -20,6 +20,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @CronJob("*\/15 * * * *")
@@ -57,7 +58,10 @@ class SearchIndexCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): void
     {
+        $io = new SymfonyStyle($input, $output);
+        $io->title($this->getDescription());
         $limit = max(1, min(5000, (int)$input->getOption('limit')));
-        $this->indexer->run($limit);
+        $changedRecordCount = $this->indexer->run($limit);
+        $io->note(sprintf('Finished indexing. %s records were changed', $changedRecordCount));
     }
 }

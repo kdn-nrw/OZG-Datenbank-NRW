@@ -209,7 +209,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
 
     public function isGranted($name, $object = null)
     {
-        if (in_array($name, ['LIST', 'VIEW', 'EXPORT'])) {
+        if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;
         }
         return parent::isGranted($name, $object);

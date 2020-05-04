@@ -34,7 +34,12 @@ class XlsxWriter implements TypedWriterInterface
     private $showHeaders;
 
     /** @var int */
-    protected $position;
+    protected $rowNumber;
+
+    /**
+     * @var int
+     */
+    private $currentColumn = 0;
 
     /**
      * XlsxWriter constructor.
@@ -45,8 +50,8 @@ class XlsxWriter implements TypedWriterInterface
     public function __construct(string $filename, bool $showHeaders = true)
     {
         $this->filename = $filename;
-        $this->position = 2;
         $this->showHeaders = $showHeaders;
+        $this->rowNumber = $showHeaders ? 2 : 1;
 
         if (is_file($filename)) {
             throw new \RuntimeException(sprintf('The file %s already exists', $filename));
@@ -82,7 +87,7 @@ class XlsxWriter implements TypedWriterInterface
             $this->setCellValue($this->getColumn($header), $value);
         }
 
-        ++$this->position;
+        ++$this->rowNumber;
     }
 
     /**
@@ -93,7 +98,7 @@ class XlsxWriter implements TypedWriterInterface
      */
     protected function init($data): void
     {
-        if ($this->position > 2) {
+        if ($this->rowNumber > 2) {
             return;
         }
         $i = 0;
@@ -122,7 +127,7 @@ class XlsxWriter implements TypedWriterInterface
      */
     public static function formatColumnName($number): string
     {
-        for ($char = ""; $number >= 0; $number = (int)($number / 26) - 1) {
+        for ($char = ''; $number >= 0; $number = (int)($number / 26) - 1) {
             $char = chr($number % 26 + 0x41) . $char;
         }
         return $char;
@@ -167,8 +172,10 @@ class XlsxWriter implements TypedWriterInterface
      */
     private function setHeader($column, $value): void
     {
-        $this->setCellValue($column . self::LABEL_COLUMN, $value);
-        $this->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
+        if ($this->showHeaders) {
+            $this->setCellValue($column . self::LABEL_COLUMN, $value);
+            $this->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
+        }
         $this->headerColumns[$value] = $column;
     }
 
@@ -179,6 +186,11 @@ class XlsxWriter implements TypedWriterInterface
      */
     private function getColumn($name): string
     {
-        return $this->headerColumns[$name] . $this->position;
+        if (isset($this->headerColumns[$name])) {
+            $this->currentColumn = $this->headerColumns[$name];
+        } else {
+            ++$this->currentColumn;
+        }
+        return $this->currentColumn . $this->rowNumber;
     }
 }
