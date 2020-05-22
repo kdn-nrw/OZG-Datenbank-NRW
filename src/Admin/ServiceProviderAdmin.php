@@ -127,7 +127,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin
         $showMapper->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,
-            'template' => 'CommuneAdmin/show-specialized-procedures-manufacturers.html.twig',
+            'template' => 'ServiceProviderAdmin/show-specialized-procedures-manufacturers.html.twig',
         ]);
     }
 }

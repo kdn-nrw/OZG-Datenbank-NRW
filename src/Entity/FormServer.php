@@ -31,6 +31,7 @@ class FormServer extends BaseNamedEntity
     /**
      * @var FormServerSolution[]|Collection
      * @ORM\OneToMany(targetEntity="FormServerSolution", mappedBy="formServer", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC", "name" = "ASC"})
      */
     private $formServerSolutions;
 

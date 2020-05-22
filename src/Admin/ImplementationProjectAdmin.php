@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 use App\Admin\Traits\ContactTrait;
+use App\Admin\Traits\FundingTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\ServiceSystemTrait;
@@ -38,6 +39,7 @@ use Symfony\Component\Form\FormEvents;
 class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     use ContactTrait;
+    use FundingTrait;
     use LaboratoryTrait;
     use OrganisationTrait;
     use SolutionTrait;
@@ -81,6 +83,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addContactsFormFields($formMapper, false, false, 'contacts', false);
         $this->addOrganisationsFormFields($formMapper, 'interestedOrganisations');
         $this->addOrganisationsFormFields($formMapper, 'participationOrganisations');
+        $this->addOrganisationsFormFields($formMapper, 'projectLeaders');
+        $this->addFundingsFormFields($formMapper);
         $formMapper->end()
             ->end()
             ->tab('app.implementation_project.tabs.services')
@@ -174,6 +178,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addContactsDatagridFilters($datagridMapper);
         $this->addOrganisationsDatagridFilters($datagridMapper, 'interestedOrganisations');
         $this->addOrganisationsDatagridFilters($datagridMapper, 'participationOrganisations');
+        $this->addOrganisationsDatagridFilters($datagridMapper, 'projectLeaders');
+        $this->addFundingsDatagridFilters($datagridMapper);
         $datagridMapper->add('services.bureaus',
             null,
             ['label' => 'app.implementation_project.entity.bureaus'],
@@ -228,8 +234,10 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addContactsShowFields($showMapper);
         $this->addOrganisationsShowFields($showMapper, 'interestedOrganisations');
         $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
+        $this->addOrganisationsShowFields($showMapper, 'projectLeaders');
         $this->addServiceSystemsShowFields($showMapper);
         $this->addServicesShowFields($showMapper);
+        $this->addFundingsShowFields($showMapper);
         $showMapper->add('bureaus', null, [
             'admin_code' => BureauAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-bureaus.html.twig',

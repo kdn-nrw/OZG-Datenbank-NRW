@@ -23,17 +23,25 @@ use App\Entity\Service;
 use App\Entity\ServiceSystem;
 use App\Entity\Solution;
 use App\EventSubscriber\SearchIndexEntityEvent;
+use DateTime;
+use DateTimeZone;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\Pool;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Search indexer
  */
 class Indexer
 {
+    private const MAX_WORD_LENGTH = 128;
+
     /**
      * Limit for index entry age
      */
@@ -57,6 +65,20 @@ class Indexer
     private $eventDispatcher;
 
     /**
+     * @var int|null
+     */
+    private $forceOnlyEntityId;
+
+    /**
+     * Enabled index contexts
+     * @var array
+     */
+    private $indexContexts = [
+        ContextAwareAdminInterface::APP_CONTEXT_FE,
+        ContextAwareAdminInterface::APP_CONTEXT_BE,
+    ];
+
+    /**
      * @param ManagerRegistry $registry
      * @param Environment $twigEnvironment
      * @param Pool $adminPool
@@ -76,22 +98,42 @@ class Indexer
     }
 
     /**
+     * @param array $contexts
+     */
+    public function setContexts(array $contexts): void
+    {
+        $this->indexContexts = $contexts;
+    }
+
+    /**
+     * @param int|null $forceOnlyEntityId
+     */
+    public function setForceOnlyEntityId(?int $forceOnlyEntityId): void
+    {
+        $this->forceOnlyEntityId = $forceOnlyEntityId;
+    }
+
+    /**
      * Run the search indexing process
      *
      * @param int $limit
+     * @param string|null $onlyEntityClass
      * @return int Number of update records
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function run(int $limit): int
+    public function run(int $limit, ?string $onlyEntityClass): int
     {
         $count = 0;
         $adminClasses = $this->getAdminClasses();
         foreach ($adminClasses as $entityClass => $classAdmins) {
-            $count += $this->updateEntityClassIndex($entityClass, $classAdmins, $limit);
-            if ($count > $limit) {
-                break;
+            if ((!$onlyEntityClass || $onlyEntityClass === $entityClass) &&
+                is_subclass_of($entityClass, BaseEntity::class)) {
+                $count += $this->updateEntityClassIndex($entityClass, $classAdmins, $limit);
+                if ($count > $limit) {
+                    break;
+                }
             }
         }
         return $count;
@@ -130,28 +172,42 @@ class Indexer
      * @param array $classAdmins
      * @param int $limit
      * @return int Count of indexed entities
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function updateEntityClassIndex(string $entityClass, array $classAdmins, int $limit): int
     {
         $count = 0;
+        $em = $this->registry->getManager();
         foreach ($classAdmins as $adminClass) {
             $admin = $this->adminPool->getAdminByAdminCode($adminClass);
             if ($admin instanceof ContextAwareAdminInterface) {
+                $context = $admin->getAppContext();
+                if (!in_array($context, $this->indexContexts, false)) {
+                    continue;
+                }
                 $baseTemplate = $admin->getTemplate('ajax');
                 $fields = $admin->getShow();
                 $template = $admin->getTemplate('show');
-                $query = $admin->createQuery('list');
-                if (method_exists($entityClass, 'getModifiedAt')) {
-                    $query->setSortBy([], ['fieldName' => 'modifiedAt']);
-                    $query->setSortOrder('DESC');
+                if ($this->forceOnlyEntityId) {
+                    $forceUpdate = true;
+                    $entity = $admin->getModelManager()->find($entityClass, $this->forceOnlyEntityId);
+                    $result = [];
+                    if (null !== $entity) {
+                        $result[] = $entity;
+                    }
+                } else {
+                    $forceUpdate = false;
+                    $query = $admin->createQuery('list');
+                    if (method_exists($entityClass, 'getModifiedAt')) {
+                        $query->setSortBy([], ['fieldName' => 'modifiedAt']);
+                        $query->setSortOrder('DESC');
+                    }
+                    $result = $query->execute();
                 }
-                $context = $admin->getAppContext();
-                $result = $query->execute();
                 foreach ($result as $entity) {
-                    if ($this->itemIndexNeedsUpdate($entityClass, $context, $entity)) {
+                    if ($forceUpdate || $this->itemIndexNeedsUpdate($entityClass, $context, $entity)) {
                         $parameters = [
                             'action' => 'show',
                             'object' => $entity,
@@ -160,16 +216,29 @@ class Indexer
                             'base_template' => $baseTemplate,
                             'admin_pool' => $this->adminPool,
                         ];
-                        $content = $this->twigEnvironment->render($template, $parameters);
-                        $this->updateEntityIndex($admin, $entity, $context, $content);
+                        try {
+                            $content = $this->twigEnvironment->render($template, $parameters);
+                            $this->updateEntityIndex($admin, $entity, $context, $content);
+                        } catch (\Exception $e) {
+                            echo 'Entity indexing failed: ' . $entityClass . ':' . $entity->getId() . ' => '
+                                . $e->getMessage() . ' ['.$e->getCode().']'
+                                . $e->getFile() . '::'.$e->getLine()."\n";
+                        }
                         ++$count;
+                        if ($count % 10 === 0) {
+                            $em->flush();
+                        }
                         if ($count > $limit) {
                             break 2;
                         }
                     }
                 }
+                $em->flush();
+                $em->clear();
             }
         }
+        $em->flush();
+        $em->clear();
         return $count;
     }
 
@@ -198,15 +267,23 @@ class Indexer
             $indexEntry->setHidden(true);
             $mapEntries[$indexEntry->getBaseword()] = $indexEntry;
         }
-        $event = new SearchIndexEntityEvent($admin, $entity, $fullTextSearchWords);
-        $this->eventDispatcher->dispatch($event);
-        $processedSearchWords = $event->getFullTextSearchWords();
+        try {
+            $event = new SearchIndexEntityEvent($admin, $entity, $fullTextSearchWords);
+            $this->eventDispatcher->dispatch($event);
+            $processedSearchWords = $event->getFullTextSearchWords();
+        } catch (\Exception $e) {
+            $processedSearchWords = $fullTextSearchWords;
+            echo 'Entity SearchIndexEntityEvent failed: ' . $entityClass . ':' . $entity->getId() . ' => '
+                . $e->getMessage() . ' ['.$e->getCode().']'
+                . $e->getFile() . '::'.$e->getLine()."\n";
+        }
         foreach ($processedSearchWords as $word => $occurrence) {
             $searchWord = (string)$word;
             if (isset($mapEntries[$searchWord])) {
                 $indexEntry = $mapEntries[$searchWord];
                 $indexEntry->setHidden(false);
                 $indexEntry->setOccurrence($occurrence);
+                $indexEntry->setModifiedAt(new DateTime());
             } else {
                 $indexEntry = new SearchIndexWord();
                 $indexEntry->setBaseword($searchWord);
@@ -233,7 +310,6 @@ class Indexer
                 $em->remove($indexEntry);
             }
         }
-        $em->flush();
     }
 
     /**
@@ -246,18 +322,39 @@ class Indexer
      */
     private function itemIndexNeedsUpdate(string $entityClass, string $context, BaseEntity $entity): bool
     {
-        $modifiedAt = $entity->getModifiedAt();
         $em = $this->registry->getManager();
         $indexRepository = $em->getRepository(SearchIndexWord::class);
         /** @var SearchIndexRepository $indexRepository */
         $lastIndexTime = $indexRepository->getRecordLastIndexTime($entityClass, $context, $entity->getId());
         if (null !== $lastIndexTime) {
-            $lastIndexTimestamp = strtotime($lastIndexTime);
+            try {
+                $lastIndexDateTime = new DateTime($lastIndexTime, new DateTimeZone('UTC'));
+                $lastIndexTimestamp = $lastIndexDateTime->getTimestamp();
+            } catch (Exception $e) {
+                $lastIndexTimestamp = strtotime('-1 day');
+            }
+            // Prevent indexing of same record more than once per hour
+            if ($lastIndexTimestamp > time() - 3600) {
+                return false;
+            }
+            $modifiedAt = $entity->getModifiedAt();
             $minReIndexTimestamp = strtotime(self::INDEX_THRESHOLD);
-            return $lastIndexTimestamp < $minReIndexTimestamp
-                || (null !== $modifiedAt && $modifiedAt->getTimestamp() > $lastIndexTimestamp);
+            $lastModifiedTimestamp = null !== $modifiedAt ? $modifiedAt->getTimestamp() : 0;
+            $itemNeedsReindex = $lastIndexTimestamp < $minReIndexTimestamp || ($lastModifiedTimestamp > $lastIndexTimestamp);
+            /*if ($itemNeedsReindex) {
+                echo 'Indexing ' . $entityClass . ':' . $entity->getId()
+                    . '; force index after: ' . date('d.m.Y H:i:s', $minReIndexTimestamp)
+                    . '; last index: ' . date('d.m.Y H:i:s', $lastIndexTimestamp)
+                    . '; last modified: ' . date('d.m.Y H:i:s', $lastModifiedTimestamp)
+                    . "\n";
+            }*/
+        } else {
+            $itemNeedsReindex = true;
+            /*echo 'Indexing ' . $entityClass . ':' . $entity->getId()
+                . '; last index: never'
+                . "\n";*/
         }
-        return true;
+        return $itemNeedsReindex;
     }
 
     /**
@@ -270,9 +367,11 @@ class Indexer
         $fullTextSearchWords = [];
         $filteredContent = preg_replace('/<th>[\wäöüÜÖÄß\s@:.\/\-]+<\/th>/u', '', $content);
         $filteredContent = preg_replace('/<!-- [\wäöüÜÖÄß\s@:.\/\-]+-->/u', '', $filteredContent);
+        //$filteredContent = str_replace(['>', PHP_EOL, '?', '*'], ['> ', ' ', ' ', ' '], $filteredContent);
         $filteredContent = str_replace(['>', PHP_EOL], ['> ', ' '], $filteredContent);
         $indexText = trim(strip_tags($filteredContent));
         if ($indexText !== '') {
+            $indexText = $this->filterUrls($indexText);
             $patternText = '/[^0-9a-zA-ZäöüÜÖÄß]+/u';
             $searchTerm = preg_replace($patternText, ' ', $indexText);
             $searchTerm = mb_strtolower(str_replace("\n", ' ', $searchTerm));
@@ -297,18 +396,12 @@ class Indexer
             foreach ($searchWordList as $searchWord) {
                 if (mb_strlen($searchWord) > 2) {
                     $dbWord = $searchWord;
-                    if (!isset($fullTextSearchWords[$dbWord])) {
-                        $fullTextSearchWords[$dbWord] = 0;
-                    }
-                    ++$fullTextSearchWords[$dbWord];
+                    $this->addSearchWord($dbWord, $fullTextSearchWords);
                     foreach ($umlauts as $umlaut => $altVals) {
                         if (mb_strpos($dbWord, $umlaut) !== false) {
                             foreach ($altVals as $altVal) {
                                 $altWord = str_replace($umlaut, $altVal, $dbWord);
-                                if (!isset($fullTextSearchWords[$altWord])) {
-                                    $fullTextSearchWords[$altWord] = 0;
-                                }
-                                ++$fullTextSearchWords[$altWord];
+                                $this->addSearchWord($altWord, $fullTextSearchWords);
                             }
                         }
                     }
@@ -316,5 +409,46 @@ class Indexer
             }
         }
         return $fullTextSearchWords;
+    }
+
+    /**
+     * Filter urls in content (remove url parameters)
+     *
+     * @param string $indexText
+     * @return string
+     */
+    private function filterUrls(string $indexText)
+    {
+        $pattern = '@((https?://)?([-\\w]+\\.[-\\w\\.]+)+\\w(:\\d+)?(/([-\\w/_\\.]*(\\?\\S+)?)?)*)@';
+        preg_match_all($pattern, $indexText, $urlMatches);
+        foreach ($urlMatches[0] as $url) {
+            $urlParts = parse_url($url);
+            if ($urlParts !== false && !empty($urlParts['host'])) {
+                $urlPath = !empty($urlParts['path']) ? str_replace('.html', '', $urlParts['path']) : '';
+                $indexText = str_replace($url, $urlParts['host'] . ' ' . $urlPath, $indexText);
+            }
+        }
+        return $indexText;
+    }
+
+    /**
+     * Add word to search word list
+     *
+     * @param string $word
+     * @param array $fullTextSearchWords
+     */
+    private function addSearchWord(string $word, array &$fullTextSearchWords): void
+    {
+        // fix long words without spaces
+        if (mb_strlen($word) > self::MAX_WORD_LENGTH) {
+            $length = (int) floor(self::MAX_WORD_LENGTH / 2);
+            $this->addSearchWord(mb_substr($word, 0, $length), $fullTextSearchWords);
+            $this->addSearchWord(mb_substr($word, $length - 1), $fullTextSearchWords);
+        } else {
+            if (!isset($fullTextSearchWords[$word])) {
+                $fullTextSearchWords[$word] = 0;
+            }
+            ++$fullTextSearchWords[$word];
+        }
     }
 }

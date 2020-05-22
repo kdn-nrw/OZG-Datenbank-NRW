@@ -24,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @CronJob("*\/15 * * * *")
- * Will be executed every 5 minutes
+ * Will be executed every 15 minutes
  */
 class SearchIndexCommand extends Command
 {
@@ -53,6 +53,24 @@ class SearchIndexCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Limit number of indexed records',
                 100
+            )
+            ->addOption(
+                'context',
+                'c',
+                InputOption::VALUE_OPTIONAL,
+                'limit indexing context'
+            )
+            ->addOption(
+                'entity-class',
+                'ec',
+                InputOption::VALUE_OPTIONAL,
+                'only index given class; escape backslashes; don\'t start with backslash'
+            )
+            ->addOption(
+                'entity-id',
+                'id',
+                InputOption::VALUE_OPTIONAL,
+                'only index given class; escape backslashes; don\'t start with backslash'
             );
     }
 
@@ -61,7 +79,16 @@ class SearchIndexCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
         $limit = max(1, min(5000, (int)$input->getOption('limit')));
-        $changedRecordCount = $this->indexer->run($limit);
+        $context = (string) $input->getOption('context');
+        $onlyEntityClass = (string) $input->getOption('entity-class');
+        if ($context) {
+            $this->indexer->setContexts(explode(',', $context));
+        }
+        $entityId = (int)$input->getOption('entity-id');
+        if ($entityId > 0) {
+            $this->indexer->setForceOnlyEntityId($entityId);
+        }
+        $changedRecordCount = $this->indexer->run($limit, $onlyEntityClass);
         $io->note(sprintf('Finished indexing. %s records were changed', $changedRecordCount));
     }
 }

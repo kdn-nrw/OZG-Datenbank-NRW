@@ -20,16 +20,22 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_form_servers_solutions")
- * @ORM\HasLifecycleCallbacks
  */
 class FormServerSolution extends BaseEntity
 {
+
     /**
      * @var FormServer|null
      * @ORM\ManyToOne(targetEntity="FormServer", inversedBy="formServerSolutions", cascade={"persist"})
      * @ORM\JoinColumn(name="form_server_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $formServer;
+
+    /**
+     * @ORM\Column(type="integer", name="position", nullable=true)
+     * @var int
+     */
+    private $position = 0;
 
     /**
      * @var Solution|null
@@ -93,6 +99,22 @@ class FormServerSolution extends BaseEntity
     public function setFormServer(FormServer $formServer): void
     {
         $this->formServer = $formServer;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition(): int
+    {
+        return (int) $this->position;
+    }
+
+    /**
+     * @param int|null $position
+     */
+    public function setPosition(?int $position): void
+    {
+        $this->position = (int) $position;
     }
 
     /**

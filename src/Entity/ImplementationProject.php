@@ -160,6 +160,34 @@ class ImplementationProject extends BaseNamedEntity
      */
     private $laboratories;
 
+    /**
+     * @var Organisation[]|Collection
+     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\JoinTable(name="ozg_implementation_project_organisation_leaders",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $projectLeaders;
+
+    /**
+     * @var Funding[]|Collection
+     * @ORM\ManyToMany(targetEntity="Funding", inversedBy="implementationProjects")
+     * @ORM\JoinTable(name="ozg_implementation_project_funding",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="funding_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $fundings;
+
     public function __construct()
     {
         $this->solutions = new ArrayCollection();
@@ -169,6 +197,8 @@ class ImplementationProject extends BaseNamedEntity
         $this->contacts = new ArrayCollection();
         $this->interestedOrganisations = new ArrayCollection();
         $this->participationOrganisations = new ArrayCollection();
+        $this->projectLeaders = new ArrayCollection();
+        $this->fundings = new ArrayCollection();
     }
 
     /**
@@ -446,7 +476,7 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @param Contact $interestedOrganisation
+     * @param Organisation $interestedOrganisation
      * @return self
      */
     public function addInterestedOrganisation($interestedOrganisation): self
@@ -460,7 +490,7 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @param Contact $interestedOrganisation
+     * @param Organisation $interestedOrganisation
      * @return self
      */
     public function removeInterestedOrganisation($interestedOrganisation): self
@@ -474,7 +504,7 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @return Contact[]|Collection
+     * @return Organisation[]|Collection
      */
     public function getInterestedOrganisations()
     {
@@ -482,7 +512,7 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @param Contact[]|Collection $interestedOrganisations
+     * @param Organisation[]|Collection $interestedOrganisations
      */
     public function setInterestedOrganisations($interestedOrganisations): void
     {
@@ -490,7 +520,7 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @param Contact $participationOrganisation
+     * @param Organisation $participationOrganisation
      * @return self
      */
     public function addParticipationOrganisation($participationOrganisation): self
@@ -504,7 +534,7 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @param Contact $participationOrganisation
+     * @param Organisation $participationOrganisation
      * @return self
      */
     public function removeParticipationOrganisation($participationOrganisation): self
@@ -518,7 +548,7 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @return Contact[]|Collection
+     * @return Organisation[]|Collection
      */
     public function getParticipationOrganisations()
     {
@@ -526,7 +556,7 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * @param Contact[]|Collection $participationOrganisations
+     * @param Organisation[]|Collection $participationOrganisations
      */
     public function setParticipationOrganisations($participationOrganisations): void
     {
@@ -593,6 +623,94 @@ class ImplementationProject extends BaseNamedEntity
     public function setLaboratories($laboratories): void
     {
         $this->laboratories = $laboratories;
+    }
+
+    /**
+     * @param Organisation $projectLeader
+     * @return self
+     */
+    public function addProjectLeader($projectLeader): self
+    {
+        if (!$this->projectLeaders->contains($projectLeader)) {
+            $this->projectLeaders->add($projectLeader);
+            //$projectLeader->addImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Organisation $projectLeader
+     * @return self
+     */
+    public function removeProjectLeader($projectLeader): self
+    {
+        if ($this->projectLeaders->contains($projectLeader)) {
+            $this->projectLeaders->removeElement($projectLeader);
+            //$projectLeader->removeImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Organisation[]|Collection
+     */
+    public function getProjectLeaders()
+    {
+        return $this->projectLeaders;
+    }
+
+    /**
+     * @param Organisation[]|Collection $projectLeaders
+     */
+    public function setProjectLeaders($projectLeaders): void
+    {
+        $this->projectLeaders = $projectLeaders;
+    }
+
+    /**
+     * @param Funding $funding
+     * @return self
+     */
+    public function addFunding($funding): self
+    {
+        if (!$this->fundings->contains($funding)) {
+            $this->fundings->add($funding);
+            $funding->addImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Funding $funding
+     * @return self
+     */
+    public function removeFunding($funding): self
+    {
+        if ($this->fundings->contains($funding)) {
+            $this->fundings->removeElement($funding);
+            $funding->removeImplementationProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Funding[]|Collection
+     */
+    public function getFundings()
+    {
+        return $this->fundings;
+    }
+
+    /**
+     * @param Funding[]|Collection $fundings
+     */
+    public function setFundings($fundings): void
+    {
+        $this->fundings = $fundings;
     }
 
     /**

@@ -22,7 +22,7 @@ file that was distributed with this source code.
 
 {% block logo %}
     {% apply spaceless %}
-        <a class="logo" href="/" target="_blank">
+        <a class="logo" href="/">
             {% if 'single_image' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
                 <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
             {% endif %}

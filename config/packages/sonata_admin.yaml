@@ -209,6 +209,7 @@ sonata_admin:
                     - App\Admin\CategoryAdmin
                     - App\Admin\MailingAdmin
                     - App\Admin\OrganisationAdmin
+                    - App\Admin\FundingAdmin
                     #- App\Admin\JurisdictionAdmin
             app_admin.menu.basic:
                 label: app.menu.basic_group
@@ -219,6 +220,7 @@ sonata_admin:
                     - App\Admin\AuthenticationAdmin
                     - App\Admin\AnalogServiceAdmin
                     - App\Admin\OpenDataAdmin
+                    - App\Admin\PageContentAdmin
             app_admin.menu.system:
                 label: app.system_group
                 #label_catalogue: messages

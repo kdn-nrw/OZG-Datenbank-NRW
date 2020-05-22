@@ -132,6 +132,18 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
+  App\Admin\FundingAdmin:
+    arguments:
+      - ~
+      - App\Entity\Funding
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.funding.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
   App\Admin\ImplementationStatusAdmin:
     arguments:
       - ~
@@ -284,6 +296,18 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
+  App\Admin\PageContentAdmin:
+    arguments:
+      - ~
+      - App\Entity\PageContent
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.page_content.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
   App\Admin\PaymentTypeAdmin:
     arguments:
       - ~
@@ -353,6 +377,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'ServiceSystemAdmin/show.html.twig']]
+      - [setTemplate, ['list', 'ServiceSystemAdmin/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm

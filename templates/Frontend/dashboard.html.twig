@@ -11,7 +11,7 @@ file that was distributed with this source code.
 {% block content %}
     <div class="row">
         <div class="col-xs-12">
-            {% include 'Frontend/Admin/Partials/_dashboard-content-top.html.twig' %}
+            {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_HOME')} %}
         </div>
         <div class="col-xs-12">
             {{ sonata_block_render({ 'type': 'App\\Block\\RecentSolutionsBlock' }, {
