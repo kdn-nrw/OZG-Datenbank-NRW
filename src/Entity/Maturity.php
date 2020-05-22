@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * Class Reifegrad
+ * Class Maturity
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_maturity")
@@ -28,7 +28,8 @@ class Maturity extends BaseNamedEntity
     public const DEFAULT_ID = 1;
 
     /**
-     * ozgrgbeschreibung
+     * Maturity description
+     *
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)

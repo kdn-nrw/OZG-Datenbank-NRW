@@ -1,0 +1,23 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% set pageContentList = app_get_page_content(pageKey) %}
+{% for pageContent in pageContentList %}
+    <div class="box box-widget">
+        <div class="box-header with-border">
+            {% if loop.first %}
+                <h1 class="box-title">{{ pageContent.headline|raw }}</h1>
+            {% else %}
+                <h1 class="box-title">{{ pageContent.headline|raw }}</h1>
+            {% endif %}
+        </div>
+        <div class="box-body">
+            <div style="max-width: 800px">
+                {{ pageContent.bodytext|raw }}
+            </div>
+        </div>
+    </div>
+{% endfor %}

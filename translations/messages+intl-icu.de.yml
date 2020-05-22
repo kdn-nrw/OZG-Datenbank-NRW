@@ -159,6 +159,14 @@ app:
       article_key: Identifikationsnummer
       status: Status
       usable_as_print_template: Druckvorlage geeignet
+  funding:
+    object_name: Finanzierung
+    list: Finanzierung
+    create: Finanzierung anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+      implementation_projects: Umsetzungsprojekte
   implementation_project:
     object_name: Umsetzungsprojekt
     list: Umsetzungsprojekte
@@ -181,6 +189,8 @@ app:
       laboratories: Digitalisierungslabore
       bureaus: Fachlichkeiten
       portals: voraussichtliches Zielportal
+      project_leaders: Projektleitung
+      fundings: Finanzierung
   implementation_status:
     object_name: Umsetzungs-Status
     list: Umsetzungs-Status
@@ -335,6 +345,21 @@ app:
       ministry_state: Ministerium (Land)
       service_provider: Dienstleister
       manufacturer: Hersteller
+  page_content:
+    object_name: Seiteninhalt
+    list: Seiteninhalte
+    create: Seiteninhalt anlegen
+    entity:
+      page: Seite
+      headline: Überschrift
+      bodytext: Inhalt
+      position: Sotierung
+      page_choices:
+        home: Startseite
+        service_systems: OZG-Leistungen
+        services: Leika-Katalog
+        implementation_projects: Umsetzungsprojekte
+        solutions: Lösungen
   payment_type:
     object_name: Bezahlverfahren
     list: Bezahlverfahren

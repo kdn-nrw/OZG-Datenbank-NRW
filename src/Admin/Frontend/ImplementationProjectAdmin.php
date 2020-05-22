@@ -130,6 +130,11 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
                     'name' => 'show',
                 ],
             ])
+            ->add('projectLeaders', null, [
+                'route' => [
+                    'name' => 'show',
+                ],
+            ])
             ->add('notes', 'html');
         $showMapper->add('bureaus', null, [
             'admin_code' => BureauAdmin::class,

@@ -93,9 +93,9 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
      * @param Category $category
      * @return self
      */
-    public function addChild($category)
+    public function addChild($category): self
     {
-        if ($category->getId() !== $this->getId() && !$this->children->contains($category)) {
+        if (!$this->children->contains($category) && $category->getId() !== $this->getId()) {
             $this->children->add($category);
             $category->setParent($this);
         }
@@ -107,7 +107,7 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
      * @param Category $category
      * @return self
      */
-    public function removeChild($category)
+    public function removeChild($category): self
     {
         if ($this->children->contains($category)) {
             $this->children->removeElement($category);
@@ -146,7 +146,7 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
      */
     public function setParent(?Category $parent): void
     {
-        if ($parent->getId() !== $this->getId()) {
+        if (null === $parent || $parent->getId() !== $this->getId()) {
             $this->parent = $parent;
         }
     }
@@ -155,7 +155,7 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
      * @param Contact $contact
      * @return self
      */
-    public function addContact($contact)
+    public function addContact($contact): self
     {
         if (!$this->contacts->contains($contact)) {
             $this->contacts->add($contact);
@@ -169,7 +169,7 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
      * @param Contact $contact
      * @return self
      */
-    public function removeContact($contact)
+    public function removeContact($contact): self
     {
         if ($this->contacts->contains($contact)) {
             $this->contacts->removeElement($contact);
@@ -185,6 +185,22 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
     public function getContacts()
     {
         return $this->contacts;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int|null $position
+     */
+    public function setPosition(?int $position): void
+    {
+        $this->position = $position;
     }
 
     /**
