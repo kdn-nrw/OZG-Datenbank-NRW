@@ -140,6 +140,11 @@ app:
     object_name: Formularserver
     list: Formularserver
     create: Formularserver anlegen
+    actions:
+      list: Formularserver Übersicht
+      show: Formularserver anzeigen
+      edit: Formularserver bearbeiten
+      solutions_list: Formularserver Lösungen verwalten
     tabs:
       general: Allgemein
       solutions: Lösungen

@@ -79,7 +79,9 @@ class FormServerSolutionAdmin extends AbstractAppAdmin
         );
         $datagridMapper->add('solution',
             null,
-            [],
+            [
+                'admin_code' => SolutionAdmin::class
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );

@@ -11,9 +11,13 @@
 
 namespace App\Admin;
 
+use App\Entity\FormServer;
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,6 +32,34 @@ class FormServerAdmin extends AbstractAppAdmin
     protected $customLabels = [
         'app.form_server.entity.form_server_solutions_solution' => 'app.form_server.entity.form_server_solutions',
     ];
+
+    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+            return;
+        }
+
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        if (null !== $admin) {
+            $id = $admin->getRequest()->get('id');
+
+            $menu->addChild('app.form_server.actions.show', [
+                'uri' => $admin->generateUrl('show', ['id' => $id])
+            ]);
+
+            if ($this->isGranted('EDIT')) {
+                $menu->addChild('app.form_server.actions.edit', [
+                    'uri' => $admin->generateUrl('edit', ['id' => $id])
+                ]);
+            }
+
+            if ($this->isGranted('LIST')) {
+                $menu->addChild('app.form_server.actions.solutions_list', [
+                    'uri' => $admin->getChild(FormServerSolutionAdmin::class)->generateUrl('list', ['id' => $id])
+                ]);
+            }
+        }
+    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -45,19 +77,36 @@ class FormServerAdmin extends AbstractAppAdmin
             ->tab('app.form_server.tabs.solutions')
                 ->with('form_server_solutions', [
                     'label' => false,
-                ])
-                    ->add('formServerSolutions', CollectionType::class, [
-                        'label' => false,
-                        'type_options' => [
-                            'delete' => true,
-                        ],
-                        'by_reference' => false,
-                    ], [
-                        'edit' => 'inline',
-                        'inline' => 'table',
-                        'sortable' => 'position',
-                        'ba_custom_hide_fields' => ['formServer'],
-                    ])
+                ]);
+        /** @var FormServer $subject */
+        $subject = $this->getSubject();
+        if (null !== $subject && $subject->getId() && $subject->getFormServerSolutions()->count() > 50) {
+            $formMapper
+                ->add('formServerSolutions', ModelType::class, [
+                    'label' => false,
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ]);
+        } else {
+            $formMapper
+                ->add('formServerSolutions', CollectionType::class, [
+                    'label' => false,
+                    'type_options' => [
+                        'delete' => true,
+                    ],
+                    'by_reference' => false,
+                ], [
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    'sortable' => 'position',
+                    'ba_custom_hide_fields' => ['formServer'],
+                ]);
+        }
+        $formMapper
                 ->end()
             ->end();
     }
