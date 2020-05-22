@@ -112,6 +112,7 @@ services:
       - App\Entity\FormServer
       - ~
     calls:
+      - [addChild, ['@App\Admin\FormServerSolutionAdmin', 'formServer']]
       - [setTemplate, ['show', 'FormServerAdmin/show.html.twig']]
     tags:
       - name:         sonata.admin
