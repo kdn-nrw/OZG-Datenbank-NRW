@@ -1,0 +1,23 @@
+.main-header {
+  .navbar-nav>.user-menu>.dropdown-menu>.user-footer .btn-default {
+    color: #fff;
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+  .navbar-custom-menu {
+    .user-footer {
+      a.btn {
+        background: #3c8dbc;
+        color: #fff;
+        transition: background-color .2s linear;
+        &:hover,
+        &:focus {
+        background: #286090;
+        color: #fff;
+        }
+      }
+    }
+  }
+}
