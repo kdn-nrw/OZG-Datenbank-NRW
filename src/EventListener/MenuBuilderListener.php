@@ -12,6 +12,7 @@
 namespace App\EventListener;
 
 
+use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Event\ConfigureMenuEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -41,14 +42,20 @@ class MenuBuilderListener
     public function addMenuItems(ConfigureMenuEvent $event)
     {
         $menu = $event->getMenu();
+        // standard controller route is not marked as current in menu
+        $request = $this->requestStack->getMasterRequest();
+        $currentRoute = null !== $request ? $request->get('_route') : '_no_route';
+
+        $this->moveSolutionMenuToTop($menu, $currentRoute);
+        $this->addSearchNode($menu, $currentRoute);
+
+        $this->moveContactMenuToTop($menu, $currentRoute);
+    }
+
+    private function addSearchNode(ItemInterface $menu, string $currentRoute): void
+    {
         $groupNode = $menu->getChild('app.ozg_implementation_group');
         if (null !== $groupNode) {
-            $childSolution = $groupNode->getChild('app.solution.list');
-            if (null !== $childSolution) {
-                $childSolution->setExtras([
-                    'icon' => '<i class="fa fa-lightbulb-o" aria-hidden="true"></i>',
-                ]);
-            }
             $child = $groupNode->addChild('search', [
                 'label' => 'app.search.list',
                 'route' => 'app_search_list',
@@ -59,42 +66,106 @@ class MenuBuilderListener
                         ],
                     ],
                 ],*/
-            ])->setExtras([
-                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
             ]);
+            $groupNode->removeChild($child);
+            $this->addChildToGroup(
+                $menu,
+                $currentRoute,
+                $child,
+                'app_admin.menu.basic',
+                'fa-search',
+                'app_search'
+            );
         }
-        // standard controller route is not marked as current in menu
-        $currentRoute = $this->requestStack->getMasterRequest()->get('_route');
-        $childAsCurrentRoutes = ['app_search_list'];
-        if (in_array($currentRoute, $childAsCurrentRoutes)) {
-            $child->setCurrent(true);
-        }
+    }
 
-        $groupNode = $menu->getChild('app.implementation_group');
-        $childContact = $groupNode->getChild('app.contact.list');
-        if (null !== $childContact) {
-            $groupNode->removeChild('app.contact.list');
-            $childContact->setExtras([
-                'icon' => '<i class="fa fa-address-card" aria-hidden="true"></i>',
+    private function moveContactMenuToTop(ItemInterface $menu, string $currentRoute): void
+    {
+        $this->moveChildNodeToTop(
+            $menu,
+            $currentRoute,
+            $menu->getChild('app.implementation_group'),
+            'app.contact.list',
+            'app.service_group',
+            'fa-address-card',
+            'admin_app_contact'
+
+        );
+    }
+
+    private function moveSolutionMenuToTop(ItemInterface $menu, string $currentRoute): void
+    {
+        $this->moveChildNodeToTop(
+            $menu,
+            $currentRoute,
+            $menu->getChild('app.ozg_implementation_group'),
+            'app.solution.list',
+            'app.settings_group',
+            'fa-puzzle-piece',
+            'admin_app_solution'
+
+        );
+    }
+
+    private function moveChildNodeToTop(
+        ItemInterface $menu,
+        string $currentRoute,
+        ?ItemInterface $groupNode,
+        string $moveChild,
+        ?string $moveAfterGroup,
+        string $icon,
+        string $activeRoutePrefix
+    ): void
+    {
+        if (null !== $groupNode && null !== $childNode = $groupNode->getChild($moveChild)) {
+            $groupNode->removeChild($moveChild);
+            $this->addChildToGroup(
+                $menu,
+                $currentRoute,
+                $childNode,
+                $moveAfterGroup,
+                $icon,
+                $activeRoutePrefix
+            );
+        }
+    }
+
+    private function addChildToGroup(
+        ItemInterface $parentNode,
+        string $currentRoute,
+        ?ItemInterface $childNode,
+        ?string $moveAfterItem,
+        string $icon,
+        string $activeRoutePrefix
+    ): void
+    {
+        if (null !== $childNode) {
+            $childNode->setExtras([
+                'icon' => '<i class="fa '.$icon.'" aria-hidden="true"></i>',
             ]);
+            $childNode->setParent($parentNode);
             $newChildren = [];
-            $children = $menu->getChildren();
             $wasAdded = false;
-            foreach ($children as $child) {
-                $newChildren[$child->getName()] = $child;
-                if ($child->getName() === 'app.service_group') {
-                    $newChildren[$childContact->getName()] = $childContact;
+            if (null === $moveAfterItem) {
+                $newChildren[$childNode->getName()] = $childNode;
+                $wasAdded = true;
+            }
+            $children = $parentNode->getChildren();
+            foreach ($children as $childGroup) {
+                $newChildren[$childGroup->getName()] = $childGroup;
+                if (!$wasAdded && $childGroup->getName() === $moveAfterItem) {
+                    $newChildren[$childNode->getName()] = $childNode;
                     $wasAdded = true;
                 }
             }
             if (!$wasAdded) {
-                $newChildren[$childContact->getName()] = $childContact;
+                $newChildren[$childNode->getName()] = $childNode;
             }
-            if (strpos($currentRoute, 'admin_app_contact') !== false) {
-                $childContact->setCurrent(true);
+            if (strpos($currentRoute, $activeRoutePrefix) !== false) {
+                $childNode->setCurrent(true);
             }
 
-            $menu->setChildren($newChildren);
+            $parentNode->setChildren($newChildren);
         }
     }
 }
