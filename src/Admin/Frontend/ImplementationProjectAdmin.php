@@ -12,6 +12,7 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\BureauAdmin;
+use App\Admin\OrganisationAdmin;
 use App\Admin\PortalAdmin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
@@ -59,6 +60,27 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         $datagridMapper->add('services.portals',
             null,
             ['label' => 'app.implementation_project.entity.portals'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('interestedOrganisations',
+            null, [
+                'admin_code' => OrganisationAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('participationOrganisations',
+            null, [
+                'admin_code' => OrganisationAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('projectLeaders',
+            null, [
+                'admin_code' => OrganisationAdmin::class,
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
