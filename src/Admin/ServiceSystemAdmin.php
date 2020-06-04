@@ -291,6 +291,12 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ->add('references', 'string', [
                 'label' => 'app.service_system.entity.references',
                 'template' => 'ServiceSystemAdmin/list-references.html.twig',
+                'filterParamName' => 'serviceSystem__serviceKey',
+                'referenceLabel' => 'app.service.type_label',
+                'route' => [
+                    'prefix' => 'admin_app_service',
+                    'name' => 'list',
+                ],
             ]);
         $this->addDefaultListActions($listMapper);
     }

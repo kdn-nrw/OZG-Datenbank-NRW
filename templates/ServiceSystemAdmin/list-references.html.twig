@@ -7,12 +7,13 @@ file that was distributed with this source code.
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 
 {% block field %}
-    {% if object.services %}
+    {% if object.services and field_description.options.route.prefix %}
         <div>
-            {% set routePrefix = 'admin_app_service' %}
-            {% set filterParamName = 'serviceSystem__serviceKey' %}
-            <a href="{{ path(routePrefix ~ '_list', {'filter': {(filterParamName): {'value': object.serviceKey}}}) }}" class="label label-primary">
-               {{ 'app.service.type_label'|trans({'count': object.services|length}) }}
+            {% set routePrefix = field_description.options.route.prefix %}
+            {% set targetRoute = routePrefix ~ '_' ~ field_description.options.route.name %}
+            {% set filterParamName = field_description.options.filterParamName %}
+            <a href="{{ path(targetRoute, {'filter': {(filterParamName): {'value': object.serviceKey}}}) }}" class="label label-primary">
+               {{ field_description.options.referenceLabel|trans({'count': object.services|length}) }}
             </a>
         </div>
     {% endif %}
