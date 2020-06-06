@@ -21,3 +21,8 @@
     }
   }
 }
+.clear-left-md {
+  @media (min-width: 992px) {
+    clear: left;
+  }
+}
