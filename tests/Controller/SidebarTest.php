@@ -17,18 +17,19 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Functional test for the frontend sidebar.
  */
-class SidebarTest extends WebTestCase
+class SidebarTest extends WebTestCase implements FrontendTestInterface
 {
     public function testGlobalSearch()
     {
         $client = static::createClient();
+        $client->catchExceptions(false);
         $client->request('GET', '/');
         self::assertResponseIsSuccessful();
         $crawler = $client->submitForm('global-search-submit', [
             'q' => 'Baugenehmigung',
         ]);
 
-        $crawlerContent = $crawler->filter('.content-wrapper')->first();
+        $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
         static::assertThat(
             $crawlerContent->filter('.search-box-item')->count(),
             new GreaterThan(1),
@@ -38,6 +39,7 @@ class SidebarTest extends WebTestCase
     public function testSidbarMenu()
     {
         $client = static::createClient();
+        $client->catchExceptions(false);
         $crawler = $client->request('GET', '/');
         self::assertResponseIsSuccessful();
         $crawlerSidebar = $crawler->filter('.main-sidebar')->first();
@@ -61,6 +63,7 @@ class SidebarTest extends WebTestCase
     public function testSidebarFilter()
     {
         $client = static::createClient();
+        $client->catchExceptions(false);
         $crawler = $client->request('GET', '/ozg-leistungen');
         self::assertResponseIsSuccessful();
         $crawlerSidebar = $crawler->filter('.main-sidebar')->first();

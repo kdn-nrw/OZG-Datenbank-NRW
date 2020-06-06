@@ -13,6 +13,7 @@ namespace App\Tests\Controller;
 
 use PHPUnit\Framework\Constraint\GreaterThan;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Functional test for the controllers defined inside frontend admin controllers.
@@ -23,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  *     $ ./vendor/bin/phpunit
  */
-abstract class AbstractFrontendAdminControllerTestCase extends WebTestCase
+abstract class AbstractFrontendAdminControllerTestCase extends WebTestCase implements FrontendTestInterface
 {
 
     abstract protected function getRoutePrefix(): string;
@@ -40,23 +41,14 @@ abstract class AbstractFrontendAdminControllerTestCase extends WebTestCase
         return $route;
     }
 
-    public function testIndex()
+    public function testIndex(): array
     {
-        $testViewData = [];
         $client = static::createClient();
+        $client->catchExceptions(false);
         $crawler = $client->request('GET', $this->getRoute('list'));
         self::assertResponseIsSuccessful();
-        $crawlerContent = $crawler->filter('.content-wrapper')->first();
-        $linkInfo = $crawlerContent->filter('a')->extract('href');
-        shuffle($linkInfo);
-        $routePattern = '/\/?'.preg_quote($this->getRoutePrefix(), '/').'\/(\d+)\/(\w+)/';
-        foreach ($linkInfo as $link) {
-            // No links to admin backend in content section in frontend
-            $this->assertNotContains('/admin/', $link);
-            if (preg_match($routePattern, $link, $matches)) {
-                $testViewData[$matches[2]][$matches[1]] = $matches[1];
-            }
-        }
+        $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
+        $testViewData = $this->parseLinks($crawlerContent);
         $this->assertContains(
             'Volltextsuche',
             $crawler->filter('.sonata-actions')->html(),
@@ -64,9 +56,10 @@ abstract class AbstractFrontendAdminControllerTestCase extends WebTestCase
             false,
             false
         );
+        $exportLinks = $testViewData['export'] ?? [];
         $this->assertContains(
             'format=xlsx',
-            implode(',', $linkInfo),
+            implode(',', $exportLinks),
             'The excel export link is present.',
             false,
             false
@@ -88,6 +81,71 @@ abstract class AbstractFrontendAdminControllerTestCase extends WebTestCase
         return $testViewData;
     }
 
+    /**
+     * @depends testIndex
+     * @param array $testViewData
+     */
+    public function testPager(array $testViewData)
+    {
+        if (!empty($testViewData['list'])) {
+            $route = $this->getRoute('list');
+            $listUrls = $testViewData['list'];
+            $pageLinksChecked = 0;
+            foreach ($listUrls as $query) {
+                parse_str($query, $params);
+                if (!empty($params['filter']['_page'])) {
+                    $client = static::createClient();
+                    $client->catchExceptions(false);
+                    $crawler = $client->request('GET', $route, $params);
+                    self::assertResponseIsSuccessful();
+
+                    $this->assertNotEmpty(
+                        $crawler->filter(self::SELECTOR_CONTENT_SECTION),
+                        'The show view has been rendered for query: ' . $query
+                    );
+                    ++$pageLinksChecked;
+                    if ($pageLinksChecked > 2) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Parse links in content of given crawler and return links grouped by view
+     * Currently only used for show and export view
+     *
+     * @param Crawler $crawler
+     * @param string $assertNotContains
+     * @return array
+     */
+    protected function parseLinks(Crawler $crawler, string $assertNotContains = '/admin/'): array
+    {
+        $testViewData = [];
+        $linkInfo = $crawler->filter('a')->extract('href');
+        shuffle($linkInfo);
+        $routePattern = '/\/?'.preg_quote($this->getRoutePrefix(), '/').'(\/(\d+))?(\/(\w+))?/';
+        foreach ($linkInfo as $link) {
+            if ($assertNotContains) {
+                // No links to admin backend in content section in frontend
+                $this->assertNotContains($assertNotContains, $link);
+            }
+            $urlParts = parse_url($link);
+            $path = array_key_exists('path', $urlParts) ? $urlParts['path'] : $link;
+            if (preg_match($routePattern, $path, $matches)) {
+                $view = $matches[4] ?? 'list';
+                if (!empty($matches[2])) {
+                    $testViewData[$view][$matches[2]] = $matches[2];
+                } elseif (array_key_exists('query', $urlParts)) {
+                    $testViewData[$view][] = $urlParts['query'];
+                } else {
+                    $testViewData[$view][] = null;
+                }
+            }
+        }
+        return $testViewData;
+    }
 
     /**
      * @depends testIndex
@@ -105,6 +163,7 @@ abstract class AbstractFrontendAdminControllerTestCase extends WebTestCase
         foreach ($testIds as $id)  {
             $route = $this->getRoute('show', ['id' => $id]);
             $client = static::createClient();
+            $client->catchExceptions(false);
             $crawler = $client->request('GET', $route);
             self::assertResponseIsSuccessful();
 

@@ -13,20 +13,20 @@ namespace App\Tests\Controller;
 
 use PHPUnit\Framework\Constraint\GreaterThan;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Functional test for the controllers defined inside SolutionController.
  */
-class DashboardControllerTest extends WebTestCase
+class DashboardControllerTest extends WebTestCase implements FrontendTestInterface
 {
     public function testIndex()
     {
         $client = static::createClient();
+        $client->catchExceptions(false);
         $crawler = $client->request('GET', '/');
         self::assertResponseIsSuccessful();
 
-        $crawlerContent = $crawler->filter('.content-wrapper')->first();
+        $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
         static::assertThat(
             $crawlerContent->filter('.box-page-content')->count(),
             new GreaterThan(0),
@@ -45,7 +45,7 @@ class DashboardControllerTest extends WebTestCase
                 $url,
                 'The chart placeholder container has a data url.'
             );
-            $chartCrawler = $client->xmlHttpRequest('GET', $url);
+            $client->xmlHttpRequest('GET', $url);
             $response = $client->getResponse();
             $this->assertSame(200, $response->getStatusCode());
             $responseData = json_decode($response->getContent(), true);
