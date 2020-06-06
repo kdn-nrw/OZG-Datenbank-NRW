@@ -27,14 +27,9 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin implements ContextAwareAdminInterface
 {
     use AdminTranslatorStrategyTrait;
-    /**
-     * @param string $context argument is deprecated since SONATA 3.3, to be removed in 4.0.'
-     * @return ProxyQueryInterface
-     */
-    public function createQuery($context = 'list')
+
+    protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
-        /** @var QueryBuilder|ProxyQueryInterface $query */
-        $query = parent::createQuery($context);
 
         if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
             $query->andWhere(

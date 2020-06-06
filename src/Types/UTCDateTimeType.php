@@ -12,6 +12,7 @@
 namespace App\Types;
 
 use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
@@ -32,16 +33,14 @@ class UTCDateTimeType extends DateTimeType
      *
      * @var DateTimeZone
      */
-    private static $utc = null;
+    private static $utc;
 
     /**
      * Application DateTimeZone object
      *
      * @var DateTimeZone
      */
-    private static $appTimezone = null;
-
-    private const defaultDateTimeString = "Y-m-d H:i:s";
+    private static $appTimezone;
 
     /**
      * Convert the PHP value to the Database value.
@@ -52,21 +51,24 @@ class UTCDateTimeType extends DateTimeType
      * @param AbstractPlatform $platform
      *
      * @return string
+     *
+     * @throws ConversionException
      */
-    public function convertToDatabaseValue($value, ?AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
             return null;
         }
-        $formatString = $platform ? $platform->getDateTimeFormatString() : self::defaultDateTimeString;
 
-        $value->setTimezone(
-            (self::$utc) ? self::$utc : (self::$utc = new DateTimeZone('UTC'))
-        );
 
-        $formatted = $value->format($formatString);
+        if ($value instanceof DateTimeInterface) {
+            $value->setTimezone(
+                (self::$utc) ?: (self::$utc = new DateTimeZone('UTC'))
+            );
+            return $value->format($platform->getDateTimeFormatString());
+        }
 
-        return $formatted;
+        throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', 'DateTime']);
     }
 
     /**
@@ -81,27 +83,45 @@ class UTCDateTimeType extends DateTimeType
      *
      * @throws ConversionException
      */
-    public function convertToPHPValue($value, ?AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
             return null;
         }
 
-        $phpValue = DateTime::createFromFormat(
-            $platform ? $platform->getDateTimeFormatString() : self::defaultDateTimeString,
-            $value,
-            (self::$utc) ? self::$utc : (self::$utc = new DateTimeZone('UTC'))
-        );
-        if (!$phpValue) {
-            throw ConversionException::conversionFailed($value, $this->getName());
+        if ($value instanceof DateTimeInterface) {
+            $val = clone $value;
+        } else {
+            $val = DateTime::createFromFormat(
+                $platform->getDateTimeFormatString(),
+                $value,
+                (self::$utc) ?: (self::$utc = new DateTimeZone('UTC'))
+            );
+
+            if (! $val) {
+                throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateTimeFormatString());
+            }
         }
 
-        // Convert to application default or user time zone
-        $phpValue->setTimezone(
-            (self::$appTimezone) ? self::$appTimezone
-                : (self::$appTimezone = new DateTimeZone(date_default_timezone_get()))
-        );
+        if (null === self::$appTimezone) {
 
-        return $phpValue;
+            $timezoneText = date_default_timezone_get() ;
+            if (!$timezoneText) {
+                $timezoneText = 'Europe/Berlin';
+            }
+            self::$appTimezone = new DateTimeZone($timezoneText);
+        }
+        // Convert to application default or user time zone
+        $val->setTimezone(self::$appTimezone);
+
+        return $val;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    {
+        return true;
     }
 }

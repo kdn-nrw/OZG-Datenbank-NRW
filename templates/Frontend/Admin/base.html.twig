@@ -108,7 +108,7 @@ file that was distributed with this source code.
             <div class="input-group custom-search-form">
                 <input type="text" name="q" value="{{ app.request.get('q') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
                 <span class="input-group-btn">
-                    <button class="btn btn-flat" type="submit">
+                    <button class="btn btn-flat" type="submit" id="global-search-submit">
                         <i class="fa fa-search" aria-hidden="true"></i>
                     </button>
                 </span>
@@ -130,27 +130,31 @@ file that was distributed with this source code.
                 {% set menuItems = {
                     'service_system': {
                         'routePrefix': 'frontend_app_servicesystem',
-                        'label': 'app.service_system.list'
+                        'label': 'app.service_system.list',
+                        'icon': 'angle-double-right'
                     },
                     'service': {
                         'routePrefix': 'frontend_app_service',
-                        'label': 'app.service.frontend.list'
+                        'label': 'app.service.frontend.list',
+                        'icon': 'angle-double-right'
                     },
                     'implementationproject': {
                         'routePrefix': 'frontend_app_implementationproject',
-                        'label': 'app.implementation_project.list'
+                        'label': 'app.implementation_project.list',
+                        'icon': 'angle-double-right'
                     },
                     'solution': {
                         'routePrefix': 'frontend_app_solution',
-                        'label': 'app.solution.list'
+                        'label': 'app.solution.list',
+                        'icon': 'angle-double-right'
                     }
                 } %}
                 {% set hasActive = false %}
                 {% for menuItem in menuItems %}
                     {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
                     <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
-                        <a href="{{ path(menuItem.routePrefix ~ '_list') }}">
-                            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                        <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
+                            <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
                             {{ menuItem.label|trans }}
                         </a>
                         {% if miActive %}

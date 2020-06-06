@@ -6,7 +6,7 @@ file that was distributed with this source code.
 #}
 {% set pageContentList = app_get_page_content(pageKey) %}
 {% for pageContent in pageContentList %}
-    <div class="box box-widget">
+    <div class="box box-widget box-page-content">
         <div class="box-header with-border">
             {% if loop.first %}
                 <h1 class="box-title">{{ pageContent.headline|raw }}</h1>
