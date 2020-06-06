@@ -17,6 +17,7 @@ use App\Entity\Status;
 use App\Entity\Subject;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 
@@ -286,14 +287,8 @@ class SolutionAdmin extends AbstractFrontendAdmin
         $datagrid->addFilterMenu('serviceSolutions.service.serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject');
     }
 
-    /**
-     * Exclude unpublished objects
-     * @param string $context
-     * @return \Doctrine\ORM\QueryBuilder|\Sonata\AdminBundle\Datagrid\ProxyQueryInterface
-     */
-    public function createQuery($context = 'list')
+    protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
-        $query = parent::createQuery($context);
         // Fix Sonata-Bug https://github.com/sonata-project/SonataAdminBundle/issues/3368
         // When global search is executed, the filter query will be concatenated with the additional
         // conditions in this function with OR (instead of AND)

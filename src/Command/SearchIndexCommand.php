@@ -90,5 +90,41 @@ class SearchIndexCommand extends Command
         }
         $changedRecordCount = $this->indexer->run($limit, $onlyEntityClass);
         $io->note(sprintf('Finished indexing. %s records were changed', $changedRecordCount));
+        // Fix file permissions for cache files created by server (allow deletion of cache files at least in _backup folder!)
+        if (is_dir('/home/kdn/webspace/domain/ozg.kdn.de/_backup')) {
+            $this->chmodRecursive('/home/kdn/webspace/domain/ozg.kdn.de/_backup', 0777);
+        }
+        if (is_dir('/home/kdn/webspace/domain/ozg.kdn.de/var/cache/prod')) {
+            $this->chmodRecursive('/home/kdn/webspace/domain/ozg.kdn.de/var/cache/prod', 0777);
+        }
+        chmod('/home/kdn/webspace/domain/ozg.kdn.de/var/log/shapecode_cron.log', 0777);
+    }
+
+    private function chmodRecursive($path, $filemode) {
+        if (!is_dir($path)) {
+            return chmod($path, $filemode);
+        }
+        $dh = opendir($path);
+        while ( $file = readdir($dh) ) {
+            if ($file !== '.' && $file !== '..') {
+                $fullpath = $path.'/'.$file;
+                if(!is_dir($fullpath)) {
+                    if (!chmod($fullpath, $filemode)){
+                        return false;
+                    }
+                } else {
+                    if (!$this->chmodRecursive($fullpath, $filemode)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        closedir($dh);
+
+        if (chmod($path, $filemode)) {
+            return true;
+        }
+        return false;
     }
 }

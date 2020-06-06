@@ -5,6 +5,18 @@
     "composer/installers": {
         "version": "v1.6.0"
     },
+    "dama/doctrine-test-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "56eaa387b5e48ebcc7c95a893b47dfa1ad51449c"
+        },
+        "files": [
+            "config/packages/test/dama_doctrine_test_bundle.yaml"
+        ]
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -170,6 +182,9 @@
     "knplabs/knp-menu-bundle": {
         "version": "v2.3.0"
     },
+    "maennchen/zipstream-php": {
+        "version": "2.1.0"
+    },
     "markbaker/complex": {
         "version": "1.4.7"
     },
@@ -209,6 +224,9 @@
     "mtdowling/cron-expression": {
         "version": "v1.2.1"
     },
+    "myclabs/php-enum": {
+        "version": "1.7.6"
+    },
     "ocramius/package-versions": {
         "version": "1.4.0"
     },
@@ -229,6 +247,9 @@
     },
     "psr/container": {
         "version": "1.0.0"
+    },
+    "psr/http-message": {
+        "version": "1.0.1"
     },
     "psr/log": {
         "version": "1.1.0"
@@ -358,6 +379,9 @@
             "bin/console",
             "config/bootstrap.php"
         ]
+    },
+    "symfony/css-selector": {
+        "version": "v4.4.9"
     },
     "symfony/debug": {
         "version": "v4.2.4"
@@ -506,6 +530,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.11.0"
+    },
+    "symfony/polyfill-php80": {
+        "version": "v1.17.0"
     },
     "symfony/process": {
         "version": "v4.2.7"

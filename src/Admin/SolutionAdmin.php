@@ -304,6 +304,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         );
         $datagridMapper->add('name');
         $datagridMapper->add('description');
+        $datagridMapper->add('isPublished');
     }
 
     protected function configureListFields(ListMapper $listMapper)
