@@ -54,7 +54,7 @@ class ContactAdmin extends AbstractAppAdmin
         $formMapper->end();
         $formMapper
             ->end()
-            ->with('app.contact.groups.organisation', ['class' => 'col-md-6']);
+            ->with('app.contact.groups.organisation', ['class' => 'clear-left-md col-md-6']);
         if (!in_array('organisationEntity', $hideFields, false)) {
             $formMapper->add('organisationEntity', ModelType::class, [
                     'label' => 'app.contact.entity.organisation_entity_form',
