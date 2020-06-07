@@ -74,7 +74,9 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
         );
         $datagridMapper->add('solution',
             null,
-            [],
+            [
+                'admin_code' => \App\Admin\SolutionAdmin::class
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );

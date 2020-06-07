@@ -11,6 +11,9 @@
 
 namespace App\Import;
 
+use phpDocumentor\Reflection\Types\Callable_;
+use Symfony\Component\VarDumper\VarDumper;
+
 class DataParser
 {
     /**
@@ -69,6 +72,22 @@ class DataParser
             $formattedValue = true;
         }
         return $formattedValue;
+    }
+
+    /**
+     * Format value in callback
+     *
+     * @param mixed $value
+     *
+     * @param $callback
+     * @return mixed
+     */
+    public function formatCallback($value, $callback)
+    {
+        if (is_callable($callback)) {
+            return $callback($value);
+        }
+        return $value;
     }
 
     /**
@@ -169,9 +188,9 @@ class DataParser
      * Try to convert a date value into the format "YYYY-MM-DD"
      *
      * @param string $value
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function formatDate($value): ?string
+    public function formatDate($value): ?\DateTime
     {
         if (empty($value)) {
             return null;
@@ -179,7 +198,7 @@ class DataParser
         $date = $this->convertDateString($value);
         // Value is already in correct format
         if ($date instanceof \DateTime) {
-            return $date->format('Y-m-d');
+            return $date;
         }
         $year = 0;
         $month = 0;
@@ -197,7 +216,6 @@ class DataParser
             $month = (int) $dateParts[1];
             $day = (int) $dateParts[2];
         }
-        $value = '';
         if ($day > 0 && $month > 0 && $year > 0) {
             if (strlen($year) === 2) {
                 $year += $year > 50 ? 1900 : 2000;
@@ -209,8 +227,11 @@ class DataParser
                 $day = '0' . $day;
             }
             $value = $year . '-' . $month . '-' . $day;
+            $dateObj = new \DateTime($value);
+            $dateObj->setTime(0, 0, 0);
+            return $dateObj;
         }
-        return $value;
+        return null;
     }
 
     /**
@@ -232,6 +253,7 @@ class DataParser
             if ($errors['warning_count'] > 0) {
                 return false;
             }
+            $date->setTime(0, 0, 0);
         }
 
         return $date;

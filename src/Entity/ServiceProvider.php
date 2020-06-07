@@ -32,13 +32,6 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     use OrganisationTrait;
 
     /**
-     * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="serviceProvider", cascade={"all"})
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $organisation;
-
-    /**
      * Short name
      * @var string|null
      *
@@ -95,8 +88,8 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      */
     public function setOrganisation(Organisation $organisation): void
     {
-        $this->organisation = $organisation;
-        $this->organisation->setServiceProvider($this);
+        $organisation1 = $organisation;
+        $organisation1->setServiceProvider($this);
     }
 
     /**

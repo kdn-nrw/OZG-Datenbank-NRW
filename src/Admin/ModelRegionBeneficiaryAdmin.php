@@ -12,7 +12,6 @@
 namespace App\Admin;
 
 use App\Admin\Traits\AddressTrait;
-use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
 use App\Entity\Contact;
@@ -26,9 +25,8 @@ use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class CentralAssociationAdmin extends AbstractAppAdmin
+class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin
 {
-    use CommuneTrait;
     use ContactTrait;
     use AddressTrait;
     use OrganisationOneToOneTrait;
@@ -37,23 +35,22 @@ class CentralAssociationAdmin extends AbstractAppAdmin
      * @var string[]
      */
     protected $customLabels = [
-        'app.central_association.entity.organisation_contacts' => 'app.organisation.entity.contacts',
-        'app.central_association.entity.organisation_url' => 'app.organisation.entity.url',
-        'app.central_association.entity.organisation_street' => 'app.organisation.entity.street',
-        'app.central_association.entity.organisation_zip_code' => 'app.organisation.entity.zip_code',
-        'app.central_association.entity.organisation_town' => 'app.organisation.entity.town',
+        'app.model_region_beneficiary.entity.organisation_contacts' => 'app.organisation.entity.contacts',
+        'app.model_region_beneficiary.entity.organisation_url' => 'app.organisation.entity.url',
+        'app.model_region_beneficiary.entity.organisation_street' => 'app.organisation.entity.street',
+        'app.model_region_beneficiary.entity.organisation_zip_code' => 'app.organisation.entity.zip_code',
+        'app.model_region_beneficiary.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->tab('default', ['label' => 'app.central_association.tabs.default']);
+            ->tab('default', ['label' => 'app.model_region_beneficiary.tabs.default']);
         $formMapper->with('general', [
-            'label' => 'app.central_association.tabs.default',
+            'label' => 'app.model_region_beneficiary.tabs.default',
         ]);
         $this->addOrganisationOneToOneFormFields($formMapper);
         $formMapper->add('shortName', TextType::class);
-        $this->addCommunesFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
     }
@@ -98,8 +95,14 @@ class CentralAssociationAdmin extends AbstractAppAdmin
         $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name')
             ->add('shortName');
+        $datagridMapper->add('organisation.modelRegionProjects',
+            null, [
+                'admin_code' => ModelRegionProjectAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addCommunesDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -117,8 +120,8 @@ class CentralAssociationAdmin extends AbstractAppAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper->add('name')
-            ->add('shortName');
+            ->add('shortName')
+            ->add('organisation.modelRegionProjects');
         $this->addOrganisationOneToOneShowFields($showMapper);
-        $this->addCommunesShowFields($showMapper);
     }
 }

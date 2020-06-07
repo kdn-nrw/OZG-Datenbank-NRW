@@ -212,6 +212,14 @@ sonata_admin:
                     - App\Admin\OrganisationAdmin
                     - App\Admin\FundingAdmin
                     #- App\Admin\JurisdictionAdmin
+            app.digital_model_reqion_group:
+                label: app.menu.digital_model_reqion_group
+                label_catalogue: messages
+                icon: '<i class="fa fa-object-group"></i>'
+                items:
+                    - App\Admin\ModelRegionAdmin
+                    - App\Admin\ModelRegionBeneficiaryAdmin
+                    - App\Admin\ModelRegionProjectAdmin
             app_admin.menu.basic:
                 label: app.menu.basic_group
                 label_catalogue: messages

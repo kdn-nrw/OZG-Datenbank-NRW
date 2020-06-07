@@ -33,7 +33,24 @@ abstract class AbstractBackendTestCase extends AbstractWebTestCase implements Ba
 
     protected function getContextPrefix(): string
     {
-        return self::BACKEND_URL_PREFIX;
+        return self::BACKEND_URL_PREFIX . 'app/';
+    }
+
+    /**
+     * @param string $view
+     * @param array $params
+     * @return string
+     */
+    protected function getRouteUrl(string $view, array $params = []): string
+    {
+        $route = $this->getRoutePrefix();
+        if ($view !== 'index') {
+            if (array_key_exists('id', $params)) {
+                $route .= '/' . $params['id'];
+            }
+            $route .= '/' . $view;
+        }
+        return $this->getContextPrefix() . $route;
     }
 
     protected function findUserByEmail(string $email): ?User
