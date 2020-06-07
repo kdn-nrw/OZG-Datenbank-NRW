@@ -285,6 +285,42 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
+  App\Admin\ModelRegionAdmin:
+    arguments:
+      - ~
+      - App\Entity\ModelRegion
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.model_region.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\ModelRegionBeneficiaryAdmin:
+    arguments:
+      - ~
+      - App\Entity\ModelRegionBeneficiary
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.model_region_beneficiary.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
+  App\Admin\ModelRegionProjectAdmin:
+    arguments:
+      - ~
+      - App\Entity\ModelRegionProject
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.model_region_project.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
   App\Admin\OpenDataAdmin:
     arguments:
       - ~

@@ -4,6 +4,7 @@ app:
   menu:
     settings_group: OZG Basisdaten
     service_group: NRW Basisdaten
+    digital_model_reqion_group: Digitale Modellregionen
     implementation_group: Umsetzung Basisdaten
     ozg_implementation_group: OZG Umsetzung
     basic_group: Basisdienste
@@ -333,6 +334,52 @@ app:
     entity:
       name: Name
       description: Beschreibung
+  model_region:
+    object_name: Modellregion
+    list: Modellregionen
+    create: Modellregion anlegen
+    tabs:
+      default: Allgemein
+    entity:
+      name: Name
+      description: Beschreibung
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      model_region_projects: Umsetzungsprojekte
+  model_region_beneficiary:
+    object_name: Zuwendungsempfänger
+    list: Zuwendungsempfänger
+    create: Zuwendungsempfänger anlegen
+    tabs:
+      default: Allgemein
+    entity:
+      organisation: Organisation
+      name: Name
+      short_name: Kürzel
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      contacts: Ansprechpartner
+  model_region_project:
+    object_name: Umsetzungsprojekt
+    list: Umsetzungsprojekte
+    create: Umsetzungsprojekt anlegen
+    tabs:
+      default: Allgemein
+    entity:
+      name: Projekttitel
+      description: Projektbeschreibung
+      organisations: Zuwendungsempfänger
+      project_start_at: Start
+      project_end_at: Ende
+      usp: Alleinstellungsmerkmal
+      communes_benefits: Nutzen für alle Kommunen
+      transferable_service: übertragbare/lizenzfreie Leistung
+      transferable_start: Beginn Übertragbarkeit
+      model_regions: Modellregionen
   open_data:
     object_name: Open Data
     list: Open Data
@@ -364,10 +411,13 @@ app:
         ministry_state: Ministerium (Land)
         manufacturer: Hersteller
         central_association: Spitzenverband
+        model_region_beneficiary: Zuwendungsempfänger
       commune: Kommune
       ministry_state: Ministerium (Land)
       service_provider: Dienstleister
       manufacturer: Hersteller
+      central_association: Spitzenverband
+      model_region_beneficiary: Zuwendungsempfänger
   page_content:
     object_name: Seiteninhalt
     list: Seiteninhalte
@@ -598,6 +648,8 @@ app:
       form_server_solutions: Formularserver
       payment_types: Bezahlverfahren
       is_published: Lösung öffentlich sichtbar?
+    messages:
+      no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   specialized_procedure:
     object_name: Fachverfahren
     list: Fachverfahren

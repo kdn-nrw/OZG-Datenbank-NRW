@@ -26,6 +26,23 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCase implements FrontendTestInterface
 {
 
+    /**
+     * @param string $view
+     * @param array $params
+     * @return string
+     */
+    protected function getRouteUrl(string $view, array $params = []): string
+    {
+        $route = $this->getRoutePrefix();
+        if ($view !== 'list' && $view !== 'index') {
+            if (array_key_exists('id', $params)) {
+                $route .= '/' . $params['id'];
+            }
+            return $route . '/' . $view;
+        }
+        return $this->getContextPrefix() . $route;
+    }
+
     public function testIndex(): array
     {
         $client = static::createClient();
@@ -95,41 +112,6 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
                 }
             }
         }
-    }
-
-    /**
-     * Parse links in content of given crawler and return links grouped by view
-     * Currently only used for show and export view
-     *
-     * @param Crawler $crawler
-     * @param string $assertNotContains
-     * @return array
-     */
-    protected function parseLinks(Crawler $crawler, string $assertNotContains = '/admin/'): array
-    {
-        $testViewData = [];
-        $linkInfo = $crawler->filter('a')->extract(['href']);
-        shuffle($linkInfo);
-        $routePattern = '/\/?' . preg_quote($this->getRoutePrefix(), '/') . '(\/(\d+))?(\/(\w+))?/';
-        foreach ($linkInfo as $link) {
-            if ($assertNotContains) {
-                // No links to admin backend in content section in frontend
-                $this->assertNotContains($assertNotContains, $link);
-            }
-            $urlParts = parse_url($link);
-            $path = array_key_exists('path', $urlParts) ? $urlParts['path'] : $link;
-            if (preg_match($routePattern, $path, $matches)) {
-                $view = $matches[4] ?? 'list';
-                if (!empty($matches[2])) {
-                    $testViewData[$view][$matches[2]] = $matches[2];
-                } elseif (array_key_exists('query', $urlParts)) {
-                    $testViewData[$view][] = $urlParts['query'];
-                } else {
-                    $testViewData[$view][] = null;
-                }
-            }
-        }
-        return $testViewData;
     }
 
     /**

@@ -34,6 +34,7 @@ class Organisation extends BaseNamedEntity
     public const TYPE_MINISTRY_STATE = 'ministry_state';
     public const TYPE_SERVICE_PROVIDER = 'service_provider';
     public const TYPE_CENTRAL_ASSOCIATION = 'central_association';
+    public const TYPE_MODEL_REGION_BENEFICIARY = 'model_region_beneficiary';
 
     /**
      * @var array Supported positions
@@ -45,6 +46,7 @@ class Organisation extends BaseNamedEntity
         'app.organisation.entity.organization_type_choices.ministry_state' => Organisation::TYPE_MINISTRY_STATE,
         'app.organisation.entity.organization_type_choices.service_provider' => Organisation::TYPE_SERVICE_PROVIDER,
         'app.organisation.entity.organization_type_choices.central_association' => Organisation::TYPE_CENTRAL_ASSOCIATION,
+        'app.organisation.entity.organization_type_choices.model_region_beneficiary' => Organisation::TYPE_MODEL_REGION_BENEFICIARY,
     ];
 
     /**
@@ -56,6 +58,7 @@ class Organisation extends BaseNamedEntity
         Organisation::TYPE_MANUFACTURER => 'manufacturer',
         Organisation::TYPE_SERVICE_PROVIDER => 'serviceProvider',
         Organisation::TYPE_CENTRAL_ASSOCIATION => 'centralAssociation',
+        Organisation::TYPE_MODEL_REGION_BENEFICIARY => 'modelRegionBeneficiary',
     ];
 
     use AddressTrait;
@@ -73,6 +76,12 @@ class Organisation extends BaseNamedEntity
      * @ORM\OneToMany(targetEntity="Contact", mappedBy="organisationEntity", cascade={"all"})
      */
     private $contacts;
+
+    /**
+     * @var ModelRegionProject[]|Collection
+     * @ORM\OneToMany(targetEntity="ModelRegionProject", mappedBy="organisations", cascade={"all"})
+     */
+    private $modelRegionProjects;
 
     /**
      * @var MinistryState|null
@@ -109,9 +118,17 @@ class Organisation extends BaseNamedEntity
      */
     private $centralAssociation;
 
+    /**
+     * @var ModelRegionBeneficiary|null
+     * @ORM\OneToOne(targetEntity="ModelRegionBeneficiary", mappedBy="organisation", cascade={"all"})
+     * @ORM\JoinColumn(name="model_region_beneficiary_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    private $modelRegionBeneficiary;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
+        $this->modelRegionProjects = new ArrayCollection();
     }
 
     /**
@@ -209,6 +226,9 @@ class Organisation extends BaseNamedEntity
         } elseif ($refEntity instanceof CentralAssociation) {
             $this->setOrganizationType(self::TYPE_CENTRAL_ASSOCIATION);
             $this->setCentralAssociation($refEntity);
+        } elseif ($refEntity instanceof ModelRegionBeneficiary) {
+            $this->setOrganizationType(self::TYPE_MODEL_REGION_BENEFICIARY);
+            $this->setModelRegionBeneficiary($refEntity);
         }
     }
 
@@ -290,6 +310,66 @@ class Organisation extends BaseNamedEntity
     public function setCentralAssociation(?CentralAssociation $centralAssociation): void
     {
         $this->centralAssociation = $centralAssociation;
+    }
+
+    /**
+     * @return ModelRegionBeneficiary|null
+     */
+    public function getModelRegionBeneficiary(): ?ModelRegionBeneficiary
+    {
+        return $this->modelRegionBeneficiary;
+    }
+
+    /**
+     * @param ModelRegionBeneficiary|null $modelRegionBeneficiary
+     */
+    public function setModelRegionBeneficiary(?ModelRegionBeneficiary $modelRegionBeneficiary): void
+    {
+        $this->modelRegionBeneficiary = $modelRegionBeneficiary;
+    }
+
+    /**
+     * @param ModelRegionProject $modelRegionProject
+     * @return self
+     */
+    public function addModelRegionProject($modelRegionProject): self
+    {
+        if (!$this->modelRegionProjects->contains($modelRegionProject)) {
+            $this->modelRegionProjects->add($modelRegionProject);
+            $modelRegionProject->addOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ModelRegionProject $modelRegionProject
+     * @return self
+     */
+    public function removeModelRegionProject($modelRegionProject): self
+    {
+        if ($this->modelRegionProjects->contains($modelRegionProject)) {
+            $this->modelRegionProjects->removeElement($modelRegionProject);
+            $modelRegionProject->removeOrganisation($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ModelRegionProject[]|Collection
+     */
+    public function getModelRegionProjects()
+    {
+        return $this->modelRegionProjects;
+    }
+
+    /**
+     * @param ModelRegionProject[]|Collection $modelRegionProjects
+     */
+    public function setModelRegionProjects($modelRegionProjects): void
+    {
+        $this->modelRegionProjects = $modelRegionProjects;
     }
 
 }

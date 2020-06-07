@@ -61,8 +61,15 @@ file that was distributed with this source code.
                             {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
                         {% else %}
                             {% set createShowLink = listEnableShowLink %}
-                            {% set editObjectId = child.service.id %}
-                            {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}
+                            {% if child.service %}
+                                {% set editObjectId = child.service.id %}
+                                {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}
+                            {% else %}
+                                <td colspan="7" class="service-is-missing">
+                                    <span class="text-warning">{{ 'app.solution.messages.no_service_selected'|trans }}</span>
+                                </td>
+                                {% set editObjectId = null %}
+                            {% endif %}
                         {% endif %}
                         <td>
                             {% if child.maturity %}

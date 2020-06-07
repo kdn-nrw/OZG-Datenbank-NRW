@@ -24,6 +24,11 @@ class DashboardControllerTest extends AbstractBackendTestCase
         return 'dashboard';
     }
 
+    protected function getContextPrefix(): string
+    {
+        return self::BACKEND_URL_PREFIX;
+    }
+
     public function testIndex()
     {
         $client = static::createClient();

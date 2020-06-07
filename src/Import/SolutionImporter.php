@@ -11,7 +11,6 @@
 
 namespace App\Import;
 
-use App\Entity\Base\BaseEntity;
 use App\Entity\FormServer;
 use App\Entity\FormServerSolution;
 use App\Entity\Maturity;
@@ -21,18 +20,9 @@ use App\Entity\Solution;
 use App\Entity\SpecializedProcedure;
 use App\Entity\Status;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\Persistence\ManagerRegistry;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-class SolutionImporter implements LoggerAwareInterface
+class SolutionImporter extends AbstractCsvImporter
 {
-    use LoggerAwareTrait;
-
     /**
      * @var array
      */
@@ -49,10 +39,15 @@ class SolutionImporter implements LoggerAwareInterface
 
     private const IMPORT_STATUS_ID = 6;
 
-    /**
-     * @var \Doctrine\Common\Persistence\ManagerRegistry|ManagerRegistry
-     */
-    private $registry;
+    protected function getFieldMap(): array
+    {
+        return self::FIELD_MAP;
+    }
+
+    protected function getImportSourceKey(): string
+    {
+        return 'solution_importer';
+    }
 
     /**
      * @var FormServer
@@ -65,27 +60,6 @@ class SolutionImporter implements LoggerAwareInterface
     private $maturity;
 
     /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    /**
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $registry
-     */
-    public function __construct(ManagerRegistry $registry)
-    {
-        $this->registry = $registry;
-    }
-
-    /**
-     * @param OutputInterface $output
-     */
-    public function setOutput(OutputInterface $output): void
-    {
-        $this->output = $output;
-    }
-
-    /**
      * Initialize maturity entity by id
      *
      * @param int $id
@@ -93,7 +67,7 @@ class SolutionImporter implements LoggerAwareInterface
     public function setMaturityById(int $id): void
     {
         /** @var EntityManager $em */
-        $em = $this->registry->getManager();
+        $em = $this->getManagerRegistry()->getManager();
         $this->maturity = $em->getRepository(Maturity::class)->find($id);
     }
 
@@ -105,39 +79,8 @@ class SolutionImporter implements LoggerAwareInterface
     public function setFormServerById(int $id): void
     {
         /** @var EntityManager $em */
-        $em = $this->registry->getManager();
+        $em = $this->getManagerRegistry()->getManager();
         $this->formServer = $em->getRepository(FormServer::class)->find($id);
-    }
-
-    /**
-     * Run file import
-     *
-     * @param string $directory Absolute path to directory with CSV file(s)
-     */
-    public function run(string $directory): void
-    {
-        $this->debug(sprintf('Starting import for directory %s', $directory));
-        if (!is_dir($directory) || !is_readable($directory)) {
-            $message = sprintf('Directory %s does not exist or is not readable!', $directory);
-            $this->debug($message, OutputInterface::VERBOSITY_DEBUG);
-            $this->logger->error($message, ['directory' => $directory]);
-        } else {
-            $pattern = rtrim($directory, '/') . '/*.{csv}';
-            $files = glob($pattern, GLOB_BRACE);
-            if (empty($files)) {
-                $this->debug('Found no files to import');
-            } else {
-                $this->debug(sprintf('Found %s file(s) for import: %s', count($files), implode(', ', $files)));
-                foreach ($files as $file) {
-                    $data = file_get_contents($file);
-                    if (!empty($data)) {
-                        $rows = $this->getRowsFromCsvData($data);
-                        $this->processImportRows($rows);
-                    }
-                }
-            }
-            $this->debug(sprintf('Finished import'));
-        }
     }
 
     /**
@@ -145,10 +88,10 @@ class SolutionImporter implements LoggerAwareInterface
      *
      * @param array $rows The imported rows
      */
-    private function processImportRows(array $rows): void
+    protected function processImportRows(array $rows): void
     {
         /** @var EntityManager $em */
-        $em = $this->registry->getManager();
+        $em = $this->getManagerRegistry()->getManager();
         $expressionBuilder = $em->getExpressionBuilder();
         $status = $em->getRepository(Status::class)->find(self::IMPORT_STATUS_ID);
         $formServer = $this->formServer;
@@ -170,31 +113,31 @@ class SolutionImporter implements LoggerAwareInterface
         $rowOffset = 0;
         /** @var Status $status */
         foreach ($rows as $importRow) {
-            $solutionProperties = $importRow[Solution::class];
-            $importId = (int)$solutionProperties['importId'];
-            $solution = $this->findEntityByConditions(Solution::class, [
+            $importClassProperties = $importRow[Solution::class];
+            $importId = (int)$importClassProperties['importId'];
+            $targetEntity = $this->findEntityByConditions(Solution::class, [
                 //$expressionBuilder->eq('LOWER(e.name)', ':name'),
                 $expressionBuilder->eq('e.importSource', ':importSource'),
                 $expressionBuilder->eq('e.importId', ':importId'),
             ], [
                     //'name' => $solutionProperties['name'],
-                    'importSource' => 'solution_importer',
+                    'importSource' => $this->getImportSourceKey(),
                     'importId' => $importId,
                 ]
             );
             $formServerSolution = null;
-            if (null === $solution) {
-                $solution = new Solution();
-                $solution->setStatus($status);
-                $solution->setImportSource('solution_importer');
-                if (!empty($solutionProperties['importId'])) {
-                    $solution->setImportId((int)$solutionProperties['importId']);
+            if (null === $targetEntity) {
+                $targetEntity = new Solution();
+                $targetEntity->setStatus($status);
+                $targetEntity->setImportSource($this->getImportSourceKey());
+                if (!empty($importClassProperties['importId'])) {
+                    $targetEntity->setImportId((int)$importClassProperties['importId']);
                 }
-                $em->persist($solution);
+                $em->persist($targetEntity);
             } else {
-                /** @var Solution $solution */
-                $solution->setHidden(false);
-                $formServerSolutions = $solution->getFormServerSolutions();
+                /** @var Solution $targetEntity */
+                $targetEntity->setHidden(false);
+                $formServerSolutions = $targetEntity->getFormServerSolutions();
                 foreach ($formServerSolutions as $entity) {
                     if ($entity->getFormServer() === $formServer) {
                         $formServerSolution = $entity;
@@ -202,17 +145,17 @@ class SolutionImporter implements LoggerAwareInterface
                     }
                 }
             }
-            $this->debug('Saving solution: ' . $solutionProperties['name'] . ' [' . ($solution->getId() ?: 'NEW') . ']');
-            $solution->setName($solutionProperties['name']);
-            $solution->setMaturity($this->maturity);
-            $this->addSpecializedProcedures($solution, $solutionProperties['specializedProcedures']);
-            $this->addServiceSolutions($solution, $solutionProperties['serviceSolutions']);
+            $this->debug('Saving solution: ' . $importClassProperties['name'] . ' [' . ($targetEntity->getId() ?: 'NEW') . ']');
+            $targetEntity->setName($importClassProperties['name']);
+            $targetEntity->setMaturity($this->maturity);
+            $this->addSpecializedProcedures($targetEntity, $importClassProperties['specializedProcedures']);
+            $this->addServiceSolutions($targetEntity, $importClassProperties['serviceSolutions']);
             if (null === $formServerSolution) {
                 $formServerSolution = new FormServerSolution();
                 $formServerSolution->setFormServer($formServer);
-                $formServerSolution->setSolution($solution);
+                $formServerSolution->setSolution($targetEntity);
                 $em->persist($formServerSolution);
-                $solution->addFormServerSolution($formServerSolution);
+                $targetEntity->addFormServerSolution($formServerSolution);
             }
             $properties = $importRow[FormServerSolution::class];
             if (!empty($properties['articleNumber'])) {
@@ -235,10 +178,10 @@ class SolutionImporter implements LoggerAwareInterface
         $em->flush();
     }
 
-    private function addSpecializedProcedures(Solution $solution, array $importValues)
+    private function addSpecializedProcedures(Solution $solution, array $importValues): void
     {
         /** @var EntityManager $em */
-        $em = $this->registry->getManager();
+        $em = $this->getManagerRegistry()->getManager();
         $expressionBuilder = $em->getExpressionBuilder();
         foreach ($importValues as $importValue) {
             $importEntity = $this->findEntityByConditions(SpecializedProcedure::class, [
@@ -264,7 +207,7 @@ class SolutionImporter implements LoggerAwareInterface
     private function addServiceSolutions(Solution $solution, array $importValues): void
     {
         /** @var EntityManager $em */
-        $em = $this->registry->getManager();
+        $em = $this->getManagerRegistry()->getManager();
         $expressionBuilder = $em->getExpressionBuilder();
         foreach ($importValues as $importValue) {
             if (stripos($importValue, 'keine') === 0) {
@@ -298,172 +241,5 @@ class SolutionImporter implements LoggerAwareInterface
                 }
             }
         }
-    }
-
-    /**
-     * Create debug message with given verbosity
-     *
-     * @param string $message The message
-     * @param int $verbosity The verbosity controls which messages are displayed
-     */
-    private function debug(string $message, int $verbosity = OutputInterface::VERBOSITY_NORMAL): void
-    {
-        if (null !== $this->output) {
-            $debug = date('Y-m-d H:i:s') . ': ' . $message;
-            $this->output->writeln($debug, OutputInterface::OUTPUT_NORMAL | $verbosity);
-        }
-    }
-
-    /**
-     * @return LoggerInterface
-     */
-    protected function getLogger(): LoggerInterface
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Converts the given file data to an array with field value rows
-     * @param string $data
-     * @return array
-     */
-    private function getRowsFromCsvData($data): array
-    {
-        $rows = array();
-        $csvRows = explode("\n", $data);
-        $firstRow = $csvRows[0];
-        $possibleDelimiters = ['|', ';', ','];
-        $delimiter = ';';
-        foreach ($possibleDelimiters as $checkDelimiter) {
-            if (strpos($firstRow, $checkDelimiter) !== false) {
-                $delimiter = $checkDelimiter;
-            }
-        }
-        $enclosing = strpos($firstRow, '"') === false ? '' : '"';
-
-        $tmpHeaders = str_getcsv($firstRow, $delimiter, $enclosing);
-
-        $headers = array();
-        $parser = new DataParser();
-
-        foreach ($tmpHeaders as $offset => $header) {
-            if (empty($header)) {
-                $headers[] = 'offset_' . $offset;
-            } else {
-                $headers[] = strtolower(
-                    str_replace(['/', ' ', '-'],
-                        '_',
-                        $parser->cleanStringValue($parser->formatString($header)))
-                );
-            }
-        }
-        $rowCount = count($csvRows);
-        // Skip header row, start count at 1
-        for ($i = 1; $i < $rowCount; $i++) {
-            $csvLine = trim($csvRows[$i]);
-            if (!empty($csvLine)) {
-                $row = $this->parseCsvLine($csvLine, $headers, $delimiter, $enclosing);
-                if (!empty($row)) {
-                    if (null !== $parsedRow = $this->fillInRowData($row)) {
-                        $rows[] = $parsedRow;
-                    }
-                }
-            }
-        }
-        return $rows;
-    }
-
-    /**
-     * Fill in data for DB queries and updates/inserts.
-     * PDO::prepare will escape parameters automatically later.
-     *
-     * @param array $row
-     *
-     * @return array|null Parsed row data
-     */
-    protected function fillInRowData($row): ?array
-    {
-        $entityPropertyData = [];
-        $parser = new DataParser();
-        foreach (self::FIELD_MAP as $srcField => $fieldData) {
-            $val = null;
-            if (!empty($fieldData['required']) && (!isset($row[$srcField]) || (string)$row[$srcField] === '')) {
-                return null;
-            }
-            $trgField = $fieldData['field'];
-            if (isset($row[$srcField])) {
-                if (array_key_exists('fixedValue', $fieldData)) {
-                    $val = $fieldData['fixedValue'];
-                } else {
-                    $val = $row[$srcField];
-                    if (is_array($val)) {
-                        $val = current($val);
-                    }
-                    $ccKey = ucwords(str_replace('_', ' ', $fieldData['type']));
-                    $formatFunction = 'format' . str_replace(' ', '', $ccKey);
-                    if (method_exists($parser, $formatFunction)) {
-                        $val = $parser->$formatFunction($val);
-                    }
-                }
-            }
-            $entityPropertyData[$fieldData['entity']][$trgField] = $val;
-        }
-        return $entityPropertyData;
-    }
-
-    /**
-     * Either find an existing entity by the given field or create a new entity
-     * @param string $entityClass
-     * @param array $expressions
-     * @param array $parameters
-     * @return BaseEntity|null
-     */
-    private function findEntityByConditions(string $entityClass, array $expressions, array $parameters = []): ?BaseEntity
-    {
-        /** @var EntityRepository $repository */
-        $repository = $this->registry->getRepository($entityClass);
-        $qb = $repository->createQueryBuilder('e')
-            ->orderBy('e.id', 'ASC');
-        $andX = $qb->expr()->andX();
-        foreach ($expressions as $expr) {
-            $andX->add($expr);
-        }
-        $qb->where($andX);
-        if (!empty($parameters)) {
-            $qb->setParameters($parameters);
-        }
-        $qb->setMaxResults(1);
-        /** @var BaseEntity|null $entity */
-        try {
-            $entity = $qb->getQuery()->getOneOrNullResult();
-        } catch (NonUniqueResultException $e) {
-            $entity = null;
-        }
-        return $entity;
-    }
-
-    /**
-     * Map the given csv line to the header names defined in the first row of the csv file
-     *
-     * @param string $csvLine Raw csv line content
-     * @param array $headers CSV headers found in the first line of the csv file
-     * @param string $delimiter CSV delimiter
-     * @param string $enclosure
-     * @return array|null
-     */
-    private function parseCsvLine(string $csvLine, array $headers, string $delimiter, string $enclosure): ?array
-    {
-        $csvRow = str_getcsv($csvLine, $delimiter, $enclosure);
-        $row = array();
-        foreach ($headers as $offset => $header) {
-            if (isset($csvRow[$offset])) {
-                $row[$header] = trim($csvRow[$offset]);
-            } else {
-                $errMsg = sprintf('CSV row column count does not match header column count: %s', $csvLine);
-                $this->debug($errMsg, OutputInterface::VERBOSITY_VERBOSE);
-                return null;
-            }
-        }
-        return $row;
     }
 }

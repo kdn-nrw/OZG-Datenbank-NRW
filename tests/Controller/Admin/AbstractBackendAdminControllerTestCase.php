@@ -12,7 +12,6 @@
 namespace App\Tests\Controller\Admin;
 
 use PHPUnit\Framework\Constraint\GreaterThan;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -31,10 +30,12 @@ abstract class AbstractBackendAdminControllerTestCase extends AbstractBackendTes
     {
         $client = static::createClient();
         $client->catchExceptions(false);
-        $crawler = $client->request('GET', $this->getRouteUrl('list'));
+        $this->logIn($client);
+        $url = $this->getRouteUrl('list');
+        $crawler = $client->request('GET', $url);
         self::assertResponseIsSuccessful();
         $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
-        $testViewData = $this->parseLinks($crawlerContent);
+        $testViewData = $this->parseLinks($crawlerContent, '');
         $this->assertContains(
             'Volltextsuche',
             $crawler->filter('.sonata-actions')->html(),
@@ -82,6 +83,7 @@ abstract class AbstractBackendAdminControllerTestCase extends AbstractBackendTes
                 if (!empty($params['filter']['_page'])) {
                     $client = static::createClient();
                     $client->catchExceptions(false);
+                    $this->logIn($client);
                     $crawler = $client->request('GET', $route, $params);
                     self::assertResponseIsSuccessful();
 
@@ -99,78 +101,94 @@ abstract class AbstractBackendAdminControllerTestCase extends AbstractBackendTes
     }
 
     /**
-     * Parse links in content of given crawler and return links grouped by view
-     * Currently only used for show and export view
-     *
-     * @param Crawler $crawler
-     * @param string $assertNotContains
-     * @return array
+     * @depends testIndex
+     * @param array $testViewData
      */
-    protected function parseLinks(Crawler $crawler, string $assertNotContains = '/admin/'): array
+    public function testShow(array $testViewData)
     {
-        $testViewData = [];
-        $linkInfo = $crawler->filter('a')->extract(['href']);
-        shuffle($linkInfo);
-        $routePattern = '/\/?'.preg_quote($this->getRoutePrefix(), '/').'(\/(\d+))?(\/(\w+))?/';
-        foreach ($linkInfo as $link) {
-            if ($assertNotContains) {
-                // No links to admin backend in content section in frontend
-                $this->assertNotContains($assertNotContains, $link);
-            }
-            $urlParts = parse_url($link);
-            $path = array_key_exists('path', $urlParts) ? $urlParts['path'] : $link;
-            if (preg_match($routePattern, $path, $matches)) {
-                $view = $matches[4] ?? 'list';
-                if (!empty($matches[2])) {
-                    $testViewData[$view][$matches[2]] = $matches[2];
-                } elseif (array_key_exists('query', $urlParts)) {
-                    $testViewData[$view][] = $urlParts['query'];
-                } else {
-                    $testViewData[$view][] = null;
-                }
-            }
-        }
-        return $testViewData;
+        $this->checkItemView($testViewData, 'show');
     }
 
     /**
      * @depends testIndex
      * @param array $testViewData
      */
-    public function testShow(array $testViewData)
+    public function testEdit(array $testViewData)
+    {
+        $this->checkItemView($testViewData, 'edit');
+    }
+
+    /**
+     * @param array $testViewData
+     * @param string $view
+     */
+    protected function checkItemView(array $testViewData, string $view)
     {
         $testIds = [];
-        if (!empty($testViewData['show'])) {
-            $testIds = $testViewData['show'];
+        if (!empty($testViewData[$view])) {
+            $testIds = $testViewData[$view];
             shuffle($testIds);
         }
         $maxCount = min(3, count($testIds));
         $count = 0;
-        foreach ($testIds as $id)  {
-            $route = $this->getRouteUrl('show', ['id' => $id]);
+        foreach ($testIds as $id) {
+            $route = $this->getRouteUrl($view, ['id' => $id]);
+            echo '$route: '.print_r($route, true)."\n";
             $client = static::createClient();
             $client->catchExceptions(false);
+            $this->logIn($client);
             $crawler = $client->request('GET', $route);
             self::assertResponseIsSuccessful();
-
-            $this->assertNotEmpty(
-                $crawler->filter('.sonata-ba-view'),
-                'The show view has been rendered for ID: ' . $id
-            );
-            $this->assertNotEmpty(
-                $crawler->filter('.sonata-action-element'),
-                'The back button exists for ID: ' . $id
-            );
-
-            static::assertThat(
-                $crawler->filter('.box-title')->count(),
-                new GreaterThan(0),
-                'At least on box exists with a title for ID: ' . $id
-            );
+            switch ($view) {
+                case 'show':
+                    $this->runShowAssertions($crawler, $id);
+                    break;
+                case 'edit':
+                    $this->runEditAssertions($crawler, $id);
+                    break;
+            }
             ++$count;
             if ($count >= $maxCount) {
                 break;
             }
         }
+    }
+
+    protected function runShowAssertions(Crawler $crawler, int $id)
+    {
+        $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
+        $this->assertNotEmpty(
+            $crawlerContent->filter('.sonata-ba-view'),
+            'The show view has been rendered for ID: ' . $id
+        );
+        $this->assertNotEmpty(
+            $crawlerContent->filter('.sonata-action-element'),
+            'The back button exists for ID: ' . $id
+        );
+
+        static::assertThat(
+            $crawlerContent->filter('.box-title')->count(),
+            new GreaterThan(0),
+            'At least on box exists with a title for ID: ' . $id
+        );
+    }
+
+    protected function runEditAssertions(Crawler $crawler, int $id)
+    {
+        $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
+        $this->assertNotEmpty(
+            $crawlerContent->filter('.sonata-ba-form'),
+            'The edit view has been rendered for ID: ' . $id
+        );
+        $this->assertNotEmpty(
+            $crawlerContent->filter('.sonata-ba-form-actions'),
+            'The edit button exists for ID: ' . $id
+        );
+
+        static::assertThat(
+            $crawlerContent->filter('.form-control')->count(),
+            new GreaterThan(0),
+            'At least on form control exists for ID: ' . $id
+        );
     }
 }
