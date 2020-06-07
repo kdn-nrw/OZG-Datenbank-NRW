@@ -33,6 +33,8 @@ class Organisation extends BaseNamedEntity
     public const TYPE_MANUFACTURER = 'manufacturer';
     public const TYPE_MINISTRY_STATE = 'ministry_state';
     public const TYPE_SERVICE_PROVIDER = 'service_provider';
+    public const TYPE_CENTRAL_ASSOCIATION = 'central_association';
+
     /**
      * @var array Supported positions
      */
@@ -42,6 +44,18 @@ class Organisation extends BaseNamedEntity
         'app.organisation.entity.organization_type_choices.manufacturer' => Organisation::TYPE_MANUFACTURER,
         'app.organisation.entity.organization_type_choices.ministry_state' => Organisation::TYPE_MINISTRY_STATE,
         'app.organisation.entity.organization_type_choices.service_provider' => Organisation::TYPE_SERVICE_PROVIDER,
+        'app.organisation.entity.organization_type_choices.central_association' => Organisation::TYPE_CENTRAL_ASSOCIATION,
+    ];
+
+    /**
+     * @var array Map constants to fields
+     */
+    public static $mapFields = [
+        Organisation::TYPE_COMMUNE => 'commune',
+        Organisation::TYPE_MINISTRY_STATE => 'ministryState',
+        Organisation::TYPE_MANUFACTURER => 'manufacturer',
+        Organisation::TYPE_SERVICE_PROVIDER => 'serviceProvider',
+        Organisation::TYPE_CENTRAL_ASSOCIATION => 'centralAssociation',
     ];
 
     use AddressTrait;
@@ -87,6 +101,13 @@ class Organisation extends BaseNamedEntity
      * @ORM\JoinColumn(name="commune_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $commune;
+
+    /**
+     * @var CentralAssociation|null
+     * @ORM\OneToOne(targetEntity="CentralAssociation", mappedBy="organisation", cascade={"all"})
+     * @ORM\JoinColumn(name="central_association_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    private $centralAssociation;
 
     public function __construct()
     {
@@ -185,6 +206,9 @@ class Organisation extends BaseNamedEntity
         } elseif ($refEntity instanceof ServiceProvider) {
             $this->setOrganizationType(self::TYPE_SERVICE_PROVIDER);
             $this->setServiceProvider($refEntity);
+        } elseif ($refEntity instanceof CentralAssociation) {
+            $this->setOrganizationType(self::TYPE_CENTRAL_ASSOCIATION);
+            $this->setCentralAssociation($refEntity);
         }
     }
 
@@ -251,4 +275,21 @@ class Organisation extends BaseNamedEntity
     {
         $this->commune = $commune;
     }
+
+    /**
+     * @return CentralAssociation|null
+     */
+    public function getCentralAssociation(): ?CentralAssociation
+    {
+        return $this->centralAssociation;
+    }
+
+    /**
+     * @param CentralAssociation|null $centralAssociation
+     */
+    public function setCentralAssociation(?CentralAssociation $centralAssociation): void
+    {
+        $this->centralAssociation = $centralAssociation;
+    }
+
 }

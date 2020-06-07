@@ -82,6 +82,18 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
     public: true
 
+  App\Admin\CentralAssociationAdmin:
+    arguments:
+      - ~
+      - App\Entity\CentralAssociation
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.central_association.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+    public: true
+
   App\Admin\CommuneAdmin:
     arguments:
       - ~

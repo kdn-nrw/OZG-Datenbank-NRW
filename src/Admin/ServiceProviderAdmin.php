@@ -24,6 +24,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
 class ServiceProviderAdmin extends AbstractAppAdmin
@@ -53,6 +54,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin
             'label' => 'app.service_provider.group.general_data',
         ]);
         $this->addOrganisationOneToOneFormFields($formMapper);
+        $formMapper->add('shortName', TextType::class);
         $formMapper->end();
         $formMapper->with('services_data', [
             'label' => 'app.service_provider.group.reference_data',
@@ -101,7 +103,8 @@ class ServiceProviderAdmin extends AbstractAppAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $this->addFullTextDatagridFilter($datagridMapper);
-        $datagridMapper->add('name');
+        $datagridMapper->add('name')
+            ->add('shortName');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
         $this->addCommunesDatagridFilters($datagridMapper);
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);
@@ -111,6 +114,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin
     {
         $listMapper
             ->addIdentifier('name')
+            ->add('shortName')
             ->add('organisation.url', 'url');
         $this->addDefaultListActions($listMapper);
     }
@@ -120,7 +124,8 @@ class ServiceProviderAdmin extends AbstractAppAdmin
      */
     public function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('name');
+        $showMapper->add('name')
+            ->add('shortName');
         $this->addOrganisationOneToOneShowFields($showMapper);
         $this->addCommunesShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);

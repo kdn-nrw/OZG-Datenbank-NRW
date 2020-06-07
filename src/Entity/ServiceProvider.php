@@ -39,6 +39,14 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     private $organisation;
 
     /**
+     * Short name
+     * @var string|null
+     *
+     * @ORM\Column(type="string", name="short_name", length=255, nullable=true)
+     */
+    private $shortName;
+
+    /**
      * Contact
      * @var string|null
      *
@@ -89,6 +97,22 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     {
         $this->organisation = $organisation;
         $this->organisation->setServiceProvider($this);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getShortName(): ?string
+    {
+        return $this->shortName;
+    }
+
+    /**
+     * @param string|null $shortName
+     */
+    public function setShortName(?string $shortName): void
+    {
+        $this->shortName = $shortName;
     }
 
     /**

@@ -94,6 +94,20 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface
      */
     private $portals;
 
+    /**
+     * @var CentralAssociation[]|Collection
+     * @ORM\ManyToMany(targetEntity="CentralAssociation", inversedBy="communes")
+     * @ORM\JoinTable(name="ozg_commune_central_association",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="central_association_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $centralAssociations;
+
     public function __construct()
     {
         $this->solutions = new ArrayCollection();
@@ -101,6 +115,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface
         $this->portals = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
+        $this->centralAssociations = new ArrayCollection();
     }
 
     /**
@@ -353,6 +368,50 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface
     public function setPortals($portals): void
     {
         $this->portals = $portals;
+    }
+
+    /**
+     * @param CentralAssociation $centralAssociation
+     * @return self
+     */
+    public function addCentralAssociation($centralAssociation): self
+    {
+        if (!$this->centralAssociations->contains($centralAssociation)) {
+            $this->centralAssociations->add($centralAssociation);
+            $centralAssociation->addCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CentralAssociation $centralAssociation
+     * @return self
+     */
+    public function removeCentralAssociation($centralAssociation): self
+    {
+        if ($this->centralAssociations->contains($centralAssociation)) {
+            $this->centralAssociations->removeElement($centralAssociation);
+            $centralAssociation->removeCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return CentralAssociation[]|Collection
+     */
+    public function getCentralAssociations()
+    {
+        return $this->centralAssociations;
+    }
+
+    /**
+     * @param CentralAssociation[]|Collection $centralAssociations
+     */
+    public function setCentralAssociations($centralAssociations): void
+    {
+        $this->centralAssociations = $centralAssociations;
     }
 
     /**

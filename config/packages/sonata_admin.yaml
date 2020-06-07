@@ -188,6 +188,7 @@ sonata_admin:
                     - App\Admin\CommuneAdmin
                     - App\Admin\ServiceProviderAdmin
                     - App\Admin\MinistryStateAdmin
+                    - App\Admin\CentralAssociationAdmin
                     - App\Admin\BureauAdmin
                     #- App\Admin\CommuneServiceAdmin
                     #- App\Admin\ServiceSolutionAdmin
