@@ -32,7 +32,7 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
         $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
         static::assertThat(
             $crawlerContent->filter('.search-box-item')->count(),
-            new GreaterThan(1),
+            new GreaterThan(0),
             'The view contains at least 1 search result box.'
         );
     }
@@ -43,20 +43,22 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
         $crawler = $client->request('GET', '/');
         self::assertResponseIsSuccessful();
         $crawlerSidebar = $crawler->filter('.main-sidebar')->first();
-        $navLinkInfo = $crawlerSidebar->filter('a.nav-link')->extract('href');
+        $navLinkInfo = $crawlerSidebar->filter('a.nav-link')->extract(['href']);
         static::assertThat(
             count($navLinkInfo),
-            new GreaterThan(1),
+            new GreaterThan(0),
             'The sidebar menu contains at least 1 item.'
         );
-        foreach ($navLinkInfo as $elementCrawler) {
-            $navPageCrawler = $client->request('GET', '/');
-            self::assertResponseIsSuccessful();
-            static::assertThat(
-                $navPageCrawler->filter('.main-sidebar')->count(),
-                new GreaterThan(0),
-                'The navigation page contains a sidebar.'
-            );
+        foreach ($navLinkInfo as $url) {
+            if (strpos($url, '#') !== 0) {
+                $navPageCrawler = $client->request('GET', $url);
+                self::assertResponseIsSuccessful();
+                static::assertThat(
+                    $navPageCrawler->filter('.main-sidebar')->count(),
+                    new GreaterThan(0),
+                    'The navigation page contains a sidebar.'
+                );
+            }
         }
     }
 

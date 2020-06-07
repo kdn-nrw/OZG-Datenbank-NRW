@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Admin;
 
 use PHPUnit\Framework\Constraint\GreaterThan;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -23,7 +24,7 @@ use Symfony\Component\DomCrawler\Crawler;
  *
  *     $ ./vendor/bin/phpunit
  */
-abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCase implements FrontendTestInterface
+abstract class AbstractBackendAdminControllerTestCase extends AbstractBackendTestCase
 {
 
     public function testIndex(): array
@@ -110,7 +111,7 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
         $testViewData = [];
         $linkInfo = $crawler->filter('a')->extract(['href']);
         shuffle($linkInfo);
-        $routePattern = '/\/?' . preg_quote($this->getRoutePrefix(), '/') . '(\/(\d+))?(\/(\w+))?/';
+        $routePattern = '/\/?'.preg_quote($this->getRoutePrefix(), '/').'(\/(\d+))?(\/(\w+))?/';
         foreach ($linkInfo as $link) {
             if ($assertNotContains) {
                 // No links to admin backend in content section in frontend
@@ -145,7 +146,7 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
         }
         $maxCount = min(3, count($testIds));
         $count = 0;
-        foreach ($testIds as $id) {
+        foreach ($testIds as $id)  {
             $route = $this->getRouteUrl('show', ['id' => $id]);
             $client = static::createClient();
             $client->catchExceptions(false);
