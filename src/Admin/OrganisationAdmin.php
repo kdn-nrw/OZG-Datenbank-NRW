@@ -13,12 +13,12 @@ namespace App\Admin;
 
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\ContactTrait;
+use App\Admin\Traits\ModelTrait;
 use App\Entity\Organisation;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -28,6 +28,7 @@ class OrganisationAdmin extends AbstractAppAdmin
 {
     use ContactTrait;
     use AddressTrait;
+    use ModelTrait;
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -45,43 +46,22 @@ class OrganisationAdmin extends AbstractAppAdmin
         $this->addAddressFormFields($formMapper);
         $formMapper->end();
         if (!in_array('organizationType', $hideFields, false)) {
+            $mapFieldMasks = [
+                Organisation::TYPE_DEFAULT => [],
+            ];
+            foreach (Organisation::$mapFields as $key => $field) {
+                $mapFieldMasks[$key] = [$field];
+            }
             $formMapper
                 ->with('app.organisation.groups.type_data', ['class' => 'col-md-6'])
                 ->add('organizationType', ChoiceFieldMaskType::class, [
                     'choices' => Organisation::$organizationTypeChoices,
-                    'map' => [
-                        Organisation::TYPE_DEFAULT => [],
-                        Organisation::TYPE_COMMUNE => ['commune'],
-                        Organisation::TYPE_MINISTRY_STATE => ['ministryState'],
-                        Organisation::TYPE_MANUFACTURER => ['manufacturer'],
-                        Organisation::TYPE_SERVICE_PROVIDER => ['serviceProvider'],
-                    ],
+                    'map' => $mapFieldMasks,
                     'required' => true,
-                ])
-                ->add('commune', ModelType::class, [
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'choice_translation_domain' => false,
-                ])
-                ->add('manufacturer', ModelType::class, [
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'choice_translation_domain' => false,
-                ])
-                ->add('ministryState', ModelType::class, [
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'choice_translation_domain' => false,
-                ])
-                ->add('serviceProvider', ModelType::class, [
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'choice_translation_domain' => false,
                 ]);
+            foreach (Organisation::$mapFields as $field) {
+                $this->addDefaultModelType($formMapper, $field);
+            }
             $formMapper->end();
         }
         $formMapper

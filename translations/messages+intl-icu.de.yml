@@ -68,6 +68,22 @@ app:
       description: Beschreibung
       parent: Ober-Kategorie
       children: Unter-Kategorien
+  central_association:
+    object_name: Spitzenverband
+    list: Spitzenverbände
+    create: Spitzenverband anlegen
+    tabs:
+      default: Allgemein
+    entity:
+      organisation: Organisation
+      name: Name
+      short_name: Kürzel
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      url: Url
+      contacts: Ansprechpartner
+      communes: Kommunen
   commune:
     object_name: Kommune
     list: Kommunen
@@ -91,6 +107,7 @@ app:
       contact: Ansprechpartner der Kommune (alt)
       service_providers: IT Dienstleister
       specialized_procedures: Fachverfahren
+      central_associations: Spitzenverbände
       portals: Portale
   contact:
     object_name: Kontakt
@@ -346,6 +363,7 @@ app:
         service_provider: Dienstleister
         ministry_state: Ministerium (Land)
         manufacturer: Hersteller
+        central_association: Spitzenverband
       commune: Kommune
       ministry_state: Ministerium (Land)
       service_provider: Dienstleister
@@ -478,6 +496,7 @@ app:
     entity:
       organisation: Organisation
       name: Name
+      short_name: Abkürzung
       street: Straße, Hausnummer
       zip_code: PLZ
       town: Ort
