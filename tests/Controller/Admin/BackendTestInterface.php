@@ -9,12 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Admin;
 
 /**
- * Interface for frontend tests
+ * Interface for backend tests
  */
-interface FrontendTestInterface
+interface BackendTestInterface
 {
+    const BACKEND_URL_PREFIX = '/admin/';
+    // Test login data
+    const LOGIN_USERNAME = 'info@gerthammes.de';
+    const LOGIN_PASSWORD = 'password';
     const SELECTOR_CONTENT_SECTION = '.content-wrapper';
+    const FIREWALL_NAME = 'admin';
+    const FIREWALL_CONTEXT = 'user';
 }
