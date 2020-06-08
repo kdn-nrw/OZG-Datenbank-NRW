@@ -1,18 +1,18 @@
 {
     "devDependencies": {
-        "@babel/plugin-proposal-class-properties": "^7.8.3",
-        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
-        "@symfony/webpack-encore": "^0.29.1",
-        "autoprefixer": "^9.7.6",
+        "@babel/plugin-proposal-class-properties": "^7.10.1",
+        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.1",
+        "@symfony/webpack-encore": "^0.30.2",
+        "autoprefixer": "^9.8.0",
         "core-js": "^3.6.5",
-        "node-sass": "^4.13.1",
+        "jquery": "^3.5.1",
+        "node-sass": "^4.14.1",
         "postcss-loader": "^3.0.0",
         "regenerator-runtime": "^0.13.5",
-        "sass-loader": "^7.0.1",
-        "webpack-notifier": "^1.8.0",
-        "jquery": "^3.5.0"
+        "sass-loader": "^8.0.2",
+        "webpack-notifier": "^1.8.0"
     },
-    "license": "UNLICENSED",
+    "license": "MIT",
     "private": true,
     "scripts": {
         "dev-server": "encore dev-server",
