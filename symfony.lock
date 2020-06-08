@@ -319,6 +319,9 @@
     "sonata-project/exporter": {
         "version": "2.0.1"
     },
+    "sonata-project/form-extensions": {
+        "version": "0.1.1"
+    },
     "sonata-project/intl-bundle": {
         "version": "2.7.0"
     },
@@ -333,6 +336,9 @@
         "files": [
             "config/packages/sonata_translation.yaml"
         ]
+    },
+    "sonata-project/twig-extensions": {
+        "version": "0.1.1"
     },
     "sonata-project/user-bundle": {
         "version": "4.5.1"
