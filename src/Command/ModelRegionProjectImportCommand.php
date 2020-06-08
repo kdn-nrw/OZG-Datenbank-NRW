@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\Maturity;
 use App\Import\ModelRegionProjectImporter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

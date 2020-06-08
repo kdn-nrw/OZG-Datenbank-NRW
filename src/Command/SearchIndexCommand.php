@@ -97,19 +97,22 @@ class SearchIndexCommand extends Command
         if (is_dir('/home/kdn/webspace/domain/ozg.kdn.de/var/cache/prod')) {
             $this->chmodRecursive('/home/kdn/webspace/domain/ozg.kdn.de/var/cache/prod', 0777);
         }
-        chmod('/home/kdn/webspace/domain/ozg.kdn.de/var/log/shapecode_cron.log', 0777);
+        $logPath = '/home/kdn/webspace/domain/ozg.kdn.de/var/log/shapecode_cron.log';
+        if (is_writable($logPath)) {
+            @chmod($logPath, 0777);
+        }
     }
 
     private function chmodRecursive($path, $filemode) {
         if (!is_dir($path)) {
-            return chmod($path, $filemode);
+            return is_writable($path) ? chmod($path, $filemode) : false;
         }
         $dh = opendir($path);
         while ( $file = readdir($dh) ) {
             if ($file !== '.' && $file !== '..') {
                 $fullpath = $path.'/'.$file;
                 if(!is_dir($fullpath)) {
-                    if (!chmod($fullpath, $filemode)){
+                    if (is_writable($fullpath) || !chmod($fullpath, $filemode)){
                         return false;
                     }
                 } else {
@@ -122,9 +125,6 @@ class SearchIndexCommand extends Command
 
         closedir($dh);
 
-        if (chmod($path, $filemode)) {
-            return true;
-        }
-        return false;
+        return is_writable($path) && @chmod($path, $filemode);
     }
 }

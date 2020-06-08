@@ -16,6 +16,7 @@ use App\Entity\Repository\SearchIndexRepository;
 use App\Entity\SearchIndexWord;
 use App\Exporter\Source\CustomQuerySourceIterator;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -105,7 +106,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         $datagrid->buildPager();
         $query = $datagrid->getQuery();
 
-        $query->select('DISTINCT '.current($query->getRootAliases()));
+        $query->select('DISTINCT ' . current($query->getRootAliases()));
         $query->setFirstResult(null);
         $query->setMaxResults(null);
 
@@ -181,19 +182,48 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         $appContext = $this->getAppContext();
         $datagridMapper
             ->add('fullText', CallbackFilter::class, [
-                'callback' => static function($queryBuilder, $alias, $field, $value) use ($modelManager, $entityClass, $appContext) {
+                'callback' => static function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) use ($modelManager, $entityClass, $appContext) {
                     if (!$value['value']) {
                         return false;
                     }
+                    /** @var QueryBuilder $qb */
+                    $qb = $queryBuilder->getQueryBuilder();
+                    $reflect = new \ReflectionClass($entityClass);
+                    $props = $reflect->getProperties();
+                    $orConditions = [];
+
                     /** @var \Sonata\DoctrineORMAdminBundle\Model\ModelManager $modelManager */
                     $indexRepository = $modelManager->getEntityManager(SearchIndexWord::class)->getRepository(SearchIndexWord::class);
                     /** @var SearchIndexRepository $indexRepository */
                     $matchingRecordIds = $indexRepository->findMatchingIndexRecords($entityClass, $appContext, $value['value']);
                     if (null !== $matchingRecordIds) {
-
-                        $queryBuilder
-                            ->andWhere( $alias . ' IN(:matchingRecordIds)')
-                            ->setParameter('matchingRecordIds', $matchingRecordIds);
+                        $orConditions[] = $alias . ' IN(:matchingRecordIds)';
+                        $queryBuilder->setParameter('matchingRecordIds', $matchingRecordIds);
+                        // If indexer has record, only search the main string fields in addition to the
+                        // search index to make the search faster
+                        $extraSearchFields = ['name', 'description'];
+                    } else {
+                        $extraSearchFields = null;
+                    }
+                    $words = array_filter(array_map('trim', explode(' ', $value['value'])));
+                    foreach ($props as $refProperty) {
+                        if (preg_match('/@var\s+([^\s]+)/', $refProperty->getDocComment(), $matches)) {
+                            $field = $refProperty->getName();
+                            $type = $matches[1];
+                            if (($type === 'string' || $type === 'string|null')
+                                && (null === $extraSearchFields || in_array($field, $extraSearchFields, false))) {
+                                foreach ($words as $word) {
+                                    $orConditions[] = $qb->expr()->like(
+                                        $alias . '.' . $field,
+                                        $queryBuilder->expr()->literal('%' . $word . '%')
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    if (!empty($orConditions)) {
+                        $qb
+                            ->andWhere($qb->expr()->orX()->addMultiple($orConditions));
 
                         return true;
                     }
