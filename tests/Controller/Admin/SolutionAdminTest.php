@@ -24,7 +24,7 @@ class SolutionAdminTest extends AbstractBackendAdminControllerTestCase
     {
         return 'solution';
     }
-
+/*
     protected function runShowAssertions(Crawler $crawler, int $id)
     {
         parent::runShowAssertions($crawler, $id);
@@ -34,5 +34,5 @@ class SolutionAdminTest extends AbstractBackendAdminControllerTestCase
             new IsEmpty(),
             'No solution service is missing ID: ' . $id
         );
-    }
+    }*/
 }

@@ -35,9 +35,6 @@ final class Version20200607110043 extends AbstractMigration
         $this->addSql('ALTER TABLE ozg_organisation ADD model_region_beneficiary_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE ozg_organisation ADD CONSTRAINT FK_609D3524CADD1A77 FOREIGN KEY (model_region_beneficiary_id) REFERENCES ozg_model_region_beneficiary (id) ON DELETE CASCADE');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_609D3524CADD1A77 ON ozg_organisation (model_region_beneficiary_id)');
-        $this->addSql('ALTER TABLE ozg_service_provider DROP FOREIGN KEY FK_54ECCF6F9E6B1585');
-        $this->addSql('DROP INDEX UNIQ_54ECCF6F9E6B1585 ON ozg_service_provider');
-        $this->addSql('ALTER TABLE ozg_service_provider DROP organisation_id');
         $this->addSql('ALTER TABLE ozg_model_region_project ADD communes_benefits LONGTEXT DEFAULT NULL, ADD import_id INT DEFAULT NULL, ADD import_source VARCHAR(100) DEFAULT NULL');
     }
 
@@ -57,8 +54,6 @@ final class Version20200607110043 extends AbstractMigration
         $this->addSql('DROP TABLE ozg_model_region_beneficiary');
         $this->addSql('DROP INDEX UNIQ_609D3524CADD1A77 ON ozg_organisation');
         $this->addSql('ALTER TABLE ozg_organisation DROP model_region_beneficiary_id');
-        $this->addSql('ALTER TABLE ozg_service_provider ADD organisation_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE ozg_service_provider ADD CONSTRAINT FK_54ECCF6F9E6B1585 FOREIGN KEY (organisation_id) REFERENCES ozg_organisation (id) ON DELETE CASCADE');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_54ECCF6F9E6B1585 ON ozg_service_provider (organisation_id)');
         $this->addSql('ALTER TABLE ozg_model_region_project DROP communes_benefits, DROP import_id, DROP import_source');
     }

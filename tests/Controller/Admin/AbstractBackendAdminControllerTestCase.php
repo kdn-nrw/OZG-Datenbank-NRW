@@ -133,7 +133,6 @@ abstract class AbstractBackendAdminControllerTestCase extends AbstractBackendTes
         $count = 0;
         foreach ($testIds as $id) {
             $route = $this->getRouteUrl($view, ['id' => $id]);
-            echo '$route: '.print_r($route, true)."\n";
             $client = static::createClient();
             $client->catchExceptions(false);
             $this->logIn($client);
