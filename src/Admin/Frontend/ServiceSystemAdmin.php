@@ -59,7 +59,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('status');
+        //$datagridMapper->add('status');
         $datagridMapper->add('stateMinistries',
             null, [
             ],
@@ -90,11 +90,12 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
             ->add('situation')
             ->add('situation.subject')
             ->add('priority')
+            /*
             ->add('status', 'choice', [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
-            ])
+            ])*/
             ->add('references', 'string', [
                 'label' => 'app.service_system.entity.references',
                 'template' => 'ServiceSystemAdmin/list-references.html.twig',
@@ -113,7 +114,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
         $fields = parent::getExportFields();
         $additionalFields = [
             'name', 'serviceKey', 'situation', 'situation.subject',
-            'priority', 'status',
+            'priority',
         ];
         foreach ($additionalFields as $field) {
             if (!in_array($field, $fields, false)) {
@@ -157,13 +158,13 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
             ])
             ->add('priority', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
-            ])
+            ])/*
             ->add('status', 'choice', [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
-            ])
+            ])*/
             ->add('description', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ]);

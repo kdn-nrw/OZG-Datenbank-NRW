@@ -1,7 +1,7 @@
 # https://sonata-project.org/bundles/admin/3-x/doc/reference/dashboard.html
 sonata_admin:
     title_logo: 'template/logo.svg'
-    title: KDN - OZG
+    title: KDN - DWH
     show_mosaic_button: false
     security:
         handler: sonata.admin.security.handler.role

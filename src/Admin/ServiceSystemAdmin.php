@@ -58,12 +58,12 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ->add('situation', ModelType::class, [
                 'btn_add' => false,
                 'choice_translation_domain' => false,
-            ])
+            ])/*
             ->add('status', ModelType::class, [
                 'btn_add' => false,
                 'required' => true,
                 'choice_translation_domain' => false,
-            ])
+            ])*/
             ->add('priority', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -263,7 +263,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('status');
+        //$datagridMapper->add('status');
         $this->addStateMinistriesDatagridFilters($datagridMapper);
         $this->addSolutionsDatagridFilters($datagridMapper);
         $datagridMapper->add('bureaus',
@@ -282,12 +282,12 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ->add('jurisdictions')
             ->add('situation')
             ->add('situation.subject')
-            ->add('priority')
+            ->add('priority')/*
             ->add('status', 'choice', [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
-            ])
+            ])*/
             ->add('references', 'string', [
                 'label' => 'app.service_system.entity.references',
                 'template' => 'ServiceSystemAdmin/list-references.html.twig',
@@ -330,13 +330,13 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ])
             ->add('priority', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
-            ])
+            ])/*
             ->add('status', 'choice', [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
-            ])
+            ])*/
             ->add('description', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ]);

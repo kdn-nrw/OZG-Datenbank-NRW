@@ -61,14 +61,14 @@ class Service extends AbstractService
      * SDG1-Relevanz
      * @var bool
      *
-     * @ORM\Column(name="relevance1", type="boolean")
+     * @ORM\Column(name="relevance1", type="boolean", nullable=true)
      */
     protected $relevance1 = false;
     /**
      * SDG2-Relevanz
      * @var bool
      *
-     * @ORM\Column(name="relevance2", type="boolean")
+     * @ORM\Column(name="relevance2", type="boolean", nullable=true)
      */
     protected $relevance2 = false;
 

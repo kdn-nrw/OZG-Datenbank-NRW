@@ -62,6 +62,9 @@ class FormServerSolutionAdmin extends AbstractAppAdmin
             ])
             ->add('usableAsPrintTemplate', BooleanType::class, [
                 'required' => false,
+                // the transform option enable compatibility with the boolean field (default 1=true, 2=false)
+                // with transform set to true 0=false, 1=true
+                'transform' => true,
             ])
             ->end();
     }

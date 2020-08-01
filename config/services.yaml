@@ -9,7 +9,7 @@ parameters:
   env(APP_MAILER_DEBUG): 'false'
   env(APP_MAILER_DEBUG_RECIPIENT): 'info@gerthammes.de'
   env(APP_MAILER_FROM_MAIL): 'info@gerthammes.de'
-  env(APP_MAILER_FROM_NAME): 'OZG Plattform'
+  env(APP_MAILER_FROM_NAME): 'DWH Plattform'
   env(APP_MAILER_ADMIN_MAIL): 'info@gerthammes.de'
 
 services:

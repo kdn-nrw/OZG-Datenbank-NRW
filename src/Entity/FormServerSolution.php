@@ -81,7 +81,7 @@ class FormServerSolution extends BaseEntity
      * Usable as print template
      * @var bool
      *
-     * @ORM\Column(name="usable_as_print_template", type="boolean")
+     * @ORM\Column(name="usable_as_print_template", type="boolean", nullable=true)
      */
     protected $usableAsPrintTemplate = false;
 

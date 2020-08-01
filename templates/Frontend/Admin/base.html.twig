@@ -14,6 +14,33 @@ file that was distributed with this source code.
     <!-- Entwicklung: Gert Hammes -->
 {% endblock %}
 
+{% block sonata_head_title %}
+    {{ 'app.frontend.page_title'|trans }}
+
+    {% if _title is not empty %}
+        {{ _title|striptags|raw }}
+    {% else %}
+        {% if action is defined %}
+            -
+            {% for menu in breadcrumbs_builder.breadcrumbs(admin, action) %}
+                {% if not loop.first %}
+                    {% if loop.index != 2 %}
+                        &gt;
+                    {% endif %}
+
+                    {%- set translation_domain = menu.extra('translation_domain', 'messages') -%}
+                    {%- set label = menu.label -%}
+                    {%- if translation_domain is not same as(false) -%}
+                        {%- set label = label|trans(menu.extra('translation_params', {}), translation_domain) -%}
+                    {%- endif -%}
+
+                    {{ label }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
 {% block body_attributes -%}
     class="sonata-bc skin-black app-fe fixed
     {% if app.request.cookies.get('sonata_sidebar_hide') -%}

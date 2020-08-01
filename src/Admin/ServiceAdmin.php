@@ -99,9 +99,15 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ])
             ->add('relevance1', BooleanType::class, [
                 'required' => false,
+                // the transform option enable compatibility with the boolean field (default 1=true, 2=false)
+                // with transform set to true 0=false, 1=true
+                'transform' => true,
             ])
             ->add('relevance2', BooleanType::class, [
                 'required' => false,
+                // the transform option enable compatibility with the boolean field (default 1=true, 2=false)
+                // with transform set to true 0=false, 1=true
+                'transform' => true,
             ]);
 
         $formMapper

@@ -63,6 +63,6 @@ class ModelRegionProjectImportCommand extends Command
         $io->title($this->getDescription());
         $directory = $input->getArgument('directory');
         $this->importer->setOutput($output);
-        $this->importer->run($directory);
+        //$this->importer->run($directory);
     }
 }

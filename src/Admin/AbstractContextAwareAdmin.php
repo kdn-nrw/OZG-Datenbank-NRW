@@ -247,4 +247,15 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     {
         return ['xlsx'];
     }
+
+    public function getFilterParameters()
+    {
+        $parameters = parent::getFilterParameters();
+
+        if (!empty($parameters['_sort_order'])) {
+            $parameters['_sort_order'] = $parameters['_sort_order'] === 'DESC' ? 'DESC' : 'ASC';
+        }
+
+        return $parameters;
+    }
 }

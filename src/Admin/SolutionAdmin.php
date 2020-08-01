@@ -339,7 +339,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                     'fieldName' => 'name'
                 ],
                 'sort_parent_association_mappings' => [
-                    ['fieldName' => 'serviceSystems'],
+                    ['fieldName' => 'serviceSolutions'],
+                    ['fieldName' => 'service'],
+                    ['fieldName' => 'serviceSystem'],
                 ]
             ])
             ->add('jurisdictions', 'string', [

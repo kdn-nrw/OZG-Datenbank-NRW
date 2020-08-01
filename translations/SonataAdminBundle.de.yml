@@ -10,4 +10,4 @@ app:
     entity:
       subject_placeholder: Kein Themenfeld ausgewählt
 export_format_xlsx: Excel (XLSX)
-Admin: 'OZG NRW kommunal – Onlinedienste zum Onlinezugangsgesetz'
+Admin: 'Data Warehouse KDN'
