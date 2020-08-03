@@ -15,7 +15,7 @@ use App\Admin\ApplicationCategoryAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 trait ApplicationCategoryTrait
@@ -23,14 +23,11 @@ trait ApplicationCategoryTrait
     protected function addApplicationCategoriesFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('categories', ModelType::class,
+            ->add('categories', ModelAutocompleteType::class,
                 [
-                    'btn_add' => false,
-                    'placeholder' => '',
+                    'property' => 'name',
                     'required' => false,
                     'multiple' => true,
-                    'by_reference' => false,
-                    'choice_translation_domain' => false,
                 ],
                 [
                     'admin_code' => ApplicationCategoryAdmin::class,

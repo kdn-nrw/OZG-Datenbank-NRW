@@ -29,6 +29,8 @@ use App\Entity\Base\NamedEntityTrait;
  */
 class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInterface, HasManufacturerEntityInterface
 {
+    const DEFAULT_PARENT_APPLICATION_CATEGORY_ID = 1;
+
     use NamedEntityTrait;
     use HideableEntityTrait;
 
