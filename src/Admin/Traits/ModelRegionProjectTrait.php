@@ -34,6 +34,8 @@ trait ModelRegionProjectTrait
             'multiple' => true,
             'by_reference' => false,
             'choice_translation_domain' => false,
+        ], [
+            'admin_code' => ModelRegionProjectAdmin::class,
         ]);
     }
 

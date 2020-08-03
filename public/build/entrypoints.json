@@ -2,11 +2,11 @@
   "entrypoints": {
     "admin": {
       "js": [
-        "/build/runtime.601f77c8.js",
-        "/build/admin.00952add.js"
+        "/build/runtime.8a1d4481.js",
+        "/build/admin.0a60eacd.js"
       ],
       "css": [
-        "/build/admin.6af07f70.css"
+        "/build/admin.e4e179fe.css"
       ]
     }
   }

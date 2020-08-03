@@ -34,7 +34,11 @@ use Symfony\Component\Form\Extension\Core\Type\SearchType;
  */
 abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface
 {
-    protected $customShowFields = ['serviceSystems', 'laboratories', 'services', 'publishedSolutions', 'solutions', 'serviceProviders',];
+    protected $customShowFields = [
+        'serviceSystems', 'laboratories', 'services', 'publishedSolutions',
+        'solutions', 'serviceProviders', 'implementationProjects',
+        'modelRegionProjects', 'publishedModelRegionProjects',
+    ];
 
     protected $appContext = ContextAwareAdminInterface::APP_CONTEXT_BE;
 

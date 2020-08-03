@@ -12,6 +12,7 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\BureauAdmin;
+use App\Admin\FundingAdmin;
 use App\Admin\OrganisationAdmin;
 use App\Admin\PortalAdmin;
 use App\Datagrid\CustomDatagrid;
@@ -51,6 +52,13 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         );
         $datagridMapper->add('status');
         $datagridMapper->add('projectStartAt');
+        $datagridMapper->add('fundings',
+            null, [
+                'admin_code' => FundingAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('services.bureaus',
             null,
             ['label' => 'app.implementation_project.entity.bureaus'],
@@ -158,6 +166,10 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
                 ],
             ])
             ->add('notes', 'html');
+        $showMapper
+            ->add('fundings', null,[
+                'admin_code' => FundingAdmin::class,
+            ]);
         $showMapper->add('bureaus', null, [
             'admin_code' => BureauAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-bureaus.html.twig',

@@ -3,6 +3,8 @@ app:
   service_group: NRW Basisdaten
   digital_model_reqion_group: Digitale Modellregionen
   implementation_group: Umsetzung Basisdaten
+  application_group: Anwendungen im KDN
+  efile_group: eAkten Kataster
   ozg_implementation_group: OZG Umsetzung
   basic_group: Basisdienste
   system_group: Systemkonfiguration

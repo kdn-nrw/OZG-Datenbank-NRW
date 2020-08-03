@@ -7,7 +7,7 @@ file that was distributed with this source code.
 {% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
 
 {% block field %}
-    {# @var object \App\Entity\ServiceProvider #}
+    {# @var object \App\Entity\HasManufacturerEntityInterface #}
     {% set entities = object.manufacturers %}
     {% if entities|length > 0 %}
         <ul class="sonata-ba-show-many-to-many">

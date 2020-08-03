@@ -436,5 +436,18 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $this->addSpecializedProceduresShowFields($showMapper);
         $this->addPortalsShowFields($showMapper);
         $this->addStateMinistriesShowFields($showMapper);
+        $showMapper
+            ->add('implementationProjects', null, [
+                'admin_code' => ImplementationProjectAdmin::class,
+                'route' => [
+                    'name' => 'edit',
+                ],
+            ])
+            ->add('modelRegionProjects', null, [
+                'admin_code' => ModelRegionProjectAdmin::class,
+                'route' => [
+                    'name' => 'edit',
+                ],
+            ]);
     }
 }

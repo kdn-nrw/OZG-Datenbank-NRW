@@ -29,8 +29,8 @@ class Portal extends BaseNamedEntity
     use UrlTrait;
 
     /**
-     * @var ServiceProvider
-     * @ORM\ManyToOne(targetEntity="ServiceProvider", inversedBy="solutions", cascade={"persist"})
+     * @var ServiceProvider|null
+     * @ORM\ManyToOne(targetEntity="ServiceProvider", cascade={"persist"})
      */
     private $serviceProvider;
 
@@ -61,9 +61,9 @@ class Portal extends BaseNamedEntity
     }
 
     /**
-     * @return ServiceProvider
+     * @return ServiceProvider|null
      */
-    public function getServiceProvider()
+    public function getServiceProvider(): ?ServiceProvider
     {
         return $this->serviceProvider;
     }

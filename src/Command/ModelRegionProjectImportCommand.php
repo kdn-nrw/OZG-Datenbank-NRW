@@ -47,7 +47,7 @@ class ModelRegionProjectImportCommand extends Command
      */
     protected function configure()
     {
-        $this->setDescription('Import solutions from a csv file in a given directory')
+        $this->setDescription('Import model region projects from a csv file in a given directory')
             ->addArgument(
                 'directory',
                 InputArgument::REQUIRED,

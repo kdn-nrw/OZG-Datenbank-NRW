@@ -351,6 +351,37 @@ class Service extends AbstractService
     }
 
     /**
+     * @return ModelRegionProject[]|Collection
+     */
+    public function getPublishedModelRegionProjects()
+    {
+        return $this->getModelRegionProjects(true);
+    }
+
+    /**
+     * @param bool $publishedOnly Only return projects for published solutions
+     *
+     * @return ModelRegionProject[]|Collection
+     */
+    public function getModelRegionProjects($publishedOnly = false)
+    {
+        $collection = new ArrayCollection();
+        $serviceSolutions = $this->getServiceSolutions();
+        foreach ($serviceSolutions as $serviceSolution) {
+            if ((null !== $solution = $serviceSolution->getSolution())
+                && (!$publishedOnly || $solution->isPublished())) {
+                $mapCollection = $solution->getModelRegionProjects();
+                foreach ($mapCollection as $modelRegionProject) {
+                    if (!$collection->contains($modelRegionProject)) {
+                        $collection->add($modelRegionProject);
+                    }
+                }
+            }
+        }
+        return $collection;
+    }
+
+    /**
      * @return string|null
      */
     public function getServiceType(): ?string

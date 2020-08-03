@@ -15,6 +15,7 @@ use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\ModelRegionTrait;
 use App\Admin\Traits\OrganisationTrait;
+use App\Admin\Traits\SolutionTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -29,6 +30,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin
     use DatePickerTrait;
     use ModelRegionTrait;
     use OrganisationTrait;
+    use SolutionTrait;
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -59,6 +61,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin
                 'required' => false,
             ]);
         $this->addModelRegionsFormFields($formMapper);
+        $this->addSolutionsFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
     }
@@ -77,6 +80,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin
             ->add('transferableService')
             ->add('transferableStart');
         $this->addModelRegionsDatagridFilters($datagridMapper);
+        $this->addSolutionsDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -104,5 +108,14 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin
             ->add('transferableStart');
         $this->addOrganisationsShowFields($showMapper);
         $this->addModelRegionsShowFields($showMapper);
+        $showMapper
+            ->add('solutions', null, [
+                'admin_code' => SolutionAdmin::class,
+                'template' => 'General/Show/show-solutions.html.twig',
+                'route' => [
+                    'name' => 'edit',
+                ],
+                'showServices' => true,
+            ]);
     }
 }

@@ -28,7 +28,7 @@ file that was distributed with this source code.
                 <thead>
                     <tr>
                         <th>{{ 'app.solution.entity.communes'|trans }}</th>
-                        <th>{{ 'app.solution.entity.service_provider'|trans }}</th>
+                        <th>{{ 'app.solution.entity.service_providers'|trans }}</th>
                         <th>{{ 'app.solution.entity.url'|trans }}</th>
                         <th>{{ 'app.solution.entity.service_systems'|trans }}</th>
                         <th>{{ 'app.solution.entity.maturity'|trans }}</th>
@@ -41,6 +41,7 @@ file that was distributed with this source code.
                 </thead>
                 <tbody>
                 {% for object in pager.getResults() %}
+                    {# @var object \App\Entity\Solution #}
                     <tr>
                         <td>
                             {% for commune in object.communes %}
@@ -51,8 +52,13 @@ file that was distributed with this source code.
                             {% endfor %}
                         </td>
                         <td>
-                            {% if object.serviceProvider %}
-                                {{ object.serviceProvider.name }}
+                            {% if object.serviceProviders|length > 0 %}
+                                {% for serviceProvider in object.serviceProviders %}
+                                    {% if loop.index > 1 %}
+                                        ,
+                                    {% endif %}
+                                    {{ serviceProvider.name }}
+                                {% endfor %}
                             {% endif %}
                         </td>
                         <td>

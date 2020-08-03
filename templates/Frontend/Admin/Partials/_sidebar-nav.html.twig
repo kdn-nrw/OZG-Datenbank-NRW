@@ -1,0 +1,109 @@
+
+<ul class="sidebar-menu" data-widget="tree">
+    {% set menuItems = {
+        'service_system': {
+            'routePrefix': 'frontend_app_servicesystem',
+            'label': 'app.service_system.list',
+            'icon': 'angle-double-right'
+        },
+        'service': {
+            'routePrefix': 'frontend_app_service',
+            'label': 'app.service.frontend.list',
+            'icon': 'angle-double-right'
+        },
+        'implementationproject': {
+            'routePrefix': 'frontend_app_implementationproject',
+            'label': 'app.implementation_project.list',
+            'icon': 'angle-double-right'
+        },
+        'solution': {
+            'routePrefix': 'frontend_app_solution',
+            'label': 'app.solution.list',
+            'icon': 'angle-double-right'
+        },
+    } %}
+    {% set hasActive = false %}
+    {% for menuItem in menuItems %}
+        {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
+        {% if miActive %}
+            {% set hasActive = true %}
+        {% endif %}
+    {% endfor %}
+    <li class="first treeview{{ hasActive ? ' active' : '' }}">
+        <a href="#">
+            <i class="fa fa-sitemap" aria-hidden="true"></i>
+            <span>{{ 'app.menu.ozg_overview'|trans }}</span>
+            <span class="pull-right-container"><i class="fa pull-right fa-angle-left"></i></span>
+        </a>
+        <ul class="active treeview-menu menu_level_1">
+            {% set hasActive = false %}
+            {% for menuItem in menuItems %}
+                {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
+                <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
+                    <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
+                        <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
+                        {{ menuItem.label|trans }}
+                    </a>
+                    {% if miActive %}
+                        {% set hasActive = true %}
+                        {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% set menuItems = {
+        'model_region': {
+            'routePrefix': 'frontend_app_modelregion',
+            'label': 'app.model_region.list',
+            'icon': 'angle-double-right'
+        },
+        'moderegionproject': {
+            'routePrefix': 'frontend_app_modelregionproject',
+            'label': 'app.model_region_project.list',
+            'icon': 'angle-double-right'
+        },
+    } %}
+    {% set hasActive = false %}
+    {% for menuItem in menuItems %}
+        {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
+        {% if miActive %}
+            {% set hasActive = true %}
+        {% endif %}
+    {% endfor %}
+    <li class="treeview{{ hasActive ? ' active' : '' }}">
+        <a href="#">
+            <i class="fa fa-sitemap" aria-hidden="true"></i>
+            <span>{{ 'app.model_region.list'|trans }}</span>
+            <span class="pull-right-container"><i class="fa pull-right fa-angle-left"></i></span>
+        </a>
+        <ul class="active treeview-menu menu_level_1">
+            {% set hasActive = false %}
+            {% for menuItem in menuItems %}
+                {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
+                <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
+                    <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
+                        <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
+                        {{ menuItem.label|trans }}
+                    </a>
+                    {% if miActive %}
+                        {% set hasActive = true %}
+                        {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>
+        <a href="https://www.kdn.de/meta-menue/impressum/" target="_blank">
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            Impressum
+        </a>
+    </li>
+    <li>
+        <a href="https://www.kdn.de/meta-menue/datenschutz/" target="_blank">
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            Datenschutz
+        </a>
+    </li>
+</ul>

@@ -167,6 +167,18 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
             ])*/
             ->add('description', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
+            ])
+            ->add('implementationProjects', null, [
+                'admin_code' => ImplementationProjectAdmin::class,
+                'route' => [
+                    'name' => 'show',
+                ],
+            ])
+            ->add('publishedModelRegionProjects', null, [
+                'admin_code' => ModelRegionProjectAdmin::class,
+                'route' => [
+                    'name' => 'show',
+                ],
             ]);
     }
 
@@ -197,5 +209,13 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
     protected function getRoutePrefix(): string
     {
         return 'frontend_app_servicesystem';
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExportExcludeFields(): array
+    {
+        return array_merge(parent::getExportExcludeFields(), ['contact']);
     }
 }

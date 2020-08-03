@@ -204,7 +204,19 @@ class ServiceAdmin extends AbstractFrontendAdmin
             ->add('authorityBureaus')
             ->add('authorityStateMinistries')
             ->add('laboratories')
-            ->add('stateMinistries');
+            ->add('stateMinistries')
+            ->add('implementationProjects', null, [
+                'admin_code' => ImplementationProjectAdmin::class,
+                'route' => [
+                    'name' => 'show',
+                ],
+            ])
+            ->add('publishedModelRegionProjects', null, [
+                'admin_code' => ModelRegionProjectAdmin::class,
+                'route' => [
+                    'name' => 'show',
+                ],
+            ]);
     }
 
     public function isGranted($name, $object = null)

@@ -103,10 +103,25 @@ class ModelRegionProject extends BaseNamedEntity
      */
     private $organisations;
 
+    /**
+     * @var Solution[]|Collection
+     * @ORM\ManyToMany(targetEntity="Solution", inversedBy="modelRegionProjects")
+     * @ORM\JoinTable(name="ozg_model_region_project_solutions",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="model_region_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $solutions;
+
     public function __construct()
     {
         $this->modelRegions = new ArrayCollection();
         $this->organisations = new ArrayCollection();
+        $this->solutions = new ArrayCollection();
     }
 
     /**
@@ -305,6 +320,50 @@ class ModelRegionProject extends BaseNamedEntity
     public function setTransferableStart(?string $transferableStart): void
     {
         $this->transferableStart = $transferableStart;
+    }
+
+    /**
+     * @param Solution $solution
+     * @return self
+     */
+    public function addSolution($solution): self
+    {
+        if (!$this->solutions->contains($solution)) {
+            $this->solutions->add($solution);
+            $solution->addModelRegionProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Solution $solution
+     * @return self
+     */
+    public function removeSolution($solution): self
+    {
+        if ($this->solutions->contains($solution)) {
+            $this->solutions->removeElement($solution);
+            $solution->removeModelRegionProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Solution[]|Collection
+     */
+    public function getSolutions()
+    {
+        return $this->solutions;
+    }
+
+    /**
+     * @param Solution[]|Collection $solutions
+     */
+    public function setSolutions($solutions): void
+    {
+        $this->solutions = $solutions;
     }
 
 }

@@ -16,7 +16,6 @@ use App\Admin\Traits\ServiceTrait;
 use App\Admin\Traits\SolutionTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\ServiceSystem;
-use App\Entity\Status;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -339,6 +338,26 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             ])*/
             ->add('description', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
+            ])
+            ->add('implementationProjects', null, [
+                'admin_code' => ImplementationProjectAdmin::class,
+                'route' => [
+                    'name' => 'edit',
+                ],
+            ])
+            ->add('modelRegionProjects', null, [
+                'admin_code' => ModelRegionProjectAdmin::class,
+                'route' => [
+                    'name' => 'edit',
+                ],
             ]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExportExcludeFields(): array
+    {
+        return array_merge(parent::getExportExcludeFields(), ['contact']);
     }
 }

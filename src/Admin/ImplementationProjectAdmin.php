@@ -22,7 +22,6 @@ use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
 use App\Entity\Service;
-use DateTime;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -78,6 +77,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addOrganisationsFormFields($formMapper, 'participationOrganisations');
         $this->addOrganisationsFormFields($formMapper, 'projectLeaders');
         $this->addFundingsFormFields($formMapper);
+        $this->addContactsFormFields($formMapper, false, false, 'fimExperts', false);
         $formMapper->end()
             ->end()
             ->tab('app.implementation_project.tabs.services')
@@ -169,7 +169,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $datagridMapper->add('status');
 
         $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
-        $this->addContactsDatagridFilters($datagridMapper);
+        $this->addContactsDatagridFilters($datagridMapper, 'contacts');
         $this->addOrganisationsDatagridFilters($datagridMapper, 'interestedOrganisations');
         $this->addOrganisationsDatagridFilters($datagridMapper, 'participationOrganisations');
         $this->addOrganisationsDatagridFilters($datagridMapper, 'projectLeaders');
@@ -186,6 +186,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $this->addContactsDatagridFilters($datagridMapper, 'fimExperts');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -221,7 +222,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
             ->add('notes', 'html');
         $this->addLaboratoriesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
-        $this->addContactsShowFields($showMapper);
+        $this->addContactsShowFields($showMapper, false, 'contacts');
         $this->addOrganisationsShowFields($showMapper, 'interestedOrganisations');
         $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
         $this->addOrganisationsShowFields($showMapper, 'projectLeaders');
@@ -237,5 +238,6 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
             'admin_code' => PortalAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
         ]);
+        $this->addContactsShowFields($showMapper, false, 'fimExperts');
     }
 }

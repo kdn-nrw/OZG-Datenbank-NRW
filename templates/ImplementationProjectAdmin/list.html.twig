@@ -12,4 +12,12 @@ file that was distributed with this source code.
     {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_IMPLEMENTATION_PROJECTS')} %}
     </section>
     {{ parent() }}
+    <section class="content content-bottom">
+        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+            'title': 'app.statistics.implementation_project_status',
+            'translation_domain': 'messages',
+            'mode': 'admin',
+            'provider':  'App\\Statistics\\Provider\\ImplementationProjectStatusChartProvider'
+        }) }}
+    </section>
 {% endblock sonata_page_content %}

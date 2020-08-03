@@ -668,4 +668,32 @@ class ServiceSystem extends AbstractService
     {
         return $this->authorityBureaus;
     }
+
+    /**
+     * @return ModelRegionProject[]|Collection
+     */
+    public function getPublishedModelRegionProjects()
+    {
+        return $this->getModelRegionProjects(true);
+    }
+
+    /**
+     * @param bool $publishedOnly Only return projects for published solutions
+     *
+     * @return ModelRegionProject[]|Collection
+     */
+    public function getModelRegionProjects($publishedOnly = false)
+    {
+        $collection = new ArrayCollection();
+        $services = $this->getServices();
+        foreach ($services as $service) {
+            $mapCollection = $service->getModelRegionProjects($publishedOnly);
+            foreach ($mapCollection as $modelRegionProject) {
+                if (!$collection->contains($modelRegionProject)) {
+                    $collection->add($modelRegionProject);
+                }
+            }
+        }
+        return $collection;
+    }
 }

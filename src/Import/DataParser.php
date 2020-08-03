@@ -68,7 +68,7 @@ class DataParser
 
         $formattedValue = false;
         $chkVal = strtolower($value);
-        if ($chkVal === 'ja' || $chkVal === 'yes' || $chkVal === '1') {
+        if ($chkVal === 'ja' || $chkVal === 'yes' || $chkVal === '1' || $chkVal === 'true') {
             $formattedValue = true;
         }
         return $formattedValue;
@@ -159,6 +159,24 @@ class DataParser
         }
         return $value;
     }
+
+    /**
+     * Parse values as decimal numbers
+     *
+     * @param string $string A string containing a number
+     *
+     * @return string|null A valid decimal number
+     */
+    public function formatDecimal($string): ?string
+    {
+        if ($string === '') {
+            return null;
+        }
+        $number = $this->formatFloat($string);
+        return str_replace('.', ',', $number);
+    }
+
+
 
     /**
      * Parses the given string value to extract an integer.

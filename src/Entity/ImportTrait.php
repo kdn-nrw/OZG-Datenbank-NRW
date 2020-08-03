@@ -22,14 +22,14 @@ trait ImportTrait
      *
      * @ORM\Column(name="import_id", type="integer", nullable=true)
      */
-    private $importId;
+    protected $importId;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="import_source", type="string", length=100, nullable=true)
      */
-    private $importSource;
+    protected $importSource;
 
     /**
      * @return int|null

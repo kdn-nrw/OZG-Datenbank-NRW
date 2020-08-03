@@ -25,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Entity\Repository\CommuneRepository")
  * @ORM\Table(name="ozg_commune")
  */
-class Commune extends AppBaseEntity implements OrganisationEntityInterface
+class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface
 {
     use AddressTrait;
     use UrlTrait;
@@ -416,9 +416,9 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface
 
     /**
      * Returns the unique manufacturer list with the manufacturer determined through the specialized procedures
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getManufacturers(): ArrayCollection
+    public function getManufacturers(): Collection
     {
         $manufacturers = new ArrayCollection();
         $specializedProcedures = $this->getSpecializedProcedures();

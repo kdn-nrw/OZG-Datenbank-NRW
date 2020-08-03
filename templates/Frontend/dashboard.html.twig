@@ -13,6 +13,7 @@ file that was distributed with this source code.
         <div class="col-xs-12">
             {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_HOME')} %}
         </div>
+        {#
         <div class="col-xs-12">
             {{ sonata_block_render({ 'type': 'App\\Block\\RecentSolutionsBlock' }, {
                 'code':  'App\\Admin\\Frontend\\SolutionAdmin',
@@ -22,6 +23,7 @@ file that was distributed with this source code.
                 'title':  'app.solution.recent_solutions'
             }) }}
         </div>
+        #}
         <div class="col-xs-12 col-sm-6 col-lg-4">
             {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
                 'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
@@ -49,6 +51,7 @@ file that was distributed with this source code.
                 'color': 'bg-green'
             }) }}
         </div>
+        {#
         <div class="col-xs-12 col-lg-6">
             {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
                 'title': 'app.statistics.solution_maturity',
@@ -65,6 +68,7 @@ file that was distributed with this source code.
                 'provider':  'App\\Statistics\\Provider\\ImplementationProjectStatusChartProvider'
             }) }}
         </div>
+        #}
         {#
         <div class="col-xs-12 col-lg-6">
             {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {

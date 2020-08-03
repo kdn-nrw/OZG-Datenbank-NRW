@@ -1,0 +1,99 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if entities|length > 0 %}
+    {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+    {% set refAdmin = null %}
+    {% if not field_description.hasassociationadmin %}
+        {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
+        {% if isAdminMode %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ImplementationProjectAdmin') %}
+        {% else %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\ImplementationProjectAdmin') %}
+        {% endif %}
+    {% else %}
+        {% set refAdmin = field_description.associationadmin %}
+    {% endif %}
+    {% set editRouteName = field_description.options.route.name %}
+    {% set createEditLink = editRouteName and refAdmin is not null and refAdmin.hasRoute(editRouteName) and refAdmin.hasAccess(editRouteName) %}
+    {% set showRouteName = 'show' %}
+    {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title">
+                {{ 'app.implementation_project.list'|trans }}
+            </h4>
+        </div>
+        <div class="box-body table-responsive no-padding">
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    <th>
+                        {{ 'app.implementation_project.entity.name'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.implementation_project.entity.status'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.implementation_project.entity.project_start_at'|trans }}
+                    </th>
+                    <th>
+                        {{ 'app.implementation_project.entity.project_leaders'|trans }}
+                    </th>
+                    {% if createEditLink %}
+                        <th></th>
+                    {% endif %}
+                </tr>
+                {% for child in entities %}
+                    {# @var child \App\Entity\ImplementationProject #}
+                    <tr>
+                        <td>
+                            {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
+                                <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
+                                    {{ child.name }}
+                                </a>
+                            {% else %}
+                                {{ child.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.status %}
+                                {{ child.status.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.projectStartAt %}
+                                {{ child.projectStartAt|format_datetime('dd.MM.yyyy') }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if child.projectLeaders|length > 0 %}
+                                {% for organisation in child.projectLeaders %}
+                                    {# @var organisation \App\Entity\Organisation #}
+                                    {{ organisation.name }}
+                                    {% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        {% if createEditLink %}
+                            <td>
+                                {% if refAdmin.hasAccess(editRouteName, child) %}
+                                    {% if field_description.options.route.parameters %}
+                                        {% set editParameters = field_description.options.route.parameters %}
+                                    {% else %}
+                                        {% set editParameters = {'id': child.id} %}
+                                    {% endif %}
+                                    <a href="{{ refAdmin.generateObjectUrl(editRouteName, child, editParameters) }}">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endif %}

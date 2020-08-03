@@ -12,8 +12,6 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
-use App\Entity\Base\SoftdeletableEntityInterface;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_provider")
  */
-class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInterface
+class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface
 {
     use AddressTrait;
     use UrlTrait;
@@ -55,9 +53,9 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     private $contact;
 
     /**
-     * @var Collection|Solution[]
-     *
-     * @ORM\OneToMany(targetEntity="Solution", mappedBy="serviceProvider", cascade={"all"})
+     * @var Solution[]|Collection
+     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="serviceProviders")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $solutions;
 
@@ -138,7 +136,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
-            $solution->setServiceProvider($this);
+            $solution->addServiceProvider($this);
         }
     }
 
@@ -149,9 +147,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
-            if ($solution instanceof SoftdeletableEntityInterface) {
-                $solution->setDeletedAt(new DateTime());
-            }
+            $solution->removeServiceProvider($this);
         }
     }
 
@@ -305,9 +301,9 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
 
     /**
      * Returns the unique manufacturer list with the manufacturer determined through the specialized procedures
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getManufacturers(): ArrayCollection
+    public function getManufacturers(): Collection
     {
         $manufacturers = new ArrayCollection();
         $specializedProcedures = $this->getSpecializedProcedures();

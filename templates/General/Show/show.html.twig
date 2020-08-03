@@ -66,6 +66,12 @@ file that was distributed with this source code.
                                     {% include 'General/Show/show-service-providers.html.twig' with {'entities': object.serviceProviders, 'field_description': elements[field_name]} %}
                                 {% elseif field_name == 'communes' %}
                                     {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'implementationProjects' %}
+                                    {% include 'General/Show/show-implementation-projects.html.twig' with {'entities': object.implementationProjects, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'modelRegionProjects' %}
+                                    {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.modelRegionProjects, 'field_description': elements[field_name]} %}
+                                {% elseif field_name == 'publishedModelRegionProjects' %}
+                                    {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.publishedModelRegionProjects, 'field_description': elements[field_name]} %}
                                 {% endif %}
                             </div>
                         {% endif %}

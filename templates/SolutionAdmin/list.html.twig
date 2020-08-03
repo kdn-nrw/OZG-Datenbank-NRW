@@ -11,4 +11,13 @@ file that was distributed with this source code.
         {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_SOLUTIONS')} %}
     </section>
     {{ parent() }}
+    <section class="content content-bottom">
+        {{ sonata_block_render({ 'type': 'App\\Block\\RecentSolutionsBlock' }, {
+            'code':  'App\\Admin\\Frontend\\SolutionAdmin',
+            'translation_domain':  'messages',
+            'mode':  'public',
+            'mode':  'public',
+            'title':  'app.solution.recent_solutions'
+        }) }}
+    </section>
 {% endblock sonata_page_content %}

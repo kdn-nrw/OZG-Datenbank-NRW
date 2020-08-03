@@ -11,6 +11,8 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\Traits\ModelRegionProjectTrait;
+use App\Admin\Traits\ServiceProviderTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Solution;
 use App\Entity\Status;
@@ -23,6 +25,8 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class SolutionAdmin extends AbstractFrontendAdmin
 {
+    use ModelRegionProjectTrait;
+    use ServiceProviderTrait;
 
     /**
      * @var string[]
@@ -34,12 +38,7 @@ class SolutionAdmin extends AbstractFrontendAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $this->addFullTextDatagridFilter($datagridMapper);
-        $datagridMapper->add('serviceProvider',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addServiceProvidersDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSolutions.service.serviceSystem',
             null,
             [
@@ -121,6 +120,7 @@ class SolutionAdmin extends AbstractFrontendAdmin
         );
         $datagridMapper->add('name');
         $datagridMapper->add('description');
+        $this->addModelRegionProjectsDatagridFilters($datagridMapper);
     }
 
     /**
@@ -162,14 +162,14 @@ class SolutionAdmin extends AbstractFrontendAdmin
                     ['fieldName' => 'portals'],
                 ]
             ])*/
-            ->add('serviceProvider', null, [
-                'template' => 'General/Association/list_many_to_one_nolinks.html.twig',
+            ->add('serviceProviders', null, [
+                'template' => 'SolutionAdmin/list-service-providers.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
                 ],
                 'sort_parent_association_mappings' => [
-                    ['fieldName' => 'serviceProvider'],
+                    ['fieldName' => 'serviceProviders'],
                 ]
             ])
             ->add('serviceSystems', null, [
@@ -216,8 +216,8 @@ class SolutionAdmin extends AbstractFrontendAdmin
     {
         $fields = parent::getExportFields();
         $additionalFields = [
-            // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions',
-            'serviceProvider', 'customProvider', 'name', 'maturity', 'url', 'status',
+            // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions', 'serviceProviders',
+            'customProvider', 'name', 'maturity', 'url', 'status',
         ];
         foreach ($additionalFields as $field) {
             if (!in_array($field, $fields, false)) {
@@ -236,8 +236,9 @@ class SolutionAdmin extends AbstractFrontendAdmin
             ->add('communes', 'choice', [
                 'associated_property' => 'name',
                 'template' => 'SolutionAdmin/show-communes.html.twig',
-            ])
-            ->add('serviceProvider')
+            ]);
+        $this->addServiceProvidersShowFields($showMapper);
+        $showMapper
             ->add('customProvider')
             ->add('portals')
             ->add('specializedProcedures')
@@ -264,6 +265,7 @@ class SolutionAdmin extends AbstractFrontendAdmin
         $this->customShowFields[] = 'serviceSystems';
         $this->customShowFields[] = 'serviceSolutions';
         $this->customShowFields[] = 'formServerSolutions';
+        $this->addModelRegionProjectsShowFields($showMapper);
     }
 
     public function isGranted($name, $object = null)

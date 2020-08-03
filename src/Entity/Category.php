@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_category")
  */
-class Category extends BaseNamedEntity implements ImportEntityInterface
+class Category extends BaseNamedEntity implements CategoryEntityInterface, ImportEntityInterface
 {
     use ImportTrait;
 
@@ -34,7 +34,7 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description = '';
+    protected $description = '';
 
     /**
      * @var int|null
@@ -50,7 +50,7 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
      */
-    private $children;
+    protected $children;
 
     /**
      * Many Categories have One Category.
@@ -60,13 +60,13 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var Contact[]|Collection
      * @ORM\ManyToMany(targetEntity="Contact", mappedBy="categories")
      */
-    private $contacts;
+    protected $contacts;
 
     public function __construct()
     {
@@ -188,6 +188,14 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
     }
 
     /**
+     * @param Contact[]|Collection $contacts
+     */
+    public function setContacts($contacts): void
+    {
+        $this->contacts = $contacts;
+    }
+
+    /**
      * @return int|null
      */
     public function getPosition(): ?int
@@ -201,14 +209,6 @@ class Category extends BaseNamedEntity implements ImportEntityInterface
     public function setPosition(?int $position): void
     {
         $this->position = $position;
-    }
-
-    /**
-     * @param Contact[]|Collection $contacts
-     */
-    public function setContacts($contacts): void
-    {
-        $this->contacts = $contacts;
     }
 
     public function __toString(): string

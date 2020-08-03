@@ -140,8 +140,26 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $showMapper->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,
-            'template' => 'CommuneAdmin/show-specialized-procedures-manufacturers.html.twig',
+            'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function getExportFields()
+    {
+        $exportFields = parent::getExportFields();
+        $exportFields[] = 'manufacturers';
+        return $exportFields;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExportExcludeFields(): array
+    {
+        return ['hidden', 'specializedProcedures.manufacturers'];
     }
 
     public function toString($object)

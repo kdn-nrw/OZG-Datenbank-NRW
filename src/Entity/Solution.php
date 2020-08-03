@@ -43,10 +43,18 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     protected $name;
 
     /**
-     * @var ServiceProvider|null
-     * @ORM\ManyToOne(targetEntity="ServiceProvider", inversedBy="solutions", cascade={"persist"})
+     * @var ServiceProvider[]|Collection
+     * @ORM\ManyToMany(targetEntity="ServiceProvider", inversedBy="solutions")
+     * @ORM\JoinTable(name="ozg_solution_service_provider",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id")
+     *   }
+     * )
      */
-    private $serviceProvider;
+    private $serviceProviders;
 
     /**
      * @var string|null
@@ -203,6 +211,13 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
      * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="solutions")
      */
     private $implementationProjects;
+
+    /**
+     * @var ModelRegionProject[]|Collection
+     * @ORM\ManyToMany(targetEntity="ModelRegionProject", mappedBy="solutions")
+     */
+    private $modelRegionProjects;
+
     /**
      * Solution is published
      *
@@ -228,17 +243,19 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
 
     public function __construct()
     {
-        $this->serviceSolutions = new ArrayCollection();
-        $this->specializedProcedures = new ArrayCollection();
-        $this->portals = new ArrayCollection();
-        $this->communes = new ArrayCollection();
         $this->analogServices = new ArrayCollection();
         $this->authentications = new ArrayCollection();
+        $this->communes = new ArrayCollection();
         $this->formServerSolutions = new ArrayCollection();
+        $this->implementationProjects = new ArrayCollection();
+        $this->modelRegionProjects = new ArrayCollection();
         $this->openDataItems = new ArrayCollection();
         $this->paymentTypes = new ArrayCollection();
-        $this->implementationProjects = new ArrayCollection();
+        $this->portals = new ArrayCollection();
+        $this->serviceProviders = new ArrayCollection();
+        $this->serviceSolutions = new ArrayCollection();
         $this->solutionContacts = new ArrayCollection();
+        $this->specializedProcedures = new ArrayCollection();
     }
 
     /**
@@ -298,19 +315,47 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     }
 
     /**
-     * @return ServiceProvider|null
+     * @param ServiceProvider $serviceProvider
+     * @return self
      */
-    public function getServiceProvider(): ?ServiceProvider
+    public function addServiceProvider($serviceProvider): self
     {
-        return $this->serviceProvider;
+        if (!$this->serviceProviders->contains($serviceProvider)) {
+            $this->serviceProviders->add($serviceProvider);
+            $serviceProvider->addSolution($this);
+        }
+
+        return $this;
     }
 
     /**
      * @param ServiceProvider $serviceProvider
+     * @return self
      */
-    public function setServiceProvider($serviceProvider): void
+    public function removeServiceProvider($serviceProvider): self
     {
-        $this->serviceProvider = $serviceProvider;
+        if ($this->serviceProviders->contains($serviceProvider)) {
+            $this->serviceProviders->removeElement($serviceProvider);
+            $serviceProvider->removeSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ServiceProvider[]|Collection
+     */
+    public function getServiceProviders()
+    {
+        return $this->serviceProviders;
+    }
+
+    /**
+     * @param ServiceProvider[]|Collection $serviceProviders
+     */
+    public function setServiceProviders($serviceProviders): void
+    {
+        $this->serviceProviders = $serviceProviders;
     }
 
     /**
@@ -860,6 +905,50 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     public function setImplementationProjects($implementationProjects): void
     {
         $this->implementationProjects = $implementationProjects;
+    }
+
+    /**
+     * @param ModelRegionProject $modelRegionProject
+     * @return self
+     */
+    public function addModelRegionProject($modelRegionProject): self
+    {
+        if (!$this->modelRegionProjects->contains($modelRegionProject)) {
+            $this->modelRegionProjects->add($modelRegionProject);
+            $modelRegionProject->addSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ModelRegionProject $modelRegionProject
+     * @return self
+     */
+    public function removeModelRegionProject($modelRegionProject): self
+    {
+        if ($this->modelRegionProjects->contains($modelRegionProject)) {
+            $this->modelRegionProjects->removeElement($modelRegionProject);
+            $modelRegionProject->removeSolution($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ModelRegionProject[]|Collection
+     */
+    public function getModelRegionProjects()
+    {
+        return $this->modelRegionProjects;
+    }
+
+    /**
+     * @param ModelRegionProject[]|Collection $modelRegionProjects
+     */
+    public function setModelRegionProjects($modelRegionProjects): void
+    {
+        $this->modelRegionProjects = $modelRegionProjects;
     }
 
     /**

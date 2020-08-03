@@ -5,3 +5,7 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block notice %}
+    {% include '@SonataTwig/FlashMessage/render.html.twig' %}
+{% endblock notice %}

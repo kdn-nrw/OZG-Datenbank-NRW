@@ -188,17 +188,32 @@ class ImplementationProject extends BaseNamedEntity
      */
     private $fundings;
 
+    /**
+     * @var Contact[]|Collection
+     * @ORM\ManyToMany(targetEntity="Contact")
+     * @ORM\JoinTable(name="ozg_implementation_project_fim_export",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $fimExperts;
+
     public function __construct()
     {
-        $this->solutions = new ArrayCollection();
-        $this->laboratories = new ArrayCollection();
-        $this->services = new ArrayCollection();
-        $this->serviceSystems = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->fimExperts = new ArrayCollection();
+        $this->fundings = new ArrayCollection();
         $this->interestedOrganisations = new ArrayCollection();
+        $this->laboratories = new ArrayCollection();
         $this->participationOrganisations = new ArrayCollection();
         $this->projectLeaders = new ArrayCollection();
-        $this->fundings = new ArrayCollection();
+        $this->services = new ArrayCollection();
+        $this->serviceSystems = new ArrayCollection();
+        $this->solutions = new ArrayCollection();
     }
 
     /**
@@ -751,5 +766,47 @@ class ImplementationProject extends BaseNamedEntity
             }
         }
         return $distinctEntities;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function addFimExpert($fimExpert): self
+    {
+        if (!$this->fimExperts->contains($fimExpert)) {
+            $this->fimExperts->add($fimExpert);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $fimExpert
+     * @return self
+     */
+    public function removeFimExpert($fimExpert): self
+    {
+        if ($this->fimExperts->contains($fimExpert)) {
+            $this->fimExperts->removeElement($fimExpert);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getFimExperts()
+    {
+        return $this->fimExperts;
+    }
+
+    /**
+     * @param Contact[]|Collection $fimExperts
+     */
+    public function setFimExperts($fimExperts): void
+    {
+        $this->fimExperts = $fimExperts;
     }
 }

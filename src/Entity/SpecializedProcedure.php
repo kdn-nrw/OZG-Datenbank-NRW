@@ -27,7 +27,7 @@ use App\Entity\Base\NamedEntityTrait;
  * @ORM\Table(name="ozg_specialized_procedure")
  * @ORM\HasLifecycleCallbacks
  */
-class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInterface
+class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInterface, HasManufacturerEntityInterface
 {
     use NamedEntityTrait;
     use HideableEntityTrait;
@@ -142,7 +142,7 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
     /**
      * @return Manufacturer[]|Collection
      */
-    public function getManufacturers()
+    public function getManufacturers(): Collection
     {
         return $this->manufacturers;
     }

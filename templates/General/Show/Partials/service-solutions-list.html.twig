@@ -1,0 +1,80 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if entities|length > 0 %}
+    {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
+    {% set refAdmin = null %}
+    {% if showSolution %}
+        {% if isAdminMode %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
+        {% elseif admin_pool is defined %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\SolutionAdmin') %}
+        {% endif %}
+    {% else  %}
+        {% if isAdminMode %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceAdmin') %}
+        {% elseif admin_pool is defined %}
+            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\ServiceAdmin') %}
+        {% endif %}
+    {% endif %}
+    {# @var refAdmin \App\Admin\AbstractAppAdmin #}
+    {% set route_name = 'edit' %}
+    {% set createEditLink = refAdmin is not null and refAdmin.hasRoute(route_name) and refAdmin.hasAccess(route_name) %}
+    {% set showRouteName = 'show' %}
+    {% set listEnableShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+    {% set showContacts = isAdminMode %}
+    <table class="table table-bordered table-condensed">
+        <tr>
+            {% if showSolution %}
+                {% include 'General/Show/Table/tabe-head-solutions.html.twig' %}
+            {% else %}
+                {% include 'General/Show/Table/tabe-head-services.html.twig' %}
+            {% endif %}
+            <th>
+                {{ 'app.solution.entity.maturity'|trans }}
+            </th>
+            {% if createEditLink %}
+                <th>
+                </th>
+            {% endif %}
+        </tr>
+        {% for child in entities %}
+            {# @var child \App\Entity\ServiceSolution #}
+            <tr>
+                {% if showSolution %}
+                    {% set createShowLink = listEnableShowLink and (isAdminMode or child.solution.isPublished) %}
+                    {% set editObjectId = child.solution.id %}
+                    {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
+                {% else %}
+                    {% set createShowLink = listEnableShowLink %}
+                    {% if child.service %}
+                        {% set editObjectId = child.service.id %}
+                        {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}
+                    {% else %}
+                        <td colspan="7" class="service-is-missing">
+                            <span class="text-warning">{{ 'app.solution.messages.no_service_selected'|trans }}</span>
+                        </td>
+                        {% set editObjectId = null %}
+                    {% endif %}
+                {% endif %}
+                <td>
+                    {% if child.maturity %}
+                        {{ child.maturity.name }}
+                    {% endif %}
+                </td>
+                {% if createEditLink and editObjectId %}
+                    <td>
+                        {% if refAdmin.hasAccess(route_name, child) %}
+                            <a href="{{ refAdmin.generateUrl(route_name, { 'id': editObjectId }) }}">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

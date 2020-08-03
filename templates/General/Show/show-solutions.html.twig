@@ -22,6 +22,7 @@ file that was distributed with this source code.
     {% set showRouteName = 'show' %}
     {% set listEnableShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
     {% set showContacts = isAdminMode %}
+    {% set showServices = field_description.options.showServices is defined and field_description.options.showServices %}
 <div class="box box-primary">
     <div class="box-header">
         <h4 class="box-title">
@@ -56,6 +57,17 @@ file that was distributed with this source code.
                         </td>
                     {% endif %}
                 </tr>
+                {% if showServices %}
+                    {% if child.serviceSolutions|length > 0 %}
+                        <tr>
+                            <td colspan="{{ showContacts ? 5 : 4 }}" class="child-table-container">
+                                <h4 class="headline"><i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                    {{ 'app.service.list'|trans }}</h4>
+                                {% include 'General/Show/Partials/service-solutions-list.html.twig' with {'entities': child.serviceSolutions, 'showSolution': false} %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         </table>
     </div>

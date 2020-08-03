@@ -12,6 +12,10 @@
 namespace App\Import;
 
 use App\Entity\Base\BaseEntity;
+use App\Entity\Base\BaseEntityInterface;
+use App\Entity\Organisation;
+use App\Entity\OrganisationEntityInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -147,11 +151,7 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
             if (empty($header)) {
                 $headers[] = 'offset_' . $offset;
             } else {
-                $headers[] = strtolower(
-                    str_replace(['/', ' ', '-', '(', ')', '.', '___', '__'],
-                        '_',
-                        $parser->cleanStringValue($parser->formatString($header)))
-                );
+                $headers[] = $this->getCleanFieldName($parser, $header);
             }
         }
         $rowNr = 1;
@@ -167,13 +167,22 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
         return $rows;
     }
 
+    private function getCleanFieldName(DataParser $parser, $name)
+    {
+        return strtolower(
+            str_replace(['/', ' ', '-', '(', ')', '.', '___', '__'],
+                '_',
+                $parser->cleanStringValue($parser->formatString(trim($name))))
+        );
+    }
+
     /**
      * Fill in data for DB queries and updates/inserts.
      * PDO::prepare will escape parameters automatically later.
      *
      * @param array $row
-     *
      * @param int $rowNr
+     *
      * @return array|null Parsed row data
      */
     protected function fillInRowData(array $row, int $rowNr): ?array
@@ -181,23 +190,32 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
         $entityPropertyData = [];
         $parser = new DataParser();
         $fieldMap = $this->getFieldMap();
-        foreach ($fieldMap as $srcField => $fieldData) {
+        $tmpFields = array_keys($fieldMap);
+        $mapImportFieldNames = [];
+        foreach ($tmpFields as $sourceField) {
+            $mapImportFieldNames[$sourceField] = $this->getCleanFieldName($parser, $sourceField);
+        }
+        foreach ($mapImportFieldNames as $sourceField => $importFieldName) {
+            $fieldData = $fieldMap[$sourceField];
             $val = null;
-            if (!empty($fieldData['required']) && (!isset($row[$srcField]) || (string)$row[$srcField] === '')) {
+            if (!empty($fieldData['required']) && (!isset($row[$importFieldName]) || (string)$row[$importFieldName] === '')) {
                 if (array_key_exists('auto_increment', $fieldData)) {
-                    $row[$srcField] = $rowNr;
+                    $row[$importFieldName] = $rowNr;
                 } else {
                     return null;
                 }
             }
             $trgField = $fieldData['field'];
-            if (isset($row[$srcField])) {
+            if (array_key_exists($importFieldName, $row)) {
                 if (array_key_exists('fixedValue', $fieldData)) {
                     $val = $fieldData['fixedValue'];
                 } elseif ($fieldData['type'] === 'callback') {
-                    $val = $parser->formatCallback($row[$srcField], $fieldData['callback']);
+                    $val = $parser->formatCallback($row[$importFieldName], $fieldData['callback']);
+                } elseif (!empty($fieldData['targetEntity'])) {
+                    $mapToProperty = $fieldData['mapToProperty'] ?? 'name';
+                    $val = $this->findOrCreateTargetEntity($row[$importFieldName], $fieldData['targetEntity'], $mapToProperty, $fieldData['type']);
                 } else {
-                    $val = $row[$srcField];
+                    $val = $row[$importFieldName];
                     if (is_array($val)) {
                         $val = current($val);
                     }
@@ -211,6 +229,67 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
             $entityPropertyData[$fieldData['entity']][$trgField] = $val;
         }
         return $entityPropertyData;
+    }
+
+    /**
+     * Finds or creates the entity of the given entity class that matches the given value
+     *
+     * @param mixed $value
+     * @param string $entityClass
+     * @param string $mapValueToProperty
+     * @param string $dataType
+     * @return ArrayCollection|BaseEntityInterface|null
+     */
+    protected function findOrCreateTargetEntity(
+        $value,
+        string $entityClass,
+        $mapValueToProperty = 'name',
+        $dataType = 'string'
+    )
+    {
+        $compareValue = trim(strip_tags($value));
+        if (empty($compareValue)) {
+            return null;
+        }
+        $em = $this->getManagerRegistry()->getManager();
+        /** @var EntityRepository $repository */
+        $repository = $em->getRepository($entityClass);
+        if ($dataType === 'csv') {
+            $mapValues = explode(',', $compareValue);
+            $collection = new ArrayCollection();
+            foreach ($mapValues as $listValue) {
+                $listEntity = $this->findOrCreateTargetEntity($listValue, $entityClass, $mapValueToProperty, 'string');
+                if (null !== $listEntity) {
+                    $collection->add($listEntity);
+                }
+            }
+            return $collection;
+        }
+        $hasChanges = false;
+        $entity = $repository->findOneBy([$mapValueToProperty => $compareValue]);
+        if (null === $entity) {
+            $entity = new $entityClass();
+            $setter = 'set' . ucfirst($mapValueToProperty);
+            $entity->$setter($compareValue);
+            $em->persist($entity);
+            $hasChanges = true;
+        }
+        if ($entity instanceof OrganisationEntityInterface) {
+            $organisation = $entity->getOrganisation();
+            if (null === $organisation) {
+                $organisation = new Organisation();
+                $entity->setOrganisation($organisation);
+                $organisation->setName($compareValue);
+                $hasChanges = true;
+            } elseif (empty($organisation->getName())) {
+                $organisation->setName($compareValue);
+                $hasChanges = true;
+            }
+        }
+        if ($hasChanges) {
+            $em->flush();
+        }
+        return $entity;
     }
 
     /**

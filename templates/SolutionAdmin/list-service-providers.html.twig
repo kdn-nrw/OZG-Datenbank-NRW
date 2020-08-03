@@ -1,0 +1,19 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+<div>
+    {# @var object \App\Entity\Solution #}
+    {% for serviceProvider in object.serviceProviders %}
+        {% if loop.index > 1 %}
+            ,
+        {% endif %}
+        {{ serviceProvider.name }}
+    {% endfor %}
+</div>
+{% endblock %}

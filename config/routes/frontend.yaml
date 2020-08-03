@@ -45,3 +45,27 @@ frontend_app_solution_show:
 frontend_app_solution_export:
   path: /loesungen/export
   controller: App\Controller\SolutionController::exportAction
+
+frontend_app_modelregionproject_list:
+  path: /dmr-umsetzungsprojekte
+  controller: App\Controller\ModelRegionProjectController::listAction
+
+frontend_app_modelregionproject_show:
+  path: /dmr-umsetzungsprojekte/{id}/show
+  controller: App\Controller\ModelRegionProjectController::showAction
+
+frontend_app_modelregionproject_export:
+  path: /dmr-umsetzungsprojekte/export
+  controller: App\Controller\ModelRegionProjectController::exportAction
+
+frontend_app_modelregion_list:
+  path: /modellregionen
+  controller: App\Controller\ModelRegionController::listAction
+
+frontend_app_modelregion_show:
+  path: /modellregionen/{id}/show
+  controller: App\Controller\ModelRegionController::showAction
+
+frontend_app_modelregion_export:
+  path: /modellregionen/export
+  controller: App\Controller\ModelRegionController::exportAction

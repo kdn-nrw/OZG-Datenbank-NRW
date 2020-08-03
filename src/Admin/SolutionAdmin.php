@@ -13,7 +13,9 @@ namespace App\Admin;
 
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ContactTrait;
+use App\Admin\Traits\ModelRegionProjectTrait;
 use App\Admin\Traits\PortalTrait;
+use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Status;
@@ -36,7 +38,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 {
     use CommuneTrait;
     use ContactTrait;
+    use ModelRegionProjectTrait;
     use PortalTrait;
+    use ServiceProviderTrait;
     use ServiceSystemTrait;
     use SpecializedProcedureTrait;
 
@@ -93,13 +97,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->with('app.solution.tabs.general', ['tab' => true])
                 ->with('general', [
                     'label' => false,
-                ])
-                    ->add('serviceProvider', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'choice_translation_domain' => false,
-                    ])
+                ]);
+        $this->addServiceProvidersFormFields($formMapper);
+        $formMapper
                     ->add('customProvider', TextType::class, [
                         'required' => false,
                     ])
@@ -182,7 +182,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                         'multiple' => true,
                         'by_reference' => false,
                         'choice_translation_domain' => false,
-                    ])
+                    ]);
+        $this->addModelRegionProjectsFormFields($formMapper);
+        $formMapper
                 ->end()
             ->end()
             ->tab('app.solution.tabs.form_servers')
@@ -226,12 +228,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $this->addFullTextDatagridFilter($datagridMapper);
-        $datagridMapper->add('serviceProvider',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addServiceProvidersDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSolutions.service.serviceSystem',
             null,
             [
@@ -305,6 +302,7 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $datagridMapper->add('name');
         $datagridMapper->add('description');
         $datagridMapper->add('isPublished');
+        $this->addModelRegionProjectsDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -320,14 +318,14 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                     ['fieldName' => 'communes'],
                 ]
             ])
-            ->add('serviceProvider', null, [
-                'template' => 'General/Association/list_many_to_one_nolinks.html.twig',
+            ->add('serviceProviders', null, [
+                'template' => 'SolutionAdmin/list-service-providers.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
                 ],
                 'sort_parent_association_mappings' => [
-                    ['fieldName' => 'serviceProvider'],
+                    ['fieldName' => 'serviceProviders'],
                 ]
             ])
             ->add('serviceSystems', null, [
@@ -372,8 +370,8 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     {
         $fields = parent::getExportFields();
         $additionalFields = [
-            // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions',
-            'serviceProvider', 'customProvider', 'name', 'maturity', 'url', 'status',
+            // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions', 'serviceProvider',
+            'customProvider', 'name', 'maturity', 'url', 'status',
         ];
         foreach ($additionalFields as $field) {
             if (!in_array($field, $fields, false)) {
@@ -392,8 +390,9 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             ->add('communes', 'choice', [
                 'associated_property' => 'name',
                 'template' => 'SolutionAdmin/show-communes.html.twig',
-            ])
-            ->add('serviceProvider')
+            ]);
+        $this->addServiceProvidersShowFields($showMapper);
+        $showMapper
             ->add('customProvider');
         $this->addPortalsShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);
@@ -425,5 +424,6 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
         $this->customShowFields[] = 'serviceSystems';
         $this->customShowFields[] = 'serviceSolutions';
         $this->customShowFields[] = 'formServerSolutions';
+        $this->addModelRegionProjectsShowFields($showMapper);
     }
 }

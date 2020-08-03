@@ -88,15 +88,15 @@ file that was distributed with this source code.
                                             {% if menu.extra('safe_label', true) %}
                                                 {{- label|raw -}}
                                             {% else %}
-                                                {{- label|truncate(100) -}}
+                                                {{- label|u.truncate(100) -}}
                                             {% endif %}
                                         </a>
                                     {% else %}
-                                        <span>{{ label|truncate(100) }}</span>
+                                        <span>{{ label|u.truncate(100) }}</span>
                                     {% endif %}
                                 </li>
                             {% else %}
-                                <li class="active"><span>{{ label|truncate(100) }}</span></li>
+                                <li class="active"><span>{{ label|u.truncate(100) }}</span></li>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
@@ -147,63 +147,10 @@ file that was distributed with this source code.
 
 
 {% block side_bar_nav %}
-    <ul class="sidebar-menu" data-widget="tree">
-        <li class="first treeview active">
-            <a href="#">
-                <i class="fa fa-sitemap" aria-hidden="true"></i>
-                <span>{{ 'app.menu.ozg_overview'|trans }}</span>
-                <span class="pull-right-container"><i class="fa pull-right fa-angle-left"></i></span>
-            </a>
-            <ul class="active treeview-menu menu_level_1">
-                {% set menuItems = {
-                    'service_system': {
-                        'routePrefix': 'frontend_app_servicesystem',
-                        'label': 'app.service_system.list',
-                        'icon': 'angle-double-right'
-                    },
-                    'service': {
-                        'routePrefix': 'frontend_app_service',
-                        'label': 'app.service.frontend.list',
-                        'icon': 'angle-double-right'
-                    },
-                    'implementationproject': {
-                        'routePrefix': 'frontend_app_implementationproject',
-                        'label': 'app.implementation_project.list',
-                        'icon': 'angle-double-right'
-                    },
-                    'solution': {
-                        'routePrefix': 'frontend_app_solution',
-                        'label': 'app.solution.list',
-                        'icon': 'angle-double-right'
-                    }
-                } %}
-                {% set hasActive = false %}
-                {% for menuItem in menuItems %}
-                    {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
-                    <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
-                        <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
-                            <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
-                            {{ menuItem.label|trans }}
-                        </a>
-                        {% if miActive %}
-                            {% set hasActive = true %}
-                            {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
-                        {% endif %}
-                    </li>
-                {% endfor %}
-                <li>
-                    <a href="https://www.kdn.de/meta-menue/impressum/" target="_blank">
-                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                        Impressum
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.kdn.de/meta-menue/datenschutz/" target="_blank">
-                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                        Datenschutz
-                    </a>
-                </li>
-            </ul>
-        </li>
-    </ul>
+    {% include 'Frontend/Admin/Partials/_sidebar-nav.html.twig' %}
 {% endblock side_bar_nav %}
+
+
+{% block notice %}
+    {% include '@SonataTwig/FlashMessage/render.html.twig' %}
+{% endblock notice %}

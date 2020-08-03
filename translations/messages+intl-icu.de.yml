@@ -6,6 +6,8 @@ app:
     service_group: NRW Basisdaten
     digital_model_reqion_group: Digitale Modellregionen
     implementation_group: Umsetzung Basisdaten
+    application_group: Anwendungen im KDN
+    efile_group: eAkten Kataster
     ozg_implementation_group: OZG Umsetzung
     basic_group: Basisdienste
     ozg_overview: OZG Überblick
@@ -38,6 +40,30 @@ app:
       hidden: Versteckt
       created_by: Erstellt von
       modified_by: Geändert von
+  application:
+    object_name: Anwendung
+    list: Anwendungen
+    create: Anwendung anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+      categories: Softwarekategorien
+      manufacturers: Hersteller
+      service_providers: KDN Mitglieder
+      communes: Anwenderkommunen
+      accessibility: Barrierefreiheit
+      privacy: Datenschutz
+      archive: Archiv
+      in_house_development: Eigenentwicklung
+  application_category:
+    object_name: Kategorie
+    list: Kategorien
+    create: Kategorie anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+      parent: Ober-Kategorie
+      children: Unter-Kategorien
   analog_service:
     object_name: Analoger Dienst
     list: Analoge Dienste
@@ -110,6 +136,7 @@ app:
       specialized_procedures: Fachverfahren
       central_associations: Spitzenverbände
       portals: Portale
+      manufacturers: Hersteller
   contact:
     object_name: Kontakt
     list: Kontakte
@@ -154,6 +181,48 @@ app:
       service_provider: Dienstleister
       commune: Kommune
       categories: Kategorien
+  efile:
+    object_name: eAkten Kataster
+    list: eAkten Kataster
+    create: eAkte anlegen
+    actions:
+      list: eAkten Kataster Übersicht
+      show: eAkten Kataster anzeigen
+      edit: eAkten Kataster bearbeiten
+    tabs:
+      general: Allgemein
+      solutions: Lösungen
+    entity:
+      name: DMS-Anwendung
+      description: Kurzbeschreibung
+      url: Url
+      service_provider: Betreiber
+      specialized_procedures: Softwarebasis
+      status: Status eAkte
+      leading_system: Führendes System
+      storage_types: Speichertechniken
+      software_modules: Beteiligte Softwaremodule
+      notes: Informationen
+      notes_placeholder: Erfahrungen / Stolpersteine / Besonderheiten / Hauptnutzen / Treiber
+      has_economic_viability_assessment: Wirtschaftlichkeitsbetrachtung erfolgt?
+      sum_investments: Investitionssumme
+      follow_up_costs: Folgekosten (jährlich)
+      saving_potential_notes: Einsparpotentiale
+  efile_status:
+    object_name: Umsetzungs-Status
+    list: Umsetzungs-Status
+    create: Umsetzungs-Status anlegen
+    entity:
+      name: Name
+      level: Level/Sortierung
+      description: Beschreibung
+  efile_storage_type:
+    object_name: Speichertechnik
+    list: Speichertechniken
+    create: Speichertechnik anlegen
+    entity:
+      name: Name
+      description: Beschreibung
   form_server:
     object_name: Formularserver
     list: Formularserver
@@ -207,13 +276,14 @@ app:
       solutions: Lösungen
       contacts: Ansprechpartner
       notes: Notizen
-      interested_organisations: An Mitarbeit interessiert
-      participation_organisations: Mitarbeit zugesichert
+      interested_organisations: An Mitarbeit interessiert (erweitertes Projektteam)
+      participation_organisations: Mitarbeit zugesichert (Projekt-Kernteam Fach + IT)
       laboratories: Digitalisierungslabore
       bureaus: Fachlichkeiten
       portals: voraussichtliches Zielportal
       project_leaders: Projektleitung
       fundings: Finanzierung
+      fim_experts: FIM Methodenexperte
   implementation_status:
     object_name: Umsetzungs-Status
     list: Umsetzungs-Status
@@ -347,7 +417,7 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      model_region_projects: Umsetzungsprojekte
+      model_region_projects: DMR Umsetzungsprojekte
   model_region_beneficiary:
     object_name: Zuwendungsempfänger
     list: Zuwendungsempfänger
@@ -364,9 +434,9 @@ app:
       url: Url
       contacts: Ansprechpartner
   model_region_project:
-    object_name: Umsetzungsprojekt
-    list: Umsetzungsprojekte
-    create: Umsetzungsprojekt anlegen
+    object_name: DMR Umsetzungsprojekt
+    list: DMR Umsetzungsprojekte
+    create: DMR Umsetzungsprojekt anlegen
     tabs:
       default: Allgemein
     entity:
@@ -380,6 +450,7 @@ app:
       transferable_service: übertragbare/lizenzfreie Leistung
       transferable_start: Beginn Übertragbarkeit
       model_regions: Modellregionen
+      solutions: Lösungen
   open_data:
     object_name: Open Data
     list: Open Data
@@ -533,6 +604,8 @@ app:
       authority_inherit_state_ministries: Regelungskompetenz Ministerien (Land) von OZG-Leistung übernehmen
       authority_inherit_state_ministries.yes: Regelungskompetenz Ministerien (Land) der Leika-Leistung mit Regelungskompetenz  Ministerien (Land) der OZG-Leistung erweitern
       authority_inherit_state_ministries.no: Regelungskompetenz Ministerien (Land) der OZG-Leistung nicht übernehmen
+      implementation_projects: Umsetzungsprojekte
+      model_region_projects: DMR Umsetzungsprojekte
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister
@@ -555,6 +628,7 @@ app:
       #solutions: Lösungen
       communes: Kommunen
       specialized_procedures: Fachverfahren
+      manufacturers: Hersteller
   service_solution:
     object_name: Lösung für Leistung
     list: Lösung für Leistung
@@ -597,6 +671,8 @@ app:
       authority_state_ministries: Regelungskompetenz Ministerien (Land)
       authority_bureaus_form: Regelungskompetenz Fachlichkeiten (werden an Leika-Leistungen vererbt)
       authority_state_ministries_form: Regelungskompetenz Ministerien (Land) (werden an Leika-Leistungen vererbt)
+      implementation_projects: Umsetzungsprojekte
+      model_region_projects: DMR Umsetzungsprojekte
   situation:
     object_name: Lage
     list: Lage
@@ -623,7 +699,7 @@ app:
     entity:
       view_all: Alle Lösungen anzeigen
       no_solution_found: Keine Lösungen gefunden
-      service_provider: IT Dienstleister
+      service_providers: IT Dienstleister
       custom_provider: Anbieter (sonstige)
       specialized_procedures: Anbindung Fachverfahren
       portals: Portale
@@ -648,6 +724,7 @@ app:
       form_server_solutions: Formularserver
       payment_types: Bezahlverfahren
       is_published: Lösung öffentlich sichtbar?
+      model_region_projects: DMR Umsetzungsprojekte
     messages:
       no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   specialized_procedure:
