@@ -14,4 +14,14 @@ namespace App\Admin;
 
 class EFileStatusAdmin extends StatusAdmin
 {
+
+    /**
+     * Returns the classname label.
+     *
+     * @return string the classname label
+     */
+    public function getClassnameLabel()
+    {
+        return 'efileStatus';
+    }
 }

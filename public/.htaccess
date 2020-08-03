@@ -20,6 +20,22 @@ DirectoryIndex index.php
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    RewriteCond %{HTTP_HOST} ^ozg\.kdn\.de$ [NC]
+    RewriteRule ^admin(.*)$ https://data-warehouse.kdn.de/admin$1 [L,R=301]
+
+    RewriteCond %{HTTP_HOST} ^data-warehouse\.kdn\.de$ [NC]
+    #RewriteCond %{REQUEST_URI} !^/admin/? [NC]
+    RewriteRule ^(/?|l.*|s.*|um.*|ozg.*)$ https://data-warehouse.kdn.de/admin [L,R=302]
+    #RewriteRule ^(.*)$ https://data-warehouse.kdn.de/admin [L,R=302]
+
+    #RewriteCond %{HTTP_HOST} ^data-warehouse\.kdn\.de$ [NC]
+    #RewriteCond %{REQUEST_URI} !^/admin/? [NC]
+    #RewriteRule ^(.*)$ https://data-warehouse.kdn.de/admin [L,R=302]
+
+    RewriteCond %{HTTP_HOST} ^datawarehouse\.kdn\.de$ [NC,OR]
+    RewriteCond %{HTTP_HOST} ^dwh\.kdn\.de$ [NC]
+    RewriteRule ^(.*)$ https://data-warehouse.kdn.de/$1 [L,R=301]
+
     # Determine the RewriteBase automatically and set it as environment variable.
     # If you are using Apache aliases to do mass virtual hosting or installed the
     # project in a subdirectory, the base path will be prepended to allow proper
@@ -65,4 +81,10 @@ DirectoryIndex index.php
         RedirectMatch 307 ^/$ /index.php/
         # RedirectTemp cannot be used instead
     </IfModule>
+</IfModule>
+
+<IfModule mod_php7.c>
+    #Session timeout
+    php_value session.cookie_lifetime "86400"
+    php_value session.gc_maxlifetime "86400"
 </IfModule>

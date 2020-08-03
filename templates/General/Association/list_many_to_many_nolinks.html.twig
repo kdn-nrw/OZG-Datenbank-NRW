@@ -13,12 +13,6 @@ file that was distributed with this source code.
     {% endfor %}
 {% endblock %}
 
-{%- block relation_link -%}
-    <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, field_description.options.route.parameters) }}">
-        {{- element|render_relation_element(field_description) -}}
-    </a>
-{%- endblock -%}
-
 {%- block relation_value -%}
     {{- element|render_relation_element(field_description) -}}
 {%- endblock -%}

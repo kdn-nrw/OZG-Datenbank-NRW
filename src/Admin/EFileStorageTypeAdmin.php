@@ -53,4 +53,14 @@ class EFileStorageTypeAdmin extends AbstractAppAdmin
             ->add('name')
             ->add('description');
     }
+
+    /**
+     * Returns the classname label.
+     *
+     * @return string the classname label
+     */
+    public function getClassnameLabel()
+    {
+        return 'efileStorageType';
+    }
 }

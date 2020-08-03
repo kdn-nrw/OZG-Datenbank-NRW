@@ -51,6 +51,7 @@ trait OrganisationTrait
     {
         $listMapper
             ->add($fieldName, null,[
+                'template' => 'General/Association/list_many_to_many_nolinks.html.twig',
                 'admin_code' => OrganisationAdmin::class,
             ]);
     }

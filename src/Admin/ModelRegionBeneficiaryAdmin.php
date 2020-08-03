@@ -121,7 +121,9 @@ class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin
     {
         $showMapper->add('name')
             ->add('shortName')
-            ->add('organisation.modelRegionProjects');
+            ->add('organisation.modelRegionProjects', null, [
+                'admin_code' => ModelRegionProjectAdmin::class,
+            ]);
         $this->addOrganisationOneToOneShowFields($showMapper);
     }
 }

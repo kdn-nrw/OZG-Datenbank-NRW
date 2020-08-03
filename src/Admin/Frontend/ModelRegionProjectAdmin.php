@@ -11,12 +11,9 @@
 
 namespace App\Admin\Frontend;
 
-use App\Admin\SolutionAdmin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\DatePickerTrait;
-use App\Admin\Traits\ModelRegionTrait;
 use App\Admin\Traits\OrganisationTrait;
-use App\Admin\Traits\SolutionTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -26,9 +23,7 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin
 {
     use AddressTrait;
     use DatePickerTrait;
-    use ModelRegionTrait;
     use OrganisationTrait;
-    use SolutionTrait;
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -43,8 +38,20 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
-        $this->addModelRegionsDatagridFilters($datagridMapper);
-        $this->addSolutionsDatagridFilters($datagridMapper);
+        $datagridMapper->add('modelRegions',
+            null, [
+                'admin_code' => ModelRegionAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('solutions',
+            null, [
+                'admin_code' => SolutionAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -71,7 +78,10 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin
             ->add('transferableService')
             ->add('transferableStart');
         $this->addOrganisationsShowFields($showMapper);
-        $this->addModelRegionsShowFields($showMapper);
+        $showMapper
+            ->add('modelRegions', null, [
+                'admin_code' => ModelRegionAdmin::class,
+            ]);
         $showMapper
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
