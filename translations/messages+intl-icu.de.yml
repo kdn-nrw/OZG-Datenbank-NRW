@@ -433,6 +433,7 @@ app:
       town: Ort
       url: Url
       contacts: Ansprechpartner
+      model_region_projects: DMR Umsetzungsprojekte
   model_region_project:
     object_name: DMR Umsetzungsprojekt
     list: DMR Umsetzungsprojekte

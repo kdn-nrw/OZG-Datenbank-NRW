@@ -91,7 +91,7 @@ class ModelRegionProject extends BaseNamedEntity
 
     /**
      * @var Organisation[]|Collection
-     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\ManyToMany(targetEntity="Organisation", inversedBy="modelRegionProjects")
      * @ORM\JoinTable(name="ozg_model_region_project_organisation",
      *     joinColumns={
      *     @ORM\JoinColumn(name="model_region_project_id", referencedColumnName="id")

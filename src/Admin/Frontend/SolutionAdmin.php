@@ -21,6 +21,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 class SolutionAdmin extends AbstractFrontendAdmin
@@ -82,6 +83,18 @@ class SolutionAdmin extends AbstractFrontendAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('communeType', null,
+            [
+            ],
+            ChoiceType::class,
+            [
+                'choices' => [
+                    'app.solution.entity.commune_type_all' => 'all',
+                    'app.solution.entity.commune_type_selected' => 'selected',
+                ],
+                'expanded' => false,
+                'multiple' => false,
+            ]);
         $datagridMapper->add('communes',
             null,
             [],

@@ -29,6 +29,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -95,133 +96,133 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     {
         $formMapper
             ->with('app.solution.tabs.general', ['tab' => true])
-                ->with('general', [
-                    'label' => false,
-                ]);
+            ->with('general', [
+                'label' => false,
+            ]);
         $this->addServiceProvidersFormFields($formMapper);
         $formMapper
-                    ->add('customProvider', TextType::class, [
-                        'required' => false,
-                    ])
-                    ->add('status', ModelType::class, [
-                        'btn_add' => false,
-                        'required' => true,
-                        'choice_translation_domain' => false,
-                    ])
-                    ->add('name', TextType::class, [
-                        'required' => false,
-                    ])
-                    ->add('description', TextareaType::class, [
-                        'required' => false,
-                    ])
-                    ->add('url', UrlType::class, [
-                        'required' => false
-                    ]);
-            $this->addContactsFormFields($formMapper, true, false, 'solutionContacts');
-            $formMapper->add('isPublished', CheckboxType::class, [
-                        'required' => false,
-                    ])
-                    /*
-                    ->add('serviceSolutions', ModelType::class, [
-                        'expanded' => true,
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ])*/
-                ->end()
+            ->add('customProvider', TextType::class, [
+                'required' => false,
+            ])
+            ->add('status', ModelType::class, [
+                'btn_add' => false,
+                'required' => true,
+                'choice_translation_domain' => false,
+            ])
+            ->add('name', TextType::class, [
+                'required' => false,
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+            ])
+            ->add('url', UrlType::class, [
+                'required' => false
+            ]);
+        $this->addContactsFormFields($formMapper, true, false, 'solutionContacts');
+        $formMapper->add('isPublished', CheckboxType::class, [
+            'required' => false,
+        ])
+            /*
+            ->add('serviceSolutions', ModelType::class, [
+                'expanded' => true,
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ])*/
+            ->end()
             ->end()
             ->tab('app.solution.tabs.relations')
-                ->with('relations', [
-                    'label' => false,
-                ]);
-            $this->addPortalsFormFields($formMapper);
-            $formMapper
-                    ->add('communeType', ChoiceFieldMaskType::class, [
-                        'choices' => [
-                            'app.solution.entity.commune_type_all' => 'all',
-                            'app.solution.entity.commune_type_selected' => 'selected',
-                        ],
-                        'map' => [
-                            'all' => [],
-                            'selected' => ['communes'],
-                        ],
-                        'required' => true,
-                    ]);
-                $this->addCommunesFormFields($formMapper);
-                $this->addSpecializedProceduresFormFields($formMapper);
-                $formMapper
-                    ->add('paymentTypes', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ])
-                    ->add('authentications', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ])
-                    ->add('analogServices', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ])
-                    ->add('openDataItems', ModelType::class, [
-                        'btn_add' => false,
-                        'placeholder' => '',
-                        'required' => false,
-                        'multiple' => true,
-                        'by_reference' => false,
-                        'choice_translation_domain' => false,
-                    ]);
+            ->with('relations', [
+                'label' => false,
+            ]);
+        $this->addPortalsFormFields($formMapper);
+        $formMapper
+            ->add('communeType', ChoiceFieldMaskType::class, [
+                'choices' => [
+                    'app.solution.entity.commune_type_all' => 'all',
+                    'app.solution.entity.commune_type_selected' => 'selected',
+                ],
+                'map' => [
+                    'all' => [],
+                    'selected' => ['communes'],
+                ],
+                'required' => true,
+            ]);
+        $this->addCommunesFormFields($formMapper);
+        $this->addSpecializedProceduresFormFields($formMapper);
+        $formMapper
+            ->add('paymentTypes', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ])
+            ->add('authentications', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ])
+            ->add('analogServices', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ])
+            ->add('openDataItems', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ]);
         $this->addModelRegionProjectsFormFields($formMapper);
         $formMapper
-                ->end()
+            ->end()
             ->end()
             ->tab('app.solution.tabs.form_servers')
-                ->with('form_server_solutions', [
-                    'label' => false,
-                ])
-                    ->add('formServerSolutions', CollectionType::class, [
-                        'label' => false,
-                        'type_options' => [
-                            'delete' => true,
-                        ],
-                        'by_reference' => false,
-                    ], [
-                        'edit' => 'inline',
-                        'inline' => 'table',
-                        'sortable' => 'position',
-                        'ba_custom_hide_fields' => ['solution'],
-                    ])
-                ->end()
+            ->with('form_server_solutions', [
+                'label' => false,
+            ])
+            ->add('formServerSolutions', CollectionType::class, [
+                'label' => false,
+                'type_options' => [
+                    'delete' => true,
+                ],
+                'by_reference' => false,
+            ], [
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable' => 'position',
+                'ba_custom_hide_fields' => ['solution'],
+            ])
+            ->end()
             ->end()
             ->tab('app.solution.tabs.services')
-                ->with('service_solutions', [
-                    'label' => false,
-                ])
-                    ->add('serviceSolutions', CollectionType::class, [
-                        'label' => false,
-                        'type_options' => [
-                            'delete' => true,
-                        ],
-                        'by_reference' => false,
-                    ], [
-                        'edit' => 'inline',
-                        'inline' => 'table',
-                        'sortable' => 'position',
-                        'ba_custom_hide_fields' => ['solution'],
-                    ])
-                ->end()
+            ->with('service_solutions', [
+                'label' => false,
+            ])
+            ->add('serviceSolutions', CollectionType::class, [
+                'label' => false,
+                'type_options' => [
+                    'delete' => true,
+                ],
+                'by_reference' => false,
+            ], [
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable' => 'position',
+                'ba_custom_hide_fields' => ['solution'],
+            ])
+            ->end()
             ->end();
     }
 
@@ -260,13 +261,25 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             null,
             [
                 'label' => 'app.service_solution.entity.service',
-                'admin_code' => \App\Admin\ServiceAdmin::class
+                'admin_code' => ServiceAdmin::class
             ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('status');
         $this->addPortalsDatagridFilters($datagridMapper);
+        $datagridMapper->add('communeType', null,
+            [
+            ],
+            ChoiceType::class,
+            [
+                'choices' => [
+                    'app.solution.entity.commune_type_all' => 'all',
+                    'app.solution.entity.commune_type_selected' => 'selected',
+                ],
+                'expanded' => false,
+                'multiple' => false,
+            ]);
         $this->addCommunesDatagridFilters($datagridMapper);
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);
         $datagridMapper->add('formServerSolutions.formServer',

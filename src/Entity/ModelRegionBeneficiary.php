@@ -12,6 +12,8 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -65,5 +67,20 @@ class ModelRegionBeneficiary extends BaseNamedEntity implements OrganisationEnti
     public function setShortName(?string $shortName): void
     {
         $this->shortName = $shortName;
+    }
+
+    /**
+     * @return ModelRegionProject[]|Collection
+     */
+    public function getModelRegionProjects()
+    {
+        // Notice: Undefined index: targetToSourceKeyColumns
+        if ((null !== $organisation = $this->getOrganisation())) {
+            $collection = $organisation->getModelRegionProjects();
+            if (null !== $collection && $collection->count() > 0) {
+                return $collection;
+            }
+        }
+        return new ArrayCollection();
     }
 }

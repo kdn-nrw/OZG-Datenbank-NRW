@@ -60,7 +60,7 @@ class MinistryState extends BaseNamedEntity implements OrganisationEntityInterfa
 
     /**
      * @var Service[]|Collection
-     * @ORM\ManyToMany(targetEntity="Service", mappedBy="stateMinistries")
+     * @ORM\ManyToMany(targetEntity="Service", mappedBy="authorityStateMinistries")
      */
     private $serviceAuthorities;
 
