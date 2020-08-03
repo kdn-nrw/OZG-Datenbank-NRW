@@ -13,7 +13,6 @@ namespace App\Admin\Frontend;
 
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\DatePickerTrait;
-use App\Admin\Traits\OrganisationTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -23,13 +22,16 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin
 {
     use AddressTrait;
     use DatePickerTrait;
-    use OrganisationTrait;
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
-        $this->addOrganisationsDatagridFilters($datagridMapper);
+        $datagridMapper->add('organisations',
+            null, [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
         $this->addDatePickersDatagridFilters($datagridMapper, 'projectEndAt');
         $datagridMapper
@@ -59,7 +61,10 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin
         $listMapper->addIdentifier('name');
         $this->addDatePickersListFields($listMapper, 'projectStartAt');
         $this->addDatePickersListFields($listMapper, 'projectEndAt');
-        $this->addOrganisationsListFields($listMapper);
+        $listMapper
+            ->add('organisations', null, [
+                'template' => 'General/Association/list_many_to_many_nolinks.html.twig',
+            ]);
         $this->addDefaultListActions($listMapper);
     }
 
@@ -77,7 +82,8 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
-        $this->addOrganisationsShowFields($showMapper);
+        $showMapper
+            ->add('organisations');
         $showMapper
             ->add('modelRegions', null, [
                 'admin_code' => ModelRegionAdmin::class,
@@ -93,6 +99,13 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin
             ]);
     }
 
+    public function isGranted($name, $object = null)
+    {
+        if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
+            return true;
+        }
+        return parent::isGranted($name, $object);
+    }
 
     protected function getRoutePrefix(): string
     {
