@@ -167,7 +167,7 @@ class CustomEntityValueProvider
             $this->dataGroupCache[$itemId]['_tstamp'] >= $lastChanged) {
             return $this->dataGroupCache[$itemId];
         }
-        $itemGroup = (int) floor($itemId/200);
+        $itemGroup = (int)floor($itemId / 200);
         $key = str_replace('\\', '.', get_class($objectOrArray)) . '..' . $itemGroup;
         try {
             $item = $this->cache->getItem(self::CACHE_PREFIX . $this->context . rawurlencode($key));
@@ -196,7 +196,7 @@ class CustomEntityValueProvider
      * @param object|array $objectOrArray
      * @return array
      */
-    protected function processData($objectOrArray)
+    protected function processData($objectOrArray): array
     {
         $data = [];
         foreach ($this->propertyPaths as $name => $propertyPath) {
@@ -256,7 +256,7 @@ class CustomEntityValueProvider
     protected function getValue($value)
     {
         //if value is array or collection, creates string
-        if (\is_array($value) || $value instanceof \Traversable) {
+        if (\is_iterable($value)) {
             $result = array();
             foreach ($value as $item) {
                 $result[] = $this->getValue($item);

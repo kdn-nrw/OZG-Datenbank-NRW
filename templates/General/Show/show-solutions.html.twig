@@ -44,16 +44,7 @@ file that was distributed with this source code.
                     {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' %}
                     {% if createEditLink %}
                         <td>
-                            {% if refAdmin.hasAccess(editRouteName, child) %}
-                                {% if field_description.options.route.parameters %}
-                                    {% set editParameters = field_description.options.route.parameters %}
-                                {% else %}
-                                    {% set editParameters = {'id': child.id} %}
-                                {% endif %}
-                                <a href="{{ refAdmin.generateObjectUrl(editRouteName, child, editParameters) }}">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </a>
-                            {% endif %}
+                            {% include 'General/Show/Partials/link-to-child.html.twig' %}
                         </td>
                     {% endif %}
                 </tr>

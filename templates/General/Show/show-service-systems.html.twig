@@ -111,7 +111,11 @@ file that was distributed with this source code.
                                         {% set editParameters = {'id': child.id} %}
                                     {% endif %}
                                     <a href="{{ refAdmin.generateObjectUrl(editRouteName, child, editParameters) }}">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        {% if editRouteName == 'show' %}
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        {% else %}
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        {% endif %}
                                     </a>
                                 {% endif %}
                             </td>
