@@ -50,28 +50,6 @@
         </ul>
     </li>
     {% set menuItems = {
-        'solution': {
-            'routePrefix': 'frontend_app_solution',
-            'label': 'app.solution.list',
-            'icon': 'puzzle-piece'
-        },
-    } %}
-
-    {% set activeRoutePrefix = null %}
-    {% for menuItem in menuItems %}
-        {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
-        <li class="top-nav-item{% if miActive %} active{% endif %}">
-            <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
-                <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
-                {{ menuItem.label|trans }}
-            </a>
-            {% if miActive %}
-                {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
-                {% set activeRoutePrefix = menuItem.routePrefix %}
-            {% endif %}
-        </li>
-    {% endfor %}
-    {% set menuItems = {
         'model_region': {
             'routePrefix': 'frontend_app_modelregion',
             'label': 'app.model_region.list',
@@ -111,6 +89,28 @@
             {% endfor %}
         </ul>
     </li>
+    {% set menuItems = {
+        'solution': {
+            'routePrefix': 'frontend_app_solution',
+            'label': 'app.solution.list',
+            'icon': 'puzzle-piece'
+        },
+    } %}
+
+    {% set activeRoutePrefix = null %}
+    {% for menuItem in menuItems %}
+        {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
+        <li class="top-nav-item{% if miActive %} active{% endif %}">
+            <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
+                <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
+                {{ menuItem.label|trans }}
+            </a>
+            {% if miActive %}
+                {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
+                {% set activeRoutePrefix = menuItem.routePrefix %}
+            {% endif %}
+        </li>
+    {% endfor %}
     <li>
         <a href="https://www.kdn.de/meta-menue/impressum/" target="_blank">
             <i class="fa fa-angle-double-right" aria-hidden="true"></i>
