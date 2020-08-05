@@ -1,4 +1,6 @@
 {
+    "name": "kdn-nrw/ozg",
+    "description" : "The data warehouse application from KDN NRW containing the OZG database",
     "type": "project",
     "license": "MIT",
     "require": {
