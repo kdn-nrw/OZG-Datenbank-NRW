@@ -23,9 +23,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  *
  * @author    Gert Hammes <info@gerthammes.de>
  * @copyright 2019 Gert Hammes
- * @since     2019-08-15
  */
-class ProtectSuperAdminVoter extends Voter implements VoterInterface
+class ProtectSuperAdminVoter extends Voter
 {
 
     /**

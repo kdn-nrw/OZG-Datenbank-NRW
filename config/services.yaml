@@ -679,6 +679,10 @@ services:
     tags:
       - { name: security.voter }
 
+  App\Security\Authorization\Voter\UserVoter:
+    tags:
+      - { name: security.voter }
+
   App\Form\Type\SecurityRolesType:
     arguments:
       - '@kernel'

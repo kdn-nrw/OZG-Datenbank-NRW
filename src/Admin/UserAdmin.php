@@ -122,6 +122,13 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin implements Cont
             ])
             ->end()
             ->end();
+        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+            $formMapper->remove('enabled');
+            $formMapper->remove('realRoles');
+            $formMapper->remove('groups');
+            $formMapper->removeGroup('Groups', 'Security', true);
+            $formMapper->removeGroup('Status', 'Security', true);
+        }
     }
 
     /**
