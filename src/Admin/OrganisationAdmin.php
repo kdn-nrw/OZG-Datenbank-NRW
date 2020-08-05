@@ -68,7 +68,7 @@ class OrganisationAdmin extends AbstractAppAdmin
             ->end()
             ->with('app.organisation.groups.contacts', ['class' => 'col-md-6']);
 
-        $this->addContactsFormFields($formMapper, false, true, 'contacts', false);
+        $this->addContactsFormFields($formMapper, false, true, 'contacts', false, false);
         $formMapper
             ->end();
     }

@@ -73,13 +73,13 @@ class Organisation extends BaseNamedEntity
 
     /**
      * @var Contact[]|Collection
-     * @ORM\OneToMany(targetEntity="Contact", mappedBy="organisationEntity", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="Contact", mappedBy="organisationEntity", cascade={"persist"})
      */
     private $contacts;
 
     /**
      * @var ModelRegionProject[]|Collection
-     * @ORM\ManyToMany(targetEntity="ModelRegionProject", mappedBy="organisations", cascade={"all"})
+     * @ORM\ManyToMany(targetEntity="ModelRegionProject", mappedBy="organisations", cascade={"persist"})
      */
     private $modelRegionProjects;
 

@@ -27,7 +27,8 @@ trait ContactTrait
         $addOldField = false,
         $editable = false,
         $fieldName = 'contacts',
-        $addTab = true
+        $addTab = true,
+        $required = false
     ): void
     {
         if ($editable) {
@@ -45,6 +46,7 @@ trait ContactTrait
                         'delete' => true,
                     ],
                     'by_reference' => false,
+                    'required' => $required,
                 ], [
                     'admin_code' => ContactAdmin::class,
                     'edit' => 'inline',
@@ -55,7 +57,7 @@ trait ContactTrait
 
             if ($addOldField) {
                 $formMapper->add('contact', TextareaType::class, [
-                    'required' => false,
+                    'required' => $required,
                 ]);
             }
             if ($addTab) {
@@ -66,14 +68,14 @@ trait ContactTrait
             $formMapper->add($fieldName, ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
-                'required' => false,
+                'required' => $required,
                 'multiple' => true,
                 'by_reference' => false,
                 'choice_translation_domain' => false,
             ]);
             if ($addOldField) {
                 $formMapper->add('contact', TextareaType::class, [
-                    'required' => false,
+                    'required' => $required,
                 ]);
             }
         }

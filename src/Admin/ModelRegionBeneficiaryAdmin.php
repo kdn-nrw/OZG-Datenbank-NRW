@@ -50,7 +50,9 @@ class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin
             'label' => 'app.model_region_beneficiary.tabs.default',
         ]);
         $this->addOrganisationOneToOneFormFields($formMapper);
-        $formMapper->add('shortName', TextType::class);
+        $formMapper->add('shortName', TextType::class, [
+            'required' => false,
+        ]);
         $formMapper->end();
         $formMapper->end();
     }
