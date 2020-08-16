@@ -11,6 +11,7 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\PortalAdmin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Status;
 use App\Entity\Subject;
@@ -79,6 +80,13 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('services.portals',
+            null, [
+                'admin_code' => PortalAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -144,6 +152,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
             ->add('authorityStateMinistries')
             ->add('services', null,[
                 'admin_code' => ServiceAdmin::class,
+                'template' => 'General/Show/show-services.html.twig',
             ])
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
@@ -202,7 +211,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
         //$situations = $modelManager->findBy(Situation::class);
         //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
         $subjects = $modelManager->findBy(Subject::class);
-        $datagrid->addFilterMenu('situation.subject', $subjects, 'app.situation.entity.subject');
+        $datagrid->addFilterMenu('situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
     }
 
 

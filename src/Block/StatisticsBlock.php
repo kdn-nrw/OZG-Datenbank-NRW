@@ -103,7 +103,9 @@ class StatisticsBlock extends AbstractBlockService
                     'required' => false,
                 ]],
                 ['provider', TextType::class, [
-                    'label' => 'form.label_class',
+                    'required' => false,
+                ]],
+                ['filters', TextType::class, [
                     'required' => false,
                 ]],
                 ['mode', ChoiceType::class, [
@@ -128,6 +130,7 @@ class StatisticsBlock extends AbstractBlockService
             'icon' => 'fa fa-line-chart',
             'class' => null,
             'provider' => null,
+            'filters' => null,
             'template' => 'Block/statistics-chart.html.twig',
         ]);
     }

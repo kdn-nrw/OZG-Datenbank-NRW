@@ -27,6 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ServiceSystem extends AbstractService
 {
+    use ContactTextTrait;
 
     /**
      * Status
@@ -36,19 +37,6 @@ class ServiceSystem extends AbstractService
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $status;
-
-    // name => ozglstg
-    /*
-    ozgschl
-    ozgtyp
-     */
-    /**
-     * Contact
-     * @var string|null
-     *
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $contact;
 
     /**
      * @var Situation|null
@@ -175,22 +163,6 @@ class ServiceSystem extends AbstractService
         $this->services = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->stateMinistries = new ArrayCollection();
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getContact(): ?string
-    {
-        return $this->contact;
-    }
-
-    /**
-     * @param string|null $contact
-     */
-    public function setContact(?string $contact): void
-    {
-        $this->contact = $contact;
     }
 
     /**

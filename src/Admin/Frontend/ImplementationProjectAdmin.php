@@ -136,6 +136,8 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
             ])
             ->add('services', null, [
                 'admin_code' => ServiceAdmin::class,
+                'template' => 'General/Show/show-services.html.twig',
+                'showFimTypes' => true,
                 'route' => [
                     'name' => 'show',
                 ],
@@ -167,7 +169,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
             ])
             ->add('notes', 'html');
         $showMapper
-            ->add('fundings', null,[
+            ->add('fundings', null, [
                 'admin_code' => FundingAdmin::class,
             ]);
         $showMapper->add('bureaus', null, [
@@ -200,7 +202,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin
         //$situations = $modelManager->findBy(Situation::class);
         //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
         $subjects = $modelManager->findBy(Subject::class);
-        $datagrid->addFilterMenu('serviceSystems.situation.subject', $subjects, 'app.situation.entity.subject');
+        $datagrid->addFilterMenu('serviceSystems.situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
     }
 
 

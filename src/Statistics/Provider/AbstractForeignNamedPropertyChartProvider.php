@@ -14,6 +14,7 @@ namespace App\Statistics\Provider;
 use App\Statistics\AbstractChartJsStatisticsProvider;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJsStatisticsProvider
 {
@@ -78,13 +79,16 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
      */
     protected function loadData()
     {
-        $property = 's.' . $this->foreignProperty;
+        $alias = 's';
+        $property = $alias . '.' . $this->foreignProperty;
         /** @var EntityRepository $repository */
         $repository = $this->registry->getRepository($this->getEntityClass());
-        $queryBuilder = $repository->createQueryBuilder('s');
+        $queryBuilder = $repository->createQueryBuilder($alias);
         $queryBuilder
             ->select('COUNT(s.id) AS itemCount', 'IDENTITY(' . $property . ') AS refId', 'fnp.name')
-            ->leftJoin($property, 'fnp')
+            ->leftJoin($property, 'fnp');
+        $this->addCustomDataConditions($queryBuilder, $alias);
+        $queryBuilder
             ->groupBy($property)
             ->orderBy($property);
         //$queryBuilder->
@@ -96,5 +100,15 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
             $data[$key] = $row['itemCount'];
         }
         return $data;
+    }
+
+    protected function addCustomDataConditions(QueryBuilder $queryBuilder, string $alias = 's'): void
+    {
+        if (!empty($this->additionalFilters)) {
+            foreach ($this->additionalFilters as $filterProperty => $filterValue) {
+                $queryBuilder->andWhere($queryBuilder->expr()->eq($alias . '.' . $filterProperty, ':' . $filterProperty));
+                $queryBuilder->setParameter($filterProperty, trim(strip_tags($filterValue)));
+            }
+        }
     }
 }

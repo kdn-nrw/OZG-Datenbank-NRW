@@ -12,12 +12,11 @@
 namespace App\Admin;
 
 use App\Admin\Traits\CategoryTrait;
-use App\Admin\Traits\CommuneTrait;
-use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Entity\Contact;
 use App\Entity\Mailing;
 use App\Entity\MailingContact;
+use App\Form\Type\MailingAttachmentType;
 use App\Validator\Constraints\MailingSenderEmail;
 use DateTime;
 use Knp\Menu\ItemInterface as MenuItemInterface;
@@ -32,6 +31,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Validator\ErrorElement;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -75,27 +75,27 @@ class MailingAdmin extends AbstractAppAdmin
         $now = new DateTime();
         $formMapper
             ->with('app.mailing.groups.default')
-                ->add('subject', TextType::class)
-                ->add('greetingType', ChoiceFieldMaskType::class, [
-                    'choices' => [
-                        'app.mailing.entity.greeting_type_choices.none' => Mailing::GREETING_TYPE_NONE,
-                        'app.mailing.entity.greeting_type_choices.prepend' => Mailing::GREETING_TYPE_PREPEND,
-                    ],
-                    'map' => [
-                        Mailing::GREETING_TYPE_NONE => ['textPlain'],
-                        Mailing::GREETING_TYPE_PREPEND => ['greeting', 'textPlain'],
-                    ],
-                    'required' => true,
-                ])
-                ->add('greeting', TextType::class, [
-                    'label' => false,
-                    'mapped' => false,
-                    'disabled' => true,
-                    'data' => 'Sehr geehrte(r) Frau/Herr Mustermann,',
-                ])
-                ->add('textPlain', TextareaType::class, [
-                    'required' => true,
-                ]);
+            ->add('subject', TextType::class)
+            ->add('greetingType', ChoiceFieldMaskType::class, [
+                'choices' => [
+                    'app.mailing.entity.greeting_type_choices.none' => Mailing::GREETING_TYPE_NONE,
+                    'app.mailing.entity.greeting_type_choices.prepend' => Mailing::GREETING_TYPE_PREPEND,
+                ],
+                'map' => [
+                    Mailing::GREETING_TYPE_NONE => ['textPlain'],
+                    Mailing::GREETING_TYPE_PREPEND => ['greeting', 'textPlain'],
+                ],
+                'required' => true,
+            ])
+            ->add('greeting', TextType::class, [
+                'label' => false,
+                'mapped' => false,
+                'disabled' => true,
+                'data' => 'Sehr geehrte(r) Frau/Herr Mustermann,',
+            ])
+            ->add('textPlain', TextareaType::class, [
+                'required' => true,
+            ]);
         $formMapper->end();
         $formMapper->with('app.mailing.groups.options', ['class' => 'col-md-6']);
         $formMapper
@@ -138,6 +138,12 @@ class MailingAdmin extends AbstractAppAdmin
             'multiple' => true,
             //'choice_translation_domain' => false,
         ]);
+        $formMapper->add('attachments', CollectionType::class, [
+            'entry_type' => MailingAttachmentType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'by_reference' => false,
+        ]);
         $formMapper->end();
     }
 
@@ -145,7 +151,7 @@ class MailingAdmin extends AbstractAppAdmin
     {
         $errorElement
             ->with('senderEmail')
-                ->addConstraint(new MailingSenderEmail())
+            ->addConstraint(new MailingSenderEmail())
             ->end();
     }
 

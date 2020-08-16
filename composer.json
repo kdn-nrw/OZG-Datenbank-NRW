@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^2.0",
         "friendsofsymfony/ckeditor-bundle": "^1.2",
         "jms/serializer-bundle": "^3.7",
+        "liip/imagine-bundle": "^2.3",
         "phpoffice/phpspreadsheet": "^1.10",
         "sensio/framework-extra-bundle": "^5.5",
         "shapecode/cron-bundle": "^3.2",

@@ -161,11 +161,13 @@ app:
       zip_code: PLZ
       town: Ort
       street: Straße
+      url: Url
       organisation: Organisation
       organisation_form: Organisation (extern/Name)
       organisation_entity: Organisation
       organisation_entity_form: Organisation (interne Referenz)
       department: Organisationseinheit
+      department_fe: Abteilung
       position: Funktion
       phone_number: Telefon
       fax_number: Fax
@@ -181,6 +183,7 @@ app:
       service_provider: Dienstleister
       commune: Kommune
       categories: Kategorien
+      image_file: Profilbild
   efile:
     object_name: eAkten Kataster
     list: eAkten Kataster
@@ -303,9 +306,9 @@ app:
         state: Land
         commune: Kommunal
   laboratory:
-    object_name: Labor
-    list: Labore
-    create: Labor anlegen
+    object_name: Stichwort
+    list: Stichwörter
+    create: Stichwort anlegen
     entity:
       name: Name
       description: Beschreibung
@@ -357,6 +360,7 @@ app:
       recipient_count: '# Empfänger'
       sent_count: '# verschickt'
       exclude_contacts: Blacklist
+      attachments: Anhänge
   mailing_contact:
     object_name: Mailing Kontakt
     list: Mailing Kontakte
@@ -561,6 +565,8 @@ app:
       general: Allgemein
       relations: Relationen
       service_solutions: Lösungen
+      # Federal information management
+      fim: FIM
     groups:
       general: Leistung
       relations: Relationen
@@ -578,7 +584,7 @@ app:
       status: Status
       priority: Priorität
       service_solutions: Lösungen
-      laboratories: Labore
+      laboratories: Stichwörter
       bureaus: Fachlichkeiten
       inherit_bureaus: Fachlichkeiten von OZG-Leistung übernehmen
       inherit_bureaus.yes: Fachlichkeiten der Leika-Leistung mit Fachlichkeiten der OZG-Leistung erweitern
@@ -592,7 +598,7 @@ app:
       inherit_state_ministries.yes: Ministerien (Land) der Leika-Leistung mit Ministerien (Land) der OZG-Leistung erweitern
       inherit_state_ministries.no: Ministerien (Land) der OZG-Leistung nicht übernehmen
       specialized_procedures: Fachverfahren
-      portals: Portale
+      portals: Zielportale
       rule_authorities: Regelungskompetenz
       authority_bureaus: Regelungskompetenz Fachlichkeiten
       authority_state_ministries: Regelungskompetenz  Ministerien (Land)
@@ -607,6 +613,24 @@ app:
       authority_inherit_state_ministries.no: Regelungskompetenz Ministerien (Land) der OZG-Leistung nicht übernehmen
       implementation_projects: Umsetzungsprojekte
       model_region_projects: DMR Umsetzungsprojekte
+      fim_types: FIM
+    fim:
+      object_name: Föderales Informationsmanagement (FIM)
+      list: FIM
+      entity:
+        status: Status
+        notes: Notizen
+        data_type: Typ
+        status_choices:
+          in_progress: In Arbeit
+          submitted: Vorgelegt
+          approved: Freigegeben
+      type_choices:
+        description: Beschreibung
+        master_data_fields: Stammdatenfelder
+        root_process: Stammprozess
+        reference_data_fields: Referenzdatenfelder
+        reference_process: Referenzprozess
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister
@@ -662,7 +686,7 @@ app:
       jurisdictions_form: Zuständigkeiten (werden an Leika-Leistungen vererbt)
       references: Referenzen
       state_ministries: Ministerien (Land)
-      laboratories: Labore
+      laboratories: Stichwörter
       bureaus: Fachlichkeiten
       bureaus_form: Fachlichkeiten (werden an Leika-Leistungen vererbt und auf Umsetzungsprojekten angezeigt)
       solutions: Lösungen
@@ -674,6 +698,7 @@ app:
       authority_state_ministries_form: Regelungskompetenz Ministerien (Land) (werden an Leika-Leistungen vererbt)
       implementation_projects: Umsetzungsprojekte
       model_region_projects: DMR Umsetzungsprojekte
+      services_portals: Zielportale
   situation:
     object_name: Lage
     list: Lage
@@ -760,6 +785,9 @@ app:
     entity:
       name: Name
       situations: Lage
+      contact: Ansprechpartner
+    frontend:
+      contact_for: Ansprechpartner für das Themenfeld
   user:
     object_name: Benutzer
     list: Benutzer

@@ -12,10 +12,7 @@
 namespace App\Controller;
 
 
-use App\Admin\ContextAwareAdminInterface;
-use App\Admin\Frontend\AbstractFrontendAdmin;
 use App\Admin\Frontend\ModelRegionProjectAdmin;
-use Sonata\AdminBundle\Controller\CRUDController;
 
 /**
  * Class ModelRegionProjectController
@@ -24,29 +21,21 @@ use Sonata\AdminBundle\Controller\CRUDController;
  * @copyright 2020 Gert Hammes
  * @since     2020-08-01
  */
-class ModelRegionProjectController extends CRUDController
+class ModelRegionProjectController extends AbstractFrontendCRUDController
 {
-
-    public function index()
+    /**
+     * @inheritDoc
+     */
+    protected function getDefaultRouteName(): string
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return $this->redirectToRoute('sonata_admin_dashboard');
-        }
-        return $this->redirectToRoute('frontend_app_modelregionproject_list');
+        return 'frontend_app_modelregionproject_list';
     }
 
     /**
-     * Contextualize the admin class depends on the current request.
-     *
-     * @throws \RuntimeException
+     * @inheritDoc
      */
-    protected function configure()
+    protected function getAdminClassName(): string
     {
-        $request = $this->getRequest();
-        $request->attributes->set('_sonata_admin', ModelRegionProjectAdmin::class);
-        parent::configure();
-        /** @var $admin AbstractFrontendAdmin */
-        $admin = $this->admin;
-        $admin->setAppContext(ContextAwareAdminInterface::APP_CONTEXT_FE);
+        return ModelRegionProjectAdmin::class;
     }
 }

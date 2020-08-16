@@ -8,6 +8,7 @@ file that was distributed with this source code.
 
 {% block show_groups %}
     {# @var object \App\Entity\Base\BaseEntity #}
+    {# @var admin \App\Admin\AbstractContextAwareAdmin #}
     <div class="row">
         {% block field_row %}
             {% for code in groups %}
@@ -51,27 +52,29 @@ file that was distributed with this source code.
                     {% for field_name in show_group.fields %}
                         {% if field_name in customFields %}
                             <div class="col-xs-12">
+                                {# @var fieldDescription \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+                                {% set fieldDescription = elements[field_name] %}
                                 {# {{ elements['field_name']|render_view_element(object) }} #}
                                 {% if field_name == 'serviceSystems' %}
-                                    {% include 'General/Show/show-service-systems.html.twig' with {'entities': object.serviceSystems, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-service-systems.html.twig' with {'entities': object.serviceSystems, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'services' %}
-                                    {% include 'General/Show/show-services.html.twig' with {'entities': object.services, 'field_description': elements[field_name]} %}
+                                    {% include fieldDescription.template with {'entities': object.services, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'laboratories' %}
-                                    {% include 'General/Show/show-laboratories.html.twig' with {'entities': object.laboratories, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-laboratories.html.twig' with {'entities': object.laboratories, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'publishedSolutions' %}
-                                    {% include 'General/Show/show-solutions.html.twig' with {'entities': object.publishedSolutions, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-solutions.html.twig' with {'entities': object.publishedSolutions, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'solutions' %}
-                                    {% include 'General/Show/show-solutions.html.twig' with {'entities': object.solutions, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-solutions.html.twig' with {'entities': object.solutions, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'serviceProviders' %}
-                                    {% include 'General/Show/show-service-providers.html.twig' with {'entities': object.serviceProviders, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-service-providers.html.twig' with {'entities': object.serviceProviders, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'communes' %}
-                                    {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'implementationProjects' %}
-                                    {% include 'General/Show/show-implementation-projects.html.twig' with {'entities': object.implementationProjects, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-implementation-projects.html.twig' with {'entities': object.implementationProjects, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'modelRegionProjects' %}
-                                    {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.modelRegionProjects, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.modelRegionProjects, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'publishedModelRegionProjects' %}
-                                    {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.publishedModelRegionProjects, 'field_description': elements[field_name]} %}
+                                    {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.publishedModelRegionProjects, 'field_description': fieldDescription} %}
                                 {% endif %}
                             </div>
                         {% endif %}

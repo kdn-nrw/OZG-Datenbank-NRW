@@ -25,7 +25,7 @@ file that was distributed with this source code.
         {% endif %}
 
         <div class="panel-body">
-            <div class="mb-chart-container" style="position: relative;margin: auto;" data-url="{{ path('app_statistics_chart', {'key': chartKey}) }}">
+            <div class="mb-chart-container" style="position: relative;margin: auto;" data-url="{{ path('app_statistics_chart', {'key': chartKey, 'filters': settings.filters}) }}">
             </div>
         </div>
     </div>

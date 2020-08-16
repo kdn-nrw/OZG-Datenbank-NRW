@@ -1,0 +1,24 @@
+
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if entities|length > 0 %}
+    {% for child in entities %}
+        {# @var child \App\Entity\FederalInformationManagementType #}
+        <div class="child-list-item fim-list-item">
+            <h5 class="item-headline">{{ child.dataTypeLabel|trans }}
+                <span class="label label-{% if child.status == 2 %}submitted{% elseif child.status == 3 %}success{% else %}warning{% endif %}">
+                            {{ child.statusLabel|trans }}
+                        </span>
+            </h5>
+            {% if child.notes %}
+                <div class="item-notes">
+                    {{ child.notes|raw }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}

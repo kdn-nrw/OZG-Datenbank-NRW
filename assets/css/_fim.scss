@@ -1,0 +1,22 @@
+.fim-list-item {
+  &:not(:last-child) {
+    padding-bottom: 20px;
+    border-bottom: 2px solid $gray-200;
+    margin-bottom: 20px;
+  }
+  .item-headline {
+    font-weight: bold;
+    .label {
+      margin-left: 15px;
+    }
+  }
+}
+.child-table-container {
+  .fim-list-item {
+    &:not(:last-child) {
+      padding-bottom: 10px;
+      border-bottom: none;
+      margin-bottom: 10px;
+    }
+  }
+}

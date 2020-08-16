@@ -16,17 +16,24 @@ namespace App\Statistics;
  */
 interface ChartStatisticsProviderInterface
 {
+    /**
+     * Add custom filter as JSON encoded string
+     *
+     * @param string|null $filters
+     * @return void
+     */
+    public function addFilters(?string $filters): void;
 
     /**
      * Returns the chart configuration
      *
      * @return array
      */
-    public function getChartConfig();
+    public function getChartConfig(): array;
 
     /**
      * Returns the list of JavaScript files required for this provider
      * @return array
      */
-    public function getScripts();
+    public function getScripts(): array;
 }

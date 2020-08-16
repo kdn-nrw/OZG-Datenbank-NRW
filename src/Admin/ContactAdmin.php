@@ -22,6 +22,8 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 
 class ContactAdmin extends AbstractAppAdmin
@@ -47,28 +49,43 @@ class ContactAdmin extends AbstractAppAdmin
                 'required' => false,
             ])
             ->add('firstName', TextType::class)
-            ->add('lastName', TextType::class)
+            ->add('lastName', TextType::class);
+        $formMapper->add('imageFile', VichImageType::class, [
+            'required' => false,
+            'allow_delete' => true,
+            //'delete_label' => '...',
+            //'download_label' => '...',
+            'download_uri' => true,
+            'image_uri' => true,
+            'imagine_pattern' => 'default_small',
+            'asset_helper' => true,
+        ]);
+        $formMapper
             ->end()
             ->with('app.contact.groups.address_data', ['class' => 'col-md-6']);
         $this->addAddressFormFields($formMapper);
+        $formMapper
+            ->add('url', UrlType::class, [
+                'required' => false
+            ]);
         $formMapper->end();
         $formMapper
             ->end()
             ->with('app.contact.groups.organisation', ['class' => 'clear-left-md col-md-6']);
         if (!in_array('organisationEntity', $hideFields, false)) {
             $formMapper->add('organisationEntity', ModelType::class, [
-                    'label' => 'app.contact.entity.organisation_entity_form',
-                    'btn_add' => false,
-                    'placeholder' => '',
-                    'required' => false,
-                    'choice_translation_domain' => false,
-                ]);
+                'label' => 'app.contact.entity.organisation_entity_form',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'choice_translation_domain' => false,
+            ]);
         }
         if (!in_array('organisationEntity', $hideFields, false)) {
             $formMapper->add('organisation', TextType::class, [
-                    'label' => 'app.contact.entity.organisation_form',
-                    'required' => false,
-                ]);
+                'label' => 'app.contact.entity.organisation_form',
+                'required' => false,
+            ]);
         }
         $formMapper
             ->add('department', TextType::class, [
@@ -157,6 +174,7 @@ class ContactAdmin extends AbstractAppAdmin
             ->add('firstName')
             ->add('email');
         $this->addAddressShowFields($showMapper);
+        $showMapper->add('url', 'url');
         $showMapper->add('organisation')
             ->add('department')
             ->add('position')

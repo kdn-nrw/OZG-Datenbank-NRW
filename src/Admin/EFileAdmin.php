@@ -100,6 +100,12 @@ class EFileAdmin extends AbstractAppAdmin implements SearchableAdminInterface
     {
         $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
+        $datagridMapper->add('serviceProvider',
+            null,
+            ['label' => 'app.efile.entity.service_provider'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('leadingSystem',
             null,
             ['label' => 'app.efile.entity.leading_system'],

@@ -227,7 +227,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
         $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
         $this->addOrganisationsShowFields($showMapper, 'projectLeaders');
         $this->addServiceSystemsShowFields($showMapper);
-        $this->addServicesShowFields($showMapper);
+        $this->addServicesShowFields($showMapper, ['showFimTypes' => true]);
         $this->addFundingsShowFields($showMapper);
         $showMapper->add('bureaus', null, [
             'admin_code' => BureauAdmin::class,

@@ -9,6 +9,8 @@ sonata_admin:
         role_super_admin: ROLE_SUPER_ADMIN
     templates:
         show: 'General/Show/show.html.twig'
+    options:
+        use_icheck: false # disable iCheck
     assets:
 #        javascripts:
 #            - bundles/sonatacore/vendor/jquery/dist/jquery.min.js

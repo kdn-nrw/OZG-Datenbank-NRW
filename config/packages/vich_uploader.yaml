@@ -2,6 +2,17 @@ vich_uploader:
     db_driver: orm
 
     mappings:
-        mailing:
+        mailing_attachment:
             uri_prefix: /media/mailing
             upload_destination: '%kernel.project_dir%/public/media/mailing'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load:     false
+            delete_on_update:   true
+            delete_on_remove:   true
+        contact_image:
+            uri_prefix: /media/contact
+            upload_destination: '%kernel.project_dir%/public/media/contact'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load:     false
+            delete_on_update:   true
+            delete_on_remove:   true

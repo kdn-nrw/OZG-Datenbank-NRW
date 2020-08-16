@@ -19,6 +19,8 @@ use App\Entity\Jurisdiction;
 use App\Entity\Priority;
 use App\Entity\Status;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
+use App\Form\Type\FederalInformationManagementType;
+use App\Form\Type\MailingAttachmentType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -264,6 +266,26 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 ->end()
                 ->end();
         }
+        $formMapper->tab('app.service.tabs.fim', [
+            'label' => 'app.service.tabs.fim',
+            'box_class' => 'box-tab',
+        ])
+            ->with('app.service.entity.fim_types', [
+                'label' => false,
+                'class' => 'col-md-12 box-group-service-fim',
+                'box_class' => 'box-tab',
+            ])
+            ->add('fimTypes', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                'entry_type' => FederalInformationManagementType::class,
+                'allow_add' => false,
+                'allow_delete' => false,
+                'by_reference' => false,
+                'attr' => [
+                    'class' => 'block-fim-type',
+                ],
+            ])
+            ->end()
+            ->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -448,6 +470,7 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
                 'route' => [
                     'name' => 'edit',
                 ],
-            ]);
+            ])
+            ->add('fimTypes');
     }
 }

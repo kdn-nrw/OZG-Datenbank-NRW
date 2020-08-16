@@ -1,0 +1,48 @@
+.box-group-service-fim {
+  > .sonata-ba-collapsed-fields > .form-group > .control-label {
+    display: none;
+  }
+  .show-as-headline {
+    background: transparent;
+    color: #000;
+    border-width: 0;
+    font-weight: bold;
+    padding: 0;
+    font-size: 2rem;
+    // Hide dropdown arrow
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+  }
+  .fim-status {
+    + .control-label__text {
+      display: inline-block;
+      border-radius: 3px;
+      padding: 3px 6px;
+      background-color: #fff;
+    }
+    &.fim-status-1 {
+      + .control-label__text {
+        background-color: $warning;
+      }
+    }
+    &.fim-status-2 {
+      + .control-label__text {
+        background-color: $yellow;
+      }
+    }
+    &.fim-status-3 {
+      + .control-label__text {
+        background-color: $success;
+      }
+    }
+  }
+  .sonata-collection-row {
+    &:not(:last-child) {
+      padding-bottom: 20px;
+      border-bottom: 2px solid $gray-200;
+      margin-bottom: 20px;
+    }
+  }
+}

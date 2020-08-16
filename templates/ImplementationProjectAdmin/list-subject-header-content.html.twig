@@ -1,0 +1,19 @@
+{# @var subject \App\Entity\Subject #}
+<div class="row">
+    {% if subject.contact %}
+        <div class="col-xs-12 col-lg-4 col-xl-6">
+            <h3 class="widget-headline">{{ 'app.subject.frontend.contact_for'|trans }} {{ subject.name }}</h3>
+            {% include 'Frontend/Admin/Partials/_contact-widget.html.twig' with {'contact': subject.contact} %}
+        </div>
+    {% endif %}
+    <div class="col-xs-12 col-lg-8 col-xl-6">
+        {% set filters = {'subject': subject.id } %}
+        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+            'title': 'app.statistics.implementation_project_status',
+            'translation_domain': 'messages',
+            'mode': 'admin',
+            'filters': filters|json_encode,
+            'provider':  'App\\Statistics\\Provider\\ImplementationProjectStatusChartProvider'
+        }) }}
+    </div>
+</div>

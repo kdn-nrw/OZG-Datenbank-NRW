@@ -9,15 +9,22 @@ file that was distributed with this source code.
 
 {% block sonata_page_content %}
     <section class="content">
-    {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_IMPLEMENTATION_PROJECTS')} %}
+        {% if filterSubject is defined and filterSubject is not null %}
+            {% include 'ImplementationProjectAdmin/list-subject-header-content.html.twig' with {'subject': filterSubject} %}
+        {% else %}
+            {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_IMPLEMENTATION_PROJECTS')} %}
+        {% endif %}
     </section>
     {{ parent() }}
-    <section class="content content-bottom">
-        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
-            'title': 'app.statistics.implementation_project_status',
-            'translation_domain': 'messages',
-            'mode': 'admin',
-            'provider':  'App\\Statistics\\Provider\\ImplementationProjectStatusChartProvider'
-        }) }}
-    </section>
+    {% if filterSubject is defined and filterSubject is not null %}
+    {% else %}
+        <section class="content content-bottom">
+            {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+                'title': 'app.statistics.implementation_project_status',
+                'translation_domain': 'messages',
+                'mode': 'admin',
+                'provider':  'App\\Statistics\\Provider\\ImplementationProjectStatusChartProvider'
+            }) }}
+        </section>
+    {% endif %}
 {% endblock sonata_page_content %}

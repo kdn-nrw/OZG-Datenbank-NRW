@@ -17,6 +17,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\VarDumper\VarDumper;
 
 trait ServiceTrait
 {
@@ -55,14 +56,18 @@ trait ServiceTrait
     }
 
     /**
-     * @inheritdoc
+     * Add service fields for show action
+     * @param ShowMapper $showMapper
+     * @param array $overrideFieldDescriptionOptions
      */
-    public function addServicesShowFields(ShowMapper $showMapper)
+    public function addServicesShowFields(ShowMapper $showMapper, array $overrideFieldDescriptionOptions = [])
     {
+        $fieldDescriptionOptions = array_merge([
+            'admin_code' => ServiceAdmin::class,
+            'template' => 'General/Show/show-services.html.twig',
+            'showFimTypes' => false,
+        ], $overrideFieldDescriptionOptions);
         $showMapper
-            ->add('services', null,[
-                'admin_code' => ServiceAdmin::class,
-                //'template' => 'General/Show/show-services.twig',
-            ]);
+            ->add('services', null, $fieldDescriptionOptions);
     }
 }

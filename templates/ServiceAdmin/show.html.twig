@@ -80,6 +80,7 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block app_show_custom_fields %}
+    {# @var object \App\Entity\Service #}
     {% if elements['serviceSolutions'] is defined %}
         {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
         {% set displayServiceSolutions = isAdminMode ? object.serviceSolutions : object.publishedServiceSolutions %}
@@ -88,4 +89,9 @@ file that was distributed with this source code.
         </div>
     {% endif %}
     {{ parent() }}
+    {% if elements['fimTypes'] is defined %}
+        <div class="col-xs-12">
+            {% include 'ServiceAdmin/show-fim.html.twig' with {'entities': object.fimTypes} %}
+        </div>
+    {% endif %}
 {% endblock %}

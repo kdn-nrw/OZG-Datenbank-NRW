@@ -12,6 +12,7 @@
 namespace App\Service\Mailer;
 
 use App\Entity\Mailing;
+use App\Entity\MailingAttachment;
 use App\Entity\MailingContact;
 use DateTime;
 use DateTimeZone;
@@ -19,6 +20,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Vich\UploaderBundle\Storage\FileSystemStorage;
 
 class MailingSender
 {
@@ -32,14 +34,21 @@ class MailingSender
     private $registry;
 
     /**
+     * @var FileSystemStorage
+     */
+    private $attachmentStorage;
+
+    /**
      * MailingSender constructor.
      * @param ManagerRegistry $registry
      * @param BaseMailer $mailer
+     * @param FileSystemStorage $attachmentStorage
      */
-    public function __construct(ManagerRegistry $registry, BaseMailer $mailer)
+    public function __construct(ManagerRegistry $registry, BaseMailer $mailer, FileSystemStorage $attachmentStorage)
     {
         $this->registry = $registry;
         $this->mailer = $mailer;
+        $this->attachmentStorage = $attachmentStorage;
     }
 
     /**
@@ -129,14 +138,16 @@ class MailingSender
         if ($senderEmail = $mailing->getSenderEmail()) {
             $email->from($mailer->createAddress($senderEmail, $mailing->getSenderName()));
         }
-        //->cc('cc@example.com')
-        //->bcc('bcc@example.com')
-        //->replyTo('fabien@example.com')
-        //->priority(Email::PRIORITY_HIGH)
         $email->subject($mailing->getSubject())
             ->text($plainText);
-        //$email->html('<p>See Twig integration for better HTML integration!</p>');
-
+        $attachments = $mailing->getAttachments();
+        foreach ($attachments as $attachment) {
+            /** @var MailingAttachment $attachment */
+            $path = $this->attachmentStorage->resolvePath($attachment);
+            if (file_exists($path)) {
+                $email->attachFromPath($path, $attachment->getName());
+            }
+        }
         return $mailer->sendMessage($email);
     }
 

@@ -14,6 +14,7 @@ namespace App\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -36,6 +37,12 @@ class SubjectAdmin extends AbstractAppAdmin
                 'sortable' => 'position',
                 'ba_custom_hide_fields' => ['subject'],
             ])
+            ->add('contact', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'choice_translation_domain' => false,
+            ])
             ->end();
     }
 
@@ -49,12 +56,14 @@ class SubjectAdmin extends AbstractAppAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('contact');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
             ->addIdentifier('name')
+            ->add('contact')
             ->addIdentifier('situations');
         $this->addDefaultListActions($listMapper);
     }
@@ -65,6 +74,7 @@ class SubjectAdmin extends AbstractAppAdmin
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name');
+            ->add('name')
+            ->add('contact');
     }
 }

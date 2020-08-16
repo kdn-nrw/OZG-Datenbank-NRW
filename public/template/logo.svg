@@ -1,1 +1,22 @@
-<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1417.32 722.24"><defs><style>.cls-1,.cls-2{fill:#001f33;}.cls-2{fill-rule:evenodd;}.cls-3{fill:#ee7203;}</style></defs><title>2017-02-02 KDN_LogoVektor-cmyk-50cm</title><polygon class="cls-1" points="0 369.11 0 722.24 100.54 722.24 100.54 574.18 207.58 722.24 336.63 722.24 191.57 541.67 328.13 369.11 203.08 369.11 100.54 510.16 100.54 369.11 0 369.11 0 369.11"/><path class="cls-2" d="M455.29,436.11V789.24H566.34c54,0,77.53-3,103.54-13,65.53-24.51,87-89,92.54-109.54a225,225,0,0,0,7-56c0-36-8.5-73-27.51-103.54-31.51-50-77-61-98.54-65.52-21-4-40.52-5.5-83.53-5.5Zm101.05,82.53c26.51,0,55,0,78.53,16,31,22,31,66.53,31,74.53,0,44-18,68.53-32,80.53-22.5,18.51-50.51,18-77.52,17V518.64Z" transform="translate(-80 -67)"/><path class="cls-1" d="M819.09,436.11V789.24H919.63l-2-159.06c0-18-1-36.51-1.51-54,4,6,8,12,12.51,18.51,6.5,9.5,13.5,19.5,20.51,29l124.05,165.56h100V436.11h-99.54l2,160.56c.5,16.5,1,33.51,1,50q-14.26-21-30-42L918.62,436.11Z" transform="translate(-80 -67)"/><polygon class="cls-3" points="997.62 0 1417.32 0 1417.32 420.36 1307.62 420.36 1307.62 111.26 997.62 111.27 997.62 0 997.62 0"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1417.3" height="722.25" data-name="Ebene 1" version="1.1" viewBox="0 0 1417.3 722.25" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>2017-02-02 KDN_LogoVektor-cmyk-50cm</dc:title>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style>.cls-1,.cls-2{fill:#215566;}.cls-2{fill-rule:evenodd;}.cls-3{fill:#f8523c;}</style>
+ </defs>
+ <title>2017-02-02 KDN_LogoVektor-cmyk-50cm</title>
+ <g fill="#215566">
+  <polygon class="cls-1" points="191.57 541.67 328.13 369.11 203.08 369.11 100.54 510.16 100.54 369.11 0 369.11 0 722.24 100.54 722.24 100.54 574.18 207.58 722.24 336.63 722.24"/>
+  <path class="cls-2" d="m375.29 369.11v353.13h111.05c54 0 77.53-3 103.54-13 65.53-24.51 87-89 92.54-109.54a225 225 0 0 0 7-56c0-36-8.5-73-27.51-103.54-31.51-50-77-61-98.54-65.52-21-4-40.52-5.5-83.53-5.5zm101.05 82.53c26.51 0 55 0 78.53 16 31 22 31 66.53 31 74.53 0 44-18 68.53-32 80.53-22.5 18.51-50.51 18-77.52 17v-188.06z" fill-rule="evenodd"/>
+  <path class="cls-1" d="m739.09 369.11v353.13h100.54l-2-159.06c0-18-1-36.51-1.51-54 4 6 8 12 12.51 18.51 6.5 9.5 13.5 19.5 20.51 29l124.05 165.56h100v-353.14h-99.54l2 160.56c0.5 16.5 1 33.51 1 50q-14.26-21-30-42l-128.03-168.56z"/>
+ </g>
+ <polygon class="cls-3" points="997.62 0 1417.3 0 1417.3 420.36 1307.6 420.36 1307.6 111.26 997.62 111.27" fill="#f8523c"/>
+</svg>

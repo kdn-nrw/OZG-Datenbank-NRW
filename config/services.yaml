@@ -257,6 +257,7 @@ services:
         label:        app.implementation_project.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
     public: true
 
   App\Admin\JurisdictionAdmin:
@@ -368,6 +369,7 @@ services:
         label:        app.model_region.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
     public: true
 
   App\Admin\ModelRegionBeneficiaryAdmin:
@@ -405,6 +407,7 @@ services:
         label:        app.model_region_project.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
     public: true
 
   App\Admin\OpenDataAdmin:
@@ -519,6 +522,7 @@ services:
         label:        app.service_system.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
     public: true
 
   App\Admin\ServiceAdmin:
@@ -549,6 +553,7 @@ services:
         label:        app.service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
     public: true
 
   App\Admin\ServiceProviderAdmin:
@@ -631,6 +636,7 @@ services:
         label:        app.solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
     public: true
 
   App\Entity\Manager\ImplementationProjectManager:

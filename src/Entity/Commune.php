@@ -28,6 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface
 {
     use AddressTrait;
+    use ContactTextTrait;
     use UrlTrait;
     use OrganisationTrait;
 
@@ -37,14 +38,6 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
-
-    /**
-     * Contact persons
-     * @var string|null
-     *
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $contact;
 
     /**
      * @var Office[]|Collection
@@ -126,22 +119,6 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
         $this->organisation = $organisation;
         $this->organisation->setCommune($this);
         $this->organisation->setFromReference($this);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getContact(): ?string
-    {
-        return $this->contact;
-    }
-
-    /**
-     * @param string|null $contact
-     */
-    public function setContact(?string $contact): void
-    {
-        $this->contact = $contact;
     }
 
     /**

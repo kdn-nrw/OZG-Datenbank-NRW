@@ -22,10 +22,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_subject")
- * @ORM\HasLifecycleCallbacks
  */
 class Subject extends BaseNamedEntity
 {
+    use ContactEntityTrait;
 
     /**
      * @var Situation[]|Collection
@@ -42,7 +42,7 @@ class Subject extends BaseNamedEntity
      * @param Situation $situation
      * @return self
      */
-    public function addSituation($situation)
+    public function addSituation($situation): self
     {
         if (!$this->situations->contains($situation)) {
             $this->situations->add($situation);
@@ -56,7 +56,7 @@ class Subject extends BaseNamedEntity
      * @param Situation $situation
      * @return self
      */
-    public function removeSituation($situation)
+    public function removeSituation($situation): self
     {
         if ($this->situations->contains($situation)) {
             $this->situations->removeElement($situation);

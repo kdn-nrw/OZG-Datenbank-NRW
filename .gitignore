@@ -5,6 +5,8 @@
 /.env.*.local
 /public/bundles/
 /var/
+/public/media/*
+!/public/media/.gitkeep
 /vendor/
 /composer.phar
 ###< symfony/framework-bundle ###

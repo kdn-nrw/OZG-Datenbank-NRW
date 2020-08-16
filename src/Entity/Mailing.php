@@ -18,6 +18,7 @@ use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
 /**
@@ -25,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_mailing")
+ * @Vich\Uploadable
  */
 class Mailing extends BaseBlamableEntity
 {
@@ -172,8 +174,14 @@ class Mailing extends BaseBlamableEntity
      */
     private $blacklistEmails;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MailingAttachment", mappedBy="mailing", cascade={"persist", "remove"})
+     */
+    private $attachments;
+
     public function __construct()
     {
+        $this->attachments = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->excludeContacts = new ArrayCollection();
         $this->mailingContacts = new ArrayCollection();
@@ -575,6 +583,49 @@ class Mailing extends BaseBlamableEntity
     }
 
     /**
+     * Add attachment
+     *
+     * @param MailingAttachment $attachment
+     *
+     * @return self
+     */
+    public function addAttachment(MailingAttachment $attachment): self
+    {
+        $this->attachments->add($attachment);
+        $attachment->setMailing($this);
+        // $this->attachments[] = $attachment;
+        return $this;
+    }
+
+    /**
+     * Remove attachment
+     *
+     * @param MailingAttachment $attachment
+     */
+    public function removeAttachment(MailingAttachment $attachment): void
+    {
+        $this->attachments->removeElement($attachment);
+    }
+
+    /**
+     * Get attachments
+     *
+     * @return Collection
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param MailingAttachment[]|Collection $attachments
+     */
+    public function setAttachments($attachments): void
+    {
+        $this->attachments = $attachments;
+    }
+
+    /**
      * Mailing to string
      *
      * @return string
@@ -599,5 +650,4 @@ class Mailing extends BaseBlamableEntity
         }
         return $text;
     }
-
 }

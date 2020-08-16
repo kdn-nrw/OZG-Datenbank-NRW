@@ -73,12 +73,18 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
         // https://chartjs-plugin-datalabels.netlify.com/options.html
         'datalabels' => '/vendor/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js',
     ];
+
     /**
      * @var array
      */
     private $scripts = [
         'core' => '/vendor/chart.js/dist/Chart.bundle.min.js',
     ];
+
+    /**
+     * @var array
+     */
+    protected $additionalFilters = [];
 
     /**
      * https://nagix.github.io/chartjs-plugin-colorschemes
@@ -164,7 +170,7 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
      *
      * @return array
      */
-    public function getChartConfig()
+    public function getChartConfig(): array
     {
         // Get data first in case the options are overridden depending on the loaded data!
         $data = $this->createChartData();
@@ -177,8 +183,21 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
         ];
     }
 
-    public function getScripts()
+    public function getScripts(): array
     {
         return $this->scripts;
     }
+
+    /**
+     * Add custom filter as JSON encoded string
+     *
+     * @param string|null $filters
+     */
+    public function addFilters(?string $filters): void
+    {
+        if ($filters && $filterArray = json_decode($filters, true)) {
+            $this->additionalFilters = array_merge($this->additionalFilters, $filterArray);
+        }
+    }
+
 }

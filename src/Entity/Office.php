@@ -12,11 +12,10 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseBlamableEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\NamedEntityTrait;
+use Doctrine\ORM\Mapping as ORM;
 
 
 /**
@@ -30,6 +29,7 @@ class Office extends BaseBlamableEntity implements NamedEntityInterface
 {
     use NamedEntityTrait;
     use HideableEntityTrait;
+    use ContactTextTrait;
     use UrlTrait;
 
     /**
@@ -45,14 +45,6 @@ class Office extends BaseBlamableEntity implements NamedEntityInterface
      * @ORM\ManyToOne(targetEntity="Commune", inversedBy="offices", cascade={"persist"})
      */
     private $commune;
-
-    /**
-     * Contact
-     * @var string|null
-     *
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $contact;
 
     /**
      * @return string|null
@@ -73,7 +65,7 @@ class Office extends BaseBlamableEntity implements NamedEntityInterface
     /**
      * @return Commune
      */
-    public function getCommune()
+    public function getCommune(): Commune
     {
         return $this->commune;
     }
@@ -85,21 +77,4 @@ class Office extends BaseBlamableEntity implements NamedEntityInterface
     {
         $this->commune = $commune;
     }
-
-    /**
-     * @return string|null
-     */
-    public function getContact(): ?string
-    {
-        return $this->contact;
-    }
-
-    /**
-     * @param string|null $contact
-     */
-    public function setContact(?string $contact): void
-    {
-        $this->contact = $contact;
-    }
-
 }

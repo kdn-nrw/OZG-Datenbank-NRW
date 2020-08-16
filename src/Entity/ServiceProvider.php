@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface
 {
     use AddressTrait;
+    use ContactTextTrait;
     use UrlTrait;
     use OrganisationTrait;
 
@@ -43,14 +44,6 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @ORM\Column(type="string", name="short_name", length=255, nullable=true)
      */
     private $shortName;
-
-    /**
-     * Contact
-     * @var string|null
-     *
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $contact;
 
     /**
      * @var Solution[]|Collection
@@ -111,22 +104,6 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     public function setShortName(?string $shortName): void
     {
         $this->shortName = $shortName;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getContact(): ?string
-    {
-        return $this->contact;
-    }
-
-    /**
-     * @param string|null $contact
-     */
-    public function setContact(?string $contact): void
-    {
-        $this->contact = $contact;
     }
 
     /**

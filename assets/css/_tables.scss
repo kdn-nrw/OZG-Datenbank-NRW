@@ -5,11 +5,21 @@
     border-bottom-width: 2px;
     border-left-width: 30px;
     .headline {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
+      font-weight: bold;
       padding-left: 8px;
     }
     .table {
       margin-bottom: 0;
+    }
+    .child-item-list {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .child-list-item {
+      background: $gray-200;
+      padding: 10px 15px;
+      margin: 10px 10px 10px 0;
     }
   }
 }

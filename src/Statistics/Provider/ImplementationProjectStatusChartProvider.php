@@ -12,6 +12,7 @@
 namespace App\Statistics\Provider;
 
 use App\Entity\ImplementationProject;
+use Doctrine\ORM\QueryBuilder;
 
 class ImplementationProjectStatusChartProvider extends AbstractForeignNamedPropertyChartProvider
 {
@@ -21,5 +22,22 @@ class ImplementationProjectStatusChartProvider extends AbstractForeignNamedPrope
     protected function getEntityClass(): string
     {
         return ImplementationProject::class;
+    }
+
+    protected function addCustomDataConditions(QueryBuilder $queryBuilder, string $alias = 's'): void
+    {
+        if (!empty($this->additionalFilters)) {
+            foreach ($this->additionalFilters as $filterProperty => $filterValue) {
+                if ($filterProperty === 'subject') {
+                    $queryBuilder->leftJoin( $alias . '.serviceSystems', 'ssy');
+                    $queryBuilder->leftJoin( 'ssy.situation', 'st');
+                    $queryBuilder->andWhere($queryBuilder->expr()->eq('st.' . $filterProperty, ':' . $filterProperty));
+                    $queryBuilder->setParameter($filterProperty, trim(strip_tags($filterValue)));
+                } else {
+                    $queryBuilder->andWhere($queryBuilder->expr()->eq('s.' . $filterProperty, ':' . $filterProperty));
+                    $queryBuilder->setParameter($filterProperty, trim(strip_tags($filterValue)));
+                }
+            }
+        }
     }
 }

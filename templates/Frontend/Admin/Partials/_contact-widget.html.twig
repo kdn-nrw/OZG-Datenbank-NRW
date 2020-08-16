@@ -1,0 +1,40 @@
+{# @var contact \App\Entity\Contact #}
+<div class="box box-widget widget-user">
+    <div class="widget-user-header bg-aqua-active">
+        <h3 class="widget-user-username">{{ contact.fullName }}</h3>
+        <h5 class="widget-user-desc">{{ contact.email }}</h5>
+    </div>
+    {% if contact.imageName %}
+    <div class="widget-user-image">
+        <div class="box-img-circle">
+            <img src="{{ vich_uploader_asset(contact, 'imageFile')|imagine_filter('default_small') }}" alt="{{ contact.fullName }}">
+        </div>
+    </div>
+    {% endif %}
+    <div class="box-footer">
+        {% if contact.phoneNumber %}
+        <div class="description-block">
+            <h5 class="description-header">{{ 'app.contact.entity.phone_number'|trans }}:</h5>
+            <span class="description-text">{{ contact.phoneNumber }}</span>
+        </div>
+        {% endif %}
+        {% if contact.mobileNumber %}
+            <div class="description-block">
+                <h5 class="description-header">{{ 'app.contact.entity.mobile_number'|trans }}:</h5>
+                <span class="description-text">{{ contact.mobileNumber }}</span>
+            </div>
+        {% endif %}
+        {% if contact.url %}
+            <div class="description-block">
+                <h5 class="description-header">{{ 'app.contact.entity.url'|trans }}:</h5>
+                <span class="description-text">{{ contact.url }}</span>
+            </div>
+        {% endif %}
+        {% if contact.department %}
+            <div class="description-block">
+                <h5 class="description-header">{{ 'app.contact.entity.department_fe'|trans }}:</h5>
+                <span class="description-text">{{ contact.department }}</span>
+            </div>
+        {% endif %}
+    </div>
+</div>

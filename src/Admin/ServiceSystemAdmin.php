@@ -271,6 +271,13 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('services.portals',
+            null, [
+                'admin_code' => PortalAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)

@@ -5,7 +5,7 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {% if entities|length > 0 %}
-    {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+    {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
     {% set refAdmin = null %}
     {% if not field_description.hasassociationadmin %}
         {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
@@ -46,6 +46,17 @@ file that was distributed with this source code.
                             </td>
                         {% endif %}
                     </tr>
+                    {% if field_description.option('showFimTypes') %}
+                        <tr>
+                            <td colspan="7" class="child-table-container">
+                                <h4 class="headline"><i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                    {{ 'app.service.fim.object_name'|trans }}</h4>
+                                <div class="child-item-list">
+                                    {% include 'ServiceAdmin/show-fim-list.html.twig' with {'entities': child.fimTypes} %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         </div>

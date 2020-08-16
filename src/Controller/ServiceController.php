@@ -12,12 +12,9 @@
 namespace App\Controller;
 
 
-use App\Admin\ContextAwareAdminInterface;
-use App\Admin\Frontend\AbstractFrontendAdmin;
 use App\Admin\Frontend\ServiceAdmin;
 use App\Entity\ServiceSystem;
 use Doctrine\ORM\EntityRepository;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -27,30 +24,22 @@ use Symfony\Component\HttpFoundation\Request;
  * @copyright 2019 Gert Hammes
  * @since     2019-11-08
  */
-class ServiceController extends CRUDController
+class ServiceController extends AbstractFrontendCRUDController
 {
-
-    public function index()
+    /**
+     * @inheritDoc
+     */
+    protected function getDefaultRouteName(): string
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return $this->redirectToRoute('sonata_admin_dashboard');
-        }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return 'frontend_app_service_list';
     }
 
     /**
-     * Contextualize the admin class depends on the current request.
-     *
-     * @throws \RuntimeException
+     * @inheritDoc
      */
-    protected function configure()
+    protected function getAdminClassName(): string
     {
-        $request = $this->getRequest();
-        $request->attributes->set('_sonata_admin', ServiceAdmin::class);
-        parent::configure();
-        /** @var $admin AbstractFrontendAdmin */
-        $admin = $this->admin;
-        $admin->setAppContext(ContextAwareAdminInterface::APP_CONTEXT_FE);
+        return ServiceAdmin::class;
     }
 
     public function getChoicesAction(Request $request)
@@ -76,7 +65,7 @@ class ServiceController extends CRUDController
             foreach ($result as $serviceSystem) {
                 /** @var ServiceSystem $serviceSystem */
                 $serviceSystemId = $serviceSystem->getId();
-                $isCurrent = $serviceSystemId === (int) $changeData['groupId'];
+                $isCurrent = $serviceSystemId === (int)$changeData['groupId'];
                 $services = $serviceSystem->getServices();
                 foreach ($services as $service) {
                     $serviceList[] = [
@@ -92,7 +81,7 @@ class ServiceController extends CRUDController
                 }
             }
             if ($changeData['type'] === 'removed'
-                && null !== $removedServiceSystem = $repository->find((int) $changeData['groupId'])) {
+                && null !== $removedServiceSystem = $repository->find((int)$changeData['groupId'])) {
                 /** @var ServiceSystem $removedServiceSystem */
                 $services = $removedServiceSystem->getServices();
                 foreach ($services as $service) {

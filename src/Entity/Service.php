@@ -95,6 +95,12 @@ class Service extends AbstractService
     private $serviceSolutions;
 
     /**
+     * @var FederalInformationManagementType[]|Collection
+     * @ORM\OneToMany(targetEntity="FederalInformationManagementType", mappedBy="service", cascade={"all"}, orphanRemoval=true)
+     */
+    private $fimTypes;
+
+    /**
      * @var Laboratory[]|Collection
      * @ORM\ManyToMany(targetEntity="Laboratory", mappedBy="services")
      */
@@ -263,6 +269,7 @@ class Service extends AbstractService
         $this->authorityBureaus = new ArrayCollection();
         $this->authorityStateMinistries = new ArrayCollection();
         $this->bureaus = new ArrayCollection();
+        $this->fimTypes = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
@@ -330,6 +337,68 @@ class Service extends AbstractService
     public function setServiceSolutions($serviceSolutions): void
     {
         $this->serviceSolutions = $serviceSolutions;
+    }
+
+    /**
+     * @param FederalInformationManagementType $fimType
+     * @return self
+     */
+    public function addFimType($fimType): self
+    {
+        if (!$this->fimTypes->contains($fimType)) {
+            $this->fimTypes->add($fimType);
+            $fimType->setService($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param FederalInformationManagementType $fimType
+     * @return self
+     */
+    public function removeFimType($fimType): self
+    {
+        if ($this->fimTypes->contains($fimType)) {
+            $this->fimTypes->removeElement($fimType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return FederalInformationManagementType[]|Collection
+     */
+    public function getFimTypes()
+    {
+        $dataTypes = array_keys(FederalInformationManagementType::$mapTypes);
+        $mapTypes = [];
+        foreach ($dataTypes as $dataType) {
+            $mapTypes[$dataType] = null;
+        }
+        foreach ($this->fimTypes as $fimEntry) {
+            /** @var FederalInformationManagementType $fimEntry */
+            if (($entryDataType = $fimEntry->getDataType()) && array_key_exists($entryDataType, $mapTypes)) {
+                $mapTypes[$entryDataType] = $fimEntry;
+            }
+        }
+        foreach ($dataTypes as $dataType) {
+            if (null === $mapTypes[$dataType]) {
+                $newEntry = new FederalInformationManagementType();
+                $newEntry->setStatus(FederalInformationManagementType::STATUS_IN_PROGRESS);
+                $newEntry->setDataType($dataType);
+                $this->addFimType($newEntry);
+            }
+        }
+        return $this->fimTypes;
+    }
+
+    /**
+     * @param FederalInformationManagementType[]|Collection $fimTypes
+     */
+    public function setFimTypes($fimTypes): void
+    {
+        $this->fimTypes = $fimTypes;
     }
 
     /**

@@ -32,6 +32,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     public const COMMUNE_TYPE_SELECTED = 'selected';
 
     use HideableEntityTrait;
+    use ContactTextTrait;
     use UrlTrait;
     use ImportTrait;
 
@@ -84,14 +85,6 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
      * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="solution", cascade={"all"}, orphanRemoval=true)
      */
     private $serviceSolutions;
-
-    /**
-     * Contact
-     * @var string|null
-     *
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $contact;
 
     /**
      * @var SpecializedProcedure[]|Collection
@@ -522,22 +515,6 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     public function setCustomProvider(?string $customProvider): void
     {
         $this->customProvider = $customProvider;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getContact(): ?string
-    {
-        return $this->contact;
-    }
-
-    /**
-     * @param string|null $contact
-     */
-    public function setContact(?string $contact): void
-    {
-        $this->contact = $contact;
     }
 
     /**

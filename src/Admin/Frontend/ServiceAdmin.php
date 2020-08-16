@@ -11,6 +11,8 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\LaboratoryAdmin;
+use App\Admin\PortalAdmin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Priority;
 use App\Entity\Status;
@@ -63,6 +65,13 @@ class ServiceAdmin extends AbstractFrontendAdmin
         );
         $datagridMapper->add('serviceSystem.serviceKey');
         $datagridMapper->add('status');
+        $datagridMapper->add('laboratories',
+            null, [
+                'admin_code' => LaboratoryAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
         $datagridMapper->add('jurisdictions',
             null,
             [],
@@ -72,6 +81,13 @@ class ServiceAdmin extends AbstractFrontendAdmin
         $datagridMapper->add('bureaus',
             null,
             [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('portals',
+            null, [
+                'admin_code' => PortalAdmin::class,
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -216,7 +232,8 @@ class ServiceAdmin extends AbstractFrontendAdmin
                 'route' => [
                     'name' => 'show',
                 ],
-            ]);
+            ])
+            ->add('fimTypes');
     }
 
     public function isGranted($name, $object = null)
@@ -239,7 +256,7 @@ class ServiceAdmin extends AbstractFrontendAdmin
         //$situations = $modelManager->findBy(Situation::class);
         //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
         $subjects = $modelManager->findBy(Subject::class);
-        $datagrid->addFilterMenu('serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject');
+        $datagrid->addFilterMenu('serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
     }
 
 

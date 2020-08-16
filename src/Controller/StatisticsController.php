@@ -3,7 +3,7 @@
  * This file is part of the KDN OZG package.
  *
  * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
+ * @copyright 2020 Gert Hammes
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,18 +12,11 @@
 namespace App\Controller;
 
 
-use App\Admin\SearchableAdminInterface;
-use App\Entity\Search;
-use App\Form\Type\SearchType;
-use App\Statistics\AbstractChartJsStatisticsProvider;
 use App\Statistics\ChartStatisticsProviderInterface;
 use App\Statistics\ProviderLoader;
 use Sonata\AdminBundle\Admin\Pool;
-use Sonata\DoctrineORMAdminBundle\Filter\Filter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -63,13 +56,17 @@ class StatisticsController extends AbstractController
 
 
     /**
-     * @param string $key
+     * @param Request $request
+     * @param string $key The chart key
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function chartAction(string $key)
+    public function chartAction(Request $request, string $key)
     {
         $provider = $this->providerLoader->getProviderByKey($key);
         if ($provider instanceof ChartStatisticsProviderInterface) {
+            if ($request->query->has('filters')) {
+                $provider->addFilters($request->query->get('filters'));
+            }
             /** @var ChartStatisticsProviderInterface $provider */
             $chartConfig = $provider->getChartConfig();
             $jsonData = [

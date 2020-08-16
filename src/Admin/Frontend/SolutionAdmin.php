@@ -301,7 +301,7 @@ class SolutionAdmin extends AbstractFrontendAdmin
         //$situations = $modelManager->findBy(Situation::class);
         //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
         $subjects = $modelManager->findBy(Subject::class);
-        $datagrid->addFilterMenu('serviceSolutions.service.serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject');
+        $datagrid->addFilterMenu('serviceSolutions.service.serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
     }
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface

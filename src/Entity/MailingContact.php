@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 class MailingContact extends BaseEntity
 {
     use HideableEntityTrait;
+    use ContactEntityTrait;
 
     const SEND_STATUS_FAILED = 3;
     const SEND_STATUS_DISABLED = 5;
