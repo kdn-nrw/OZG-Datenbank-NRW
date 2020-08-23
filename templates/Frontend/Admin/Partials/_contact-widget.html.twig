@@ -30,6 +30,12 @@
                 <span class="description-text">{{ contact.url }}</span>
             </div>
         {% endif %}
+        {% if contact.organisation %}
+            <div class="description-block">
+                <h5 class="description-header">{{ 'app.contact.entity.organisation'|trans }}:</h5>
+                <span class="description-text">{{ contact.organisation }}</span>
+            </div>
+        {% endif %}
         {% if contact.department %}
             <div class="description-block">
                 <h5 class="description-header">{{ 'app.contact.entity.department_fe'|trans }}:</h5>

@@ -5,38 +5,23 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {% if entities|length > 0 %}
-    {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
-    {% set refAdmin = null %}
-    {% if showSolution %}
-        {% if isAdminMode %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
-        {% elseif admin_pool is defined %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\SolutionAdmin') %}
-        {% endif %}
-    {% else  %}
-        {% if isAdminMode %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceAdmin') %}
-        {% elseif admin_pool is defined %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\ServiceAdmin') %}
-        {% endif %}
-    {% endif %}
-    {# @var refAdmin \App\Admin\AbstractAppAdmin #}
-    {% set route_name = 'edit' %}
-    {% set createEditLink = refAdmin is not null and refAdmin.hasRoute(route_name) and refAdmin.hasAccess(route_name) %}
-    {% set showRouteName = 'show' %}
-    {% set listEnableShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
-    {% set showContacts = isAdminMode %}
+    {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+    {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\Service' %}
+    {% set refFieldDesc = field_description is defined ? field_description : null %}
+    {% set refSettings = app_get_reference_settings(entityClass, admin.appContext, refFieldDesc) %}
+    {# @var refSettings \App\Model\ReferenceSettings #}
+    {% set showContacts = refSettings.isBackendMode %}
     <table class="table table-bordered table-condensed">
         <tr>
             {% if showSolution %}
-                {% include 'General/Show/Table/tabe-head-solutions.html.twig' %}
+                {% include 'General/Show/Table/table-head-solutions.html.twig' %}
             {% else %}
-                {% include 'General/Show/Table/tabe-head-services.html.twig' %}
+                {% include 'General/Show/Table/table-head-services.html.twig' %}
             {% endif %}
             <th>
                 {{ 'app.solution.entity.maturity'|trans }}
             </th>
-            {% if createEditLink %}
+            {% if refSettings.edit.enabled %}
                 <th>
                 </th>
             {% endif %}
@@ -45,14 +30,12 @@ file that was distributed with this source code.
             {# @var child \App\Entity\ServiceSolution #}
             <tr>
                 {% if showSolution %}
-                    {% set createShowLink = listEnableShowLink and (isAdminMode or child.solution.isPublished) %}
                     {% set editObjectId = child.solution.id %}
-                    {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
+                    {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child.solution} %}
                 {% else %}
-                    {% set createShowLink = listEnableShowLink %}
                     {% if child.service %}
                         {% set editObjectId = child.service.id %}
-                        {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child.service} %}
+                        {% include 'General/Show/Table/table-row-cells-services.html.twig' with {'child': child.service} %}
                     {% else %}
                         <td colspan="7" class="service-is-missing">
                             <span class="text-warning">{{ 'app.solution.messages.no_service_selected'|trans }}</span>
@@ -65,10 +48,10 @@ file that was distributed with this source code.
                         {{ child.maturity.name }}
                     {% endif %}
                 </td>
-                {% if createEditLink and editObjectId %}
+                {% if refSettings.edit.enabled and editObjectId %}
                     <td>
-                        {% if refAdmin.hasAccess(route_name, child) %}
-                            <a href="{{ refAdmin.generateUrl(route_name, { 'id': editObjectId }) }}">
+                        {% if refSettings.admin.hasAccess(refSettings.edit.route, child) %}
+                            <a href="{{ refSettings.admin.generateUrl(refSettings.edit.route, { 'id': editObjectId }) }}">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                         {% endif %}

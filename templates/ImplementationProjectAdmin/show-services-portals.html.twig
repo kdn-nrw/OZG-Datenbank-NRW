@@ -12,23 +12,12 @@ file that was distributed with this source code.
     {% if entities|length > 0 %}
     <ul class="sonata-ba-show-many-to-many">
         {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
-        {% set refAdmin = null %}
-        {% if not field_description.hasassociationadmin %}
-            {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
-            {% if isAdminMode %}
-                {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\PortalAdmin') %}
-            {% endif %}
-        {% else %}
-            {% set refAdmin = field_description.associationadmin %}
-        {% endif %}
-        {% set editRouteName = field_description.options.route.name %}
-        {% set createEditLink = editRouteName and refAdmin is not null and refAdmin.hasRoute(editRouteName) and refAdmin.hasAccess(editRouteName) %}
-        {% set showRouteName = 'show' %}
-        {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+        {% set refFieldDesc = field_description is defined ? field_description : null %}
+        {% set refSettings = app_get_reference_settings('App\\Entity\\Portal', admin.appContext, refFieldDesc) %}
         {% for child in entities %}
             <li>
-                {% if createEditLink and refAdmin.hasAccess(editRouteName, child) %}
-                    <a href="{{ refAdmin.generateObjectUrl(editRouteName, child, {'id': child.id}) }}">
+                {% if refSettings.edit.enabled and refSettings.admin.hasAccess(refSettings.edit.route, child) %}
+                    <a href="{{ refSettings.admin.generateObjectUrl(refSettings.edit.route, child, {'id': child.id}) }}">
                         {{ child.name }}
                     </a>
                 {% else %}

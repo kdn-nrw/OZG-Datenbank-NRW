@@ -6,13 +6,7 @@ file that was distributed with this source code.
 #}
 {# @var child \App\Entity\FormServer #}
 <td>
-    {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
-        <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
-            {{ child.name }}
-        </a>
-    {% else %}
-        {{ child.name }}
-    {% endif %}
+    {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
 </td>
 <td>
     {{ child.url }}

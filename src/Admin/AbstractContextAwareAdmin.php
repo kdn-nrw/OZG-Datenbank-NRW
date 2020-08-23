@@ -15,6 +15,7 @@ namespace App\Admin;
 use App\Entity\Repository\SearchIndexRepository;
 use App\Entity\SearchIndexWord;
 use App\Exporter\Source\CustomQuerySourceIterator;
+use App\Model\ReferenceSettings;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -261,5 +262,26 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         }
 
         return $parameters;
+    }
+
+    /**
+     * Returns the default reference settings for the reference lists in the detail views of other admins
+     *
+     * @param string $context The application context (backend or frontend); is not necessarily the same context of the current admin!
+     * @param string $editRouteName The edit route may be overridden in the field configuration
+     * @return ReferenceSettings
+     */
+    public function getReferenceSettings(string $context, string $editRouteName = 'edit'): ReferenceSettings
+    {
+        $settings = new ReferenceSettings();
+        $showRouteName = 'show';
+        $isBackendMode = $context === 'backend';
+        $settings->setAdmin($this);
+        $createShowLink = $this->hasRoute($showRouteName) && $this->hasAccess($showRouteName);
+        $createEditLink = $isBackendMode && $this->hasRoute($editRouteName) && $this->hasAccess($editRouteName);
+        $settings->setShow($createShowLink, $showRouteName);
+        $settings->setEdit($createEditLink, $editRouteName);
+        $settings->setListTitle($this->getLabel());
+        return $settings;
     }
 }

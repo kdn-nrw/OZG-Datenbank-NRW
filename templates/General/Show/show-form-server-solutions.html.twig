@@ -5,26 +5,12 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {% if entities|length > 0 %}
-    {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
-    {% set refAdmin = null %}
-    {% if showSolution %}
-        {% if isAdminMode %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\SolutionAdmin') %}
-        {% else %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\SolutionAdmin') %}
-        {% endif %}
-    {% else  %}
-        {% if isAdminMode %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\FormServerAdmin') %}
-        {% else %}
-        {% endif %}
-    {% endif %}
-    {# @var refAdmin \App\Admin\AbstractAppAdmin #}
-    {% set route_name = 'edit' %}
-    {% set createEditLink = refAdmin is not null and refAdmin.hasRoute(route_name) and refAdmin.hasAccess(route_name) %}
-    {% set showRouteName = 'show' %}
-    {% set listEnableShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
-    {% set showContacts = isAdminMode %}
+    {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+    {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\FormServer' %}
+    {% set refFieldDesc = field_description is defined ? field_description : null %}
+    {% set refSettings = app_get_reference_settings(entityClass, admin.appContext, refFieldDesc) %}
+    {# @var refSettings \App\Model\ReferenceSettings #}
+    {% set showContacts = refSettings.isBackendMode %}
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
@@ -38,27 +24,8 @@ file that was distributed with this source code.
         <div class="box-body table-responsive no-padding">
             <table class="table table-bordered table-condensed">
                 <tr>
-                    {% if showSolution %}
-                        {% include 'General/Show/Table/tabe-head-solutions.html.twig' %}
-                    {% else %}
-                        {% include 'General/Show/Table/tabe-head-form-servers.html.twig' %}
-                    {% endif %}
-                    <th>
-                        {{ 'app.form_server_solution.entity.status'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.form_server_solution.entity.article_number'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.form_server_solution.entity.assistant_type'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.form_server_solution.entity.article_key'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.form_server_solution.entity.usable_as_print_template'|trans }}
-                    </th>
-                    {% if createEditLink %}
+                    {% include 'General/Show/Table/table-head-form-server-solutions.html.twig' %}
+                    {% if refSettings.edit.enabled %}
                         <th>
                         </th>
                     {% endif %}
@@ -67,13 +34,11 @@ file that was distributed with this source code.
                     {# @var child \App\Entity\FormServerSolution #}
                     <tr>
                         {% if showSolution %}
-                            {% set createShowLink = listEnableShowLink and (isAdminMode or child.solution.isPublished) %}
                             {% set editObjectId = child.solution.id %}
-                            {% include 'General/Show/Table/tabe-row-cells-solutions.html.twig' with {'child': child.solution} %}
+                            {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child.solution} %}
                         {% else %}
-                            {% set createShowLink = listEnableShowLink %}
                             {% set editObjectId = child.formServer.id %}
-                            {% include 'General/Show/Table/tabe-row-cells-form-servers.html.twig' with {'child': child.formServer} %}
+                            {% include 'General/Show/Table/table-row-cells-form-servers.html.twig' with {'child': child.formServer} %}
                         {% endif %}
                         <td>
                             {% if child.status %}
@@ -92,10 +57,10 @@ file that was distributed with this source code.
                         <td>
                             {{ child.usableAsPrintTemplate ? 'Ja' : 'Nein' }}
                         </td>
-                        {% if createEditLink and editObjectId %}
+                        {% if refSettings.edit.enabled and editObjectId %}
                         <td>
-                            {% if refAdmin.hasAccess(route_name, child) %}
-                                <a href="{{ refAdmin.generateUrl(route_name, { 'id': editObjectId }) }}">
+                            {% if refSettings.admin.hasAccess(refSettings.edit.route, child) %}
+                                <a href="{{ refSettings.admin.generateUrl(refSettings.edit.route, { 'id': editObjectId }) }}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
                             {% endif %}

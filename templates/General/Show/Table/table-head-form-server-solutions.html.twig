@@ -1,0 +1,27 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% if showSolution %}
+    {% include 'General/Show/Table/table-head-solutions.html.twig' %}
+{% else %}
+    {% include 'General/Show/Table/table-head-form-servers.html.twig' %}
+{% endif %}
+<th>
+    {{ 'app.form_server_solution.entity.status'|trans }}
+</th>
+<th>
+    {{ 'app.form_server_solution.entity.article_number'|trans }}
+</th>
+<th>
+    {{ 'app.form_server_solution.entity.assistant_type'|trans }}
+</th>
+<th>
+    {{ 'app.form_server_solution.entity.article_key'|trans }}
+</th>
+<th>
+    {{ 'app.form_server_solution.entity.usable_as_print_template'|trans }}
+</th>

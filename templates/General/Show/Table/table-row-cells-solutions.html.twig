@@ -6,9 +6,10 @@ file that was distributed with this source code.
 #}
 
 {# @var child \App\Entity\Solution #}
+{% set createShowLink = refSettings.show.enabled and (refSettings.isBackendMode or child.isPublished) %}
 <td>
-    {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
-        <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
+    {% if createShowLink and refSettings.admin.hasAccess(refSettings.show.route, child) %}
+        <a href="{{ refSettings.admin.generateObjectUrl(refSettings.show.route, child, {'id': child.id}) }}">
             {{ child.displayName }}
         </a>
     {% else %}

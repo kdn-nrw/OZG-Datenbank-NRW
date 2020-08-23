@@ -5,6 +5,7 @@
   .box-footer {
     .description-block {
       display: flex;
+      align-items: center;
       max-width: 400px;
     }
     .description-header {
@@ -37,5 +38,8 @@
       width: 100%;
       height: auto;
     }
+  }
+  .box-footer {
+    padding-top: 10px;
   }
 }

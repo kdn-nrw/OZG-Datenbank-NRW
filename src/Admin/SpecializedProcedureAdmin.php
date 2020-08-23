@@ -23,7 +23,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\VarDumper\VarDumper;
 
 
 class SpecializedProcedureAdmin extends AbstractAppAdmin

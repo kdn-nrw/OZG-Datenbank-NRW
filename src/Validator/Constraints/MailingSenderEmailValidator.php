@@ -13,7 +13,6 @@ namespace App\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\VarDumper\VarDumper;
 
 class MailingSenderEmailValidator extends ConstraintValidator
 {

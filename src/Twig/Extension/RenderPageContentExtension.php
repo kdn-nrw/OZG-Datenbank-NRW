@@ -44,7 +44,13 @@ class RenderPageContentExtension extends AbstractExtension
         ];
     }
 
-    public function getPageContent(int $pageKey)
+    /**
+     * Returns an array with the contents for the given page key
+     *
+     * @param int $pageKey
+     * @return array
+     */
+    public function getPageContent(int $pageKey): array
     {
         /** @var \Doctrine\ORM\EntityRepository $repository */
         $repository = $this->registry->getRepository(PageContent::class);

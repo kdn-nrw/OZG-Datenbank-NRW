@@ -5,42 +5,30 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {% if entities|length > 0 %}
-    {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
-    {% set refAdmin = null %}
-    {% if not field_description.hasassociationadmin %}
-        {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
-        {% if isAdminMode %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceAdmin') %}
-        {% else %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\ServiceAdmin') %}
-        {% endif %}
-    {% else %}
-        {% set refAdmin = field_description.associationadmin %}
-    {% endif %}
-    {% set editRouteName = field_description.options.route.name %}
-    {% set createEditLink = editRouteName and refAdmin is not null and refAdmin.hasRoute(editRouteName) and refAdmin.hasAccess(editRouteName) %}
-    {% set showRouteName = 'show' %}
-    {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+    {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+    {% set refFieldDesc = field_description is defined ? field_description : null %}
+    {% set refSettings = app_get_reference_settings('App\\Entity\\Service', admin.appContext, refFieldDesc) %}
+    {# @var refSettings \App\Model\ReferenceSettings #}
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
-                {{ 'app.service.list'|trans }}
+                {{ refSettings.listTitle|trans }}
             </h4>
         </div>
         <div class="box-body table-responsive no-padding">
             <table class="table table-bordered table-condensed">
                 <tr>
-                    {% include 'General/Show/Table/tabe-head-services.html.twig' %}
-                    {% if createEditLink %}
+                    {% include 'General/Show/Table/table-head-services.html.twig' %}
+                    {% if refSettings.edit.enabled %}
                     <th></th>
                     {% endif %}
                 </tr>
                 {% for child in entities %}
                     {# @var child \App\Entity\Service #}
                     <tr>
-                        {% include 'General/Show/Table/tabe-row-cells-services.html.twig' with {'child': child} %}
+                        {% include 'General/Show/Table/table-row-cells-services.html.twig' with {'child': child} %}
 
-                        {% if createEditLink %}
+                        {% if refSettings.edit.enabled %}
                             <td>
                                 {% include 'General/Show/Partials/link-to-child.html.twig' %}
                             </td>

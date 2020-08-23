@@ -82,8 +82,8 @@ file that was distributed with this source code.
 {% block app_show_custom_fields %}
     {# @var object \App\Entity\Service #}
     {% if elements['serviceSolutions'] is defined %}
-        {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
-        {% set displayServiceSolutions = isAdminMode ? object.serviceSolutions : object.publishedServiceSolutions %}
+        {% set isBackendMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
+        {% set displayServiceSolutions = isBackendMode ? object.serviceSolutions : object.publishedServiceSolutions %}
         <div class="col-xs-12">
             {% include 'General/Show/show-service-solutions.html.twig' with {'entities': displayServiceSolutions, 'showSolution': true} %}
         </div>

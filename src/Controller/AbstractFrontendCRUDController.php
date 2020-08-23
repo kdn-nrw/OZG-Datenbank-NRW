@@ -16,7 +16,10 @@ use App\Admin\ContextAwareAdminInterface;
 use App\Admin\Frontend\AbstractFrontendAdmin;
 use App\Datagrid\CustomDatagrid;
 use Sonata\AdminBundle\Controller\CRUDController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class AbstractFrontendCRUDController
@@ -46,6 +49,33 @@ abstract class AbstractFrontendCRUDController extends CRUDController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('sonata_admin_dashboard');
         }
+        return $this->redirectToRoute($this->getDefaultRouteName());
+    }
+
+    /**
+     * No delete action possible in frontend (the routes are not defined anyways)
+     * @inheritDoc
+     */
+    public function deleteAction($id) // NEXT_MAJOR: Remove the unused $id parameter
+    {
+        return $this->redirectToRoute($this->getDefaultRouteName());
+    }
+
+    /**
+     * No edit action possible in frontend (the routes are not defined anyways)
+     * @inheritDoc
+     */
+    public function editAction($deprecatedId = null)
+    {
+        return $this->redirectToRoute($this->getDefaultRouteName());
+    }
+
+    /**
+     * No create action possible in frontend (the routes are not defined anyways)
+     * @inheritDoc
+     */
+    public function createAction()
+    {
         return $this->redirectToRoute($this->getDefaultRouteName());
     }
 

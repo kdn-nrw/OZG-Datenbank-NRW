@@ -9,52 +9,20 @@ file that was distributed with this source code.
 {% endif %}
 {% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
-    {% set refAdmin = null %}
-    {% if not field_description.hasassociationadmin %}
-        {% set isAdminMode = (admin is defined and admin.appContext == 'backend') and admin_pool is defined %}
-        {% if isAdminMode %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\ServiceSystemAdmin') %}
-        {% else %}
-            {% set refAdmin = admin_pool.getAdminByAdminCode('App\\Admin\\Frontend\\ServiceSystemAdmin') %}
-        {% endif %}
-    {% else %}
-        {% set refAdmin = field_description.associationadmin %}
-    {% endif %}
-    {% set editRouteName = field_description.options.route.name %}
-    {% set createEditLink = editRouteName and refAdmin is not null and refAdmin.hasRoute(editRouteName) and refAdmin.hasAccess(editRouteName) %}
-    {% set showRouteName = 'show' %}
-    {% set createShowLink = refAdmin is not null and refAdmin.hasRoute(showRouteName) and refAdmin.hasAccess(showRouteName) %}
+    {% set refFieldDesc = field_description is defined ? field_description : null %}
+    {% set refSettings = app_get_reference_settings('App\\Entity\\ServiceSystem', admin.appContext, refFieldDesc) %}
+    {# @var refSettings \App\Model\ReferenceSettings #}
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
-                {{ 'app.service_system.list'|trans }}
+                {{ refSettings.listTitle|trans }}
             </h4>
         </div>
         <div class="box-body table-responsive no-padding">
             <table class="table table-bordered table-condensed">
                 <tr>
-                    <th>
-                        {{ 'app.service_system.entity.name'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.service_system.entity.service_key'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.service_system.entity.jurisdictions'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.service_system.entity.situation'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.situation.entity.subject'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.service_system.entity.priority'|trans }}
-                    </th>
-                    <th>
-                        {{ 'app.service_system.entity.status'|trans }}
-                    </th>
-                    {% if createEditLink %}
+                    {% include 'General/Show/Table/table-head-service-systems.html.twig' %}
+                    {% if refSettings.edit.enabled %}
                         <th></th>
                     {% endif %}
                 </tr>
@@ -62,13 +30,7 @@ file that was distributed with this source code.
                     {# @var child \App\Entity\ServiceSystem #}
                     <tr>
                         <td>
-                            {% if createShowLink and refAdmin.hasAccess(showRouteName, child) %}
-                                <a href="{{ refAdmin.generateObjectUrl(showRouteName, child, {'id': child.id}) }}">
-                                    {{ child.name }}
-                                </a>
-                            {% else %}
-                                {{ child.name }}
-                            {% endif %}
+                            {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
                         </td>
                         <td>
                             {% if child.serviceKey %}
@@ -102,16 +64,16 @@ file that was distributed with this source code.
                                 {{ child.status.name }}
                             {% endif %}
                         </td>
-                        {% if createEditLink %}
+                        {% if refSettings.edit.enabled %}
                             <td>
-                                {% if refAdmin.hasAccess(editRouteName, child) %}
+                                {% if refSettings.admin.hasAccess(refSettings.edit.route, child) %}
                                     {% if field_description.options.route.parameters %}
                                         {% set editParameters = field_description.options.route.parameters %}
                                     {% else %}
                                         {% set editParameters = {'id': child.id} %}
                                     {% endif %}
-                                    <a href="{{ refAdmin.generateObjectUrl(editRouteName, child, editParameters) }}">
-                                        {% if editRouteName == 'show' %}
+                                    <a href="{{ refSettings.admin.generateObjectUrl(refSettings.edit.route, child, editParameters) }}">
+                                        {% if refSettings.edit.route == 'show' %}
                                             <i class="fa fa-eye" aria-hidden="true"></i>
                                         {% else %}
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>

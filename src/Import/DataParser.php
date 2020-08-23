@@ -11,8 +11,7 @@
 
 namespace App\Import;
 
-use phpDocumentor\Reflection\Types\Callable_;
-use Symfony\Component\VarDumper\VarDumper;
+use DateTime;
 
 class DataParser
 {
@@ -187,7 +186,7 @@ class DataParser
      */
     public function formatInt($value): int
     {
-        $intVal = preg_replace('/[^0-9]/', '', trim($value));
+        $intVal = preg_replace('/\D/', '', trim($value));
         if (strlen($intVal) > 1) {
             $intVal = ltrim($intVal, '0');
         }
@@ -206,16 +205,16 @@ class DataParser
      * Try to convert a date value into the format "YYYY-MM-DD"
      *
      * @param string $value
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function formatDate($value): ?\DateTime
+    public function formatDate($value): ?DateTime
     {
         if (empty($value)) {
             return null;
         }
         $date = $this->convertDateString($value);
         // Value is already in correct format
-        if ($date instanceof \DateTime) {
+        if ($date instanceof DateTime) {
             return $date;
         }
         $year = 0;
@@ -245,7 +244,7 @@ class DataParser
                 $day = '0' . $day;
             }
             $value = $year . '-' . $month . '-' . $day;
-            $dateObj = new \DateTime($value);
+            $dateObj = new DateTime($value);
             $dateObj->setTime(0, 0, 0);
             return $dateObj;
         }
@@ -255,19 +254,19 @@ class DataParser
     /**
      * Attempts to convert a string into a DateTime object
      *
-     * @param  string $value
+     * @param string $value
      *
-     * @return bool|\DateTime
+     * @return bool|DateTime
      */
-    protected function convertDateString($value)
+    protected function convertDateString(string $value)
     {
         $date = self::dateGerman2Iso($value);
         if (method_exists('DateTime', 'createFromFormat')) {
-            $date = \DateTime::createFromFormat('Y-m-d', $date);
+            $date = DateTime::createFromFormat('Y-m-d', $date);
 
             // Invalid dates can show up as warnings (ie. "2007-02-99")
             // and still return a DateTime object.
-            $errors = \DateTime::getLastErrors();
+            $errors = DateTime::getLastErrors();
             if ($errors['warning_count'] > 0) {
                 return false;
             }
@@ -283,7 +282,7 @@ class DataParser
      * @param string $checkDate Date string with format dd.mm.YYYY (or YY)
      * @return string Iso date
      */
-    public static function dateGerman2Iso($checkDate)
+    public static function dateGerman2Iso(string $checkDate): string
     {
         if (empty($checkDate)) {
             return '0000-00-00';
