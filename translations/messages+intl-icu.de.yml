@@ -614,6 +614,7 @@ app:
       authority_inherit_state_ministries.no: Regelungskompetenz Ministerien (Land) der OZG-Leistung nicht übernehmen
       implementation_projects: Umsetzungsprojekte
       model_region_projects: DMR Umsetzungsprojekte
+      published_model_region_projects: Veröffentlichte DMR Umsetzungsprojekte
       fim_types: FIM
     fim:
       object_name: Föderales Informationsmanagement (FIM)
@@ -699,6 +700,7 @@ app:
       authority_state_ministries_form: Regelungskompetenz Ministerien (Land) (werden an Leika-Leistungen vererbt)
       implementation_projects: Umsetzungsprojekte
       model_region_projects: DMR Umsetzungsprojekte
+      published_model_region_projects: Veröffentlichte DMR Umsetzungsprojekte
       services_portals: Zielportale
   situation:
     object_name: Lage

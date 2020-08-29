@@ -35,7 +35,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
 
-class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableAdminInterface
+class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
     use ContactTrait;
     use DatePickerTrait;
@@ -154,7 +154,6 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements SearchableA
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addLaboratoriesDatagridFilters($datagridMapper);
         $this->addSolutionsDatagridFilters($datagridMapper);

@@ -12,6 +12,7 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\PortalAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Status;
 use App\Entity\Subject;
@@ -20,7 +21,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 
-class ServiceSystemAdmin extends AbstractFrontendAdmin
+class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
 
     /**
@@ -32,7 +33,6 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
         //$this->addLaboratoriesDatagridFilters($datagridMapper);

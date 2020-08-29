@@ -25,7 +25,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 
 
-class ManufacturerAdmin extends AbstractAppAdmin
+class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use AddressTrait;
     use ContactTrait;
@@ -88,7 +88,6 @@ class ManufacturerAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);

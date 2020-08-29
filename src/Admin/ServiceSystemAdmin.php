@@ -28,7 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInterface
+class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
     use MinistryStateTrait;
     use ServiceTrait;
@@ -234,7 +234,6 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements SearchableAdminInte
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
         //$this->addLaboratoriesDatagridFilters($datagridMapper);

@@ -21,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class PortalAdmin extends AbstractAppAdmin implements SearchableAdminInterface
+class PortalAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -44,7 +44,6 @@ class PortalAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
     }
 

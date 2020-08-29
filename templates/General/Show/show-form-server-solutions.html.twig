@@ -36,9 +36,14 @@ file that was distributed with this source code.
                         {% if showSolution %}
                             {% set editObjectId = child.solution.id %}
                             {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child.solution} %}
-                        {% else %}
+                        {% elseif child.formServer is not null %}
                             {% set editObjectId = child.formServer.id %}
                             {% include 'General/Show/Table/table-row-cells-form-servers.html.twig' with {'child': child.formServer} %}
+                        {% else %}
+                            <td>
+                            </td>
+                            <td>
+                            </td>
                         {% endif %}
                         <td>
                             {% if child.status %}

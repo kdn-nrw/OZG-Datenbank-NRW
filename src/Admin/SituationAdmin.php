@@ -19,13 +19,13 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class SituationAdmin extends AbstractAppAdmin
+class SituationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
         $hideFields = $this->getFormHideFields();
         $formMapper->add('name', TextType::class);
-        if (!in_array('subject', $hideFields)) {
+        if (!in_array('subject', $hideFields, false)) {
             $formMapper->add('subject', ModelListType::class, [
                 'btn_add'       => 'app.common.model_list_type.add',       //Specify a custom label
                 'btn_list'      => 'app.common.model_list_type.list',      //which will be translated
@@ -45,7 +45,6 @@ class SituationAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('subject',
             null,

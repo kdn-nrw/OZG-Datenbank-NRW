@@ -20,7 +20,7 @@ use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class SubjectAdmin extends AbstractAppAdmin
+class SubjectAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -48,7 +48,6 @@ class SubjectAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('situations',
             null,

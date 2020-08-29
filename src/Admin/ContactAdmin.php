@@ -26,7 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 
-class ContactAdmin extends AbstractAppAdmin
+class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use CategoryTrait;
     use AddressTrait;
@@ -123,7 +123,6 @@ class ContactAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('firstName');
         $datagridMapper->add('lastName');
         $datagridMapper->add('email');

@@ -19,7 +19,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class AuthenticationAdmin extends AbstractAppAdmin
+class AuthenticationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use SolutionTrait;
 
@@ -33,7 +33,6 @@ class AuthenticationAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addSolutionsDatagridFilters($datagridMapper);
     }

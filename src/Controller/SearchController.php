@@ -12,7 +12,7 @@
 namespace App\Controller;
 
 
-use App\Admin\SearchableAdminInterface;
+use App\Admin\ExtendedSearchAdminInterface;
 use App\Entity\Search;
 use App\Form\Type\SearchType;
 use Sonata\AdminBundle\Admin\Pool;
@@ -171,7 +171,7 @@ class SearchController extends AbstractController
             // Initialize only app backend admins
             if (strpos($serviceId, 'App') === 0 && strpos($serviceId, 'Frontend') === false) {
                 $admin = $this->adminPool->getInstance($serviceId);
-                if ($admin instanceof SearchableAdminInterface && $admin->isGranted('LIST')) {
+                if ($admin instanceof ExtendedSearchAdminInterface && $admin->isGranted('LIST')) {
                     //$routes = $admin->getRoutes();
                     $arrayRoute = $admin->generateMenuUrl('list');
                     $label = $admin->getLabel();

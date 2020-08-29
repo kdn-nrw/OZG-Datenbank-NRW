@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class OrganisationAdmin extends AbstractAppAdmin
+class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use ContactTrait;
     use AddressTrait;
@@ -75,7 +75,6 @@ class OrganisationAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addAddressDatagridFilters($datagridMapper);
     }

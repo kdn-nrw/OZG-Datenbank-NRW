@@ -15,6 +15,7 @@ use App\Admin\BureauAdmin;
 use App\Admin\FundingAdmin;
 use App\Admin\OrganisationAdmin;
 use App\Admin\PortalAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
@@ -23,11 +24,10 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 
-class ImplementationProjectAdmin extends AbstractFrontendAdmin
+class ImplementationProjectAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('solutions',
             null, [

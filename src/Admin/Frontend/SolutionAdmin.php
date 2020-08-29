@@ -11,6 +11,7 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\ModelRegionProjectTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Datagrid\CustomDatagrid;
@@ -24,7 +25,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
-class SolutionAdmin extends AbstractFrontendAdmin
+class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
     use ModelRegionProjectTrait;
     use ServiceProviderTrait;
@@ -38,7 +39,6 @@ class SolutionAdmin extends AbstractFrontendAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $this->addServiceProvidersDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSolutions.service.serviceSystem',
             null,

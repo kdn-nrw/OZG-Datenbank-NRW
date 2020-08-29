@@ -19,7 +19,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Class search index word
  *
  * @ORM\Entity(repositoryClass="App\Entity\Repository\SearchIndexRepository")
- * @ORM\Table(name="ozg_search_index_word",indexes={@ORM\Index(name="search_idx", columns={"module", "record_id", "context"})})
+ * @ORM\Table(name="ozg_search_index_word",indexes={
+ *     @ORM\Index(name="search_idx", columns={"module", "record_id", "context"}),
+ *     @ORM\Index(name="search_baseword", columns={"baseword"}),
+ *     @ORM\Index(name="search_stopword", columns={"is_stopword"}),
+ *     @ORM\Index(name="search_generated", columns={"is_generated"}),
+ *     @ORM\Index(name="search_phonetic", columns={"metaphone"})
+ * })
  */
 class SearchIndexWord extends BaseEntity
 {
@@ -76,6 +82,15 @@ class SearchIndexWord extends BaseEntity
      * @ORM\Column(name="is_stopword", type="boolean")
      */
     protected $isStopword = false;
+
+    /**
+     * Is generated word or word exists in content
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="is_generated", type="boolean")
+     */
+    protected $isGenerated = false;
 
     /**
      * Is hidden (Temporary flag used when updating)
@@ -184,11 +199,27 @@ class SearchIndexWord extends BaseEntity
     }
 
     /**
-     * @param bool $isStopword
+     * @param bool $isStopWord
      */
-    public function setIsStopword(bool $isStopword): void
+    public function setIsStopword(bool $isStopWord): void
     {
-        $this->isStopword = $isStopword;
+        $this->isStopword = $isStopWord;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGenerated(): bool
+    {
+        return $this->isGenerated;
+    }
+
+    /**
+     * @param bool $isGenerated
+     */
+    public function setIsGenerated(bool $isGenerated): void
+    {
+        $this->isGenerated = $isGenerated;
     }
 
     /**

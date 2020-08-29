@@ -26,7 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class EFileAdmin extends AbstractAppAdmin implements SearchableAdminInterface
+class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
     use SpecializedProcedureTrait;
 
@@ -98,7 +98,6 @@ class EFileAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('serviceProvider',
             null,

@@ -21,12 +21,12 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 
-class ServiceSolutionAdmin extends AbstractAppAdmin
+class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
         $hideFields = $this->getFormHideFields();
-        if (!in_array('service', $hideFields)) {
+        if (!in_array('service', $hideFields, false)) {
             $formMapper
                 ->add('service', ModelAutocompleteType::class, [
                     'property' => 'name',
@@ -35,7 +35,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
                     'admin_code' => \App\Admin\ServiceAdmin::class
                 ]);
         }
-        if (!in_array('solution', $hideFields)) {
+        if (!in_array('solution', $hideFields, false)) {
             $formMapper
                 ->add('solution', ModelAutocompleteType::class, [
                     'property' => ['name', 'description'],
@@ -63,7 +63,6 @@ class ServiceSolutionAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('service',
             null,
             [

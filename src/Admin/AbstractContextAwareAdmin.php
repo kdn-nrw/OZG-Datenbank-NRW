@@ -3,7 +3,7 @@
  * This file is part of the KDN OZG package.
  *
  * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
+ * @copyright 2020 Gert Hammes
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,26 +12,16 @@
 namespace App\Admin;
 
 
-use App\Entity\Repository\SearchIndexRepository;
-use App\Entity\SearchIndexWord;
 use App\Exporter\Source\CustomQuerySourceIterator;
 use App\Model\ReferenceSettings;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
-use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
-use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
 /**
  * Class AbstractContextAwareAdmin
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2020 Gert Hammes
- * @since     2020-02-11
  */
 abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface
 {
@@ -177,70 +167,6 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     }
 
     /**
-     * Add- custom query condition for full text data grid filter field
-     * @param DatagridMapper $datagridMapper
-     */
-    protected function addFullTextDatagridFilter(DatagridMapper $datagridMapper)
-    {
-        $modelManager = $this->getModelManager();
-        $entityClass = $this->getClass();
-        $appContext = $this->getAppContext();
-        $datagridMapper
-            ->add('fullText', CallbackFilter::class, [
-                'callback' => static function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) use ($modelManager, $entityClass, $appContext) {
-                    if (!$value['value']) {
-                        return false;
-                    }
-                    /** @var QueryBuilder $qb */
-                    $qb = $queryBuilder->getQueryBuilder();
-                    $reflect = new \ReflectionClass($entityClass);
-                    $props = $reflect->getProperties();
-                    $orConditions = [];
-
-                    /** @var \Sonata\DoctrineORMAdminBundle\Model\ModelManager $modelManager */
-                    $indexRepository = $modelManager->getEntityManager(SearchIndexWord::class)->getRepository(SearchIndexWord::class);
-                    /** @var SearchIndexRepository $indexRepository */
-                    $matchingRecordIds = $indexRepository->findMatchingIndexRecords($entityClass, $appContext, $value['value']);
-                    if (null !== $matchingRecordIds) {
-                        $orConditions[] = $alias . ' IN(:matchingRecordIds)';
-                        $queryBuilder->setParameter('matchingRecordIds', $matchingRecordIds);
-                        // If indexer has record, only search the main string fields in addition to the
-                        // search index to make the search faster
-                        $extraSearchFields = ['name', 'description'];
-                    } else {
-                        $extraSearchFields = null;
-                    }
-                    $words = array_filter(array_map('trim', explode(' ', $value['value'])));
-                    foreach ($props as $refProperty) {
-                        if (preg_match('/@var\s+([^\s]+)/', $refProperty->getDocComment(), $matches)) {
-                            $field = $refProperty->getName();
-                            $type = $matches[1];
-                            if (($type === 'string' || $type === 'string|null')
-                                && (null === $extraSearchFields || in_array($field, $extraSearchFields, false))) {
-                                foreach ($words as $word) {
-                                    $orConditions[] = $qb->expr()->like(
-                                        $alias . '.' . $field,
-                                        $queryBuilder->expr()->literal('%' . $word . '%')
-                                    );
-                                }
-                            }
-                        }
-                    }
-                    if (!empty($orConditions)) {
-                        $qb
-                            ->andWhere($qb->expr()->orX()->addMultiple($orConditions));
-
-                        return true;
-                    }
-                    return false;
-                },
-                'label' => 'app.common.full_text_search',
-                'field_type' => SearchType::class,
-                'show_filter' => true,
-            ]);
-    }
-
-    /**
      * @return array
      */
     protected function getExportExcludeFields(): array
@@ -283,5 +209,14 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         $settings->setEdit($createEditLink, $editRouteName);
         $settings->setListTitle($this->getLabel());
         return $settings;
+    }
+
+    /**
+     * Returns the template for this admin used for creating the search index
+     * @return string
+     */
+    public function getSearchIndexingTemplate(): string
+    {
+        return $this->getTemplateRegistry()->getTemplate('show');
     }
 }

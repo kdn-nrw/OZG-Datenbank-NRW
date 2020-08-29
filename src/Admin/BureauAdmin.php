@@ -20,7 +20,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class BureauAdmin extends AbstractAppAdmin
+class BureauAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use ServiceSystemTrait;
 
@@ -37,7 +37,6 @@ class BureauAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addServiceSystemsDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSystems.situation.subject',

@@ -25,7 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ApplicationAdmin extends AbstractAppAdmin
+class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use ApplicationCategoryTrait;
     use CommuneTrait;
@@ -68,7 +68,6 @@ class ApplicationAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addManufaturersDatagridFilters($datagridMapper);
         $this->addApplicationCategoriesDatagridFilters($datagridMapper);

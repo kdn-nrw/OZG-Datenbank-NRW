@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * This file is part of the KDN OZG package.
  *
@@ -12,10 +9,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace App\Search;
 
 use App\Admin\ContextAwareAdminInterface;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Entity\Base\BaseEntity;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\ImplementationProject;
 use App\Entity\Repository\SearchIndexRepository;
 use App\Entity\SearchIndexWord;
@@ -28,19 +29,16 @@ use DateTimeZone;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\Pool;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 /**
  * Search indexer
  */
 class Indexer
 {
-    private const MAX_WORD_LENGTH = 128;
 
     /**
      * Limit for index entry age
@@ -119,19 +117,18 @@ class Indexer
      * @param int $limit
      * @param string|null $onlyEntityClass
      * @return int Number of update records
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      */
     public function run(int $limit, ?string $onlyEntityClass): int
     {
         $count = 0;
+        $maxResults = $limit;
         $adminClasses = $this->getAdminClasses();
         foreach ($adminClasses as $entityClass => $classAdmins) {
             if ((!$onlyEntityClass || $onlyEntityClass === $entityClass) &&
                 is_subclass_of($entityClass, BaseEntity::class)) {
-                $count += $this->updateEntityClassIndex($entityClass, $classAdmins, $limit);
-                if ($count > $limit) {
+                $count += $this->updateEntityClassIndex($entityClass, $classAdmins, $maxResults);
+                $maxResults = $limit - $count;
+                if ($maxResults < 1) {
                     break;
                 }
             }
@@ -172,73 +169,107 @@ class Indexer
      * @param array $classAdmins
      * @param int $limit
      * @return int Count of indexed entities
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      */
     private function updateEntityClassIndex(string $entityClass, array $classAdmins, int $limit): int
     {
         $count = 0;
+        /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->registry->getManager();
+        // Save memory
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
         foreach ($classAdmins as $adminClass) {
             $admin = $this->adminPool->getAdminByAdminCode($adminClass);
-            if ($admin instanceof ContextAwareAdminInterface) {
-                $context = $admin->getAppContext();
-                if (!in_array($context, $this->indexContexts, false)) {
-                    continue;
-                }
-                $baseTemplate = $admin->getTemplate('ajax');
-                $fields = $admin->getShow();
-                $template = $admin->getTemplate('show');
+            if ($admin instanceof EnableFullTextSearchAdminInterface) {
                 if ($this->forceOnlyEntityId) {
                     $forceUpdate = true;
                     $entity = $admin->getModelManager()->find($entityClass, $this->forceOnlyEntityId);
-                    $result = [];
                     if (null !== $entity) {
-                        $result[] = $entity;
+                        $count += $this->updateEntityList([$entity], $admin, $forceUpdate);
                     }
                 } else {
                     $forceUpdate = false;
-                    $query = $admin->createQuery('list');
-                    if (method_exists($entityClass, 'getModifiedAt')) {
-                        $query->setSortBy([], ['fieldName' => 'modifiedAt']);
-                        $query->setSortOrder('DESC');
-                    }
-                    $result = $query->execute();
-                }
-                foreach ($result as $entity) {
-                    if ($forceUpdate || $this->itemIndexNeedsUpdate($entityClass, $context, $entity)) {
-                        $parameters = [
-                            'action' => 'show',
-                            'object' => $entity,
-                            'elements' => $fields,
-                            'admin' => $admin,
-                            'base_template' => $baseTemplate,
-                            'admin_pool' => $this->adminPool,
-                        ];
-                        try {
-                            $content = $this->twigEnvironment->render($template, $parameters);
-                            $this->updateEntityIndex($admin, $entity, $context, $content);
-                        } catch (\Exception $e) {
-                            echo 'Entity indexing failed: ' . $entityClass . ':' . $entity->getId() . ' => '
-                                . $e->getMessage() . ' ['.$e->getCode().']'
-                                . $e->getFile() . '::'.$e->getLine()."\n";
+                    $maxResultsPerCycle = 50;
+                    $firstResultOffset = 0;
+                    while ($firstResultOffset < $limit) {
+                        $query = $admin->createQuery('list');
+                        if (method_exists($entityClass, 'getModifiedAt')) {
+                            $query->setSortBy([], ['fieldName' => 'modifiedAt']);
+                            $query->setSortOrder('DESC');
                         }
-                        ++$count;
-                        if ($count % 10 === 0) {
-                            $em->flush();
-                        }
-                        if ($count > $limit) {
-                            break 2;
+                        $query->setFirstResult($firstResultOffset);
+                        $query->setMaxResults($maxResultsPerCycle);
+                        $result = $query->execute();
+                        $count += $this->updateEntityList($result, $admin, $forceUpdate);
+                        $firstResultOffset += $maxResultsPerCycle;
+                        $em->flush();
+                        // Clear all entities before continuing with the next admin
+                        $em->clear();
+                        // Mark as ended when less rows are returned than allowed
+                        if ($count > $limit || count($result) < $maxResultsPerCycle) {
+                            break;
                         }
                     }
                 }
-                $em->flush();
-                $em->clear();
             }
         }
         $em->flush();
         $em->clear();
+        return $count;
+    }
+
+    /**
+     * Update the search index for the given entity list
+     * @param array|BaseEntityInterface[]|mixed $entityList
+     * @param AdminInterface|EnableFullTextSearchAdminInterface $admin
+     * @param bool $forceUpdate
+     * @return int
+     */
+    private function updateEntityList(
+        $entityList,
+        AdminInterface $admin,
+        bool $forceUpdate
+    ): int
+    {
+        if ($admin instanceof ContextAwareAdminInterface) {
+            $context = $admin->getAppContext();
+        } else {
+            $context = ContextAwareAdminInterface::APP_CONTEXT_BE;
+        }
+        if (!in_array($context, $this->indexContexts, false)) {
+            return 0;
+        }
+        $entityClass = $admin->getClass();
+        $em = $this->registry->getManager();
+        $baseTemplate = '@SonataAdmin/ajax_layout.html.twig';
+        $fields = $admin->getShow();
+        $template = $admin->getSearchIndexingTemplate();
+        $count = 0;
+
+        foreach ($entityList as $entity) {
+            if ($forceUpdate || $this->itemIndexNeedsUpdate($entityClass, $context, $entity)) {
+                $parameters = [
+                    'action' => 'show',
+                    'object' => $entity,
+                    'elements' => $fields,
+                    'admin' => $admin,
+                    'base_template' => $baseTemplate,
+                    'admin_pool' => $this->adminPool,
+                ];
+                try {
+                    $content = $this->twigEnvironment->render($template, $parameters);
+                    $this->updateEntityIndex($admin, $entity, $context, $content);
+                } catch (Exception $e) {
+                    echo 'Entity indexing failed: ' . $entityClass . ':' . $entity->getId() . ' => '
+                        . $e->getMessage() . ' [' . $e->getCode() . ']'
+                        . $e->getFile() . '::' . $e->getLine() . "\n";
+                }
+                ++$count;
+                if ($count % 10 === 0) {
+                    $em->flush();
+                }
+            }
+            unset($entity);
+        }
         return $count;
     }
 
@@ -253,7 +284,7 @@ class Indexer
         $em = $this->registry->getManager();
         $indexRepository = $em->getRepository(SearchIndexWord::class);
         /** @var SearchIndexRepository $indexRepository */
-        $fullTextSearchWords = $this->filterContent($content);
+        $fullTextSearchWords = TextProcessor::createWordListForText($content);
         /** @var SearchIndexWord[] $mapEntries */
         $mapEntries = [];
         $entityClass = $admin->getClass();
@@ -271,18 +302,21 @@ class Indexer
             $event = new SearchIndexEntityEvent($admin, $entity, $fullTextSearchWords);
             $this->eventDispatcher->dispatch($event);
             $processedSearchWords = $event->getFullTextSearchWords();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $processedSearchWords = $fullTextSearchWords;
             echo 'Entity SearchIndexEntityEvent failed: ' . $entityClass . ':' . $entity->getId() . ' => '
-                . $e->getMessage() . ' ['.$e->getCode().']'
-                . $e->getFile() . '::'.$e->getLine()."\n";
+                . $e->getMessage() . ' [' . $e->getCode() . ']'
+                . $e->getFile() . '::' . $e->getLine() . "\n";
         }
-        foreach ($processedSearchWords as $word => $occurrence) {
+        foreach ($processedSearchWords as $word => $wordMeta) {
+            $occurrence = (int)$wordMeta['count'];
+            $isGenerated = (bool)$wordMeta['is_generated'];
             $searchWord = (string)$word;
             if (isset($mapEntries[$searchWord])) {
                 $indexEntry = $mapEntries[$searchWord];
                 $indexEntry->setHidden(false);
                 $indexEntry->setOccurrence($occurrence);
+                $indexEntry->setIsGenerated($isGenerated);
                 $indexEntry->setModifiedAt(new DateTime());
             } else {
                 $indexEntry = new SearchIndexWord();
@@ -291,14 +325,10 @@ class Indexer
                 $indexEntry->setModule($entityClass);
                 $indexEntry->setContext($context);
                 $isStopWord = mb_strlen($searchWord) < 3;
-                $metaphone = metaphone($searchWord);
-                if ($metaphone === '') {
-                    $metaphone = 0;
-                } else {
-                    $metaphone = hexdec(mb_substr(md5($metaphone), 0, 7));
-                }
+                $phonetic = PhoneticUtility::getPhoneticRepresentationForWord($searchWord);
                 $indexEntry->setIsStopword($isStopWord);
-                $indexEntry->setMetaphone($metaphone);
+                $indexEntry->setIsGenerated($isGenerated);
+                $indexEntry->setMetaphone($phonetic);
                 $indexEntry->setHidden(false);
                 $indexEntry->setOccurrence($occurrence);
                 $em->persist($indexEntry);
@@ -355,100 +385,5 @@ class Indexer
                 . "\n";*/
         }
         return $itemNeedsReindex;
-    }
-
-    /**
-     * Filter the given HTML content and find the relevant search words in the content
-     * @param string $content HTML content
-     * @return array
-     */
-    private function filterContent($content): array
-    {
-        $fullTextSearchWords = [];
-        $filteredContent = preg_replace('/<th>[\wäöüÜÖÄß\s@:.\/\-]+<\/th>/u', '', $content);
-        $filteredContent = preg_replace('/<!-- [\wäöüÜÖÄß\s@:.\/\-]+-->/u', '', $filteredContent);
-        //$filteredContent = str_replace(['>', PHP_EOL, '?', '*'], ['> ', ' ', ' ', ' '], $filteredContent);
-        $filteredContent = str_replace(['>', PHP_EOL], ['> ', ' '], $filteredContent);
-        $indexText = trim(strip_tags($filteredContent));
-        if ($indexText !== '') {
-            $indexText = $this->filterUrls($indexText);
-            $patternText = '/[^0-9a-zA-ZäöüÜÖÄß]+/u';
-            $searchTerm = preg_replace($patternText, ' ', $indexText);
-            $searchTerm = mb_strtolower(str_replace("\n", ' ', $searchTerm));
-            $searchWordList = explode(' ', $searchTerm);
-            // Add additional words with . and - (so we can search both the word parts and the whole words)
-            $patternTextAdd = "/[^0-9a-zA-ZäöüÜÖÄß\.-]+/u";
-            $extendedSearchTerm = preg_replace($patternTextAdd, ' ', $indexText);
-            $stAddChars = mb_strtolower(str_replace("\n", ' ', $extendedSearchTerm));
-            $extendedSearchWords = explode(' ', $stAddChars);
-            foreach ($extendedSearchWords as $word) {
-                $cleanWord = trim($word, '.-');
-                if (!in_array($cleanWord, $searchWordList, false)) {
-                    $searchWordList[] = $cleanWord;
-                }
-            }
-            $umlauts = array(
-                'ö' => array('o', 'oe'),
-                'ü' => array('u', 'ue'),
-                'ä' => array('a', 'ae'),
-                'ß' => array('ss',),
-            );
-            foreach ($searchWordList as $searchWord) {
-                if (mb_strlen($searchWord) > 2) {
-                    $dbWord = $searchWord;
-                    $this->addSearchWord($dbWord, $fullTextSearchWords);
-                    foreach ($umlauts as $umlaut => $altVals) {
-                        if (mb_strpos($dbWord, $umlaut) !== false) {
-                            foreach ($altVals as $altVal) {
-                                $altWord = str_replace($umlaut, $altVal, $dbWord);
-                                $this->addSearchWord($altWord, $fullTextSearchWords);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $fullTextSearchWords;
-    }
-
-    /**
-     * Filter urls in content (remove url parameters)
-     *
-     * @param string $indexText
-     * @return string
-     */
-    private function filterUrls(string $indexText)
-    {
-        $pattern = '@((https?://)?([-\\w]+\\.[-\\w\\.]+)+\\w(:\\d+)?(/([-\\w/_\\.]*(\\?\\S+)?)?)*)@';
-        preg_match_all($pattern, $indexText, $urlMatches);
-        foreach ($urlMatches[0] as $url) {
-            $urlParts = parse_url($url);
-            if ($urlParts !== false && !empty($urlParts['host'])) {
-                $urlPath = !empty($urlParts['path']) ? str_replace('.html', '', $urlParts['path']) : '';
-                $indexText = str_replace($url, $urlParts['host'] . ' ' . $urlPath, $indexText);
-            }
-        }
-        return $indexText;
-    }
-
-    /**
-     * Add word to search word list
-     *
-     * @param string $word
-     * @param array $fullTextSearchWords
-     */
-    private function addSearchWord(string $word, array &$fullTextSearchWords): void
-    {
-        // fix long words without spaces
-        if (mb_strlen($word) > self::MAX_WORD_LENGTH) {
-            $length = (int) floor(self::MAX_WORD_LENGTH / 2);
-            $this->addSearchWord(mb_substr($word, 0, $length), $fullTextSearchWords);
-            $this->addSearchWord(mb_substr($word, $length - 1), $fullTextSearchWords);
-        } else {
-            if (!isset($fullTextSearchWords[$word])) {
-                $fullTextSearchWords[$word] = 0;
-            }
-            ++$fullTextSearchWords[$word];
-        }
     }
 }

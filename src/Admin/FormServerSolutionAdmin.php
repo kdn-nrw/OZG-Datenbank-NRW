@@ -22,7 +22,7 @@ use Sonata\Form\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class FormServerSolutionAdmin extends AbstractAppAdmin
+class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -71,7 +71,6 @@ class FormServerSolutionAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('formServer',
             null,
             [

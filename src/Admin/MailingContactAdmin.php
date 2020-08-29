@@ -21,7 +21,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
-class MailingContactAdmin extends AbstractAppAdmin
+class MailingContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     /**
      * @var string[]
@@ -65,7 +65,6 @@ class MailingContactAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('mailing');
         $datagridMapper->add('contact');
         $datagridMapper->add('sendStatus');

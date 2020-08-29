@@ -29,7 +29,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 
 
-class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
+class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
     use AddressTrait;
     use CentralAssociationTrait;
@@ -107,7 +107,6 @@ class CommuneAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
         $this->addServiceProvidersDatagridFilters($datagridMapper);

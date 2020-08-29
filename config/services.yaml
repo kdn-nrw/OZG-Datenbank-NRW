@@ -44,6 +44,7 @@ services:
         manager_type: orm
         label:        app.analog_service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ApplicationAdmin:
@@ -56,6 +57,7 @@ services:
         manager_type: orm
         label:        app.application.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ApplicationCategoryAdmin:
@@ -68,6 +70,7 @@ services:
         manager_type: orm
         label:        app.application_category.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\AuthenticationAdmin:
@@ -80,6 +83,7 @@ services:
         manager_type: orm
         label:        app.authentication.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\BureauAdmin:
@@ -92,6 +96,7 @@ services:
         manager_type: orm
         label:        app.bureau.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\CategoryAdmin:
@@ -104,6 +109,7 @@ services:
         manager_type: orm
         label:        app.category.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\CentralAssociationAdmin:
@@ -116,6 +122,7 @@ services:
         manager_type: orm
         label:        app.central_association.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\CommuneAdmin:
@@ -128,6 +135,7 @@ services:
         manager_type: orm
         label:        app.commune.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ContactAdmin:
@@ -140,6 +148,7 @@ services:
         manager_type: orm
         label:        app.contact.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\EFileAdmin:
@@ -152,6 +161,7 @@ services:
         manager_type: orm
         label:        app.efile.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\EFileStatusAdmin:
@@ -164,6 +174,7 @@ services:
         manager_type: orm
         label:        app.efile_status.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\EFileStorageTypeAdmin:
@@ -176,6 +187,7 @@ services:
         manager_type: orm
         label:        app.efile_storage_type.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\FormServerAdmin:
@@ -191,6 +203,7 @@ services:
         manager_type: orm
         label:        app.form_server.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\FormServerSolutionAdmin:
@@ -203,6 +216,7 @@ services:
         manager_type: orm
         label:        app.form_server_solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\FundingAdmin:
@@ -215,6 +229,7 @@ services:
         manager_type: orm
         label:        app.funding.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ImplementationStatusAdmin:
@@ -227,6 +242,7 @@ services:
         manager_type: orm
         label:        app.implementation_status.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ImplementationProjectAdmin:
@@ -241,6 +257,7 @@ services:
         manager_type: orm
         label:        app.implementation_project.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\Frontend\ImplementationProjectAdmin:
@@ -270,6 +287,7 @@ services:
         manager_type: orm
         label:        app.jurisdiction.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\LaboratoryAdmin:
@@ -282,6 +300,7 @@ services:
         manager_type: orm
         label:        app.laboratory.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ManufacturerAdmin:
@@ -294,6 +313,7 @@ services:
         manager_type: orm
         label:        app.manufacturer.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\MailingAdmin:
@@ -308,6 +328,7 @@ services:
         manager_type: orm
         label:        app.mailing.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\MailingContactAdmin:
@@ -320,6 +341,7 @@ services:
         manager_type: orm
         label:        app.mailing_contact.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\MinistryStateAdmin:
@@ -332,6 +354,7 @@ services:
         manager_type: orm
         label:        app.ministry_state.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\MaturityAdmin:
@@ -344,6 +367,7 @@ services:
         manager_type: orm
         label:        app.maturity.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ModelRegionAdmin:
@@ -356,6 +380,7 @@ services:
         manager_type: orm
         label:        app.model_region.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\Frontend\ModelRegionAdmin:
@@ -382,6 +407,7 @@ services:
         manager_type: orm
         label:        app.model_region_beneficiary.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ModelRegionProjectAdmin:
@@ -394,6 +420,7 @@ services:
         manager_type: orm
         label:        app.model_region_project.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\Frontend\ModelRegionProjectAdmin:
@@ -420,6 +447,7 @@ services:
         manager_type: orm
         label:        app.open_data.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\OrganisationAdmin:
@@ -432,6 +460,7 @@ services:
         manager_type: orm
         label:        app.organisation.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\PageContentAdmin:
@@ -444,6 +473,7 @@ services:
         manager_type: orm
         label:        app.page_content.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\PaymentTypeAdmin:
@@ -456,6 +486,7 @@ services:
         manager_type: orm
         label:        app.payment_type.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\PortalAdmin:
@@ -468,6 +499,7 @@ services:
         manager_type: orm
         label:        app.portal.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\PriorityAdmin:
@@ -480,6 +512,7 @@ services:
         manager_type: orm
         label:        app.priority.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\SituationAdmin:
@@ -492,6 +525,7 @@ services:
         manager_type: orm
         label:        app.situation.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ServiceSystemAdmin:
@@ -506,6 +540,7 @@ services:
         manager_type: orm
         label:        app.service_system.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\Frontend\ServiceSystemAdmin:
@@ -537,6 +572,7 @@ services:
         manager_type: orm
         label:        app.service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\Frontend\ServiceAdmin:
@@ -568,6 +604,7 @@ services:
         manager_type: orm
         label:        app.service_provider.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\ServiceSolutionAdmin:
@@ -580,6 +617,7 @@ services:
         manager_type: orm
         label:        app.service_solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\StatusAdmin:
@@ -592,6 +630,7 @@ services:
         manager_type: orm
         label:        app.status.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\SpecializedProcedureAdmin:
@@ -604,6 +643,7 @@ services:
         manager_type: orm
         label:        app.specialized_procedure.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\SolutionAdmin:
@@ -620,6 +660,7 @@ services:
         manager_type: orm
         label:        app.solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
   App\Admin\Frontend\SolutionAdmin:
@@ -639,6 +680,19 @@ services:
         persist_filters: true
     public: true
 
+  App\Admin\SubjectAdmin:
+    arguments:
+      - ~
+      - App\Entity\Subject
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.subject.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Entity\Manager\ImplementationProjectManager:
     arguments:
       - '@doctrine'
@@ -650,18 +704,6 @@ services:
   App\Entity\Manager\ServiceManager:
     arguments:
       - '@doctrine'
-
-  App\Admin\SubjectAdmin:
-    arguments:
-      - ~
-      - App\Entity\Subject
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.subject.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-    public: true
 
   App\Block\RecentSolutionsBlock:
     arguments:
@@ -757,3 +799,7 @@ services:
       - '@twig'
     autowire: false
     public: true
+
+  App\Admin\Extension\SearchExtension:
+    tags:
+      - { name: sonata.admin.extension, global: true }

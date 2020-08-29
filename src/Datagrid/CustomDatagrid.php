@@ -16,18 +16,19 @@ use Sonata\AdminBundle\Datagrid\Datagrid;
 
 /**
  * Class CustomDatagrid
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
- * @since     2019-11-09
  */
-class CustomDatagrid extends Datagrid
+class CustomDatagrid extends Datagrid implements FulltextSearchDatagridInterface
 {
     /**
      * Filter items that are displayed in the frontend sidebar menu
      * @var array
      */
     private $filterMenuItems = [];
+
+    /**
+     * @var array|null
+     */
+    private $recordIdList;
 
     /**
      * Add the filter information for displaying the menu items
@@ -51,7 +52,7 @@ class CustomDatagrid extends Datagrid
         $values = $this->getValues();
         if (isset($values[$filterNameInternal]['value'])) {
             $filterItem['value'] = $values[$filterNameInternal]['value'];
-            $value = (array) $filterItem['value'];
+            $value = (array)$filterItem['value'];
             if (!empty($value)) {
                 foreach ($filterChoices as $entity) {
                     if (in_array($entity->getId(), $value, false)) {
@@ -71,5 +72,38 @@ class CustomDatagrid extends Datagrid
     public function getFilterMenuItems(): array
     {
         return $this->filterMenuItems;
+    }
+
+    public function setCustomOrderRecordIdList(array $recordIdList)
+    {
+        $this->recordIdList = $recordIdList;
+    }
+
+    public function getResults()
+    {
+        $this->buildPager();
+
+        if (null === $this->results) {
+            if (null !== $this->recordIdList) {
+                $results = $this->pager->getResults();
+
+                $sortedResults = [];
+                foreach ($this->recordIdList as $recordId) {
+                    $sortedResults[$recordId] = null;
+                }
+                foreach ($results as $offset => $row) {
+                    if (method_exists($row, 'getId')) {
+                        $sortedResults[$row->getId()] = $row;
+                    } else {
+                        $sortedResults['_no_id_' . $offset] = $row;
+                    }
+                }
+                $this->results = array_values(array_filter($sortedResults));
+            } else {
+                $this->results = $this->pager->getResults();
+            }
+        }
+
+        return $this->results;
     }
 }

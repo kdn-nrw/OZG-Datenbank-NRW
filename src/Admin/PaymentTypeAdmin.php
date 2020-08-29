@@ -37,7 +37,6 @@ class PaymentTypeAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addSolutionsDatagridFilters($datagridMapper);
     }

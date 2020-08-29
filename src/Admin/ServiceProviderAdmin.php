@@ -27,7 +27,7 @@ use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ServiceProviderAdmin extends AbstractAppAdmin
+class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use CommuneTrait;
     use ContactTrait;
@@ -102,7 +102,6 @@ class ServiceProviderAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name')
             ->add('shortName');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);

@@ -11,6 +11,7 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\DatePickerTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -18,14 +19,13 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 
-class ModelRegionProjectAdmin extends AbstractFrontendAdmin
+class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
     use AddressTrait;
     use DatePickerTrait;
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('organisations',
             null, [],

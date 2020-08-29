@@ -37,7 +37,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class MailingAdmin extends AbstractAppAdmin
+class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use CategoryTrait;
     use OrganisationTrait;
@@ -157,7 +157,6 @@ class MailingAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('subject');
         $this->addCategoriesDatagridFilters($datagridMapper);
         $this->addOrganisationsDatagridFilters($datagridMapper);

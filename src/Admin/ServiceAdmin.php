@@ -20,7 +20,6 @@ use App\Entity\Priority;
 use App\Entity\Status;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
 use App\Form\Type\FederalInformationManagementType;
-use App\Form\Type\MailingAttachmentType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -35,7 +34,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
+class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
     use LaboratoryTrait;
     use MinistryStateTrait;
@@ -290,7 +289,6 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
         $datagridMapper->add('serviceType');
@@ -397,6 +395,14 @@ class ServiceAdmin extends AbstractAppAdmin implements SearchableAdminInterface
             }
         }
         return $fields;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExportExcludeFields(): array
+    {
+        return ['hidden', 'fimTypes'];
     }
 
     /**

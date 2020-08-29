@@ -51,7 +51,6 @@ class PageContentAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('page');
         $datagridMapper->add('headline');
     }

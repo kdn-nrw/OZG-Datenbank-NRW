@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class FormServerAdmin extends AbstractAppAdmin
+class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     /**
      * @var string[]
@@ -113,7 +113,6 @@ class FormServerAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('formServerSolutions.solution',
             null, [

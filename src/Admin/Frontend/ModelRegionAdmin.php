@@ -11,19 +11,19 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\AddressTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 
-class ModelRegionAdmin extends AbstractFrontendAdmin
+class ModelRegionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
     use AddressTrait;
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addAddressDatagridFilters($datagridMapper);
         $datagridMapper->add('modelRegionProjects',

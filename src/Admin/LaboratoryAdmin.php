@@ -23,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class LaboratoryAdmin extends AbstractAppAdmin
+class LaboratoryAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use ServiceTrait;
     use ServiceProviderTrait;
@@ -52,7 +52,6 @@ class LaboratoryAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addServiceProvidersDatagridFilters($datagridMapper);
         $this->addServicesDatagridFilters($datagridMapper);

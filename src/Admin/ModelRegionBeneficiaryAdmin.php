@@ -25,7 +25,7 @@ use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin
+class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use ContactTrait;
     use AddressTrait;
@@ -94,7 +94,6 @@ class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name')
             ->add('shortName');
         $datagridMapper->add('organisation.modelRegionProjects',

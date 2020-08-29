@@ -19,7 +19,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class EFileStorageTypeAdmin extends AbstractAppAdmin
+class EFileStorageTypeAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -34,7 +34,6 @@ class EFileStorageTypeAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
     }
 

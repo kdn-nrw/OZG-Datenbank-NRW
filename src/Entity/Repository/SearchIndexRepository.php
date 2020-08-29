@@ -11,6 +11,8 @@
 
 namespace App\Entity\Repository;
 
+use App\Search\PhoneticUtility;
+use App\Search\TextProcessor;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
@@ -27,7 +29,8 @@ class SearchIndexRepository extends EntityRepository
     {
         $matchingRecordIds = null;
         $searchParameters = [];
-        $searchWords = explode(' ', trim(strip_tags(mb_strtolower($searchTerm))));
+        $fullTextSearchWords = TextProcessor::createWordListForText($searchTerm);
+        $searchWords = array_keys($fullTextSearchWords);
         foreach ($searchWords as $offset => $tmpWord) {
             if (!empty($tmpWord)) {
                 $key = 'word' . $offset;
@@ -35,44 +38,72 @@ class SearchIndexRepository extends EntityRepository
             }
         }
         if (!empty($searchParameters)) {
-            $matchingRecordIds = [0];
             $queryBuilder = $this->createQueryBuilder('si');
-            $query = $queryBuilder->select('si.recordId')
+            $query = $queryBuilder->select('si.baseword', 'si.recordId')
                 ->where('si.module = :recordType')
                 ->andWhere('si.context = :context')
                 ->groupBy('si.recordId')
+                ->addGroupBy('si.baseword')
                 ->setParameters([
                     'recordType' => $entityClass,
                     'context' => $context,
                 ]);
-            $orConditions = [];
+            $searchConditions = [];
             foreach ($searchParameters as $word) {
                 $wordLength = mb_strlen($word);
                 if ($wordLength > 3 && !is_numeric($word)) {
-                    $mpStr = metaphone($word);
+                    $mpStr = PhoneticUtility::getPhoneticRepresentationForWord($word);
                 } else {
                     $mpStr = '';
                 }
                 // Compare numeric metaphone values if metaphone returns a non empty string
                 if ($mpStr !== '') {
-                    $mp = hexdec(substr(md5($mpStr), 0, 7));
-                    $orConditions[] = $queryBuilder->expr()->andX(
+                    $searchConditions[] = $queryBuilder->expr()->andX(
                         'LENGTH(si.baseword) >= ' . $wordLength,
                         $queryBuilder->expr()->orX(
-                            $queryBuilder->expr()->eq('si.metaphone', $queryBuilder->expr()->literal($mp)),
-                            $queryBuilder->expr()->like('si.baseword', $queryBuilder->expr()->literal('%'.$word.'%'))
+                            $queryBuilder->expr()->eq('si.metaphone', $queryBuilder->expr()->literal($mpStr)),
+                            $queryBuilder->expr()->like('si.baseword', $queryBuilder->expr()->literal('%' . $word . '%'))
                         )
                     );
-                //Numbers create empty metaphone string; compare these values with words directly
+                    //Numbers create empty metaphone string; compare these values with words directly
                 } else {
-                    $orConditions[] = $queryBuilder->expr()->like('si.baseword', $queryBuilder->expr()->literal('%'.$word.'%'));
+                    $searchConditions[] = $queryBuilder->expr()->like('si.baseword', $queryBuilder->expr()->literal('%' . $word . '%'));
                 }
             }
-            $expr = $query->expr()->orX()->addMultiple($orConditions);
+            $expr = $query->expr()->orX()->addMultiple($searchConditions);
             $queryBuilder->andWhere($expr);
             $result = $query->getQuery()->getArrayResult();
+            $recordIdPoints = [];
             foreach ($result as $row) {
-                $matchingRecordIds[] = $row['recordId'];
+                if (!isset($recordIdPoints[$row['recordId']])) {
+                    $recordIdPoints[$row['recordId']] = 0;
+                }
+                $baseWord = (string) $row['baseword'];
+                $baseWordLength = mb_strlen($baseWord);
+                $points = 0;
+                foreach ($searchParameters as $word) {
+                    $searchWordLength = mb_strlen((string) $word);
+                    $wordOffset = mb_strpos($baseWord, (string) $word);
+                    if ($wordOffset !== false) {
+                        $points += max(0, $searchWordLength * 1000 - $wordOffset - $baseWordLength);
+                    }
+                }
+                $recordIdPoints[$row['recordId']] += $points;
+            }
+            // Only return significant results
+            if (!empty($recordIdPoints)) {
+                $matchingRecordIds = [];
+                arsort($recordIdPoints);
+                $offset = 0;
+                foreach ($recordIdPoints as $recordId => $points) {
+                    $matchingRecordIds[] = $recordId;
+                    if ($offset > 50 && $points < $points * $offset) {
+                        break;
+                    }
+                    ++$offset;
+                }
+            } else {
+                $matchingRecordIds = [0];
             }
         }
         return $matchingRecordIds;

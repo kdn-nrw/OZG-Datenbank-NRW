@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class FundingAdmin extends AbstractAppAdmin
+class FundingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use ImplementationProjectTrait;
 
@@ -36,7 +36,6 @@ class FundingAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $datagridMapper->add('description');
         $this->addImplementationProjectsDatagridFilters($datagridMapper);

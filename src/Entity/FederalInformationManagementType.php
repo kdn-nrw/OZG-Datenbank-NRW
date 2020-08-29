@@ -164,4 +164,12 @@ class FederalInformationManagementType extends BaseEntity
         return self::$statusChoices[$this->getStatus()];
     }
 
+    /**
+     * Returns the name of this contact
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getDataType() . ' ('.$this->getStatus().')';
+    }
 }

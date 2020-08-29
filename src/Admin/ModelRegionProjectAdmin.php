@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ModelRegionProjectAdmin extends AbstractAppAdmin
+class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
     use AddressTrait;
     use DatePickerTrait;
@@ -68,7 +68,6 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $datagridMapper->add('name');
         $this->addOrganisationsDatagridFilters($datagridMapper);
         $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');

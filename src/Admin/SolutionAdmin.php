@@ -35,7 +35,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
-class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
+class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
     use CommuneTrait;
     use ContactTrait;
@@ -228,7 +228,6 @@ class SolutionAdmin extends AbstractAppAdmin implements SearchableAdminInterface
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addFullTextDatagridFilter($datagridMapper);
         $this->addServiceProvidersDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSolutions.service.serviceSystem',
             null,
