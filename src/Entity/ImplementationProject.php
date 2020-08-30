@@ -12,6 +12,8 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Base\SluggableEntityTrait;
+use App\Entity\Base\SluggableInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,8 +27,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_implementation_project")
  * @ORM\HasLifecycleCallbacks
  */
-class ImplementationProject extends BaseNamedEntity
+class ImplementationProject extends BaseNamedEntity implements SluggableInterface
 {
+    use SluggableEntityTrait;
 
     /**
      * Status

@@ -12,20 +12,23 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Base\SluggableEntityTrait;
+use App\Entity\Base\SluggableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Modellregion
+ * Class ModelRegion
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_model_region")
  * @ORM\HasLifecycleCallbacks
  */
-class ModelRegion extends BaseNamedEntity
+class ModelRegion extends BaseNamedEntity implements SluggableInterface
 {
     use AddressTrait;
+    use SluggableEntityTrait;
     use UrlTrait;
 
     /**

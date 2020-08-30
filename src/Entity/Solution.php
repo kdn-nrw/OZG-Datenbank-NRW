@@ -14,6 +14,8 @@ namespace App\Entity;
 use App\Entity\Base\BaseBlamableEntity;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
+use App\Entity\Base\SluggableEntityTrait;
+use App\Entity\Base\SluggableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,15 +28,16 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_solution")
  * @ORM\HasLifecycleCallbacks
  */
-class Solution extends BaseBlamableEntity implements NamedEntityInterface, ImportEntityInterface
+class Solution extends BaseBlamableEntity implements NamedEntityInterface, ImportEntityInterface, SluggableInterface
 {
     public const COMMUNE_TYPE_ALL = 'all';
     public const COMMUNE_TYPE_SELECTED = 'selected';
 
-    use HideableEntityTrait;
     use ContactTextTrait;
-    use UrlTrait;
+    use HideableEntityTrait;
     use ImportTrait;
+    use SluggableEntityTrait;
+    use UrlTrait;
 
     /**
      * @var string|null

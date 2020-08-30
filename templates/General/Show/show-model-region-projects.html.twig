@@ -27,13 +27,7 @@ file that was distributed with this source code.
                     {# @var child \App\Entity\ModelRegionProject #}
                     <tr>
                         <td>
-                            {% if refSettings.show.enabled and refSettings.admin.hasAccess(refSettings.show.route, child) %}
-                                <a href="{{ refSettings.admin.generateObjectUrl(refSettings.show.route, child, {'id': child.id}) }}">
-                                    {{ child.name }}
-                                </a>
-                            {% else %}
-                                {{ child.name }}
-                            {% endif %}
+                            {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
                         </td>
                         <td>
                             {% if child.projectStartAt %}

@@ -2,9 +2,13 @@ frontend_app_service_list:
   path: /leistungen
   controller: App\Controller\ServiceController::listAction
 
-frontend_app_service_show:
+frontend_app_service_show_default:
   path: /leistungen/{id}/show
   controller: App\Controller\ServiceController::showAction
+
+frontend_app_service_show:
+  path: /leistungen/{slug}
+  controller: App\Controller\ServiceController::showBySlugAction
 
 frontend_app_service_export:
   path: /leistungen/export
@@ -14,9 +18,13 @@ frontend_app_servicesystem_list:
   path: /ozg-leistungen
   controller: App\Controller\ServiceSystemController::listAction
 
-frontend_app_servicesystem_show:
+frontend_app_servicesystem_show_default:
   path: /ozg-leistungen/{id}/show
   controller: App\Controller\ServiceSystemController::showAction
+
+frontend_app_servicesystem_show:
+  path: /ozg-leistungen/{slug}
+  controller: App\Controller\ServiceSystemController::showBySlugAction
 
 frontend_app_servicesystem_export:
   path: /ozg-leistungen/export
@@ -26,9 +34,13 @@ frontend_app_implementationproject_list:
   path: /umsetzungsprojekte
   controller: App\Controller\ImplementationProjectController::listAction
 
-frontend_app_implementationproject_show:
+frontend_app_implementationproject_show_default:
   path: /umsetzungsprojekte/{id}/show
   controller: App\Controller\ImplementationProjectController::showAction
+
+frontend_app_implementationproject_show:
+  path: /umsetzungsprojekte/{slug}
+  controller: App\Controller\ImplementationProjectController::showBySlugAction
 
 frontend_app_implementationproject_export:
   path: /umsetzungsprojekte/export
@@ -38,9 +50,13 @@ frontend_app_solution_list:
   path: /loesungen
   controller: App\Controller\SolutionController::listAction
 
-frontend_app_solution_show:
+frontend_app_solution_show_default:
   path: /loesungen/{id}/show
   controller: App\Controller\SolutionController::showAction
+
+frontend_app_solution_show:
+  path: /loesungen/{slug}
+  controller: App\Controller\SolutionController::showBySlugAction
 
 frontend_app_solution_export:
   path: /loesungen/export
@@ -50,9 +66,13 @@ frontend_app_modelregionproject_list:
   path: /dmr-umsetzungsprojekte
   controller: App\Controller\ModelRegionProjectController::listAction
 
-frontend_app_modelregionproject_show:
+frontend_app_modelregionproject_show_default:
   path: /dmr-umsetzungsprojekte/{id}/show
   controller: App\Controller\ModelRegionProjectController::showAction
+
+frontend_app_modelregionproject_show:
+  path: /dmr-umsetzungsprojekte/{slug}
+  controller: App\Controller\ModelRegionProjectController::showBySlugAction
 
 frontend_app_modelregionproject_export:
   path: /dmr-umsetzungsprojekte/export
@@ -62,9 +82,13 @@ frontend_app_modelregion_list:
   path: /modellregionen
   controller: App\Controller\ModelRegionController::listAction
 
-frontend_app_modelregion_show:
+frontend_app_modelregion_show_default:
   path: /modellregionen/{id}/show
   controller: App\Controller\ModelRegionController::showAction
+
+frontend_app_modelregion_show:
+  path: /modellregionen/{slug}
+  controller: App\Controller\ModelRegionController::showBySlugAction
 
 frontend_app_modelregion_export:
   path: /modellregionen/export

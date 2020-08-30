@@ -31,6 +31,7 @@ class ReferenceSettings
     protected $show = [
         'enabled' => true,
         'route' => 'show',
+        'enableSlug' => false,
     ];
 
     /**
@@ -87,14 +88,16 @@ class ReferenceSettings
     }
 
     /**
-     * @param bool $enabled
-     * @param string $route
+     * @param bool $enabled Toggle enable mode for show link
+     * @param string $route Set route for show action
+     * @param bool $enableSlug Toggle slug feature
      */
-    public function setShow(bool $enabled, string $route = 'show'): void
+    public function setShow(bool $enabled, string $route = 'show', bool $enableSlug = false): void
     {
         $this->show = [
             'enabled' => $enabled,
             'route' => $route,
+            'enableSlug' => $enableSlug,
         ];
     }
 

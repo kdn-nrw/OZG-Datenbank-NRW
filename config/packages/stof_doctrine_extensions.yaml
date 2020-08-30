@@ -10,4 +10,4 @@ stof_doctrine_extensions:
       blameable: true
       #translatable: true
       #sortable: true
-      #sluggable: true
+      sluggable: true

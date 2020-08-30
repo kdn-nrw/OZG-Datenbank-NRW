@@ -12,6 +12,8 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\AbstractContextAwareAdmin;
+use App\Entity\Base\BaseEntityInterface;
+use App\Entity\Base\SluggableInterface;
 use RuntimeException;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -169,6 +171,21 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
     protected function getExportExcludeFields(): array
     {
         return $this->excludeExportFields;
+    }
+
+    public function generateObjectUrl($name, $object, array $parameters = [], $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        if ($name === 'show' && $object instanceof SluggableInterface) {
+            if (empty($parameters['slug'])) {
+                /** @var SluggableInterface|BaseEntityInterface $object */
+                $parameters['slug'] = $object->getSlug() ?? (string) $object->getId();
+                unset($parameters['id']);
+            }
+        } else {
+            $parameters['id'] = $this->getUrlSafeIdentifier($object);
+        }
+
+        return $this->generateUrl($name, $parameters, $referenceType);
     }
 
     public function generateUrl($name, array $parameters = [], $absolute = RoutingUrlGeneratorInterface::ABSOLUTE_PATH)

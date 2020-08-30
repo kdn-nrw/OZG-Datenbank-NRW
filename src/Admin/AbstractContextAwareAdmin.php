@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 
+use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
 use App\Model\ReferenceSettings;
 use App\Service\ApplicationContextHandler;
@@ -170,9 +171,17 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         $showRouteName = 'show';
         $settings->setAdmin($this);
         $isBackendMode = $applicationContextHandler->isBackend();
-        $createShowLink = $this->hasRoute($showRouteName) && $this->hasAccess($showRouteName);
+        // Don't create show link if admin is only visible in frontend
+        $createShowLink = ($isBackendMode
+            || ApplicationContextHandler::getDefaultAdminApplicationContext($this) === ApplicationContextHandler::APP_CONTEXT_FE)
+            && $this->hasRoute($showRouteName) && $this->hasAccess($showRouteName);
         $createEditLink = $isBackendMode && $this->hasRoute($editRouteName) && $this->hasAccess($editRouteName);
-        $settings->setShow($createShowLink, $showRouteName);
+        $enableSlug = false;
+        if ($createShowLink && !$isBackendMode) {
+            $class = new \ReflectionClass($this->getClass());
+            $enableSlug = $class->implementsInterface(SluggableInterface::class);
+        }
+        $settings->setShow($createShowLink, $showRouteName, $enableSlug);
         $settings->setEdit($createEditLink, $editRouteName);
         $settings->setListTitle($this->getLabel());
         return $settings;

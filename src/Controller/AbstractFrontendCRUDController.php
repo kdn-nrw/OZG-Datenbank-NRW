@@ -14,8 +14,13 @@ namespace App\Controller;
 
 use App\Admin\Frontend\ContextFrontendAdminInterface;
 use App\Datagrid\CustomDatagrid;
+use App\Entity\Base\BaseEntityInterface;
+use App\Entity\Base\SluggableInterface;
+use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class AbstractFrontendCRUDController
@@ -46,6 +51,93 @@ abstract class AbstractFrontendCRUDController extends CRUDController
             return $this->redirectToRoute('sonata_admin_dashboard');
         }
         return $this->redirectToRoute($this->getDefaultRouteName());
+    }
+
+    /**
+     * Show action.
+     *
+     * @param string $slug
+     *
+     * @return Response
+     * @throws AccessDeniedException If access is not granted
+     *
+     * @throws NotFoundHttpException If the object does not exist
+     */
+    public function showBySlugAction(string $slug): ?Response
+    {
+        if (is_numeric($slug)) {
+            $object = $this->admin->getObject((int)$slug);
+            if ($object instanceof SluggableInterface && $redirectSlug = $object->getSlug()) {
+                $redirectUrl = $this->admin->generateUrl('show', ['slug' => $redirectSlug]);
+                $status = 301;
+                return $this->redirect($redirectUrl, $status);
+            }
+        } else {
+            $modelManager = $this->admin->getModelManager();
+            $object = $modelManager->findOneBy($this->admin->getClass(), ['slug' => $slug]);
+        }
+        if (null === $object) {
+            throw $this->createNotFoundException(sprintf('unable to find the object with id: %s', $slug));
+        }
+        /** @var BaseEntityInterface $object */
+        return $this->showObject($object);
+    }
+
+    /**
+     * Renders the show view
+     * @param BaseEntityInterface $object
+     * @return Response
+     */
+    private function showObject($object): Response
+    {
+        $request = $this->getRequest();
+
+        $this->admin->checkAccess('show', $object);
+
+        $preResponse = $this->preShow($request, $object);
+        if (null !== $preResponse) {
+            return $preResponse;
+        }
+
+        $this->admin->setSubject($object);
+
+        $fields = $this->admin->getShow();
+        \assert($fields instanceof FieldDescriptionCollection);
+
+        // NEXT_MAJOR: Remove this line and use commented line below it instead
+        $template = $this->admin->getTemplate('show');
+        //$template = $this->templateRegistry->getTemplate('show');
+
+        return $this->renderWithExtraParams($template, [
+            'action' => 'show',
+            'object' => $object,
+            'elements' => $fields,
+        ], null);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function showAction($deprecatedId = null)
+    {
+        $request = $this->getRequest();
+        $id = $request->get($this->admin->getIdParameter());
+        $object = null;
+        if (is_numeric($id)) {
+            $object = $this->admin->getObject($id);
+        } elseif (!empty($id)) {
+            $modelManager = $this->admin->getModelManager();
+            $object = $modelManager->findOneBy($this->admin->getClass(), ['slug' => $id]);
+        }
+        if ($object instanceof SluggableInterface && $redirectSlug = $object->getSlug()) {
+            $redirectUrl = $this->admin->generateUrl('show', ['slug' => $redirectSlug]);
+            $status = 301;
+            return $this->redirect($redirectUrl, $status);
+        }
+        if (null === $object) {
+            throw $this->createNotFoundException(sprintf('unable to find the object with id: %s', $id));
+        }
+        return parent::showAction();
     }
 
     /**

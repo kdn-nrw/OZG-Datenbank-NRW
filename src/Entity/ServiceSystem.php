@@ -11,12 +11,14 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\SluggableEntityTrait;
+use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Class OZG service systems
@@ -25,9 +27,16 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_service_system")
  * @ORM\HasLifecycleCallbacks
  */
-class ServiceSystem extends AbstractService
+class ServiceSystem extends AbstractService implements SluggableInterface
 {
     use ContactTextTrait;
+    use SluggableEntityTrait;
+    /**
+     * @var string|null
+     * @Gedmo\Slug(fields={"name", "serviceKey", "id"}, updatable=false)
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
 
     /**
      * Status
