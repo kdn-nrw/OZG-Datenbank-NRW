@@ -1,0 +1,5 @@
+parameters:
+    twig_cache.adapter.class: Twig\CacheExtension\CacheProvider\PsrCacheAdapter
+
+twig_cache:
+    service: 'cache.app'

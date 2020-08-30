@@ -7,3 +7,6 @@ twig:
         - 'General/Form/datepicker.html.twig'
     paths:
         '%kernel.project_dir%/vendor/vich/uploader-bundle/templates': VichUploader
+
+#twig_cache:
+#    service: 'cache.app'

@@ -197,7 +197,6 @@ services:
       - ~
     calls:
       - [addChild, ['@App\Admin\FormServerSolutionAdmin', 'formServer']]
-      - [setTemplate, ['show', 'FormServerAdmin/show.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -654,7 +653,6 @@ services:
     calls:
       - [addChild, ['@App\Admin\ServiceSolutionAdmin', 'solution']]
       - [addChild, ['@App\Admin\FormServerSolutionAdmin', 'solution']]
-      - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -669,7 +667,6 @@ services:
       - App\Entity\Solution
       - ~
     calls:
-      - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
       - [setTemplate, ['list', 'SolutionAdmin/list.html.twig']]
     tags:
       - name:         sonata.admin
