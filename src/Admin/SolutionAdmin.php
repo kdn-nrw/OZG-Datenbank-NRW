@@ -19,6 +19,7 @@ use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Status;
+use App\Model\ExportSettings;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -378,19 +379,17 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $this->addDefaultListActions($listMapper);
     }
 
-    public function getExportFields()
+    /**
+     * @inheritDoc
+     */
+    public function getExportSettings(): ExportSettings
     {
-        $fields = parent::getExportFields();
-        $additionalFields = [
+        $settings = parent::getExportSettings();
+        $settings->setAdditionFields([
             // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions', 'serviceProvider',
             'customProvider', 'name', 'maturity', 'url', 'status',
-        ];
-        foreach ($additionalFields as $field) {
-            if (!in_array($field, $fields, false)) {
-                $fields[] = $field;
-            }
-        }
-        return $fields;
+        ]);
+        return $settings;
     }
 
     /**

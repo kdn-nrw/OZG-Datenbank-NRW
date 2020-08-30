@@ -20,6 +20,7 @@ use App\Entity\Priority;
 use App\Entity\Status;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
 use App\Form\Type\FederalInformationManagementType;
+use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -382,27 +383,18 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addDefaultListActions($listMapper);
     }
 
-    public function getExportFields()
+    /**
+     * @inheritDoc
+     */
+    public function getExportSettings(): ExportSettings
     {
-        $fields = parent::getExportFields();
-        $additionalFields = [
+        $settings = parent::getExportSettings();
+        $settings->addExcludeFields(['fimTypes']);
+        $settings->setAdditionFields([
             'serviceSystem.situation.subject', 'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey',
             'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
-        ];
-        foreach ($additionalFields as $field) {
-            if (!in_array($field, $fields, false)) {
-                $fields[] = $field;
-            }
-        }
-        return $fields;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getExportExcludeFields(): array
-    {
-        return ['hidden', 'fimTypes'];
+        ]);
+        return $settings;
     }
 
     /**

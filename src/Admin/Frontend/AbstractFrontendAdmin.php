@@ -14,6 +14,7 @@ namespace App\Admin\Frontend;
 use App\Admin\AbstractContextAwareAdmin;
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\SluggableInterface;
+use App\Model\ExportSettings;
 use RuntimeException;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -40,11 +41,6 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
      * @var string[]
      */
     protected $searchResultActions = ['show'];
-
-    /**
-     * Exclude fields in export
-     */
-    protected $excludeExportFields = ['createdBy', 'modifiedBy', 'hidden'];
 
     /**
      * Initialized the routes and templates for this admin
@@ -166,11 +162,13 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
-    protected function getExportExcludeFields(): array
+    public function getExportSettings(): ExportSettings
     {
-        return $this->excludeExportFields;
+        $settings = parent::getExportSettings();
+        $settings->addExcludeFields(['createdBy', 'modifiedBy']);
+        return $settings;
     }
 
     public function generateObjectUrl($name, $object, array $parameters = [], $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH)
@@ -178,7 +176,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         if ($name === 'show' && $object instanceof SluggableInterface) {
             if (empty($parameters['slug'])) {
                 /** @var SluggableInterface|BaseEntityInterface $object */
-                $parameters['slug'] = $object->getSlug() ?? (string) $object->getId();
+                $parameters['slug'] = $object->getSlug() ?? (string)$object->getId();
                 unset($parameters['id']);
             }
         } else {

@@ -18,6 +18,7 @@ use App\Datagrid\CustomDatagrid;
 use App\Entity\Solution;
 use App\Entity\Status;
 use App\Entity\Subject;
+use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -225,19 +226,17 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         $this->addDefaultListActions($listMapper);
     }
 
-    public function getExportFields()
+    /**
+     * @inheritDoc
+     */
+    public function getExportSettings(): ExportSettings
     {
-        $fields = parent::getExportFields();
-        $additionalFields = [
+        $settings = parent::getExportSettings();
+        $settings->setAdditionFields([
             // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions', 'serviceProviders',
             'customProvider', 'name', 'maturity', 'url', 'status',
-        ];
-        foreach ($additionalFields as $field) {
-            if (!in_array($field, $fields, false)) {
-                $fields[] = $field;
-            }
-        }
-        return $fields;
+        ]);
+        return $settings;
     }
 
     /**

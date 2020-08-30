@@ -13,6 +13,7 @@ namespace App\Admin;
 
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\EFileStatus;
+use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -184,21 +185,14 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
-    public function getExportFields()
+    public function getExportSettings(): ExportSettings
     {
-        $exportFields = parent::getExportFields();
-        $exportFields[] = 'manufacturers';
-        return $exportFields;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getExportExcludeFields(): array
-    {
-        return ['hidden', 'specializedProcedures.manufacturers'];
+        $settings = parent::getExportSettings();
+        $settings->addExcludeFields(['specializedProcedures.manufacturers']);
+        $settings->setAdditionFields(['manufacturers']);
+        return $settings;
     }
 
     /**

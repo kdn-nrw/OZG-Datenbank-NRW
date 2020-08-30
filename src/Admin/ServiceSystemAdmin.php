@@ -17,6 +17,7 @@ use App\Admin\Traits\SolutionTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\ServiceSystem;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
+use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -360,10 +361,16 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
-    protected function getExportExcludeFields(): array
+    public function getExportSettings(): ExportSettings
     {
-        return array_merge(parent::getExportExcludeFields(), ['contact']);
+        $settings = parent::getExportSettings();
+        $settings->addExcludeFields(['contact']);
+        /*$settings->setAdditionFields([
+            'name', 'serviceKey', 'situation', 'situation.subject',
+            'priority',
+        ]);*/
+        return $settings;
     }
 }

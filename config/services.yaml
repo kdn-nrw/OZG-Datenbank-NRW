@@ -802,3 +802,13 @@ services:
       - '@App\Search\Finder'
     tags:
       - { name: sonata.admin.extension, global: true }
+
+  App\Admin\Extension\ExportConfigurationExtension:
+    tags:
+      - { name: sonata.admin.extension, global: true }
+
+  App\Admin\Extension\FrontendRoutingExtension:
+    arguments:
+      - '@App\Service\ApplicationContextHandler'
+    tags:
+      - { name: sonata.admin.extension, global: true }

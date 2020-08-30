@@ -15,6 +15,7 @@ use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\PortalAdmin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Subject;
+use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -116,19 +117,18 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
         $this->addDefaultListActions($listMapper);
     }
 
-    public function getExportFields()
+    /**
+     * @inheritDoc
+     */
+    public function getExportSettings(): ExportSettings
     {
-        $fields = parent::getExportFields();
-        $additionalFields = [
+        $settings = parent::getExportSettings();
+        $settings->addExcludeFields(['contact']);
+        $settings->setAdditionFields([
             'name', 'serviceKey', 'situation', 'situation.subject',
             'priority',
-        ];
-        foreach ($additionalFields as $field) {
-            if (!in_array($field, $fields, false)) {
-                $fields[] = $field;
-            }
-        }
-        return $fields;
+        ]);
+        return $settings;
     }
 
     /**
@@ -217,13 +217,5 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
     protected function getRoutePrefix(): string
     {
         return 'frontend_app_servicesystem';
-    }
-
-    /**
-     * @return array
-     */
-    protected function getExportExcludeFields(): array
-    {
-        return array_merge(parent::getExportExcludeFields(), ['contact']);
     }
 }

@@ -14,6 +14,7 @@ namespace App\Admin;
 
 use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
+use App\Model\ExportSettings;
 use App\Model\ReferenceSettings;
 use App\Service\ApplicationContextHandler;
 use Doctrine\ORM\Query;
@@ -25,7 +26,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 /**
  * Class AbstractContextAwareAdmin
  */
-abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface
+abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface, CustomExportAdminInterface
 {
 
     public function getDataSourceIterator()
@@ -99,50 +100,16 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
-    public function getExportFields()
+    public function getExportSettings(): ExportSettings
     {
-        $preFields = ['id', 'createdAt', 'modifiedAt', 'createdBy'];
-        $defaultFields = parent::getExportFields();
-        $fields = [];
-        foreach ($preFields as $field) {
-            if (in_array($field, $defaultFields, false)) {
-                $fields[] = $field;
-            }
-        }
-        foreach ($defaultFields as $field) {
-            if (!in_array($field, $fields, false)) {
-                $fields[] = $field;
-            }
-        }
-        $show = $this->getShow();
-        if (null !== $show) {
-            $showFields = array_keys($show->getElements());
-            foreach ($showFields as $field) {
-                if (!in_array($field, $fields, false)) {
-                    $fields[] = $field;
-                }
-            }
-        }
-        $excludeFields = $this->getExportExcludeFields();
-        if (!empty($excludeFields)) {
-            $fields = array_diff($fields, $excludeFields);
-        }
-        return $fields;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getExportExcludeFields(): array
-    {
-        return ['hidden'];
+        return new ExportSettings();
     }
 
     public function getExportFormats()
     {
-        return ['xlsx'];
+        return $this->getExportSettings()->getFormats();
     }
 
     public function getFilterParameters()
