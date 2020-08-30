@@ -21,7 +21,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 /**
  * Trait CommuneTrait
  * @package App\Admin\Traits
- * @property array $customShowFields
  */
 trait CommuneTrait
 {
@@ -63,8 +62,9 @@ trait CommuneTrait
     {
         $showMapper
             ->add('communes', null,[
+                'associated_property' => 'name',
                 'admin_code' => CommuneAdmin::class,
+                'check_has_all_modifier' => false,
             ]);
-        $this->customShowFields[] = 'communes';
     }
 }

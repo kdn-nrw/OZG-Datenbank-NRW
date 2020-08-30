@@ -248,14 +248,16 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         $showMapper
             ->add('communes', 'choice', [
                 'associated_property' => 'name',
-                'template' => 'SolutionAdmin/show-communes.html.twig',
+                'check_has_all_modifier' => true,
             ]);
         $this->addServiceProvidersShowFields($showMapper);
         $showMapper
             ->add('customProvider')
             ->add('portals')
             ->add('specializedProcedures')
-            ->add('formServerSolutions')
+            ->add('formServerSolutions', null, [
+                'associated_property' => 'formServer'
+            ])
             ->add('paymentTypes')
             ->add('authentications')
             ->add('analogServices')
@@ -275,9 +277,6 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ]);
-        $this->customShowFields[] = 'serviceSystems';
-        $this->customShowFields[] = 'serviceSolutions';
-        $this->customShowFields[] = 'formServerSolutions';
         $this->addModelRegionProjectsShowFields($showMapper);
     }
 

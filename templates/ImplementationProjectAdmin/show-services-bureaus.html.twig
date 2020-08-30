@@ -13,7 +13,7 @@ file that was distributed with this source code.
     <ul class="sonata-ba-show-many-to-many">
         {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
         {% set refFieldDesc = field_description is defined ? field_description : null %}
-        {% set refSettings = app_get_reference_settings('App\\Entity\\Bureau', admin.appContext, refFieldDesc) %}
+        {% set refSettings = app_get_reference_settings('App\\Entity\\Bureau', refFieldDesc) %}
         {# @var refSettings \App\Model\ReferenceSettings #}
         {% for child in entities %}
             <li>

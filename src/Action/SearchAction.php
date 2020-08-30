@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Action;
 
-use App\Admin\ContextAwareAdminInterface;
+use App\Admin\Frontend\ContextFrontendAdminInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\Pool;
 use Sonata\AdminBundle\Search\SearchHandler;
@@ -44,7 +44,8 @@ final class SearchAction
         Pool $pool,
         SearchHandler $searchHandler,
         Environment $twig
-    ) {
+    )
+    {
         $this->pool = $pool;
         $this->searchHandler = $searchHandler;
         $this->twig = $twig;
@@ -62,8 +63,7 @@ final class SearchAction
         $adminServiceIds = $this->pool->getAdminServiceIds();
         foreach ($adminServiceIds as $adminServiceId) {
             $admin = $this->pool->getInstance($adminServiceId);
-            if ($admin instanceof ContextAwareAdminInterface
-                && $admin->getAppContext() === ContextAwareAdminInterface::APP_CONTEXT_FE) {
+            if ($admin instanceof ContextFrontendAdminInterface) {
                 $displayAdmins[$adminServiceId] = $admin;
             }
         }
@@ -105,8 +105,8 @@ final class SearchAction
                     'id' => $admin->id($result),
                 ];
             }
-            $page = (int) $pager->getPage();
-            $total = (int) $pager->getNbResults();
+            $page = (int)$pager->getPage();
+            $total = (int)$pager->getNbResults();
         }
 
         $response = new JsonResponse([

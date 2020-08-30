@@ -14,6 +14,7 @@ namespace App\Admin;
 
 use App\Exporter\Source\CustomQuerySourceIterator;
 use App\Model\ReferenceSettings;
+use App\Service\ApplicationContextHandler;
 use Doctrine\ORM\Query;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
@@ -25,42 +26,6 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
  */
 abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface
 {
-    protected $customShowFields = [
-        'serviceSystems', 'laboratories', 'services', 'publishedSolutions',
-        'solutions', 'serviceProviders', 'implementationProjects',
-        'modelRegionProjects', 'publishedModelRegionProjects',
-    ];
-
-    protected $appContext = ContextAwareAdminInterface::APP_CONTEXT_BE;
-
-    /**
-     * @param string $appContext
-     */
-    public function setAppContext(string $appContext): void
-    {
-        $this->appContext = $appContext;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAppContext(): string
-    {
-        return $this->appContext;
-    }
-
-    protected function isFrontend(): bool
-    {
-        return $this->appContext === ContextAwareAdminInterface::APP_CONTEXT_FE;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCustomShowFields(): array
-    {
-        return $this->customShowFields;
-    }
 
     public function getDataSourceIterator()
     {
@@ -127,7 +92,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
             $query,
             $fields,
             $cacheDir,
-            $this->getAppContext(),
+            ApplicationContextHandler::getDefaultAdminApplicationContext($this),
             'd.m.Y H:i:s'
         );
     }
@@ -193,16 +158,18 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     /**
      * Returns the default reference settings for the reference lists in the detail views of other admins
      *
-     * @param string $context The application context (backend or frontend); is not necessarily the same context of the current admin!
+     * @param ApplicationContextHandler $applicationContextHandler The application context handler
      * @param string $editRouteName The edit route may be overridden in the field configuration
      * @return ReferenceSettings
      */
-    public function getReferenceSettings(string $context, string $editRouteName = 'edit'): ReferenceSettings
+    public function getReferenceSettings(
+        ApplicationContextHandler $applicationContextHandler,
+        string $editRouteName = 'edit'): ReferenceSettings
     {
         $settings = new ReferenceSettings();
         $showRouteName = 'show';
-        $isBackendMode = $context === 'backend';
         $settings->setAdmin($this);
+        $isBackendMode = $applicationContextHandler->isBackend();
         $createShowLink = $this->hasRoute($showRouteName) && $this->hasAccess($showRouteName);
         $createEditLink = $isBackendMode && $this->hasRoute($editRouteName) && $this->hasAccess($editRouteName);
         $settings->setShow($createShowLink, $showRouteName);

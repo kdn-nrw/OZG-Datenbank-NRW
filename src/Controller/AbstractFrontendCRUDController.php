@@ -12,14 +12,10 @@
 namespace App\Controller;
 
 
-use App\Admin\ContextAwareAdminInterface;
-use App\Admin\Frontend\AbstractFrontendAdmin;
+use App\Admin\Frontend\ContextFrontendAdminInterface;
 use App\Datagrid\CustomDatagrid;
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class AbstractFrontendCRUDController
@@ -112,8 +108,9 @@ abstract class AbstractFrontendCRUDController extends CRUDController
         $request = $this->getRequest();
         $request->attributes->set('_sonata_admin', $this->getAdminClassName());
         parent::configure();
-        /** @var $admin AbstractFrontendAdmin */
         $admin = $this->admin;
-        $admin->setAppContext(ContextAwareAdminInterface::APP_CONTEXT_FE);
+        if ($admin instanceof ContextFrontendAdminInterface) {
+            $admin->initializeAppContext();
+        }
     }
 }

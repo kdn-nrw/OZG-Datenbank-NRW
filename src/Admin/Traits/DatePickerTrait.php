@@ -11,19 +11,16 @@
 
 namespace App\Admin\Traits;
 
-use App\Admin\DatePickerAdmin;
 use DateTime;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DatePickerType;
 
 /**
  * Trait DatePickerTrait
  * @package App\Admin\Traits
- * @property array $customShowFields
  */
 trait DatePickerTrait
 {

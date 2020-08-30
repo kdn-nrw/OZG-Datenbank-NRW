@@ -454,7 +454,9 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])
             ->add('serviceSystem.situation')
             ->add('serviceSystem.situation.subject')
-            ->add('serviceSolutions')
+            ->add('serviceSolutions', null, [
+                'associated_property' => 'solution'
+            ])
             ->add('jurisdictions')
             ->add('bureaus')
             ->add('ruleAuthorities')

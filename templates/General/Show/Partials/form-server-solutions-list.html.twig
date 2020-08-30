@@ -6,47 +6,50 @@ file that was distributed with this source code.
 #}
 {% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
-    {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\Service' %}
+    {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\FormServer' %}
     {% set refFieldDesc = field_description is defined ? field_description : null %}
     {% set refSettings = app_get_reference_settings(entityClass, refFieldDesc) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
     {% set showContacts = refSettings.isBackendMode %}
     <table class="table table-bordered table-condensed">
         <tr>
-            {% if showSolution %}
-                {% include 'General/Show/Table/table-head-solutions.html.twig' %}
-            {% else %}
-                {% include 'General/Show/Table/table-head-services.html.twig' %}
-            {% endif %}
-            <th>
-                {{ 'app.solution.entity.maturity'|trans }}
-            </th>
+            {% include 'General/Show/Table/table-head-form-server-solutions.html.twig' %}
             {% if refSettings.edit.enabled %}
                 <th>
                 </th>
             {% endif %}
         </tr>
         {% for child in entities %}
-            {# @var child \App\Entity\ServiceSolution #}
+            {# @var child \App\Entity\FormServerSolution #}
             <tr>
                 {% if showSolution %}
                     {% set editObjectId = child.solution.id %}
                     {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child.solution} %}
+                {% elseif child.formServer is not null %}
+                    {% set editObjectId = child.formServer.id %}
+                    {% include 'General/Show/Table/table-row-cells-form-servers.html.twig' with {'child': child.formServer} %}
                 {% else %}
-                    {% if child.service %}
-                        {% set editObjectId = child.service.id %}
-                        {% include 'General/Show/Table/table-row-cells-services.html.twig' with {'child': child.service} %}
-                    {% else %}
-                        <td colspan="7" class="service-is-missing">
-                            <span class="text-warning">{{ 'app.solution.messages.no_service_selected'|trans }}</span>
-                        </td>
-                        {% set editObjectId = null %}
-                    {% endif %}
+                    <td>
+                    </td>
+                    <td>
+                    </td>
                 {% endif %}
                 <td>
-                    {% if child.maturity %}
-                        {{ child.maturity.name }}
+                    {% if child.status %}
+                        {{ child.status.name }}
                     {% endif %}
+                </td>
+                <td>
+                    {{ child.articleNumber }}
+                </td>
+                <td>
+                    {{ child.assistantType }}
+                </td>
+                <td>
+                    {{ child.articleKey }}
+                </td>
+                <td>
+                    {{ child.usableAsPrintTemplate ? 'Ja' : 'Nein' }}
                 </td>
                 {% if refSettings.edit.enabled and editObjectId %}
                     <td>

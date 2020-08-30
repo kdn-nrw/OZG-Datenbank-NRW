@@ -11,8 +11,9 @@
 
 namespace App\Twig\Extension;
 
-use App\Admin\AbstractContextAwareAdmin;
+use App\Admin\ContextAwareAdminInterface;
 use App\Model\ReferenceSettings;
+use App\Service\ApplicationContextHandler;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Admin\Pool;
@@ -27,12 +28,19 @@ class ReferenceSettingsExtension extends AbstractExtension
     private $pool;
 
     /**
+     * @var ApplicationContextHandler
+     */
+    private $applicationContextHandler;
+
+    /**
      * RenderPageContentExtension constructor.
      * @param Pool $pool
+     * @param ApplicationContextHandler $applicationContextHandler
      */
-    public function __construct(Pool $pool)
+    public function __construct(Pool $pool, ApplicationContextHandler $applicationContextHandler)
     {
         $this->pool = $pool;
+        $this->applicationContextHandler = $applicationContextHandler;
     }
 
     /**
@@ -43,23 +51,38 @@ class ReferenceSettingsExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
+            new TwigFunction('app_is_backend', [$this, 'getAdminContextIsBackend']),
             new TwigFunction('app_get_reference_settings', [$this, 'getReferenceSettings']),
         ];
     }
 
     /**
+     * Returns true if the current application context is "backend"
+     *
+     * @return bool
+     */
+    public function getAdminContextIsBackend(): bool
+    {
+        return $this->applicationContextHandler->isBackend();
+    }
+
+    /**
      * @param string $entityClass The entity class name for which the settings are loaded
-     * @param string $context The application context (backend or frontend)
      * @param FieldDescriptionInterface|null $fieldDescription The optional field description (not set for custom fields)
      * @return ReferenceSettings
      */
-    public function getReferenceSettings(string $entityClass, string $context, ?FieldDescriptionInterface $fieldDescription = null): ReferenceSettings
+    public function getReferenceSettings(
+        string $entityClass,
+        ?FieldDescriptionInterface $fieldDescription = null
+    ): ReferenceSettings
     {
         $refAdmin = null;
-        $isBackendMode = $context === 'backend';
+        $isBackendMode = $this->applicationContextHandler->isBackend();
         $editRouteName = 'edit';
-        if (null !== $fieldDescription && $fieldDescription->hasAssociationAdmin()) {
-            $refAdmin = $fieldDescription->getAssociationAdmin();
+        if (null !== $fieldDescription && $fieldDescription->hasAssociationAdmin()
+            && (null !== $tmpFieldAdmin = $fieldDescription->getAssociationAdmin())
+            && $tmpFieldAdmin->getClass() === $entityClass) {
+            $refAdmin = $tmpFieldAdmin;
             $editRouteName = $fieldDescription->getOption('route')['name'];
         } else {
             $adminClasses = $this->pool->getAdminClasses();
@@ -83,8 +106,8 @@ class ReferenceSettingsExtension extends AbstractExtension
             }
         }
         if (null !== $refAdmin) {
-            if ($refAdmin instanceof AbstractContextAwareAdmin) {
-                $settings = $refAdmin->getReferenceSettings($context, $editRouteName);
+            if ($refAdmin instanceof ContextAwareAdminInterface) {
+                $settings = $refAdmin->getReferenceSettings($this->applicationContextHandler, $editRouteName);
             } else {
                 $showRouteName = 'show';
                 /** @var AbstractAdmin $refAdmin */

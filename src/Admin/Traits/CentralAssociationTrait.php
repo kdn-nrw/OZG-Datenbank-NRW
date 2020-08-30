@@ -21,7 +21,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 /**
  * Trait CentralAssociationTrait
  * @package App\Admin\Traits
- * @property array $customShowFields
  */
 trait CentralAssociationTrait
 {
@@ -62,6 +61,5 @@ trait CentralAssociationTrait
             ->add('centralAssociations', null,[
                 'admin_code' => CentralAssociationAdmin::class,
             ]);
-        //$this->customShowFields[] = 'centralAssociations';
     }
 }

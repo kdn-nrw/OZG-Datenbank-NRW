@@ -12,7 +12,7 @@
 namespace App\Admin;
 
 
-use Doctrine\ORM\QueryBuilder;
+use DateTime;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 /**
  * User admin
  */
-class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin implements ContextAwareAdminInterface
+class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
 {
     use AdminTranslatorStrategyTrait;
 
@@ -63,8 +63,7 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin implements Cont
         }
         $listMapper
             ->add('enabled', null, ['editable' => true])
-            ->add('createdAt')
-        ;
+            ->add('createdAt');
         $listMapper->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
@@ -77,8 +76,7 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin implements Cont
 
         if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
             $listMapper
-                ->add('impersonating', 'string', ['template' => '@SonataUser/Admin/Field/impersonating.html.twig'])
-            ;
+                ->add('impersonating', 'string', ['template' => '@SonataUser/Admin/Field/impersonating.html.twig']);
         }
     }
 
@@ -106,7 +104,7 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin implements Cont
         $formMapper->removeGroup('Roles', 'Security');
         $formMapper->removeGroup('Keys', 'Security');
         $formMapper->remove('dateOfBirth');
-        $now = new \DateTime();
+        $now = new DateTime();
         $formMapper
             ->tab('User')
             ->with('Profile')
@@ -129,14 +127,6 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin implements Cont
             $formMapper->removeGroup('Groups', 'Security', true);
             $formMapper->removeGroup('Status', 'Security', true);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getAppContext(): string
-    {
-        return ContextAwareAdminInterface::APP_CONTEXT_BE;
     }
 
 }

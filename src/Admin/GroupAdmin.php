@@ -18,7 +18,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 /**
  * Group admin
  */
-class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin implements ContextAwareAdminInterface
+class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
 {
     /**
      * @param ListMapper $listMapper
@@ -45,14 +45,6 @@ class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin implements Co
             $formMapper->remove('roles');
             $formMapper->removeGroup('Roles', 'Security', true);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getAppContext(): string
-    {
-        return ContextAwareAdminInterface::APP_CONTEXT_BE;
     }
 
 }

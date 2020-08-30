@@ -21,7 +21,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 /**
  * Trait ModelRegionProjectTrait
  * @package App\Admin\Traits
- * @property array $customShowFields
  */
 trait ModelRegionProjectTrait
 {
@@ -64,6 +63,5 @@ trait ModelRegionProjectTrait
             ->add('modelRegionProjects', null,[
                 'admin_code' => ModelRegionProjectAdmin::class,
             ]);
-        //$this->customShowFields[] = 'modelRegionProjects';
     }
 }

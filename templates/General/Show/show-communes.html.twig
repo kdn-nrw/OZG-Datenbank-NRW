@@ -4,9 +4,9 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-{% if entities|length > 0 %}
+{% if entities|length > 0 or showHasAll %}
     {% set refFieldDesc = field_description is defined ? field_description : null %}
-    {% set refSettings = app_get_reference_settings('App\\Entity\\Commune', admin.appContext, refFieldDesc) %}
+    {% set refSettings = app_get_reference_settings('App\\Entity\\Commune', refFieldDesc) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
     <div class="box box-primary">
         <div class="box-header">
@@ -14,53 +14,59 @@ file that was distributed with this source code.
                 {{ refSettings.listTitle|trans }}
             </h4>
         </div>
-        <div class="box-body table-responsive no-padding">
-            <table class="table table-bordered table-condensed">
-                <tr>
-                    {% include 'General/Show/Table/table-head-communes.html.twig' %}
-                    {% if refSettings.edit.enabled %}
-                        <th></th>
-                    {% endif %}
-                </tr>
-                {% for child in entities %}
-                    {# @var child \App\Entity\Commune #}
+        {% if showHasAll %}
+            <div class="box-body">
+                <em>{{ 'app.solution.entity.commune_type_all'|trans }}</em>
+            </div>
+        {% else %}
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-bordered table-condensed">
                     <tr>
-                        <td>
-                            {% if refSettings.show.enabled and refSettings.admin.hasAccess(refSettings.show.route, child) %}
-                                <a href="{{ refSettings.admin.generateObjectUrl(refSettings.show.route, child, {'id': child.id}) }}">
-                                    {{ child.name }}
-                                </a>
-                            {% else %}
-                                {{ child.name }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if child.street %}
-                                {{ child.street }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if child.zipCode %}
-                                {{ child.zipCode }}
-                            {% endif %}
-                            {% if child.town %}
-                                {{ child.town }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if child.url %}
-                                {{ child.url }}
-                            {% endif %}
-                        </td>
+                        {% include 'General/Show/Table/table-head-communes.html.twig' %}
                         {% if refSettings.edit.enabled %}
-                            <td>
-                                {% include 'General/Show/Partials/link-to-child.html.twig' %}
-                            </td>
+                            <th></th>
                         {% endif %}
                     </tr>
-                {% endfor %}
-            </table>
-        </div>
+                    {% for child in entities %}
+                        {# @var child \App\Entity\Commune #}
+                        <tr>
+                            <td>
+                                {% if refSettings.show.enabled and refSettings.admin.hasAccess(refSettings.show.route, child) %}
+                                    <a href="{{ refSettings.admin.generateObjectUrl(refSettings.show.route, child, {'id': child.id}) }}">
+                                        {{ child.name }}
+                                    </a>
+                                {% else %}
+                                    {{ child.name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if child.street %}
+                                    {{ child.street }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if child.zipCode %}
+                                    {{ child.zipCode }}
+                                {% endif %}
+                                {% if child.town %}
+                                    {{ child.town }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if child.url %}
+                                    {{ child.url }}
+                                {% endif %}
+                            </td>
+                            {% if refSettings.edit.enabled %}
+                                <td>
+                                    {% include 'General/Show/Partials/link-to-child.html.twig' %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
     </div>
 {% endif %}
 

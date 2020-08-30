@@ -11,10 +11,9 @@
 
 namespace App\Admin\Frontend;
 
-use App\Admin\PortalAdmin;
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\PortalAdmin;
 use App\Datagrid\CustomDatagrid;
-use App\Entity\Status;
 use App\Entity\Subject;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -150,7 +149,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
             ->add('ruleAuthorities')
             ->add('authorityBureaus')
             ->add('authorityStateMinistries')
-            ->add('services', null,[
+            ->add('services', null, [
                 'admin_code' => ServiceAdmin::class,
                 'template' => 'General/Show/show-services.html.twig',
             ])

@@ -397,6 +397,19 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     }
 
     /**
+     * Returns the published service solutions (if this solution is published, all service solutions are returned)
+     *
+     * @return ServiceSolution[]|Collection
+     */
+    public function getPublishedServiceSolutions()
+    {
+        if ($this->isPublished()) {
+            return $this->getServiceSolutions();
+        }
+        return new ArrayCollection();
+    }
+
+    /**
      * @return ServiceSystem[]|Collection
      */
     public function getServiceSystems()

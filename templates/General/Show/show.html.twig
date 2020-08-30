@@ -8,7 +8,13 @@ file that was distributed with this source code.
 
 {% block show_groups %}
     {# @var object \App\Entity\Base\BaseEntity #}
-    {# @var admin \App\Admin\AbstractContextAwareAdmin #}
+    {# @var admin \Sonata\AdminBundle\Admin\AdminInterface #}
+    {% set customShowFields =  [
+        'serviceSystems', 'laboratories', 'services', 'publishedSolutions',
+        'solutions', 'serviceProviders', 'implementationProjects',
+        'modelRegionProjects', 'publishedModelRegionProjects',
+        'formServerSolutions', 'serviceSolutions', 'communes', 'fimTypes'
+    ] %}
     <div class="row">
         {% block field_row %}
             {% for code in groups %}
@@ -29,10 +35,9 @@ file that was distributed with this source code.
                                 {% endblock %}
                                 <table class="table">
                                     <tbody>
-                                    {% set excludeCustomFields = admin.customShowFields %}
                                     {% for field_name in show_group.fields %}
                                         {% block show_field %}
-                                            {% if field_name not in excludeCustomFields %}
+                                            {% if field_name not in customShowFields %}
                                                 <tr class="sonata-ba-view-container">
                                                     {% if elements[field_name] is defined %}
                                                         {{ elements[field_name]|render_view_element(object) }}
@@ -48,9 +53,8 @@ file that was distributed with this source code.
                     </div>
                 {% endblock %}
                 {% block app_show_custom_fields %}
-                    {% set customFields = admin.customShowFields %}
                     {% for field_name in show_group.fields %}
-                        {% if field_name in customFields %}
+                        {% if field_name in customShowFields %}
                             <div class="col-xs-12">
                                 {# @var fieldDescription \Sonata\AdminBundle\Admin\BaseFieldDescription #}
                                 {% set fieldDescription = elements[field_name] %}
@@ -68,13 +72,24 @@ file that was distributed with this source code.
                                 {% elseif field_name == 'serviceProviders' %}
                                     {% include 'General/Show/show-service-providers.html.twig' with {'entities': object.serviceProviders, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'communes' %}
-                                    {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'field_description': fieldDescription} %}
+                                    {% set showHasAll = fieldDescription.option('check_has_all_modifier') and object.communeType == constant('App\\Entity\\Solution::COMMUNE_TYPE_ALL') %}
+                                    {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'showHasAll': showHasAll, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'implementationProjects' %}
                                     {% include 'General/Show/show-implementation-projects.html.twig' with {'entities': object.implementationProjects, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'modelRegionProjects' %}
                                     {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.modelRegionProjects, 'field_description': fieldDescription} %}
                                 {% elseif field_name == 'publishedModelRegionProjects' %}
                                     {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.publishedModelRegionProjects, 'field_description': fieldDescription} %}
+                                {% elseif field_name == 'serviceSolutions' %}
+                                    {% set showSolution = fieldDescription.option('associated_property') == 'solution' %}
+                                    {% set displayServiceSolutions = app_is_backend() ? object.serviceSolutions : object.publishedServiceSolutions %}
+                                    {% include 'General/Show/show-service-solutions.html.twig' with {'entities': displayServiceSolutions, 'showSolution': showSolution, 'field_description': fieldDescription} %}
+                                {% elseif field_name == 'formServerSolutions' %}
+                                    {% set showSolution = fieldDescription.option('associated_property') == 'solution' %}
+                                    {% include 'General/Show/show-form-server-solutions.html.twig' with {'entities': object.formServerSolutions, 'showSolution': showSolution, 'field_description': fieldDescription} %}
+                                {% elseif field_name == 'fimTypes' %}
+                                    {% set showSolution = fieldDescription.option('associated_property') == 'solution' %}
+                                    {% include 'General/Show/show-fim.html.twig' with {'entities': object.fimTypes, 'field_description': fieldDescription} %}
                                 {% endif %}
                             </div>
                         {% endif %}

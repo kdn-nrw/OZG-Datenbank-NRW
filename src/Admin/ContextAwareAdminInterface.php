@@ -12,6 +12,9 @@
 namespace App\Admin;
 
 
+use App\Model\ReferenceSettings;
+use App\Service\ApplicationContextHandler;
+
 /**
  * Class ContextAwareAdminInterface
  *
@@ -21,11 +24,14 @@ namespace App\Admin;
  */
 interface ContextAwareAdminInterface
 {
-    public const APP_CONTEXT_BE = 'backend';
-    public const APP_CONTEXT_FE = 'frontend';
-
     /**
-     * @return string
+     * Returns the default reference settings for the reference lists in the detail views of other admins
+     *
+     * @param ApplicationContextHandler $applicationContextHandler The application context handler
+     * @param string $editRouteName The edit route may be overridden in the field configuration
+     * @return ReferenceSettings
      */
-    public function getAppContext(): string;
+    public function getReferenceSettings(
+        ApplicationContextHandler $applicationContextHandler,
+        string $editRouteName = 'edit'): ReferenceSettings;
 }

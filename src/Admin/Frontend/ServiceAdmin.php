@@ -220,7 +220,9 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ])
             ->add('serviceSystem.situation')
             ->add('serviceSystem.situation.subject')
-            ->add('serviceSolutions')
+            ->add('serviceSolutions', null, [
+                'associated_property' => 'solution'
+            ])
             ->add('jurisdictions')
             ->add('bureaus')
             ->add('specializedProcedures')

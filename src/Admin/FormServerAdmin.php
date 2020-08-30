@@ -141,6 +141,5 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
             ->add('formServerSolutions', null, [
                 'associated_property' => 'solution'
             ]);
-        $this->customShowFields[] = 'formServerSolutions';
     }
 }

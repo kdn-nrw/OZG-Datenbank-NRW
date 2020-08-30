@@ -13,14 +13,11 @@ namespace App\EventSubscriber;
 
 use App\Entity\Base\BaseEntity;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Symfony\Contracts\EventDispatcher\Event as ContractEvent;
 
 /*
- * Class EntityEvent
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2020 Gert Hammes
- * @since     2020-05-02
+ * Class SearchIndexEntityEvent
  */
 
 class SearchIndexEntityEvent extends ContractEvent
@@ -42,11 +39,11 @@ class SearchIndexEntityEvent extends ContractEvent
 
     /**
      * SearchIndexEntityEvent constructor.
-     * @param AbstractAdmin $admin
+     * @param AdminInterface $admin
      * @param BaseEntity $object
      * @param array $fullTextSearchWords
      */
-    public function __construct(AbstractAdmin $admin, BaseEntity $object, array $fullTextSearchWords)
+    public function __construct(AdminInterface $admin, BaseEntity $object, array $fullTextSearchWords)
     {
         $this->object = $object;
         $this->fullTextSearchWords = $fullTextSearchWords;
@@ -80,9 +77,9 @@ class SearchIndexEntityEvent extends ContractEvent
     }
 
     /**
-     * @return AbstractAdmin
+     * @return AdminInterface
      */
-    public function getAdmin(): AbstractAdmin
+    public function getAdmin(): AdminInterface
     {
         return $this->admin;
     }

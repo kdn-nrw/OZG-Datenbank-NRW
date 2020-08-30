@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace App\Admin\Extension;
 
-use App\Admin\ContextAwareAdminInterface;
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Datagrid\FulltextSearchDatagridInterface;
-use App\Entity\Repository\SearchIndexRepository;
-use App\Entity\SearchIndexWord;
+use App\Search\Finder;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdminExtension;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -31,6 +29,21 @@ use Symfony\Component\Form\Extension\Core\Type\SearchType;
 class SearchExtension extends AbstractAdminExtension
 {
     private const FILTER_KEY = 'fullText';
+
+    /**
+     * @var Finder
+     */
+    protected $finder;
+
+    /**
+     * SearchExtension constructor.
+     * @param Finder $finder
+     */
+    public function __construct(Finder $finder)
+    {
+        $this->finder = $finder;
+    }
+
 
     public function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -49,18 +62,12 @@ class SearchExtension extends AbstractAdminExtension
     private function addFullTextDatagridFilter(DatagridMapper $datagridMapper): void
     {
         $admin = $datagridMapper->getAdmin();
-        if ($admin instanceof ContextAwareAdminInterface) {
-            $appContext = $admin->getAppContext();
-        } else {
-            $appContext = ContextAwareAdminInterface::APP_CONTEXT_BE;
-        }
         $datagridMapper
             ->add(self::FILTER_KEY, CallbackFilter::class, [
-                'callback' => static function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) use ($admin, $appContext) {
+                'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) use ($admin) {
                     if (!$value['value']) {
                         return false;
                     }
-                    $modelManager = $admin->getModelManager();
                     $entityClass = $admin->getClass();
                     $dataGrid = $admin->getDatagrid();
                     /** @var QueryBuilder $qb */
@@ -69,10 +76,7 @@ class SearchExtension extends AbstractAdminExtension
                     $props = $reflect->getProperties();
                     $orConditions = [];
 
-                    /** @var \Sonata\DoctrineORMAdminBundle\Model\ModelManager $modelManager */
-                    $indexRepository = $modelManager->getEntityManager(SearchIndexWord::class)->getRepository(SearchIndexWord::class);
-                    /** @var SearchIndexRepository $indexRepository */
-                    $matchingRecordIds = $indexRepository->findMatchingIndexRecords($entityClass, $appContext, $value['value']);
+                    $matchingRecordIds = $this->finder->findMatchingRecordIds($entityClass, (string) $value['value']);
                     $extraSearchFields = null;
                     $hasEnoughResults = false;
                     if (null !== $matchingRecordIds) {

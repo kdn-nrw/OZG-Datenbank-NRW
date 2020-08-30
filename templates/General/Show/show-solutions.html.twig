@@ -7,7 +7,7 @@ file that was distributed with this source code.
 {% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
     {% set refFieldDesc = field_description is defined ? field_description : null %}
-    {% set refSettings = app_get_reference_settings('App\\Entity\\Solution', admin.appContext, refFieldDesc) %}
+    {% set refSettings = app_get_reference_settings('App\\Entity\\Solution', refFieldDesc) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
     <div class="box box-primary">
         <div class="box-header">

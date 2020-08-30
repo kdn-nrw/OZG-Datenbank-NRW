@@ -39,7 +39,7 @@ class SearchIndexRepository extends EntityRepository
         }
         if (!empty($searchParameters)) {
             $queryBuilder = $this->createQueryBuilder('si');
-            $query = $queryBuilder->select('si.baseword', 'si.recordId')
+            $query = $queryBuilder->select('si.baseword', 'si.recordId', 'SUM(si.occurrence) as wordCount')
                 ->where('si.module = :recordType')
                 ->andWhere('si.context = :context')
                 ->groupBy('si.recordId')
@@ -56,27 +56,31 @@ class SearchIndexRepository extends EntityRepository
                 } else {
                     $mpStr = '';
                 }
+                // If word has less than 3 characters, only match words that start with the given word
+                $prefixCond = $wordLength > 3 ? '%' : '';
                 // Compare numeric metaphone values if metaphone returns a non empty string
                 if ($mpStr !== '') {
                     $searchConditions[] = $queryBuilder->expr()->andX(
                         'LENGTH(si.baseword) >= ' . $wordLength,
                         $queryBuilder->expr()->orX(
                             $queryBuilder->expr()->eq('si.metaphone', $queryBuilder->expr()->literal($mpStr)),
-                            $queryBuilder->expr()->like('si.baseword', $queryBuilder->expr()->literal('%' . $word . '%'))
+                            $queryBuilder->expr()->like('si.baseword', $queryBuilder->expr()->literal($prefixCond . $word . '%'))
                         )
                     );
                     //Numbers create empty metaphone string; compare these values with words directly
                 } else {
-                    $searchConditions[] = $queryBuilder->expr()->like('si.baseword', $queryBuilder->expr()->literal('%' . $word . '%'));
+                    $searchConditions[] = $queryBuilder->expr()->like('si.baseword', $queryBuilder->expr()->literal($prefixCond . $word . '%'));
                 }
             }
             $expr = $query->expr()->orX()->addMultiple($searchConditions);
             $queryBuilder->andWhere($expr);
             $result = $query->getQuery()->getArrayResult();
             $recordIdPoints = [];
+            //$explain = [];
             foreach ($result as $row) {
                 if (!isset($recordIdPoints[$row['recordId']])) {
                     $recordIdPoints[$row['recordId']] = 0;
+                    //$explain[$row['recordId']] = [];
                 }
                 $baseWord = (string) $row['baseword'];
                 $baseWordLength = mb_strlen($baseWord);
@@ -85,7 +89,19 @@ class SearchIndexRepository extends EntityRepository
                     $searchWordLength = mb_strlen((string) $word);
                     $wordOffset = mb_strpos($baseWord, (string) $word);
                     if ($wordOffset !== false) {
-                        $points += max(0, $searchWordLength * 1000 - $wordOffset - $baseWordLength);
+                        $lengthRatio = $searchWordLength / $baseWordLength;
+                        $wordCountRatio = 0.5 + (0.5 / (int) $row['wordCount']);
+                        $rating = (int) ($searchWordLength * 1000 * $lengthRatio * $wordCountRatio);
+                        $points += max(0, $rating);
+                        /*$explain[$row['recordId']][] = [
+                            '$baseWord' => $baseWord,
+                            'word' => $word,
+                            'rating' => $rating,
+                            'lengthRatio' => $lengthRatio,
+                            'wordCountRatio' => $wordCountRatio,
+                            'lengthRating' => $searchWordLength * 1000,
+                            'wordCount' => $row['wordCount'],
+                        ];*/
                     }
                 }
                 $recordIdPoints[$row['recordId']] += $points;

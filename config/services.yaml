@@ -801,5 +801,7 @@ services:
     public: true
 
   App\Admin\Extension\SearchExtension:
+    arguments:
+      - '@App\Search\Finder'
     tags:
       - { name: sonata.admin.extension, global: true }

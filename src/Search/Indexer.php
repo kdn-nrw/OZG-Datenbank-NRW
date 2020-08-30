@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Search;
 
-use App\Admin\ContextAwareAdminInterface;
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\BaseEntityInterface;
@@ -24,11 +23,11 @@ use App\Entity\Service;
 use App\Entity\ServiceSystem;
 use App\Entity\Solution;
 use App\EventSubscriber\SearchIndexEntityEvent;
+use App\Service\ApplicationContextHandler;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\Pool;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -37,18 +36,13 @@ use Twig\Environment;
 /**
  * Search indexer
  */
-class Indexer
+class Indexer extends AbstractSearchService
 {
 
     /**
      * Limit for index entry age
      */
     public const INDEX_THRESHOLD = '-2 weeks';
-
-    /**
-     * @var \Doctrine\Common\Persistence\ManagerRegistry|ManagerRegistry
-     */
-    private $registry;
     /**
      * @var Pool
      */
@@ -71,10 +65,7 @@ class Indexer
      * Enabled index contexts
      * @var array
      */
-    private $indexContexts = [
-        ContextAwareAdminInterface::APP_CONTEXT_FE,
-        ContextAwareAdminInterface::APP_CONTEXT_BE,
-    ];
+    private $indexContexts;
 
     /**
      * @param ManagerRegistry $registry
@@ -89,7 +80,7 @@ class Indexer
         EventDispatcherInterface $eventDispatcher
     )
     {
-        $this->registry = $registry;
+        parent::__construct($registry);
         $this->adminPool = $adminPool;
         $this->twigEnvironment = $twigEnvironment;
         $this->eventDispatcher = $eventDispatcher;
@@ -101,6 +92,14 @@ class Indexer
     public function setContexts(array $contexts): void
     {
         $this->indexContexts = $contexts;
+    }
+
+    private function getContexts(): array
+    {
+        if (null === $this->indexContexts) {
+            $this->indexContexts = $this->applicationContextHandler->getAllContexts();
+        }
+        return $this->indexContexts;
     }
 
     /**
@@ -230,12 +229,8 @@ class Indexer
         bool $forceUpdate
     ): int
     {
-        if ($admin instanceof ContextAwareAdminInterface) {
-            $context = $admin->getAppContext();
-        } else {
-            $context = ContextAwareAdminInterface::APP_CONTEXT_BE;
-        }
-        if (!in_array($context, $this->indexContexts, false)) {
+        $context = ApplicationContextHandler::getDefaultAdminApplicationContext($admin);
+        if (!in_array($context, $this->getContexts(), false)) {
             return 0;
         }
         $entityClass = $admin->getClass();
@@ -274,15 +269,15 @@ class Indexer
     }
 
     /**
-     * @param AbstractAdmin|ContextAwareAdminInterface $admin The admin instance
+     * @param AdminInterface $admin The admin instance
      * @param BaseEntity $entity The entity
      * @param string $context The view context (frontend or backend)
      * @param string $content The rendered view content
      */
-    private function updateEntityIndex(AbstractAdmin $admin, BaseEntity $entity, string $context, string $content): void
+    private function updateEntityIndex(AdminInterface $admin, BaseEntity $entity, string $context, string $content): void
     {
         $em = $this->registry->getManager();
-        $indexRepository = $em->getRepository(SearchIndexWord::class);
+        $indexRepository = $this->getIndexRepository();
         /** @var SearchIndexRepository $indexRepository */
         $fullTextSearchWords = TextProcessor::createWordListForText($content);
         /** @var SearchIndexWord[] $mapEntries */
@@ -352,8 +347,7 @@ class Indexer
      */
     private function itemIndexNeedsUpdate(string $entityClass, string $context, BaseEntity $entity): bool
     {
-        $em = $this->registry->getManager();
-        $indexRepository = $em->getRepository(SearchIndexWord::class);
+        $indexRepository = $this->getIndexRepository();
         /** @var SearchIndexRepository $indexRepository */
         $lastIndexTime = $indexRepository->getRecordLastIndexTime($entityClass, $context, $entity->getId());
         if (null !== $lastIndexTime) {

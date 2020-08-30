@@ -11,17 +11,14 @@
 
 namespace App\EventSubscriber;
 
-use App\Admin\AbstractContextAwareAdmin;
+use App\Admin\ContextAwareAdminInterface;
 use App\Exporter\Source\CustomEntityValueProvider;
+use App\Service\ApplicationContextHandler;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class UpdatePropertyAccessorCache
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2020 Gert Hammes
- * @since     2020-05-02
  */
 class UpdatePropertyAccessorCache implements EventSubscriberInterface
 {
@@ -60,14 +57,14 @@ class UpdatePropertyAccessorCache implements EventSubscriberInterface
     {
         $entity = $event->getObject();
         $admin = $event->getAdmin();
-        if ($admin instanceof AbstractContextAwareAdmin) {
+        if ($admin instanceof ContextAwareAdminInterface) {
             // Update the export value cache
             $cacheDir = $this->kernel->getCacheDir();
             $exportFields = $admin->getExportFields();
             $customValueProvider = new CustomEntityValueProvider(
                 $exportFields,
                 $cacheDir,
-                $admin->getAppContext(),
+                ApplicationContextHandler::getDefaultAdminApplicationContext($admin),
                 'd.m.Y H:i:s'
             );
             $customValueProvider->getCacheItemData($entity, true);

@@ -401,7 +401,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $showMapper
             ->add('communes', 'choice', [
                 'associated_property' => 'name',
-                'template' => 'SolutionAdmin/show-communes.html.twig',
+                'check_has_all_modifier' => true,
             ]);
         $this->addServiceProvidersShowFields($showMapper);
         $showMapper
@@ -433,9 +433,6 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ]);
-        $this->customShowFields[] = 'serviceSystems';
-        $this->customShowFields[] = 'serviceSolutions';
-        $this->customShowFields[] = 'formServerSolutions';
         $this->addModelRegionProjectsShowFields($showMapper);
     }
 }
