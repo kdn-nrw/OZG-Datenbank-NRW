@@ -44,6 +44,7 @@ abstract class AbstractBackendAdminControllerTestCase extends AbstractBackendTes
             false
         );
         $exportLinks = $testViewData['export'] ?? [];
+        $exportLinkStr = implode(',', $exportLinks);
         $this->assertContains(
             'format=xlsx',
             implode(',', $exportLinks),

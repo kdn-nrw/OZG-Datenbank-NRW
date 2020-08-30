@@ -35,10 +35,14 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
     {
         $route = $this->getRoutePrefix();
         if ($view !== 'list' && $view !== 'index') {
-            if (array_key_exists('id', $params)) {
-                $route .= '/' . $params['id'];
+            if ($view === 'show' && array_key_exists('slug', $params)) {
+                $route .= '/details/' . $params['slug'];
+            } else {
+                if (array_key_exists('id', $params)) {
+                    $route .= '/' . $params['id'];
+                }
+                $route .= '/' . $view;
             }
-            return $route . '/' . $view;
         }
         return $this->getContextPrefix() . $route;
     }
@@ -127,8 +131,13 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
         }
         $maxCount = min(3, count($testIds));
         $count = 0;
+        $hasSlug = false;
         foreach ($testIds as $id) {
-            $route = $this->getRouteUrl('show', ['id' => $id]);
+            if (!$hasSlug && !is_numeric($id)) {
+                $hasSlug = true;
+            }
+            $params = $hasSlug ? ['slug' => $id] : ['id' => $id];
+            $route = $this->getRouteUrl('show', $params);
             $client = static::createClient();
             $client->catchExceptions(false);
             $crawler = $client->request('GET', $route);

@@ -7,7 +7,7 @@ frontend_app_service_show_default:
   controller: App\Controller\ServiceController::showAction
 
 frontend_app_service_show:
-  path: /leistungen/{slug}
+  path: /leistungen/details/{slug}
   controller: App\Controller\ServiceController::showBySlugAction
 
 frontend_app_service_export:
@@ -23,7 +23,7 @@ frontend_app_servicesystem_show_default:
   controller: App\Controller\ServiceSystemController::showAction
 
 frontend_app_servicesystem_show:
-  path: /ozg-leistungen/{slug}
+  path: /ozg-leistungen/details/{slug}
   controller: App\Controller\ServiceSystemController::showBySlugAction
 
 frontend_app_servicesystem_export:
@@ -39,7 +39,7 @@ frontend_app_implementationproject_show_default:
   controller: App\Controller\ImplementationProjectController::showAction
 
 frontend_app_implementationproject_show:
-  path: /umsetzungsprojekte/{slug}
+  path: /umsetzungsprojekte/details/{slug}
   controller: App\Controller\ImplementationProjectController::showBySlugAction
 
 frontend_app_implementationproject_export:
@@ -55,7 +55,7 @@ frontend_app_solution_show_default:
   controller: App\Controller\SolutionController::showAction
 
 frontend_app_solution_show:
-  path: /loesungen/{slug}
+  path: /loesungen/details/{slug}
   controller: App\Controller\SolutionController::showBySlugAction
 
 frontend_app_solution_export:
@@ -71,7 +71,7 @@ frontend_app_modelregionproject_show_default:
   controller: App\Controller\ModelRegionProjectController::showAction
 
 frontend_app_modelregionproject_show:
-  path: /dmr-umsetzungsprojekte/{slug}
+  path: /dmr-umsetzungsprojekte/details/{slug}
   controller: App\Controller\ModelRegionProjectController::showBySlugAction
 
 frontend_app_modelregionproject_export:
@@ -87,7 +87,7 @@ frontend_app_modelregion_show_default:
   controller: App\Controller\ModelRegionController::showAction
 
 frontend_app_modelregion_show:
-  path: /modellregionen/{slug}
+  path: /modellregionen/details/{slug}
   controller: App\Controller\ModelRegionController::showBySlugAction
 
 frontend_app_modelregion_export:

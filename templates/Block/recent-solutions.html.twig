@@ -7,6 +7,7 @@ file that was distributed with this source code.
 {% extends sonata_block.templates.block_base %}
 
 {% block block %}
+    {# @var admin \Sonata\AdminBundle\Admin\AdminInterface #}
     <div class="panel panel-default {{ settings.class }}">
         {% if settings.title is not empty %}
             <div class="panel-heading">
@@ -95,7 +96,7 @@ file that was distributed with this source code.
                             </td>
                             <td>
                                 <a class="list-item-action"
-                                   href="{{ admin.generateUrl('edit', { 'id': object.id }) }}"
+                                   href="{{ admin.generateObjectUrl('edit', object, {'id': object.id}) }}"
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
@@ -103,7 +104,7 @@ file that was distributed with this source code.
                         {% else %}
                             <td>
                                 <a class="list-item-action"
-                                   href="{{ admin.generateUrl('show', { 'id': object.id }) }}"
+                                   href="{{ admin.generateObjectUrl('show', object, {'id': object.id}) }}"
                                 >
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </a>

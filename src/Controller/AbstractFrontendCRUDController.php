@@ -67,7 +67,9 @@ abstract class AbstractFrontendCRUDController extends CRUDController
     {
         if (is_numeric($slug)) {
             $object = $this->admin->getObject((int)$slug);
-            if ($object instanceof SluggableInterface && $redirectSlug = $object->getSlug()) {
+            if ($object instanceof SluggableInterface
+                && ($redirectSlug = $object->getSlug())
+                && $redirectSlug !== $slug) {
                 $redirectUrl = $this->admin->generateUrl('show', ['slug' => $redirectSlug]);
                 $status = 301;
                 return $this->redirect($redirectUrl, $status);
