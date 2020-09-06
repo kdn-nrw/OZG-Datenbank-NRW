@@ -9,30 +9,45 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Admin\BasicGroup;
 
+use App\Tests\Controller\Admin\AbstractBackendTestCase;
 use PHPUnit\Framework\Constraint\GreaterThan;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * Functional test for the controllers defined inside SolutionController.
  */
-class DashboardControllerTest extends WebTestCase implements FrontendTestInterface
+class DashboardControllerTest extends AbstractBackendTestCase
 {
+
+    protected function getRoutePrefix(): string
+    {
+        return 'dashboard';
+    }
+
+    protected function getContextPrefix(): string
+    {
+        return self::BACKEND_URL_PREFIX;
+    }
+
     public function testIndex()
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->catchExceptions(false);
-        $crawler = $client->request('GET', '/');
-        self::assertResponseIsSuccessful();
+        $this->logIn($client);
+        $url = $this->getRouteUrl('index');
+        $crawler = $client->request('GET', $url);
+        self::assertResponseIsSuccessful(
+            'The url request ' . self::BACKEND_URL_PREFIX . ' must be successful'
+        );
 
         $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
-        static::assertThat(
-            $crawlerContent->filter('.box-page-content')->count(),
+        self::assertThat(
+            $crawler->filter('.dropdown-user')->count(),
             new GreaterThan(0),
-            'The view contains at least 1 page content box.'
+            'The view must contain the user profile dropdown.'
         );
-        static::assertThat(
+        self::assertThat(
             $crawlerContent->filter('.small-box')->count(),
             new GreaterThan(1),
             'The view contains at least 2 page statistics boxes.'
@@ -41,15 +56,15 @@ class DashboardControllerTest extends WebTestCase implements FrontendTestInterfa
         foreach ($chartPlaceholderCrawler as $elementCrawler) {
             $urlAttr = $elementCrawler->attributes->getNamedItem('data-url');
             $url = $urlAttr ? $urlAttr->nodeValue : null;
-            static::assertNotEmpty(
+            self::assertNotEmpty(
                 $url,
                 'The chart placeholder container has a data url.'
             );
             $client->xmlHttpRequest('GET', $url);
             $response = $client->getResponse();
-            $this->assertSame(200, $response->getStatusCode());
+            self::assertSame(200, $response->getStatusCode());
             $responseData = json_decode($response->getContent(), true);
-            $this->assertSame('chart', $responseData['type']);
+            self::assertSame('chart', $responseData['type']);
         }
     }
 }

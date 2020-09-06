@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Admin\ServiceGroup;
+
+use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
- * Functional test for the controllers defined inside ModelRegionAdmin.
+ * Functional test for the controllers defined inside BureauAdmin
  */
-class ModelRegionControllerTest extends AbstractFrontendAdminControllerTestCase
+class BureauAdminTest extends AbstractBackendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'dmr-umsetzungsprojekte';
+        return 'bureau';
     }
 }

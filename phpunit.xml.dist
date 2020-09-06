@@ -8,6 +8,7 @@
          bootstrap="config/bootstrap.php"
 >
     <php>
+        <ini name="memory_limit" value="-1" />
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
@@ -17,8 +18,38 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="App Backend ApplicationGroup">
+            <directory>tests/Controller/Admin/ApplicationGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend BasicGroup">
+            <directory>tests/Controller/Admin/BasicGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend DigitalModelRegionGroup">
+            <directory>tests/Controller/Admin/DigitalModelRegionGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend EFileGroup">
+            <directory>tests/Controller/Admin/EFileGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend EFileGroup">
+            <directory>tests/Controller/Admin/EFileGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend ImplementationGroup">
+            <directory>tests/Controller/Admin/ImplementationGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend OzgImplementationGroup">
+            <directory>tests/Controller/Admin/OzgImplementationGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend ServiceGroup">
+            <directory>tests/Controller/Admin/ServiceGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend SettingsGroup">
+            <directory>tests/Controller/Admin/SettingsGroup</directory>
+        </testsuite>
+        <testsuite name="App Backend SystemGroup">
+            <directory>tests/Controller/Admin/SystemGroup</directory>
+        </testsuite>
+        <testsuite name="App Frontend">
+            <directory>tests/Controller/Frontend</directory>
         </testsuite>
     </testsuites>
 

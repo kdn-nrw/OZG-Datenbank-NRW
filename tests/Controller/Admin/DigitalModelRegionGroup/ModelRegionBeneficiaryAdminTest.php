@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Admin\DigitalModelRegionGroup;
+
+use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
- * Functional test for the controllers defined inside ModelRegionProjectAdmin.
+ * Functional test for the controllers defined inside ModelRegionBeneficiaryAdmin
  */
-class ModelRegionProjectControllerTest extends AbstractFrontendAdminControllerTestCase
+class ModelRegionBeneficiaryAdminTest extends AbstractBackendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'modellregionen';
+        return 'modelregionbeneficiary';
     }
 }

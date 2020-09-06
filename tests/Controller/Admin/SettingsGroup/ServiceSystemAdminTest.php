@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Admin\SettingsGroup;
+
+use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
- * Functional test for the controllers defined inside ServiceSystemAdmin.
+ * Functional test for the controllers defined inside ServiceSystem.
  */
-class ServiceSystemControllerTest extends AbstractFrontendAdminControllerTestCase
+class ServiceSystemAdminTest extends AbstractBackendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'ozg-leistungen';
+        return 'servicesystem';
     }
 }

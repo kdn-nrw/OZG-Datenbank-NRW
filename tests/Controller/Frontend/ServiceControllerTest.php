@@ -9,12 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Frontend;
 
 /**
- * Interface for frontend tests
+ * Functional test for the controllers defined inside ServiceAdmin.
  */
-interface FrontendTestInterface
+class ServiceControllerTest extends AbstractFrontendAdminControllerTestCase
 {
-    const SELECTOR_CONTENT_SECTION = '.content-wrapper';
+
+    protected function getRoutePrefix(): string
+    {
+        return 'leistungen';
+    }
 }

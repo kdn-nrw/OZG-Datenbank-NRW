@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Admin\EFileGroup;
+
+use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
- * Functional test for the controllers defined inside ServiceAdmin.
+ * Functional test for the controllers defined inside EFile.
  */
-class ServiceControllerTest extends AbstractFrontendAdminControllerTestCase
+class EFileAdminTest extends AbstractBackendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'leistungen';
+        return 'efile';
     }
 }

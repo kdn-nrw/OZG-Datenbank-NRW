@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller\Admin;
+namespace App\Tests\Controller\Admin\OzgImplementationGroup;
 
-use PHPUnit\Framework\Constraint\IsEmpty;
-use Symfony\Component\DomCrawler\Crawler;
+use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
  * Functional test for the controllers defined inside SolutionController.

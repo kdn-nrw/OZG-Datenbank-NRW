@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Frontend;
 
 use PHPUnit\Framework\Constraint\GreaterThan;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -21,7 +21,7 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
 {
     public function testGlobalSearch()
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->catchExceptions(false);
         $client->request('GET', '/');
         self::assertResponseIsSuccessful();
@@ -44,7 +44,7 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
         self::assertResponseIsSuccessful();
         $crawlerSidebar = $crawler->filter('.main-sidebar')->first();
         $navLinkInfo = $crawlerSidebar->filter('a.nav-link')->extract(['href']);
-        static::assertThat(
+        self::assertThat(
             count($navLinkInfo),
             new GreaterThan(0),
             'The sidebar menu contains at least 1 item.'
@@ -53,7 +53,7 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
             if (strpos($url, '#') !== 0) {
                 $navPageCrawler = $client->request('GET', $url);
                 self::assertResponseIsSuccessful();
-                static::assertThat(
+                self::assertThat(
                     $navPageCrawler->filter('.main-sidebar')->count(),
                     new GreaterThan(0),
                     'The navigation page contains a sidebar.'
@@ -76,11 +76,11 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
             $filterValueAttr = $elementCrawler->attributes->getNamedItem('data-filter-value');
             $urlTemplate = $urlAttr ? $urlAttr->nodeValue : null;
             $filterValue = $filterValueAttr ? $filterValueAttr->nodeValue : null;
-            static::assertNotEmpty(
+            self::assertNotEmpty(
                 $urlTemplate,
                 'The filter link has a data url.'
             );
-            static::assertNotEmpty(
+            self::assertNotEmpty(
                 $filterValue,
                 'The filter link has a filter value.'
             );
@@ -88,7 +88,7 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
             $filterCrawler = $client->request('GET', $url);
             self::assertResponseIsSuccessful();
 
-            static::assertThat(
+            self::assertThat(
                 $filterCrawler->filter('.sonata-filter-form')->count(),
                 new GreaterThan(0),
                 'The filter result contains a filter form.'

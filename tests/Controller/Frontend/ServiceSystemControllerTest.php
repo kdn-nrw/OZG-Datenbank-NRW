@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Frontend;
 
 /**
- * Functional test for the controllers defined inside ImplementationProjectAdmin.
+ * Functional test for the controllers defined inside ServiceSystemAdmin.
  */
-class ImplementationProjectControllerTest extends AbstractFrontendAdminControllerTestCase
+class ServiceSystemControllerTest extends AbstractFrontendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'umsetzungsprojekte';
+        return 'ozg-leistungen';
     }
 }

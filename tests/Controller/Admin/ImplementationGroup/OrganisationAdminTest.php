@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Admin\ImplementationGroup;
+
+use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
- * Functional test for the controllers defined inside SolutionController.
+ * Functional test for the controllers defined inside OrganisationAdmin
  */
-class SolutionControllerTest extends AbstractFrontendAdminControllerTestCase
+class OrganisationAdminTest extends AbstractBackendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'loesungen';
+        return 'organisation';
     }
 }

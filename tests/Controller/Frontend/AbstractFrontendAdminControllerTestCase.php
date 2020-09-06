@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Frontend;
 
+use App\Tests\Controller\AbstractWebTestCase;
 use PHPUnit\Framework\Constraint\GreaterThan;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Functional test for the controllers defined inside frontend admin controllers.
@@ -55,7 +55,7 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
         self::assertResponseIsSuccessful();
         $crawlerContent = $crawler->filter(self::SELECTOR_CONTENT_SECTION)->first();
         $testViewData = $this->parseLinks($crawlerContent);
-        $this->assertContains(
+        self::assertContains(
             'Volltextsuche',
             $crawler->filter('.sonata-actions')->html(),
             'The full text search field is present.',
@@ -63,14 +63,14 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
             false
         );
         $exportLinks = $testViewData['export'] ?? [];
-        $this->assertContains(
+        self::assertContains(
             'format=xlsx',
             implode(',', $exportLinks),
             'The excel export link is present.',
             false,
             false
         );
-        $this->assertContains(
+        self::assertContains(
             'custom-search-form',
             $crawler->filter('.main-sidebar')->html(),
             'The global search form is present.',
@@ -105,7 +105,7 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
                     $crawler = $client->request('GET', $route, $params);
                     self::assertResponseIsSuccessful();
 
-                    $this->assertNotEmpty(
+                    self::assertNotEmpty(
                         $crawler->filter(self::SELECTOR_CONTENT_SECTION),
                         'The show view has been rendered for query: ' . $query
                     );
@@ -143,11 +143,11 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
             $crawler = $client->request('GET', $route);
             self::assertResponseIsSuccessful();
 
-            $this->assertNotEmpty(
+            self::assertNotEmpty(
                 $crawler->filter('.sonata-ba-view'),
                 'The show view has been rendered for ID: ' . $id
             );
-            $this->assertNotEmpty(
+            self::assertNotEmpty(
                 $crawler->filter('.sonata-action-element'),
                 'The back button exists for ID: ' . $id
             );

@@ -68,8 +68,8 @@ abstract class AbstractWebTestCase extends WebTestCase
             }
         }
         shuffle($internalPaths);
-        $showPattern = '/\/?' . preg_quote($this->getRoutePrefix(), '/') . '\/details\/([\w\d\-]+)/';
-        $defaultRoutePattern = '/\/?' . preg_quote($this->getRoutePrefix(), '/') . '(\/(\d+))?(\/(\w+))?/';
+        $showPattern = '/\/' . preg_quote($this->getRoutePrefix(), '/') . '\/details\/([\w\d\-]+)/';
+        $defaultRoutePattern = '/\/' . preg_quote($this->getRoutePrefix(), '/') . '(\/(\d+))?(\/(\w+))?/';
         foreach ($internalPaths as $urlParts) {
             $path = $urlParts['path'];
             if (strpos($path, '/details/') !== false) {

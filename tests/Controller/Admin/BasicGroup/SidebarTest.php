@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller\Admin;
+namespace App\Tests\Controller\Admin\BasicGroup;
 
+use App\Tests\Controller\Admin\AbstractBackendTestCase;
 use PHPUnit\Framework\Constraint\GreaterThan;
 
 /**
@@ -31,7 +32,7 @@ class SidebarTest extends AbstractBackendTestCase
 
     public function testGlobalSearch()
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->catchExceptions(false);
         $this->logIn($client);
         $url = $this->getRouteUrl('index');
@@ -48,7 +49,7 @@ class SidebarTest extends AbstractBackendTestCase
         $crawlerResult = $client->submit($form);
 
         $crawlerContent = $crawlerResult->filter(self::SELECTOR_CONTENT_SECTION)->first();
-        static::assertThat(
+        self::assertThat(
             $crawlerContent->filter('.search-box-item')->count(),
             new GreaterThan(1),
             'The view contains at least 1 search result box.'
@@ -66,7 +67,7 @@ class SidebarTest extends AbstractBackendTestCase
         $crawlerSidebar = $crawler->filter('.main-sidebar')->first();
         $navLinkInfo = $crawlerSidebar->filter('.sidebar-menu a')->extract(['href']);
 
-        static::assertThat(
+        self::assertThat(
             count($navLinkInfo),
             new GreaterThan(0),
             'The sidebar menu contains at least 1 item.'
@@ -76,7 +77,7 @@ class SidebarTest extends AbstractBackendTestCase
             if (strpos($url, '#') !== 0) {
                 $navPageCrawler = $client->request('GET', $url);
                 self::assertResponseIsSuccessful();
-                static::assertThat(
+                self::assertThat(
                     $navPageCrawler->filter('.main-sidebar')->count(),
                     new GreaterThan(0),
                     'The navigation page contains a sidebar.'
