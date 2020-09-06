@@ -38,7 +38,7 @@ trait BlameableTrait
      *
      * @var UserInterface|null
      */
-    protected $createdBy = null;
+    protected $createdBy;
 
     /**
      * User ID who last modified the entity
@@ -49,7 +49,7 @@ trait BlameableTrait
      *
      * @var UserInterface|null
      */
-    protected $modifiedBy = null;
+    protected $modifiedBy;
 
     /**
      * Sets createdBy.

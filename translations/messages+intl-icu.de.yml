@@ -41,6 +41,19 @@ app:
       created_by: Erstellt von
       modified_by: Geändert von
       references: Referenzen
+      name: Bezeichnung
+  object_references:
+    headline: Referenzen auf dieses Objekt
+    delete_error: Der Datensatz kann nicht gelöscht werden, da es andere Datnsätze gibt, die von diesem Datensatz abhängig sind. Bitte prüfen Sie die rot markierten Datensätze.
+    no_data: Der Datensatz hat keine Referenzen für dieses Feld.
+    actions:
+      delete: Der referenzierte Datensatz wird ebenfalls gelöscht
+      remove_mm: Der zu löschende Datensatz wird in einer Mehrfachauswahl von anderen Datensätzen referenziert. Diese Referenzen werden entfernt.
+      set_null: Der zu löschende Datensatz wird in einem Auswahlfeld von anderen Datensätzen referenziert. Diese Referenz wird entfernt.
+      error: Der Eintrag kann nicht gelöscht werden, da ansonsten eine notwendige Referenz verloren gehen würde
+      unknown: Die Referenz auf den gelöschten Datensatz wird entfernt
+      nothing: Für den referenzierten Datensatz ist keine Änderung notwendig
+
   application:
     object_name: Anwendung
     list: Anwendungen
@@ -138,6 +151,8 @@ app:
       central_associations: Spitzenverbände
       portals: Portale
       manufacturers: Hersteller
+      offices: Ämter
+      solutions: Lösungen
   contact:
     object_name: Kontakt
     list: Kontakte
@@ -185,6 +200,8 @@ app:
       commune: Kommune
       categories: Kategorien
       image_file: Profilbild
+      implementation_projects: Umsetzungsprojekte
+      solutions: Lösungen
   efile:
     object_name: eAkten Kataster
     list: eAkten Kataster
@@ -227,6 +244,12 @@ app:
     entity:
       name: Name
       description: Beschreibung
+  federal_information_management_type:
+    object_name: FIM
+    list: Föderales Informationsmanagement
+    create: FIM anlegen
+    entity:
+      service: Leika-Leistung
   form_server:
     object_name: Formularserver
     list: Formularserver
@@ -362,12 +385,19 @@ app:
       sent_count: '# verschickt'
       exclude_contacts: Blacklist
       attachments: Anhänge
+  mailing_attachment:
+    object_name: Mailing Anhang
+    list: Mailing Anhänge
+    create: Mailing Anhang anlegen
+    entity:
+      mailing: Mailing
   mailing_contact:
     object_name: Mailing Kontakt
     list: Mailing Kontakte
     create: Mailing Kontakt anlegen
     entity:
       contact: Kontakt
+      mailing: Mailing
       sent_at: Verschickt am
       send_status: Versandstatus
       send_attempts: '# Versuche'
@@ -402,6 +432,7 @@ app:
       url: Url
       contacts: Ansprechpartner
       service_systems: OZG-Leistungen
+      service_authorities: Regelungskompetenzen
   maturity:
     object_name: Reifegrad
     list: Reifegrade
@@ -652,10 +683,11 @@ app:
       town: Ort
       url: Url
       contact: OZG-Ansprechpartner (alt)
-      #solutions: Lösungen
+      solutions: Lösungen
       communes: Kommunen
       specialized_procedures: Fachverfahren
       manufacturers: Hersteller
+      laboratories: Labore
   service_solution:
     object_name: Lösung für Leistung
     list: Lösung für Leistung
@@ -726,6 +758,9 @@ app:
       form_servers: Formularserver
       services: Leika-Leistungen
     entity:
+      created_by: Erstellt von
+      modified_by: Geändert von
+      created_at: Erstellt am
       view_all: Alle Lösungen anzeigen
       no_solution_found: Keine Lösungen gefunden
       service_providers: IT Dienstleister
@@ -747,13 +782,12 @@ app:
       authentications: Authentifizierung
       analog_services: Analoge Dienste
       open_data_items: Open Data
-      created_by: Erstellt von
-      created_at: Erstellt am
       maturity: Reifegrad
       form_server_solutions: Formularserver
       payment_types: Bezahlverfahren
       is_published: Lösung öffentlich sichtbar?
       model_region_projects: DMR Umsetzungsprojekte
+      implementation_projects: Umsetzungsprojekte
     messages:
       no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   specialized_procedure:

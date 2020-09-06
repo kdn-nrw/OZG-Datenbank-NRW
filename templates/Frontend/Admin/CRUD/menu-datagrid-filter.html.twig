@@ -30,14 +30,15 @@ file that was distributed with this source code.
                 </div>
                 <ul class="filter-menu{% if iconPath %} has-icon{% endif %}">
                     {% for filterChoice in filterMenu.choices %}
+                        {% set choiceIconPath = filterChoice.id < 15 ? iconPath : null %}
                         {% set filterParamName = filterName|replace({'.': '__'}) %}
-                        <li class="filter-menu-item{% if iconPath %} has-icon{% endif %}">
+                        <li class="filter-menu-item{% if choiceIconPath %} has-icon{% endif %}">
                             <a href="#" class="custom-menu-filter-link{% if filterChoice.id in filterMenu.value %} active{% endif %}" onclick="window.location.href=this.dataset.url.replace('FILTER_VALUE', '{{ filterChoice.id }}');return false;"
                                data-url="{{ path(menuItem.routePrefix ~ '_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
                                data-filter-value="{{ filterChoice.id }}"
                                     {% if filterChoice.id in filterMenu.value %} style="color:#fff;font-weight: bold;" {% endif %}>
-                                {% if iconPath %}
-                                    <img src="{{ iconPath ~ filterChoice.id ~ '.png' }}" class="icon" alt="{{ filterChoice.name }}">
+                                {% if choiceIconPath %}
+                                    <img src="{{ choiceIconPath ~ filterChoice.id ~ '.png' }}" class="icon" alt="{{ filterChoice.name }}">
                                 {% endif %}
                                 <span class="item-label">{{ filterChoice.name }}</span>
                             </a>

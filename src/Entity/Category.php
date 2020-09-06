@@ -136,7 +136,7 @@ class Category extends BaseNamedEntity implements CategoryEntityInterface, Impor
     /**
      * @return Category|null
      */
-    public function getParent(): ?Category
+    public function getParent(): ?CategoryEntityInterface
     {
         return $this->parent;
     }

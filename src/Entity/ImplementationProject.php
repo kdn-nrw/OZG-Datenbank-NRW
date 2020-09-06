@@ -126,10 +126,10 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
      * @ORM\ManyToMany(targetEntity="Organisation")
      * @ORM\JoinTable(name="ozg_implementation_project_organisation_interested",
      *     joinColumns={
-     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */
@@ -140,10 +140,10 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
      * @ORM\ManyToMany(targetEntity="Organisation")
      * @ORM\JoinTable(name="ozg_implementation_project_organisation_participation",
      *     joinColumns={
-     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
      */

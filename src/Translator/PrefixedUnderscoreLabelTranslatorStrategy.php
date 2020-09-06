@@ -61,6 +61,28 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
     }
 
     /**
+     * Creates the label key for the given
+     * @param string $entityClass
+     * @param string $property
+     * @return string
+     */
+    public static function getClassPropertyLabel(string $entityClass, string $property = ''): string
+    {
+        $classParts = explode('\\', $entityClass);
+        $lastIndex = count($classParts) - 1;
+        $className = $classParts[$lastIndex];
+        unset($classParts[$lastIndex]);
+        $snakeCaseConverter = new SnakeCaseConverter();
+        $prefix = strtolower($classParts[0]) === 'app' ? 'app.' : implode('.', $classParts) . '.';
+        if ($property) {
+            $key = '.entity.' . $property;
+        } else {
+            $key = '.list';
+        }
+        return $snakeCaseConverter->classNameToSnakeCase($prefix . $className . $key);
+    }
+
+    /**
      * @param string $label
      * @param string $context
      * @param string $type

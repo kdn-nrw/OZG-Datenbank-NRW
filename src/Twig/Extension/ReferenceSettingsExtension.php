@@ -14,6 +14,7 @@ namespace App\Twig\Extension;
 use App\Admin\ContextAwareAdminInterface;
 use App\Model\ReferenceSettings;
 use App\Service\ApplicationContextHandler;
+use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Admin\Pool;
@@ -53,6 +54,7 @@ class ReferenceSettingsExtension extends AbstractExtension
         return [
             new TwigFunction('app_is_backend', [$this, 'getAdminContextIsBackend']),
             new TwigFunction('app_get_reference_settings', [$this, 'getReferenceSettings']),
+            new TwigFunction('app_get_entity_label', [$this, 'getClassPropertyLabel']),
         ];
     }
 
@@ -64,6 +66,17 @@ class ReferenceSettingsExtension extends AbstractExtension
     public function getAdminContextIsBackend(): bool
     {
         return $this->applicationContextHandler->isBackend();
+    }
+
+    /**
+     * Creates the label key for the given
+     * @param string $entityClass
+     * @param string $property
+     * @return string
+     */
+    public function getClassPropertyLabel(string $entityClass, string $property = ''): string
+    {
+        return PrefixedUnderscoreLabelTranslatorStrategy::getClassPropertyLabel($entityClass, $property);
     }
 
     /**
@@ -100,7 +113,7 @@ class ReferenceSettingsExtension extends AbstractExtension
                             break;
                         }
                     }
-                } else {
+                } elseif ($this->pool->hasAdminByClass($objectAdminClasses[0])) {
                     $refAdmin = $this->pool->getAdminByClass($objectAdminClasses[0]);
                 }
             }
@@ -122,6 +135,8 @@ class ReferenceSettingsExtension extends AbstractExtension
             $settings = new ReferenceSettings();
             $settings->setShow(false);
             $settings->setEdit(false);
+            $label = $this->getClassPropertyLabel($entityClass);
+            $settings->setListTitle($label);
         }
         return $settings;
     }

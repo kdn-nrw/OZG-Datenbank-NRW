@@ -1,0 +1,33 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var entityReferenceProperty \App\Model\EntityReferenceProperty #}
+{% if entities|length > 0 %}
+    {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+    {% set field_description = entityReferenceProperty.fieldDescription %}
+    {% set refFieldDesc = field_description is defined ? field_description : null %}
+    {% set refSettings = app_get_reference_settings(entityReferenceProperty.entityClass, refFieldDesc) %}
+    {# @var refSettings \App\Model\ReferenceSettings #}
+    {% if showLevel > 1 %}
+    <span class="item-list item-level-{{ showLevel }}" title="{{ entityReferenceProperty.name }}">
+        {% for child in entities %}
+            {% if not child is same as(mainObject) %}
+                {% include 'General/References/Partials/show-entity-field-reference.html.twig'%}
+            {% endif %}
+        {% endfor %}
+    </span>
+    {% else %}
+        <div class="item-list item-level-{{ showLevel }}" title="{{ entityReferenceProperty.name }}">
+            {% for child in entities %}
+                {% if not child is same as(mainObject) %}
+                    {% include 'General/References/Partials/show-entity-field-reference.html.twig'%}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% elseif showLevel == 1 %}
+    <p>{{ 'app.object_references.no_data'|trans }}</p>
+{% endif %}

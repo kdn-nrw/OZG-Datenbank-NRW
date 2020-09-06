@@ -20,13 +20,13 @@ use Doctrine\Common\Collections\Collection;
 interface CategoryEntityInterface
 {
     /**
-     * @return Category[]|Collection
+     * @return CategoryEntityInterface[]|Collection
      */
     public function getChildren();
 
     /**
-     * @return Category|null
+     * @return CategoryEntityInterface|null
      */
-    public function getParent(): ?Category;
+    public function getParent(): ?CategoryEntityInterface;
 
 }

@@ -129,7 +129,7 @@ class ApplicationCategory extends BaseNamedEntity implements CategoryEntityInter
     /**
      * @return ApplicationCategory|null
      */
-    public function getParent(): ?Category
+    public function getParent(): ?CategoryEntityInterface
     {
         return $this->parent;
     }

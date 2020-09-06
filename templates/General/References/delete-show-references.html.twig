@@ -1,0 +1,31 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var entityReferenceMap \App\Model\EntityReferenceMap #}
+{% set objectReferenceProperties = entityReferenceMap.propertyReferences() %}
+{% for entityReferenceProperty in objectReferenceProperties %}
+    {# @var entityReferenceProperty \App\Model\EntityReferenceProperty #}
+    {% set entities = app_entity_reference_data(object, entityReferenceProperty) %}
+    {% if entityReferenceProperty.name != 'createdBy' and entityReferenceProperty.name != 'modifiedBy' %}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title" title="{{ entityReferenceProperty.entityClass }}">
+                {{ app_get_entity_label(entityReferenceProperty.entityLabelClass, entityReferenceProperty.name)|trans }}
+            </h4>
+        </div>
+        <div class="box-body">
+            {% include 'General/References/Partials/show-field-references-list.html.twig' with {
+                'entityReferenceProperty': entityReferenceProperty,
+                'entities': entities,
+                'showLevel': 1,
+                'parentAction': constant('App\\Model\\EntityReferenceProperty::ACTION_DELETE'),
+                'parentReferenceProperty': null,
+                'mainObject': object
+            } %}
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}

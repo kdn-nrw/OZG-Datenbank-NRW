@@ -1,0 +1,62 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var refSettings \App\Model\ReferenceSettings #}
+{% set childAction = entityReferenceProperty.performedObjectAction(child, parentAction) %}
+
+{% set displayText %}
+    {{ admin.toString(child)|u.truncate(100) }}
+    {% include 'General/References/Partials/show-field-reference-action.html.twig' with {'action': childAction} %}
+{% endset %}
+{% if refSettings.edit.enabled %}
+    {% include 'General/Show/Partials/link-to-child.html.twig' with {
+        'refSettings': refSettings,
+        'linkClass': 'label label-' ~ entityReferenceProperty.levelAsString(childAction),
+        'buttonText': displayText
+    } %}
+{% else %}
+    {% include 'General/Show/Partials/link-child-name-show.html.twig' with {
+        'refSettings': refSettings,
+        'linkClass': 'label label-' ~ entityReferenceProperty.levelAsString(childAction),
+        'displayName': displayText
+    } %}
+{% endif %}
+{% verbatim %}
+
+{% endverbatim %}
+{% if showLevel < 3 and entityReferenceProperty.actionRequiresCheck(childAction) %}
+    {% set childReferenceMap = entityReferenceProperty.targetEntityReferenceMap %}
+    {# @var childReferenceMap \App\Model\EntityReferenceMap #}
+    {% set childReferenceProperties = childReferenceMap.propertyReferences() %}
+    {% for childReferenceProperty in childReferenceProperties %}
+        {# @var childReferenceProperty \App\Model\EntityReferenceProperty #}
+        {% set childRefSettings = app_get_reference_settings(childReferenceProperty.entityClass) %}
+        {% if childReferenceProperty.requiresCheck(entityReferenceProperty, childAction) %}
+            {% set grandChildEntities = app_entity_reference_data(child, childReferenceProperty) %}
+            {% if grandChildEntities|length > 0 %}
+                <div class="item-sub-list">
+                    &nbsp;<strong class="item-sub-list-title" title="{{ childReferenceProperty.entityClass }}">
+                        {% for i in range(1, showLevel) %}
+                            &gt;
+                        {% endfor %}
+                        {{ childRefSettings.listTitle|trans }}:
+                        <span title="{{ childReferenceProperty.name }}">
+                            {{ app_get_entity_label(childReferenceProperty.entityLabelClass, childReferenceProperty.name)|trans }}
+                        </span>
+                    </strong>
+                    {% include 'General/References/Partials/show-field-references-list.html.twig' with {
+                        'entityReferenceProperty': childReferenceProperty,
+                        'entities': grandChildEntities,
+                        'showLevel': showLevel + 1,
+                        'parentAction': childAction,
+                        'parentReferenceProperty': entityReferenceProperty,
+                        'mainObject': object
+                    } %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

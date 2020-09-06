@@ -121,7 +121,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
     /**
      * @var Organisation|null
      * @ORM\ManyToOne(targetEntity="Organisation", inversedBy="contacts", cascade={"persist"})
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $organisationEntity;
 

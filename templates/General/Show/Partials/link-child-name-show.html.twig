@@ -6,10 +6,17 @@ file that was distributed with this source code.
 #}
 
 {# @var refSettings \App\Model\ReferenceSettings #}
+{% if displayName is not defined or displayName is null %}
+    {% set displayName = child.name %}
+{% endif %}
 {% if refSettings.show.enabled and refSettings.admin.hasAccess(refSettings.show.route, child) %}
-    <a href="{{ refSettings.admin.generateObjectUrl(refSettings.show.route, child, {'id': child.id}) }}">
-        {{ child.name }}
+    <a href="{{ refSettings.admin.generateObjectUrl(refSettings.show.route, child, {'id': child.id}) }}"{% if linkClass is defined %} class="{{ linkClass }}" {% endif %}>
+        {{ displayName|raw }}
     </a>
+{% elseif linkClass is defined %}
+    <span class="{{ linkClass }}">
+        {{ displayName|raw }}
+    </span>
 {% else %}
-    {{ child.name }}
+    {{ displayName|raw }}
 {% endif %}
