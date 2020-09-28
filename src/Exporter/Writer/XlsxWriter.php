@@ -39,7 +39,7 @@ class XlsxWriter implements TypedWriterInterface
     /**
      * @var int
      */
-    private $currentColumn = 0;
+    private $currentColumnOffset = 0;
 
     /**
      * XlsxWriter constructor.
@@ -88,6 +88,7 @@ class XlsxWriter implements TypedWriterInterface
         }
 
         ++$this->rowNumber;
+        $this->currentColumnOffset = 0;
     }
 
     /**
@@ -187,10 +188,13 @@ class XlsxWriter implements TypedWriterInterface
     private function getColumn($name): string
     {
         if (isset($this->headerColumns[$name])) {
-            $this->currentColumn = $this->headerColumns[$name];
+            $currentColumn = $this->headerColumns[$name];
+            ++$this->currentColumnOffset;
         } else {
-            ++$this->currentColumn;
+            ++$this->currentColumnOffset;
+            $currentColumn = self::formatColumnName($this->currentColumnOffset);
+            $this->headerColumns[$name] = $currentColumn;
         }
-        return $this->currentColumn . $this->rowNumber;
+        return $currentColumn . $this->rowNumber;
     }
 }
