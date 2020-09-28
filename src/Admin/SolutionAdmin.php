@@ -20,7 +20,7 @@ use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Status;
 use App\Model\ExportSettings;
-use Knp\Menu\ItemInterface as MenuItemInterface;
+use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -65,7 +65,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         'app.solution.entity.form_server_solutions_form_server' => 'app.solution.entity.form_server_solutions',
     ];
 
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureTabMenuMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && $action !== 'edit') {
             return;

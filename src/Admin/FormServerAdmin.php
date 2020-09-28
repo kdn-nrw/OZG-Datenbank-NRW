@@ -12,7 +12,7 @@
 namespace App\Admin;
 
 use App\Entity\FormServer;
-use Knp\Menu\ItemInterface as MenuItemInterface;
+use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -33,7 +33,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
         'app.form_server.entity.form_server_solutions_solution' => 'app.form_server.entity.form_server_solutions',
     ];
 
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureTabMenuMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;

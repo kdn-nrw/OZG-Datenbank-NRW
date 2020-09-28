@@ -19,7 +19,7 @@ use App\Entity\MailingContact;
 use App\Form\Type\MailingAttachmentType;
 use App\Validator\Constraints\MailingSenderEmail;
 use DateTime;
-use Knp\Menu\ItemInterface as MenuItemInterface;
+use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -42,7 +42,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     use CategoryTrait;
     use OrganisationTrait;
 
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureTabMenuMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;

@@ -26,7 +26,7 @@ interface SluggableInterface
     /**
      * Sets the slug (used in case Gedmo Sluggable is not working)
      *
-     * @return string|null $slug
+     * @param string|null $slug
      */
     public function setSlug(?string $slug): void;
 

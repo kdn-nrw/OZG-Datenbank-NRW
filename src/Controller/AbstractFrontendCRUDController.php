@@ -131,7 +131,9 @@ abstract class AbstractFrontendCRUDController extends CRUDController
             $modelManager = $this->admin->getModelManager();
             $object = $modelManager->findOneBy($this->admin->getClass(), ['slug' => $id]);
         }
-        if ($object instanceof SluggableInterface && $redirectSlug = $object->getSlug()) {
+        if ($object instanceof SluggableInterface
+            && ($redirectSlug = $object->getSlug())
+            && (string) $id !== $redirectSlug) {
             $redirectUrl = $this->admin->generateUrl('show', ['slug' => $redirectSlug]);
             $status = 301;
             return $this->redirect($redirectUrl, $status);
