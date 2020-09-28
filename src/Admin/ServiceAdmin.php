@@ -18,6 +18,7 @@ use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\Priority;
 use App\Entity\Status;
+use App\Exporter\Source\ServiceFimValueFormatter;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
 use App\Form\Type\FederalInformationManagementType;
 use App\Model\ExportSettings;
@@ -30,6 +31,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\CollectionType;
+use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -60,12 +62,17 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->with('app.service.tabs.general', [
                 'label' => 'app.service.tabs.general',
                 'tab' => true,
-            ])
-            ->with('app.service.groups.general', [
+            ]);
+        $formMapper->with('general', [
+            'class' => 'col-xs-12 col-md-6',
+            'label' => 'app.service.groups.general',
+        ]);
+        /*
+        $formMapper->with('app.service.groups.general', [
                 'label' => false,
                 'box_class' => 'box-tab',
-            ])
-            ->add('name', TextareaType::class, [
+            ]);*/
+        $formMapper->add('name', TextareaType::class, [
                 'required' => true,
             ])
             ->add('serviceKey', TextType::class, [
@@ -80,7 +87,6 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'admin_code' => ServiceSystemAdmin::class
             ]);
         }
-        $this->addLaboratoriesFormFields($formMapper);
         $formMapper
             ->add('status', ModelType::class, [
                 'btn_add' => false,
@@ -89,7 +95,13 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])
             ->add('serviceType', TextType::class, [
                 'required' => true,
-            ])
+            ]);
+        $formMapper->end();
+        $formMapper->with('laws', [
+            'class' => 'col-xs-12 col-md-6',
+            'label' => 'app.service.groups.laws',
+        ]);
+        $formMapper
             ->add('legalBasis', TextareaType::class, [
                 'required' => false,
             ])
@@ -110,7 +122,12 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 // the transform option enable compatibility with the boolean field (default 1=true, 2=false)
                 // with transform set to true 0=false, 1=true
                 'transform' => true,
-            ]);
+            ]);;
+        $formMapper->end();
+        $formMapper->with('relations', [
+            'class' => 'col-xs-12',
+            'label' => 'app.service.groups.relations',
+        ]);
 
         $formMapper
             ->add('inheritJurisdictions', ChoiceType::class, [
@@ -286,6 +303,24 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])
             ->end()
             ->end();
+        $formMapper->tab('app.service.tabs.notes', [
+            'label' => 'app.service.tabs.notes',
+            'box_class' => 'box-tab',
+        ])
+            ->with('app.service.entity.notes', [
+                'label' => false,
+                'class' => 'col-md-12 box-group-notes',
+                'box_class' => 'box-tab',
+            ])
+            ->add('notes', SimpleFormatterType::class, [
+                'label' => 'app.service.entity.notes_placeholder',
+                'format' => 'richhtml',
+                'ckeditor_context' => 'default', // optional
+            ]);
+        $this->addLaboratoriesFormFields($formMapper);
+        $formMapper->end()
+            ->end();
+
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -342,6 +377,22 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('fimTypes.dataType',
+            null, [
+            ],
+            ChoiceType::class,
+            [
+                'choices' => array_flip(\App\Entity\FederalInformationManagementType::$mapTypes)
+            ]
+        );
+        $datagridMapper->add('fimTypes.status',
+            null, [
+            ],
+            ChoiceType::class,
+            [
+                'choices' => array_flip(\App\Entity\FederalInformationManagementType::$statusChoices)
+            ]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -397,10 +448,30 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     {
         $settings = parent::getExportSettings();
         $settings->addExcludeFields(['fimTypes']);
-        $settings->setAdditionFields([
+
+        $additionalFields = [
             'serviceSystem.situation.subject', 'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey',
             'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
-        ]);
+        ];
+        $customServiceFormatter = new ServiceFimValueFormatter();
+        $fimStatusTypes = \App\Entity\FederalInformationManagementType::$statusChoices;
+        $statusTranslations = [];
+        foreach ($fimStatusTypes as $status => $labelKey) {
+            $statusTranslations[$status] = $this->trans($labelKey);
+        }
+        $customServiceFormatter->setFimStatusTranslations($statusTranslations);
+        $fimTypes = \App\Entity\FederalInformationManagementType::$mapTypes;
+        foreach ($fimTypes as $type => $labelKey) {
+            $typeField = ServiceFimValueFormatter::FIM_DATA_TYPE_PREFIX . $type;
+            $statusField = ServiceFimValueFormatter::FIM_STATUS_PREFIX . $type;
+            $settings->addCustomLabel($typeField, 'FIM Typ ' . $this->trans($labelKey));
+            $settings->addCustomLabel($statusField, 'FIM Status ' . $this->trans($labelKey));
+            $additionalFields[] = $typeField;
+            $additionalFields[] = $statusField;
+            $settings->addCustomPropertyValueFormatter($typeField, $customServiceFormatter);
+            $settings->addCustomPropertyValueFormatter($statusField, $customServiceFormatter);
+        }
+        $settings->setAdditionFields($additionalFields);
         return $settings;
     }
 
@@ -460,7 +531,8 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('bureaus')
             ->add('ruleAuthorities')
             ->add('authorityBureaus')
-            ->add('authorityStateMinistries');
+            ->add('authorityStateMinistries')
+            ->add('notes', 'html');
         $this->addLaboratoriesShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);
         $this->addPortalsShowFields($showMapper);

@@ -200,14 +200,25 @@ class CustomEntityValueProvider
     {
         $data = [];
         foreach ($this->propertyPaths as $name => $propertyPath) {
-            try {
-                $data[$name] = $this->getValue($this->propertyAccessor->getValue($objectOrArray, $propertyPath));
-            } catch (UnexpectedTypeException $e) {
-                //non existent object in path will be ignored
-                $data[$name] = null;
-            }
+            $data[$name] = $this->getPropertyValue($propertyPath, $objectOrArray);
         }
         return $data;
+    }
+
+    /**
+     * Returns the property value for the given object or array
+     * @param string $propertyPath
+     * @param object|array $objectOrArray
+     * @return string|null
+     */
+    protected function getPropertyValue(string $propertyPath, $objectOrArray): ?string
+    {
+        try {
+            return $this->getValue($this->propertyAccessor->getValue($objectOrArray, $propertyPath));
+        } catch (UnexpectedTypeException $e) {
+            //non existent object in path will be ignored
+            return null;
+        }
     }
 
     final public function setDateTimeFormat(string $dateTimeFormat): void
@@ -253,7 +264,7 @@ class CustomEntityValueProvider
      * @param mixed $value
      * @return string|null
      */
-    protected function getValue($value)
+    protected function getValue($value): ?string
     {
         //if value is array or collection, creates string
         if (\is_iterable($value)) {
@@ -272,6 +283,6 @@ class CustomEntityValueProvider
             $value = trim(strip_tags($value));
         }
 
-        return $value;
+        return (string)$value;
     }
 }

@@ -36,10 +36,16 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         $datagrid->buildPager();
 
         $fields = [];
+        $exportSettings = $this->getExportSettings();
 
         foreach ($this->getExportFields() as $key => $field) {
-            $label = $this->getTranslationLabel($field, 'export', 'label');
-            $transLabel = $this->trans($label);
+            $transLabel = $exportSettings->getCustomLabel($field);
+            if (!$transLabel) {
+                $label = $this->getTranslationLabel($field, 'export', 'label');
+                $transLabel = $this->trans($label);
+            } else {
+                $label = $field;
+            }
 
             // NEXT_MAJOR: Remove this hack, because all field labels will be translated with the major release
             // No translation key exists
@@ -49,20 +55,21 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
                 $fields[$transLabel] = $field;
             }
         }
+        $exportSettings->setProcessedPropertyMap($fields);
         /** @noinspection NullPointerExceptionInspection */
-        return $this->getCustomDataSourceIterator($datagrid, $fields);
+        return $this->getCustomDataSourceIterator($datagrid, $exportSettings);
     }
 
     /**
      * Create custom query source iterator for exporting collection variables
      *
      * @param DatagridInterface $datagrid
-     * @param array $fields
+     * @param ExportSettings $exportSettings
      *
      * @return CustomQuerySourceIterator
      * @see \Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator
      */
-    private function getCustomDataSourceIterator(DatagridInterface $datagrid, array $fields): CustomQuerySourceIterator
+    private function getCustomDataSourceIterator(DatagridInterface $datagrid, ExportSettings $exportSettings): CustomQuerySourceIterator
     {
         ini_set('max_execution_time', 0);
         $datagrid->buildPager();
@@ -89,13 +96,11 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         if (null !== $container) {
             $cacheDir = $container->getParameter('kernel.cache_dir');
         }
-
+        $exportSettings->setContext(ApplicationContextHandler::getDefaultAdminApplicationContext($this));
         return new CustomQuerySourceIterator(
             $query,
-            $fields,
             $cacheDir,
-            ApplicationContextHandler::getDefaultAdminApplicationContext($this),
-            'd.m.Y H:i:s'
+            $exportSettings
         );
     }
 

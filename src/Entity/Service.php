@@ -273,6 +273,15 @@ class Service extends AbstractService implements SluggableInterface
      */
     private $portals;
 
+    /**
+     * Notes
+     *
+     * @var string|null
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    private $notes = '';
+
     public function __construct()
     {
         $this->authorityBureaus = new ArrayCollection();
@@ -373,6 +382,22 @@ class Service extends AbstractService implements SluggableInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $dataType
+     * @return FederalInformationManagementType|null
+     */
+    public function getFimType(string $dataType): ?FederalInformationManagementType
+    {
+        $fimTypes = $this->getFimTypes();
+        foreach ($fimTypes as $fimEntry) {
+            /** @var FederalInformationManagementType $fimEntry */
+            if ($fimEntry->getDataType() === $dataType) {
+                return $fimEntry;
+            }
+        }
+        return null;
     }
 
     /**
@@ -1134,6 +1159,22 @@ class Service extends AbstractService implements SluggableInterface
     public function setPortals($portals): void
     {
         $this->portals = $portals;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string|null $notes
+     */
+    public function setNotes(?string $notes): void
+    {
+        $this->notes = $notes;
     }
 
 }

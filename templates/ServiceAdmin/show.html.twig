@@ -51,6 +51,12 @@ file that was distributed with this source code.
                         {{ elements['specializedProcedures']|render_view_element(object)}}
                     </div>
                 {% endif %}
+                {% if elements['notes'] is defined and object.notes|length > 0 %}
+                    <div class="item-property">
+                        <h4>{{ 'app.service.entity.notes'|trans }}</h4>
+                        {{ elements['notes']|render_view_element(object)}}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -58,7 +64,7 @@ file that was distributed with this source code.
         <div class="box box-primary">
             <div class="box-header">
                 <h4 class="box-title">
-                    {{ 'app.service.entity.legal_basis'|trans }}/{{ 'app.service.entity.laws'|trans }}
+                    {{ 'app.service.groups.laws'|trans }}
                 </h4>
             </div>
             <div class="box-body">

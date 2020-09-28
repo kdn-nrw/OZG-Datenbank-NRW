@@ -37,6 +37,11 @@
         background-color: $success;
       }
     }
+    &.fim-status-4 {
+      + .control-label__text {
+        background-color: $gray-200;
+      }
+    }
   }
   .sonata-collection-row {
     &:not(:last-child) {

@@ -11,17 +11,20 @@
 
 namespace App\Admin\Frontend;
 
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\LaboratoryAdmin;
 use App\Admin\PortalAdmin;
-use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Datagrid\CustomDatagrid;
+use App\Entity\FederalInformationManagementType;
 use App\Entity\Priority;
 use App\Entity\Status;
 use App\Entity\Subject;
+use App\Exporter\Source\ServiceFimValueFormatter;
 use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
@@ -104,6 +107,22 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('fimTypes.dataType',
+            null, [
+            ],
+            ChoiceType::class,
+            [
+                'choices' => array_flip(FederalInformationManagementType::$mapTypes)
+            ]
+        );
+        $datagridMapper->add('fimTypes.status',
+            null, [
+            ],
+            ChoiceType::class,
+            [
+                'choices' => array_flip(FederalInformationManagementType::$statusChoices)
+            ]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -167,10 +186,30 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     {
         $settings = parent::getExportSettings();
         $settings->addExcludeFields(['fimTypes']);
-        $settings->setAdditionFields([
+
+        $additionalFields = [
             'serviceSystem.situation.subject', 'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey',
             'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
-        ]);
+        ];
+        $customServiceFormatter = new ServiceFimValueFormatter();
+        $fimStatusTypes = \App\Entity\FederalInformationManagementType::$statusChoices;
+        $statusTranslations = [];
+        foreach ($fimStatusTypes as $status => $labelKey) {
+            $statusTranslations[$status] = $this->trans($labelKey);
+        }
+        $customServiceFormatter->setFimStatusTranslations($statusTranslations);
+        $fimTypes = \App\Entity\FederalInformationManagementType::$mapTypes;
+        foreach ($fimTypes as $type => $labelKey) {
+            $typeField = ServiceFimValueFormatter::FIM_DATA_TYPE_PREFIX . $type;
+            $statusField = ServiceFimValueFormatter::FIM_STATUS_PREFIX . $type;
+            $settings->addCustomLabel($typeField, 'FIM Typ ' . $this->trans($labelKey));
+            $settings->addCustomLabel($statusField, 'FIM Status ' . $this->trans($labelKey));
+            $additionalFields[] = $typeField;
+            $additionalFields[] = $statusField;
+            $settings->addCustomPropertyValueFormatter($typeField, $customServiceFormatter);
+            $settings->addCustomPropertyValueFormatter($statusField, $customServiceFormatter);
+        }
+        $settings->setAdditionFields($additionalFields);
         return $settings;
     }
 

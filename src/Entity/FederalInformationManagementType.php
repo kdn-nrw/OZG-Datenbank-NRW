@@ -27,6 +27,7 @@ class FederalInformationManagementType extends BaseEntity
     public const STATUS_IN_PROGRESS = 1;
     public const STATUS_SUBMITTED = 2;
     public const STATUS_APPROVED = 3;
+    public const STATUS_NOT_PROVIDED = 4;
 
     public const TYPE_DESCRIPTION = 'description';
     public const TYPE_MASTER_DATA_FIELDS = 'master_data_fields';
@@ -35,17 +36,18 @@ class FederalInformationManagementType extends BaseEntity
     public const TYPE_REFERENCE_PROCESS = 'reference_process';
 
     public static $mapTypes = [
-        FederalInformationManagementEntity::TYPE_DESCRIPTION             => 'app.service.fim.type_choices.description',
-        FederalInformationManagementEntity::TYPE_MASTER_DATA_FIELDS      => 'app.service.fim.type_choices.master_data_fields',
-        FederalInformationManagementEntity::TYPE_ROOT_PROCESS            => 'app.service.fim.type_choices.root_process',
-        FederalInformationManagementEntity::TYPE_REFERENCE_DATA_FIELDS   => 'app.service.fim.type_choices.reference_data_fields',
-        FederalInformationManagementEntity::TYPE_REFERENCE_PROCESS       => 'app.service.fim.type_choices.reference_process',
+        FederalInformationManagementEntity::TYPE_DESCRIPTION             => 'app.service.fim.entity.type_choices.description',
+        FederalInformationManagementEntity::TYPE_MASTER_DATA_FIELDS      => 'app.service.fim.entity.type_choices.master_data_fields',
+        FederalInformationManagementEntity::TYPE_ROOT_PROCESS            => 'app.service.fim.entity.type_choices.root_process',
+        FederalInformationManagementEntity::TYPE_REFERENCE_DATA_FIELDS   => 'app.service.fim.entity.type_choices.reference_data_fields',
+        FederalInformationManagementEntity::TYPE_REFERENCE_PROCESS       => 'app.service.fim.entity.type_choices.reference_process',
     ];
 
     public static $statusChoices = [
         FederalInformationManagementEntity::STATUS_IN_PROGRESS  => 'app.service.fim.entity.status_choices.in_progress',
         FederalInformationManagementEntity::STATUS_SUBMITTED    => 'app.service.fim.entity.status_choices.submitted',
         FederalInformationManagementEntity::STATUS_APPROVED     => 'app.service.fim.entity.status_choices.approved',
+        FederalInformationManagementEntity::STATUS_NOT_PROVIDED     => 'app.service.fim.entity.status_choices.not_provided',
     ];
 
     /**

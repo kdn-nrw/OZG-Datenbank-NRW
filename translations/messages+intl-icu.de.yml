@@ -600,8 +600,10 @@ app:
       service_solutions: Lösungen
       # Federal information management
       fim: FIM
+      notes: Zusatz-Infos
     groups:
       general: Leistung
+      laws: Rechtsgrundlage / Gesetze / SDG
       relations: Relationen
     entity:
       name: Leika-Bezeichnung
@@ -648,6 +650,10 @@ app:
       model_region_projects: DMR Umsetzungsprojekte
       published_model_region_projects: Veröffentlichte DMR Umsetzungsprojekte
       fim_types: FIM
+      fim_types_data_type: FIM Typ
+      fim_types_status: FIM Status
+      notes: Notizen
+      notes_placeholder: Notizen
     fim:
       object_name: Föderales Informationsmanagement (FIM)
       list: FIM
@@ -659,12 +665,13 @@ app:
           in_progress: In Arbeit
           submitted: Vorgelegt
           approved: Freigegeben
-      type_choices:
-        description: Beschreibung
-        master_data_fields: Stammdatenfelder
-        root_process: Stammprozess
-        reference_data_fields: Referenzdatenfelder
-        reference_process: Referenzprozess
+          not_provided: nicht vorgesehen
+        type_choices:
+          description: Beschreibung
+          master_data_fields: Stammdatenfelder
+          root_process: Stammprozess
+          reference_data_fields: Referenzdatenfelder
+          reference_process: Referenzprozess
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister

@@ -11,6 +11,7 @@
 
 namespace App\Exporter\Source;
 
+use App\Model\ExportSettings;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\ORM\Query;
 use Sonata\Exporter\Exception\InvalidMethodCallException;
@@ -35,22 +36,48 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
      * @var IterableResult
      */
     protected $iterator;
+    /**
+     * @var ExportSettings
+     */
+    private $exportSettings;
 
     /**
      * @param Query $query The Doctrine Query
-     * @param array $fields Fields to export
      * @param string|null $cacheDir
-     * @param string $context
-     * @param string $dateTimeFormat
+     * @param ExportSettings $exportSettings
      */
-    public function __construct(Query $query, array $fields, ?string $cacheDir, string $context, string $dateTimeFormat = 'r')
+    public function __construct(
+        Query $query,
+        ?string $cacheDir,
+        ExportSettings $exportSettings
+    )
     {
-        parent::__construct($fields, $cacheDir, $context, $dateTimeFormat);
+        parent::__construct(
+            $exportSettings->getProcessedPropertyMap(),
+            $cacheDir,
+            $exportSettings->getContext(),
+            $exportSettings->getDateTimeFormat()
+        );
         $this->query = clone $query;
         $this->query->setParameters($query->getParameters());
         foreach ($query->getHints() as $name => $value) {
             $this->query->setHint($name, $value);
         }
+        $this->exportSettings = $exportSettings;
+    }
+
+    /**
+     * Returns the property value for the given object or array
+     * @param string $propertyPath
+     * @param object|array $objectOrArray
+     * @return string|null
+     */
+    protected function getPropertyValue(string $propertyPath, $objectOrArray): ?string
+    {
+        if (null !== $customFormatter = $this->exportSettings->getCustomPropertyValueFormatter($propertyPath)) {
+            return $customFormatter->getPropertyValue($propertyPath, $objectOrArray);
+        }
+        return parent::getPropertyValue($propertyPath, $objectOrArray);
     }
 
     final public function current()
