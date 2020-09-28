@@ -196,6 +196,13 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'status'],
+                ]
             ]);
 
         $this->addDatePickersListFields($listMapper, 'projectStartAt');

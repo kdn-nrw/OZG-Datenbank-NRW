@@ -207,7 +207,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             ])
             ->add('name')/*
             ->add('status', 'choice', [
-                'editable' => true,
+                'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
             ])*/
@@ -271,7 +271,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'associated_property' => 'service'
             ])
             ->add('status', 'choice', [
-                'editable' => true,
+                'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',

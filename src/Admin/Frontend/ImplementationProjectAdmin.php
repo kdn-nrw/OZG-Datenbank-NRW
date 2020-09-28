@@ -104,9 +104,16 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'template' => 'ImplementationProjectAdmin/list-service-system-subjects.html.twig',
             ])
             ->add('status', 'choice', [
-                'editable' => true,
+                'editable' => false,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'status'],
+                ]
             ])
             ->add('projectStartAt', null, [
                 // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details

@@ -100,7 +100,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
             ->add('priority')
             /*
             ->add('status', 'choice', [
-                'editable' => true,
+                'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
             ])*/
@@ -168,7 +168,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])/*
             ->add('status', 'choice', [
-                'editable' => true,
+                'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',

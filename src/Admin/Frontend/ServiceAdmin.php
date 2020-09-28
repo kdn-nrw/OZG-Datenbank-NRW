@@ -121,7 +121,17 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                     ['fieldName' => 'subject'],
                 ]
             ])
-            ->add('serviceSystem.situation')
+            ->add('serviceSystem.situation', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSystem'],
+                    ['fieldName' => 'situation'],
+                ]
+            ])
             ->add('serviceSystem', null, [
                 'admin_code' => ServiceSystemAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable

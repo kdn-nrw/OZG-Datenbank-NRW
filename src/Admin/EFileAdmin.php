@@ -142,6 +142,13 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
                 'editable' => true,
                 'class' => EFileStatus::class,
                 'catalogue' => 'messages',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'status'],
+                ]
             ]);
         $this->addDefaultListActions($listMapper);
     }
