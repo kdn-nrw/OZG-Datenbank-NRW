@@ -101,14 +101,29 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      */
     private $centralAssociations;
 
+    /**
+     * @var Laboratory[]|Collection
+     * @ORM\ManyToMany(targetEntity="Laboratory")
+     * @ORM\JoinTable(name="ozg_commune_laboratory",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="laboratory_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $laboratories;
+
     public function __construct()
     {
-        $this->solutions = new ArrayCollection();
+        $this->centralAssociations = new ArrayCollection();
+        $this->laboratories = new ArrayCollection();
         $this->offices = new ArrayCollection();
         $this->portals = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
+        $this->solutions = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
-        $this->centralAssociations = new ArrayCollection();
     }
 
     /**
@@ -389,6 +404,50 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     public function setCentralAssociations($centralAssociations): void
     {
         $this->centralAssociations = $centralAssociations;
+    }
+
+    /**
+     * @param Laboratory $laboratory
+     * @return self
+     */
+    public function addLaboratory($laboratory): self
+    {
+        if (!$this->laboratories->contains($laboratory)) {
+            $this->laboratories->add($laboratory);
+            //$laboratory->addCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Laboratory $laboratory
+     * @return self
+     */
+    public function removeLaboratory($laboratory): self
+    {
+        if ($this->laboratories->contains($laboratory)) {
+            $this->laboratories->removeElement($laboratory);
+            //$laboratory->removeCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Laboratory[]|Collection
+     */
+    public function getLaboratories()
+    {
+        return $this->laboratories;
+    }
+
+    /**
+     * @param Laboratory[]|Collection $laboratories
+     */
+    public function setLaboratories($laboratories): void
+    {
+        $this->laboratories = $laboratories;
     }
 
     /**

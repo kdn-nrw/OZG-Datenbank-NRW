@@ -153,6 +153,7 @@ app:
       manufacturers: Hersteller
       offices: Ämter
       solutions: Lösungen
+      laboratories: Stichwörter
   contact:
     object_name: Kontakt
     list: Kontakte
@@ -305,7 +306,7 @@ app:
       notes: Notizen
       interested_organisations: An Mitarbeit interessiert (erweitertes Projektteam)
       participation_organisations: Mitarbeit zugesichert (Projekt-Kernteam Fach + IT)
-      laboratories: Digitalisierungslabore
+      laboratories: Stichwörter
       bureaus: Fachlichkeiten
       portals: voraussichtliches Zielportal
       project_leaders: Projektleitung
@@ -687,7 +688,7 @@ app:
       communes: Kommunen
       specialized_procedures: Fachverfahren
       manufacturers: Hersteller
-      laboratories: Labore
+      laboratories: Stichwörter
   service_solution:
     object_name: Lösung für Leistung
     list: Lösung für Leistung

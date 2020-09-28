@@ -618,24 +618,6 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     }
 
     /**
-     * @return Laboratory[]
-     * /
-     * public function getLaboratories(): array
-     * {
-     * $items = [];
-     * $serviceSystems = $this->getServiceSystems();
-     * foreach ($serviceSystems as $serviceSystem) {
-     * $laboratories = $serviceSystem->getLaboratories();
-     * foreach ($laboratories as $laboratory) {
-     * if (!isset($items[$laboratory->getId()])) {
-     * $items[$laboratory->getId()] = $laboratory;
-     * }
-     * }
-     * }
-     * return $items;
-     * }*/
-
-    /**
      * @param Laboratory[]|Collection $laboratories
      */
     public function setLaboratories($laboratories): void

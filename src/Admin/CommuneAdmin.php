@@ -14,6 +14,7 @@ namespace App\Admin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\CentralAssociationTrait;
 use App\Admin\Traits\ContactTrait;
+use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
 use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\ServiceProviderTrait;
@@ -35,6 +36,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     use AddressTrait;
     use CentralAssociationTrait;
     use ContactTrait;
+    use LaboratoryTrait;
     use OrganisationOneToOneTrait;
     use PortalTrait;
     use ServiceProviderTrait;
@@ -67,6 +69,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addCentralAssociationsFormFields($formMapper);
         $this->addSpecializedProceduresFormFields($formMapper);
         $this->addPortalsFormFields($formMapper);
+        $this->addLaboratoriesFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
     }
@@ -114,6 +117,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addCentralAssociationsDatagridFilters($datagridMapper);
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);
         $this->addPortalsDatagridFilters($datagridMapper);
+        $this->addLaboratoriesDatagridFilters($datagridMapper);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -137,6 +141,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addCentralAssociationsShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);
         $this->addPortalsShowFields($showMapper);
+        $this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,
