@@ -94,7 +94,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface
 
     /**
      * @var Organisation[]|Collection
-     * @ORM\ManyToMany(targetEntity="Organisation", inversedBy="modelRegionProjects")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Organisation", inversedBy="modelRegionProjects")
      * @ORM\JoinTable(name="ozg_model_region_project_organisation",
      *     joinColumns={
      *     @ORM\JoinColumn(name="model_region_project_id", referencedColumnName="id")
@@ -108,7 +108,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", inversedBy="modelRegionProjects")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", inversedBy="modelRegionProjects")
      * @ORM\JoinTable(name="ozg_model_region_project_solutions",
      *     joinColumns={
      *     @ORM\JoinColumn(name="model_region_project_id", referencedColumnName="id")

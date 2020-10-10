@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,13 +32,13 @@ class EFile extends BaseNamedEntity implements ImportEntityInterface
 
     /**
      * @var ServiceProvider
-     * @ORM\ManyToOne(targetEntity="ServiceProvider", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\ServiceProvider", cascade={"persist"})
      */
     private $serviceProvider;
 
     /**
      * @var SpecializedProcedure[]|Collection
-     * @ORM\ManyToMany(targetEntity="SpecializedProcedure")
+     * @ORM\ManyToMany(targetEntity="App\Entity\SpecializedProcedure")
      * @ORM\JoinTable(name="ozg_efile_specialized_procedures",
      *     joinColumns={
      *     @ORM\JoinColumn(name="efile_id", referencedColumnName="id")
@@ -61,7 +62,7 @@ class EFile extends BaseNamedEntity implements ImportEntityInterface
      * Status
      * @var EFileStatus|null
      *
-     * @ORM\ManyToOne(targetEntity="EFileStatus")
+     * @ORM\ManyToOne(targetEntity="App\Entity\EFileStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $status;
@@ -71,14 +72,14 @@ class EFile extends BaseNamedEntity implements ImportEntityInterface
      *
      * @var SpecializedProcedure|null
      *
-     * @ORM\ManyToOne(targetEntity="SpecializedProcedure")
+     * @ORM\ManyToOne(targetEntity="App\Entity\SpecializedProcedure")
      * @ORM\JoinColumn(name="leading_system_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $leadingSystem;
 
     /**
      * @var EFileStorageType[]|Collection
-     * @ORM\ManyToMany(targetEntity="EFileStorageType", inversedBy="eFiles")
+     * @ORM\ManyToMany(targetEntity="App\Entity\EFileStorageType", inversedBy="eFiles")
      * @ORM\JoinTable(name="ozg_efile_storage_type_mm",
      *     joinColumns={
      *     @ORM\JoinColumn(name="efile_id", referencedColumnName="id")
@@ -92,7 +93,7 @@ class EFile extends BaseNamedEntity implements ImportEntityInterface
 
     /**
      * @var SpecializedProcedure[]|Collection
-     * @ORM\ManyToMany(targetEntity="SpecializedProcedure")
+     * @ORM\ManyToMany(targetEntity="App\Entity\SpecializedProcedure")
      * @ORM\JoinTable(name="ozg_efile_software_modules",
      *     joinColumns={
      *     @ORM\JoinColumn(name="efile_id", referencedColumnName="id")

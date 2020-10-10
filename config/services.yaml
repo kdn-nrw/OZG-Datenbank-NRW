@@ -86,10 +86,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\BureauAdmin:
+  App\Admin\StateGroup\BureauAdmin:
     arguments:
       - ~
-      - App\Entity\Bureau
+      - App\Entity\StateGroup\Bureau
       - ~
     tags:
       - name:         sonata.admin
@@ -112,10 +112,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\CentralAssociationAdmin:
+  App\Admin\StateGroup\CentralAssociationAdmin:
     arguments:
       - ~
-      - App\Entity\CentralAssociation
+      - App\Entity\StateGroup\CentralAssociation
       - ~
     tags:
       - name:         sonata.admin
@@ -125,10 +125,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\CommuneAdmin:
+  App\Admin\StateGroup\CommuneAdmin:
     arguments:
       - ~
-      - App\Entity\Commune
+      - App\Entity\StateGroup\Commune
       - ~
     tags:
       - name:         sonata.admin
@@ -343,10 +343,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\MinistryStateAdmin:
+  App\Admin\StateGroup\MinistryStateAdmin:
     arguments:
       - ~
-      - App\Entity\MinistryState
+      - App\Entity\StateGroup\MinistryState
       - ~
     tags:
       - name:         sonata.admin
@@ -591,10 +591,10 @@ services:
         persist_filters: true
     public: true
 
-  App\Admin\ServiceProviderAdmin:
+  App\Admin\StateGroup\ServiceProviderAdmin:
     arguments:
       - ~
-      - App\Entity\ServiceProvider
+      - App\Entity\StateGroup\ServiceProvider
       - ~
     calls:
       - [setTemplate, ['show', 'ServiceProviderAdmin/show.html.twig']]

@@ -29,7 +29,7 @@ class AnalogService extends BaseNamedEntity
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="analogServices")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="analogServices")
      */
     private $solutions;
 

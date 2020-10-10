@@ -9,9 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\StateGroup;
 
+use App\Entity\AddressTrait;
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Organisation;
+use App\Entity\OrganisationEntityInterface;
+use App\Entity\OrganisationTrait;
+use App\Entity\UrlTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,7 +36,7 @@ class CentralAssociation extends BaseNamedEntity implements OrganisationEntityIn
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="centralAssociation", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="centralAssociation", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
@@ -46,7 +51,7 @@ class CentralAssociation extends BaseNamedEntity implements OrganisationEntityIn
 
     /**
      * @var Commune[]|Collection
-     * @ORM\ManyToMany(targetEntity="Commune", mappedBy="centralAssociations")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune", mappedBy="centralAssociations")
      */
     private $communes;
 

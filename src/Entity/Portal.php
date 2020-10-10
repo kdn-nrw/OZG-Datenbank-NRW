@@ -12,6 +12,8 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,7 +32,7 @@ class Portal extends BaseNamedEntity
 
     /**
      * @var ServiceProvider|null
-     * @ORM\ManyToOne(targetEntity="ServiceProvider", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\ServiceProvider", cascade={"persist"})
      */
     private $serviceProvider;
 
@@ -44,13 +46,13 @@ class Portal extends BaseNamedEntity
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="portals")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="portals")
      */
     private $solutions;
 
     /**
      * @var Commune[]|Collection
-     * @ORM\ManyToMany(targetEntity="Commune", mappedBy="portals")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune", mappedBy="portals")
      */
     private $communes;
 

@@ -120,26 +120,26 @@ class Contact extends BaseEntity implements ImportEntityInterface
 
     /**
      * @var Organisation|null
-     * @ORM\ManyToOne(targetEntity="Organisation", inversedBy="contacts", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Organisation", inversedBy="contacts", cascade={"persist"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $organisationEntity;
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="solutionContacts")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="solutionContacts")
      */
     private $solutions;
 
     /**
      * @var ImplementationProject[]|Collection
-     * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="contacts")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ImplementationProject", mappedBy="contacts")
      */
     private $implementationProjects;
 
     /**
      * @var Category[]|Collection
-     * @ORM\ManyToMany(targetEntity="Category", inversedBy="contacts")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="contacts")
      * @ORM\JoinTable(name="ozg_contact_category",
      *     joinColumns={
      *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")

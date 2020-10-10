@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Admin;
+namespace App\Admin\StateGroup;
 
 
+use App\Admin\AbstractAppAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\ServiceSystemTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -22,6 +24,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class BureauAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
+    protected $baseRoutePattern = 'state/bureau';
+
     use ServiceSystemTrait;
 
     protected function configureFormFields(FormMapper $formMapper)

@@ -9,10 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\StateGroup;
 
+use App\Entity\AddressTrait;
 use App\Entity\Base\AppBaseEntity;
 use App\Entity\Base\SoftdeletableEntityInterface;
+use App\Entity\ContactTextTrait;
+use App\Entity\HasManufacturerEntityInterface;
+use App\Entity\Laboratory;
+use App\Entity\Organisation;
+use App\Entity\OrganisationEntityInterface;
+use App\Entity\OrganisationTrait;
+use App\Entity\Portal;
+use App\Entity\Solution;
+use App\Entity\SpecializedProcedure;
+use App\Entity\UrlTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -34,21 +45,21 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="commune", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="commune", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
 
     /**
      * @var Office[]|Collection
-     * @ORM\OneToMany(targetEntity="Office", mappedBy="commune", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\StateGroup\Office", mappedBy="commune", cascade={"all"}, orphanRemoval=true)
      * @deprecated
      */
     private $offices;
 
     /**
      * @var ServiceProvider[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceProvider", inversedBy="communes")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\ServiceProvider", inversedBy="communes")
      * @ORM\JoinTable(name="ozg_communes_service_provider",
      *     joinColumns={
      *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
@@ -62,20 +73,20 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="communes")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="communes")
      */
     private $solutions;
 
     /**
      * @var SpecializedProcedure[]|Collection
-     * @ORM\ManyToMany(targetEntity="SpecializedProcedure", mappedBy="communes")
+     * @ORM\ManyToMany(targetEntity="App\Entity\SpecializedProcedure", mappedBy="communes")
      * @ORM\OrderBy({"name" = "ASC"})
      */
     private $specializedProcedures;
 
     /**
      * @var Portal[]|Collection
-     * @ORM\ManyToMany(targetEntity="Portal", inversedBy="communes")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Portal", inversedBy="communes")
      * @ORM\JoinTable(name="ozg_commune_portals",
      *     joinColumns={
      *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
@@ -89,7 +100,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
 
     /**
      * @var CentralAssociation[]|Collection
-     * @ORM\ManyToMany(targetEntity="CentralAssociation", inversedBy="communes")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\CentralAssociation", inversedBy="communes")
      * @ORM\JoinTable(name="ozg_commune_central_association",
      *     joinColumns={
      *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
@@ -103,7 +114,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
 
     /**
      * @var Laboratory[]|Collection
-     * @ORM\ManyToMany(targetEntity="Laboratory")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Laboratory")
      * @ORM\JoinTable(name="ozg_commune_laboratory",
      *     joinColumns={
      *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")

@@ -52,7 +52,7 @@ class FederalInformationManagementType extends BaseEntity
 
     /**
      * @var Service|null
-     * @ORM\ManyToOne(targetEntity="Service", inversedBy="fimTypes", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Service", inversedBy="fimTypes", cascade={"persist"})
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $service;

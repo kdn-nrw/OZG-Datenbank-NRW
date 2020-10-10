@@ -29,7 +29,7 @@ class OpenData extends BaseNamedEntity
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="openDataItems")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="openDataItems")
      */
     private $solutions;
 

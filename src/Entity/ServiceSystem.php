@@ -14,6 +14,8 @@ namespace App\Entity;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
+use App\Entity\StateGroup\Bureau;
+use App\Entity\StateGroup\MinistryState;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -42,7 +44,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface
      * Status
      * @var Status|null
      *
-     * @ORM\ManyToOne(targetEntity="Status")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $status;
@@ -62,13 +64,13 @@ class ServiceSystem extends AbstractService implements SluggableInterface
 
     /**
      * @var Service[]|Collection
-     * @ORM\OneToMany(targetEntity="Service", mappedBy="serviceSystem", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Service", mappedBy="serviceSystem", cascade={"persist"})
      */
     private $services;
 
     /**
      * @var Jurisdiction[]|Collection
-     * @ORM\ManyToMany(targetEntity="Jurisdiction", inversedBy="serviceSystems")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Jurisdiction", inversedBy="serviceSystems")
      * @ORM\JoinTable(name="ozg_service_system_jurisdiction",
      *     joinColumns={
      *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
@@ -82,31 +84,31 @@ class ServiceSystem extends AbstractService implements SluggableInterface
 
     /**
      * @var ImplementationProject[]|Collection
-     * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="serviceSystems")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ImplementationProject", mappedBy="serviceSystems")
      */
     private $implementationProjects;
 
     /**
      * @var Laboratory[]|Collection
-     * @ORM\ManyToMany(targetEntity="Laboratory", mappedBy="serviceSystems")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Laboratory", mappedBy="serviceSystems")
      */
     private $laboratories;
 
     /**
      * @var MinistryState[]|Collection
-     * @ORM\ManyToMany(targetEntity="MinistryState", mappedBy="serviceSystems")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\MinistryState", mappedBy="serviceSystems")
      */
     private $stateMinistries;
 
     /**
      * @var Bureau[]|Collection
-     * @ORM\ManyToMany(targetEntity="Bureau", mappedBy="serviceSystems")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Bureau", mappedBy="serviceSystems")
      */
     private $bureaus;
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution")
      * @ORM\JoinTable(name="ozg_service_system_solution",
      *     joinColumns={
      *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
@@ -120,7 +122,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface
 
     /**
      * @var Jurisdiction[]|Collection
-     * @ORM\ManyToMany(targetEntity="Jurisdiction")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Jurisdiction")
      * @ORM\JoinTable(name="ozg_service_system_rule_authority",
      *     joinColumns={
      *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
@@ -134,7 +136,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface
 
     /**
      * @var MinistryState[]|Collection
-     * @ORM\ManyToMany(targetEntity="MinistryState")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\MinistryState")
      * @ORM\JoinTable(name="ozg_service_system_authority_ministry_state",
      *     joinColumns={
      *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
@@ -148,7 +150,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface
 
     /**
      * @var Bureau[]|Collection
-     * @ORM\ManyToMany(targetEntity="Bureau")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Bureau")
      * @ORM\JoinTable(name="ozg_service_system_authority_bureau",
      *     joinColumns={
      *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")

@@ -35,7 +35,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
      * Status
      * @var ImplementationStatus|null
      *
-     * @ORM\ManyToOne(targetEntity="ImplementationStatus")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ImplementationStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $status;
@@ -67,7 +67,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var ServiceSystem[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceSystem", inversedBy="implementationProjects")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ServiceSystem", inversedBy="implementationProjects")
      * @ORM\JoinTable(name="ozg_implementation_project_service_system",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
@@ -81,7 +81,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Service[]|Collection
-     * @ORM\ManyToMany(targetEntity="Service", inversedBy="implementationProjects")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Service", inversedBy="implementationProjects")
      * @ORM\JoinTable(name="ozg_implementation_project_service",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
@@ -95,7 +95,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", inversedBy="implementationProjects")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", inversedBy="implementationProjects")
      * @ORM\JoinTable(name="ozg_implementation_project_solution",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
@@ -109,7 +109,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Contact[]|Collection
-     * @ORM\ManyToMany(targetEntity="Contact", inversedBy="implementationProjects")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Contact", inversedBy="implementationProjects")
      * @ORM\JoinTable(name="ozg_implementation_project_contact",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
@@ -123,7 +123,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Organisation[]|Collection
-     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Organisation")
      * @ORM\JoinTable(name="ozg_implementation_project_organisation_interested",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id", onDelete="CASCADE")
@@ -137,7 +137,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Organisation[]|Collection
-     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Organisation")
      * @ORM\JoinTable(name="ozg_implementation_project_organisation_participation",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id", onDelete="CASCADE")
@@ -151,7 +151,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Laboratory[]|Collection
-     * @ORM\ManyToMany(targetEntity="Laboratory")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Laboratory")
      * @ORM\JoinTable(name="ozg_implementation_project_laboratory",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
@@ -165,7 +165,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Organisation[]|Collection
-     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Organisation")
      * @ORM\JoinTable(name="ozg_implementation_project_organisation_leaders",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
@@ -179,7 +179,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Funding[]|Collection
-     * @ORM\ManyToMany(targetEntity="Funding", inversedBy="implementationProjects")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Funding", inversedBy="implementationProjects")
      * @ORM\JoinTable(name="ozg_implementation_project_funding",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
@@ -193,7 +193,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
 
     /**
      * @var Contact[]|Collection
-     * @ORM\ManyToMany(targetEntity="Contact")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Contact")
      * @ORM\JoinTable(name="ozg_implementation_project_fim_export",
      *     joinColumns={
      *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")

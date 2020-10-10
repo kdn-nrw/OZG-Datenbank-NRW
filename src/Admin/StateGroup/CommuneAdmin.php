@@ -9,8 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Admin;
+namespace App\Admin\StateGroup;
 
+use App\Admin\AbstractAppAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\ExtendedSearchAdminInterface;
+use App\Admin\ManufacturerAdmin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\CentralAssociationTrait;
 use App\Admin\Traits\ContactTrait;
@@ -19,7 +23,7 @@ use App\Admin\Traits\OrganisationOneToOneTrait;
 use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
-use App\Entity\Commune;
+use App\Entity\StateGroup\Commune;
 use App\Entity\Contact;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
@@ -33,6 +37,8 @@ use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 
 class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
+    protected $baseRoutePattern = 'state/commune';
+
     use AddressTrait;
     use CentralAssociationTrait;
     use ContactTrait;

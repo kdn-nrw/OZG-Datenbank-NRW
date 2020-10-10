@@ -37,7 +37,7 @@ class Funding extends BaseNamedEntity
 
     /**
      * @var ImplementationProject[]|Collection
-     * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="fundings")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ImplementationProject", mappedBy="fundings")
      */
     private $implementationProjects;
 

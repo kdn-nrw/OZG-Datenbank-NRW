@@ -9,9 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\StateGroup;
 
+use App\Entity\AddressTrait;
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Organisation;
+use App\Entity\OrganisationEntityInterface;
+use App\Entity\OrganisationTrait;
+use App\Entity\Service;
+use App\Entity\ServiceSystem;
+use App\Entity\UrlTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,7 +38,7 @@ class MinistryState extends BaseNamedEntity implements OrganisationEntityInterfa
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="ministryState", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="ministryState", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
@@ -46,7 +53,7 @@ class MinistryState extends BaseNamedEntity implements OrganisationEntityInterfa
 
     /**
      * @var ServiceSystem[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceSystem", inversedBy="stateMinistries")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ServiceSystem", inversedBy="stateMinistries")
      * @ORM\JoinTable(name="ozg_ministry_state_service_system",
      *     joinColumns={
      *     @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id")
@@ -60,7 +67,7 @@ class MinistryState extends BaseNamedEntity implements OrganisationEntityInterfa
 
     /**
      * @var Service[]|Collection
-     * @ORM\ManyToMany(targetEntity="Service", mappedBy="authorityStateMinistries")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Service", mappedBy="authorityStateMinistries")
      */
     private $serviceAuthorities;
 

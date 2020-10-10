@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\StateGroup;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Service;
+use App\Entity\ServiceSystem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,7 +38,7 @@ class Bureau extends BaseNamedEntity
 
     /**
      * @var ServiceSystem[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceSystem", inversedBy="bureaus")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ServiceSystem", inversedBy="bureaus")
      * @ORM\JoinTable(name="ozg_bureau_service_system",
      *     joinColumns={
      *     @ORM\JoinColumn(name="bureau_id", referencedColumnName="id")
@@ -50,7 +52,7 @@ class Bureau extends BaseNamedEntity
 
     /**
      * @var Service[]|Collection
-     * @ORM\ManyToMany(targetEntity="Service", inversedBy="bureaus")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Service", inversedBy="bureaus")
      * @ORM\JoinTable(name="ozg_bureau_service",
      *     joinColumns={
      *     @ORM\JoinColumn(name="bureau_id", referencedColumnName="id")

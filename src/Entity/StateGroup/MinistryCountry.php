@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\StateGroup;
 
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\ORM\Mapping as ORM;

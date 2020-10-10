@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Admin;
+namespace App\Admin\StateGroup;
 
+use App\Admin\AbstractAppAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
@@ -28,6 +30,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class MinistryStateAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
+    protected $baseRoutePattern = 'state/ministrystate';
+
     use ContactTrait;
     use AddressTrait;
     use OrganisationOneToOneTrait;

@@ -15,6 +15,7 @@ use App\Entity\Base\BaseBlamableEntity;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\NamedEntityTrait;
+use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,7 +52,7 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
 
     /**
      * @var ServiceProvider[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceProvider", inversedBy="laboratories")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\ServiceProvider", inversedBy="laboratories")
      * @ORM\JoinTable(name="ozg_laboratory_service_provider",
      *     joinColumns={
      *     @ORM\JoinColumn(name="laboratory_id", referencedColumnName="id")
@@ -65,7 +66,7 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
 
     /**
      * @var Service[]|Collection
-     * @ORM\ManyToMany(targetEntity="Service", inversedBy="laboratories")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Service", inversedBy="laboratories")
      * @ORM\JoinTable(name="ozg_laboratory_service",
      *     joinColumns={
      *     @ORM\JoinColumn(name="laboratory_id", referencedColumnName="id")
@@ -79,7 +80,7 @@ class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
 
     /**
      * @var ServiceSystem[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceSystem", inversedBy="laboratories")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ServiceSystem", inversedBy="laboratories")
      * @ORM\JoinTable(name="ozg_laboratory_service_system",
      *     joinColumns={
      *     @ORM\JoinColumn(name="laboratory_id", referencedColumnName="id")

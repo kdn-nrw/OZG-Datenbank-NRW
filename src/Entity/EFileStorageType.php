@@ -36,7 +36,7 @@ class EFileStorageType extends BaseNamedEntity
 
     /**
      * @var EFile[]|Collection
-     * @ORM\ManyToMany(targetEntity="EFile", mappedBy="storageTypes")
+     * @ORM\ManyToMany(targetEntity="App\Entity\EFile", mappedBy="storageTypes")
      */
     private $eFiles;
 

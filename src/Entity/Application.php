@@ -12,6 +12,8 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,7 +40,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
 
     /**
      * @var Manufacturer[]|Collection
-     * @ORM\ManyToMany(targetEntity="Manufacturer")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Manufacturer")
      * @ORM\JoinTable(name="ozg_application_manufacturer",
      *     joinColumns={
      *     @ORM\JoinColumn(name="application_id", referencedColumnName="id", onDelete="CASCADE")
@@ -52,7 +54,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
 
     /**
      * @var ApplicationCategory[]|Collection
-     * @ORM\ManyToMany(targetEntity="ApplicationCategory")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ApplicationCategory")
      * @ORM\JoinTable(name="ozg_application_category_mm",
      *     joinColumns={
      *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
@@ -66,7 +68,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
 
     /**
      * @var Commune[]|Collection
-     * @ORM\ManyToMany(targetEntity="Commune")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune")
      * @ORM\JoinTable(name="ozg_application_commune",
      *     joinColumns={
      *     @ORM\JoinColumn(name="application_id", referencedColumnName="id", onDelete="CASCADE")
@@ -80,7 +82,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
 
     /**
      * @var ServiceProvider[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceProvider")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\ServiceProvider")
      * @ORM\JoinTable(name="ozg_application_service_provider",
      *     joinColumns={
      *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")

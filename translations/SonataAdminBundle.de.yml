@@ -1,6 +1,6 @@
 app:
   settings_group: OZG Basisdaten
-  service_group: NRW Basisdaten
+  state_group: NRW Basisdaten
   digital_model_reqion_group: Digitale Modellregionen
   implementation_group: Umsetzung Basisdaten
   application_group: Anwendungen im KDN

@@ -48,7 +48,7 @@ class Category extends BaseNamedEntity implements CategoryEntityInterface, Impor
      *
      * @var ArrayCollection|Category[]
      *
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="parent")
      */
     protected $children;
 
@@ -57,14 +57,14 @@ class Category extends BaseNamedEntity implements CategoryEntityInterface, Impor
      *
      * @var Category|null
      *
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $parent;
 
     /**
      * @var Contact[]|Collection
-     * @ORM\ManyToMany(targetEntity="Contact", mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Contact", mappedBy="categories")
      */
     protected $contacts;
 

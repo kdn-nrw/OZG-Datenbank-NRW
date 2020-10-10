@@ -29,14 +29,14 @@ class ServiceSolution extends BaseEntity
 
     /**
      * @var Service|null
-     * @ORM\ManyToOne(targetEntity="Service", inversedBy="serviceSolutions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Service", inversedBy="serviceSolutions", cascade={"persist"})
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
      */
     private $service;
 
     /**
      * @var Solution|null
-     * @ORM\ManyToOne(targetEntity="Solution", inversedBy="serviceSolutions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Solution", inversedBy="serviceSolutions", cascade={"persist"})
      * @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
      */
     private $solution;
@@ -52,7 +52,7 @@ class ServiceSolution extends BaseEntity
      * Status
      * @var Status|null
      *
-     * @ORM\ManyToOne(targetEntity="Status")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $status;

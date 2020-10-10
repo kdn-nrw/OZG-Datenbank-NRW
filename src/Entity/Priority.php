@@ -44,7 +44,7 @@ class Priority extends BaseNamedEntity
 
     /**
      * @var ServiceSystem[]|Collection
-     * @ORM\OneToMany(targetEntity="ServiceSystem", mappedBy="priority")
+     * @ORM\OneToMany(targetEntity="App\Entity\ServiceSystem", mappedBy="priority")
      */
     private $serviceSystems;
 

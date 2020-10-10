@@ -11,7 +11,7 @@
 
 namespace App\Admin\Frontend;
 
-use App\Admin\BureauAdmin;
+use App\Admin\StateGroup\BureauAdmin;
 use App\Admin\FundingAdmin;
 use App\Admin\OrganisationAdmin;
 use App\Admin\PortalAdmin;

@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\StateGroup;
 
 use App\Entity\Base\BaseBlamableEntity;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\NamedEntityTrait;
+use App\Entity\ContactTextTrait;
+use App\Entity\UrlTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -42,7 +44,7 @@ class Office extends BaseBlamableEntity implements NamedEntityInterface
 
     /**
      * @var Commune
-     * @ORM\ManyToOne(targetEntity="Commune", inversedBy="offices", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\Commune", inversedBy="offices", cascade={"persist"})
      */
     private $commune;
 

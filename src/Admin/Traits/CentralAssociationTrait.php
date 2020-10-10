@@ -11,7 +11,7 @@
 
 namespace App\Admin\Traits;
 
-use App\Admin\CentralAssociationAdmin;
+use App\Admin\StateGroup\CentralAssociationAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;

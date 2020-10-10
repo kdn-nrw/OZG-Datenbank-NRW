@@ -31,14 +31,14 @@ class Manufacturer extends BaseNamedEntity implements OrganisationEntityInterfac
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="manufacturer", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="manufacturer", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
 
     /**
      * @var SpecializedProcedure[]|Collection
-     * @ORM\ManyToMany(targetEntity="SpecializedProcedure", inversedBy="manufacturers")
+     * @ORM\ManyToMany(targetEntity="App\Entity\SpecializedProcedure", inversedBy="manufacturers")
      * @ORM\JoinTable(name="ozg_manufacturers_specialized_procedures",
      *     joinColumns={
      *     @ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id")

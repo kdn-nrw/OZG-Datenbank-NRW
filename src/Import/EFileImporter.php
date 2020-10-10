@@ -14,7 +14,7 @@ namespace App\Import;
 use App\Entity\EFile;
 use App\Entity\EFileStatus;
 use App\Entity\EFileStorageType;
-use App\Entity\ServiceProvider;
+use App\Entity\StateGroup\ServiceProvider;
 use App\Entity\Solution;
 use App\Entity\SpecializedProcedure;
 use App\Entity\Status;

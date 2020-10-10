@@ -86,7 +86,7 @@ class MenuBuilderListener
             $currentRoute,
             $menu->getChild('app.implementation_group'),
             'app.contact.list',
-            'app.service_group',
+            'app.state_group',
             'fa-address-card',
             'admin_app_contact'
 

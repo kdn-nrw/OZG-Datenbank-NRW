@@ -16,6 +16,8 @@ use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
+use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -48,7 +50,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
 
     /**
      * @var ServiceProvider[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceProvider", inversedBy="solutions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\ServiceProvider", inversedBy="solutions")
      * @ORM\JoinTable(name="ozg_solution_service_provider",
      *     joinColumns={
      *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
@@ -78,20 +80,20 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
      * Status
      * @var Status|null
      *
-     * @ORM\ManyToOne(targetEntity="Status")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $status;
 
     /**
      * @var ServiceSolution[]|Collection
-     * @ORM\OneToMany(targetEntity="ServiceSolution", mappedBy="solution", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ServiceSolution", mappedBy="solution", cascade={"all"}, orphanRemoval=true)
      */
     private $serviceSolutions;
 
     /**
      * @var SpecializedProcedure[]|Collection
-     * @ORM\ManyToMany(targetEntity="SpecializedProcedure", inversedBy="solutions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\SpecializedProcedure", inversedBy="solutions")
      * @ORM\JoinTable(name="ozg_solutions_specialized_procedures",
      *     joinColumns={
      *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
@@ -105,7 +107,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
 
     /**
      * @var Portal[]|Collection
-     * @ORM\ManyToMany(targetEntity="Portal", inversedBy="solutions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Portal", inversedBy="solutions")
      * @ORM\JoinTable(name="ozg_solutions_portals",
      *     joinColumns={
      *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
@@ -128,7 +130,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
 
     /**
      * @var Commune[]|Collection
-     * @ORM\ManyToMany(targetEntity="Commune", inversedBy="solutions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune", inversedBy="solutions")
      * @ORM\JoinTable(name="ozg_solutions_communes",
      *     joinColumns={
      *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
@@ -204,7 +206,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
 
     /**
      * @var ImplementationProject[]|Collection
-     * @ORM\ManyToMany(targetEntity="ImplementationProject", mappedBy="solutions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ImplementationProject", mappedBy="solutions")
      */
     private $implementationProjects;
 
@@ -225,7 +227,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
 
     /**
      * @var Contact[]|Collection
-     * @ORM\ManyToMany(targetEntity="Contact", inversedBy="solutions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Contact", inversedBy="solutions")
      * @ORM\JoinTable(name="ozg_solution_contact",
      *     joinColumns={
      *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")

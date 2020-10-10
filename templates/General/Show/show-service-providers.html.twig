@@ -7,7 +7,7 @@ file that was distributed with this source code.
 {% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
     {% set refFieldDesc = field_description is defined ? field_description : null %}
-    {% set refSettings = app_get_reference_settings('App\\Entity\\ServiceProvider', refFieldDesc) %}
+    {% set refSettings = app_get_reference_settings('App\\Entity\\StateGroup\\ServiceProvider', refFieldDesc) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
     <div class="box box-primary">
         <div class="box-header">
@@ -24,7 +24,7 @@ file that was distributed with this source code.
                     {% endif %}
                 </tr>
                 {% for child in entities %}
-                    {# @var child \App\Entity\ServiceProvider #}
+                    {# @var child \App\Entity\StateGroup\ServiceProvider #}
                     <tr>
                         <td>
                             {% include 'General/Show/Partials/link-child-name-show.html.twig' %}

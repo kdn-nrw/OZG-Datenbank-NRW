@@ -47,7 +47,7 @@ class ApplicationCategory extends BaseNamedEntity implements CategoryEntityInter
      *
      * @var ArrayCollection|ApplicationCategory[]
      *
-     * @ORM\OneToMany(targetEntity="ApplicationCategory", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="App\Entity\ApplicationCategory", mappedBy="parent")
      */
     protected $children;
 
@@ -56,7 +56,7 @@ class ApplicationCategory extends BaseNamedEntity implements CategoryEntityInter
      *
      * @var ApplicationCategory|null
      *
-     * @ORM\ManyToOne(targetEntity="ApplicationCategory", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ApplicationCategory", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $parent;

@@ -110,7 +110,7 @@ class Mailing extends BaseBlamableEntity
 
     /**
      * @var Organisation[]|Collection
-     * @ORM\ManyToMany(targetEntity="Organisation")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Organisation")
      * @ORM\JoinTable(name="ozg_mailing_organisation",
      *     joinColumns={
      *     @ORM\JoinColumn(name="mailing_id", referencedColumnName="id", onDelete="CASCADE")
@@ -124,7 +124,7 @@ class Mailing extends BaseBlamableEntity
 
     /**
      * @var Category[]|Collection
-     * @ORM\ManyToMany(targetEntity="Category")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category")
      * @ORM\JoinTable(name="ozg_mailing_category",
      *     joinColumns={
      *     @ORM\JoinColumn(name="mailing_id", referencedColumnName="id", onDelete="CASCADE")
@@ -150,7 +150,7 @@ class Mailing extends BaseBlamableEntity
 
     /**
      * @var Contact[]|Collection
-     * @ORM\ManyToMany(targetEntity="Contact")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Contact")
      * @ORM\JoinTable(name="ozg_mailing_exclude_contact",
      *     joinColumns={
      *     @ORM\JoinColumn(name="mailing_id", referencedColumnName="id", onDelete="CASCADE")

@@ -32,13 +32,13 @@ class Jurisdiction extends BaseNamedEntity
 
     /**
      * @var Service[]|Collection
-     * @ORM\ManyToMany(targetEntity="Service", mappedBy="jurisdictions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Service", mappedBy="jurisdictions")
      */
     private $services;
 
     /**
      * @var ServiceSystem[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceSystem", mappedBy="jurisdictions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ServiceSystem", mappedBy="jurisdictions")
      */
     private $serviceSystems;
 

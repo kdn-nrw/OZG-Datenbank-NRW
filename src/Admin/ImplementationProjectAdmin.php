@@ -11,6 +11,7 @@
 
 namespace App\Admin;
 
+use App\Admin\StateGroup\BureauAdmin;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\FundingTrait;

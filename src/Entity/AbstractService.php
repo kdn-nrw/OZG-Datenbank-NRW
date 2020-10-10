@@ -15,6 +15,8 @@ use App\Entity\Base\BaseEntity;
 use App\Entity\Base\BlameableInterface;
 use App\Entity\Base\BlameableTrait;
 use App\Entity\Base\HideableEntityTrait;
+use App\Entity\StateGroup\Bureau;
+use App\Entity\StateGroup\MinistryState;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 

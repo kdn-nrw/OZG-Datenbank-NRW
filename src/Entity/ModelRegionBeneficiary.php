@@ -31,7 +31,7 @@ class ModelRegionBeneficiary extends BaseNamedEntity implements OrganisationEnti
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="modelRegionBeneficiary", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="modelRegionBeneficiary", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;

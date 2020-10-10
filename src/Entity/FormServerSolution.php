@@ -39,7 +39,7 @@ class FormServerSolution extends BaseEntity
 
     /**
      * @var Solution|null
-     * @ORM\ManyToOne(targetEntity="Solution", inversedBy="formServerSolutions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Solution", inversedBy="formServerSolutions", cascade={"persist"})
      * @ORM\JoinColumn(name="solution_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $solution;
@@ -48,7 +48,7 @@ class FormServerSolution extends BaseEntity
      * Status
      * @var Status|null
      *
-     * @ORM\ManyToOne(targetEntity="Status")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $status;

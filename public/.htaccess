@@ -36,6 +36,8 @@ DirectoryIndex index.php
     RewriteCond %{HTTP_HOST} ^dwh\.kdn\.de$ [NC]
     RewriteRule ^(.*)$ https://data-warehouse.kdn.de/$1 [L,R=301]
 
+    RedirectMatch 301 "/admin/app/(commune.*|bureau.*|centralassociation.*|ministrystate.*|serviceprovider.*)$" "/admin/state/$1"
+
     # Determine the RewriteBase automatically and set it as environment variable.
     # If you are using Apache aliases to do mass virtual hosting or installed the
     # project in a subdirectory, the base path will be prepended to allow proper

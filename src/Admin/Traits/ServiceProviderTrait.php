@@ -11,7 +11,7 @@
 
 namespace App\Admin\Traits;
 
-use App\Admin\ServiceProviderAdmin;
+use App\Admin\StateGroup\ServiceProviderAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;

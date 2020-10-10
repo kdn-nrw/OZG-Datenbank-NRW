@@ -9,9 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\StateGroup;
 
+use App\Entity\AddressTrait;
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\ContactTextTrait;
+use App\Entity\HasManufacturerEntityInterface;
+use App\Entity\Laboratory;
+use App\Entity\Organisation;
+use App\Entity\OrganisationEntityInterface;
+use App\Entity\OrganisationTrait;
+use App\Entity\Solution;
+use App\Entity\SpecializedProcedure;
+use App\Entity\UrlTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,7 +42,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
 
     /**
      * @var Organisation
-     * @ORM\OneToOne(targetEntity="Organisation", inversedBy="serviceProvider", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="serviceProvider", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $organisation;
@@ -47,28 +57,28 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="serviceProviders")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="serviceProviders")
      * @ORM\OrderBy({"name" = "ASC"})
      */
     private $solutions;
 
     /**
      * @var Commune[]|Collection
-     * @ORM\ManyToMany(targetEntity="Commune", mappedBy="serviceProviders")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune", mappedBy="serviceProviders")
      * @ORM\OrderBy({"name" = "ASC"})
      */
     private $communes;
 
     /**
      * @var Laboratory[]|Collection
-     * @ORM\ManyToMany(targetEntity="Laboratory", mappedBy="serviceProviders")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Laboratory", mappedBy="serviceProviders")
      * @ORM\OrderBy({"name" = "ASC"})
      */
     private $laboratories;
 
     /**
      * @var SpecializedProcedure[]|Collection
-     * @ORM\ManyToMany(targetEntity="SpecializedProcedure", mappedBy="serviceProviders")
+     * @ORM\ManyToMany(targetEntity="App\Entity\SpecializedProcedure", mappedBy="serviceProviders")
      * @ORM\OrderBy({"name" = "ASC"})
      */
     private $specializedProcedures;

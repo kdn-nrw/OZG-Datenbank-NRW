@@ -11,7 +11,7 @@
 
 namespace App\Admin\Traits;
 
-use App\Admin\CommuneAdmin;
+use App\Admin\StateGroup\CommuneAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;

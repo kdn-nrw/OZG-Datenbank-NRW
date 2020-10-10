@@ -30,7 +30,7 @@ class PaymentType extends BaseNamedEntity
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", inversedBy="paymentTypes")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", inversedBy="paymentTypes")
      * @ORM\JoinTable(name="ozg_payment_types_solutions",
      *     joinColumns={
      *     @ORM\JoinColumn(name="payment_type_id", referencedColumnName="id")

@@ -12,6 +12,8 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseBlamableEntity;
+use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -44,19 +46,19 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="specializedProcedures")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="specializedProcedures")
      */
     private $solutions;
 
     /**
      * @var Manufacturer[]|Collection
-     * @ORM\ManyToMany(targetEntity="Manufacturer", mappedBy="specializedProcedures")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Manufacturer", mappedBy="specializedProcedures")
      */
     private $manufacturers;
 
     /**
      * @var ServiceProvider[]|Collection
-     * @ORM\ManyToMany(targetEntity="ServiceProvider", inversedBy="specializedProcedures")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\ServiceProvider", inversedBy="specializedProcedures")
      * @ORM\JoinTable(name="ozg_specialized_procedure_service_provider",
      *     joinColumns={
      *     @ORM\JoinColumn(name="specialized_procedure_id", referencedColumnName="id", onDelete="CASCADE")
@@ -70,7 +72,7 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
 
     /**
      * @var Commune[]|Collection
-     * @ORM\ManyToMany(targetEntity="Commune", inversedBy="specializedProcedures")
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune", inversedBy="specializedProcedures")
      * @ORM\JoinTable(name="ozg_specialized_procedure_commune",
      *     joinColumns={
      *     @ORM\JoinColumn(name="specialized_procedure_id", referencedColumnName="id", onDelete="CASCADE")
@@ -84,7 +86,7 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
 
     /**
      * @var Service[]|Collection
-     * @ORM\ManyToMany(targetEntity="Service", mappedBy="specializedProcedures")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Service", mappedBy="specializedProcedures")
      */
     private $services;
 

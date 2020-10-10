@@ -13,6 +13,10 @@ namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\SoftdeletableEntityInterface;
+use App\Entity\StateGroup\CentralAssociation;
+use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\MinistryState;
+use App\Entity\StateGroup\ServiceProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -73,7 +77,7 @@ class Organisation extends BaseNamedEntity
 
     /**
      * @var Contact[]|Collection
-     * @ORM\OneToMany(targetEntity="Contact", mappedBy="organisationEntity", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="organisationEntity", cascade={"persist"})
      */
     private $contacts;
 
@@ -85,35 +89,35 @@ class Organisation extends BaseNamedEntity
 
     /**
      * @var MinistryState|null
-     * @ORM\OneToOne(targetEntity="MinistryState", mappedBy="organisation", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\StateGroup\MinistryState", mappedBy="organisation", cascade={"all"})
      * @ORM\JoinColumn(name="ministry_state_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $ministryState;
 
     /**
      * @var ServiceProvider|null
-     * @ORM\OneToOne(targetEntity="ServiceProvider", mappedBy="organisation", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\StateGroup\ServiceProvider", mappedBy="organisation", cascade={"all"})
      * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $serviceProvider;
 
     /**
      * @var Manufacturer|null
-     * @ORM\OneToOne(targetEntity="Manufacturer", mappedBy="organisation", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Manufacturer", mappedBy="organisation", cascade={"all"})
      * @ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $manufacturer;
 
     /**
      * @var Commune|null
-     * @ORM\OneToOne(targetEntity="Commune", mappedBy="organisation", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\StateGroup\Commune", mappedBy="organisation", cascade={"all"})
      * @ORM\JoinColumn(name="commune_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $commune;
 
     /**
      * @var CentralAssociation|null
-     * @ORM\OneToOne(targetEntity="CentralAssociation", mappedBy="organisation", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\StateGroup\CentralAssociation", mappedBy="organisation", cascade={"all"})
      * @ORM\JoinColumn(name="central_association_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $centralAssociation;

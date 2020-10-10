@@ -29,7 +29,7 @@ class Authentication extends BaseNamedEntity
 
     /**
      * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="Solution", mappedBy="authentications")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="authentications")
      */
     private $solutions;
 

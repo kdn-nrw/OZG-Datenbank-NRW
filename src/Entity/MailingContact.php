@@ -40,7 +40,7 @@ class MailingContact extends BaseEntity
 
     /**
      * @var Contact
-     * @ORM\ManyToOne(targetEntity="Contact", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $contact;
