@@ -21,6 +21,6 @@ class PortalAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'portal';
+        return 'app/portal';
     }
 }

@@ -21,6 +21,6 @@ class EFileAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'efile';
+        return 'app/efile';
     }
 }

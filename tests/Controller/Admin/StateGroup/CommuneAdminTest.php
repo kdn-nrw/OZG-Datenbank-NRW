@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller\Admin\ServiceGroup;
+namespace App\Tests\Controller\Admin\StateGroup;
 
 use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
- * Functional test for the controllers defined inside ServiceProvider.
+ * Functional test for the controllers defined inside CommuneAdmin
  */
-class ServiceProviderAdminTest extends AbstractBackendAdminControllerTestCase
+class CommuneAdminTest extends AbstractBackendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'serviceprovider';
+        return 'state/commune';
     }
 }

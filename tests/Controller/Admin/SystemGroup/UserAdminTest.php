@@ -24,6 +24,6 @@ class UserAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'user';
+        return 'app/user';
     }
 }

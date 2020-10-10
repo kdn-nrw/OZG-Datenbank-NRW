@@ -21,6 +21,6 @@ class FundingAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'funding';
+        return 'app/funding';
     }
 }

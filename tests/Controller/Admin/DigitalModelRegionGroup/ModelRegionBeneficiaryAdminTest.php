@@ -21,6 +21,6 @@ class ModelRegionBeneficiaryAdminTest extends AbstractBackendAdminControllerTest
 
     protected function getRoutePrefix(): string
     {
-        return 'modelregionbeneficiary';
+        return 'app/modelregionbeneficiary';
     }
 }

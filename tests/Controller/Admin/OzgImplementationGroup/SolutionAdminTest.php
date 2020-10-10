@@ -21,7 +21,7 @@ class SolutionAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'solution';
+        return 'app/solution';
     }
 /*
     protected function runShowAssertions(Crawler $crawler, int $id)

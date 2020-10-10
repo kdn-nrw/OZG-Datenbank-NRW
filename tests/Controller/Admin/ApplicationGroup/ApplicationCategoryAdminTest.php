@@ -21,6 +21,6 @@ class ApplicationCategoryAdminTest extends AbstractBackendAdminControllerTestCas
 
     protected function getRoutePrefix(): string
     {
-        return 'applicationcategory';
+        return 'app/applicationcategory';
     }
 }

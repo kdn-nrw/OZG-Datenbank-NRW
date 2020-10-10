@@ -21,6 +21,6 @@ class OpenDataAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'opendata';
+        return 'app/opendata';
     }
 }

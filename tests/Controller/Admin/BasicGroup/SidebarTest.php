@@ -25,11 +25,6 @@ class SidebarTest extends AbstractBackendTestCase
         return 'dashboard';
     }
 
-    protected function getContextPrefix(): string
-    {
-        return self::BACKEND_URL_PREFIX;
-    }
-
     public function testGlobalSearch()
     {
         $client = self::createClient();

@@ -21,6 +21,6 @@ class ImplementationProjectAdminTest extends AbstractBackendAdminControllerTestC
 
     protected function getRoutePrefix(): string
     {
-        return 'implementationproject';
+        return 'app/implementationproject';
     }
 }

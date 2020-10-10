@@ -22,6 +22,6 @@ class PriorityAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'priority';
+        return 'app/priority';
     }
 }

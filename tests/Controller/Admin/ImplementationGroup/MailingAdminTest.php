@@ -21,6 +21,6 @@ class MailingAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'mailing';
+        return 'app/mailing';
     }
 }

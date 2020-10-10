@@ -22,6 +22,6 @@ class StatusAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'status';
+        return 'app/status';
     }
 }

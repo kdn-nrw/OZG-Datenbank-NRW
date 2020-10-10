@@ -22,6 +22,6 @@ class ImplementationStatusAdminTest extends AbstractBackendAdminControllerTestCa
 
     protected function getRoutePrefix(): string
     {
-        return 'implementationstatus';
+        return 'app/implementationstatus';
     }
 }

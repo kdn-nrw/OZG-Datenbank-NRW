@@ -21,6 +21,6 @@ class ManufacturerAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'manufacturer';
+        return 'app/manufacturer';
     }
 }

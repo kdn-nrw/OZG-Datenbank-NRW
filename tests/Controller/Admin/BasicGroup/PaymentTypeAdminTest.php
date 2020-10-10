@@ -22,6 +22,6 @@ class PaymentTypeAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'paymenttype';
+        return 'app/paymenttype';
     }
 }

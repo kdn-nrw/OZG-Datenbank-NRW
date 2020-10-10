@@ -21,6 +21,6 @@ class OrganisationAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'organisation';
+        return 'app/organisation';
     }
 }

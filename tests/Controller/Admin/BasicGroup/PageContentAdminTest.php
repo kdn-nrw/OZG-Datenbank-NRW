@@ -22,6 +22,6 @@ class PageContentAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'pagecontent';
+        return 'app/pagecontent';
     }
 }

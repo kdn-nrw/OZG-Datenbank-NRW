@@ -21,6 +21,6 @@ class ModelRegionAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'modelregion';
+        return 'app/modelregion';
     }
 }

@@ -21,6 +21,6 @@ class ServiceSystemAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'servicesystem';
+        return 'app/servicesystem';
     }
 }

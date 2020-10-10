@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Controller\Admin\ServiceGroup;
+namespace App\Tests\Controller\Admin\StateGroup;
 
 use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
- * Functional test for the controllers defined inside CentralAssociationAdmin
+ * Functional test for the controllers defined inside BureauAdmin
  */
-class CentralAssociationAdminTest extends AbstractBackendAdminControllerTestCase
+class BureauAdminTest extends AbstractBackendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'centralassociation';
+        return 'state/bureau';
     }
 }

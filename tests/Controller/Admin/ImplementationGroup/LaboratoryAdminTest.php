@@ -21,6 +21,6 @@ class LaboratoryAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'laboratory';
+        return 'app/laboratory';
     }
 }

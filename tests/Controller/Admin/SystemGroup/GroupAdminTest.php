@@ -24,6 +24,6 @@ class GroupAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'group';
+        return 'app/group';
     }
 }

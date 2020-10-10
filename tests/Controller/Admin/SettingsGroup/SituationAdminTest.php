@@ -21,6 +21,6 @@ class SituationAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'situation';
+        return 'app/situation';
     }
 }

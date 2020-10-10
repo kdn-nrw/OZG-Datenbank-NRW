@@ -22,6 +22,6 @@ class MaturityAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'maturity';
+        return 'app/maturity';
     }
 }

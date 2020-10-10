@@ -21,6 +21,6 @@ class SpecializedProcedureAdminTest extends AbstractBackendAdminControllerTestCa
 
     protected function getRoutePrefix(): string
     {
-        return 'specializedprocedure';
+        return 'app/specializedprocedure';
     }
 }

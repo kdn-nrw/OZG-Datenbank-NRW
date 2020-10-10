@@ -21,6 +21,6 @@ class FormServerAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'formserver';
+        return 'app/formserver';
     }
 }

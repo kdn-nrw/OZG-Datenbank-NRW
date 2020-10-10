@@ -21,6 +21,6 @@ class AnalogServiceAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'analogservice';
+        return 'app/analogservice';
     }
 }

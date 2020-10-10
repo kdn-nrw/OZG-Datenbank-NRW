@@ -33,7 +33,7 @@ abstract class AbstractBackendTestCase extends AbstractWebTestCase implements Ba
 
     protected function getContextPrefix(): string
     {
-        return self::BACKEND_URL_PREFIX . 'app/';
+        return self::BACKEND_URL_PREFIX;
     }
 
     /**
@@ -68,7 +68,7 @@ abstract class AbstractBackendTestCase extends AbstractWebTestCase implements Ba
         $session = self::$container->get('session');
         // retrieve the test user
         $user = $this->findUserByEmail($email);
-        $this->assertNotNull($user, 'The user ' . $email . ' must not be null');
+        self::assertNotNull($user, 'The user ' . $email . ' must not be null');
         $firewallName = self::FIREWALL_NAME;
         // if you don't define multiple connected firewalls, the context defaults to the firewall name
         // See https://symfony.com/doc/current/reference/configuration/security.html#firewall-context

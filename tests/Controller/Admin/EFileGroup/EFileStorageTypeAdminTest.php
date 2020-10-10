@@ -21,6 +21,6 @@ class EFileStorageTypeAdminTest extends AbstractBackendAdminControllerTestCase
 
     protected function getRoutePrefix(): string
     {
-        return 'efilestoragetype';
+        return 'app/efilestoragetype';
     }
 }
