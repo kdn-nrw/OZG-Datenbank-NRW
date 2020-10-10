@@ -167,7 +167,7 @@ class CustomEntityValueProvider
             $this->dataGroupCache[$itemId]['_tstamp'] >= $lastChanged) {
             return $this->dataGroupCache[$itemId];
         }
-        $itemGroup = (int)floor($itemId / 200);
+        $itemGroup = intdiv($itemId, 200);
         $key = str_replace('\\', '.', get_class($objectOrArray)) . '..' . $itemGroup;
         try {
             $item = $this->cache->getItem(self::CACHE_PREFIX . $this->context . rawurlencode($key));
