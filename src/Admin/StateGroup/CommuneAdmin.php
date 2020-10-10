@@ -23,16 +23,21 @@ use App\Admin\Traits\OrganisationOneToOneTrait;
 use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
-use App\Entity\StateGroup\Commune;
 use App\Entity\Contact;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
+use App\Entity\StateGroup\Commune;
 use App\Model\ExportSettings;
+use Doctrine\ORM\EntityManager;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
 class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
@@ -67,6 +72,39 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'label' => 'app.commune.group.general_data',
         ]);
         $this->addOrganisationOneToOneFormFields($formMapper);
+        /** @var EntityManager $em */
+        $em = $this->modelManager->getEntityManager(Commune::class);
+
+        $queryBuilder = $em->createQueryBuilder()
+            ->select('c')
+            ->from(Commune::class, 'c')
+            ->where('c.communeType IN (:communeTypes)')
+            ->setParameter('communeTypes', [Commune::TYPE_CONSTITUENCY, Commune::TYPE_CITY_REGION])
+            ->orderBy('c.name', 'ASC');
+        $formMapper
+            ->add('communeType', ChoiceType::class, [
+                'choices' => array_flip(Commune::$communeTypeChoices),
+                'required' => true,
+            ])
+            ->add('constituency', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'query' => $queryBuilder,
+                'choice_translation_domain' => false,
+            ])
+            ->add('administrativeDistrict', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'choice_translation_domain' => false,
+            ])
+            ->add('mainEmail', EmailType::class, [
+                'required' => false,
+            ])
+            ->add('officialCommunityKey', TextType::class, [
+                'required' => false,
+            ]);
         $formMapper->end();
         $formMapper->with('services_data', [
             'label' => 'app.commune.group.reference_data',
@@ -124,12 +162,41 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);
         $this->addPortalsDatagridFilters($datagridMapper);
         $this->addLaboratoriesDatagridFilters($datagridMapper);
+        $datagridMapper->add('constituency',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('administrativeDistrict',
+            null,
+            [],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('communeType',
+            null, [
+            ],
+            ChoiceType::class,
+            [
+                'choices' => array_flip(Commune::$communeTypeChoices)
+            ]
+        );
+        $datagridMapper->add('officialCommunityKey');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->addIdentifier('name');
         $this->addOrganisationOneToOneListFields($listMapper);
+        $listMapper
+            ->add('constituency')
+            ->add('officialCommunityKey')
+            ->add('communeType', 'choice', [
+                'editable' => true,
+                'choices' => Commune::$communeTypeChoices,
+                'catalogue' => 'messages',
+            ]);
         $this->addDefaultListActions($listMapper);
     }
 
@@ -141,7 +208,16 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $showMapper->add('name')
             ->add('organisation.zipCode')
             ->add('organisation.town')
-            ->add('organisation.url', 'url');
+            ->add('organisation.url', 'url')
+            ->add('officialCommunityKey')
+            ->add('administrativeDistrict')
+            ->add('constituency')
+            ->add('communeType', 'choice', [
+                'editable' => true,
+                'choices' => Commune::$communeTypeChoices,
+                'catalogue' => 'messages',
+            ])
+            ->add('mainEmail');
         $this->addContactsShowFields($showMapper, true, 'organisation.contacts');
         $this->addServiceProvidersShowFields($showMapper);
         $this->addCentralAssociationsShowFields($showMapper);

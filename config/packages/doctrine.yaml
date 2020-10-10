@@ -43,6 +43,8 @@ doctrine:
             WEEKDAY: DoctrineExtensions\Query\Mysql\WeekDay
             YEAR: DoctrineExtensions\Query\Mysql\Year
             DATE: DoctrineExtensions\Query\Mysql\Date
+          string_functions:
+            REPLACE: DoctrineExtensions\Query\Mysql\Replace
         filters:
           softdeleteable:
             class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter

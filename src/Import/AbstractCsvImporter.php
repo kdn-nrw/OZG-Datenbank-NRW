@@ -15,7 +15,9 @@ use App\Entity\Base\BaseEntity;
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
+use App\Translator\TranslatorAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,10 +25,15 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractCsvImporter implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
+    use TranslatorAwareTrait;
+
+    public const DATA_TYPE_CALLBACK = 'callback';
+    public const DATA_TYPE_CHOICE = 'choice';
 
     abstract protected function getFieldMap(): array;
 
@@ -41,11 +48,19 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
     private $output;
 
     /**
-     * @param \Doctrine\Persistence\ManagerRegistry $registry
+     * Cache import meta information, e.g. translated choice labels
+     * @var array
      */
-    public function __construct(ManagerRegistry $registry)
+    protected $importMetaCache = [];
+
+    /**
+     * @param \Doctrine\Persistence\ManagerRegistry $registry
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(ManagerRegistry $registry, TranslatorInterface $translator)
     {
         $this->registry = $registry;
+        $this->setTranslator($translator);
     }
 
     /**
@@ -154,11 +169,12 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
                 $headers[] = $this->getCleanFieldName($parser, $header);
             }
         }
+        $fieldMap = $this->getFieldMap();
         $rowNr = 1;
         while (($data = fgetcsv($handle, 10000, $delimiter, $enclosure)) !== FALSE) {
             $row = $this->parseCsvLine($data, $headers);
             if (!empty($row)) {
-                if (null !== $parsedRow = $this->fillInRowData($row, $rowNr)) {
+                if (null !== $parsedRow = $this->fillInRowData($row, $fieldMap, $rowNr)) {
                     $rows[] = $parsedRow;
                 }
             }
@@ -181,15 +197,15 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
      * PDO::prepare will escape parameters automatically later.
      *
      * @param array $row
+     * @param array $fieldMap The mapping information for the imported fields
      * @param int $rowNr
      *
      * @return array|null Parsed row data
      */
-    protected function fillInRowData(array $row, int $rowNr): ?array
+    protected function fillInRowData(array $row, array $fieldMap, int $rowNr): ?array
     {
         $entityPropertyData = [];
         $parser = new DataParser();
-        $fieldMap = $this->getFieldMap();
         $tmpFields = array_keys($fieldMap);
         $mapImportFieldNames = [];
         foreach ($tmpFields as $sourceField) {
@@ -209,8 +225,19 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
             if (array_key_exists($importFieldName, $row)) {
                 if (array_key_exists('fixedValue', $fieldData)) {
                     $val = $fieldData['fixedValue'];
-                } elseif ($fieldData['type'] === 'callback') {
+                } elseif ($fieldData['type'] === self::DATA_TYPE_CALLBACK) {
                     $val = $parser->formatCallback($row[$importFieldName], $fieldData['callback']);
+                } elseif ($fieldData['type'] === self::DATA_TYPE_CHOICE) {
+                    if (!isset($this->importMetaCache[$sourceField]['_translated_choices'])) {
+                        $choices = [];
+                        foreach ($fieldData['choices'] as $choiceKey => $choiceLabel) {
+                            $choices[$choiceKey] = $this->translate($choiceLabel);
+                        }
+                        $this->importMetaCache[$sourceField]['_translated_choices'] = $choices;
+                    } else {
+                        $choices = $this->importMetaCache[$sourceField]['_translated_choices'];
+                    }
+                    $val = $parser->formatChoice($row[$importFieldName], $choices);
                 } elseif (!empty($fieldData['targetEntity'])) {
                     $mapToProperty = $fieldData['mapToProperty'] ?? 'name';
                     $val = $this->findOrCreateTargetEntity($row[$importFieldName], $fieldData['targetEntity'], $mapToProperty, $fieldData['type']);
@@ -295,21 +322,26 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
     /**
      * Either find an existing entity by the given field or create a new entity
      * @param string $entityClass
-     * @param array $expressions
+     * @param array|Criteria $expressions
      * @param array $parameters
      * @return BaseEntity|null
+     * @throws \Doctrine\ORM\Query\QueryException
      */
-    protected function findEntityByConditions(string $entityClass, array $expressions, array $parameters = []): ?BaseEntity
+    protected function findEntityByConditions(string $entityClass, $expressions, array $parameters = []): ?BaseEntity
     {
         /** @var EntityRepository $repository */
         $repository = $this->registry->getRepository($entityClass);
         $qb = $repository->createQueryBuilder('e')
             ->orderBy('e.id', 'ASC');
-        $andX = $qb->expr()->andX();
-        foreach ($expressions as $expr) {
-            $andX->add($expr);
+        if ($expressions instanceof Criteria) {
+            $qb->addCriteria($expressions);
+        } else {
+            $andX = $qb->expr()->andX();
+            foreach ($expressions as $expr) {
+                $andX->add($expr);
+            }
+            $qb->where($andX);
         }
-        $qb->where($andX);
         if (!empty($parameters)) {
             $qb->setParameters($parameters);
         }

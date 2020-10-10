@@ -39,6 +39,14 @@ class Mailing extends BaseBlamableEntity
     public const STATUS_FINISHED = 8;
     public const STATUS_CANCELLED = 9;
 
+    public static $statusChoices = [
+        Mailing::STATUS_NEW => 'app.mailing.entity.status_choices.new',
+        Mailing::STATUS_PREPARED => 'app.mailing.entity.status_choices.prepared',
+        Mailing::STATUS_ACTIVE => 'app.mailing.entity.status_choices.active',
+        Mailing::STATUS_FINISHED => 'app.mailing.entity.status_choices.finished',
+        Mailing::STATUS_CANCELLED => 'app.mailing.entity.status_choices.cancelled',
+    ];
+
     use CategoryTrait;
     use HideableEntityTrait;
 

@@ -71,7 +71,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('interestedOrganisations',
+        $datagridMapper->add('projectLeaders',
             null, [
                 'admin_code' => OrganisationAdmin::class,
             ],
@@ -85,7 +85,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('projectLeaders',
+        $datagridMapper->add('interestedOrganisations',
             null, [
                 'admin_code' => OrganisationAdmin::class,
             ],
@@ -159,7 +159,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
                 'pattern' => 'MMMM yyyy',
             ])
-            ->add('interestedOrganisations', null, [
+            ->add('projectLeaders', null, [
                 'route' => [
                     'name' => 'show',
                 ],
@@ -169,7 +169,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                     'name' => 'show',
                 ],
             ])
-            ->add('projectLeaders', null, [
+            ->add('interestedOrganisations', null, [
                 'route' => [
                     'name' => 'show',
                 ],

@@ -40,11 +40,11 @@ class DataParser
     public function cleanStringValue(string $value): string
     {
         $cleanVal = $value;
-        $chIn  = array('ç', 'ä', 'ü',  'ö', 'Ä', 'Ü', 'Ö', 'ß', 'á', 'à',
+        $chIn = array('ç', 'ä', 'ü', 'ö', 'Ä', 'Ü', 'Ö', 'ß', 'á', 'à',
             'â', 'é', 'è', 'ê', 'ë', 'í', 'ì', 'î', 'ó', 'ò', 'ô', 'ú', 'ù',
             'û', 'Á', 'À', 'Â', 'É', 'È', 'Ê', 'Í', 'Ì', 'Î', 'Ó', 'Ò', 'ô',
             'Ú', 'Ù', 'Û', 'ñ', '´', '`');
-        $chOut = array('c', 'ae' , 'ue', 'oe', 'Ae', 'Ue', 'Oe', 'ss', 'a',
+        $chOut = array('c', 'ae', 'ue', 'oe', 'Ae', 'Ue', 'Oe', 'ss', 'a',
             'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'u',
             'u', 'u', 'A', 'A', 'A', 'E', 'E', 'E', 'I', 'I', 'I', 'O', 'O',
             'O', 'U', 'U', 'U', 'n', '', '');
@@ -77,7 +77,6 @@ class DataParser
      * Format value in callback
      *
      * @param mixed $value
-     *
      * @param $callback
      * @return mixed
      */
@@ -87,6 +86,19 @@ class DataParser
             return $callback($value);
         }
         return $value;
+    }
+
+    /**
+     * Format value in callback
+     *
+     * @param mixed $value
+     * @param array $choices
+     * @return mixed
+     */
+    public function formatChoice($value, $choices)
+    {
+        $key = array_search($value, $choices, false);
+        return $key !== false ? $key : null;
     }
 
     /**
@@ -134,18 +146,17 @@ class DataParser
                 //12,345.67
                 if ($pointPos > $commaPos) {
                     $value = str_replace(',', '', $value);
-                //12.345,67
+                    //12.345,67
                 } else {
                     $value = str_replace(['.', ','], ['', '.'], $value);
                 }
                 $value = (float)$value;
-            //12345,67
+                //12345,67
             } else {
                 $value = str_replace(',', '.', $value);
                 $value = (float)$value;
             }
-        }
-        //invalid number e.g. 1a4c
+        } //invalid number e.g. 1a4c
         elseif (!$pointSet) {
             $value = $this->formatInt($value);
         } else {
@@ -154,7 +165,7 @@ class DataParser
         if (empty($value)) {
             $value = 0.0;
         } else {
-            $value = (float) str_replace( ',', '.', $value );
+            $value = (float)str_replace(',', '.', $value);
         }
         return $value;
     }
@@ -174,7 +185,6 @@ class DataParser
         $number = $this->formatFloat($string);
         return str_replace('.', ',', $number);
     }
-
 
 
     /**
@@ -223,15 +233,15 @@ class DataParser
         if (strpos($value, '.') !== false) {
             $dateParts = explode('.', $value);
             if (count($dateParts) === 3) {
-                $year = (int) $dateParts[2];
-                $month = (int) $dateParts[1];
-                $day = (int) $dateParts[0];
+                $year = (int)$dateParts[2];
+                $month = (int)$dateParts[1];
+                $day = (int)$dateParts[0];
             }
         } else {
             $dateParts = explode('-', $value);
-            $year = (int) $dateParts[0];
-            $month = (int) $dateParts[1];
-            $day = (int) $dateParts[2];
+            $year = (int)$dateParts[0];
+            $month = (int)$dateParts[1];
+            $day = (int)$dateParts[2];
         }
         if ($day > 0 && $month > 0 && $year > 0) {
             if (strlen($year) === 2) {

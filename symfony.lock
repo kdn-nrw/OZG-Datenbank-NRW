@@ -1,4 +1,7 @@
 {
+    "beberlei/doctrineextensions": {
+        "version": "v1.2.8"
+    },
     "composer/installers": {
         "version": "v1.6.0"
     },

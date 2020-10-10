@@ -43,6 +43,24 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     use UrlTrait;
     use OrganisationTrait;
 
+    public const TYPE_CITY_REGION = 1;
+    public const TYPE_CONSTITUENCY = 2;
+    public const TYPE_MUNICIPALITY_DISTRICT = 3;
+    public const TYPE_LARGE_CITY_DISTRICT = 4;
+    public const TYPE_INDEPENDENT_CITY = 5;
+    public const TYPE_MIDDLE_CITY_DISTRICT = 6;
+    public const TYPE_CITY_DISTRICT = 7;
+
+    public static $communeTypeChoices = [
+        self::TYPE_CITY_REGION  => 'app.commune.entity.commune_type_choices.1',
+        self::TYPE_CONSTITUENCY  => 'app.commune.entity.commune_type_choices.2',
+        self::TYPE_MUNICIPALITY_DISTRICT  => 'app.commune.entity.commune_type_choices.3',
+        self::TYPE_LARGE_CITY_DISTRICT  => 'app.commune.entity.commune_type_choices.4',
+        self::TYPE_INDEPENDENT_CITY  => 'app.commune.entity.commune_type_choices.5',
+        self::TYPE_MIDDLE_CITY_DISTRICT  => 'app.commune.entity.commune_type_choices.6',
+        self::TYPE_CITY_DISTRICT  => 'app.commune.entity.commune_type_choices.7',
+    ];
+
     /**
      * @var Organisation
      * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="commune", cascade={"all"})
@@ -125,6 +143,43 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * )
      */
     private $laboratories;
+
+    /**
+     * @var Commune|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\Commune", cascade={"persist"})
+     * @ORM\JoinColumn(name="constituency_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $constituency;
+
+    /**
+     * Administrative district
+     * @var AdministrativeDistrict|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\AdministrativeDistrict", inversedBy="communes", cascade={"persist"})
+     * @ORM\JoinColumn(name="administrative_district_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $administrativeDistrict;
+
+    /**
+     * @ORM\Column(type="integer", name="commune_type", nullable=true)
+     * @var int|null
+     */
+    private $communeType;
+
+    /**
+     * Main commune email
+     * @var string|null
+     *
+     * @ORM\Column(type="string", name="main_email", length=255, nullable=true)
+     */
+    private $mainEmail;
+
+    /**
+     * Official community_key
+     * @var string|null
+     *
+     * @ORM\Column(type="string", name="official_community_key", length=255, nullable=true)
+     */
+    private $officialCommunityKey;
 
     public function __construct()
     {
@@ -459,6 +514,86 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     public function setLaboratories($laboratories): void
     {
         $this->laboratories = $laboratories;
+    }
+
+    /**
+     * @return Commune|null
+     */
+    public function getConstituency(): ?Commune
+    {
+        return $this->constituency;
+    }
+
+    /**
+     * @param Commune|null $constituency
+     */
+    public function setConstituency(?Commune $constituency): void
+    {
+        $this->constituency = $constituency;
+    }
+
+    /**
+     * @return AdministrativeDistrict|null
+     */
+    public function getAdministrativeDistrict(): ?AdministrativeDistrict
+    {
+        return $this->administrativeDistrict;
+    }
+
+    /**
+     * @param AdministrativeDistrict|null $administrativeDistrict
+     */
+    public function setAdministrativeDistrict(?AdministrativeDistrict $administrativeDistrict): void
+    {
+        $this->administrativeDistrict = $administrativeDistrict;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCommuneType(): ?int
+    {
+        return $this->communeType;
+    }
+
+    /**
+     * @param int|null $communeType
+     */
+    public function setCommuneType(?int $communeType): void
+    {
+        $this->communeType = $communeType;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMainEmail(): ?string
+    {
+        return $this->mainEmail;
+    }
+
+    /**
+     * @param string|null $mainEmail
+     */
+    public function setMainEmail(?string $mainEmail): void
+    {
+        $this->mainEmail = $mainEmail;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOfficialCommunityKey(): ?string
+    {
+        return $this->officialCommunityKey;
+    }
+
+    /**
+     * @param string|null $officialCommunityKey
+     */
+    public function setOfficialCommunityKey(?string $officialCommunityKey): void
+    {
+        $this->officialCommunityKey = $officialCommunityKey;
     }
 
     /**

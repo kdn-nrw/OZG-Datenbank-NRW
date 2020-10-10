@@ -14,7 +14,6 @@ namespace App\Import;
 use App\Entity\ModelRegionBeneficiary;
 use App\Entity\ModelRegionProject;
 use App\Entity\Organisation;
-use App\Entity\Solution;
 use App\Entity\Status;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -111,7 +110,7 @@ class ModelRegionProjectImporter extends AbstractCsvImporter
                 }
                 $em->persist($targetEntity);
             } else {
-                /** @var Solution $targetEntity */
+                /** @var ModelRegionProject $targetEntity */
                 $targetEntity->setHidden(false);
             }
             $this->debug('Saving model region project: ' . $importClassProperties['name'] . ' [' . ($targetEntity->getId() ?: 'NEW') . ']');

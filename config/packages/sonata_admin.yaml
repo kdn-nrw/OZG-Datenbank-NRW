@@ -192,6 +192,7 @@ sonata_admin:
                     - App\Admin\StateGroup\MinistryStateAdmin
                     - App\Admin\StateGroup\CentralAssociationAdmin
                     - App\Admin\StateGroup\BureauAdmin
+                    - App\Admin\StateGroup\AdministrativeDistrictAdmin
                     #- App\Admin\CommuneServiceAdmin
                     #- App\Admin\ServiceSolutionAdmin
             app.implementation_group:

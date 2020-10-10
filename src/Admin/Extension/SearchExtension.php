@@ -119,7 +119,8 @@ class SearchExtension extends AbstractAdminExtension
                     if (!$hasEnoughResults) {
                         $words = array_filter(array_map('trim', explode(' ', $value['value'])));
                         foreach ($props as $refProperty) {
-                            if (preg_match('/@var\s+([^\s]+)/', $refProperty->getDocComment(), $matches)) {
+                            if ((false !== $docComment = $refProperty->getDocComment())
+                                && preg_match('/@var\s+([^\s]+)/', $docComment, $matches)) {
                                 $field = $refProperty->getName();
                                 $type = $matches[1];
                                 if (($type === 'string' || $type === 'string|null')

@@ -23,6 +23,7 @@ use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
 use App\Entity\Service;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -74,9 +75,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'ckeditor_context' => 'default', // optional
             ]);
         $this->addContactsFormFields($formMapper, false, false, 'contacts', false);
-        $this->addOrganisationsFormFields($formMapper, 'interestedOrganisations');
-        $this->addOrganisationsFormFields($formMapper, 'participationOrganisations');
         $this->addOrganisationsFormFields($formMapper, 'projectLeaders');
+        $this->addOrganisationsFormFields($formMapper, 'participationOrganisations');
+        $this->addOrganisationsFormFields($formMapper, 'interestedOrganisations');
         $this->addFundingsFormFields($formMapper);
         $this->addContactsFormFields($formMapper, false, false, 'fimExperts', false);
         $formMapper->end()
@@ -139,8 +140,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
             static function (FormEvent $event) use ($formMapper, $subject, $em) {
                 $serviceSystems = $subject->getServiceSystems();
                 if (count($serviceSystems) > 0) {
+                    /** @var EntityManager $em */
                     /** @var QueryBuilder $queryBuilder */
-                    $queryBuilder = $em->createQueryBuilder('s')
+                    $queryBuilder = $em->createQueryBuilder()
                         ->select('s')
                         ->from(Service::class, 's')
                         ->where('s.serviceSystem IN(:serviceSystems)')
@@ -170,9 +172,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
 
         $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
         $this->addContactsDatagridFilters($datagridMapper, 'contacts');
-        $this->addOrganisationsDatagridFilters($datagridMapper, 'interestedOrganisations');
-        $this->addOrganisationsDatagridFilters($datagridMapper, 'participationOrganisations');
         $this->addOrganisationsDatagridFilters($datagridMapper, 'projectLeaders');
+        $this->addOrganisationsDatagridFilters($datagridMapper, 'participationOrganisations');
+        $this->addOrganisationsDatagridFilters($datagridMapper, 'interestedOrganisations');
         $this->addFundingsDatagridFilters($datagridMapper);
         $datagridMapper->add('services.bureaus',
             null,
@@ -230,9 +232,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addLaboratoriesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
         $this->addContactsShowFields($showMapper, false, 'contacts');
-        $this->addOrganisationsShowFields($showMapper, 'interestedOrganisations');
-        $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
         $this->addOrganisationsShowFields($showMapper, 'projectLeaders');
+        $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
+        $this->addOrganisationsShowFields($showMapper, 'interestedOrganisations');
         $this->addServiceSystemsShowFields($showMapper);
         $this->addServicesShowFields($showMapper, ['showFimTypes' => true]);
         $this->addFundingsShowFields($showMapper);

@@ -109,13 +109,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
                 'help' => 'Bitte verwenden Sie nur Adressen ...@kdn.de als Absender. Ansonsten landen die E-Mails sehr wahrscheinlich beim Empfänger im Spam-Ordner.',
             ])
             ->add('status', ChoiceType::class, [
-                'choices' => [
-                    'app.mailing.entity.status_choices.new' => Mailing::STATUS_NEW,
-                    'app.mailing.entity.status_choices.prepared' => Mailing::STATUS_PREPARED,
-                    'app.mailing.entity.status_choices.active' => Mailing::STATUS_ACTIVE,
-                    'app.mailing.entity.status_choices.finished' => Mailing::STATUS_FINISHED,
-                    'app.mailing.entity.status_choices.cancelled' => Mailing::STATUS_CANCELLED,
-                ],
+                'choices' => array_flip(Mailing::$statusChoices),
                 'required' => true,
             ])
             ->add('startAt', DateTimePickerType::class, [
@@ -160,6 +154,14 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $datagridMapper->add('subject');
         $this->addCategoriesDatagridFilters($datagridMapper);
         $this->addOrganisationsDatagridFilters($datagridMapper);
+        $datagridMapper->add('status',
+            null, [
+            ],
+            ChoiceType::class,
+            [
+                'choices' => array_flip(Mailing::$statusChoices)
+            ]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -168,13 +170,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->add('createdAt')
             ->add('status', 'choice', [
                 'editable' => true,
-                'choices' => [
-                    Mailing::STATUS_NEW => 'app.mailing.entity.status_choices.new',
-                    Mailing::STATUS_PREPARED => 'app.mailing.entity.status_choices.prepared',
-                    Mailing::STATUS_ACTIVE => 'app.mailing.entity.status_choices.active',
-                    Mailing::STATUS_FINISHED => 'app.mailing.entity.status_choices.finished',
-                    Mailing::STATUS_CANCELLED => 'app.mailing.entity.status_choices.cancelled',
-                ],
+                'choices' => Mailing::$statusChoices,
                 'catalogue' => 'messages',
             ])
             ->add('subject')
@@ -194,13 +190,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->add('createdAt')
             ->add('status', 'choice', [
                 'editable' => true,
-                'choices' => [
-                    Mailing::STATUS_NEW => 'app.mailing.entity.status_choices.new',
-                    Mailing::STATUS_PREPARED => 'app.mailing.entity.status_choices.prepared',
-                    Mailing::STATUS_ACTIVE => 'app.mailing.entity.status_choices.active',
-                    Mailing::STATUS_FINISHED => 'app.mailing.entity.status_choices.finished',
-                    Mailing::STATUS_CANCELLED => 'app.mailing.entity.status_choices.cancelled',
-                ],
+                'choices' => Mailing::$statusChoices,
                 'catalogue' => 'messages',
             ])
             ->add('subject')

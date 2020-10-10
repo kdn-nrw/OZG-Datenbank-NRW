@@ -54,6 +54,14 @@ app:
       unknown: Die Referenz auf den gelöschten Datensatz wird entfernt
       nothing: Für den referenzierten Datensatz ist keine Änderung notwendig
 
+  administrative_district:
+    object_name: Regierungsbezirk
+    list: Regierungsbezirke
+    create: Regierungsbezirk anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+      communes: Kommunen
   application:
     object_name: Anwendung
     list: Anwendungen
@@ -154,6 +162,21 @@ app:
       offices: Ämter
       solutions: Lösungen
       laboratories: Stichwörter
+      commune_type: Kategorie
+      commune_type_choices:
+        1: Städteregion
+        2: Kreis
+        3: kreisangehörige Gemeinde
+        4: Große kreisangehörige Stadt
+        5: kreisfreie Stadt
+        6: Mittlere kreisangehörige Stadt
+        7: kreisangehörige Stadt
+      constituency: Kreis
+      main_email: E-Mail
+      official_community_key: AGS
+      official_community_key_placeholder: Amtlicher Gemeindeschlüssel
+      administrative_district: Reg-Bez
+      administrative_district_placeholder: Regierungsbezirk
   contact:
     object_name: Kontakt
     list: Kontakte
@@ -304,12 +327,12 @@ app:
       solutions: Lösungen
       contacts: Ansprechpartner
       notes: Notizen
-      interested_organisations: An Mitarbeit interessiert (erweitertes Projektteam)
+      project_leaders: Projektleitung
       participation_organisations: Mitarbeit zugesichert (Projekt-Kernteam Fach + IT)
+      interested_organisations: An Mitarbeit interessiert (erweitertes Projektteam)
       laboratories: Stichwörter
       bureaus: Fachlichkeiten
       portals: voraussichtliches Zielportal
-      project_leaders: Projektleitung
       fundings: Finanzierung
       fim_experts: FIM Methodenexperte
   implementation_status:

@@ -14,9 +14,8 @@ namespace App\Import;
 use App\Entity\EFile;
 use App\Entity\EFileStatus;
 use App\Entity\EFileStorageType;
-use App\Entity\StateGroup\ServiceProvider;
-use App\Entity\Solution;
 use App\Entity\SpecializedProcedure;
+use App\Entity\StateGroup\ServiceProvider;
 use App\Entity\Status;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -45,8 +44,7 @@ class EFileImporter extends AbstractCsvImporter
 
     protected function getFieldMap(): array
     {
-        $fieldMap = self::FIELD_MAP;
-        return $fieldMap;
+        return self::FIELD_MAP;
     }
 
     protected function getImportSourceKey(): string
@@ -88,7 +86,7 @@ class EFileImporter extends AbstractCsvImporter
                 }
                 $em->persist($targetEntity);
             } else {
-                /** @var Solution $targetEntity */
+                /** @var EFile $targetEntity */
                 $targetEntity->setHidden(false);
             }
             $this->debug('Saving efile entity: ' . $importClassProperties['name'] . ' [' . ($targetEntity->getId() ?: 'NEW') . ']');
