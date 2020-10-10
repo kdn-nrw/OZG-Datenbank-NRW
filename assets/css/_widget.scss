@@ -1,5 +1,11 @@
 .widget-headline {
   font-size: 1.5rem;
+  &:first-child {
+    margin-top: 0;
+  }
+  &.wh-bold {
+    font-weight: bold;
+  }
 }
 .box-widget {
   .box-footer {
@@ -20,6 +26,7 @@
 }
 .widget-user {
   .widget-user-header {
+    display: block;
     padding-left: 120px;
   }
   .widget-user-image {
@@ -37,6 +44,27 @@
     img {
       width: 100%;
       height: auto;
+    }
+  }
+  .has-collapse {
+    cursor: pointer;
+    padding-left: 120px;
+    transition: all .2s linear;
+    .widget-user-image {
+      transition: top .2s linear;
+    }
+    .box-img-circle {
+      transition: all .2s linear;
+    }
+    &.collapsed {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 70px;
+      height: 70px;
+      .box-img-circle {
+        width: 50px;
+        height: 50px;
+      }
     }
   }
   .box-footer {

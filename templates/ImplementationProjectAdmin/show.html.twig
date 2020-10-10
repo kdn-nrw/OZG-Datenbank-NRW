@@ -19,6 +19,58 @@ file that was distributed with this source code.
     {% endif %}
 {% endblock %}
 
+{% set notesHtmlRendered = false %}
+{% set notesHtml %}{% apply spaceless %}
+    {% if object.notes %}
+        <div class="box box-primary">
+            <div class="box-header">
+                <h4 class="box-title">
+                    {{ 'app.implementation_project.entity.notes'|trans }}
+                </h4>
+            </div>
+            <div class="box-body">
+                {{ object.notes|raw }}
+            </div>
+        </div>
+    {% endif %}
+{% endapply %}{% endset %}
+
+
+{% block app_show_default_fields_content %}
+    {# @var object \App\Entity\ImplementationProject #}
+    {% if object.subjects|length > 0 %}
+        {% set showCollapse = object.subjects|length > 2 %}
+        {% set subjectContactCount = 0 %}
+        {% set contactHtml %}{% apply spaceless %}
+            {% for subject in object.subjects %}
+                {% if subject.contact %}
+                    <h3 class="widget-headline wh-bold">{{ 'app.subject.frontend.contact_for'|trans }} {{ subject.name }}</h3>
+                    {% include 'Frontend/Admin/Partials/_contact-widget.html.twig' with {'contact': subject.contact, 'showCollapse': showCollapse, 'collapseGroup': subject.id} %}
+                    {% set subjectContactCount = subjectContactCount + 1 %}
+                {% endif %}
+            {% endfor %}
+        {% endapply %}{% endset %}
+        {% if contactHtml|length > 0 %}
+            <div class="row">
+                <div class="col-xs-12 col-lg-8">
+                    {{ parent() }}
+                    {% if subjectContactCount > 6 %}
+                        {% set notesHtmlRendered = true %}
+                        {{ notesHtml|raw }}
+                    {% endif %}
+                </div>
+                <div class="col-xs-12 col-lg-4">
+                    {{ contactHtml|raw }}
+                </div>
+            </div>
+        {% else %}
+            {{ parent()  }}
+        {% endif %}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
 {% block app_show_custom_fields_top %}
     {% if object.description %}
         <p class="item-property">
@@ -28,19 +80,11 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block app_show_custom_fields %}
-    {% if object.notes %}
+    {% if not notesHtmlRendered and notesHtml|length > 0 %}
         <div class="col-xs-12">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h4 class="box-title">
-                        {{ 'app.implementation_project.entity.notes'|trans }}
-                    </h4>
-                </div>
-                <div class="box-body">
-                    {{ object.notes|raw }}
-                </div>
-            </div>
+            {{ notesHtml|raw }}
         </div>
     {% endif %}
     {{ parent() }}
 {% endblock %}
+

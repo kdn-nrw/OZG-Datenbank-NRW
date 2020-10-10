@@ -12,7 +12,6 @@
 namespace App\Model;
 
 use App\Entity\Base\BaseEntityInterface;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class EntityReferenceMap
@@ -115,13 +114,6 @@ class EntityReferenceMap
                 $inverseReference = $meta;
                 break;
             }
-        }
-        if (null === $inverseReference) {
-            VarDumper::dump($reference);
-            VarDumper::dump($targetProperty);
-            VarDumper::dump($reference->getEntityClass());
-            VarDumper::dump($this);
-            exit;
         }
         return $inverseReference;
     }

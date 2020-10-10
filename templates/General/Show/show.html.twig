@@ -33,21 +33,23 @@ file that was distributed with this source code.
                             <div class="box-body{% block app_show_custom_box_body_classes %} table-responsive no-padding{% endblock %}">
                                 {% block app_show_custom_fields_top %}
                                 {% endblock %}
-                                <table class="table">
-                                    <tbody>
-                                    {% for field_name in show_group.fields %}
-                                        {% block show_field %}
-                                            {% if field_name not in customShowFields %}
-                                                <tr class="sonata-ba-view-container">
-                                                    {% if elements[field_name] is defined %}
-                                                        {{ elements[field_name]|render_view_element(object) }}
-                                                    {% endif %}
-                                                </tr>
-                                            {% endif %}
-                                        {% endblock %}
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
+                                {% block app_show_default_fields_content %}
+                                    <table class="table">
+                                        <tbody>
+                                        {% for field_name in show_group.fields %}
+                                            {% block show_field %}
+                                                {% if field_name not in customShowFields %}
+                                                    <tr class="sonata-ba-view-container">
+                                                        {% if elements[field_name] is defined %}
+                                                            {{ elements[field_name]|render_view_element(object) }}
+                                                        {% endif %}
+                                                    </tr>
+                                                {% endif %}
+                                            {% endblock %}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endblock %}
                             </div>
                         </div>
                     </div>

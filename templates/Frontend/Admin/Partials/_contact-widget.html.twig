@@ -1,17 +1,27 @@
 {# @var contact \App\Entity\Contact #}
 <div class="box box-widget widget-user">
-    <div class="widget-user-header bg-aqua-active">
+    {% set collapseId = showCollapse ? 'collapseContact' ~ collapseGroup ~ contact.id : null %}
+    {% set widgetHeadContent %}
         <h3 class="widget-user-username">{{ contact.fullName }}</h3>
         <h5 class="widget-user-desc">{{ contact.email }}</h5>
-    </div>
-    {% if contact.imageName %}
-    <div class="widget-user-image">
-        <div class="box-img-circle">
-            <img src="{{ vich_uploader_asset(contact, 'imageFile')|imagine_filter('default_small') }}" alt="{{ contact.fullName }}">
+        {% if contact.imageName %}
+            <div class="widget-user-image">
+                <div class="box-img-circle">
+                    <img src="{{ vich_uploader_asset(contact, 'imageFile')|imagine_filter('default_small') }}" alt="{{ contact.fullName }}">
+                </div>
+            </div>
+        {% endif %}
+    {% endset %}
+    {% if showCollapse %}
+        <div class="widget-user-header bg-aqua-active has-collapse collapsed" data-toggle="collapse" href="#{{ collapseId }}" aria-expanded="false" aria-controls="{{ collapseId }}">
+            {{ widgetHeadContent|raw }}
         </div>
-    </div>
+    {% else %}
+        <div class="widget-user-header bg-aqua-active">
+            {{ widgetHeadContent|raw }}
+        </div>
     {% endif %}
-    <div class="box-footer">
+    <div{% if showCollapse %} class="box-footer collapse" id="{{ collapseId }}"{% else %} class="box-footer"{% endif %}>
         {% if contact.phoneNumber %}
         <div class="description-block">
             <h5 class="description-header">{{ 'app.contact.entity.phone_number'|trans }}:</h5>
