@@ -30,13 +30,13 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
     protected $chartLabel = 'Anzahl der Datensätze';
     protected $foreignProperty = 'status';
     /**
-     * @var \Doctrine\Common\Persistence\ManagerRegistry|ManagerRegistry
+     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
      */
     private $registry;
 
     /**
      * @required
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $registry
+     * @param \Doctrine\Persistence\ManagerRegistry $registry
      */
     public function injectSolutionManager(ManagerRegistry $registry): void
     {

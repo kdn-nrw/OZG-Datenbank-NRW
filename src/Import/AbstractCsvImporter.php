@@ -31,7 +31,7 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
     abstract protected function getFieldMap(): array;
 
     /**
-     * @var \Doctrine\Common\Persistence\ManagerRegistry|ManagerRegistry
+     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
      */
     private $registry;
 
@@ -41,7 +41,7 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
     private $output;
 
     /**
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $registry
+     * @param \Doctrine\Persistence\ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -65,7 +65,7 @@ abstract class AbstractCsvImporter implements LoggerAwareInterface
     abstract protected function processImportRows(array $rows): void;
 
     /**
-     * @return \Doctrine\Common\Persistence\ManagerRegistry|ManagerRegistry
+     * @return \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
      */
     protected function getManagerRegistry()
     {

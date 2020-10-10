@@ -26,12 +26,12 @@ class CmsContactImport
 {
     const IMPORT_SOURCE = 'cms_contacts';
     /**
-     * @var \Doctrine\Common\Persistence\ManagerRegistry|ManagerRegistry
+     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
      */
     private $registry;
 
     /**
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $registry
+     * @param \Doctrine\Persistence\ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {

@@ -21,7 +21,7 @@ class EntityReferenceMapper
 {
 
     /**
-     * @var \Doctrine\Common\Persistence\ManagerRegistry|ManagerRegistry
+     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
      */
     protected $registry;
 
