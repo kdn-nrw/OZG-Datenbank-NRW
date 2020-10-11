@@ -597,6 +597,17 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     }
 
     /**
+     * @return string
+     */
+    public function getCommuneTypeLabelKey(): string
+    {
+        if ($this->communeType && array_key_exists($this->communeType, self::$communeTypeChoices)) {
+            return self::$communeTypeChoices[$this->communeType];
+        }
+        return 'app.commune.entity.commune_type_not_set';
+    }
+
+    /**
      * Returns the unique manufacturer list with the manufacturer determined through the specialized procedures
      * @return Collection
      */

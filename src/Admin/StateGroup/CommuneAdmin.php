@@ -29,6 +29,7 @@ use App\Entity\OrganisationEntityInterface;
 use App\Entity\StateGroup\Commune;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -72,15 +73,6 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'label' => 'app.commune.group.general_data',
         ]);
         $this->addOrganisationOneToOneFormFields($formMapper);
-        /** @var EntityManager $em */
-        $em = $this->modelManager->getEntityManager(Commune::class);
-
-        $queryBuilder = $em->createQueryBuilder()
-            ->select('c')
-            ->from(Commune::class, 'c')
-            ->where('c.communeType IN (:communeTypes)')
-            ->setParameter('communeTypes', [Commune::TYPE_CONSTITUENCY, Commune::TYPE_CITY_REGION])
-            ->orderBy('c.name', 'ASC');
         $formMapper
             ->add('communeType', ChoiceType::class, [
                 'choices' => array_flip(Commune::$communeTypeChoices),
@@ -90,7 +82,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
-                'query' => $queryBuilder,
+                'query' => $this->getConstituencyQueryBuilder(),
                 'choice_translation_domain' => false,
             ])
             ->add('administrativeDistrict', ModelType::class, [
@@ -166,7 +158,11 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             null,
             [],
             null,
-            ['expanded' => false, 'multiple' => true]
+            [
+                'expanded' => false,
+                'multiple' => true,
+                'query_builder' => $this->getConstituencyQueryBuilder()
+            ]
         );
         $datagridMapper->add('administrativeDistrict',
             null,
@@ -190,12 +186,29 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $listMapper->addIdentifier('name');
         $this->addOrganisationOneToOneListFields($listMapper);
         $listMapper
-            ->add('constituency')
+            ->add('constituency', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'constituency'],
+                ]
+            ])
             ->add('officialCommunityKey')
             ->add('communeType', 'choice', [
                 'editable' => true,
                 'choices' => Commune::$communeTypeChoices,
                 'catalogue' => 'messages',
+            ])
+            ->add('administrativeDistrict', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'administrativeDistrict'],
+                ]
             ]);
         $this->addDefaultListActions($listMapper);
     }
@@ -247,5 +260,24 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         return $object instanceof Commune
             ? $object->getName()
             : 'Commune'; // shown in the breadcrumb on the create view
+    }
+
+    /**
+     * Returns the query builder for the constituencies (sub-set of communes)
+     *
+     * @return QueryBuilder
+     */
+    private function getConstituencyQueryBuilder(): QueryBuilder
+    {
+        /** @var EntityManager $em */
+        $em = $this->modelManager->getEntityManager(Commune::class);
+
+        $queryBuilder = $em->createQueryBuilder()
+            ->select('c')
+            ->from(Commune::class, 'c')
+            ->where('c.communeType IN (:communeTypes)')
+            ->setParameter('communeTypes', [Commune::TYPE_CONSTITUENCY, Commune::TYPE_CITY_REGION])
+            ->orderBy('c.name', 'ASC');
+        return $queryBuilder;
     }
 }

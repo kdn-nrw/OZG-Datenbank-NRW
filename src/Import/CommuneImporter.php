@@ -32,9 +32,10 @@ class CommuneImporter extends AbstractCsvImporter
                 'entity' => Commune::class,
                 'type' => 'callback',
                 'callback' => function (string $value) use ($objectManager): Commune {
-                    $refCommune = $this->finCommuneWithMatchingNameAndType(
+                    $refCommune = $this->findCommuneWithMatchingNameAndType(
                         $value,
-                        [Commune::TYPE_CONSTITUENCY, Commune::TYPE_CITY_REGION]
+                        [Commune::TYPE_CONSTITUENCY, Commune::TYPE_CITY_REGION],
+                        false
                     );
                     if (null === $refCommune) {
                         $refCommune = new Commune();
@@ -77,7 +78,7 @@ class CommuneImporter extends AbstractCsvImporter
         foreach ($rows as $importRow) {
             $importClassProperties = $importRow[Commune::class];
             $communeType = (int)$importClassProperties['communeType'];
-            $targetEntity = $this->finCommuneWithMatchingNameAndType($importClassProperties['name'], $communeType);
+            $targetEntity = $this->findCommuneWithMatchingNameAndType($importClassProperties['name'], $communeType);
             if (null === $targetEntity) {
                 $this->debug('No entity found for name: ' . $importClassProperties['name'] . ' [' . $importClassProperties['zipCode'] . ']' . ' [' . $communeType . ']');
                 $targetEntity = new Commune();
@@ -122,9 +123,10 @@ class CommuneImporter extends AbstractCsvImporter
      *
      * @param string $name
      * @param int|int[]|null $communeTypes
+     * @param bool $allowEmptyType
      * @return Commune|null
      */
-    private function finCommuneWithMatchingNameAndType(string $name, $communeTypes): ?Commune
+    private function findCommuneWithMatchingNameAndType(string $name, $communeTypes, $allowEmptyType = true): ?Commune
     {
         /** @var CommuneRepository $repository */
         $repository = $this->getManagerRegistry()->getRepository(Commune::class);
@@ -157,18 +159,24 @@ class CommuneImporter extends AbstractCsvImporter
         }
 
         if (!empty($allowedCommuneTypes)) {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->isNull('e.communeType'),
+            if ($allowEmptyType) {
+                $qb->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('e.communeType'),
+                        $qb->expr()->in('e.communeType', $allowedCommuneTypes)
+                    )
+                );
+            } else {
+                $qb->andWhere(
                     $qb->expr()->in('e.communeType', $allowedCommuneTypes)
-                )
-            );
+                );
+            }
         }
         $result = $qb->getQuery()->getResult();
         $entity = null;
         foreach ($result as $row) {
             /** @var Commune $result */
-            if (null === $entity || $this->isBetterMatch($name, $entity, $row)) {
+            if (null === $entity || $this->isBetterMatch($name, $allowedCommuneTypes, $entity, $row)) {
                 $entity = $row;
             }
         }
@@ -180,27 +188,34 @@ class CommuneImporter extends AbstractCsvImporter
      * Returns true if the name if the check entity is a better match to the given name than the currently entity used
      *
      * @param string $name
+     * @param array|null $allowedCommuneTypes
      * @param Commune $entity
      * @param Commune $checkEntity
      * @return bool
      */
-    private function isBetterMatch(string $name, Commune $entity, Commune $checkEntity): bool
+    private function isBetterMatch(string $name, ?array $allowedCommuneTypes, Commune $entity, Commune $checkEntity): bool
     {
+        $isBetterMatch = false;
         $oldName = $entity->getName();
         $checkName = $checkEntity->getName();
-        if ($checkName !== $name) {
+        if ($checkName !== $name && $oldName !== $name) {
             $lenA = mb_strlen($name);
             $lenB = mb_strlen($oldName);
             $lenC = mb_strlen($checkName);
             // Return true if the name is shorted
             if ($lenC > $lenA) {
-                return $lenC < $lenB;
+                $isBetterMatch = $lenC < $lenB;
+            } else {
+                $isBetterMatch = ($lenA - $lenC) < ($lenA - $lenB);
             }
-            return ($lenA - $lenC) < ($lenA - $lenB);
         }
-        if ($oldName === $name) {
-            return false;
+        // If the name is not a better match, check if the commune type is a better match
+        if (!$isBetterMatch && !empty($allowedCommuneTypes)) {
+            $oldCommuneType = $entity->getCommuneType();
+            $checkCommuneType = $checkEntity->getCommuneType();
+            $isBetterMatch = $checkCommuneType && in_array($checkCommuneType, $allowedCommuneTypes, false)
+                && (!$oldCommuneType || !in_array($oldCommuneType, $allowedCommuneTypes, false));
         }
-        return true;
+        return $isBetterMatch;
     }
 }

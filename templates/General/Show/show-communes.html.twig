@@ -29,34 +29,7 @@ file that was distributed with this source code.
                     </tr>
                     {% for child in entities %}
                         {# @var child \App\Entity\StateGroup\Commune #}
-                        <tr>
-                            <td>
-                                {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
-                            </td>
-                            <td>
-                                {% if child.street %}
-                                    {{ child.street }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if child.zipCode %}
-                                    {{ child.zipCode }}
-                                {% endif %}
-                                {% if child.town %}
-                                    {{ child.town }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if child.url %}
-                                    {{ child.url }}
-                                {% endif %}
-                            </td>
-                            {% if refSettings.edit.enabled %}
-                                <td>
-                                    {% include 'General/Show/Partials/link-to-child.html.twig' %}
-                                </td>
-                            {% endif %}
-                        </tr>
+                        {% include 'General/Show/Table/table-row-cells-communes.html.twig' with {'child': child} %}
                     {% endfor %}
                 </table>
             </div>

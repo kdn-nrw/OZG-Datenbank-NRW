@@ -163,6 +163,7 @@ app:
       solutions: Lösungen
       laboratories: Stichwörter
       commune_type: Kategorie
+      commune_type_not_set: 'n.a.'
       commune_type_choices:
         1: Städteregion
         2: Kreis
