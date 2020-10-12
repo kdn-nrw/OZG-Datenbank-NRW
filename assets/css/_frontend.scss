@@ -13,6 +13,7 @@
         padding-left: 22px;
     }
     .filter-menu {
+        padding-bottom: 8px;
         &.has-icon {
             list-style: none;
             margin-left: 0;
@@ -43,6 +44,11 @@
                 margin-right: 8px;
                 padding-top: 4px;
             }
+        }
+        &.filter-subject-15 {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #b8c7ce;
         }
     }
     .content-bottom {
