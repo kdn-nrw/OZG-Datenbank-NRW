@@ -247,6 +247,7 @@ sonata_admin:
                     - App\Admin\AuthenticationAdmin
                     - App\Admin\AnalogServiceAdmin
                     - App\Admin\OpenDataAdmin
+                    - App\Admin\StateGroup\CommuneTypeAdmin
                     - App\Admin\PageContentAdmin
             app_admin.menu.system:
                 label: app.system_group
@@ -256,9 +257,6 @@ sonata_admin:
                 items:
                     - sonata.user.admin.user
                     - sonata.user.admin.group
-                    #- Mindbase\SettingsBundle\Controller\Admin\SettingAdmin
-                    #- Mindbase\EmailBundle\Controller\Admin\EmailTemplateAdmin
-                    #- Mindbase\LogBundle\Controller\Admin\SysLogAdmin
                     #- shapecode_cron.cronjob
                     #- shapecode_cron.cronjob_result
 

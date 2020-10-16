@@ -38,11 +38,9 @@ file that was distributed with this source code.
                                         <tbody>
                                         {% for field_name in show_group.fields %}
                                             {% block show_field %}
-                                                {% if field_name not in customShowFields %}
+                                                {% if field_name not in customShowFields and elements[field_name] is defined and (not elements[field_name].option('is_custom_field')) %}
                                                     <tr class="sonata-ba-view-container">
-                                                        {% if elements[field_name] is defined %}
-                                                            {{ elements[field_name]|render_view_element(object) }}
-                                                        {% endif %}
+                                                        {{ elements[field_name]|render_view_element(object) }}
                                                     </tr>
                                                 {% endif %}
                                             {% endblock %}
@@ -56,7 +54,13 @@ file that was distributed with this source code.
                 {% endblock %}
                 {% block app_show_custom_fields %}
                     {% for field_name in show_group.fields %}
-                        {% if field_name in customShowFields %}
+                        {% if elements[field_name].option('is_custom_field') %}
+                            <div class="col-xs-12">
+                            {# @var fieldDescription \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+                            {% set fieldDescription = elements[field_name] %}
+                            {% include fieldDescription.template with {'object': object, 'field_description': fieldDescription} %}
+                            </div>
+                        {% elseif field_name in customShowFields %}
                             <div class="col-xs-12">
                                 {# @var fieldDescription \Sonata\AdminBundle\Admin\BaseFieldDescription #}
                                 {% set fieldDescription = elements[field_name] %}

@@ -13,6 +13,8 @@ namespace App\Entity\StateGroup;
 
 use App\Entity\AddressTrait;
 use App\Entity\Base\AppBaseEntity;
+use App\Entity\Base\SluggableEntityTrait;
+use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
 use App\Entity\ContactTextTrait;
 use App\Entity\HasManufacturerEntityInterface;
@@ -28,6 +30,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
@@ -36,12 +39,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Entity\Repository\CommuneRepository")
  * @ORM\Table(name="ozg_commune")
  */
-class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface
+class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface, SluggableInterface
 {
     use AddressTrait;
     use ContactTextTrait;
-    use UrlTrait;
     use OrganisationTrait;
+    use SluggableEntityTrait;
+    use UrlTrait;
 
     public const TYPE_CITY_REGION = 1;
     public const TYPE_CONSTITUENCY = 2;
@@ -51,15 +55,12 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     public const TYPE_MIDDLE_CITY_DISTRICT = 6;
     public const TYPE_CITY_DISTRICT = 7;
 
-    public static $communeTypeChoices = [
-        self::TYPE_CITY_REGION  => 'app.commune.entity.commune_type_choices.1',
-        self::TYPE_CONSTITUENCY  => 'app.commune.entity.commune_type_choices.2',
-        self::TYPE_MUNICIPALITY_DISTRICT  => 'app.commune.entity.commune_type_choices.3',
-        self::TYPE_LARGE_CITY_DISTRICT  => 'app.commune.entity.commune_type_choices.4',
-        self::TYPE_INDEPENDENT_CITY  => 'app.commune.entity.commune_type_choices.5',
-        self::TYPE_MIDDLE_CITY_DISTRICT  => 'app.commune.entity.commune_type_choices.6',
-        self::TYPE_CITY_DISTRICT  => 'app.commune.entity.commune_type_choices.7',
-    ];
+    /**
+     * @var string|null
+     * @Gedmo\Slug(fields={"name", "id"}, updatable=false)
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
 
     /**
      * @var Organisation
@@ -160,8 +161,11 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     private $administrativeDistrict;
 
     /**
-     * @ORM\Column(type="integer", name="commune_type", nullable=true)
-     * @var int|null
+     * Commune type
+     * @var CommuneType|null
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\CommuneType", inversedBy="communes")
+     * @ORM\JoinColumn(name="commune_type_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $communeType;
 
@@ -549,17 +553,17 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     }
 
     /**
-     * @return int|null
+     * @return CommuneType|null
      */
-    public function getCommuneType(): ?int
+    public function getCommuneType(): ?CommuneType
     {
         return $this->communeType;
     }
 
     /**
-     * @param int|null $communeType
+     * @param CommuneType|null $communeType
      */
-    public function setCommuneType(?int $communeType): void
+    public function setCommuneType(?CommuneType $communeType): void
     {
         $this->communeType = $communeType;
     }
@@ -594,17 +598,6 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     public function setOfficialCommunityKey(?string $officialCommunityKey): void
     {
         $this->officialCommunityKey = $officialCommunityKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCommuneTypeLabelKey(): string
-    {
-        if ($this->communeType && array_key_exists($this->communeType, self::$communeTypeChoices)) {
-            return self::$communeTypeChoices[$this->communeType];
-        }
-        return 'app.commune.entity.commune_type_not_set';
     }
 
     /**

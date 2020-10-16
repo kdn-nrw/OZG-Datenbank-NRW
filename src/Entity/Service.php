@@ -14,6 +14,7 @@ namespace App\Entity;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\StateGroup\Bureau;
+use App\Entity\StateGroup\CommuneType;
 use App\Entity\StateGroup\MinistryState;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -284,15 +285,38 @@ class Service extends AbstractService implements SluggableInterface
      */
     private $notes = '';
 
+    /**
+     * @var CommuneType[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\CommuneType", inversedBy="services")
+     * @ORM\JoinTable(name="ozg_service_commune_type",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="commune_type_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $communeTypes;
+
+    /**
+     * Toggle inheritance of commune types from service system
+     * @var bool|null
+     *
+     * @ORM\Column(name="inherit_commune_types", type="boolean", nullable=true)
+     */
+    protected $inheritCommuneTypes = true;
+
     public function __construct()
     {
         $this->authorityBureaus = new ArrayCollection();
         $this->authorityStateMinistries = new ArrayCollection();
         $this->bureaus = new ArrayCollection();
+        $this->communeTypes = new ArrayCollection();
         $this->fimTypes = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
-        $this->laboratories = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
+        $this->laboratories = new ArrayCollection();
         $this->portals = new ArrayCollection();
         $this->ruleAuthorities = new ArrayCollection();
         $this->serviceSolutions = new ArrayCollection();
@@ -1011,6 +1035,70 @@ class Service extends AbstractService implements SluggableInterface
     public function setAuthorityInheritStateMinistries(bool $authorityInheritStateMinistries): void
     {
         $this->authorityInheritStateMinistries = $authorityInheritStateMinistries;
+    }
+
+    /**
+     * @param CommuneType $communeType
+     * @return self
+     */
+    public function addCommuneType($communeType): self
+    {
+        if (!$this->communeTypes->contains($communeType)) {
+            $this->communeTypes->add($communeType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CommuneType $communeType
+     * @return self
+     */
+    public function removeCommuneType($communeType): self
+    {
+        if ($this->communeTypes->contains($communeType)) {
+            $this->communeTypes->removeElement($communeType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return CommuneType[]|Collection
+     */
+    public function getCommuneTypes()
+    {
+        if ($this->isInheritCommuneTypes() && null !== $serviceSystem = $this->getServiceSystem()) {
+            $parentEntities = $serviceSystem->getCommuneTypes();
+            foreach ($parentEntities as $entity) {
+                $this->addCommuneType($entity);
+            }
+        }
+        return $this->communeTypes;
+    }
+
+    /**
+     * @param CommuneType[]|Collection $communeTypes
+     */
+    public function setCommuneTypes($communeTypes): void
+    {
+        $this->communeTypes = $communeTypes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInheritCommuneTypes(): bool
+    {
+        return (bool) $this->inheritCommuneTypes;
+    }
+
+    /**
+     * @param bool $inheritCommuneTypes
+     */
+    public function setInheritCommuneTypes(bool $inheritCommuneTypes): void
+    {
+        $this->inheritCommuneTypes = $inheritCommuneTypes;
     }
 
     /**

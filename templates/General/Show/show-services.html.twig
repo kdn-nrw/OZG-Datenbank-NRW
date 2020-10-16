@@ -12,7 +12,11 @@ file that was distributed with this source code.
     <div class="box box-primary">
         <div class="box-header">
             <h4 class="box-title">
-                {{ refSettings.listTitle|trans }}
+                {% if customListTitle is not defined %}
+                    {{ refSettings.listTitle|trans }}
+                {% else %}
+                    {{ customListTitle }}
+                {% endif %}
             </h4>
         </div>
         <div class="box-body table-responsive no-padding">

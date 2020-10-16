@@ -24,21 +24,28 @@ file that was distributed with this source code.
                     {% endfor %}
                 </select>
             {% else %}
-                {% set iconPath = 'subject' in filterName ? '/img/icons/subject/16/' : null %}
+                {% set iconPath = null %}
+                {% if 'subject' in filterName %}
+                    {% set iconPath = '/img/icons/subject/16/' %}
+                {% endif %}
                 <div class="filter-menu-headline"><i class="fa fa-filter" aria-hidden="true"></i>
                     Filter: {{ filterMenu.label|trans }}
                 </div>
-                <ul class="filter-menu{% if iconPath %} has-icon{% endif %}">
+                <ul class="filter-menu has-icon">
                     {% for filterChoice in filterMenu.choices %}
                         {% set choiceIconPath = filterChoice.id < 16 ? iconPath : null %}
                         {% set filterParamName = filterName|replace({'.': '__'}) %}
-                        <li class="filter-menu-item{% if choiceIconPath %} has-icon{% endif %} filter-subject-{{ filterChoice.id }}">
+                        <li class="filter-menu-item has-icon filter-subject-{{ filterChoice.id }}">
                             <a href="#" class="custom-menu-filter-link{% if filterChoice.id in filterMenu.value %} active{% endif %}" onclick="window.location.href=this.dataset.url.replace('FILTER_VALUE', '{{ filterChoice.id }}');return false;"
                                data-url="{{ path(menuItem.routePrefix ~ '_list', {'filter': {(filterParamName): {'value': {'': 'FILTER_VALUE'}}}}) }}"
                                data-filter-value="{{ filterChoice.id }}"
                                     {% if filterChoice.id in filterMenu.value %} style="color:#fff;font-weight: bold;" {% endif %}>
                                 {% if choiceIconPath %}
                                     <img src="{{ choiceIconPath ~ filterChoice.id ~ '.png' }}" class="icon" alt="{{ filterChoice.name }}">
+                                {% else %}
+                                    <span  class="icon" title="{{ filterChoice.name }}">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    </span>
                                 {% endif %}
                                 <span class="item-label">{{ filterChoice.name }}</span>
                             </a>

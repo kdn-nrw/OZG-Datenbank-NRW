@@ -11,12 +11,14 @@
 
 namespace App\Admin;
 
+use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\Priority;
+use App\Entity\StateGroup\Commune;
 use App\Entity\Status;
 use App\Exporter\Source\ServiceFimValueFormatter;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
@@ -29,6 +31,7 @@ use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\CollectionType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
@@ -122,7 +125,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 // the transform option enable compatibility with the boolean field (default 1=true, 2=false)
                 // with transform set to true 0=false, 1=true
                 'transform' => true,
-            ]);;
+            ]);
         $formMapper->end();
         $formMapper->with('relations', [
             'class' => 'col-xs-12',
@@ -237,7 +240,9 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                     'by_reference' => false,
                     'choice_translation_domain' => false,
                 ]
-            )
+            );
+
+        $formMapper
             ->add('authorityInheritBureaus', ChoiceType::class, [
                 'choices' => [
                     'app.service.entity.authority_inherit_bureaus.no' => false,
@@ -255,6 +260,24 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                     'choice_translation_domain' => false,
                 ]
             );
+
+        $formMapper
+            ->add('inheritCommuneTypes', ChoiceType::class, [
+                'choices' => [
+                    'app.service.entity.inherit_commune_types.no' => false,
+                    'app.service.entity.inherit_commune_types.yes' => true,
+                ],
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('communeTypes', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ]);
         $this->addSpecializedProceduresFormFields($formMapper);
         $this->addPortalsFormFields($formMapper);
         $formMapper->end()
@@ -393,6 +416,13 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'choices' => array_flip(\App\Entity\FederalInformationManagementType::$statusChoices)
             ]
         );
+        $datagridMapper->add('communeTypes',
+            null, [
+                'admin_code' => CommuneTypeAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -509,13 +539,13 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('relevance2', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('serviceSystem.priority', 'choice', [
+            ->add('serviceSystem.priority', TemplateRegistry::TYPE_CHOICE, [
                 'label' => 'app.service_system.entity.priority',
                 'editable' => true,
                 'class' => Priority::class,
@@ -532,6 +562,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('ruleAuthorities')
             ->add('authorityBureaus')
             ->add('authorityStateMinistries')
+            ->add('communeTypes')
             ->add('notes', 'html');
         $this->addLaboratoriesShowFields($showMapper);
         $this->addSpecializedProceduresShowFields($showMapper);

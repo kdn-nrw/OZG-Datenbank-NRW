@@ -13,6 +13,7 @@ namespace App\Admin\Frontend;
 
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\PortalAdmin;
+use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Subject;
 use App\Model\ExportSettings;
@@ -87,6 +88,13 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('communeTypes',
+            null, [
+                'admin_code' => CommuneTypeAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -149,6 +157,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
             ->add('ruleAuthorities')
             ->add('authorityBureaus')
             ->add('authorityStateMinistries')
+            ->add('communeTypes')
             ->add('services', null, [
                 'admin_code' => ServiceAdmin::class,
                 'template' => 'General/Show/show-services.html.twig',

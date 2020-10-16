@@ -11,6 +11,7 @@
 
 namespace App\Admin;
 
+use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\ServiceTrait;
 use App\Admin\Traits\SolutionTrait;
@@ -141,6 +142,15 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
                 'multiple' => true,
                 'by_reference' => false,
                 'choice_translation_domain' => false,
+            ])
+            ->add('communeTypes', ModelType::class, [
+                'label' => 'app.service_system.entity.commune_types_form',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
             ]);
         $formMapper->end()
             ->end();
@@ -204,33 +214,13 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
     public function preUpdate($object)
     {
         /** @var ServiceSystem $object */
-        $this->saveInheritedValues($object);
+        $object->saveInheritedValues();
     }
 
     public function prePersist($object)
     {
         /** @var ServiceSystem $object */
-        $this->saveInheritedValues($object);
-    }
-
-    private function saveInheritedValues(ServiceSystem $object)
-    {
-        // Save inherited properties in service entities
-        $jurisdictions = $object->getJurisdictions();
-        $bureaus = $object->getBureaus();
-        $services = $object->getServices();
-        foreach ($services as $service) {
-            if ($service->isInheritJurisdictions()) {
-                foreach ($jurisdictions as $jurisdiction) {
-                    $service->addJurisdiction($jurisdiction);
-                }
-            }
-            if ($service->isInheritBureaus()) {
-                foreach ($bureaus as $bureau) {
-                    $service->addBureau($bureau);
-                }
-            }
-        }
+        $object->saveInheritedValues();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -278,6 +268,13 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('communeTypes',
+            null, [
+                'admin_code' => CommuneTypeAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -289,7 +286,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
             ->add('situation')
             ->add('situation.subject')
             ->add('priority')/*
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -325,6 +322,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
         $showMapper->add('ruleAuthorities');
         $showMapper->add('authorityBureaus');
         $showMapper->add('authorityStateMinistries');
+        $showMapper->add('communeTypes');
         $this->addServicesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
         //$this->addLaboratoriesShowFields($showMapper);
@@ -337,7 +335,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
             ->add('priority', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])/*
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',

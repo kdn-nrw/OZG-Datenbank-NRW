@@ -17,38 +17,7 @@
             'icon': 'angle-double-right'
         },
     } %}
-    {% set activeRoutePrefix = null %}
-    {% set hasActive = false %}
-    {% for menuItem in menuItems %}
-        {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
-        {% if miActive %}
-            {% set hasActive = true %}
-            {% set activeRoutePrefix = menuItem.routePrefix %}
-        {% endif %}
-    {% endfor %}
-    <li class="first treeview{{ hasActive ? ' active' : '' }}">
-        <a href="#">
-            <i class="fa fa-sitemap" aria-hidden="true"></i>
-            <span>{{ 'app.menu.ozg_overview'|trans }}</span>
-            <span class="pull-right-container"><i class="fa pull-right fa-angle-left"></i></span>
-        </a>
-        <ul class="active treeview-menu menu_level_1">
-            {% set hasActive = false %}
-            {% for menuItem in menuItems %}
-                {% set miActive = not hasActive and menuItem.routePrefix in app.request.attributes.get('_route') %}
-                <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
-                    <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
-                        <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
-                        {{ menuItem.label|trans }}
-                    </a>
-                    {% if miActive %}
-                        {% set hasActive = true %}
-                        {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </li>
+    {% include 'Frontend/Admin/Partials/_sidebar-nav-group.html.twig' with {'menuItems': menuItems, 'itemClasses': 'first treeview', 'groupLabel': 'app.menu.ozg_overview'|trans} %}
     {% set menuItems = {
         'model_region': {
             'routePrefix': 'frontend_app_modelregion',
@@ -61,34 +30,7 @@
             'icon': 'angle-double-right'
         },
     } %}
-    {% set activeRoutePrefix = null %}
-    {% for menuItem in menuItems %}
-        {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
-        {% if miActive %}
-            {% set activeRoutePrefix = menuItem.routePrefix %}
-        {% endif %}
-    {% endfor %}
-    <li class="treeview{{ activeRoutePrefix ? ' active' : '' }}">
-        <a href="#">
-            <i class="fa fa-sitemap" aria-hidden="true"></i>
-            <span>{{ 'app.menu.digital_model_reqion_group'|trans }}</span>
-            <span class="pull-right-container"><i class="fa pull-right fa-angle-left"></i></span>
-        </a>
-        <ul class="active treeview-menu menu_level_1">
-            {% for menuItem in menuItems %}
-                {% set miActive = activeRoutePrefix and menuItem.routePrefix == activeRoutePrefix %}
-                <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
-                    <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
-                        <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
-                        {{ menuItem.label|trans }}
-                    </a>
-                    {% if miActive %}
-                        {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </li>
+    {% include 'Frontend/Admin/Partials/_sidebar-nav-group.html.twig' with {'menuItems': menuItems, 'itemClasses': 'treeview', 'groupLabel': 'app.menu.digital_model_reqion_group'|trans} %}
     {% set menuItems = {
         'solution': {
             'routePrefix': 'frontend_app_solution',
@@ -97,20 +39,16 @@
         },
     } %}
 
-    {% set activeRoutePrefix = null %}
-    {% for menuItem in menuItems %}
-        {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
-        <li class="top-nav-item{% if miActive %} active{% endif %}">
-            <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
-                <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
-                {{ menuItem.label|trans }}
-            </a>
-            {% if miActive %}
-                {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
-                {% set activeRoutePrefix = menuItem.routePrefix %}
-            {% endif %}
-        </li>
-    {% endfor %}
+    {% include 'Frontend/Admin/Partials/_sidebar-nav-top-item.html.twig' with {'menuItems': menuItems} %}
+    {% set menuItems = {
+        'commune': {
+            'routePrefix': 'frontend_app_commune',
+            'label': 'app.commune.list_fe',
+            'icon': 'map-o'
+        },
+    } %}
+
+    {% include 'Frontend/Admin/Partials/_sidebar-nav-top-item.html.twig' with {'menuItems': menuItems} %}
     <li>
         <a href="https://www.kdn.de/impressum/" target="_blank">
             <i class="fa fa-angle-double-right" aria-hidden="true"></i>

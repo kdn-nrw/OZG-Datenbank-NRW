@@ -15,6 +15,7 @@ use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
 use App\Entity\StateGroup\Bureau;
+use App\Entity\StateGroup\CommuneType;
 use App\Entity\StateGroup\MinistryState;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -162,11 +163,26 @@ class ServiceSystem extends AbstractService implements SluggableInterface
      */
     private $authorityBureaus;
 
+    /**
+     * @var CommuneType[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\CommuneType", inversedBy="serviceSystems")
+     * @ORM\JoinTable(name="ozg_service_system_commune_type",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="service_system_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="commune_type_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $communeTypes;
+
     public function __construct()
     {
         $this->authorityBureaus = new ArrayCollection();
         $this->authorityStateMinistries = new ArrayCollection();
         $this->bureaus = new ArrayCollection();
+        $this->communeTypes = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
         $this->jurisdictions = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
@@ -653,6 +669,48 @@ class ServiceSystem extends AbstractService implements SluggableInterface
     }
 
     /**
+     * @param CommuneType $communeType
+     * @return self
+     */
+    public function addCommuneType($communeType): self
+    {
+        if (!$this->communeTypes->contains($communeType)) {
+            $this->communeTypes->add($communeType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CommuneType $communeType
+     * @return self
+     */
+    public function removeCommuneType($communeType): self
+    {
+        if ($this->communeTypes->contains($communeType)) {
+            $this->communeTypes->removeElement($communeType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return CommuneType[]|Collection
+     */
+    public function getCommuneTypes()
+    {
+        return $this->communeTypes;
+    }
+
+    /**
+     * @param CommuneType[]|Collection $communeTypes
+     */
+    public function setCommuneTypes($communeTypes): void
+    {
+        $this->communeTypes = $communeTypes;
+    }
+
+    /**
      * @return ModelRegionProject[]|Collection
      */
     public function getPublishedModelRegionProjects()
@@ -678,5 +736,60 @@ class ServiceSystem extends AbstractService implements SluggableInterface
             }
         }
         return $collection;
+    }
+
+    /**
+     * Copy inherited values to services
+     */
+    public function saveInheritedValues(): void
+    {
+        // Save inherited properties in service entities
+        $jurisdictions = $this->getJurisdictions();
+        $bureaus = $this->getBureaus();
+        $communeTypes = $this->getCommuneTypes();
+        $stateMinistries = $this->getAuthorityStateMinistries();
+        $authorityBureaus = $this->getAuthorityBureaus();
+        $authorityBureausEnabled = $this->getAuthorityBureausEnabled();
+        $ruleAuthorities = $this->getRuleAuthorities();
+        $authorityStateMinistries = $this->getAuthorityStateMinistries();
+        $authorityStateMinistriesEnabled = $this->getAuthorityStateMinistriesEnabled();
+        $services = $this->getServices();
+        foreach ($services as $service) {
+            if ($service->isInheritJurisdictions()) {
+                foreach ($jurisdictions as $jurisdiction) {
+                    $service->addJurisdiction($jurisdiction);
+                }
+            }
+            if ($service->isInheritBureaus()) {
+                foreach ($bureaus as $bureau) {
+                    $service->addBureau($bureau);
+                }
+            }
+            if ($service->isInheritStateMinistries()) {
+                foreach ($stateMinistries as $stateMinistry) {
+                    $service->addStateMinistry($stateMinistry);
+                }
+            }
+            if ($service->isInheritCommuneTypes()) {
+                foreach ($communeTypes as $communeType) {
+                    $service->addCommuneType($communeType);
+                }
+            }
+            if ($service->isInheritRuleAuthorities()) {
+                foreach ($ruleAuthorities as $ruleAuthority) {
+                    $service->addRuleAuthority($ruleAuthority);
+                }
+            }
+            if ($authorityBureausEnabled && $service->isAuthorityInheritBureaus()) {
+                foreach ($authorityBureaus as $authorityBureau) {
+                    $service->addAuthorityBureau($authorityBureau);
+                }
+            }
+            if ($authorityStateMinistriesEnabled && $service->isAuthorityInheritStateMinistries()) {
+                foreach ($authorityStateMinistries as $stateMinistry) {
+                    $service->addAuthorityStateMinistry($stateMinistry);
+                }
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace App\Admin\Frontend;
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\LaboratoryAdmin;
 use App\Admin\PortalAdmin;
+use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\FederalInformationManagementType;
 use App\Entity\Priority;
@@ -123,6 +124,13 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'choices' => array_flip(FederalInformationManagementType::$statusChoices)
             ]
         );
+        $datagridMapper->add('communeTypes',
+            null, [
+                'admin_code' => CommuneTypeAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -192,13 +200,13 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
         ];
         $customServiceFormatter = new ServiceFimValueFormatter();
-        $fimStatusTypes = \App\Entity\FederalInformationManagementType::$statusChoices;
+        $fimStatusTypes = FederalInformationManagementType::$statusChoices;
         $statusTranslations = [];
         foreach ($fimStatusTypes as $status => $labelKey) {
             $statusTranslations[$status] = $this->trans($labelKey);
         }
         $customServiceFormatter->setFimStatusTranslations($statusTranslations);
-        $fimTypes = \App\Entity\FederalInformationManagementType::$mapTypes;
+        $fimTypes = FederalInformationManagementType::$mapTypes;
         foreach ($fimTypes as $type => $labelKey) {
             $typeField = ServiceFimValueFormatter::FIM_DATA_TYPE_PREFIX . $type;
             $statusField = ServiceFimValueFormatter::FIM_STATUS_PREFIX . $type;
@@ -270,6 +278,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ->add('ruleAuthorities')
             ->add('authorityBureaus')
             ->add('authorityStateMinistries')
+            ->add('communeTypes')
             ->add('laboratories')
             ->add('stateMinistries')
             ->add('implementationProjects', null, [

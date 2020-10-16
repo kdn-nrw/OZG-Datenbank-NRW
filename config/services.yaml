@@ -151,6 +151,33 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Admin\StateGroup\CommuneTypeAdmin:
+    arguments:
+      - ~
+      - App\Entity\StateGroup\CommuneType
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.commune_type.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Frontend\CommuneAdmin:
+    arguments:
+      - ~
+      - App\Entity\StateGroup\Commune
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.commune.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+    public: true
+
   App\Admin\ContactAdmin:
     arguments:
       - ~

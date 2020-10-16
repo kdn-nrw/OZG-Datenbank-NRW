@@ -11,6 +11,7 @@
 
 namespace App\Admin;
 
+use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\ModelRegionProjectTrait;
@@ -28,6 +29,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -322,6 +324,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     {
         $listMapper
             ->add('communes', null, [
+                'admin_code' => CommuneAdmin::class,
                 'template' => 'SolutionAdmin/list_communes.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
@@ -398,7 +401,8 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('communes', 'choice', [
+            ->add('communes', TemplateRegistry::TYPE_CHOICE, [
+                'admin_code' => CommuneAdmin::class,
                 'associated_property' => 'name',
                 'check_has_all_modifier' => true,
             ]);
@@ -426,7 +430,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->add('serviceSolutions', null, [
                 'associated_property' => 'service'
             ])
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',

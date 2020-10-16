@@ -26,14 +26,19 @@ trait CommuneTrait
 {
     protected function addCommunesFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('communes', ModelType::class, [
-            'btn_add' => false,
-            'placeholder' => '',
-            'required' => false,
-            'multiple' => true,
-            'by_reference' => false,
-            'choice_translation_domain' => false,
-        ]);
+        $formMapper->add('communes', ModelType::class,
+            [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ],
+            [
+                'admin_code' => CommuneAdmin::class,
+            ]
+        );
     }
 
     protected function addCommunesDatagridFilters(DatagridMapper $datagridMapper)

@@ -23,6 +23,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
@@ -72,7 +73,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             null,
             [
                 'label' => 'app.service_solution.entity.service',
-                'admin_code' => \App\Admin\ServiceAdmin::class
+                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
             ],
             null,
             ['expanded' => false, 'multiple' => true]
@@ -98,7 +99,9 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             ]);
         $datagridMapper->add('communes',
             null,
-            [],
+            [
+                'admin_code' => CommuneAdmin::class
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
@@ -158,6 +161,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     {
         $listMapper
             ->add('communes', null, [
+                'admin_code' => CommuneAdmin::class,
                 'template' => 'SolutionAdmin/list_communes.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
@@ -206,7 +210,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'template' => 'SolutionAdmin/list-jurisdiction.html.twig',
             ])
             ->add('name')/*
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -245,7 +249,8 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('communes', 'choice', [
+            ->add('communes', TemplateRegistry::TYPE_CHOICE, [
+                'admin_code' => CommuneAdmin::class,
                 'associated_property' => 'name',
                 'check_has_all_modifier' => true,
             ]);
@@ -270,7 +275,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             ->add('serviceSolutions', null, [
                 'associated_property' => 'service'
             ])
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',

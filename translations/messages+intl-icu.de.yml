@@ -136,6 +136,7 @@ app:
   commune:
     object_name: Kommune
     list: Kommunen
+    list_fe: Kommunen in NRW
     create: Kommune anlegen
     actions:
       list: Kommunen Übersicht
@@ -162,22 +163,28 @@ app:
       offices: Ämter
       solutions: Lösungen
       laboratories: Stichwörter
-      commune_type: Kategorie
-      commune_type_not_set: 'n.a.'
-      commune_type_choices:
-        1: Städteregion
-        2: Kreis
-        3: kreisangehörige Gemeinde
-        4: Große kreisangehörige Stadt
-        5: kreisfreie Stadt
-        6: Mittlere kreisangehörige Stadt
-        7: kreisangehörige Stadt
+      commune_type: Größenklasse
       constituency: Kreis
       main_email: E-Mail
       official_community_key: AGS
       official_community_key_placeholder: Amtlicher Gemeindeschlüssel
       administrative_district: Reg-Bez
       administrative_district_placeholder: Regierungsbezirk
+  commune_type:
+    object_name: Größenklasse
+    list: Größenklassen
+    create: Größenklasse anlegen
+    show:
+      headline:
+        service_systems: 'OZG-Leistungen für Größenklasse {communeType}'
+        services: 'Leike-Leistungen für Größenklasse {communeType}'
+    entity:
+      name: Name
+      description: Beschreibung
+      communes: Kommunen
+      constituency: Als Auswahlmöglichkeit für Kreise anzeigen?
+      service_systems: OZG-Leistungen
+      services: Leika-Leistungen
   contact:
     object_name: Kontakt
     list: Kontakte
@@ -678,6 +685,10 @@ app:
       fim_types_status: FIM Status
       notes: Notizen
       notes_placeholder: Notizen
+      commune_types: relevant bei folgenden Größenklassen
+      inherit_commune_types: Größenklassen von OZG-Leistung übernehmen
+      inherit_commune_types.yes: Größenklassen der Leika-Leistung mit Größenklassen der OZG-Leistung erweitern
+      inherit_commune_types.no: Größenklassen der OZG-Leistung nicht übernehmen
     fim:
       object_name: Föderales Informationsmanagement (FIM)
       list: FIM
@@ -766,6 +777,8 @@ app:
       model_region_projects: DMR Umsetzungsprojekte
       published_model_region_projects: Veröffentlichte DMR Umsetzungsprojekte
       services_portals: Zielportale
+      commune_types: relevant bei folgenden Größenklassen
+      commune_types_form: relevant bei folgenden Größenklassen (werden an Leika-Leistungen vererbt)
   situation:
     object_name: Lage
     list: Lage

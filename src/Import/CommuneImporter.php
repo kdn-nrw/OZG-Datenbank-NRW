@@ -15,6 +15,7 @@ use App\Entity\OrganisationEntityInterface;
 use App\Entity\Repository\CommuneRepository;
 use App\Entity\StateGroup\AdministrativeDistrict;
 use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\CommuneType;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -26,7 +27,7 @@ class CommuneImporter extends AbstractCsvImporter
         return [
             //'id' => ['field' => 'importId', 'entity' => Commune::class, 'type' => 'int', 'required' => true, 'auto_increment' => true],
             'Kommune/Kreis' => ['field' => 'name', 'entity' => Commune::class, 'type' => 'string', 'required' => true],
-            'Kategorie' => ['field' => 'communeType', 'entity' => Commune::class, 'type' => self::DATA_TYPE_CHOICE, 'choices' => Commune::$communeTypeChoices],
+            'Kategorie' => ['field' => 'communeType', 'entity' => Commune::class, 'type' => 'string', 'targetEntity' => CommuneType::class],
             'Zugehörigkeit Kreis' => [
                 'field' => 'constituency',
                 'entity' => Commune::class,
@@ -38,9 +39,10 @@ class CommuneImporter extends AbstractCsvImporter
                         false
                     );
                     if (null === $refCommune) {
+                        $communeType = $objectManager->find(CommuneType::class, Commune::TYPE_CONSTITUENCY);
                         $refCommune = new Commune();
                         $refCommune->setName(trim($value));
-                        $refCommune->setCommuneType(Commune::TYPE_CONSTITUENCY);
+                        $refCommune->setCommuneType($communeType);
                         $objectManager->persist($refCommune);
                     } elseif (empty($refCommune->getName())) {
                         $refCommune->setName(trim($value));
@@ -77,10 +79,11 @@ class CommuneImporter extends AbstractCsvImporter
         $accessor = PropertyAccess::createPropertyAccessor();
         foreach ($rows as $importRow) {
             $importClassProperties = $importRow[Commune::class];
-            $communeType = (int)$importClassProperties['communeType'];
-            $targetEntity = $this->findCommuneWithMatchingNameAndType($importClassProperties['name'], $communeType);
+            $communeType = $importClassProperties['communeType'];
+            $communeTypeId = null !== $communeType ? $communeType->getId() : null;
+            $targetEntity = $this->findCommuneWithMatchingNameAndType($importClassProperties['name'], $communeTypeId);
             if (null === $targetEntity) {
-                $this->debug('No entity found for name: ' . $importClassProperties['name'] . ' [' . $importClassProperties['zipCode'] . ']' . ' [' . $communeType . ']');
+                $this->debug('No entity found for name: ' . $importClassProperties['name'] . ' [' . $importClassProperties['zipCode'] . ']' . ' [' . $communeTypeId . ']');
                 $targetEntity = new Commune();
                 $em->persist($targetEntity);
             } else {
@@ -89,7 +92,7 @@ class CommuneImporter extends AbstractCsvImporter
                 $targetEntity->setHidden(false);
             }
             $excludeTypes = [Commune::TYPE_CONSTITUENCY, Commune::TYPE_CITY_REGION, Commune::TYPE_INDEPENDENT_CITY];
-            if (in_array($communeType, $excludeTypes, true)) {
+            if (in_array($communeTypeId, $excludeTypes, true)) {
                 $importClassProperties['constituency'] = null;
                 $targetEntity->setConstituency(null);
             }
@@ -213,8 +216,8 @@ class CommuneImporter extends AbstractCsvImporter
         if (!$isBetterMatch && !empty($allowedCommuneTypes)) {
             $oldCommuneType = $entity->getCommuneType();
             $checkCommuneType = $checkEntity->getCommuneType();
-            $isBetterMatch = $checkCommuneType && in_array($checkCommuneType, $allowedCommuneTypes, false)
-                && (!$oldCommuneType || !in_array($oldCommuneType, $allowedCommuneTypes, false));
+            $isBetterMatch = null !== $checkCommuneType && in_array($checkCommuneType->getId(), $allowedCommuneTypes, false)
+                && (null === $oldCommuneType || !in_array($oldCommuneType->getId(), $allowedCommuneTypes, false));
         }
         return $isBetterMatch;
     }

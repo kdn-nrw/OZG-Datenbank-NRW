@@ -93,3 +93,19 @@ frontend_app_modelregion_show:
 frontend_app_modelregion_export:
   path: /modellregionen/export
   controller: App\Controller\ModelRegionController::exportAction
+
+frontend_app_commune_list:
+  path: /kommunen
+  controller: App\Controller\CommuneController::listAction
+
+frontend_app_commune_show_default:
+  path: /kommunen/{id}/show
+  controller: App\Controller\CommuneController::showAction
+
+frontend_app_commune_show:
+  path: /kommunen/details/{slug}
+  controller: App\Controller\CommuneController::showBySlugAction
+
+frontend_app_commune_export:
+  path: /kommunen/export
+  controller: App\Controller\CommuneController::exportAction
