@@ -18,7 +18,6 @@ use App\Admin\Traits\CentralAssociationTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
 use App\Admin\Traits\PortalTrait;
-use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\StateGroup\AdministrativeDistrict;
 use App\Entity\StateGroup\Commune;
@@ -37,7 +36,6 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     use LaboratoryTrait;
     use OrganisationOneToOneTrait;
     use PortalTrait;
-    use SpecializedProcedureTrait;
 
     /**
      * @var string[]
@@ -53,9 +51,9 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
+        $datagridMapper->add('organisation.zipCode');
+        $datagridMapper->add('organisation.town');
         $this->addCentralAssociationsDatagridFilters($datagridMapper);
-        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
         $this->addPortalsDatagridFilters($datagridMapper);
         $this->addLaboratoriesDatagridFilters($datagridMapper);
         $datagridMapper->add('constituency',
@@ -136,10 +134,8 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ->add('constituency', null, [
                 'admin_code' => self::class,
             ])
-            ->add('communeType')
-            ->add('mainEmail');
+            ->add('communeType');
         $this->addCentralAssociationsShowFields($showMapper);
-        $this->addSpecializedProceduresShowFields($showMapper);
         $this->addPortalsShowFields($showMapper);
         $this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('specializedProcedures.manufacturers', null, [
@@ -167,7 +163,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     public function getExportSettings(): ExportSettings
     {
         $settings = parent::getExportSettings();
-        $settings->addExcludeFields(['specializedProcedures.manufacturers', 'contact', 'serviceProviders', 'organisation.contacts']);
+        $settings->addExcludeFields(['specializedProcedures', 'specializedProcedures.manufacturers', 'contact', 'serviceProviders', 'organisation.contacts']);
         $settings->setAdditionFields(['manufacturers']);
         return $settings;
     }
@@ -192,7 +188,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         $queryBuilder = $em->createQueryBuilder()
             ->select('c')
             ->from(Commune::class, 'c')
-            ->leftJoin( 'c.communeType', 'ct')
+            ->leftJoin('c.communeType', 'ct')
             ->where('ct.constituency = 1')
             ->orderBy('c.name', 'ASC');
         return $queryBuilder;

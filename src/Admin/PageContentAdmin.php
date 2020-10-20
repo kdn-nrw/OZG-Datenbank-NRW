@@ -28,13 +28,7 @@ class PageContentAdmin extends AbstractAppAdmin
     {
         $formMapper
             ->add('page', ChoiceType::class, [
-                'choices' => [
-                    'app.page_content.entity.page_choices.home' => PageContent::PAGE_HOME,
-                    'app.page_content.entity.page_choices.service_systems' => PageContent::PAGE_SERVICE_SYSTEMS,
-                    'app.page_content.entity.page_choices.services' => PageContent::PAGE_SERVICES,
-                    'app.page_content.entity.page_choices.implementation_projects' => PageContent::PAGE_IMPLEMENTATION_PROJECTS,
-                    'app.page_content.entity.page_choices.solutions' => PageContent::PAGE_SOLUTIONS,
-                ],
+                'choices' => array_flip(PageContent::$pageChoices),
                 'required' => true,
             ])
             ->add('headline', TextType::class, [
@@ -61,13 +55,7 @@ class PageContentAdmin extends AbstractAppAdmin
             ->add('createdAt')
             ->add('page', 'choice', [
                 'editable' => true,
-                'choices' => [
-                    PageContent::PAGE_HOME => 'app.page_content.entity.page_choices.home',
-                    PageContent::PAGE_SERVICE_SYSTEMS => 'app.page_content.entity.page_choices.service_systems',
-                    PageContent::PAGE_SERVICES => 'app.page_content.entity.page_choices.services',
-                    PageContent::PAGE_IMPLEMENTATION_PROJECTS => 'app.page_content.entity.page_choices.implementation_projects',
-                    PageContent::PAGE_SOLUTIONS => 'app.page_content.entity.page_choices.solutions',
-                ],
+                'choices' => PageContent::$pageChoices,
                 'catalogue' => 'messages',
             ])
             ->add('headline')

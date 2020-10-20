@@ -96,12 +96,6 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('specializedProcedures',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
         $datagridMapper->add('ruleAuthorities',
             null,
             [],
@@ -274,7 +268,6 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ])
             ->add('jurisdictions')
             ->add('bureaus')
-            ->add('specializedProcedures')
             ->add('ruleAuthorities')
             ->add('authorityBureaus')
             ->add('authorityStateMinistries')

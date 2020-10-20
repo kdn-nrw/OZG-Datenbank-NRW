@@ -105,12 +105,6 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $datagridMapper->add('specializedProcedures',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
         $datagridMapper->add('formServerSolutions.formServer',
             null,
             [],
@@ -258,7 +252,6 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         $showMapper
             ->add('customProvider')
             ->add('portals')
-            ->add('specializedProcedures')
             ->add('formServerSolutions', null, [
                 'associated_property' => 'formServer'
             ])

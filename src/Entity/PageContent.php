@@ -28,6 +28,16 @@ class PageContent extends BaseEntity
     public const PAGE_SERVICES = 3;
     public const PAGE_IMPLEMENTATION_PROJECTS = 4;
     public const PAGE_SOLUTIONS = 5;
+    public const PAGE_COMMUNES = 6;
+
+    public static $pageChoices = [
+        self::PAGE_HOME => 'app.page_content.entity.page_choices.home',
+        self::PAGE_SERVICE_SYSTEMS => 'app.page_content.entity.page_choices.service_systems',
+        self::PAGE_SERVICES => 'app.page_content.entity.page_choices.services',
+        self::PAGE_IMPLEMENTATION_PROJECTS => 'app.page_content.entity.page_choices.implementation_projects',
+        self::PAGE_SOLUTIONS => 'app.page_content.entity.page_choices.solutions',
+        self::PAGE_COMMUNES => 'app.page_content.entity.page_choices.communes',
+    ];
 
     /**
      * @ORM\Column(type="integer", name="page")

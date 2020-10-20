@@ -169,6 +169,9 @@ services:
       - ~
       - App\Entity\StateGroup\Commune
       - ~
+    calls:
+      - [setTemplate, ['show', 'CommuneAdmin/show.html.twig']]
+      - [setTemplate, ['list', 'CommuneAdmin/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm

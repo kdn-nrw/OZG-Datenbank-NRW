@@ -177,7 +177,7 @@ app:
     show:
       headline:
         service_systems: 'OZG-Leistungen für Größenklasse {communeType}'
-        services: 'Leike-Leistungen für Größenklasse {communeType}'
+        services: 'Leika-Leistungen für Größenklasse {communeType}'
     entity:
       name: Name
       description: Beschreibung
@@ -573,6 +573,7 @@ app:
         services: Leika-Katalog
         implementation_projects: Umsetzungsprojekte
         solutions: Lösungen
+        communes: Kommunen
   payment_type:
     object_name: Bezahlverfahren
     list: Bezahlverfahren

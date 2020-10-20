@@ -51,3 +51,13 @@
     }
   }
 }
+@media (min-width: 400px) {
+  .select2-drop {
+    max-width: 400px;
+  }
+}
+@media (min-width: 800px) {
+  .select2-drop {
+    max-width: 600px;
+  }
+}

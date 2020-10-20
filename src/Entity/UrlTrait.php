@@ -33,6 +33,9 @@ trait UrlTrait
      */
     public function getUrl(): ?string
     {
+        if (!empty($this->url) && strpos($this->url, 'http') !== 0) {
+            return 'https://' . ltrim($this->url, '/ ');
+        }
         return $this->url;
     }
 
