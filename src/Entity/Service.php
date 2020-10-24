@@ -69,6 +69,7 @@ class Service extends AbstractService implements SluggableInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lawShortcuts;
+
     /**
      * SDG1-Relevanz
      * @var bool
@@ -76,6 +77,7 @@ class Service extends AbstractService implements SluggableInterface
      * @ORM\Column(name="relevance1", type="boolean", nullable=true)
      */
     protected $relevance1 = false;
+
     /**
      * SDG2-Relevanz
      * @var bool

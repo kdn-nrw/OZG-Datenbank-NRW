@@ -16,7 +16,9 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DatePickerType;
+use Sonata\Form\Type\DateTimeRangePickerType;
 
 /**
  * Trait DatePickerTrait
@@ -41,7 +43,10 @@ trait DatePickerTrait
 
     protected function addDatePickersDatagridFilters(DatagridMapper $datagridMapper, string $fieldName): void
     {
-        $datagridMapper->add($fieldName);
+        $datagridMapper->add($fieldName,
+            'doctrine_orm_datetime_range', [
+            'field_type'=> DateTimeRangePickerType::class,
+        ]);
     }
 
     protected function addDatePickersListFields(ListMapper $listMapper, string $fieldName): void

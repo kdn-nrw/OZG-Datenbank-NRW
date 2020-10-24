@@ -1,0 +1,113 @@
+.project-status-info {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 -15px;
+  padding-left: 20px;
+  position: relative;
+  z-index: 0;
+  $project-status-height: 80px;
+  $project-status-arrow-size: $project-status-height / 2;
+  .arrow {
+    position: relative;
+    height: $project-status-height;
+    width: $project-status-arrow-size;
+    z-index: 10;
+    flex: 0 0 auto;
+    &::before,
+    &::after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 $project-status-arrow-size $project-status-arrow-size 0;
+      border-color: transparent $gray-200 transparent transparent;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    &::after {
+      border-width: 0 0 $project-status-arrow-size $project-status-arrow-size;
+      border-color: transparent transparent $gray-200 transparent;
+      top: auto;
+      bottom: 0;
+    }
+    &.right {
+      z-index: 9;
+      &::before {
+        border-width: $project-status-arrow-size 0 0 $project-status-arrow-size;
+        border-color: transparent transparent transparent $gray-200;
+      }
+      &::after {
+        border-width: $project-status-arrow-size $project-status-arrow-size 0 0;
+        border-color: $gray-200 transparent transparent transparent;
+      }
+    }
+  }
+  .name {
+    display: flex;
+    align-items: center;
+    background: $gray-200;
+    height: $project-status-height;
+    line-height: 20px;
+    padding: 10px 0 10px 20px;
+    min-width: 120px;
+    font-size: 20px;
+  }
+  .project-status-name {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .project-status {
+    margin-left: -20px;
+    margin-bottom: 20px;
+    &.active {
+      .name {
+        background-color: $green;
+        color: #fff;
+      }
+      .arrow {
+        &::before {
+          border-color: transparent $green transparent transparent;
+        }
+        &::after {
+          border-color: transparent transparent $green transparent;
+        }
+        &.right {
+          &::before {
+            border-color: transparent transparent transparent $green;
+          }
+          &::after {
+            border-color: $green transparent transparent transparent;
+          }
+        }
+      }
+    }
+    &.current {
+      .name {
+        background-color: $green;
+      }
+      &::before,
+      &::after {
+        border-color: transparent $green transparent transparent;
+      }
+      &::after {
+        border-color: transparent transparent $green transparent;
+      }
+    }
+  }
+  .project-status-date {
+    padding: 6px 40px 0 60px;
+  }
+  @media (min-width: 576px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .project-status {
+      margin-top: 0;
+      &:not(:first-child) {
+        margin-left: -20px;
+      }
+    }
+  }
+}

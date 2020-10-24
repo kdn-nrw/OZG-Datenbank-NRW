@@ -1,0 +1,36 @@
+{# @var object \App\Entity\ImplementationProject #}
+{% set statusInfo = app_implementation_project_status_info(object) %}
+<div class="box box-primary">
+    <div class="box-header">
+        <h4 class="box-title">
+            {{ 'app.implementation_status.object_name'|trans }}
+        </h4>
+    </div>
+    <div class="box-body">
+        <div class="project-status-info">
+            {% for statusDetails in statusInfo %}
+                <div class="project-status{{ statusDetails.isActive ? ' active' : '' }}{{ statusDetails.isCurrent ? ' current' : '' }}">
+                    <div class="project-status-name">
+                        <div class="arrow left"></div>
+                        <div class="name">
+                            {{ statusDetails.name }}
+                        </div>
+                        <div class="arrow right"></div>
+                    </div>
+                    {% if statusDetails.statusDate is not null %}
+                        <div class="project-status-date">
+                            {% if date(statusDetails.statusDate) > date() %}
+                                {{ 'app.implementation_status.common.status_from'|trans }}
+                            {% else %}
+                                {{ 'app.implementation_status.common.status_since'|trans }}
+                            {% endif %}
+                            {{ statusDetails.statusDate|date('d.m.Y') }}
+                        </div>
+                    {% else %}
+                        <div class="project-status-date not-assigned"></div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

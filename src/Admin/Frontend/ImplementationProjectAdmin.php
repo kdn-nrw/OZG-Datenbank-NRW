@@ -11,14 +11,17 @@
 
 namespace App\Admin\Frontend;
 
-use App\Admin\StateGroup\BureauAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\FundingAdmin;
+use App\Admin\ImplementationStatusAdmin;
 use App\Admin\OrganisationAdmin;
 use App\Admin\PortalAdmin;
-use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\StateGroup\BureauAdmin;
+use App\Admin\Traits\DatePickerTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
+use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -26,6 +29,8 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class ImplementationProjectAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
+    use DatePickerTrait;
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
@@ -51,7 +56,10 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
             ['expanded' => false, 'multiple' => true]
         );
         $datagridMapper->add('status');
-        $datagridMapper->add('projectStartAt');
+        $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
+        $this->addDatePickersDatagridFilters($datagridMapper, 'conceptStatusAt');
+        $this->addDatePickersDatagridFilters($datagridMapper, 'implementationStatusAt');
+        $this->addDatePickersDatagridFilters($datagridMapper, 'commissioningStatusAt');
         $datagridMapper->add('fundings',
             null, [
                 'admin_code' => FundingAdmin::class,
@@ -107,6 +115,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'editable' => false,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
+                'template' => 'ImplementationProjectAdmin/list-status.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -114,12 +123,19 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'status'],
                 ]
-            ])
-            ->add('projectStartAt', null, [
-                // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
-                'pattern' => 'MMMM yyyy',
             ]);
         $this->addDefaultListActions($listMapper);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExportSettings(): ExportSettings
+    {
+        $settings = parent::getExportSettings();
+        $settings->addExcludeFields(['statusInfo']);
+        $settings->setAdditionFields(['status', 'projectStartAt', 'conceptStatusAt', 'implementationStatusAt', 'commissioningStatusAt']);
+        return $settings;
     }
 
     /**
@@ -129,6 +145,18 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
     {
         $showMapper
             ->add('name')
+            ->add('description');
+        $showMapper->add('statusInfo', null, [
+            'admin_code' => ImplementationStatusAdmin::class,
+            'template' => 'ImplementationProjectAdmin/show-status-info.html.twig',
+            'is_custom_field' => true,
+        ]);
+        $showMapper
+            ->add('notes', 'html', [
+                'template' => 'ImplementationProjectAdmin/show-notes.html.twig',
+                'is_custom_field' => true,
+            ]);
+        $showMapper
             ->add('publishedSolutions', null, [
                 'admin_code' => SolutionAdmin::class,
                 'route' => [
@@ -148,17 +176,8 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'route' => [
                     'name' => 'show',
                 ],
-            ])
-            ->add('description')
-            ->add('status', 'choice', [
-                'editable' => false,
-                'class' => ImplementationStatus::class,
-                'catalogue' => 'messages',
-            ])
-            ->add('projectStartAt', null, [
-                // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
-                'pattern' => 'MMMM yyyy',
-            ])
+            ]);
+        $showMapper
             ->add('projectLeaders', null, [
                 'route' => [
                     'name' => 'show',
@@ -173,8 +192,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'route' => [
                     'name' => 'show',
                 ],
-            ])
-            ->add('notes', 'html');
+            ]);
         $showMapper
             ->add('fundings', null, [
                 'admin_code' => FundingAdmin::class,

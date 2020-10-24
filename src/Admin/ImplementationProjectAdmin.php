@@ -23,6 +23,7 @@ use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
 use App\Entity\Service;
+use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -53,7 +54,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $formMapper
             ->with('app.implementation_project.tabs.general', ['tab' => true])
             ->with('general', [
-                'label' => false,
+                'label' => 'app.implementation_project.groups.general_data',
+                'class' => 'col-md-6'
             ]);
         $formMapper->add('name', TextType::class);
         $this->addSolutionsFormFields($formMapper);
@@ -62,13 +64,30 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'required' => false,
             ]);
         $this->addLaboratoriesFormFields($formMapper);
+        $formMapper->end();
         $formMapper
-            ->add('status', ModelType::class, [
-                'btn_add' => false,
-                'required' => true,
-                'choice_translation_domain' => false,
+            ->with('dates', [
+                'label' => 'app.implementation_project.groups.dates',
+                'class' => 'col-md-6'
             ]);
         $this->addDatePickerFormField($formMapper, 'projectStartAt');
+        $this->addDatePickerFormField($formMapper, 'conceptStatusAt');
+        $this->addDatePickerFormField($formMapper, 'implementationStatusAt');
+        $this->addDatePickerFormField($formMapper, 'commissioningStatusAt');
+        $formMapper
+            ->add('status', ModelType::class, [
+                'label' => 'app.implementation_project.entity.status_form',
+                'btn_add' => false,
+                'required' => true,
+                'expanded' => true,
+                'query' => $this->getStatusQueryBuilder(),
+                'choice_translation_domain' => false,
+            ]);
+        $formMapper->end();
+        $formMapper
+            ->with('references', [
+                'label' => false,
+            ]);
         $formMapper
             ->add('notes', SimpleFormatterType::class, [
                 'format' => 'richhtml',
@@ -89,6 +108,35 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addServiceFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
+    }
+
+    /**
+     * Returns the query builder for the status
+     *
+     * @return QueryBuilder
+     */
+    private function getStatusQueryBuilder(): QueryBuilder
+    {
+        /** @var EntityManager $em */
+        $em = $this->modelManager->getEntityManager(ImplementationStatus::class);
+
+        /** @var ImplementationProject $subject */
+        $subject = $this->getSubject();
+        $status = $subject->getStatus();
+        $queryBuilder = $em->createQueryBuilder()
+            ->select('s')
+            ->from(ImplementationStatus::class, 's');
+        if (null !== $status) {
+            $queryBuilder->where($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->eq('s.setAutomatically', 0),
+                $queryBuilder->expr()->eq('s', $status->getId())
+            ));
+        } else {
+            $queryBuilder->where('s.setAutomatically = 0');
+        }
+        $queryBuilder->orderBy('s.level', 'ASC');
+        $queryBuilder->addOrderBy('s.name', 'ASC');
+        return $queryBuilder;
     }
 
     private function addServiceFormFields(FormMapper $formMapper): void
@@ -171,6 +219,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $datagridMapper->add('status');
 
         $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
+        $this->addDatePickersDatagridFilters($datagridMapper, 'conceptStatusAt');
+        $this->addDatePickersDatagridFilters($datagridMapper, 'implementationStatusAt');
+        $this->addDatePickersDatagridFilters($datagridMapper, 'commissioningStatusAt');
         $this->addContactsDatagridFilters($datagridMapper, 'contacts');
         $this->addOrganisationsDatagridFilters($datagridMapper, 'projectLeaders');
         $this->addOrganisationsDatagridFilters($datagridMapper, 'participationOrganisations');
@@ -196,9 +247,10 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $listMapper
             ->addIdentifier('name')
             ->add('status', 'choice', [
-                'editable' => true,
+                'editable' => false,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
+                'template' => 'ImplementationProjectAdmin/list-status.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -208,10 +260,20 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 ]
             ]);
 
-        $this->addDatePickersListFields($listMapper, 'projectStartAt');
         $this->addServiceSystemsListFields($listMapper);
         //$this->addSolutionsListFields($listMapper);
         $this->addDefaultListActions($listMapper);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExportSettings(): ExportSettings
+    {
+        $settings = parent::getExportSettings();
+        $settings->addExcludeFields(['statusInfo']);
+        $settings->setAdditionFields(['status', 'projectStartAt', 'conceptStatusAt', 'implementationStatusAt', 'commissioningStatusAt']);
+        return $settings;
     }
 
     /**
@@ -226,9 +288,16 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
             ]);
-        $this->addDatePickersShowFields($showMapper, 'projectStartAt');
+        $showMapper->add('statusInfo', null, [
+            'admin_code' => ImplementationStatusAdmin::class,
+            'template' => 'ImplementationProjectAdmin/show-status-info.html.twig',
+            'is_custom_field' => true,
+        ]);
         $showMapper
-            ->add('notes', 'html');
+            ->add('notes', 'html', [
+                'template' => 'ImplementationProjectAdmin/show-notes.html.twig',
+                'is_custom_field' => true,
+            ]);
         $this->addLaboratoriesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
         $this->addContactsShowFields($showMapper, false, 'contacts');

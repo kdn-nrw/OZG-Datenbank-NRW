@@ -57,6 +57,27 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     protected $projectStartAt;
 
     /**
+     * @var null|DateTime
+     *
+     * @ORM\Column(nullable=true, type="datetime", name="concept_status_at")
+     */
+    protected $conceptStatusAt;
+
+    /**
+     * @var null|DateTime
+     *
+     * @ORM\Column(nullable=true, type="datetime", name="implementation_status_at")
+     */
+    protected $implementationStatusAt;
+
+    /**
+     * @var null|DateTime
+     *
+     * @ORM\Column(nullable=true, type="datetime", name="commissioning_status_at")
+     */
+    protected $commissioningStatusAt;
+
+    /**
      * Notes
      *
      * @var string|null
@@ -265,6 +286,54 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     public function setProjectStartAt(?DateTime $projectStartAt): void
     {
         $this->projectStartAt = $projectStartAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getConceptStatusAt(): ?DateTime
+    {
+        return $this->conceptStatusAt;
+    }
+
+    /**
+     * @param DateTime|null $conceptStatusAt
+     */
+    public function setConceptStatusAt(?DateTime $conceptStatusAt): void
+    {
+        $this->conceptStatusAt = $conceptStatusAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getImplementationStatusAt(): ?DateTime
+    {
+        return $this->implementationStatusAt;
+    }
+
+    /**
+     * @param DateTime|null $implementationStatusAt
+     */
+    public function setImplementationStatusAt(?DateTime $implementationStatusAt): void
+    {
+        $this->implementationStatusAt = $implementationStatusAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getCommissioningStatusAt(): ?DateTime
+    {
+        return $this->commissioningStatusAt;
+    }
+
+    /**
+     * @param DateTime|null $commissioningStatusAt
+     */
+    public function setCommissioningStatusAt(?DateTime $commissioningStatusAt): void
+    {
+        $this->commissioningStatusAt = $commissioningStatusAt;
     }
 
     /**
@@ -757,7 +826,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
      * @param Contact $contact
      * @return self
      */
-    public function addFimExpert($fimExpert): self
+    public function addFimExpert(Contact $fimExpert): self
     {
         if (!$this->fimExperts->contains($fimExpert)) {
             $this->fimExperts->add($fimExpert);
@@ -770,7 +839,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
      * @param Contact $fimExpert
      * @return self
      */
-    public function removeFimExpert($fimExpert): self
+    public function removeFimExpert(Contact $fimExpert): self
     {
         if ($this->fimExperts->contains($fimExpert)) {
             $this->fimExperts->removeElement($fimExpert);
@@ -793,5 +862,127 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     public function setFimExperts($fimExperts): void
     {
         $this->fimExperts = $fimExperts;
+    }
+
+    /**
+     * Hook on persist and update operations.
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function prePersist(): void
+    {
+        $this->updateStatus();
+    }
+
+    /**
+     * Returns the true if the given status is active
+     *
+     * @param ImplementationStatus $status
+     * @return bool
+     */
+    public function isStatusActive(ImplementationStatus $status): bool
+    {
+        $isActive = $status === $this->getStatus();
+        if (!$isActive && null !== $statusId = $status->getId()) {
+            switch ($statusId) {
+                case ImplementationStatus::STATUS_ID_PREPARED:
+                    $isActive = null !== $this->projectStartAt && $this->projectStartAt->getTimestamp() <= time();
+                    break;
+                case ImplementationStatus::STATUS_ID_CONCEPT:
+                    $isActive = null !== $this->conceptStatusAt && $this->conceptStatusAt->getTimestamp() <= time();
+                    break;
+                case ImplementationStatus::STATUS_ID_IMPLEMENTATION:
+                    $isActive = null !== $this->implementationStatusAt && $this->implementationStatusAt->getTimestamp() <= time();
+                    break;
+                case ImplementationStatus::STATUS_ID_COMMISSIONING:
+                    $isActive = null !== $this->commissioningStatusAt && $this->commissioningStatusAt->getTimestamp() <= time();
+                    break;
+            }
+        }
+        return $isActive;
+    }
+
+    /**
+     * Returns the status date for the given status
+     *
+     * @param ImplementationStatus $status
+     * @return DateTime|null
+     */
+    public function getStatusDate(ImplementationStatus $status): ?DateTime
+    {
+        $statusDate = null;
+        if (null !== $status && null !== $statusId = $status->getId()) {
+            switch ($statusId) {
+                case ImplementationStatus::STATUS_ID_PREPARED:
+                    $statusDate = $this->projectStartAt;
+                    break;
+                case ImplementationStatus::STATUS_ID_CONCEPT:
+                    $statusDate = $this->conceptStatusAt;
+                    break;
+                case ImplementationStatus::STATUS_ID_IMPLEMENTATION:
+                    $statusDate = $this->implementationStatusAt;
+                    break;
+                case ImplementationStatus::STATUS_ID_COMMISSIONING:
+                    $statusDate = $this->commissioningStatusAt;
+                    break;
+            }
+        }
+        return $statusDate;
+    }
+
+    /**
+     * Updates the project status based on the date fields set in the project
+     * @param int $callCount
+     */
+    public function updateStatus($callCount = 1): void
+    {
+        $status = $this->getStatus();
+        if ($callCount < 10 && null !== $status && null !== $switchType = $status->getStatusSwitch()) {
+            switch ($switchType) {
+                case ImplementationStatus::STATUS_SWITCH_PREPARED:
+                    $newStatus = $this->getNewStatusBasedOnDateTime($status, null, $this->projectStartAt);
+                    break;
+                case ImplementationStatus::STATUS_SWITCH_CONCEPT:
+                    $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->projectStartAt, $this->conceptStatusAt);
+                    break;
+                case ImplementationStatus::STATUS_SWITCH_IMPLEMENTATION:
+                    $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->conceptStatusAt, $this->implementationStatusAt);
+                    break;
+                case ImplementationStatus::STATUS_SWITCH_COMMISSIONING:
+                    $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->implementationStatusAt, $this->commissioningStatusAt);
+                    break;
+                default:
+                    $newStatus = null;
+                    break;
+            }
+            if (null !== $newStatus && $newStatus !== $status) {
+                $this->setStatus($newStatus);
+                $this->updateStatus($callCount + 1);
+            }
+        }
+    }
+
+    /**
+     * Returns the previous or next status depending on the given dates
+     * If the previous date is null or the is in the future the previous status is returned
+     * If the next date is not null or the is in the past the previous status is returned
+     *
+     * @param ImplementationStatus $status
+     * @param DateTime|null $prevDateTime
+     * @param DateTime|null $nextDateTime
+     * @return ImplementationStatus|null
+     */
+    private function getNewStatusBasedOnDateTime(
+        ImplementationStatus $status,
+        ?DateTime $prevDateTime,
+        ?DateTime $nextDateTime
+    ): ?ImplementationStatus {
+        $newStatus = null;
+        if (null !== $nextDateTime && $nextDateTime->getTimestamp() <= time())  {
+            $newStatus = $status->getNextStatus();
+        } elseif (null === $prevDateTime || $prevDateTime->getTimestamp() > time()) {
+            $newStatus = $status->getPrevStatus();
+        }
+        return $newStatus;
     }
 }
