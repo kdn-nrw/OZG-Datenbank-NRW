@@ -17,7 +17,7 @@ use Doctrine\ORM\QueryBuilder;
 class ImplementationProjectStatusChartProvider extends AbstractForeignNamedPropertyChartProvider
 {
 
-    protected $chartLabel = 'Anzahl der Umsetzungsprojekte';
+    protected $chartLabel = 'Anzahl der OZG Umsetzungsprojekte';
 
     protected function getEntityClass(): string
     {

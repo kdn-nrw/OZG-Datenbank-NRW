@@ -20,7 +20,7 @@ app:
       offline: 'Lösungen: offline'
       maturity_4: 'Lösungen: Reifegrad 4'
     implementation_project:
-      total: 'gemeinsame kommunale Umsetzungsprojekte in NRW'
+      total: 'gemeinsame kommunale OZG Umsetzungsprojekte in NRW'
     service_system:
       total: 'OZG-Leistungen insgesamt (Bund-Länder-Kommunen)'
       communal_execution: 'OZG-Leistungen in NRW im kommunalen Vollzug'
@@ -232,7 +232,7 @@ app:
       commune: Kommune
       categories: Kategorien
       image_file: Profilbild
-      implementation_projects: Umsetzungsprojekte
+      implementation_projects: OZG Umsetzungsprojekte
       solutions: Lösungen
   efile:
     object_name: eAkten Kataster
@@ -317,11 +317,11 @@ app:
     entity:
       name: Name
       description: Beschreibung
-      implementation_projects: Umsetzungsprojekte
+      implementation_projects: OZG Umsetzungsprojekte
   implementation_project:
-    object_name: Umsetzungsprojekt
-    list: Umsetzungsprojekte
-    create: Umsetzungsprojekt anlegen
+    object_name: OZG Umsetzungsprojekt
+    list: OZG Umsetzungsprojekte
+    create: OZG Umsetzungsprojekt anlegen
     tabs:
       general: Allgemein
       services: Leistungen
@@ -571,7 +571,7 @@ app:
         home: Startseite
         service_systems: OZG-Leistungen
         services: Leika-Katalog
-        implementation_projects: Umsetzungsprojekte
+        implementation_projects: OZG Umsetzungsprojekte
         solutions: Lösungen
         communes: Kommunen
   payment_type:
@@ -678,7 +678,7 @@ app:
       authority_inherit_state_ministries: Regelungskompetenz Ministerien (Land) von OZG-Leistung übernehmen
       authority_inherit_state_ministries.yes: Regelungskompetenz Ministerien (Land) der Leika-Leistung mit Regelungskompetenz  Ministerien (Land) der OZG-Leistung erweitern
       authority_inherit_state_ministries.no: Regelungskompetenz Ministerien (Land) der OZG-Leistung nicht übernehmen
-      implementation_projects: Umsetzungsprojekte
+      implementation_projects: OZG Umsetzungsprojekte
       model_region_projects: DMR Umsetzungsprojekte
       published_model_region_projects: Veröffentlichte DMR Umsetzungsprojekte
       fim_types: FIM
@@ -774,7 +774,7 @@ app:
       authority_state_ministries: Regelungskompetenz Ministerien (Land)
       authority_bureaus_form: Regelungskompetenz Fachlichkeiten (werden an Leika-Leistungen vererbt)
       authority_state_ministries_form: Regelungskompetenz Ministerien (Land) (werden an Leika-Leistungen vererbt)
-      implementation_projects: Umsetzungsprojekte
+      implementation_projects: OZG Umsetzungsprojekte
       model_region_projects: DMR Umsetzungsprojekte
       published_model_region_projects: Veröffentlichte DMR Umsetzungsprojekte
       services_portals: Zielportale
@@ -833,7 +833,7 @@ app:
       payment_types: Bezahlverfahren
       is_published: Lösung öffentlich sichtbar?
       model_region_projects: DMR Umsetzungsprojekte
-      implementation_projects: Umsetzungsprojekte
+      implementation_projects: OZG Umsetzungsprojekte
     messages:
       no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   specialized_procedure:
@@ -852,7 +852,7 @@ app:
     solution_maturity: 'Lösungen: Reifegrade'
     solution_status: 'Lösungen: Status'
     service_status: 'Leika-Leistungen: Status'
-    implementation_project_status: 'Umsetzungsprojekte: Status'
+    implementation_project_status: 'OZG Umsetzungsprojekte: Status'
   status:
     object_name: Status
     list: Status
