@@ -17,7 +17,7 @@ namespace App\Util;
  */
 class SnakeCaseConverter
 {
-    public function classNameToSnakeCase(string $className): string
+    public static function classNameToSnakeCase(string $className): string
     {
         return str_replace(
             '\\',
@@ -25,7 +25,7 @@ class SnakeCaseConverter
             strtolower(
                 preg_replace_callback(
                     '/([a-z])([A-Z])/',
-                    function ($a) {
+                    static function ($a) {
                         return $a[1]."_".strtolower($a[2]);
                     },
                     lcfirst($className)

@@ -1,0 +1,35 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+
+{% block sonata_page_content %}
+    <section class="content">
+    {# @var apiHandler \App\Service\Zsm\ApiHandler #}
+    {% set providers = apiHandler.providers %}
+    <div id="vsm-snippet-container">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                {% for provider in providers %}
+                    {# @var provider \App\Service\Zsm\Api\ApiProviderInterface #}
+                    {% set isActive = activeProviderKey == provider.key or (activeProviderKey is null and loop.first) %}
+                    <li{% if isActive %} class="active"{% endif %}><a href="#api-{{ provider.key }}" title="{{ provider.description }}" data-toggle="tab">{{ provider.name }}</a></li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+            {% for provider in providers %}
+                {% set isActive = activeProviderKey == provider.key or (activeProviderKey is null and loop.first) %}
+                <div class="{% if isActive %}active {% endif %}tab-pane" id="api-{{ provider.key }}">
+                    <h4>{{ provider.description }}</h4>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    </section>
+{% endblock %}

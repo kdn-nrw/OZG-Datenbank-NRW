@@ -48,9 +48,8 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
         if (preg_match('/^((.*Bundle|[^\\\\]+)?(\\\\.+)*\\\\)?([^\\\\]+)$/', $adminClassName, $matches) === 1) {
             $bundle = preg_replace('/^(.*)Bundle$/', '$1', str_replace('\\', '', $matches[2]));
             $class = preg_replace('/^(.*)Admin$/', '$1', $matches[4]);
-            $snakeCaseConverter = new SnakeCaseConverter();
             $prefix = empty($bundle) ? $class : $bundle . '\\' . $class;
-            $filteredPrefix = $snakeCaseConverter->classNameToSnakeCase($prefix);
+            $filteredPrefix = SnakeCaseConverter::classNameToSnakeCase($prefix);
             $parts = explode('.', $filteredPrefix);
             unset($parts[0]);
             $this->adminKey = implode('_', $parts);
@@ -72,14 +71,13 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
         $lastIndex = count($classParts) - 1;
         $className = $classParts[$lastIndex];
         unset($classParts[$lastIndex]);
-        $snakeCaseConverter = new SnakeCaseConverter();
         $prefix = strtolower($classParts[0]) === 'app' ? 'app.' : implode('.', $classParts) . '.';
         if ($property) {
             $key = '.entity.' . $property;
         } else {
             $key = '.list';
         }
-        return $snakeCaseConverter->classNameToSnakeCase($prefix . $className . $key);
+        return SnakeCaseConverter::classNameToSnakeCase($prefix . $className . $key);
     }
 
     /**

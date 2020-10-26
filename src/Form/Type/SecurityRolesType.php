@@ -34,9 +34,8 @@ class SecurityRolesType extends AbstractTypeExtension
     private function getTransposedBundles()
     {
         $bundles = [];
-        $converter = new SnakeCaseConverter();
         foreach ($this->bundles as $bundle) {
-            $bundles[$bundle] = strtoupper($converter->classNameToSnakeCase(preg_replace('/Bundle$/', '', $bundle)));
+            $bundles[$bundle] = strtoupper(SnakeCaseConverter::classNameToSnakeCase(preg_replace('/Bundle$/', '', $bundle)));
         }
 
         return $bundles;

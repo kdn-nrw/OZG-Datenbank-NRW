@@ -1,0 +1,38 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        #vsmsnippet{
+            --primary-color: #204E5F;
+            --secondry-color: #FF8984;
+            --secondry-color-hover: #D4726E;
+            --header-font-color: #314365;
+            --primary-font-color: #424544;
+            --link-color: #204E5F;
+            --link-color-hover: #124252;
+            --odd-strip-color: #B7D7D8;
+            --even-strip-color: #EDF7F5;
+            --font-size-h4: 20px;
+            --font-size-h5: 11px;
+            --font-size-base: 8px;
+            --input-background-color: #f5f5dc;
+        }
+    </style>
+{% endblock %}
+
+{% block sonata_page_content %}
+    <section class="content">
+    <div id="vsm-snippet-container">
+        <div id="vsmsnippet"{% if displayMap %} data-display-it-nrw-maps="yes"{% endif %}></div>
+        <script async type="text/javascript" src="https://snippet.vsm.nrw/snippet.js"></script>
+    </div>
+    </section>
+{% endblock %}

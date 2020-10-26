@@ -13,6 +13,10 @@ app:
     ozg_overview: OZG Überblick
     login: Anmelden
     dashboard: Startseite
+    vsm_group: VSM
+    vsm_snippet: VSM Snippet
+    vsm_snippet_map: VSM Snippet + Karte
+    vsm_api: VSM API
   block:
     solution:
       online: 'Lösungen: Online'
@@ -890,6 +894,9 @@ app:
       contact: Ansprechpartner
     frontend:
       contact_for: Ansprechpartner für das Themenfeld
+  vsm:
+    object_name: Verwaltungssuchmaschine
+    list: Verwaltungssuchmaschine
   user:
     object_name: Benutzer
     list: Benutzer

@@ -15,6 +15,7 @@ namespace App\EventListener;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Event\ConfigureMenuEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class MenuBuilderListener
@@ -31,15 +32,22 @@ class MenuBuilderListener
     private $requestStack;
 
     /**
-     * MenuBuilderListener constructor.
-     * @param RequestStack $requestStack
+     * @var Security
      */
-    public function __construct(RequestStack $requestStack)
+    private $security;
+
+/**
+ * MenuBuilderListener constructor.
+ * @param RequestStack $requestStack
+ * @param Security $security
+ */
+    public function __construct(RequestStack $requestStack, Security $security)
     {
         $this->requestStack = $requestStack;
+        $this->security = $security;
     }
 
-    public function addMenuItems(ConfigureMenuEvent $event)
+    public function addMenuItems(ConfigureMenuEvent $event): void
     {
         $menu = $event->getMenu();
         // standard controller route is not marked as current in menu
@@ -48,6 +56,9 @@ class MenuBuilderListener
 
         $this->moveSolutionMenuToTop($menu, $currentRoute);
         $this->addSearchNode($menu, $currentRoute);
+        if ($this->security->isGranted('ROLE_VSM')) {
+            $this->addVsmNodes($menu, $currentRoute);
+        }
 
         $this->moveContactMenuToTop($menu, $currentRoute);
     }
@@ -76,6 +87,40 @@ class MenuBuilderListener
                 'fa-search',
                 'app_search'
             );
+        }
+    }
+
+    private function addVsmNodes(ItemInterface $menu, string $currentRoute): void
+    {
+        $groupNode = $menu->addChild('app.vsm_group', [
+            'label' => 'app.menu.vsm_group',
+            'route' => 'app_vsm_snippet',
+        ]);
+        $groupNode->setExtras([
+            'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+        ]);
+        if (null !== $groupNode) {
+            $childNode = $groupNode->addChild('app.vsm_snippet', [
+                'label' => 'app.menu.vsm_snippet',
+                'route' => 'app_vsm_snippet',
+            ]);
+            $childNode->setExtras([
+                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+            ]);
+            $childNode = $groupNode->addChild('app.vsm_snippet_map', [
+                'label' => 'app.menu.vsm_snippet_map',
+                'route' => 'app_vsm_snippet_map',
+            ]);
+            $childNode->setExtras([
+                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+            ]);
+            $childNode = $groupNode->addChild('app.vsm_api', [
+                'label' => 'app.menu.vsm_api',
+                'route' => 'app_vsm_api_index',
+            ]);
+            $childNode->setExtras([
+                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+            ]);
         }
     }
 

@@ -19,10 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DashboardController
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2020 Gert Hammes
- * @since     2020-04-13
  */
 class DashboardController extends AbstractController
 {
