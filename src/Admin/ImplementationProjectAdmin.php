@@ -245,20 +245,11 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
-            ->add('status', 'choice', [
-                'editable' => false,
-                'class' => ImplementationStatus::class,
-                'catalogue' => 'messages',
-                'template' => 'ImplementationProjectAdmin/list-status.html.twig',
-                'sortable' => true, // IMPORTANT! make the column sortable
-                'sort_field_mapping' => [
-                    'fieldName' => 'name'
-                ],
-                'sort_parent_association_mappings' => [
-                    ['fieldName' => 'status'],
-                ]
-            ]);
+            ->addIdentifier('name');
+        $this->addDatePickersListFields($listMapper, 'projectStartAt');
+        $this->addDatePickersListFields($listMapper, 'conceptStatusAt');
+        $this->addDatePickersListFields($listMapper, 'implementationStatusAt');
+        $this->addDatePickersListFields($listMapper, 'commissioningStatusAt');
 
         $this->addServiceSystemsListFields($listMapper);
         //$this->addSolutionsListFields($listMapper);
