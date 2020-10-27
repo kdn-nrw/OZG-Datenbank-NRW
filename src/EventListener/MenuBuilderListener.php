@@ -56,9 +56,9 @@ class MenuBuilderListener
 
         $this->moveSolutionMenuToTop($menu, $currentRoute);
         $this->addSearchNode($menu, $currentRoute);
-        if ($this->security->isGranted('ROLE_VSM')) {
+        /*if ($this->security->isGranted('ROLE_VSM')) {
             $this->addVsmNodes($menu, $currentRoute);
-        }
+        }*/
 
         $this->moveContactMenuToTop($menu, $currentRoute);
     }

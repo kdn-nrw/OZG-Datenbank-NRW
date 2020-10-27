@@ -111,10 +111,10 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 //'associated_property' => 'name',
                 'template' => 'ImplementationProjectAdmin/list-service-system-subjects.html.twig',
             ]);
-        $this->addDatePickersListFields($listMapper, 'projectStartAt');
-        $this->addDatePickersListFields($listMapper, 'conceptStatusAt');
-        $this->addDatePickersListFields($listMapper, 'implementationStatusAt');
-        $this->addDatePickersListFields($listMapper, 'commissioningStatusAt');
+        $this->addDatePickersListFields($listMapper, 'projectStartAt', true);
+        $this->addDatePickersListFields($listMapper, 'conceptStatusAt', true);
+        $this->addDatePickersListFields($listMapper, 'implementationStatusAt', true);
+        $this->addDatePickersListFields($listMapper, 'commissioningStatusAt', true);
         $this->addDefaultListActions($listMapper);
     }
 

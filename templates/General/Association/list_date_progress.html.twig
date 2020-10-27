@@ -1,0 +1,19 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+<td class="sonata-ba-list-field sonata-ba-list-field-{{ field_description.type }}{% if value is not empty and date(value)< date() %} list-status-reached{% endif%}" objectId="{{ admin.id(object) }}"{% if field_description.options.row_align is defined %} style="text-align:{{ field_description.options.row_align }}"{% endif %}>
+    {% block field %}
+    {%- if value is not empty -%}
+        {% set pattern = field_description.options.pattern|default(null) %}
+        {% set locale = field_description.options.locale|default(null) %}
+        {% set timezone = field_description.options.timezone|default(null) %}
+        {% set dateType = field_description.options.dateType|default(null) %}
+
+        <time datetime="{{ value|date('Y-m-d', 'UTC') }}" title="{{ value|date('Y-m-d', 'UTC') }}">{{ value | format_date(pattern, locale, timezone, dateType) }}</time>
+
+    {%- endif -%}
+    {% endblock %}
+</td>

@@ -49,13 +49,16 @@ trait DatePickerTrait
         ]);
     }
 
-    protected function addDatePickersListFields(ListMapper $listMapper, string $fieldName): void
+    protected function addDatePickersListFields(ListMapper $listMapper, string $fieldName, $addProgress = false): void
     {
-        $listMapper
-            ->add($fieldName, null, [
-                // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
-                'pattern' => 'MMMM yyyy',
-            ]);
+        $fieldDescriptionOptions = [
+            // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
+            'pattern' => 'MMMM yyyy',
+        ];
+        if ($addProgress) {
+            $fieldDescriptionOptions['template'] = 'General/Association/list_date_progress.html.twig';
+        }
+        $listMapper->add($fieldName, null, $fieldDescriptionOptions);
     }
 
     public function addDatePickersShowFields(ShowMapper $showMapper, string $fieldName): void
