@@ -13,8 +13,8 @@ namespace App\Statistics\Provider;
 
 use App\Statistics\AbstractChartJsStatisticsProvider;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJsStatisticsProvider
 {
@@ -29,6 +29,12 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
 
     protected $chartLabel = 'Anzahl der Datensätze';
     protected $foreignProperty = 'status';
+
+    /**
+     * Optional foreign property for color value
+     * @var string|null
+     */
+    protected $foreignColorProperty;
     /**
      * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
      */
@@ -52,6 +58,9 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
         $xAxisLabels = array_keys($groupedData);
 
         $dataSetConfiguration = [];
+        if (empty($this->colors)) {
+            $this->colors = self::$defaultColors;
+        }
         $offset = 0;
         $dataSetConfiguration[$offset] = [
             'label' => $this->chartLabel,
@@ -84,8 +93,12 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
         /** @var EntityRepository $repository */
         $repository = $this->registry->getRepository($this->getEntityClass());
         $queryBuilder = $repository->createQueryBuilder($alias);
+        $selects = ['COUNT(s.id) AS itemCount', 'IDENTITY(' . $property . ') AS refId', 'fnp.name'];
+        if ($this->foreignColorProperty) {
+            $selects[] = 'fnp.' . $this->foreignColorProperty;
+        }
         $queryBuilder
-            ->select('COUNT(s.id) AS itemCount', 'IDENTITY(' . $property . ') AS refId', 'fnp.name')
+            ->select($selects)
             ->leftJoin($property, 'fnp');
         $this->addCustomDataConditions($queryBuilder, $alias);
         $queryBuilder
@@ -95,9 +108,29 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
         $query = $queryBuilder->getQuery();
         $result = $query->getArrayResult();
         $data = [];
+        $colorOffset = 0;
+        $disabledColorOffset = 0;
+        $colorCount = count(self::$defaultColors);
         foreach ($result as $row) {
-            $key = (string)$row['name'] !== '' ? $row['name'] : 'n.a';
+            $isNamed = (string)$row['name'] !== '';
+            $key = $isNamed ? $row['name'] : 'n.a';
             $data[$key] = $row['itemCount'];
+            if ($this->foreignColorProperty && !empty($row[$this->foreignColorProperty])) {
+                $rowColor = $row[$this->foreignColorProperty];
+            } elseif (!$isNamed) {
+                $rowColor = $this->disabledColors[$disabledColorOffset];
+                ++$disabledColorOffset;
+                if ($disabledColorOffset >= count($this->disabledColors)) {
+                    $disabledColorOffset = 0;
+                }
+            } else {
+                $rowColor = self::$defaultColors[$colorOffset];
+                ++$colorOffset;
+                if ($colorOffset >= $colorCount) {
+                    $colorOffset = 0;
+                }
+            }
+            $this->colors[] = $rowColor;
         }
         return $data;
     }

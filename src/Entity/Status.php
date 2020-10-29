@@ -11,7 +11,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Base\BaseNamedEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,58 +21,57 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_status")
  * @ORM\HasLifecycleCallbacks
  */
-class Status extends BaseNamedEntity
+class Status extends AbstractStatus
 {
 
     /**
-     * Status level (sorting)
+     * Previous status
+     * @var Status|null
      *
-     * @var int
-     *
-     * @ORM\Column(name="level", type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status")
+     * @ORM\JoinColumn(name="prev_status_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $level = 0;
+    protected $prevStatus;
 
     /**
-     * Description
+     * Next status
+     * @var Status|null
      *
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status")
+     * @ORM\JoinColumn(name="next_status_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $description = '';
+    protected $nextStatus;
 
     /**
-     * @return int
+     * @return Status|null
      */
-    public function getLevel(): int
+    public function getPrevStatus(): ?StatusEntityInterface
     {
-        return $this->level;
+        return $this->prevStatus;
     }
 
     /**
-     * @param int $level
+     * @param Status|null $prevStatus
      */
-    public function setLevel(int $level): void
+    public function setPrevStatus(?Status $prevStatus): void
     {
-        $this->level = $level;
+        $this->prevStatus = $prevStatus;
     }
 
     /**
-     * @return string|null
+     * @return Status|null
      */
-    public function getDescription(): ?string
+    public function getNextStatus(): ?StatusEntityInterface
     {
-        return $this->description;
+        return $this->nextStatus;
     }
 
     /**
-     * @param string|null $description
+     * @param Status|null $nextStatus
      */
-    public function setDescription(?string $description): void
+    public function setNextStatus(?Status $nextStatus): void
     {
-        $this->description = $description;
+        $this->nextStatus = $nextStatus;
     }
-
 
 }

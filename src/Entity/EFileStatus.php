@@ -11,7 +11,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Base\BaseNamedEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,56 +21,56 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_efile_status")
  * @ORM\HasLifecycleCallbacks
  */
-class EFileStatus extends BaseNamedEntity
+class EFileStatus extends AbstractStatus
 {
-
     /**
-     * statuslv
-     * @var int
+     * Previous status
+     * @var EFileStatus|null
      *
-     * @ORM\Column(name="level", type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\EFileStatus")
+     * @ORM\JoinColumn(name="prev_status_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $level = 0;
+    protected $prevStatus;
 
     /**
-     * statuslverkl
-     * @var string|null
+     * Next status
+     * @var EFileStatus|null
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\EFileStatus")
+     * @ORM\JoinColumn(name="next_status_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $description = '';
+    protected $nextStatus;
 
     /**
-     * @return int
+     * @return EFileStatus|null
      */
-    public function getLevel(): int
+    public function getPrevStatus(): ?StatusEntityInterface
     {
-        return $this->level;
+        return $this->prevStatus;
     }
 
     /**
-     * @param int $level
+     * @param EFileStatus|null $prevStatus
      */
-    public function setLevel(int $level): void
+    public function setPrevStatus(?EFileStatus $prevStatus): void
     {
-        $this->level = $level;
+        $this->prevStatus = $prevStatus;
     }
 
     /**
-     * @return string|null
+     * @return EFileStatus|null
      */
-    public function getDescription(): ?string
+    public function getNextStatus(): ?StatusEntityInterface
     {
-        return $this->description;
+        return $this->nextStatus;
     }
 
     /**
-     * @param string|null $description
+     * @param EFileStatus|null $nextStatus
      */
-    public function setDescription(?string $description): void
+    public function setNextStatus(?EFileStatus $nextStatus): void
     {
-        $this->description = $description;
+        $this->nextStatus = $nextStatus;
     }
-
 
 }

@@ -17,6 +17,7 @@ class SolutionStatusChartProvider extends AbstractForeignNamedPropertyChartProvi
 {
 
     protected $chartLabel = 'Anzahl der Lösungen';
+    protected $foreignColorProperty = 'color';
 
     protected function getEntityClass(): string
     {

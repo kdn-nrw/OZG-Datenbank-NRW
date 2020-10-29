@@ -11,7 +11,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Base\BaseNamedEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_implementation_status")
  * @ORM\HasLifecycleCallbacks
  */
-class ImplementationStatus extends BaseNamedEntity
+class ImplementationStatus extends AbstractStatus
 {
     public const STATUS_ID_PREPARED = 2;
     public const STATUS_ID_CONCEPT = 3;
@@ -40,22 +39,6 @@ class ImplementationStatus extends BaseNamedEntity
         self::STATUS_SWITCH_IMPLEMENTATION => 'app.implementation_status.entity.status_switch_choices.implementation_status_at',
         self::STATUS_SWITCH_COMMISSIONING => 'app.implementation_status.entity.status_switch_choices.commissioning_status_at',
     ];
-
-    /**
-     * statuslv
-     * @var int
-     *
-     * @ORM\Column(name="level", type="integer")
-     */
-    private $level = 0;
-
-    /**
-     * statuslverkl
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    private $description = '';
 
     /**
      * Flag indicates if status is set automatically or manually
@@ -91,43 +74,11 @@ class ImplementationStatus extends BaseNamedEntity
     private $nextStatus;
 
     /**
-     * @return int
-     */
-    public function getLevel(): int
-    {
-        return $this->level;
-    }
-
-    /**
-     * @param int $level
-     */
-    public function setLevel(int $level): void
-    {
-        $this->level = $level;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
-
-    /**
      * @return bool
      */
     public function isSetAutomatically(): bool
     {
-        return (bool) $this->setAutomatically;
+        return (bool)$this->setAutomatically;
     }
 
     /**
@@ -157,7 +108,7 @@ class ImplementationStatus extends BaseNamedEntity
     /**
      * @return ImplementationStatus|null
      */
-    public function getPrevStatus(): ?ImplementationStatus
+    public function getPrevStatus(): ?StatusEntityInterface
     {
         return $this->prevStatus;
     }
@@ -173,7 +124,7 @@ class ImplementationStatus extends BaseNamedEntity
     /**
      * @return ImplementationStatus|null
      */
-    public function getNextStatus(): ?ImplementationStatus
+    public function getNextStatus(): ?StatusEntityInterface
     {
         return $this->nextStatus;
     }

@@ -18,6 +18,7 @@ class ImplementationProjectStatusChartProvider extends AbstractForeignNamedPrope
 {
 
     protected $chartLabel = 'Anzahl der OZG Umsetzungsprojekte';
+    protected $foreignColorProperty = 'color';
 
     protected function getEntityClass(): string
     {

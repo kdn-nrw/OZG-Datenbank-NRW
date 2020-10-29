@@ -362,8 +362,6 @@ app:
       name: Name
       level: Level/Sortierung
       description: Beschreibung
-      prev_status: Vorheriger Status
-      next_status: Nächster Status
       set_automatically: Wird automatisch festgelegt
       status_switch: Statuswechsel-Typ
       status_switch_choices:
@@ -884,6 +882,15 @@ app:
       name: Name
       level: Level/Sortierung
       description: Beschreibung
+      prev_status: Vorheriger Status
+      next_status: Nächster Status
+      color: Farbe
+      css_class: CSS-Klasse
+      css_class_choices:
+        default: Standard
+        green: Grün
+        orange: Orange
+        red: Rot
   subject:
     object_name: Themenfeld
     list: Themenfelder

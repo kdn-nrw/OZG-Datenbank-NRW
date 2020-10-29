@@ -11,7 +11,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,23 +23,25 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_priority")
  * @ORM\HasLifecycleCallbacks
  */
-class Priority extends BaseNamedEntity
+class Priority extends AbstractStatus
 {
     /**
-     * priolv
-     * @var int
+     * Previous status
+     * @var Priority|null
      *
-     * @ORM\Column(name="level", type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Priority")
+     * @ORM\JoinColumn(name="prev_priority_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $level = 0;
+    protected $prevStatus;
 
     /**
-     * priolverkl
-     * @var string|null
+     * Next status
+     * @var Priority|null
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Priority")
+     * @ORM\JoinColumn(name="next_priority_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $description = '';
+    protected $nextStatus;
 
     /**
      * @var ServiceSystem[]|Collection
@@ -51,38 +52,6 @@ class Priority extends BaseNamedEntity
     public function __construct()
     {
         $this->serviceSystems = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getLevel(): int
-    {
-        return $this->level;
-    }
-
-    /**
-     * @param int $level
-     */
-    public function setLevel(int $level): void
-    {
-        $this->level = $level;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
     }
 
     /**
@@ -99,6 +68,38 @@ class Priority extends BaseNamedEntity
     public function setServiceSystems($serviceSystems): void
     {
         $this->serviceSystems = $serviceSystems;
+    }
+
+    /**
+     * @return Priority|null
+     */
+    public function getPrevStatus(): ?StatusEntityInterface
+    {
+        return $this->prevStatus;
+    }
+
+    /**
+     * @param Priority|null $prevStatus
+     */
+    public function setPrevStatus(?Priority $prevStatus): void
+    {
+        $this->prevStatus = $prevStatus;
+    }
+
+    /**
+     * @return Priority|null
+     */
+    public function getNextStatus(): ?StatusEntityInterface
+    {
+        return $this->nextStatus;
+    }
+
+    /**
+     * @param Priority|null $nextStatus
+     */
+    public function setNextStatus(?Priority $nextStatus): void
+    {
+        $this->nextStatus = $nextStatus;
     }
 
 }

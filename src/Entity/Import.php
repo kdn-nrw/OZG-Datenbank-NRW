@@ -71,6 +71,14 @@ class Import extends BaseEntity
     private $serviceSystemImportId = 0;
 
     /**
+     * Leika-ID
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $serviceId;
+
+    /**
      * OZG-ID
      * @var string|null
      *

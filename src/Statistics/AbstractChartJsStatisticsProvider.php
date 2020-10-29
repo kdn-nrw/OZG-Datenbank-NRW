@@ -87,10 +87,23 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
     protected $additionalFilters = [];
 
     /**
+     * Colors used for disabled items
+     *
+     * @var array
+     */
+    protected $disabledColors = ['#dddddd', '#cccccc', '#bbbbbb', '#aaaaaa'];
+
+    /**
+     * The default colors used in the chart
+     * @var string[]
+     */
+    protected static $defaultColors = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd', '#ccebc5', '#ffed6f'];
+
+    /**
      * https://nagix.github.io/chartjs-plugin-colorschemes
      * @var array
      */
-    protected $colors = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd', '#ccebc5', '#ffed6f'];
+    protected $colors = [];
 
     /**
      * Create the chart data used in the chart configuration

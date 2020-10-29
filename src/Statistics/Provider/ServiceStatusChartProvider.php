@@ -17,6 +17,7 @@ class ServiceStatusChartProvider extends AbstractForeignNamedPropertyChartProvid
 {
 
     protected $chartLabel = 'Anzahl der Leika-Leistungen';
+    protected $foreignColorProperty = 'color';
 
     /**
      * Returns the entity class

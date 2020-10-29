@@ -16,10 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Trait SoftdeletableEntityTrait
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
- * @since     2019-08-15
  */
 trait SoftdeletableEntityTrait
 {

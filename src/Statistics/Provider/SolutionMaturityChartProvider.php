@@ -18,6 +18,7 @@ class SolutionMaturityChartProvider extends AbstractForeignNamedPropertyChartPro
 
     protected $chartLabel = 'Anzahl der Lösungen';
     protected $foreignProperty = 'maturity';
+    protected $foreignColorProperty = 'color';
 
     protected $tooltipsOptions = [
         // https://www.chartjs.org/docs/latest/general/interactions/modes.html#interaction-modes

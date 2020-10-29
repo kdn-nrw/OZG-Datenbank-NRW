@@ -17,10 +17,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Trait TimestampableEntityTrait
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
- * @since     2019-08-15
  */
 trait TimestampableEntityTrait
 {

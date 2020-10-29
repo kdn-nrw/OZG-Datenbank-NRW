@@ -11,8 +11,11 @@
 
 namespace App\Admin;
 
+use App\Entity\Base\ColorCodedEntityInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -25,8 +28,19 @@ class MaturityAdmin extends AbstractAppAdmin
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
+            ]);
+
+        $formMapper
+            ->add('color', ColorType::class, [
+                'label' => 'app.status.entity.color',
+                'required' => false,
             ])
-            ->end();
+            ->add('cssClass', ChoiceType::class, [
+                'label' => 'app.status.entity.css_class',
+                'choices' => array_flip(ColorCodedEntityInterface::CSS_CLASS_CHOICES),
+                'required' => false,
+            ]);
+        $formMapper->end();
     }
 
     /**
