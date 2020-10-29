@@ -376,7 +376,8 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 ],
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'maturity'],
-                ]
+                ],
+                'template' => 'General/List/list-color-coded.html.twig',
             ])
             ->add('url', 'url');
         $this->addDefaultListActions($listMapper);

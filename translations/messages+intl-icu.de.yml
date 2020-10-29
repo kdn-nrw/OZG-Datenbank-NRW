@@ -884,13 +884,34 @@ app:
       description: Beschreibung
       prev_status: Vorheriger Status
       next_status: Nächster Status
-      color: Farbe
-      css_class: CSS-Klasse
+      color: Farbe (für Statistik)
+      css_class: CSS-Klasse für Hintergrundfarbe
       css_class_choices:
         default: Standard
         green: Grün
         orange: Orange
         red: Rot
+        bg_primary: Primär
+        bg_green: Grün
+        bg_red: Rot
+        bg_orange: Orange
+        bg_blue: Blau
+        bg_success: Hellgrün
+        bg_warning: Hellorange
+        bg_danger: Hellrot
+        bg_info: Hellblau
+        bg_light_green_300: Hellgrün 300
+        bg_light_green_700: Hellgrün 700
+        bg_red_300: Rot 300
+        bg_red_700: Rot 700
+        bg_yellow_300: Gelb 300
+        bg_yellow_700: Gelb 700
+        bg_amber_300: Orange 300
+        bg_amber_700: Orange 700
+        bg_blue_gray_300: Blaugrau 300
+        bg_blue_gray_700: Blaugrau 700
+        bg_gray_300: Grau 300
+        bg_gray_700: Grau 700
   subject:
     object_name: Themenfeld
     list: Themenfelder

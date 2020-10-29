@@ -11,16 +11,13 @@
 
 namespace App\Admin;
 
-use App\Entity\Base\ColorCodedEntityInterface;
-use App\Entity\Status;
+use App\Admin\Traits\ColorCodedTrait;
 use App\Entity\StatusEntityInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,6 +25,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class StatusAdmin extends AbstractAppAdmin
 {
+    use ColorCodedTrait;
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $this->addDefaultStatusFormFields($formMapper);
@@ -59,16 +58,7 @@ class StatusAdmin extends AbstractAppAdmin
                     'choice_translation_domain' => false,
                 ]);
         }
-        $formMapper
-            ->add('color', ColorType::class, [
-                'label' => 'app.status.entity.color',
-                'required' => false,
-            ])
-            ->add('cssClass', ChoiceType::class, [
-                'label' => 'app.status.entity.css_class',
-                'choices' => array_flip(ColorCodedEntityInterface::CSS_CLASS_CHOICES),
-                'required' => false,
-            ]);
+        $this->addColorFormFields($formMapper);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

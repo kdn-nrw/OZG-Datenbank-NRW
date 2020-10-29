@@ -56,7 +56,7 @@ trait DatePickerTrait
             'pattern' => 'MMMM yyyy',
         ];
         if ($addProgress) {
-            $fieldDescriptionOptions['template'] = 'General/Association/list_date_progress.html.twig';
+            $fieldDescriptionOptions['template'] = 'General/List/list_date_progress.html.twig';
         }
         $listMapper->add($fieldName, null, $fieldDescriptionOptions);
     }

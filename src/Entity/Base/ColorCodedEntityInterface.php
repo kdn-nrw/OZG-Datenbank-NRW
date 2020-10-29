@@ -16,16 +16,28 @@ namespace App\Entity\Base;
  */
 interface ColorCodedEntityInterface
 {
-    public const CSS_CLASS_DEFAULT = 'state-default';
-    public const CSS_CLASS_GREEN = 'state-green';
-    public const CSS_CLASS_ORANGE = 'state-orange';
-    public const CSS_CLASS_RED = 'state-red';
-
     public const CSS_CLASS_CHOICES = [
-        self::CSS_CLASS_DEFAULT => 'app.status.entity.css_class_choices.default',
-        self::CSS_CLASS_GREEN => 'app.status.entity.css_class_choices.green',
-        self::CSS_CLASS_ORANGE => 'app.status.entity.css_class_choices.orange',
-        self::CSS_CLASS_RED => 'app.status.entity.css_class_choices.red',
+        'bg-primary',
+        'bg-green',
+        'bg-red',
+        'bg-orange',
+        'bg-blue',
+        'bg-success',
+        'bg-warning',
+        'bg-danger',
+        'bg-info',
+        'bg-light-green-300',
+        'bg-light-green-700',
+        'bg-red-300',
+        'bg-red-700',
+        'bg-yellow-300',
+        'bg-yellow-700',
+        'bg-amber-300',
+        'bg-amber-700',
+        'bg-blue-gray-300',
+        'bg-blue-gray-700',
+        'bg-gray-300',
+        'bg-gray-700',
     ];
 
     /**
