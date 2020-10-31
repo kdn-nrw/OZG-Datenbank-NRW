@@ -1,0 +1,27 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+{# @var object \App\Entity\Base\HasDocumentsEntityInterface #}
+{# @var admin \Sonata\AdminBundle\Admin\AbstractAdmin #}
+{% block field %}
+    {% if object.documents|length > 0 %}
+        <ul>
+    {% for child in object.documents %}
+        {% if child.file %}
+            {#
+                <a href="{{ vich_uploader_asset(child, 'file') }}" target="_blank">{{ child.originalName }}</a>
+            <a href="{{ path('get_applicant_attachment', {'id': object.id, 'type': child.type}) }}" target="_blank">{{ child.originalName }}</a>
+            #}
+            <li>
+            <a href="{{ admin.generateObjectUrl('download', object, {'documentId': child.id}) }}" target="_blank">{{ child.name }}</a>
+            </li>
+
+        {% endif %}
+    {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

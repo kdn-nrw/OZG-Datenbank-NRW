@@ -1,0 +1,11 @@
+app_vsm_snippet:
+  path: /admin/vsm/snippet
+  controller: App\Controller\VSMController::snippetAction
+
+app_vsm_snippet_map:
+  path: /admin/vsm/snippet-map
+  controller: App\Controller\VSMController::snippetMapAction
+
+app_vsm_api_index:
+  path: /admin/vsm/api
+  controller: App\Controller\VSMController::apiIndexAction

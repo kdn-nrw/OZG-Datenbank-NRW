@@ -14,12 +14,8 @@ namespace App\Entity\Base;
 
 /**
  * Interface NamedEntityInterface
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
- * @since     2019-08-15
  */
-interface NamedEntityInterface
+interface NamedEntityInterface extends BaseEntityInterface
 {
     /**
      * @return string|null

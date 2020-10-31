@@ -16,10 +16,13 @@ use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\ModelRegionTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\SolutionTrait;
+use App\Form\Type\ModelRegionDocumentType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -37,7 +40,8 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $formMapper
             ->tab('default', ['label' => 'app.model_region_project.tabs.default']);
         $formMapper->with('general', [
-            'label' => 'app.model_region_project.tabs.default',
+            'label' => 'app.model_region_project.group.general_data',
+            'class' => 'col-xs-12 col-md-6',
         ]);
         $formMapper
             ->add('name', TextType::class)
@@ -47,6 +51,11 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $this->addDatePickerFormField($formMapper, 'projectStartAt');
         $this->addDatePickerFormField($formMapper, 'projectEndAt', 20);
         $this->addOrganisationsFormFields($formMapper);
+        $formMapper->end();
+        $formMapper->with('characteristics', [
+            'label' => 'app.model_region_project.group.characteristics',
+            'class' => 'col-xs-12 col-md-6',
+        ]);
         $formMapper
             ->add('usp', TextareaType::class, [
                 'required' => false,
@@ -60,8 +69,28 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('transferableStart', TextareaType::class, [
                 'required' => false,
             ]);
+        $formMapper->end();
+        $formMapper->with('reference_data', [
+            'label' => 'app.model_region_project.group.reference_data',
+            'class' => 'clear-left-md col-xs-12 col-md-6',
+        ]);
         $this->addModelRegionsFormFields($formMapper);
         $this->addSolutionsFormFields($formMapper);
+        $formMapper->end();
+        $formMapper->with('documents', [
+            'label' => 'app.model_region_project.group.documents',
+            'class' => 'col-xs-12 col-md-6',
+        ]);
+        $formMapper->add('documents', CollectionType::class, [
+            'label' => false,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'by_reference' => false,
+            'entry_type' => ModelRegionDocumentType::class,
+            'entry_options' => [
+                'parent_admin' => $this,
+            ],
+        ]);
         $formMapper->end();
         $formMapper->end();
     }
@@ -107,6 +136,9 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('transferableStart');
         $this->addOrganisationsShowFields($showMapper);
         $this->addModelRegionsShowFields($showMapper);
+        $showMapper->add('documents', null, [
+            'template' => 'General/Show/show-attachments.html.twig',
+        ]);
         $showMapper
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
@@ -116,5 +148,11 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
                 ],
                 'showServices' => true,
             ]);
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection
+            ->add('download', $this->getRouterIdParameter() . '/download');
     }
 }

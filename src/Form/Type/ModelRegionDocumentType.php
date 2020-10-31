@@ -11,7 +11,8 @@
 
 namespace App\Form\Type;
 
-use App\Entity\MailingAttachment;
+use App\Entity\ModelRegionProjectDocument;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,25 +21,33 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
-class MailingAttachmentType extends AbstractType
+class ModelRegionDocumentType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $parentAdmin = $options['parent_admin'];
+        /** @var AbstractAdmin|null $parentAdmin */
+
         $builder
             ->add('file', VichFileType::class, [
                 'required' => false,
                 'allow_delete' => true,
-                //'delete_label' => '...',
-                //'download_uri' => '...',
-                //'download_label' => '...',
+                'download_uri' => static function ($object, $uri) use ($parentAdmin) {
+                    /** @var ModelRegionProjectDocument|null $object */
+                    if (null !== $object && null !== $parentAdmin) {
+                        return $parentAdmin->generateObjectUrl('download', $object->getModelRegionProject(), ['documentId' => $object->getId()]);
+                    }
+                    return $uri;
+                },
+                'download_label' => true,
                 'asset_helper' => true,
                 'translation_domain' => 'messages',
             ]);
         $builder->addEventListener(FormEvents::POST_SET_DATA, static function (FormEvent $event) {
-            /** @var MailingAttachment $entity */
+            /** @var ModelRegionProjectDocument $entity */
             $entity = $event->getData();
             $form = $event->getForm();
             if (null !== $entity && null !== $entity->getName()) {
@@ -56,7 +65,8 @@ class MailingAttachmentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => MailingAttachment::class,
+            'data_class' => ModelRegionProjectDocument::class,
+            'parent_admin' => null,
         ]);
     }
 

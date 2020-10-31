@@ -8,9 +8,9 @@ liip_imagine:
     loaders:
         default:
             filesystem:
-                locator: filesystem
+                locator: filesystem_insecure
                 data_root:
-                    #- '%kernel.project_dir%/secured-data'
+                    - '%kernel.project_dir%/secured-data'
                     - '%kernel.project_dir%/public'
 
     #http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html#the-relative-resize-filter

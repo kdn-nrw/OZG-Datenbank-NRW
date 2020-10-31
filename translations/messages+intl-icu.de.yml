@@ -57,7 +57,22 @@ app:
       error: Der Eintrag kann nicht gelöscht werden, da ansonsten eine notwendige Referenz verloren gehen würde
       unknown: Die Referenz auf den gelöschten Datensatz wird entfernt
       nothing: Für den referenzierten Datensatz ist keine Änderung notwendig
-
+  api:
+    common:
+      no_result_found: Es wurde kein Ergebnis für Ihre Suchanfrage gefunden
+      search_exception: 'Beim Aufruf der API {apiName} ist ein Fehler aufgetreten:'
+      actions:
+        search: Suchen
+    ars_ags:
+      search_term: Suchbegriff
+    leika:
+      search_term: Suchbegriff
+    web_search:
+      search_term: Suchbegriff
+    zu_fi:
+      service_key: Leistungsschlüssel
+      regional_key: Regionalschlüssel
+      zip_code: PLZ
   administrative_district:
     object_name: Regierungsbezirk
     list: Regierungsbezirke
@@ -527,6 +542,11 @@ app:
     object_name: DMR Umsetzungsprojekt
     list: DMR Umsetzungsprojekte
     create: DMR Umsetzungsprojekt anlegen
+    group:
+      general_data: Basisdaten
+      characteristics: Merkmale/Nutzen/Übertragbarkeit
+      reference_data: Referenzen
+      documents: Dokumente
     tabs:
       default: Allgemein
     entity:
@@ -541,6 +561,13 @@ app:
       transferable_start: Beginn Übertragbarkeit
       model_regions: Modellregionen
       solutions: Lösungen
+      documents: Dokumente
+  model_region_project_document:
+    object_name: DMR Umsetzungsprojekt Dokument
+    list: DMR Umsetzungsprojekt Dokumente
+    create: DMR Umsetzungsprojekt Dokument anlegen
+    entity:
+      model_region_project: DMR Umsetzungsprojekt
   open_data:
     object_name: Open Data
     list: Open Data

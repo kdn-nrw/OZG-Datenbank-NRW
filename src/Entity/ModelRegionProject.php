@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Base\HasDocumentsEntityInterface;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use DateTime;
@@ -26,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_model_region_project")
  * @ORM\HasLifecycleCallbacks
  */
-class ModelRegionProject extends BaseNamedEntity implements SluggableInterface
+class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, HasDocumentsEntityInterface
 {
     use ImportTrait;
     use SluggableEntityTrait;
@@ -120,8 +121,15 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface
      */
     private $solutions;
 
+    /**
+     * @var ModelRegionProjectDocument[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\ModelRegionProjectDocument", mappedBy="modelRegionProject", cascade={"persist", "remove"})
+     */
+    private $documents;
+
     public function __construct()
     {
+        $this->documents = new ArrayCollection();
         $this->modelRegions = new ArrayCollection();
         $this->organisations = new ArrayCollection();
         $this->solutions = new ArrayCollection();
@@ -367,6 +375,48 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface
     public function setSolutions($solutions): void
     {
         $this->solutions = $solutions;
+    }
+
+    /**
+     * Add document
+     *
+     * @param ModelRegionProjectDocument $document
+     *
+     * @return self
+     */
+    public function addDocument(ModelRegionProjectDocument $document): self
+    {
+        $this->documents->add($document);
+        $document->setModelRegionProject($this);
+        return $this;
+    }
+
+    /**
+     * Remove document
+     *
+     * @param ModelRegionProjectDocument $document
+     */
+    public function removeDocument(ModelRegionProjectDocument $document): void
+    {
+        $this->documents->removeElement($document);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return Collection
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    /**
+     * @param ModelRegionProjectDocument[]|Collection $documents
+     */
+    public function setDocuments($documents): void
+    {
+        $this->documents = $documents;
     }
 
 }

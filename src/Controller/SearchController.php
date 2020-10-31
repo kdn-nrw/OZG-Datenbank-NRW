@@ -18,8 +18,12 @@ use App\Form\Type\SearchType;
 use Sonata\AdminBundle\Admin\Pool;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -42,14 +46,21 @@ class SearchController extends AbstractController
     private $translator;
 
     /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
      * SearchController constructor.
+     * @param SessionInterface $session
      * @param Pool $adminPool
      * @param TranslatorInterface $translator
      */
-    public function __construct(Pool $adminPool, TranslatorInterface $translator)
+    public function __construct(SessionInterface $session, Pool $adminPool, TranslatorInterface $translator)
     {
         $this->adminPool = $adminPool;
         $this->translator = $translator;
+        $this->session = $session;
     }
 
 
@@ -75,11 +86,10 @@ class SearchController extends AbstractController
     /**
      * Edit the search
      *
-     * @param Request $request
      * @param int|null $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function editAction(Request $request, int $id)
+    public function editAction(int $id): Response
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             $search = $this->initSearchModel($id);
@@ -98,11 +108,10 @@ class SearchController extends AbstractController
     /**
      * Edit the search
      *
-     * @param Request $request
      * @param int|null $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function deleteAction(Request $request, int $id)
+    public function deleteAction(int $id): Response
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             $search = $this->initSearchModel($id);
@@ -114,7 +123,7 @@ class SearchController extends AbstractController
                 $em->remove($search);
                 $em->flush();
                 /** @var FlashBag $flashBag */
-                $flashBag = $this->get('session')->getFlashBag();
+                $flashBag = $this->session->getFlashBag();
                 $translation = $this->translator->trans('app.search.entity.delete_success');
                 $flashBag->add('success', $translation);
             }
@@ -128,7 +137,7 @@ class SearchController extends AbstractController
      *
      * @param Request $request
      * @param int|null $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function saveAction(Request $request, ?int $id)
     {
@@ -150,7 +159,7 @@ class SearchController extends AbstractController
                 }
                 $em->flush();
                 /** @var FlashBag $flashBag */
-                $flashBag = $this->get('session')->getFlashBag();
+                $flashBag = $this->session->getFlashBag();
                 $translation = $this->translator->trans('app.search.entity.save_success');
                 $flashBag->add('success', $translation);
             }
@@ -225,7 +234,8 @@ class SearchController extends AbstractController
      * Initializes the search form
      *
      * @param Search $search
-     * @return \Symfony\Component\Form\FormInterface
+     * @param array $adminList
+     * @return FormInterface
      */
     private function initSearchForm(Search $search, array $adminList)
     {
