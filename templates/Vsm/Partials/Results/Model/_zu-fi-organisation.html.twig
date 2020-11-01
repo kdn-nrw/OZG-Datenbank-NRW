@@ -1,0 +1,42 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var organisation \App\Api\Consumer\Model\ZuFi\OrganisationResult #}
+<div class="item">
+    <h5 class="item-title">{{ 'app.api.zu_fi.result.organisation'|trans }}: {{ organisation ~ '' }}</h5>
+    <dl class="dl-horizontal">
+        <dt>{{ 'app.api.zu_fi.result.organisation_model.description'|trans }}</dt>
+        <dd>
+            {% include 'Vsm/Partials/Results/Model/_long-text.html.twig' with {'text': organisation.description, 'property': 'description'} %}
+        </dd>
+        <dt>{{ 'app.api.zu_fi.result.organisation_model.mandator'|trans }}</dt>
+        <dd>{{ organisation.mandator }}</dd>
+        <dt>{{ 'app.api.zu_fi.result.organisation_model.addresses'|trans }}</dt>
+        <dd>
+            {% if organisation.addresses|length > 0 %}
+                {% for addressModel in organisation.addresses %}
+                    {% include 'Vsm/Partials/Results/Model/_zu-fi-address.html.twig' with {'address': addressModel} %}
+                {% endfor %}
+            {% endif %}
+        </dd>
+        <dt>{{ 'app.api.zu_fi.result.organisation_model.communications'|trans }}</dt>
+        <dd>
+            {% if organisation.communications|length > 0 %}
+                {% for communicationModel in organisation.communications %}
+                    {% include 'Vsm/Partials/Results/Model/_zu-fi-communication.html.twig' with {'communication': communicationModel} %}
+                {% endfor %}
+            {% endif %}
+        </dd>
+    </dl>
+    {% if organisation.unmappedData|length > 0 %}
+        {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': organisation.unmappedData}) %}
+        {% if mapValueHtml|trim|length > 0 %}
+            <div class="unmapped-values uv-organisation">
+                {{ mapValueHtml|raw }}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

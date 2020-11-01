@@ -1,0 +1,27 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if unmappedData|length > 0 %}
+    {% for name, value in unmappedData %}
+        {% if value %}
+            <span class="label label-default" data-key="{{ name }}">
+                <span class="label-text">{{ name|app_format_custom_label }}:</span>
+                <span class="value">
+                {% if value is iterable %}
+                    {{ value|join(',')|striptags }}
+                {% elseif value|length > 25 %}
+                    <span class="label-popover" data-container="body" data-toggle="popover" data-placement="top" data-html="1"
+                          data-content="{{ value|raw|replace({'"': "'"}) }}">
+                      {{ value|striptags|u.truncate(25, '...') }} <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                    </span>
+                {% else %}
+                    {{ value|striptags|raw }}
+                {% endif %}
+                </span>
+            </span>
+        {% endif %}
+    {% endfor %}
+{% endif %}

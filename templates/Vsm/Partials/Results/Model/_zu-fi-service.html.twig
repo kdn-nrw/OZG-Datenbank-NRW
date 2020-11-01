@@ -1,0 +1,52 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var service \App\Api\Consumer\Model\ZuFi\ServiceResult #}
+<div class="item">
+    <h5 class="item-title">{{ 'app.api.zu_fi.result.service'|trans }}: {{ service ~ '' }}</h5>
+    {% if service.teaser %}
+        {{ service.teaser|raw }}
+    {% endif %}
+    <dl class="dl-horizontal">
+        <dt>{{ 'app.api.zu_fi.result.service_model.description'|trans }}</dt>
+        <dd>
+            {% include 'Vsm/Partials/Results/Model/_long-text.html.twig' with {'text': service.description, 'property': 'description'} %}
+        </dd>
+        <dt>{{ 'app.api.zu_fi.result.service_model.author'|trans }}</dt>
+        <dd>{{ service.author }}</dd>
+        <dt>{{ 'app.api.leika.result.synonyms'|trans }}</dt>
+        <dd>
+            {% if service.synonyms %}
+                {{ service.synonyms|join(', ') }}
+            {% else %}
+                &ndash;
+            {% endif %}
+        </dd>
+        <dt>{{ 'app.api.zu_fi.result.service_model.legal_basis'|trans }}</dt>
+        <dd>
+            {% if service.legalBasis %}
+                {{ service.legalBasis|raw }}
+            {% elseif service.legalBasisUris|length > 0 %}
+                <p>
+                {% for uriModel in service.legalBasisUris %}
+                    {# @var uriModel \App\Api\Consumer\Model\ZuFi\UriResult #}
+                    <a href="{{ uriModel.uri }}" target="_blank">{{ uriModel.title ? uriModel.title : uriModel.uri }}</a><br>
+                {% endfor %}
+                </p>
+            {% else %}
+                &ndash;
+            {% endif %}
+        </dd>
+    </dl>
+    {% if service.unmappedData|length > 0 %}
+        {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': service.unmappedData}) %}
+        {% if mapValueHtml|trim|length > 0 %}
+            <div class="unmapped-values uv-service">
+                {{ mapValueHtml|raw }}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

@@ -1,0 +1,57 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var consumer \App\Api\Consumer\ApiConsumerInterface #}
+{# @var results \App\Api\Consumer\Model\ResultCollection #}
+<ul class="search-result-list search-result-in-box">
+    {% set startOffset = results.offset %}
+    {% for child in results %}
+        {# @var child \App\Api\Consumer\Model\WebSearchResult #}
+        <li class="item search-result-item" id="{{ consumer.key }}-result-{{ loop.index }}">
+            <div class="item-header">
+                <div class="item-count" title="{{ loop.index }}. {{ 'app.api.common.search_result'|trans }}">{{ startOffset + loop.index }}</div>
+                <h4 class="item-title">
+                    {% if child.url %}
+                        <div class="item-url">
+                            <a href="{{ child.url }}" target="_blank">
+                                {{ child|trim }}
+                                <i class="fa fa-external-link" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        {{ child.title }}
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="item-content">
+                <div class="item-meta">
+                    {% if child.formattedDate %}
+                    <span class="meta" title="{{ 'app.api.web_search.result.date'|trans }}">{{ child.formattedDate }}</span>
+                    {% endif %}
+                </div>
+                <div class="item-snippet">
+                    {% include 'Vsm/Partials/Results/Model/_long-text.html.twig' with {'text': child.snippet, 'property': 'snippet', 'convertNewLines': true, 'disableDefaultText': true} %}
+                </div>
+                {% if child.url %}
+                    <div class="item-url">
+                        <a href="{{ child.url }}" target="_blank">
+                            <i class="fa fa-external-link" aria-hidden="true"></i>
+                            {{ child.encodedUrl ? child.encodedUrl : child.url }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            {% if child.unmappedData|length > 0 %}
+                {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': child.unmappedData}) %}
+                {% if mapValueHtml|trim|length > 0 %}
+                    <div class="unmapped-values uv-{{ consumer.key }}">
+                        {{ mapValueHtml|raw }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

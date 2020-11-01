@@ -1,0 +1,5 @@
+app:
+  api:
+    zu_fi:
+      validator:
+        invalid_parameters: Bitte geben Sie einen Leistungsschlüssel oder einen Fremdadapter UND einen Regionalschlüssel oder eine PLZ ein!

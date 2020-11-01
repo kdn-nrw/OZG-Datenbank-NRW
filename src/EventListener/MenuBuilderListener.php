@@ -56,9 +56,9 @@ class MenuBuilderListener
 
         $this->moveSolutionMenuToTop($menu, $currentRoute);
         $this->addSearchNode($menu, $currentRoute);
-        /*if ($this->security->isGranted('ROLE_VSM')) {
+        if ($this->security->isGranted('ROLE_VSM')) {
             $this->addVsmNodes($menu, $currentRoute);
-        }*/
+        }
 
         $this->moveContactMenuToTop($menu, $currentRoute);
     }
@@ -100,6 +100,13 @@ class MenuBuilderListener
             'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
         ]);
         if (null !== $groupNode) {
+            $childNode = $groupNode->addChild('app.vsm_api', [
+                'label' => 'app.menu.vsm_api',
+                'route' => 'app_vsm_api_index',
+            ]);
+            $childNode->setExtras([
+                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+            ]);
             $childNode = $groupNode->addChild('app.vsm_snippet', [
                 'label' => 'app.menu.vsm_snippet',
                 'route' => 'app_vsm_snippet',
@@ -110,13 +117,6 @@ class MenuBuilderListener
             $childNode = $groupNode->addChild('app.vsm_snippet_map', [
                 'label' => 'app.menu.vsm_snippet_map',
                 'route' => 'app_vsm_snippet_map',
-            ]);
-            $childNode->setExtras([
-                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
-            ]);
-            $childNode = $groupNode->addChild('app.vsm_api', [
-                'label' => 'app.menu.vsm_api',
-                'route' => 'app_vsm_api_index',
             ]);
             $childNode->setExtras([
                 'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',

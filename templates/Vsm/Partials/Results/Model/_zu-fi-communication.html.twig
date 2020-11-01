@@ -1,0 +1,18 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var communication \App\Api\Consumer\Model\ZuFi\CommunicationResult #}
+<div class="item item-contact">
+    {{ communication ~ '' }}
+    {% if communication.unmappedData|length > 0 %}
+        {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': communication.unmappedData}) %}
+        {% if mapValueHtml|trim|length > 0 %}
+            <div class="unmapped-values uv-address">
+                {{ mapValueHtml|raw }}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

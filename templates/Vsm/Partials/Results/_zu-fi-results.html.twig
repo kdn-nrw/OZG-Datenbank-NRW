@@ -1,0 +1,46 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var consumer \App\Api\Consumer\ApiConsumerInterface #}
+{# @var results \App\Api\Consumer\Model\ResultCollection #}
+<ul class="search-result-list search-result-in-box">
+    {% set startOffset = results.offset %}
+    {% for child in results %}
+        {# @var child \App\Api\Consumer\Model\ZuFiResult #}
+        <li class="item search-result-item" id="{{ consumer.key }}-result-{{ loop.index }}">
+            <div class="item-header">
+                <div class="item-count" title="{{ loop.index }}. {{ 'app.api.common.search_result'|trans }}">{{ startOffset + loop.index }}</div>
+                <h4 class="item-title">
+                    {{ child ~ '' }}
+                </h4>
+            </div>
+            <div class="item-content">
+            {% if child.service %}
+                <div class="item-sub-result item-result-service">
+                    {% include 'Vsm/Partials/Results/Model/_zu-fi-service.html.twig' with {'service': child.service} %}
+                </div>
+            {% endif %}
+            {% if child.organisations|length > 0 %}
+                <div class="item-sub-result-list">
+                    {% for organisation in child.organisations %}
+                        <div class="col item-sub-result item-result-organisation">
+                            {% include 'Vsm/Partials/Results/Model/_zu-fi-organisation.html.twig' with {'organisation': organisation} %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if child.unmappedData|length > 0 %}
+                {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': child.unmappedData}) %}
+                {% if mapValueHtml|trim|length > 0 %}
+                    <div class="unmapped-values uv-{{ consumer.key }}">
+                        {{ mapValueHtml|raw }}
+                    </div>
+                {% endif %}
+            {% endif %}
+            </div>
+        </li>
+    {% endfor %}
+</ul>

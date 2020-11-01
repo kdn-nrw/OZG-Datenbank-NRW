@@ -37,6 +37,9 @@ app:
     add_sub_record: Neuen Eintrag bearbeiten
     actions: Aktionen
     full_text_search: Volltextsuche
+    yes_no_choices:
+      1: Ja
+      0: Nein
     fields:
       id: ID
       created_at: Erstellt am
@@ -60,19 +63,71 @@ app:
   api:
     common:
       no_result_found: Es wurde kein Ergebnis für Ihre Suchanfrage gefunden
+      search_result: Suchergebnis
+      search_results: "{count, plural,
+          =0 {Für Ihre Suchanfrage wurden leider keine Ergebnisse gefunden}
+          one {Für Ihre Suchanfrage wurde 1 Ergebnis gefunden:}
+          other {Für Ihre Suchanfrage wurden # Ergebnisse gefunden:}
+        }"
       search_exception: 'Beim Aufruf der API {apiName} ist ein Fehler aufgetreten:'
+      read_more: Weiterlesen
+      read_less: Zuklappen
       actions:
         search: Suchen
     ars_ags:
       search_term: Suchbegriff
+      result:
+        name: Name
+        regional_key: Regionalschlüssel
+        commune_key: Gemeindeschlüssel
+        association_key: Verbandsschlüssel
+        state_government: Landesregierung
+        collection_key: Kollektionschlüssel
+        zip_codes: Postleitzahlen
+        searchable: Durchsuchbar
     leika:
       search_term: Suchbegriff
+      result:
+        name: Name
+        teaser: Kurztext
+        description: Beschreibung
+        procedure: Verfahrensablauf
+        required_documents: Erforderliche Unterlagen
+        special_features: Besondere Merkmale
+        service_key: Schlüssel
+        synonyms: Synonyme
+        confidence: Konfidenz
+        type: Typisierung
     web_search:
       search_term: Suchbegriff
+      result:
+        id: ID
+        title: Titel
+        snippet: Snippet
+        url: Url
+        encoded_url: kodierte Url
+        encoding: Zeichenkodierung
+        size: Größe
+        mime: Mime-Type
+        date: Datum
     zu_fi:
       service_key: Leistungsschlüssel
+      custom_key: Fremdadapter
       regional_key: Regionalschlüssel
       zip_code: PLZ
+      result:
+        service: Leistung
+        service_model:
+          description: Beschreibung
+          author: Urheber
+          legal_basis: Rechtsgrundlage
+        organisation: Organisation
+        organisations: Organisationen
+        organisation_model:
+          description: Beschreibung
+          mandator: Mandant
+          addresses: Adresse(n)
+          communications: Kontakt
   administrative_district:
     object_name: Regierungsbezirk
     list: Regierungsbezirke

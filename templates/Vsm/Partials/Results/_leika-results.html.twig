@@ -1,0 +1,58 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var consumer \App\Api\Consumer\ApiConsumerInterface #}
+{# @var results \App\Api\Consumer\Model\ResultCollection #}
+<ul class="search-result-list search-result-in-box">
+    {% set startOffset = results.offset %}
+    {% for child in results %}
+        {# @var child \App\Api\Consumer\Model\LeikaResult #}
+        <li class="item search-result-item" id="{{ consumer.key }}-result-{{ loop.index }}">
+            <div class="item-header">
+                <div class="item-count" title="{{ loop.index }}. {{ 'app.api.common.search_result'|trans }}">{{ startOffset + loop.index }}</div>
+                <h4 class="item-title">
+                    {{ child.name }} - <span title="{{ 'app.api.leika.result.service_key'|trans }}">{{ child.serviceKey }}</span>
+                </h4>
+            </div>
+            <dl class="dl-horizontal">
+                <dt>{{ 'app.api.leika.result.type'|trans }}</dt>
+                <dd>{{ child.type }}</dd>
+                <dt>{{ 'app.api.leika.result.description'|trans }}</dt>
+                <dd>
+                    {% include 'Vsm/Partials/Results/Model/_long-text.html.twig' with {'text': child.description, 'property': 'description', teaser: child.teaser} %}
+                </dd>
+                <dt>{{ 'app.api.leika.result.procedure'|trans }}</dt>
+                <dd>
+                    {% include 'Vsm/Partials/Results/Model/_long-text.html.twig' with {'text': child.procedure, 'property': 'procedure'} %}
+                </dd>
+                <dt>{{ 'app.api.leika.result.required_documents'|trans }}</dt>
+                <dd>
+                    {% include 'Vsm/Partials/Results/Model/_long-text.html.twig' with {'text': child.requiredDocuments, 'property': 'requiredDocuments'} %}
+                </dd>
+                <dt>{{ 'app.api.leika.result.special_features'|trans }}</dt>
+                <dd>
+                    {% include 'Vsm/Partials/Results/Model/_long-text.html.twig' with {'text': child.specialFeatures, 'property': 'specialFeatures'} %}
+                </dd>
+                <dt>{{ 'app.api.leika.result.synonyms'|trans }}</dt>
+                <dd>
+                    {% if child.synonyms %}
+                        {{ child.synonyms|join(', ') }}
+                    {% else %}
+                        &ndash;
+                    {% endif %}
+                </dd>
+            </dl>
+            {% if child.unmappedData|length > 0 %}
+                {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': child.unmappedData}) %}
+                {% if mapValueHtml|trim|length > 0 %}
+                    <div class="unmapped-values uv-{{ consumer.key }}">
+                        {{ mapValueHtml|raw }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

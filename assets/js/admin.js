@@ -31,6 +31,7 @@ const appOnReady = function() {
 
         }).catch(error => 'An error occurred while loading the chart component');
     }
+    jQuery('[data-toggle="popover"]').popover();
 };
 
 if (

@@ -7,5 +7,11 @@ app_vsm_snippet_map:
   controller: App\Controller\VSMController::snippetMapAction
 
 app_vsm_api_index:
-  path: /admin/vsm/api
+  path: /admin/vsm/api/{consumerKey}/{query}/{page}
   controller: App\Controller\VSMController::apiIndexAction
+  defaults:
+    consumerKey: null
+    query: null
+    page: 1
+  requirements:
+    page: '\d+'

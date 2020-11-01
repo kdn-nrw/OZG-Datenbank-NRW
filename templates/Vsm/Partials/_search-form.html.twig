@@ -1,0 +1,27 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% form_theme searchForm 'General/Form/custom_form_layout.html.twig' %}
+{{ form_start(searchForm, {'style': 'horizontal', 'attr': {'class': 'form-search'}}) }}
+{% set formIterator = searchForm.getIterator() %}
+{% for field in formIterator %}
+    {{ form_row(field) }}
+{% endfor %}
+
+<div class="form-actions form-actions-search">
+    <div class="form-group">
+        <div class="col-xs-12 col-sm-9 col-lg-6 col-sm-offset-3 col-lg-offset-2">
+            <button type="submit" id="_submit" name="_submit" class="btn btn-primary">
+                <span class="btn-text">{{ 'app.api.common.actions.search'|trans }}</span>
+            </button>
+        </div>
+    </div>
+</div>
+{{ form_widget(searchForm._token) }}
+{{ form_rest(searchForm) }}
+
+{{ form_end(searchForm, {'render_rest': false}) }}

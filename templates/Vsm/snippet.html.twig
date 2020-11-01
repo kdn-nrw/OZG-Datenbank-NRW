@@ -30,9 +30,12 @@ file that was distributed with this source code.
 
 {% block sonata_page_content %}
     <section class="content">
-    <div id="vsm-snippet-container">
-        <div id="vsmsnippet"{% if displayMap %} data-display-it-nrw-maps="yes"{% endif %}></div>
-        <script async type="text/javascript" src="https://snippet.vsm.nrw/snippet.js"></script>
-    </div>
+        {% block notice %}
+            {% include '@SonataTwig/FlashMessage/render.html.twig' %}
+        {% endblock notice %}
+        <div id="vsm-snippet-container">
+            <div id="vsmsnippet"{% if displayMap %} data-display-it-nrw-maps="yes"{% endif %}></div>
+            <script async type="text/javascript" src="https://snippet.vsm.nrw/snippet.js"></script>
+        </div>
     </section>
 {% endblock %}

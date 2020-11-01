@@ -1,0 +1,107 @@
+.search-result-container {
+  border-top: 2px solid $gray-200;
+  margin-top: 30px;
+  padding-top: 2px;
+  .item-count {
+    background: $success;
+    color: #fff;
+    display: block;
+    flex: 0 0 24px;
+    font-weight: bold;
+    line-height: 24px;
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    text-align: center;
+  }
+  .result-nav-link {
+    display: flex;
+    align-items: center;
+    border-left-width: 0;
+    padding: 6px 10px;
+  }
+}
+.search-result-list {
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+  border-top: 1px solid $gray-200;
+}
+.search-result-item {
+  background: #fff;
+  border-bottom: 1px solid $gray-200;
+  padding-top: 10px;
+  .item-header {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+  }
+  .item-title {
+    font-weight: 600;
+  }
+  .item-content {
+    padding-left: 44px;
+    padding-bottom: 15px;
+  }
+  .toggle-link-text {
+    display: block;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+  .item-collapse-wrap {
+    display: flex;
+    flex-direction: column;
+    .toggle-link-text {
+      order: 10;
+      &[aria-expanded="true"] {
+        display: none;
+        + .item-teaser {
+          display: none;
+        }
+      }
+    }
+  }
+  .dl-horizontal {
+    dt {
+      width: 200px;
+    }
+    dd {
+      margin-left: 220px;
+    }
+  }
+  .item-sub-result {
+    margin-bottom: 15px;
+  }
+  .item-sub-result-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 15px -15px 0;
+    border-top: 1px dashed $gray-200;
+    .col {
+      padding: 10px 15px;
+      flex: 1 1 auto;
+    }
+  }
+  .unmapped-values  {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 15px 0 5px;
+    padding-top: 10px;
+    border-top: 1px dashed $gray-200;
+    .label {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    .label-text {
+      padding-right: 4px;
+    }
+    .label-popover {
+      color: $blue;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{# @var consumer \App\Api\Consumer\ApiConsumerInterface #}
+{# @var results \App\Api\Consumer\Model\ResultCollection #}
+{% if results|length > 1 and results.lastPageNumber > 1 %}
+    <nav class="search-result-pagination" aria-label="Page navigation">
+        <ul class="pagination">
+            {% if results.page > 1 %}
+            <li>
+                <a href="{{ path('app_vsm_api_index', {'consumerKey': consumer.key, 'query': consumer.demandValueString, 'page': results.page - 1}) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% set startPage = results.page > 3 ? results.page - 3 : 1 %}
+            {% set endPage = results.page + 3 < results.lastPageNumber ? results.page + 3 : results.lastPageNumber %}
+            {% for pageNr in range(startPage, endPage) %}
+                {% if pageNr == results.page %}
+                    <li class="active">
+                        <span aria-label="Current">{{ pageNr }}</span>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('app_vsm_api_index', {'consumerKey': consumer.key, 'query': consumer.demandValueString, 'page': pageNr}) }}">
+                            {{ pageNr }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if not results.lastPage %}
+            <li>
+                <a href="{{ path('app_vsm_api_index', {'consumerKey': consumer.key, 'query': consumer.demandValueString, 'page': results.page + 1}) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}

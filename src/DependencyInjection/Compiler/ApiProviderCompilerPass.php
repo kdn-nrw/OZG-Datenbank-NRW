@@ -11,7 +11,7 @@
 
 namespace App\DependencyInjection\Compiler;
 
-use App\Service\Zsm\ApiHandler;
+use App\Api\Consumer\ApiHandler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

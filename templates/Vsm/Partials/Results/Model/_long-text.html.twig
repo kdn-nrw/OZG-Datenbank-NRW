@@ -1,0 +1,40 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if text %}
+    {% set textPlain = text|striptags|trim %}
+    {% if textPlain|length > 150 %}
+        {% if teaser is not defined or teaser|length == 0 %}
+            {% set teaser = textPlain|u.truncate(100, '...') %}
+        {% endif %}
+        <div class="item-collapse-wrap">
+            <a class="toggle-link-text" role="button" data-toggle="collapse" href="#collapse-{{ property }}-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ property }}-{{ loop.index }}">
+                {{ 'app.api.common.read_more'|trans }} <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+            </a>
+            <div class="item-teaser">
+                {{ teaser|raw }}
+            </div>
+        </div>
+        <div class="collapse" id="collapse-{{ property }}-{{ loop.index }}">
+            {% if convertNewLines is defined and convertNewLines %}
+                {{ text|trim|raw|nl2br }}
+            {% else %}
+                {{ text|trim|raw }}
+            {% endif %}
+            <a class="toggle-link-text" role="button" data-toggle="collapse" href="#collapse-{{ property }}-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ property }}-{{ loop.index }}">
+                {{ 'app.api.common.read_less'|trans }} <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+            </a>
+        </div>
+    {% else %}
+        {% if convertNewLines is defined and convertNewLines %}
+            {{ text|raw|nl2br }}
+        {% else %}
+            {{ text|raw }}
+        {% endif %}
+    {% endif %}
+{% elseif disableDefaultText is not defined or not disableDefaultText %}
+    &ndash;
+{% endif %}

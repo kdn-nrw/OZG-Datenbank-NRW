@@ -4,7 +4,7 @@ namespace App;
 
 use App\DependencyInjection\Compiler\ApiProviderCompilerPass;
 use App\DependencyInjection\Compiler\ChartStatisticsCompilerPass;
-use App\Service\Zsm\Api\ApiProviderInterface;
+use App\Api\Consumer\ApiConsumerInterface;
 use App\Statistics\ChartStatisticsProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -63,7 +63,7 @@ class Kernel extends BaseKernel
     protected function build(ContainerBuilder $container)
     {
         // https://symfony.com/doc/4.4/service_container/tags.html#autoconfiguring-tags
-        $container->registerForAutoconfiguration(ApiProviderInterface::class)
+        $container->registerForAutoconfiguration(ApiConsumerInterface::class)
             ->addTag('app.api_provider');
         $container->registerForAutoconfiguration(ChartStatisticsProviderInterface::class)
             ->addTag('custom_statistics.provider');
