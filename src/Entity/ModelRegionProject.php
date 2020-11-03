@@ -399,6 +399,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     public function removeDocument(ModelRegionProjectDocument $document): void
     {
         $this->documents->removeElement($document);
+        $document->setModelRegionProject(null);
     }
 
     /**
@@ -417,6 +418,27 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     public function setDocuments($documents): void
     {
         $this->documents = $documents;
+    }
+
+    /**
+     * Hook on persist and update operations.
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * @return ModelRegionProjectDocument[]|array Invalid documents (without file reference)
+     */
+    public function cleanDocuments(): array
+    {
+        $removeDocuments = [];
+        foreach ($this->documents as $document) {
+            /** @var ModelRegionProjectDocument $document */
+            if (0 < (int) $document->getId() && null === $document->getLocalName()) {
+                $removeDocuments[] = $document;
+            }
+        }
+        foreach ($removeDocuments as $document) {
+            $this->removeDocument($document);
+        }
+        return $removeDocuments;
     }
 
 }

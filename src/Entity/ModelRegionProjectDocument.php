@@ -116,11 +116,11 @@ class ModelRegionProjectDocument extends BaseNamedEntity implements DocumentUplo
     /**
      * Set model region project
      *
-     * @param ModelRegionProject $modelRegionProject
+     * @param ModelRegionProject|null $modelRegionProject
      *
      * @return self
      */
-    public function setModelRegionProject(ModelRegionProject $modelRegionProject): self
+    public function setModelRegionProject(?ModelRegionProject $modelRegionProject): self
     {
         $this->modelRegionProject = $modelRegionProject;
 
@@ -130,7 +130,7 @@ class ModelRegionProjectDocument extends BaseNamedEntity implements DocumentUplo
     /**
      * Get model region project
      *
-     * @return ModelRegionProject
+     * @return ModelRegionProject|null
      */
     public function getModelRegionProject(): ModelRegionProject
     {

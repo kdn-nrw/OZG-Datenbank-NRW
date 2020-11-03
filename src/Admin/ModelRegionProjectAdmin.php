@@ -16,12 +16,15 @@ use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\ModelRegionTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\SolutionTrait;
+use App\Entity\ModelRegionProject;
+use App\Entity\ModelRegionProjectDocument;
 use App\Form\Type\ModelRegionDocumentType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -93,6 +96,33 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         ]);
         $formMapper->end();
         $formMapper->end();
+    }
+
+    public function preUpdate($object)
+    {
+        $this->cleanDocuments($object);
+    }
+
+    public function prePersist($object)
+    {
+        $this->cleanDocuments($object);
+    }
+
+    public function cleanDocuments($object)
+    {
+        /** @var ModelRegionProject $object */
+        $removeDocuments = $object->cleanDocuments();
+
+        if (!empty($removeDocuments)) {
+            /** @var ModelManager $modelManager */
+            $modelManager = $this->getModelManager();
+            $docEm = $modelManager->getEntityManager(ModelRegionProjectDocument::class);
+            foreach ($removeDocuments as $document) {
+                if ($docEm->contains($document)) {
+                    $docEm->remove($document);
+                }
+            }
+        }
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
