@@ -110,6 +110,19 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'label' => 'app.situation.entity.subject',
                 //'associated_property' => 'name',
                 'template' => 'ImplementationProjectAdmin/list-service-system-subjects.html.twig',
+            ])
+            ->add('status', 'choice', [
+                'editable' => false,
+                'class' => ImplementationStatus::class,
+                'catalogue' => 'messages',
+                'template' => 'ImplementationProjectAdmin/list-status.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'status'],
+                ]
             ]);
         $this->addDatePickersListFields($listMapper, 'projectStartAt', true);
         $this->addDatePickersListFields($listMapper, 'conceptStatusAt', true);
