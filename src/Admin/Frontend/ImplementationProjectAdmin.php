@@ -17,6 +17,7 @@ use App\Admin\ImplementationStatusAdmin;
 use App\Admin\OrganisationAdmin;
 use App\Admin\PortalAdmin;
 use App\Admin\StateGroup\BureauAdmin;
+use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Admin\Traits\DatePickerTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
@@ -96,6 +97,15 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
         $datagridMapper->add('interestedOrganisations',
             null, [
                 'admin_code' => OrganisationAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('services.communeTypes',
+            null,
+            [
+                'admin_code' => CommuneTypeAdmin::class,
+                'label' => 'app.service_system.entity.commune_types'
             ],
             null,
             ['expanded' => false, 'multiple' => true]

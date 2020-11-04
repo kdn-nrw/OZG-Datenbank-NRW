@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 use App\Admin\StateGroup\BureauAdmin;
+use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\FundingTrait;
@@ -236,6 +237,15 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $datagridMapper->add('services.portals',
             null,
             ['label' => 'app.implementation_project.entity.portals'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $datagridMapper->add('services.communeTypes',
+            null,
+            [
+                'admin_code' => CommuneTypeAdmin::class,
+                'label' => 'app.service_system.entity.commune_types'
+            ],
             null,
             ['expanded' => false, 'multiple' => true]
         );

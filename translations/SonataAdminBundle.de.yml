@@ -13,4 +13,4 @@ app:
       subject_placeholder: Kein Themenfeld ausgewählt
 export_format_xlsx: Excel (XLSX)
 Admin: 'Data Warehouse KDN'
-btn_filter: Auswahl der Filter
+link_filters: Auswahl der Filter
