@@ -11,26 +11,14 @@
 
 namespace App\Service;
 
+use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 
 class ImplementationProjectHelper
 {
-    /**
-     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
-     */
-    protected $registry;
-
-    /**
-     * @required
-     * @param ManagerRegistry $registry
-     */
-    public function injectManagerRegistry(ManagerRegistry $registry): void
-    {
-        $this->registry = $registry;
-    }
+    use InjectManagerRegistryTrait;
 
     /**
      * Updates the status for all implementation projects
@@ -41,7 +29,7 @@ class ImplementationProjectHelper
     public function getProjectStatusInfo(ImplementationProject $project): array
     {
         /** @var EntityRepository $repository */
-        $repository = $this->registry->getRepository(ImplementationStatus::class);
+        $repository = $this->getEntityManager()->getRepository(ImplementationStatus::class);
         $result = $repository->findBy(['setAutomatically' => 1], ['level' => 'ASC']);
         $statusInfo = [];
         $now = time();

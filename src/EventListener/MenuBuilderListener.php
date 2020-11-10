@@ -36,11 +36,11 @@ class MenuBuilderListener
      */
     private $security;
 
-/**
- * MenuBuilderListener constructor.
- * @param RequestStack $requestStack
- * @param Security $security
- */
+    /**
+     * MenuBuilderListener constructor.
+     * @param RequestStack $requestStack
+     * @param Security $security
+     */
     public function __construct(RequestStack $requestStack, Security $security)
     {
         $this->requestStack = $requestStack;
@@ -53,7 +53,6 @@ class MenuBuilderListener
         // standard controller route is not marked as current in menu
         $request = $this->requestStack->getMasterRequest();
         $currentRoute = null !== $request ? $request->get('_route') : '_no_route';
-
         $this->moveSolutionMenuToTop($menu, $currentRoute);
         $this->addSearchNode($menu, $currentRoute);
         if ($this->security->isGranted('ROLE_VSM')) {
@@ -92,35 +91,42 @@ class MenuBuilderListener
 
     private function addVsmNodes(ItemInterface $menu, string $currentRoute): void
     {
-        $groupNode = $menu->addChild('app.vsm_group', [
-            'label' => 'app.menu.vsm_group',
-            'route' => 'app_vsm_snippet',
-        ]);
-        $groupNode->setExtras([
-            'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
-        ]);
+        $groupNode = $menu->getChild('app.ozg_implementation_group');
         if (null !== $groupNode) {
-            $childNode = $groupNode->addChild('app.vsm_api', [
+            $vsmChild = $menu->addChild('app.vsm_group', [
+                'label' => 'app.menu.vsm_group',
+                //'route' => 'app_vsm_snippet',
+            ]);
+            $childNode = $vsmChild->addChild('app.vsm_api', [
                 'label' => 'app.menu.vsm_api',
                 'route' => 'app_vsm_api_index',
             ]);
             $childNode->setExtras([
                 'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
             ]);
-            $childNode = $groupNode->addChild('app.vsm_snippet', [
+            $childNode = $vsmChild->addChild('app.vsm_snippet', [
                 'label' => 'app.menu.vsm_snippet',
                 'route' => 'app_vsm_snippet',
             ]);
             $childNode->setExtras([
                 'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
             ]);
-            $childNode = $groupNode->addChild('app.vsm_snippet_map', [
+            $childNode = $vsmChild->addChild('app.vsm_snippet_map', [
                 'label' => 'app.menu.vsm_snippet_map',
                 'route' => 'app_vsm_snippet_map',
             ]);
             $childNode->setExtras([
                 'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
             ]);
+            $groupNode->removeChild($vsmChild);
+            $this->addChildToGroup(
+                $menu,
+                $currentRoute,
+                $vsmChild,
+                'search',
+                'fa-search',
+                'app_vsm'
+            );
         }
     }
 
@@ -186,7 +192,7 @@ class MenuBuilderListener
     {
         if (null !== $childNode) {
             $childNode->setExtras([
-                'icon' => '<i class="fa '.$icon.'" aria-hidden="true"></i>',
+                'icon' => '<i class="fa ' . $icon . '" aria-hidden="true"></i>',
             ]);
             $childNode->setParent($parentNode);
             $newChildren = [];

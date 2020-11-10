@@ -11,39 +11,21 @@
 
 namespace App\Api\Consumer;
 
-use App\Api\Consumer\Model\AbstractDemand;
+use App\Api\Consumer\DataProcessor\DefaultApiDataProcessor;
 use App\Api\Consumer\Model\ArsAgsDemand;
 use App\Api\Consumer\Model\ArsAgsResult;
-use App\Api\Consumer\Model\ResultCollection;
 use App\Api\Form\Type\ArsAgsSearchType;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class ArsAgsConsumer extends AbstractApiConsumer
 {
-    private const API_URI = 'https://ags-ars.api.vsm.nrw/orte';
-
-    public function getName(): string
-    {
-        return 'ARS/AGS-API v1.0';
-    }
-
-    public function getDescription(): string
-    {
-        return 'Mithilfe der ARS/AGS-API v1.0 können amtlicher Gemeindeschlüssel (AGS) und amtlicher Regionalschlüssel (ARS) von Orten oder Gebieten ermittelt
-werden.';
-    }
 
     /**
-     * Returns the API base url
-     * @return string
+     * @required
+     * @param DefaultApiDataProcessor $dataProcessor
      */
-    protected function getApiUrl(): string
+    public function injectDataProcessor(DefaultApiDataProcessor $dataProcessor): void
     {
-        return self::API_URI;
+        $this->dataProcessor = $dataProcessor;
     }
 
     /**
@@ -51,7 +33,7 @@ werden.';
      *
      * @return string
      */
-    public function getDemandClass(): string
+    protected function getDemandClass(): string
     {
         return ArsAgsDemand::class;
     }
@@ -80,7 +62,7 @@ werden.';
      *
      * @return string
      */
-    public function getResultModelClass(): string
+    public function getImportModelClass(): string
     {
         return ArsAgsResult::class;
     }

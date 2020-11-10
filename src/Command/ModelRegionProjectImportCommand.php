@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Import\DataProvider\CsvDataProvider;
 use App\Import\ModelRegionProjectImporter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -34,11 +35,11 @@ class ModelRegionProjectImportCommand extends Command
     private $importer;
 
     /**
+     * @required
      * @param ModelRegionProjectImporter $importer
      */
-    public function __construct(ModelRegionProjectImporter $importer)
+    public function injectImporter(ModelRegionProjectImporter $importer): void
     {
-        parent::__construct();
         $this->importer = $importer;
     }
 
@@ -63,6 +64,10 @@ class ModelRegionProjectImportCommand extends Command
         $io->title($this->getDescription());
         $directory = $input->getArgument('directory');
         $this->importer->setOutput($output);
-        //$this->importer->run($directory);
+        $startTime = microtime(true);
+        $dataProvider = new CsvDataProvider($directory);
+        $importedRowCount = -1;//$this->importer->run($dataProvider);
+        $durationSeconds = round(microtime(true) - $startTime, 3);
+        $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }
 }

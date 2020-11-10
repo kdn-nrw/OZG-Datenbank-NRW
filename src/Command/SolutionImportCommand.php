@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\Maturity;
+use App\Import\DataProvider\CsvDataProvider;
 use App\Import\SolutionImporter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,11 +36,11 @@ class SolutionImportCommand extends Command
     private $importer;
 
     /**
+     * @required
      * @param SolutionImporter $importer
      */
-    public function __construct(SolutionImporter $importer)
+    public function injectImporter(SolutionImporter $importer): void
     {
-        parent::__construct();
         $this->importer = $importer;
     }
 
@@ -62,7 +63,7 @@ class SolutionImportCommand extends Command
             ->addArgument(
                 'maturity-id',
                 InputArgument::OPTIONAL,
-                'the form server id',
+                'the maturity server id',
                 Maturity::DEFAULT_ID
             )
             ->setHelp('Imports the solutions from a CSV file in the given directory;'
@@ -76,9 +77,13 @@ class SolutionImportCommand extends Command
         $directory = $input->getArgument('directory');
         $formServerId = (int)$input->getArgument('form-server-id');
         $maturityId = (int)$input->getArgument('maturity-id');
+        $startTime = microtime(true);
         $this->importer->setOutput($output);
-        $this->importer->setMaturityById($maturityId);
+        $this->importer->setMaturityId($maturityId);
         $this->importer->setFormServerById($formServerId);
-        $this->importer->run($directory);
+        $dataProvider = new CsvDataProvider($directory);
+        $importedRowCount = $this->importer->run($dataProvider);
+        $durationSeconds = round(microtime(true) - $startTime, 3);
+        $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }
 }

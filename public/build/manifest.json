@@ -1,10 +1,10 @@
 {
-  "build/0.36485290.js": "/build/0.36485290.js",
-  "build/1.3b8df897.js": "/build/1.3b8df897.js",
-  "build/2.df494f4b.js": "/build/2.df494f4b.js",
-  "build/3.7259063f.js": "/build/3.7259063f.js",
-  "build/admin.css": "/build/admin.9c8d6156.css",
-  "build/admin.js": "/build/admin.ccb6fdb7.js",
-  "build/runtime.js": "/build/runtime.6fe1f669.js",
+  "build/0.js": "/build/0.js",
+  "build/1.js": "/build/1.js",
+  "build/2.js": "/build/2.js",
+  "build/3.js": "/build/3.js",
+  "build/admin.css": "/build/admin.css",
+  "build/admin.js": "/build/admin.js",
+  "build/runtime.js": "/build/runtime.js",
   "build/images/login-background.jpg": "/build/images/login-background.a9acdc44.jpg"
 }

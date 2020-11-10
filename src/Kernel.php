@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\DependencyInjection\Compiler\ApiProviderCompilerPass;
+use App\DependencyInjection\Compiler\ApiManagerCompilerPass;
 use App\DependencyInjection\Compiler\ChartStatisticsCompilerPass;
 use App\Api\Consumer\ApiConsumerInterface;
 use App\Statistics\ChartStatisticsProviderInterface;
@@ -64,11 +64,11 @@ class Kernel extends BaseKernel
     {
         // https://symfony.com/doc/4.4/service_container/tags.html#autoconfiguring-tags
         $container->registerForAutoconfiguration(ApiConsumerInterface::class)
-            ->addTag('app.api_provider');
+            ->addTag('app.api_consumer');
         $container->registerForAutoconfiguration(ChartStatisticsProviderInterface::class)
             ->addTag('custom_statistics.provider');
         // https://symfony.com/doc/4.4/service_container/tags.html#create-a-compiler-pass
         $container->addCompilerPass(new ChartStatisticsCompilerPass());
-        $container->addCompilerPass(new ApiProviderCompilerPass());
+        $container->addCompilerPass(new ApiManagerCompilerPass());
     }
 }

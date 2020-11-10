@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Import\CommuneImporter;
+use App\Import\DataProvider\CsvDataProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,11 +35,11 @@ class CommuneImportCommand extends Command
     private $importer;
 
     /**
+     * @required
      * @param CommuneImporter $importer
      */
-    public function __construct(CommuneImporter $importer)
+    public function injectImporter(CommuneImporter $importer): void
     {
-        parent::__construct();
         $this->importer = $importer;
     }
 
@@ -62,7 +63,11 @@ class CommuneImportCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
         $directory = $input->getArgument('directory');
+        $startTime = microtime(true);
         $this->importer->setOutput($output);
-        $this->importer->run($directory);
+        $dataProvider = new CsvDataProvider($directory);
+        $importedRowCount = $this->importer->run($dataProvider);
+        $durationSeconds = round(microtime(true) - $startTime, 3);
+        $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }
 }

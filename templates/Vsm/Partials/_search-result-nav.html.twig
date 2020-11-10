@@ -6,13 +6,13 @@ file that was distributed with this source code.
 #}
 
 {# @var consumer \App\Api\Consumer\ApiConsumerInterface #}
-{# @var results \App\Api\Consumer\Model\ResultCollection #}
+{# @var results \App\Import\Model\ResultCollection #}
 {% if results|length > 1 %}
     {% set startOffset = results.offset %}
     <ul class="nav nav-pills nav-stacked search-result-nav">
         {% for child in results %}
             <li role="presentation">
-                <a href="#{{ consumer.key }}-result-{{ loop.index }}" class="result-nav-link">
+                <a href="#{{ consumer.importSourceKey }}-result-{{ loop.index }}" class="result-nav-link">
                     <div class="item-count">{{ startOffset + loop.index }}</div>
                     <span class="item-name">{{ child ~ '' }}</span>
                 </a>

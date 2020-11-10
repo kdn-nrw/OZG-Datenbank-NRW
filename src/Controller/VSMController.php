@@ -12,7 +12,7 @@
 namespace App\Controller;
 
 
-use App\Api\Consumer\ApiHandler;
+use App\Api\Consumer\InjectApiManagerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,10 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class VSMController extends AbstractController
 {
-    /**
-     * @var ApiHandler
-     */
-    protected $apiHandler;
+    use InjectApiManagerTrait;
 
     /**
      * @var SessionInterface
@@ -45,13 +42,11 @@ class VSMController extends AbstractController
     /**
      * VSMController constructor.
      * @param SessionInterface $session
-     * @param ApiHandler $apiHandler
      * @param TranslatorInterface $translator
      */
-    public function __construct(SessionInterface $session, ApiHandler $apiHandler, TranslatorInterface $translator)
+    public function __construct(SessionInterface $session, TranslatorInterface $translator)
     {
         $this->session = $session;
-        $this->apiHandler = $apiHandler;
         $this->translator = $translator;
     }
 
@@ -88,12 +83,13 @@ class VSMController extends AbstractController
     {
         if ($this->isGranted('ROLE_VSM')) {
             $activeConsumerKey = $consumerKey;
-            $providers = $this->apiHandler->getConsumers();
             $forms = [];
             $results = [];
-            foreach ($providers as $provider) {
-                $actionUrl = $this->generateUrl('app_vsm_api_index', ['consumerKey' => $provider->getKey()]);
-                $demand = $provider->getDemand($query);
+            $consumerServices = $this->apiManager->getConfiguredConsumers();
+            foreach ($consumerServices as $consumerService) {
+                $actionUrl = $this->generateUrl('app_vsm_api_index', ['consumerKey' => $consumerService->getImportSourceKey()]);
+                $demand = $consumerService->getDemand();
+                $consumerService->initializeDemand($query);
                 if ($page > 1) {
                     $demand->setPage($page);
                 }
@@ -104,20 +100,20 @@ class VSMController extends AbstractController
                         'novalidate' => 'novalidate',
                     ],
                     'data_class' => get_class($demand),
-                    'apiProvider' => $provider,
+                    'apiProvider' => $consumerService,
                 ];
-                $form = $this->createForm($provider->getFormTypeClass(), $demand, $formOptions);
+                $form = $this->createForm($consumerService->getFormTypeClass(), $demand, $formOptions);
                 $form->handleRequest($request);
-                $isValid = ($form->isSubmitted() && $form->isValid()) || (!empty($query) && $consumerKey === $provider->getKey());
+                $isValid = ($form->isSubmitted() && $form->isValid()) || (!empty($query) && $consumerKey === $consumerService->getImportSourceKey());
                 // Only allow submission of the current provider
                 if ($isValid) {
                     try {
-                        $activeConsumerKey = $provider->getKey();
-                        $results[$provider->getKey()] = $provider->search();
+                        $activeConsumerKey = $consumerService->getImportSourceKey();
+                        $results[$consumerService->getImportSourceKey()] = $consumerService->search();
                     } catch (HttpExceptionInterface $e) {
                         /** @var FlashBag $flashBag */
                         $flashBag = $this->session->getFlashBag();
-                        $translation = $this->translator->trans('app.api.common.search_exception', ['apiName' => $provider->getName()]);
+                        $translation = $this->translator->trans('app.api.common.search_exception', ['apiName' => $consumerService->getName()]);
                         $flashBag->add('danger', $translation . ' ' . $e->getMessage());
                     } catch (TransportExceptionInterface $e) {
                         /** @var FlashBag $flashBag */
@@ -126,10 +122,11 @@ class VSMController extends AbstractController
                         $flashBag->add('danger', $translation . ' ' . $e->getMessage());
                     }
                 }
-                $forms[$provider->getKey()] = $form->createView();
+                $forms[$consumerService->getImportSourceKey()] = $form->createView();
             }
             $response = $this->render('Vsm/api-index.html.twig', [
-                'apiHandler' => $this->apiHandler,
+                'apiHandler' => $this->apiManager,
+                'consumers' => $consumerServices,
                 'forms' => $forms,
                 'results' => $results,
                 'activeConsumerKey' => $activeConsumerKey,

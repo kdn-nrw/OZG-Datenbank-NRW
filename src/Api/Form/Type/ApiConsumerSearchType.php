@@ -36,7 +36,7 @@ class ApiConsumerSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->provider = $options['apiProvider'];
-        $propertyConfiguration = $this->provider->getPropertyConfiguration();
+        $propertyConfiguration = $this->provider->getDemandPropertyConfiguration();
         $reflectionClass = new ReflectionClass($this->provider);
         $groupName = str_replace(['Provider', 'Consumer'], '', $reflectionClass->getShortName());
         $filteredPrefix = SnakeCaseConverter::classNameToSnakeCase($groupName);

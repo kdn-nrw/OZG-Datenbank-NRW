@@ -41,11 +41,7 @@ file that was distributed with this source code.
                     {% if field_description.option('showFimTypes') %}
                         <tr>
                             <td colspan="7" class="child-table-container">
-                                <h4 class="headline"><i class="fa fa-arrow-right" aria-hidden="true"></i>
-                                    {{ 'app.service.fim.object_name'|trans }}</h4>
-                                <div class="child-item-list">
-                                    {% include 'General/Show/Partials/show-fim-list.html.twig' with {'entities': child.fimTypes} %}
-                                </div>
+                                {% include 'General/Show/show-fim.html.twig' with {'entities': child.fimTypes, 'field_description': fieldDescription} %}
                             </td>
                         </tr>
                     {% endif %}

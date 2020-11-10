@@ -13,7 +13,7 @@ namespace App\Api\Consumer\Model;
 
 use App\Api\Annotation\ApiSearchModelAnnotation;
 
-abstract class AbstractDemand implements ApiSearchModelInterface
+abstract class AbstractDemand
 {
     protected const REQUEST_METHOD_GET = 'GET';
     public const RESULTS_PER_PAGE = 10;

@@ -34,7 +34,7 @@ file that was distributed with this source code.
             {% include '@SonataTwig/FlashMessage/render.html.twig' %}
         {% endblock notice %}
         <div id="vsm-snippet-container">
-            <div id="vsmsnippet"{% if displayMap %} data-display-it-nrw-maps="yes"{% endif %}></div>
+            <div id="vsmsnippet" data-display-it-nrw-maps="{{ displayMap ? 'yes' : 'no' }}"></div>
             <script async type="text/javascript" src="https://snippet.vsm.nrw/snippet.js"></script>
         </div>
     </section>

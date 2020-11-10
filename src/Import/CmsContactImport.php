@@ -14,29 +14,19 @@ declare(strict_types=1);
 
 namespace App\Import;
 
+use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Category;
 use App\Entity\Contact;
 use App\Entity\ImportEntityInterface;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Import contacts from cms
  */
 class CmsContactImport
 {
-    const IMPORT_SOURCE = 'cms_contacts';
-    /**
-     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
-     */
-    private $registry;
+    public const IMPORT_SOURCE = 'cms_contacts';
 
-    /**
-     * @param \Doctrine\Persistence\ManagerRegistry $registry
-     */
-    public function __construct(ManagerRegistry $registry)
-    {
-        $this->registry = $registry;
-    }
+    use InjectManagerRegistryTrait;
 
     public function import(): void
     {
@@ -45,11 +35,11 @@ class CmsContactImport
         $this->importContacts($groupedContactCategories);
     }
 
-    private function importContacts(array $groupedContactCategories)
+    private function importContacts(array $groupedContactCategories): array
     {
+        $em = $this->getEntityManager();
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->registry->getConnection('cms');
-        $em = $this->registry->getManager();
         $sql = 'SELECT * FROM typo3kdn.tt_address WHERE deleted = 0 AND hidden = 0 ORDER BY uid ASC';
         /** @noinspection PhpUnhandledExceptionInspection */
         $stmt = $connection->query($sql);
@@ -60,7 +50,7 @@ class CmsContactImport
             /** @noinspection PhpUnhandledExceptionInspection */
             $importObject = $this->getLocalObjectForRemote($mapObjects, $row, Contact::class);
             /** @var Contact $importObject */
-            $remoteObjectId = (int) $row['uid'];
+            $remoteObjectId = (int)$row['uid'];
             if (isset($groupedContactCategories[$remoteObjectId])) {
                 $contactCategories = $groupedContactCategories[$remoteObjectId];
                 $storedCategories = $importObject->getCategories();
@@ -81,13 +71,13 @@ class CmsContactImport
             if ($rowCount > 50) {
                 $em->flush();
                 $rowCount = 0;
-                $sql = 'UPDATE typo3kdn.tt_address SET hidden = 1 WHERE uid IN ('.implode(',', $importedIds).')';
+                $sql = 'UPDATE typo3kdn.tt_address SET hidden = 1 WHERE uid IN (' . implode(',', $importedIds) . ')';
                 $connection->executeUpdate($sql);
                 $importedIds = [];
             }
         }
         if (!empty($importedIds)) {
-            $sql = 'UPDATE typo3kdn.tt_address SET hidden = 1 WHERE uid IN ('.implode(',', $importedIds).')';
+            $sql = 'UPDATE typo3kdn.tt_address SET hidden = 1 WHERE uid IN (' . implode(',', $importedIds) . ')';
             $connection->executeUpdate($sql);
         }
         $em->flush();
@@ -96,7 +86,7 @@ class CmsContactImport
         return $mapObjects;
     }
 
-    private function getGroupedContactCategories(array $mapCategories)
+    private function getGroupedContactCategories(array $mapCategories): array
     {
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->registry->getConnection('cms');
@@ -105,8 +95,8 @@ class CmsContactImport
         $stmt = $connection->query($sql);
         $mapContactCategories = [];
         while ($row = $stmt->fetch()) {
-            $remoteCategoryId = (int) $row['uid_local'];
-            $remoteContactId = (int) $row['uid_foreign'];
+            $remoteCategoryId = (int)$row['uid_local'];
+            $remoteContactId = (int)$row['uid_foreign'];
             if (isset($mapCategories[$remoteCategoryId]) && $mapCategories[$remoteCategoryId]['found']) {
                 $category = $mapCategories[$remoteCategoryId]['object'];
                 /** @var Category $category */
@@ -116,9 +106,9 @@ class CmsContactImport
         return $mapContactCategories;
     }
 
-    private function importCategories()
+    private function importCategories(): array
     {
-        $em = $this->registry->getManager();
+        $em = $this->getEntityManager();
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->registry->getConnection('cms');
         $sql = 'SELECT * FROM typo3kdn.sys_category WHERE deleted = 0 AND hidden = 0 ORDER BY uid ASC';
@@ -143,10 +133,10 @@ class CmsContactImport
         return $mapObjects;
     }
 
-    private function deleteUnmatchedItems($mapObjects)
+    private function deleteUnmatchedItems($mapObjects): void
     {
 
-        $em = $this->registry->getManager();
+        $em = $this->getEntityManager();
         foreach ($mapObjects as $map) {
             if (!$map['found']) {
                 $em->remove($map['object']);
@@ -157,7 +147,7 @@ class CmsContactImport
 
     private function getLocalObjectForRemote(&$mapObjects, array $row, string $entityClass)
     {
-        $remoteObjectId = (int) $row['uid'];
+        $remoteObjectId = (int)$row['uid'];
         if (isset($mapObjects[$remoteObjectId])) {
             $importObject = $mapObjects[$remoteObjectId]['object'];
             $mapObjects[$remoteObjectId]['found'] = true;
@@ -177,7 +167,7 @@ class CmsContactImport
                 'found' => true,
                 'is_new' => true,
             ];
-            $importObject->setImportId((int) $remoteObjectId);
+            $importObject->setImportId($remoteObjectId);
             $importObject->setImportSource(self::IMPORT_SOURCE);
             if (!empty($row['crdate'])) {
                 /** @noinspection PhpUnhandledExceptionInspection */
@@ -189,7 +179,7 @@ class CmsContactImport
                 /** @var Category $importObject */
                 $importObject->setName($row['title']);
                 $importObject->setDescription($row['description']);
-                $remoteParentId = (int) $row['parent'];
+                $remoteParentId = (int)$row['parent'];
                 if ($remoteParentId && isset($mapObjects[$remoteParentId])
                     && $mapObjects[$remoteParentId]['found']) {
                     $parentCategory = $mapObjects[$remoteParentId]['object'];
@@ -214,11 +204,12 @@ class CmsContactImport
                     $importObject->setContactType(Contact::CONTACT_TYPE_IMPORT_CMS);
                 }
                 $gender = Contact::GENDER_UNKNOWN;
-                if ($row['gender'] == 'f') {
+                $rowGender = (string)$row['gender'];
+                if ($rowGender === 'f') {
                     $gender = Contact::GENDER_FEMALE;
-                } elseif ($row['gender'] == 'm') {
+                } elseif ($rowGender === 'm') {
                     $gender = Contact::GENDER_MALE;
-                } elseif ($row['gender'] == 'v') {
+                } elseif ($rowGender === 'v') {
                     $gender = Contact::GENDER_OTHER;
                 }
                 $importObject->setGender($gender);
@@ -229,9 +220,9 @@ class CmsContactImport
         return $importObject;
     }
 
-    private function getMappedObjects($entityClass)
+    private function getMappedObjects($entityClass): array
     {
-        $em = $this->registry->getManager();
+        $em = $this->getEntityManager();
         /** @var ImportEntityInterface[] $localObjects */
         $repository = $em->getRepository($entityClass);
         $localObjects = $repository->findBy(['importSource' => self::IMPORT_SOURCE]);

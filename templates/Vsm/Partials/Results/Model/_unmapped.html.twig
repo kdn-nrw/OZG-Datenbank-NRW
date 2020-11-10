@@ -10,15 +10,14 @@ file that was distributed with this source code.
             <span class="label label-default" data-key="{{ name }}">
                 <span class="label-text">{{ name|app_format_custom_label }}:</span>
                 <span class="value">
-                {% if value is iterable %}
-                    {{ value|join(',')|striptags }}
-                {% elseif value|length > 25 %}
+                    {% set displayValue = value|app_format_custom_value %}
+                {% if displayValue|length > 25 %}
                     <span class="label-popover" data-container="body" data-toggle="popover" data-placement="top" data-html="1"
-                          data-content="{{ value|raw|replace({'"': "'"}) }}">
-                      {{ value|striptags|u.truncate(25, '...') }} <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                          data-content="{{ displayValue|raw|replace({'"': "'"}) }}">
+                      {{ displayValue|u.truncate(25, '...') }} <i class="fa fa-plus-square-o" aria-hidden="true"></i>
                     </span>
                 {% else %}
-                    {{ value|striptags|raw }}
+                    {{ displayValue|raw }}
                 {% endif %}
                 </span>
             </span>

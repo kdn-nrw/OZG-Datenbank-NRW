@@ -34,11 +34,11 @@ class MailingSendCommand extends Command
     private $mailingSender;
 
     /**
-     * @param MailingSender $mailingSender
+     * @required
+     * @param MailingSender $implementationProjectHelper
      */
-    public function __construct(MailingSender $mailingSender)
+    public function injectMailingSender(MailingSender $mailingSender): void
     {
-        parent::__construct();
         $this->mailingSender = $mailingSender;
     }
 

@@ -11,13 +11,14 @@
 
 namespace App\Statistics\Provider;
 
+use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Statistics\AbstractChartJsStatisticsProvider;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 
 abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJsStatisticsProvider
 {
+    use InjectManagerRegistryTrait;
 
     /**
      * Provider type (excel|csv|chart)
@@ -35,19 +36,6 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
      * @var string|null
      */
     protected $foreignColorProperty;
-    /**
-     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
-     */
-    private $registry;
-
-    /**
-     * @required
-     * @param \Doctrine\Persistence\ManagerRegistry $registry
-     */
-    public function injectSolutionManager(ManagerRegistry $registry): void
-    {
-        $this->registry = $registry;
-    }
 
     /**
      * @inheritDoc
@@ -91,7 +79,7 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
         $alias = 's';
         $property = $alias . '.' . $this->foreignProperty;
         /** @var EntityRepository $repository */
-        $repository = $this->registry->getRepository($this->getEntityClass());
+        $repository = $this->getEntityManager()->getRepository($this->getEntityClass());
         $queryBuilder = $repository->createQueryBuilder($alias);
         $selects = ['COUNT(s.id) AS itemCount', 'IDENTITY(' . $property . ') AS refId', 'fnp.name'];
         if ($this->foreignColorProperty) {

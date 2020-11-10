@@ -18,13 +18,13 @@ class DataParser
     /**
      * Replace some characters
      *
-     * @param string $value
+     * @param mixed $value
      * @return string
      */
     public function formatString($value): string
     {
         $trgEnc = 'UTF-8';
-        $cleanedValue = $value;//$this->cleanStringValue($value);
+        $cleanedValue = (string) $value;//$this->cleanStringValue($value);
         if (function_exists('mb_detect_encoding')) {
             $enc = mb_detect_encoding($value, $trgEnc, true);
             if (empty($enc)) {
@@ -58,15 +58,14 @@ class DataParser
     /**
      * Format string to boolean value
      *
-     * @param string $value
+     * @param mixed $value
      *
      * @return boolean
      */
     public function formatBoolean($value): bool
     {
-
         $formattedValue = false;
-        $chkVal = strtolower($value);
+        $chkVal = strtolower((string) $value);
         if ($chkVal === 'ja' || $chkVal === 'yes' || $chkVal === '1' || $chkVal === 'true') {
             $formattedValue = true;
         }
@@ -77,34 +76,19 @@ class DataParser
      * Format value in callback
      *
      * @param mixed $value
-     * @param $callback
-     * @return mixed
-     */
-    public function formatCallback($value, $callback)
-    {
-        if (is_callable($callback)) {
-            return $callback($value);
-        }
-        return $value;
-    }
-
-    /**
-     * Format value in callback
-     *
-     * @param mixed $value
      * @param array $choices
      * @return mixed
      */
-    public function formatChoice($value, $choices)
+    public function formatChoice($value, array $choices)
     {
-        $key = array_search($value, $choices, false);
+        $key = array_search((string) $value, $choices, false);
         return $key !== false ? $key : null;
     }
 
     /**
      * Format csv string to array value
      *
-     * @param string $value
+     * @param mixed $value
      *
      * @return array
      */
@@ -127,7 +111,7 @@ class DataParser
      *
      * Usage: Helper::parseNumber($value);
      *
-     * @param string $string A string containing a number
+     * @param mixed $string A string containing a number
      *
      * @return float A valid number
      */
@@ -173,7 +157,7 @@ class DataParser
     /**
      * Parse values as decimal numbers
      *
-     * @param string $string A string containing a number
+     * @param mixed $string A string containing a number
      *
      * @return string|null A valid decimal number
      */
@@ -190,7 +174,7 @@ class DataParser
     /**
      * Parses the given string value to extract an integer.
      *
-     * @param string $value A string containing an integer
+     * @param mixed $value A string containing an integer
      *
      * @return int A valid integer
      */
@@ -214,7 +198,7 @@ class DataParser
     /**
      * Try to convert a date value into the format "YYYY-MM-DD"
      *
-     * @param string $value
+     * @param mixed $value
      * @return DateTime|null
      */
     public function formatDate($value): ?DateTime
@@ -254,7 +238,7 @@ class DataParser
                 $day = '0' . $day;
             }
             $value = $year . '-' . $month . '-' . $day;
-            $dateObj = new DateTime($value);
+            $dateObj = date_create($value);
             $dateObj->setTime(0, 0, 0);
             return $dateObj;
         }
@@ -307,5 +291,19 @@ class DataParser
             $year += 2000;
         }
         return sprintf('%04d-%02d-%02d', $year, $month, $day);
+    }
+
+    /**
+     * Returns the given name as a cleaned field name (lowercase, without special characters)
+     * @param string $name
+     * @return string
+     */
+    public function getCleanFieldName(string $name): string
+    {
+        return strtolower(
+            str_replace(['/', ' ', '-', '(', ')', '.', '___', '__'],
+                '_',
+                $this->cleanStringValue($this->formatString(trim($name))))
+        );
     }
 }

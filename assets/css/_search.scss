@@ -72,15 +72,19 @@
   }
   .item-sub-result {
     margin-bottom: 15px;
+    background: $gray-200;border-radius: 5px;
+    padding: 10px;
   }
   .item-sub-result-list {
     display: flex;
     flex-wrap: wrap;
-    margin: 15px -15px 0;
+    margin: 15px -10px 0;
     border-top: 1px dashed $gray-200;
+    padding-top: 15px;
     .col {
-      padding: 10px 15px;
+      padding: 0 10px;
       flex: 1 1 auto;
+      margin-bottom: 20px;
     }
   }
   .unmapped-values  {

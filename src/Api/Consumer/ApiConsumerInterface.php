@@ -13,19 +13,21 @@ namespace App\Api\Consumer;
 
 use App\Api\Annotation\ApiSearchModelAnnotation;
 use App\Api\Consumer\Model\AbstractDemand;
-use App\Api\Consumer\Model\ResultCollection;
+use App\Entity\Api\ApiConsumer as ApiConsumerEntity;
+use App\Import\HasImportModelInterface;
+use App\Import\Model\ResultCollection;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-interface ApiConsumerInterface
+interface ApiConsumerInterface extends HasImportModelInterface
 {
     /**
      * Returns the key for the provider instance
      * @return string
      */
-    public function getKey(): string;
+    public function getImportSourceKey(): string;
 
     /**
      * Returns the name of the API
@@ -48,24 +50,17 @@ interface ApiConsumerInterface
 
     /**
      * Returns the API demand instance
-     * @param string|null $query
+     *
      * @return AbstractDemand
      */
-    public function getDemand(?string $query = null): AbstractDemand;
-
-    /**
-     * Returns the value string for the demand query
-     *
-     * @return string
-     */
-    public function getDemandValueString(): string;
+    public function getDemand(): AbstractDemand;
 
     /**
      * Returns the class name for the demand model
      *
-     * @return string
+     * @param string|null $query
      */
-    public function getDemandClass(): string;
+    public function initializeDemand(?string $query): void;
 
     /**
      * Searches for the submitted demand values and returns the search result
@@ -77,13 +72,6 @@ interface ApiConsumerInterface
      * @throws TransportExceptionInterface
      */
     public function search(): ResultCollection;
-
-    /**
-     * Returns the api form model annotations
-     *
-     * @return ApiSearchModelAnnotation[]|array
-     */
-    public function getPropertyConfiguration(): array;
 
     /**
      * Returns the search result template for this consumer
@@ -99,9 +87,22 @@ interface ApiConsumerInterface
     public function getFormTypeClass(): string;
 
     /**
-     * Returns the class name for the result model
+     * @param ApiConsumerEntity $apiConsumerEntity
+     */
+    public function setApiConsumerEntity(ApiConsumerEntity $apiConsumerEntity): void;
+
+    /**
+     * Returns the api demand model configuration
+     *
+     * @return ApiSearchModelAnnotation[]|array
+     */
+    public function getDemandPropertyConfiguration(): array;
+
+    /**
+     * Returns the value string for the demand query
+     * UUsed in twig templates for pagination!
      *
      * @return string
      */
-    public function getResultModelClass(): string;
+    public function getDemandValueString(): string;
 }

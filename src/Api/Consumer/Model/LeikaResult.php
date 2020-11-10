@@ -235,6 +235,18 @@ class LeikaResult extends AbstractResult
         $this->type = $type;
     }
 
+    /**
+     * Returns the import key data
+     *
+     * @return array|null
+     */
+    public function getImportKeyData(): ?array
+    {
+        return [
+            'serviceKey' => $this->getServiceKey(),
+        ];
+    }
+
     public function __toString()
     {
         return $this->getName() . ' - ' . $this->getServiceKey();

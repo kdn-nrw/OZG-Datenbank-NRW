@@ -11,28 +11,17 @@
 
 namespace App\Api\Consumer\Model;
 
-abstract class AbstractResult implements ApiSearchModelInterface
+use App\Import\Model\AbstractImportModel;
+
+abstract class AbstractResult extends AbstractImportModel
 {
     /**
-     * Contains the data from the result that were not mapped to a result property
-     * @var array
+     * Returns the import key data
+     *
+     * @return array|null
      */
-    protected $unmappedData = [];
-
-    /**
-     * @return array
-     */
-    public function getUnmappedData(): array
+    public function getImportKeyData(): ?array
     {
-        return $this->unmappedData;
+        return null;
     }
-
-    /**
-     * @param array $unmappedData
-     */
-    public function setUnmappedData(array $unmappedData): void
-    {
-        $this->unmappedData = $unmappedData;
-    }
-
 }

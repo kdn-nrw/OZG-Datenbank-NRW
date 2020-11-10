@@ -13,7 +13,7 @@ namespace App\Api\Consumer\Model\ZuFi;
 
 use App\Api\Annotation\ApiSearchModelAnnotation;
 use App\Api\Consumer\Model\AbstractResult;
-use App\Api\Consumer\Model\ResultCollection;
+use App\Import\Model\ResultCollection;
 
 class ServiceResult extends AbstractResult
 {
@@ -61,7 +61,7 @@ class ServiceResult extends AbstractResult
 
     /**
      * @var ResultCollection|UriResult[]
-     * @ApiSearchModelAnnotation(parameter="rechtsgrundlageLinks", modelClass="App\Api\Consumer\Model\ZuFi\UriResult", dataType="modelCollection", required=false)
+     * @ApiSearchModelAnnotation(parameter="rechtsgrundlageLinks", modelClass="App\Api\Consumer\Model\ZuFi\UriResult", dataType="collection", required=false)
      */
     protected $legalBasisUris;
 
@@ -206,6 +206,17 @@ class ServiceResult extends AbstractResult
         $this->legalBasisUris->add($legalBasisUri);
     }
 
+    /**
+     * Returns the import key data
+     *
+     * @return array|null
+     */
+    public function getImportKeyData(): ?array
+    {
+        return [
+            'serviceKey' => $this->getServiceKey(),
+        ];
+    }
 
     public function __toString()
     {

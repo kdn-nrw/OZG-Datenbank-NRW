@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Api\Consumer\Model;
+namespace App\Import\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-class ResultCollection extends ArrayCollection
+class ResultCollection extends ArrayCollection implements PropertyMappingInterface
 {
     /**
      * @var int
@@ -39,6 +39,11 @@ class ResultCollection extends ArrayCollection
      * @var array
      */
     protected $unmappedData = [];
+
+    /**
+     * @var array|string
+     */
+    protected $mapProperties = [];
 
     /**
      * @return int
@@ -147,5 +152,27 @@ class ResultCollection extends ArrayCollection
     public function setUnmappedData(array $unmappedData): void
     {
         $this->unmappedData = $unmappedData;
+    }
+
+    /**
+     * Add property field mapping
+     *
+     * @param string $property
+     * @param string $mappedField
+     */
+    public function addPropertyMapping(string $property, string $mappedField):void
+    {
+        $this->mapProperties[$property] = $mappedField;
+    }
+
+    /**
+     * Get remote field name for property
+     *
+     * @param string $property
+     * @return string
+     */
+    public function getPropertyMapping(string $property): string
+    {
+        return $this->mapProperties[$property] ?? $property;
     }
 }

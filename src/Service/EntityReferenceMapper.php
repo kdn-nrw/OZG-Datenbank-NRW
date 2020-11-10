@@ -11,34 +11,22 @@
 
 namespace App\Service;
 
+use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Base\BaseEntityInterface;
 use App\Model\EntityReferenceMap;
 use App\Model\EntityReferenceProperty;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 
 class EntityReferenceMapper
 {
 
-    /**
-     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
-     */
-    protected $registry;
+    use InjectManagerRegistryTrait;
 
     /**
      * Mapping of entity reference meta data
      * @var array
      */
     private $entityReferenceMeta = [];
-
-    /**
-     * @required
-     * @param ManagerRegistry $registry
-     */
-    public function injectManagerRegistry(ManagerRegistry $registry): void
-    {
-        $this->registry = $registry;
-    }
 
     /**
      * @param EntityReferenceMap $entityReferenceMap
@@ -81,7 +69,7 @@ class EntityReferenceMapper
         }
         $entityReferenceMap = new EntityReferenceMap($entityClass);
         $this->entityReferenceMeta[$entityClass] = $entityReferenceMap;
-        $em = $this->registry->getManager();
+        $em = $this->getEntityManager();
         $metaData = $em->getMetadataFactory()->getMetadataFor($entityClass);
         $associationMappings = $metaData->getAssociationMappings();
         foreach ($associationMappings as $property => $mapping) {

@@ -72,6 +72,7 @@ app:
       search_exception: 'Beim Aufruf der API {apiName} ist ein Fehler aufgetreten:'
       read_more: Weiterlesen
       read_less: Zuklappen
+      headline_base_data: Ergebnis Basisdaten
       actions:
         search: Suchen
     ars_ags:
@@ -121,6 +122,11 @@ app:
           description: Beschreibung
           author: Urheber
           legal_basis: Rechtsgrundlage
+        service_base: Leistung Stammtext
+        service_base_model:
+          description: Beschreibung
+          author: Urheber
+          legal_basis: Rechtsgrundlage
         organisation: Organisation
         organisations: Organisationen
         organisation_model:
@@ -128,6 +134,16 @@ app:
           mandator: Mandant
           addresses: Adresse(n)
           communications: Kontakt
+  api_consumer:
+    object_name: API Konsument
+    list: API Konsumenten
+    create: API Konsument anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+      url: API URL (Basis)
+      proxy: Proxy URL
+      consumer_key: Service Datenverarbeitung
   administrative_district:
     object_name: Regierungsbezirk
     list: Regierungsbezirke
@@ -796,6 +812,7 @@ app:
     fim:
       object_name: Föderales Informationsmanagement (FIM)
       list: FIM
+      notes_empty: Es wurden noch keine Informationen hinterlegt
       entity:
         status: Status
         notes: Notizen

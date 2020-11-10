@@ -11,6 +11,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Base\BaseEntity;
 use App\Entity\FederalInformationManagementType as FederalInformationManagementEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,18 +37,18 @@ class FederalInformationManagementType extends BaseEntity
     public const TYPE_REFERENCE_PROCESS = 'reference_process';
 
     public static $mapTypes = [
-        FederalInformationManagementEntity::TYPE_DESCRIPTION             => 'app.service.fim.entity.type_choices.description',
-        FederalInformationManagementEntity::TYPE_MASTER_DATA_FIELDS      => 'app.service.fim.entity.type_choices.master_data_fields',
-        FederalInformationManagementEntity::TYPE_ROOT_PROCESS            => 'app.service.fim.entity.type_choices.root_process',
-        FederalInformationManagementEntity::TYPE_REFERENCE_DATA_FIELDS   => 'app.service.fim.entity.type_choices.reference_data_fields',
-        FederalInformationManagementEntity::TYPE_REFERENCE_PROCESS       => 'app.service.fim.entity.type_choices.reference_process',
+        FederalInformationManagementEntity::TYPE_DESCRIPTION => 'app.service.fim.entity.type_choices.description',
+        FederalInformationManagementEntity::TYPE_MASTER_DATA_FIELDS => 'app.service.fim.entity.type_choices.master_data_fields',
+        FederalInformationManagementEntity::TYPE_ROOT_PROCESS => 'app.service.fim.entity.type_choices.root_process',
+        FederalInformationManagementEntity::TYPE_REFERENCE_DATA_FIELDS => 'app.service.fim.entity.type_choices.reference_data_fields',
+        FederalInformationManagementEntity::TYPE_REFERENCE_PROCESS => 'app.service.fim.entity.type_choices.reference_process',
     ];
 
     public static $statusChoices = [
-        FederalInformationManagementEntity::STATUS_IN_PROGRESS  => 'app.service.fim.entity.status_choices.in_progress',
-        FederalInformationManagementEntity::STATUS_SUBMITTED    => 'app.service.fim.entity.status_choices.submitted',
-        FederalInformationManagementEntity::STATUS_APPROVED     => 'app.service.fim.entity.status_choices.approved',
-        FederalInformationManagementEntity::STATUS_NOT_PROVIDED     => 'app.service.fim.entity.status_choices.not_provided',
+        FederalInformationManagementEntity::STATUS_IN_PROGRESS => 'app.service.fim.entity.status_choices.in_progress',
+        FederalInformationManagementEntity::STATUS_SUBMITTED => 'app.service.fim.entity.status_choices.submitted',
+        FederalInformationManagementEntity::STATUS_APPROVED => 'app.service.fim.entity.status_choices.approved',
+        FederalInformationManagementEntity::STATUS_NOT_PROVIDED => 'app.service.fim.entity.status_choices.not_provided',
     ];
 
     /**
@@ -81,6 +82,12 @@ class FederalInformationManagementType extends BaseEntity
      */
     private $notes = '';
 
+    /**
+     * @var ServiceBaseResult|null
+     * @ORM\OneToOne(targetEntity="App\Entity\Api\ServiceBaseResult", mappedBy="fimType", cascade={"all"})
+     * @ORM\JoinColumn(name="service_base_result_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    private $serviceBaseResult;
 
     /**
      * @return Service|null
@@ -167,11 +174,27 @@ class FederalInformationManagementType extends BaseEntity
     }
 
     /**
+     * @return ServiceBaseResult|null
+     */
+    public function getServiceBaseResult(): ?ServiceBaseResult
+    {
+        return $this->serviceBaseResult;
+    }
+
+    /**
+     * @param ServiceBaseResult|null $serviceBaseResult
+     */
+    public function setServiceBaseResult(?ServiceBaseResult $serviceBaseResult): void
+    {
+        $this->serviceBaseResult = $serviceBaseResult;
+    }
+
+    /**
      * Returns the name of this contact
      * @return string
      */
     public function __toString(): string
     {
-        return $this->getDataType() . ' ('.$this->getStatus().')';
+        return $this->getDataType() . ' (' . $this->getStatus() . ')';
     }
 }

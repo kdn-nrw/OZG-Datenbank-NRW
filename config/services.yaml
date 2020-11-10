@@ -34,6 +34,19 @@ services:
   App\Translator\PrefixedUnderscoreLabelTranslatorStrategy:
     public: true
 
+  App\Admin\Api\ApiConsumerAdmin:
+    arguments:
+      - ~
+      - App\Entity\Api\ApiConsumer
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.api_consumer.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Admin\StateGroup\AdministrativeDistrictAdmin:
     arguments:
       - ~

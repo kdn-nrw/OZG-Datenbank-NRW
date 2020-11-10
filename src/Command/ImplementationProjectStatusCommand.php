@@ -6,7 +6,7 @@ declare(strict_types=1);
  * This file is part of the KDN OZG package.
  *
  * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
+ * @copyright 2020 Gert Hammes
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,11 +33,11 @@ class ImplementationProjectStatusCommand extends Command
     private $implementationProjectHelper;
 
     /**
+     * @required
      * @param ImplementationProjectHelper $implementationProjectHelper
      */
-    public function __construct(ImplementationProjectHelper $implementationProjectHelper)
+    public function injectImporter(ImplementationProjectHelper $implementationProjectHelper): void
     {
-        parent::__construct();
         $this->implementationProjectHelper = $implementationProjectHelper;
     }
 

@@ -5,12 +5,21 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {# @var consumer \App\Api\Consumer\ApiConsumerInterface #}
-{# @var results \App\Api\Consumer\Model\ResultCollection #}
+{# @var results \App\Api\Consumer\Model\ZuFi\ZuFiResultCollection #}
+{% if results.serviceBase %}
+    <div class="result-collection-data search-result-in-box">
+        <h4>{{ 'app.api.common.headline_base_data'|trans }}</h4>
+        <div class="well well-sm no-shadow">
+            {% include 'Vsm/Partials/Results/Model/_zu-fi-service-base.html.twig' with {'service': results.serviceBase, 'resultCollection': results} %}
+        </div>
+    </div>
+{% endif %}
+{% include 'Vsm/Partials/_search-result-nav.html.twig' with {'results': consumerResults, 'consumer': consumer} %}
 <ul class="search-result-list search-result-in-box">
     {% set startOffset = results.offset %}
     {% for child in results %}
         {# @var child \App\Api\Consumer\Model\ZuFiResult #}
-        <li class="item search-result-item" id="{{ consumer.key }}-result-{{ loop.index }}">
+        <li class="item search-result-item" id="{{ consumer.importSourceKey }}-result-{{ loop.index }}">
             <div class="item-header">
                 <div class="item-count" title="{{ loop.index }}. {{ 'app.api.common.search_result'|trans }}">{{ startOffset + loop.index }}</div>
                 <h4 class="item-title">
@@ -26,8 +35,10 @@ file that was distributed with this source code.
             {% if child.organisations|length > 0 %}
                 <div class="item-sub-result-list">
                     {% for organisation in child.organisations %}
-                        <div class="col item-sub-result item-result-organisation">
+                        <div class="col-xs-12 col-md-6{% if loop.index % 2 == 1 %} clear-left-md{% endif %}">
+                            <div class="item-sub-result item-result-organisation">
                             {% include 'Vsm/Partials/Results/Model/_zu-fi-organisation.html.twig' with {'organisation': organisation} %}
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
@@ -35,7 +46,7 @@ file that was distributed with this source code.
             {% if child.unmappedData|length > 0 %}
                 {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': child.unmappedData}) %}
                 {% if mapValueHtml|trim|length > 0 %}
-                    <div class="unmapped-values uv-{{ consumer.key }}">
+                    <div class="unmapped-values uv-{{ consumer.importSourceKey }}">
                         {{ mapValueHtml|raw }}
                     </div>
                 {% endif %}

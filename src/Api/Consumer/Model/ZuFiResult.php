@@ -14,6 +14,7 @@ namespace App\Api\Consumer\Model;
 use App\Api\Annotation\ApiSearchModelAnnotation;
 use App\Api\Consumer\Model\ZuFi\OrganisationResult;
 use App\Api\Consumer\Model\ZuFi\ServiceResult;
+use App\Import\Model\ResultCollection;
 
 class ZuFiResult extends AbstractResult
 {
@@ -25,7 +26,7 @@ class ZuFiResult extends AbstractResult
 
     /**
      * @var ResultCollection|OrganisationResult[]
-     * @ApiSearchModelAnnotation(parameter="organisationseinheit", modelClass="App\Api\Consumer\Model\ZuFi\OrganisationResult", dataType="modelCollection", required=true)
+     * @ApiSearchModelAnnotation(parameter="organisationseinheit", modelClass="App\Api\Consumer\Model\ZuFi\OrganisationResult", dataType="collection", required=true)
      */
     protected $organisations;
 

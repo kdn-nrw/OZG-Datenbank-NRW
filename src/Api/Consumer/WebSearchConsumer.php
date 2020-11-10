@@ -11,34 +11,21 @@
 
 namespace App\Api\Consumer;
 
+use App\Api\Consumer\DataProcessor\DefaultApiDataProcessor;
 use App\Api\Consumer\Model\WebSearchDemand;
 use App\Api\Consumer\Model\WebSearchResult;
 use App\Api\Form\Type\WebSearchType;
 
 class WebSearchConsumer extends AbstractApiConsumer
 {
-    private const API_URI = 'https://web-suche.api.vsm.nrw/web-treffer';
-
-    //private const API_URI = 'https://suche.api.vsm.nrw/suche';
-
-    public function getName(): string
-    {
-        return 'Web-Such-API v1.0';
-    }
-
-    public function getDescription(): string
-    {
-        return 'Die Web-Such-API liefert zu einem Suchbegriff Volltext-Treffer von den Websites, die vom Crawler der VSM durchsucht worden sind. Sie liefert keine
-Zuständigkeitsinformationen.';
-    }
 
     /**
-     * Returns the API base url
-     * @return string
+     * @required
+     * @param DefaultApiDataProcessor $dataProcessor
      */
-    protected function getApiUrl(): string
+    public function injectDataProcessor(DefaultApiDataProcessor $dataProcessor): void
     {
-        return self::API_URI;
+        $this->dataProcessor = $dataProcessor;
     }
 
     /**
@@ -46,7 +33,7 @@ Zuständigkeitsinformationen.';
      *
      * @return string
      */
-    public function getDemandClass(): string
+    protected function getDemandClass(): string
     {
         return WebSearchDemand::class;
     }
@@ -75,7 +62,7 @@ Zuständigkeitsinformationen.';
      *
      * @return string
      */
-    public function getResultModelClass(): string
+    public function getImportModelClass(): string
     {
         return WebSearchResult::class;
     }

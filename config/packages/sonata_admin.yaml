@@ -257,6 +257,7 @@ sonata_admin:
                 items:
                     - sonata.user.admin.user
                     - sonata.user.admin.group
+                    - App\Admin\Api\ApiConsumerAdmin
                     #- shapecode_cron.cronjob
                     #- shapecode_cron.cronjob_result
 

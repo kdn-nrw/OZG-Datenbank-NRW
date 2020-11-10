@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Api\Consumer\Model;
+namespace App\Import\DataProcessor;
 
-interface ApiSearchModelInterface
+class EFileDataProcessor extends AbstractDataProcessor
 {
 }

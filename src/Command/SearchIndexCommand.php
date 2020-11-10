@@ -35,11 +35,11 @@ class SearchIndexCommand extends Command
     private $indexer;
 
     /**
+     * @required
      * @param Indexer $indexer
      */
-    public function __construct(Indexer $indexer)
+    public function injectIndexer(Indexer $indexer): void
     {
-        parent::__construct();
         $this->indexer = $indexer;
     }
 

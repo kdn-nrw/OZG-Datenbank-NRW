@@ -59,7 +59,7 @@ class ArsAgsResult extends AbstractResult
 
     /**
      * @var bool|null
-     * @ApiSearchModelAnnotation(parameter="durchsuchbar", dataType="array", required=false)
+     * @ApiSearchModelAnnotation(parameter="durchsuchbar", dataType="bool", required=false)
      */
     protected $searchable;
 

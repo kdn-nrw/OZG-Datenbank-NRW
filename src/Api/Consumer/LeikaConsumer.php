@@ -11,31 +11,21 @@
 
 namespace App\Api\Consumer;
 
+use App\Api\Consumer\DataProcessor\DefaultApiDataProcessor;
 use App\Api\Consumer\Model\LeikaDemand;
 use App\Api\Consumer\Model\LeikaResult;
 use App\Api\Form\Type\LeikaSearchType;
 
 class LeikaConsumer extends AbstractApiConsumer
 {
-    private const API_URI = 'https://leika.vsm.nrw/services';
-
-    public function getName(): string
-    {
-        return 'LeiKa-API v1.0';
-    }
-
-    public function getDescription(): string
-    {
-        return 'Die LeiKa API v1.0 liefert zu einem eingegebenen Leistungsbegriff relevante Informationen zurück.';
-    }
 
     /**
-     * Returns the API base url
-     * @return string
+     * @required
+     * @param DefaultApiDataProcessor $dataProcessor
      */
-    protected function getApiUrl(): string
+    public function injectDataProcessor(DefaultApiDataProcessor $dataProcessor): void
     {
-        return self::API_URI;
+        $this->dataProcessor = $dataProcessor;
     }
 
     /**
@@ -43,7 +33,7 @@ class LeikaConsumer extends AbstractApiConsumer
      *
      * @return string
      */
-    public function getDemandClass(): string
+    protected function getDemandClass(): string
     {
         return LeikaDemand::class;
     }
@@ -72,7 +62,7 @@ class LeikaConsumer extends AbstractApiConsumer
      *
      * @return string
      */
-    public function getResultModelClass(): string
+    public function getImportModelClass(): string
     {
         return LeikaResult::class;
     }

@@ -13,35 +13,35 @@ file that was distributed with this source code.
         {% block notice %}
             {% include '@SonataTwig/FlashMessage/render.html.twig' %}
         {% endblock notice %}
-    {# @var apiHandler \App\Api\Consumer\ApiHandler #}
-    {% set consumers = apiHandler.consumers %}
+    {# @var apiHandler \App\Api\Consumer\ApiManager #}
     <div id="vsm-snippet-container">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 {% for consumer in consumers %}
                     {# @var consumer \App\Api\Consumer\ApiConsumerInterface #}
-                    {% set isActive = activeConsumerKey == consumer.key or (activeConsumerKey is null and loop.first) %}
-                    <li{% if isActive %} class="active"{% endif %}><a href="#api-{{ consumer.key }}" title="{{ consumer.description }}" data-toggle="tab">{{ consumer.name }}</a></li>
+                    {% set isActive = activeConsumerKey == consumer.importSourceKey or (activeConsumerKey is null and loop.first) %}
+                    <li{% if isActive %} class="active"{% endif %}><a href="#api-{{ consumer.importSourceKey }}" title="{{ consumer.description }}" data-toggle="tab">{{ consumer.name }}</a></li>
                 {% endfor %}
             </ul>
             <div class="tab-content">
             {% for consumer in consumers %}
                 {# @var consumer \App\Api\Consumer\ApiConsumerInterface #}
-                {% set isActive = activeConsumerKey == consumer.key or (activeConsumerKey is null and loop.first) %}
-                <div class="{% if isActive %}active {% endif %}tab-pane" id="api-{{ consumer.key }}">
+                {% set isActive = activeConsumerKey == consumer.importSourceKey or (activeConsumerKey is null and loop.first) %}
+                <div class="{% if isActive %}active {% endif %}tab-pane" id="api-{{ consumer.importSourceKey }}">
                     <h4>{{ consumer.description }}</h4>
-                    {% if forms[consumer.key] is defined %}
-                        {% include 'Vsm/Partials/_search-form.html.twig' with {'searchForm': forms[consumer.key], 'consumer': consumer} %}
+                    {% if forms[consumer.importSourceKey] is defined %}
+                        {% include 'Vsm/Partials/_search-form.html.twig' with {'searchForm': forms[consumer.importSourceKey], 'consumer': consumer} %}
                     {% endif %}
-                    {% if results[consumer.key] is defined %}
-                        {% set consumerResults = results[consumer.key] %}
-                        {# @var consumerResults \App\Api\Consumer\Model\ResultCollection #}
+                    {% if results[consumer.importSourceKey] is defined %}
+                        {% set consumerResults = results[consumer.importSourceKey] %}
+                        {# @var consumerResults \App\Import\Model\ResultCollection #}
                         <div class="search-result-container" data-url="{{ consumer.queryUrl }}">
-                            {% if consumerResults|length > 0 %}
+                            {% if not consumerResults.empty %}
+                                {% if consumerResults.totalResultCount > 0 %}
                                 <h3 class="search-result-title">
                                     {{ 'app.api.common.search_results'|trans({'count': consumerResults.totalResultCount}) }}
                                 </h3>
-                                {% include 'Vsm/Partials/_search-result-nav.html.twig' with {'results': consumerResults, 'consumer': consumer} %}
+                                {% endif %}
                                 {% include consumer.resultTemplate with {'results': consumerResults, 'consumer': consumer} %}
                                 {% if consumerResults.paginationEnabled %}
                                     {% include 'Vsm/Partials/_search-result-pagination.html.twig' with {'results': consumerResults, 'consumer': consumer} %}

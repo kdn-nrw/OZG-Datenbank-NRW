@@ -13,7 +13,7 @@ namespace App\Api\Consumer\Model\ZuFi;
 
 use App\Api\Annotation\ApiSearchModelAnnotation;
 use App\Api\Consumer\Model\AbstractResult;
-use App\Api\Consumer\Model\ResultCollection;
+use App\Import\Model\ResultCollection;
 
 class OrganisationResult extends AbstractResult
 {
@@ -43,13 +43,13 @@ class OrganisationResult extends AbstractResult
 
     /**
      * @var ResultCollection|AddressResult[]
-     * @ApiSearchModelAnnotation(parameter="anschrift", modelClass="App\Api\Consumer\Model\ZuFi\AddressResult", dataType="modelCollection", required=false)
+     * @ApiSearchModelAnnotation(parameter="anschrift", modelClass="App\Api\Consumer\Model\ZuFi\AddressResult", dataType="collection", required=false)
      */
     protected $addresses;
 
     /**
      * @var ResultCollection|CommunicationResult[]
-     * @ApiSearchModelAnnotation(parameter="kommunikation", modelClass="App\Api\Consumer\Model\ZuFi\CommunicationResult", dataType="modelCollection", required=false)
+     * @ApiSearchModelAnnotation(parameter="kommunikation", modelClass="App\Api\Consumer\Model\ZuFi\CommunicationResult", dataType="collection", required=false)
      */
     protected $communications;
 

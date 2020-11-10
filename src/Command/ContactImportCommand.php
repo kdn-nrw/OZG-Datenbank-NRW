@@ -33,11 +33,11 @@ class ContactImportCommand extends Command
     private $cmsContactImport;
 
     /**
+     * @required
      * @param CmsContactImport $cmsContactImport
      */
-    public function __construct(CmsContactImport $cmsContactImport)
+    public function injectCmsContactImport(CmsContactImport $cmsContactImport): void
     {
-        parent::__construct();
         $this->cmsContactImport = $cmsContactImport;
     }
 
