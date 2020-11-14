@@ -41,7 +41,6 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addServiceProvidersDatagridFilters($datagridMapper);
         $datagridMapper->add('serviceSolutions.service.serviceSystem',
             null,
             [
@@ -174,16 +173,6 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                     ['fieldName' => 'portals'],
                 ]
             ])*/
-            ->add('serviceProviders', null, [
-                'template' => 'SolutionAdmin/list-service-providers.html.twig',
-                'sortable' => true, // IMPORTANT! make the column sortable
-                'sort_field_mapping' => [
-                    'fieldName' => 'name'
-                ],
-                'sort_parent_association_mappings' => [
-                    ['fieldName' => 'serviceProviders'],
-                ]
-            ])
             ->add('serviceSystems', null, [
                 'admin_code' => ServiceSystemAdmin::class,
                 //'associated_property' => 'name',
