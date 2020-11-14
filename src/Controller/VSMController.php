@@ -118,7 +118,7 @@ class VSMController extends AbstractController
                     } catch (TransportExceptionInterface $e) {
                         /** @var FlashBag $flashBag */
                         $flashBag = $this->session->getFlashBag();
-                        $translation = $this->translator->trans('app.api.common.search_exception');
+                        $translation = $this->translator->trans('app.api.common.search_exception', ['apiName' => $consumerService->getName()]);
                         $flashBag->add('danger', $translation . ' ' . $e->getMessage());
                     }
                 }

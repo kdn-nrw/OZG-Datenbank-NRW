@@ -26,9 +26,20 @@ class FormatCustomDataExtension extends AbstractExtension
         return [
             new TwigFilter('app_format_custom_label', [$this, 'getFormattedLabel']),
             new TwigFilter('app_format_custom_value', [$this, 'getFormattedValue']),
+            new TwigFilter('app_format_property_name', [$this, 'convertToPropertyName']),
         ];
     }
 
+    /**
+     * Returns the field name converted to a property name (lower camel case)
+     *
+     * @param string $input
+     * @return string
+     */
+    public function convertToPropertyName(string $input): string
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace(['-', '_', ' '], ' ', $input))));
+    }
     /**
      * Returns the field description collection for the referenced fields
      *

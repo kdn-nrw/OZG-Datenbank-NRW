@@ -40,7 +40,8 @@ class ApiConsumerAdmin extends AbstractAppAdmin
                 'required' => false,
             ])
             ->add('proxy', UrlType::class, [
-                'required' => false
+                'required' => false,
+                'default_protocol' => null,
             ])
             ->add('consumerKey', ChoiceType::class, [
                 'choices' => $this->apiManager->getConsumerChoices(),
