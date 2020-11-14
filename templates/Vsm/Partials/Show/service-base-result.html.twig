@@ -1,0 +1,20 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var serviceBaseResult \App\Entity\Api\ServiceBaseResult #}
+{% set displayFields = ['name2', 'synonyms', 'short_text', 'teaser', 'description',
+    'required_documents', 'requirements', 'costs', 'process_flow', 'processing_time', 'deadlines', 'forms',
+    'further_information', 'hints', 'technically_approved_at', 'technically_approved_by'] %}
+<dl class="dl-vertical">
+{% for field in displayFields %}
+    {% set property = field|app_format_property_name %}
+    {% set addValue = attribute(serviceBaseResult, property) %}
+    {% if addValue %}
+        <dt>{{ ('app.api.zu_fi.result.service_base_model.' ~ field)|trans }}</dt>
+        <dd>{{ addValue|app_format_custom_value }}</dd>
+    {% endif %}
+{% endfor %}
+</dl>

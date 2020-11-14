@@ -124,9 +124,24 @@ app:
           legal_basis: Rechtsgrundlage
         service_base: Leistung Stammtext
         service_base_model:
-          description: Beschreibung
           author: Urheber
           legal_basis: Rechtsgrundlage
+          name2: Leistungsbezeichnung II (bürgernahe Sprache)
+          synonyms: Begriffe im Kontext (Leistungssynonyme)
+          short_text: Information für 115 / Kurztext
+          teaser: Teaser
+          description: Volltext
+          required_documents: Erforderliche Unterlagen
+          requirements: Voraussetzungen
+          costs: Kosten
+          process_flow: Verfahrensablauf
+          processing_time: Bearbeitungsdauer
+          deadlines: Fristen
+          forms: Formulare
+          further_information: Weiterführende Informationen
+          hints: Hinweise / Besonderheiten
+          technically_approved_at: Fachlich freigegeben am
+          technically_approved_by: Fachlich freigegeben durch
         organisation: Organisation
         organisations: Organisationen
         organisation_model:

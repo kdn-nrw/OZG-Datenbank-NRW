@@ -20,3 +20,16 @@
 //    }
 //  }
 //}
+.dl-vertical {
+  dt {
+    display: block;
+    padding-bottom: 4px;
+  }
+  dd {
+    display: block;
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
+
+}

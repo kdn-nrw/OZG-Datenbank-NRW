@@ -44,7 +44,10 @@ file that was distributed with this source code.
                             <div class="item-notes">
                                 {% if child.notes %}
                                     {{ child.notes|raw }}
-                                {% else %}
+                                {% endif %}
+                                {% if child.serviceBaseResult %}
+                                    {% include 'Vsm/Partials/Show/service-base-result.html.twig' with {'serviceBaseResult': child.serviceBaseResult} %}
+                                {% elseif not child.notes %}
                                     {{ 'app.service.fim.notes_empty'|trans }}
                                 {% endif %}
                             </div>
