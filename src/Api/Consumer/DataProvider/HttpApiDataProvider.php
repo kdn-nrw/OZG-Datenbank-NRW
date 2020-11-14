@@ -104,9 +104,11 @@ class HttpApiDataProvider extends AbstractDemandDataProvider
         $demand = $this->getDemand();
         $options = [
             'timeout' => 10,
+            'verify_peer' => 0,
+            'verify_host' => 0,
         ];
         if (null !== $proxy = $this->getApiConsumerEntity()->getProxy()) {
-            $options['proxy'] = $proxy;
+            $options['proxy'] = str_replace(['http://', 'https://'], '', $proxy);
         }
         $response = $this->client->request($demand->getRequestMethod(), $this->buildQueryUrl(), $options);
         return $this->processResponse($dataProcessor, $response);
