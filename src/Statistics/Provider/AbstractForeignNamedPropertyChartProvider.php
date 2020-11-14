@@ -81,7 +81,7 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
         /** @var EntityRepository $repository */
         $repository = $this->getEntityManager()->getRepository($this->getEntityClass());
         $queryBuilder = $repository->createQueryBuilder($alias);
-        $selects = ['COUNT(s.id) AS itemCount', 'IDENTITY(' . $property . ') AS refId', 'fnp.name'];
+        $selects = ['COUNT(DISTINCT s.id) AS itemCount', 'IDENTITY(' . $property . ') AS refId', 'fnp.name'];
         if ($this->foreignColorProperty) {
             $selects[] = 'fnp.' . $this->foreignColorProperty;
         }
