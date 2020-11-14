@@ -10,6 +10,7 @@ sonata_admin:
     templates:
         show: 'General/Show/show.html.twig'
     options:
+        legacy_twig_text_extension: false
         use_icheck: false # disable iCheck
     assets:
 #        javascripts:
