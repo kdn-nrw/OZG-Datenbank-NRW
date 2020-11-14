@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 use App\Admin\StateGroup\CommuneTypeAdmin;
+use App\Admin\Traits\ImplementationProjectTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\PortalTrait;
@@ -46,6 +47,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     use MinistryStateTrait;
     use PortalTrait;
     use SpecializedProcedureTrait;
+    use ImplementationProjectTrait;
 
     /**
      * @var string[]
@@ -386,6 +388,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         );
         $this->addSpecializedProceduresDatagridFilters($datagridMapper);
         $this->addPortalsDatagridFilters($datagridMapper);
+        $this->addImplementationProjectsDatagridFilters($datagridMapper);
         $datagridMapper->add('ruleAuthorities',
             null,
             [],
@@ -568,13 +571,8 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addSpecializedProceduresShowFields($showMapper);
         $this->addPortalsShowFields($showMapper);
         $this->addStateMinistriesShowFields($showMapper);
+        $this->addImplementationProjectsShowFields($showMapper);
         $showMapper
-            ->add('implementationProjects', null, [
-                'admin_code' => ImplementationProjectAdmin::class,
-                'route' => [
-                    'name' => 'edit',
-                ],
-            ])
             ->add('modelRegionProjects', null, [
                 'admin_code' => ModelRegionProjectAdmin::class,
                 'route' => [

@@ -95,6 +95,13 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('implementationProjects',
+            null, [
+                'admin_code' => ImplementationProjectAdmin::class,
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
