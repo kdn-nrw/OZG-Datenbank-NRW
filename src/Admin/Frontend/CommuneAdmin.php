@@ -12,12 +12,10 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\EnableFullTextSearchAdminInterface;
-use App\Admin\ManufacturerAdmin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\CentralAssociationTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
-use App\Admin\Traits\PortalTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\StateGroup\AdministrativeDistrict;
 use App\Entity\StateGroup\Commune;
@@ -35,7 +33,6 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     use CentralAssociationTrait;
     use LaboratoryTrait;
     use OrganisationOneToOneTrait;
-    use PortalTrait;
 
     /**
      * @var string[]
@@ -54,7 +51,6 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         $datagridMapper->add('organisation.zipCode');
         $datagridMapper->add('organisation.town');
         $this->addCentralAssociationsDatagridFilters($datagridMapper);
-        $this->addPortalsDatagridFilters($datagridMapper);
         $this->addLaboratoriesDatagridFilters($datagridMapper);
         $datagridMapper->add('constituency',
             null,
@@ -136,13 +132,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ])
             ->add('communeType');
         $this->addCentralAssociationsShowFields($showMapper);
-        $this->addPortalsShowFields($showMapper);
         $this->addLaboratoriesShowFields($showMapper);
-        $showMapper->add('specializedProcedures.manufacturers', null, [
-            'label' => 'app.specialized_procedure.entity.manufacturers',
-            'admin_code' => ManufacturerAdmin::class,
-            'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
-        ]);
         $showMapper->add('communeType.serviceSystems', null, [
             'label' => 'app.commune_type.entity.service_systems',
             'admin_code' => ServiceSystemAdmin::class,
@@ -163,8 +153,9 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     public function getExportSettings(): ExportSettings
     {
         $settings = parent::getExportSettings();
-        $settings->addExcludeFields(['specializedProcedures', 'specializedProcedures.manufacturers', 'contact', 'serviceProviders', 'organisation.contacts']);
-        $settings->setAdditionFields(['manufacturers']);
+        $settings->addExcludeFields(['specializedProcedures', 'portals', 'specializedProcedures.manufacturers',
+            'contact', 'serviceProviders', 'organisation.contacts', 'communeType.serviceSystems', 'communeType.services']);
+        //$settings->setAdditionFields(['manufacturers']);
         return $settings;
     }
 

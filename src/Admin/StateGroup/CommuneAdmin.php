@@ -272,7 +272,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     public function getExportSettings(): ExportSettings
     {
         $settings = parent::getExportSettings();
-        $settings->addExcludeFields(['specializedProcedures.manufacturers']);
+        $settings->addExcludeFields(['specializedProcedures.manufacturers', 'communeType.serviceSystems', 'communeType.services']);
         $settings->setAdditionFields(['manufacturers']);
         return $settings;
     }
