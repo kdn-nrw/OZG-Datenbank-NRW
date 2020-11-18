@@ -250,6 +250,12 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
             ['expanded' => false, 'multiple' => true]
         );
         $this->addContactsDatagridFilters($datagridMapper, 'fimExperts');
+        $datagridMapper->add('solutions.openDataItems',
+            null,
+            ['label' => 'app.solution.entity.open_data_items'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)

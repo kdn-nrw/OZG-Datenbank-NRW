@@ -110,6 +110,12 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $datagridMapper->add('solutions.openDataItems',
+            null,
+            ['label' => 'app.solution.entity.open_data_items'],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)
