@@ -29,3 +29,7 @@ file that was distributed with this source code.
         {% endfor %}
     {% endblock %}
 {% endblock %}
+
+{% block side_bar_nav %}
+    {{ knp_menu_render('sonata_admin_sidebar', {'template': get_global_template('knp_menu_template'), 'allow_safe_labels': true}) }}
+{% endblock side_bar_nav %}

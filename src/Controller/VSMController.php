@@ -40,6 +40,16 @@ class VSMController extends AbstractController
     private $translator;
 
     /**
+     * @var string
+     */
+    protected $baseRoute = 'app_vsm_api_index';
+
+    /**
+     * @var string
+     */
+    protected $onlyFrontend = false;
+
+    /**
      * VSMController constructor.
      * @param SessionInterface $session
      * @param TranslatorInterface $translator
@@ -81,13 +91,14 @@ class VSMController extends AbstractController
      */
     public function apiIndexAction(Request $request, ?string $consumerKey = null, ?string $query = null, int $page = 1): Response
     {
-        if ($this->isGranted('ROLE_VSM')) {
-            $activeConsumerKey = $consumerKey;
-            $forms = [];
-            $results = [];
-            $consumerServices = $this->apiManager->getConfiguredConsumers();
+        $activeConsumerKey = $consumerKey;
+        $forms = [];
+        $results = [];
+        $showAll = !$this->onlyFrontend && $this->isGranted('ROLE_VSM');
+        $consumerServices = $this->apiManager->getConfiguredConsumers($showAll);
+        if (!empty($consumerServices)) {
             foreach ($consumerServices as $consumerService) {
-                $actionUrl = $this->generateUrl('app_vsm_api_index', ['consumerKey' => $consumerService->getImportSourceKey()]);
+                $actionUrl = $this->generateUrl($this->baseRoute, ['consumerKey' => $consumerService->getImportSourceKey()]);
                 $demand = $consumerService->getDemand();
                 $consumerService->initializeDemand($query);
                 if ($page > 1) {
@@ -130,9 +141,27 @@ class VSMController extends AbstractController
                 'forms' => $forms,
                 'results' => $results,
                 'activeConsumerKey' => $activeConsumerKey,
+                'baseRoute' => $this->baseRoute,
+                'base_template' => $this->onlyFrontend ?
+                    'Frontend/Admin/base.html.twig' :
+                    '@SonataAdmin/standard_layout.html.twig',
             ]);
             return $response;
         }
         return $this->redirectToRoute('frontend_app_service_list');
+    }
+
+    /**
+     * @param Request $request
+     * @param string|null $consumerKey
+     * @param string|null $query
+     * @param int $page
+     * @return Response
+     */
+    public function feApiIndexAction(Request $request, ?string $consumerKey = null, ?string $query = null, int $page = 1): Response
+    {
+        $this->baseRoute = 'frontend_app_vsm_api_index';
+        $this->onlyFrontend = true;
+        return $this->apiIndexAction($request, $consumerKey, $query, $page);
     }
 }

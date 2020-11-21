@@ -52,6 +52,15 @@ class ApiConsumer extends BaseNamedEntity
     protected $consumerKey;
 
     /**
+     * Show in frontend?
+     *
+     * @var bool|null
+     *
+     * @ORM\Column(name="show_in_frontend", type="boolean", nullable=true)
+     */
+    protected $showInFrontend = false;
+
+    /**
      * @return string|null
      */
     public function getDescription(): ?string
@@ -97,6 +106,22 @@ class ApiConsumer extends BaseNamedEntity
     public function setConsumerKey(?string $consumerKey): void
     {
         $this->consumerKey = $consumerKey;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowInFrontend(): bool
+    {
+        return (bool) $this->showInFrontend;
+    }
+
+    /**
+     * @param bool $showInFrontend
+     */
+    public function setShowInFrontend(bool $showInFrontend): void
+    {
+        $this->showInFrontend = $showInFrontend;
     }
 
 }

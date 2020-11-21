@@ -1,0 +1,12 @@
+.sidebar-menu {
+  > li {
+    white-space: normal;
+    > a {
+      display: flex;
+      align-items: center;
+      > i {
+        flex: 0 0 24px;
+      }
+    }
+  }
+}

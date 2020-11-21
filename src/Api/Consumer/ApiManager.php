@@ -14,7 +14,6 @@ namespace App\Api\Consumer;
 use App\Api\Consumer\Exception\ApiConsumerNotFoundException;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Api\ApiConsumer;
-use App\Import\HasImportModelInterface;
 
 class ApiManager
 {
@@ -73,20 +72,24 @@ class ApiManager
     /**
      * Returns the configured consumers
      *
+     * @param bool $showAll Show all consumers or only publicly visible?
      * @return ApiConsumerInterface[]|array
      * @throws ApiConsumerNotFoundException
      */
-    public function getConfiguredConsumers(): array
+    public function getConfiguredConsumers(bool $showAll = false): array
     {
         $consumerRepository = $this->getEntityManager()->getRepository(ApiConsumer::class);
         $consumerEntities = $consumerRepository->findAll();
         $configuredConsumers = [];
         foreach ($consumerEntities as $consumerEntity) {
-            $consumerService = $this->getConfiguredConsumer(
-                $consumerEntity->getConsumerKey(),
-                $consumerEntity
-            );
-            $configuredConsumers[$consumerService->getImportSourceKey()] = $consumerService;
+            /** @var ApiConsumer $consumerEntity */
+            if ($showAll || $consumerEntity->isShowInFrontend()) {
+                $consumerService = $this->getConfiguredConsumer(
+                    $consumerEntity->getConsumerKey(),
+                    $consumerEntity
+                );
+                $configuredConsumers[$consumerService->getImportSourceKey()] = $consumerService;
+            }
         }
         return $configuredConsumers;
     }

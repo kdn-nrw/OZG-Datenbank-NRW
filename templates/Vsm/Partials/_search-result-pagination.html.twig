@@ -12,7 +12,7 @@ file that was distributed with this source code.
         <ul class="pagination">
             {% if results.page > 1 %}
             <li>
-                <a href="{{ path('app_vsm_api_index', {'consumerKey': consumer.importSourceKey, 'query': consumer.demandValueString, 'page': results.page - 1}) }}" aria-label="Previous">
+                <a href="{{ path(baseRoute, {'consumerKey': consumer.importSourceKey, 'query': consumer.demandValueString, 'page': results.page - 1}) }}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -26,7 +26,7 @@ file that was distributed with this source code.
                     </li>
                 {% else %}
                     <li>
-                        <a href="{{ path('app_vsm_api_index', {'consumerKey': consumer.importSourceKey, 'query': consumer.demandValueString, 'page': pageNr}) }}">
+                        <a href="{{ path(baseRoute, {'consumerKey': consumer.importSourceKey, 'query': consumer.demandValueString, 'page': pageNr}) }}">
                             {{ pageNr }}
                         </a>
                     </li>
@@ -34,7 +34,7 @@ file that was distributed with this source code.
             {% endfor %}
             {% if not results.lastPage %}
             <li>
-                <a href="{{ path('app_vsm_api_index', {'consumerKey': consumer.importSourceKey, 'query': consumer.demandValueString, 'page': results.page + 1}) }}" aria-label="Next">
+                <a href="{{ path(baseRoute, {'consumerKey': consumer.importSourceKey, 'query': consumer.demandValueString, 'page': results.page + 1}) }}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

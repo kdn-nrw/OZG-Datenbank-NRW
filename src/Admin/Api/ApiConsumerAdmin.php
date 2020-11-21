@@ -18,8 +18,9 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\BooleanType;
+use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
@@ -36,8 +37,10 @@ class ApiConsumerAdmin extends AbstractAppAdmin
             ->add('url', UrlType::class, [
                 'required' => true
             ])
-            ->add('description', TextareaType::class, [
+            ->add('description', SimpleFormatterType::class, [
                 'required' => false,
+                'format' => 'richhtml',
+                'ckeditor_context' => 'default', // optional
             ])
             ->add('proxy', UrlType::class, [
                 'required' => false,
@@ -46,6 +49,12 @@ class ApiConsumerAdmin extends AbstractAppAdmin
             ->add('consumerKey', ChoiceType::class, [
                 'choices' => $this->apiManager->getConsumerChoices(),
                 'required' => true,
+            ])
+            ->add('showInFrontend', BooleanType::class, [
+                'required' => false,
+                // the transform option enable compatibility with the boolean field (default 1=true, 2=false)
+                // with transform set to true 0=false, 1=true
+                'transform' => true,
             ]);
         $formMapper->end();
     }

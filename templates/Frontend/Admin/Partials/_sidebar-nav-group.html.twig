@@ -18,7 +18,7 @@
             <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
                 <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="nav-link">
                     <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
-                    {{ menuItem.label|trans }}
+                    <span>{{ menuItem.label|trans }}</span>
                 </a>
                 {% if miActive %}
                     {% set hasActive = true %}

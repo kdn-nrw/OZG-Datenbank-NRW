@@ -13,7 +13,7 @@ app:
     ozg_overview: OZG Überblick
     login: Anmelden
     dashboard: Startseite
-    vsm_group: VSM
+    vsm_group: Verwaltungs&shy;suchmaschine (VSM)
     vsm_snippet: VSM Snippet
     vsm_snippet_map: VSM Snippet + Karte
     vsm_api: VSM API
@@ -160,6 +160,7 @@ app:
       url: API URL (Basis)
       proxy: Proxy URL
       consumer_key: Service Datenverarbeitung
+      show_in_frontend: Im Frontend anzeigen?
   administrative_district:
     object_name: Regierungsbezirk
     list: Regierungsbezirke
@@ -1066,6 +1067,7 @@ app:
   vsm:
     object_name: Verwaltungssuchmaschine
     list: Verwaltungssuchmaschine
+    list_fe: Verwaltungs&shy;suchmaschine (VSM)
   user:
     object_name: Benutzer
     list: Benutzer

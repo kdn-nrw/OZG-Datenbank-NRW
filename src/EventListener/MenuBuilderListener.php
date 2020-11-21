@@ -12,10 +12,12 @@
 namespace App\EventListener;
 
 
+use App\Translator\TranslatorAwareTrait;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Event\ConfigureMenuEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class MenuBuilderListener
@@ -26,6 +28,8 @@ use Symfony\Component\Security\Core\Security;
  */
 class MenuBuilderListener
 {
+    use TranslatorAwareTrait;
+
     /**
      * @var RequestStack
      */
@@ -40,11 +44,13 @@ class MenuBuilderListener
      * MenuBuilderListener constructor.
      * @param RequestStack $requestStack
      * @param Security $security
+     * @param TranslatorInterface $translator
      */
-    public function __construct(RequestStack $requestStack, Security $security)
+    public function __construct(RequestStack $requestStack, Security $security, TranslatorInterface $translator)
     {
         $this->requestStack = $requestStack;
         $this->security = $security;
+        $this->setTranslator($translator);
     }
 
     public function addMenuItems(ConfigureMenuEvent $event): void
@@ -94,9 +100,11 @@ class MenuBuilderListener
         $groupNode = $menu->getChild('app.ozg_implementation_group');
         if (null !== $groupNode) {
             $vsmChild = $menu->addChild('app.vsm_group', [
-                'label' => 'app.menu.vsm_group',
+                // Translate label here and set "safe_label", so soft hyphen (&shy;) in translation will not be escaped
+                'label' => $this->translate('app.menu.vsm_group'),
                 //'route' => 'app_vsm_snippet',
             ]);
+            $vsmChild->setExtra('safe_label', true);
             $childNode = $vsmChild->addChild('app.vsm_api', [
                 'label' => 'app.menu.vsm_api',
                 'route' => 'app_vsm_api_index',
@@ -191,9 +199,7 @@ class MenuBuilderListener
     ): void
     {
         if (null !== $childNode) {
-            $childNode->setExtras([
-                'icon' => '<i class="fa ' . $icon . '" aria-hidden="true"></i>',
-            ]);
+            $childNode->setExtra('icon', '<i class="fa ' . $icon . '" aria-hidden="true"></i>');
             $childNode->setParent($parentNode);
             $newChildren = [];
             $wasAdded = false;
