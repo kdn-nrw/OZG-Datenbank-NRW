@@ -48,6 +48,11 @@ class ReferenceSettings
     protected $listTitle = 'app.common.fields.references';
 
     /**
+     * @var string
+     */
+    protected $entityClass;
+
+    /**
      * @return AbstractAdmin|null
      */
     public function getAdmin(): ?AbstractAdmin
@@ -135,6 +140,22 @@ class ReferenceSettings
     public function setListTitle(string $listTitle): void
     {
         $this->listTitle = $listTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityClass(): string
+    {
+        return $this->entityClass;
+    }
+
+    /**
+     * @param string $entityClass
+     */
+    public function setEntityClass(string $entityClass): void
+    {
+        $this->entityClass = $entityClass;
     }
 
 }

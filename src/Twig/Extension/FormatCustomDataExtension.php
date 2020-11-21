@@ -11,11 +11,24 @@
 
 namespace App\Twig\Extension;
 
+use App\Entity\Base\CustomEntityLabelInterface;
+use App\Translator\TranslatorAwareTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 class FormatCustomDataExtension extends AbstractExtension
 {
+    use TranslatorAwareTrait;
+
+    /**
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->setTranslator($translator);
+    }
+
     /**
      * Returns a list of functions to add to the existing list.
      *
@@ -27,6 +40,7 @@ class FormatCustomDataExtension extends AbstractExtension
             new TwigFilter('app_format_custom_label', [$this, 'getFormattedLabel']),
             new TwigFilter('app_format_custom_value', [$this, 'getFormattedValue']),
             new TwigFilter('app_format_property_name', [$this, 'convertToPropertyName']),
+            new TwigFilter('app_format_collection_item_label', [$this, 'getCollectionItemLabel']),
         ];
     }
 
@@ -40,6 +54,7 @@ class FormatCustomDataExtension extends AbstractExtension
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace(['-', '_', ' '], ' ', $input))));
     }
+
     /**
      * Returns the field description collection for the referenced fields
      *
@@ -49,6 +64,23 @@ class FormatCustomDataExtension extends AbstractExtension
     public function getFormattedLabel(string $customLabel): string
     {
         return self::convertKeyToLabel($customLabel);
+    }
+
+    /**
+     * Returns the field description collection for the referenced fields
+     *
+     * @param object|null $data
+     * @return string
+     */
+    public function getCollectionItemLabel($data): string
+    {
+        if ($data instanceof CustomEntityLabelInterface) {
+            return $this->translate($data->getLabelKey());
+        }
+        if (null !== $data) {
+            return $data . '';
+        }
+        return $this->translate('app.common.add_sub_record');
     }
 
     /**

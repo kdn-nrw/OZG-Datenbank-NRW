@@ -402,19 +402,6 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\StateGroup\MinistryStateAdmin:
-    arguments:
-      - ~
-      - App\Entity\StateGroup\MinistryState
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.ministry_state.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-    public: true
-
   App\Admin\MaturityAdmin:
     arguments:
       - ~
@@ -424,6 +411,45 @@ services:
       - name:         sonata.admin
         manager_type: orm
         label:        app.maturity.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\MetaData\MetaItemAdmin:
+    arguments:
+      - ~
+      - App\Entity\MetaData\MetaItem
+      - App\Controller\MetaData\MetaItemAdminController
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.meta_item.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\MetaData\MetaItemPropertyAdmin:
+    arguments:
+      - ~
+      - App\Entity\MetaData\MetaItemProperty
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.meta_item_property.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\StateGroup\MinistryStateAdmin:
+    arguments:
+      - ~
+      - App\Entity\StateGroup\MinistryState
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.ministry_state.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true

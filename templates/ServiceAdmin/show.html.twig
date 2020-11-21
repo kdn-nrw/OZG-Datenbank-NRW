@@ -69,15 +69,21 @@ file that was distributed with this source code.
             </div>
             <div class="box-body">
                 <dl class="dl-horizontal">
-                    <dt>{{ 'app.service.entity.legal_basis'|trans }}</dt>
+                    <dt>{{ 'app.service.entity.legal_basis'|trans }}
+                        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'legal_basis'} %}</dt>
                     <dd>{{ object.legalBasis }}</dd>
-                    <dt>{{ 'app.service.entity.laws'|trans }}</dt>
+                    <dt>{{ 'app.service.entity.laws'|trans }}
+                        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'laws'} %}</dt>
                     <dd>{{ object.laws }}</dd>
-                    <dt>{{ 'app.service.entity.law_shortcuts'|trans }}</dt>
+                    <dt>{{ 'app.service.entity.law_shortcuts'|trans }}
+                        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'law_shortcuts'} %}</dt>
                     <dd>{{ object.lawShortcuts }}</dd>
-                    <dt>{{ 'app.service.entity.relevance1'|trans }}</dt>
+                    {% set fieldMetaHelp = include('MetaData/help-popover.html.twig', {'objectOrClass': admin.class, 'propertyKey': 'relevance1'}) %}
+                    <dt>{{ 'app.service.entity.relevance1'|trans }}
+                        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'relevance1'} %}</dt>
                     <dd>{% if object.relevance1 %}Ja{% else %}Nein{% endif %}</dd>
-                    <dt>{{ 'app.service.entity.relevance2'|trans }}</dt>
+                    <dt>{{ 'app.service.entity.relevance2'|trans }}
+                        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'relevance2'} %}</dt>
                     <dd>{% if object.relevance2 %}Ja{% else %}Nein{% endif %}</dd>
                 </dl>
             </div>

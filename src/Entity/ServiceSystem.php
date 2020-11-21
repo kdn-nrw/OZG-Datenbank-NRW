@@ -14,6 +14,7 @@ namespace App\Entity;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
+use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Bureau;
 use App\Entity\StateGroup\CommuneType;
 use App\Entity\StateGroup\MinistryState;
@@ -30,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="ozg_service_system")
  * @ORM\HasLifecycleCallbacks
  */
-class ServiceSystem extends AbstractService implements SluggableInterface
+class ServiceSystem extends AbstractService implements SluggableInterface, HasMetaDateEntityInterface
 {
     use ContactTextTrait;
     use SluggableEntityTrait;

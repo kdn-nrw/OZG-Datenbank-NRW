@@ -138,6 +138,7 @@ class ReferenceSettingsExtension extends AbstractExtension
             $label = $this->getClassPropertyLabel($entityClass);
             $settings->setListTitle($label);
         }
+        $settings->setEntityClass($entityClass);
         return $settings;
     }
 }

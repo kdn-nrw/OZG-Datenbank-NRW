@@ -109,3 +109,13 @@ frontend_app_commune_show:
 frontend_app_commune_export:
   path: /kommunen/export
   controller: App\Controller\CommuneController::exportAction
+
+frontend_app_vsm_api_index:
+  path: /verwaltungssuchmaschine/{consumerKey}/{query}/{page}
+  controller: App\Controller\VSMController::feApiIndexAction
+  defaults:
+    consumerKey: null
+    query: null
+    page: 1
+  requirements:
+    page: '\d+'

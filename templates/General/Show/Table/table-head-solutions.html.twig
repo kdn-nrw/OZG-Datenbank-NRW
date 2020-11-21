@@ -4,17 +4,12 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-<th>
-    {{ 'app.solution.entity.name'|trans }}
-</th>
-<th>
-    {{ 'app.solution.entity.url'|trans }}
-</th>
-<th>
-    {{ 'app.solution.entity.description'|trans }}
-</th>
+{% set tableHeaders = ['name', 'url', 'description'] %}
+{% set labelPrefix = 'app.solution.entity.' %}
+{% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
 {% if showContacts %}
 <th>
     {{ 'app.solution.entity.solution_contacts'|trans }}
+    {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': refSettings.entityClass, 'propertyKey': 'solution_contacts'} %}
 </th>
 {% endif %}

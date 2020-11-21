@@ -13,6 +13,7 @@ file that was distributed with this source code.
         <div class="box-header">
             <h4 class="box-title">
                 {{ refSettings.listTitle|trans }}
+                {% if fieldMetaHelp is defined %}{{ fieldMetaHelp|raw }}{% endif %}
             </h4>
         </div>
         <div class="box-body table-responsive no-padding">

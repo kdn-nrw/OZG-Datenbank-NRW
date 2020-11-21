@@ -11,6 +11,7 @@ file that was distributed with this source code.
             <h4 class="box-title">
                 <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 {{ 'app.service.fim.object_name'|trans }}
+                {% if fieldMetaHelp is defined %}{{ fieldMetaHelp|raw }}{% endif %}
             </h4>
         </div>
         <div class="box-body no-padding">

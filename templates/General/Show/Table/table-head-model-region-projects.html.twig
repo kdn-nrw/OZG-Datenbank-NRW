@@ -7,13 +7,8 @@ file that was distributed with this source code.
 
 <th>
     {{ 'app.model_region_project.list'|trans }}
+    {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': refSettings.entityClass, 'propertyKey': 'name', 'placement': 'top'} %}
 </th>
-<th>
-    {{ 'app.model_region_project.entity.project_start_at'|trans }}
-</th>
-<th>
-    {{ 'app.model_region_project.entity.project_end_at'|trans }}
-</th>
-<th>
-    {{ 'app.model_region_project.entity.organisations'|trans }}
-</th>
+{% set tableHeaders = ['project_start_at', 'project_end_at', 'organisations'] %}
+{% set labelPrefix = 'app.model_region_project.entity.' %}
+{% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}

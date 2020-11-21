@@ -8,20 +8,15 @@ file that was distributed with this source code.
 {% if showSolution %}
     {% include 'General/Show/Table/table-head-solutions.html.twig' %}
 {% else %}
-    {% include 'General/Show/Table/table-head-form-servers.html.twig' %}
+    {% set tableHeaders = ['name', 'url',] %}
+    {% set labelPrefix = 'app.form_server.entity.' %}
+    {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
 {% endif %}
-<th>
-    {{ 'app.form_server_solution.entity.status'|trans }}
-</th>
-<th>
-    {{ 'app.form_server_solution.entity.article_number'|trans }}
-</th>
-<th>
-    {{ 'app.form_server_solution.entity.assistant_type'|trans }}
-</th>
-<th>
-    {{ 'app.form_server_solution.entity.article_key'|trans }}
-</th>
-<th>
-    {{ 'app.form_server_solution.entity.usable_as_print_template'|trans }}
-</th>
+{% set tableHeaders = ['status', 'article_number', 'assistant_type', 'article_key', 'usable_as_print_template'] %}
+{% set labelPrefix = 'app.form_server_solution.entity.' %}
+{% for field in tableHeaders %}
+    <th>
+        {{ (labelPrefix~field)|trans }}
+        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': '\\App\\Entity\\FormServerSolution', 'propertyKey': field, 'placement': 'top'} %}
+    </th>
+{% endfor %}

@@ -13,6 +13,7 @@ namespace App\Entity;
 
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
+use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Bureau;
 use App\Entity\StateGroup\CommuneType;
 use App\Entity\StateGroup\MinistryState;
@@ -28,7 +29,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="ozg_service")
  * @ORM\HasLifecycleCallbacks
  */
-class Service extends AbstractService implements SluggableInterface
+class Service extends AbstractService implements SluggableInterface, HasMetaDateEntityInterface
 {
     use SluggableEntityTrait;
     /**

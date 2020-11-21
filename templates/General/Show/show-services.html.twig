@@ -17,6 +17,7 @@ file that was distributed with this source code.
                 {% else %}
                     {{ customListTitle }}
                 {% endif %}
+                {% if fieldMetaHelp is defined %}{{ fieldMetaHelp|raw }}{% endif %}
             </h4>
         </div>
         <div class="box-body table-responsive no-padding">

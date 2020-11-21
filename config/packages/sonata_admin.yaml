@@ -259,6 +259,7 @@ sonata_admin:
                     - sonata.user.admin.user
                     - sonata.user.admin.group
                     - App\Admin\Api\ApiConsumerAdmin
+                    - App\Admin\MetaData\MetaItemAdmin
                     #- shapecode_cron.cronjob
                     #- shapecode_cron.cronjob_result
 

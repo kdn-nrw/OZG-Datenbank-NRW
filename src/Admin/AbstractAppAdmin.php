@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 
+use App\Entity\Base\CustomEntityLabelInterface;
 use App\Entity\Base\NamedEntityInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -154,5 +155,13 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
             }
         }
         return $hideFields;
+    }
+
+    public function toString($object)
+    {
+        if ($object instanceof CustomEntityLabelInterface) {
+            return $this->trans($object->getLabelKey());
+        }
+        return parent::toString($object);
     }
 }

@@ -8,21 +8,14 @@ file that was distributed with this source code.
 #}
 <div class="sonata-ba-tabs">
     {% for nested_group_field in form.children %}
-        {% set isCollapsed = true %}
-        {% set boxHeadline = '' %}
-        {% if nested_group_field.vars.data %}
-            {% set boxHeadline = nested_group_field.vars.data ~ '' %}
-        {% endif %}
-        {% if not boxHeadline %}
-            {% set isCollapsed = false %}
-            {% set boxHeadline = 'app.common.add_sub_record'|trans %}
-        {% endif %}
+        {% set isCollapsed = nested_group_field.vars.data is not empty %}
+        {% set headlineData = isCollapsed ? nested_group_field.vars.data : null %}
+        {% set boxHeadline = headlineData|app_format_collection_item_label %}
         <div class="box box-default box-solid{% if isCollapsed %} collapsed-box{% endif %}">
             <div class="box-header with-border">
                 <h3 class="box-title">
                     {{ boxHeadline }}
                 </h3>
-
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse">
                         {% if isCollapsed %}

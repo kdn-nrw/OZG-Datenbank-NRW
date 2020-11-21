@@ -17,20 +17,25 @@ namespace App\Util;
  */
 class SnakeCaseConverter
 {
-    public static function classNameToSnakeCase(string $className): string
+    public static function camelCaseToSnakeCase(string $property): string
     {
-        return str_replace(
-            '\\',
-            '.',
+        return
             strtolower(
                 preg_replace_callback(
                     '/([a-z])([A-Z])/',
                     static function ($a) {
                         return $a[1]."_".strtolower($a[2]);
                     },
-                    lcfirst($className)
+                    lcfirst($property)
                 )
-            )
+            );
+    }
+    public static function classNameToSnakeCase(string $className): string
+    {
+        return str_replace(
+            '\\',
+            '.',
+            self::camelCaseToSnakeCase($className)
         );
     }
 }

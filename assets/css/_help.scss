@@ -1,0 +1,19 @@
+.has-popover {
+  .field-help {
+    display: inline-block;
+  }
+  .popover {
+    width: 450px;
+    max-width: 100%;
+  }
+}
+.field-help {
+  cursor: pointer;
+  color: $cyan;
+  transition: color .2s linear;
+
+  &:hover,
+  &:focus {
+    color: $blue;
+  }
+}

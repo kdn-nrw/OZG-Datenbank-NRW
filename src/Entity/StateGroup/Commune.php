@@ -19,6 +19,7 @@ use App\Entity\Base\SoftdeletableEntityInterface;
 use App\Entity\ContactTextTrait;
 use App\Entity\HasManufacturerEntityInterface;
 use App\Entity\Laboratory;
+use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
 use App\Entity\OrganisationTrait;
@@ -39,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="App\Entity\Repository\CommuneRepository")
  * @ORM\Table(name="ozg_commune")
  */
-class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface, SluggableInterface
+class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface, SluggableInterface, HasMetaDateEntityInterface
 {
     use AddressTrait;
     use ContactTextTrait;

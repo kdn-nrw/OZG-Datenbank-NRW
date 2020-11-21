@@ -14,6 +14,7 @@ file that was distributed with this source code.
             <h4 class="box-title">
                 {{ refSettings.listTitle|trans }}
             </h4>
+            {% if fieldMetaHelp is defined %}{{ fieldMetaHelp|raw }}{% endif %}
         </div>
         {% set showContacts = refSettings.isBackendMode %}
         {% set showServices = field_description.options.showServices is defined and field_description.options.showServices %}

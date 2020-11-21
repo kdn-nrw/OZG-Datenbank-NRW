@@ -17,6 +17,7 @@ app:
     vsm_snippet: VSM Snippet
     vsm_snippet_map: VSM Snippet + Karte
     vsm_api: VSM API
+    meta_data: Metadaten
   block:
     solution:
       online: 'Lösungen: Online'
@@ -272,7 +273,6 @@ app:
       constituency: Kreis
       main_email: E-Mail
       official_community_key: AGS
-      official_community_key_placeholder: Amtlicher Gemeindeschlüssel
       administrative_district: Reg-Bez
       administrative_district_placeholder: Regierungsbezirk
   commune_type:
@@ -570,6 +570,39 @@ app:
       town: Ort
       url: Url
       specialized_procedures: Anbindung Fachverfahren
+  maturity:
+    object_name: Reifegrad
+    list: Reifegrade
+    create: Reifegrad anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+  meta_item:
+    object_name: Metadaten
+    list: Metadaten
+    create: Metadaten anlegen
+    groups:
+      general_data: Eigenschaften Datentyp
+      property_data: Eigenschaften/Felder
+    entity:
+      custom_label: Bezeichnung (alternativ)
+      description: Beschreibung/Tooltip
+      meta_type: Typ
+      meta_type_choices:
+        entity: Datentyp
+        field: Datenfeld  (gehört zum ausgewählten Datentyp)
+        custom_field: Sonstiges Feld (aus anderen Datenquellen)
+      meta_key: Datentyp
+  meta_item_property:
+    object_name: Meta-Eigenschaft
+    list: Meta-Eigenschaften
+    create: Meta-Eigenschaft anlegen
+    entity:
+      parent: Metadatentyp
+      custom_label: Bezeichnung (alternativ)
+      description: Beschreibung/Tooltip
+      meta_type: Typ
+      meta_key: Eigenschaft
   ministry_state:
     object_name: Ministerium
     list: Ministerien (Land)
@@ -587,13 +620,6 @@ app:
       contacts: Ansprechpartner
       service_systems: OZG-Leistungen
       service_authorities: Regelungskompetenzen
-  maturity:
-    object_name: Reifegrad
-    list: Reifegrade
-    create: Reifegrad anlegen
-    entity:
-      name: Name
-      description: Beschreibung
   model_region:
     object_name: Modellregion
     list: Modellregionen
@@ -887,9 +913,10 @@ app:
       services: Leika-Leistungen
       solutions: Lösungen
     entity:
-      name: OZG Leistung
+      name: OZG-Leistung
       service_key: OZG-ID
       situation: Lage
+      subject: Themenfeld
       contact: Kontakt
       description: Beschreibung
       services: Leika-Leistungen

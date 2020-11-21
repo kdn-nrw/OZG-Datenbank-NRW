@@ -4,6 +4,7 @@
         <div class="box-header">
             <h4 class="box-title">
                 {{ 'app.implementation_project.entity.notes'|trans }}
+                {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': object, 'propertyKey': 'notes'} %}
             </h4>
         </div>
         <div class="box-body">

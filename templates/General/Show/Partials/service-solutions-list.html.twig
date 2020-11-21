@@ -20,6 +20,7 @@ file that was distributed with this source code.
             {% endif %}
             <th>
                 {{ 'app.solution.entity.maturity'|trans }}
+                {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': '\App\Entity\ServiceSolution', 'propertyKey': 'maturity'} %}
             </th>
             {% if refSettings.edit.enabled %}
                 <th>

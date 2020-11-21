@@ -1,0 +1,60 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+Extend base template with custom class
+@see vendor/sonata-project/admin-bundle/src/Resources/views/CRUD/base_list_field.html.twig
+#}
+{% extends '@!SonataAdmin/CRUD/base_list.html.twig' %}
+
+{% block table_header %}
+    {# @var admin \Sonata\AdminBundle\Admin\AbstractAdmin #}
+    <thead>
+    <tr class="sonata-ba-list-field-header">
+        {% for field_description in admin.list.elements %}
+            {% if admin.hasRoute('batch') and field_description.getOption('code') == '_batch' and batchactions|length > 0 %}
+                <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
+                    <input type="checkbox" id="list_batch_checkbox">
+                </th>
+            {% elseif field_description.getOption('code') == '_select' %}
+                <th class="sonata-ba-list-field-header sonata-ba-list-field-header-select"></th>
+            {% elseif field_description.name == '_action' and app.request.isXmlHttpRequest %}
+                {# Action buttons disabled in ajax view! #}
+            {% elseif field_description.getOption('ajax_hidden') == true and app.request.isXmlHttpRequest %}
+                {# Disable fields with 'ajax_hidden' option set to true #}
+            {% else %}
+                {% set sortable = false %}
+                {% if field_description.options.sortable is defined and field_description.options.sortable %}
+                    {% set sortable             = true %}
+                    {# NEXT_MAJOR: Remove next line and uncomment the other one #}
+                    {% set sort_parameters      = sonata_sort_parameters(field_description, admin) %}
+                    {# {% set sort_parameters      = admin.datagrid.sortparameters(field_description) %} #}
+                    {% set current              = admin.datagrid.values._sort_by is defined
+                        and (admin.datagrid.values._sort_by == field_description
+                        or admin.datagrid.values._sort_by.name == sort_parameters.filter._sort_by) %}
+                    {% set sort_active_class    = current ? 'sonata-ba-list-field-order-active' : '' %}
+                    {% set sort_by              = current ? admin.datagrid.values._sort_order : field_description.options._sort_order %}
+                {% endif %}
+
+                {% apply spaceless %}
+                    {% set fieldMeta = app_object_property_meta_data(admin.class, field_description.name) %}
+                    <th class="sonata-ba-list-field-header-{{ field_description.type }}{% if sortable %} sonata-ba-list-field-header-order-{{ sort_by|lower }} {{ sort_active_class }}{% endif %}{% if field_description.options.header_class is defined %} {{ field_description.options.header_class }}{% endif %}{% if fieldMeta is not null %} th-popover{% endif %}"{% if field_description.options.header_style is defined %} style="{{ field_description.options.header_style }}"{% endif %}
+                        {% if fieldMeta is not null and fieldMeta.customLabel is not empty %} title="{{ fieldMeta.customLabel|raw|replace({'"': "'"}) }}"{% endif %}>
+                        {% if sortable %}<a href="{{ admin.generateUrl('list', sort_parameters|merge({_list_mode: admin.getListMode()})) }}">{% endif %}
+                            {% if field_description.getOption('label_icon') %}
+                                <i class="sonata-ba-list-field-header-label-icon {{ field_description.getOption('label_icon') }}" aria-hidden="true"></i>
+                            {% endif %}
+                            {% if field_description.label is not same as(false) %}
+                                {{ field_description.label|trans({}, field_description.translationDomain) }}
+                            {% endif %}
+                            {% if sortable %}</a>{% endif %}
+                            {% include 'MetaData/help-popover.html.twig' with {'fieldMeta': fieldMeta} %}
+                    </th>
+                {% endapply %}
+            {% endif %}
+        {% endfor %}
+    </tr>
+    </thead>
+{% endblock %}

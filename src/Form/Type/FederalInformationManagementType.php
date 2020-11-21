@@ -30,7 +30,7 @@ class FederalInformationManagementType extends AbstractType
             ->add('dataType', ChoiceType::class, [
                 'choices' => array_flip(\App\Entity\FederalInformationManagementType::$mapTypes),
                 'attr' => [
-                    'class' => 'form-control show-as-headline',
+                    'class' => 'form-control',
                     'data-sonata-select2' => 'false'
                 ],
                 'label' => false,

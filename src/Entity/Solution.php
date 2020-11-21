@@ -16,6 +16,7 @@ use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
+use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -30,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_solution")
  * @ORM\HasLifecycleCallbacks
  */
-class Solution extends BaseBlamableEntity implements NamedEntityInterface, ImportEntityInterface, SluggableInterface
+class Solution extends BaseBlamableEntity implements NamedEntityInterface, ImportEntityInterface, SluggableInterface, HasMetaDateEntityInterface
 {
     public const COMMUNE_TYPE_ALL = 'all';
     public const COMMUNE_TYPE_SELECTED = 'selected';
