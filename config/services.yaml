@@ -835,11 +835,6 @@ services:
     tags:
       - { name: kernel.event_listener, event: sonata.admin.event.configure.menu.sidebar, method: addMenuItems }
 
-  App\Controller\SearchController:
-    arguments:
-      - '@sonata.admin.pool'
-      - '@translator'
-
   App\Service\Mailer\BaseMailer:
     arguments:
       $fromEmail: '%env(string:APP_MAILER_FROM_MAIL)%'

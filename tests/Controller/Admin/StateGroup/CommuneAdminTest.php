@@ -18,6 +18,7 @@ use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
  */
 class CommuneAdminTest extends AbstractBackendAdminControllerTestCase
 {
+    protected $hasFeatureFullTextSearchField = false;
 
     protected function getRoutePrefix(): string
     {
