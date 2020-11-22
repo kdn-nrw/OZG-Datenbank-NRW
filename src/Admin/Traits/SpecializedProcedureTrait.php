@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\SpecializedProcedureAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -30,17 +29,6 @@ trait SpecializedProcedureTrait
             'by_reference' => false,
             'choice_translation_domain' => false,
         ]);
-    }
-
-    protected function addSpecializedProceduresDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('specializedProcedures',
-            null, [
-                'admin_code' => SpecializedProcedureAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addSpecializedProceduresListFields(ListMapper $listMapper)

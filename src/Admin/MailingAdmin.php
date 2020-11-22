@@ -152,8 +152,8 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('subject');
-        $this->addCategoriesDatagridFilters($datagridMapper);
-        $this->addOrganisationsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'categories');
+        $this->addDefaultDatagridFilter($datagridMapper, 'organisations');
         $datagridMapper->add('status',
             null, [
             ],

@@ -90,7 +90,7 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
     {
         $datagridMapper->add('name');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
     }
 
     protected function configureListFields(ListMapper $listMapper)

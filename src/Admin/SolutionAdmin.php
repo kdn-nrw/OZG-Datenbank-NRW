@@ -231,45 +231,14 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $this->addServiceProvidersDatagridFilters($datagridMapper);
-        $datagridMapper->add('serviceSolutions.service.serviceSystem',
-            null,
-            [
-                'label' => 'app.service.entity.service_system',
-                'admin_code' => ServiceSystemAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('serviceSolutions.service.serviceSystem.jurisdictions',
-            null,
-            ['label' => 'app.service_system.entity.jurisdictions'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('serviceSolutions.service.serviceSystem.situation.subject',
-            null,
-            ['label' => 'app.situation.entity.subject'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('maturity',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('serviceSolutions.service',
-            null,
-            [
-                'label' => 'app.service_solution.entity.service',
-                'admin_code' => ServiceAdmin::class
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem.jurisdictions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem.situation.subject');
+        $this->addDefaultDatagridFilter($datagridMapper, 'maturity');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service');
         $datagridMapper->add('status');
-        $this->addPortalsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
         $datagridMapper->add('communeType', null,
             [
             ],
@@ -282,42 +251,17 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'expanded' => false,
                 'multiple' => false,
             ]);
-        $this->addCommunesDatagridFilters($datagridMapper);
-        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
-        $datagridMapper->add('formServerSolutions.formServer',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('paymentTypes',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('authentications',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('analogServices',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('openDataItems',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($datagridMapper, 'formServerSolutions.formServer');
+        $this->addDefaultDatagridFilter($datagridMapper, 'paymentTypes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'authentications');
+        $this->addDefaultDatagridFilter($datagridMapper, 'analogServices');
+        $this->addDefaultDatagridFilter($datagridMapper, 'openDataItems');
         $datagridMapper->add('name');
         $datagridMapper->add('description');
         $datagridMapper->add('isPublished');
-        $this->addModelRegionProjectsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
     }
 
     protected function configureListFields(ListMapper $listMapper)

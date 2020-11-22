@@ -11,7 +11,6 @@
 
 namespace App\Admin\Traits;
 
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -31,16 +30,6 @@ trait MinistryStateTrait
                     'choice_translation_domain' => false,
                 ]
             );
-    }
-
-    protected function addStateMinistriesDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('stateMinistries',
-            null, [
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addStateMinistriesListFields(ListMapper $listMapper)

@@ -20,8 +20,7 @@ file that was distributed with this source code.
             <table class="table table-bordered table-condensed">
                 <tr>
                     {% set tableHeaders = ['name', 'status', 'project_start_at', 'project_leaders'] %}
-                    {% set labelPrefix = 'app.implementation_project.entity.' %}
-                    {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+                    {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
                     {% if refSettings.edit.enabled %}
                         <th></th>
                     {% endif %}

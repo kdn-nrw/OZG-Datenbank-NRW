@@ -11,7 +11,6 @@
 
 namespace App\Admin;
 
-use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Admin\Traits\ImplementationProjectTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
@@ -19,7 +18,6 @@ use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Jurisdiction;
 use App\Entity\Priority;
-use App\Entity\StateGroup\Commune;
 use App\Entity\Status;
 use App\Exporter\Source\ServiceFimValueFormatter;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
@@ -353,56 +351,22 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
         $datagridMapper->add('serviceType');
-        $datagridMapper->add('serviceSystem',
-            null, [
-                'admin_code' => ServiceSystemAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem');
         $datagridMapper->add('serviceSystem.serviceKey',
             null,
             ['label' => 'app.service_system.entity.service_key']
         );
-        $datagridMapper->add('serviceSystem.situation.subject',
-            null,
-            [
-                'show_filter' => true,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem.situation.subject', ['show_filter' => true]);
         $datagridMapper->add('status');
-        $this->addLaboratoriesDatagridFilters($datagridMapper);
-        $datagridMapper->add('jurisdictions',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('bureaus',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
-        $this->addPortalsDatagridFilters($datagridMapper);
-        $this->addImplementationProjectsDatagridFilters($datagridMapper);
-        $datagridMapper->add('ruleAuthorities',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $this->addStateMinistriesDatagridFilters($datagridMapper);
-        $datagridMapper->add('serviceSolutions.solution',
-            null, [
-                'admin_code' => SolutionAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
+        $this->addDefaultDatagridFilter($datagridMapper, 'jurisdictions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'bureaus');
+        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
+        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects');
+        $this->addDefaultDatagridFilter($datagridMapper, 'ruleAuthorities');
+        $this->addDefaultDatagridFilter($datagridMapper, 'stateMinistries');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.solution');
         $datagridMapper->add('fimTypes.dataType',
             null, [
             ],
@@ -419,13 +383,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'choices' => array_flip(\App\Entity\FederalInformationManagementType::$statusChoices)
             ]
         );
-        $datagridMapper->add('communeTypes',
-            null, [
-                'admin_code' => CommuneTypeAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
     }
 
     protected function configureListFields(ListMapper $listMapper)

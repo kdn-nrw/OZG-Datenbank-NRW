@@ -156,11 +156,11 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     {
         $datagridMapper->add('name');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addServiceProvidersDatagridFilters($datagridMapper);
-        $this->addCentralAssociationsDatagridFilters($datagridMapper);
-        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
-        $this->addPortalsDatagridFilters($datagridMapper);
-        $this->addLaboratoriesDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
+        $this->addDefaultDatagridFilter($datagridMapper, 'centralAssociations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
+        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
         $datagridMapper->add('constituency',
             null,
             [
@@ -173,18 +173,8 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'query_builder' => $this->getConstituencyQueryBuilder()
             ]
         );
-        $datagridMapper->add('administrativeDistrict',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('communeType',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'administrativeDistrict');
+        $this->addDefaultDatagridFilter($datagridMapper, 'communeType');
         $datagridMapper->add('officialCommunityKey');
     }
 

@@ -100,26 +100,10 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('serviceProvider',
-            null,
-            ['label' => 'app.efile.entity.service_provider'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('leadingSystem',
-            null,
-            ['label' => 'app.efile.entity.leading_system'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
-        $datagridMapper->add('storageTypes',
-            null, [
-                'admin_code' => EFileStorageTypeAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProvider');
+        $this->addDefaultDatagridFilter($datagridMapper,'leadingSystem');
+        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($datagridMapper, 'storageTypes');
         $datagridMapper->add('hasEconomicViabilityAssessment');
     }
 

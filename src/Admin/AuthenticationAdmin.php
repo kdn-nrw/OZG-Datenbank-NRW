@@ -34,7 +34,7 @@ class AuthenticationAdmin extends AbstractAppAdmin implements EnableFullTextSear
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addSolutionsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
     }
 
     protected function configureListFields(ListMapper $listMapper)

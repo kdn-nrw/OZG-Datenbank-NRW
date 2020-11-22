@@ -719,6 +719,7 @@ app:
       manufacturer: Hersteller
       central_association: Spitzenverband
       model_region_beneficiary: Zuwendungsempfänger
+      model_region_projects: DMR Umsetzungsprojekte
   page_content:
     object_name: Seiteninhalt
     list: Seiteninhalte

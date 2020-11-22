@@ -38,7 +38,7 @@ class FundingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     {
         $datagridMapper->add('name');
         $datagridMapper->add('description');
-        $this->addImplementationProjectsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects');
     }
 
     /**

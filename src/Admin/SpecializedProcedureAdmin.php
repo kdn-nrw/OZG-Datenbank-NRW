@@ -105,9 +105,9 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addManufaturersDatagridFilters($datagridMapper);
-        $this->addCommunesDatagridFilters($datagridMapper);
-        $this->addServiceProvidersDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'manufacturers');
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
     }
 
     protected function configureListFields(ListMapper $listMapper)

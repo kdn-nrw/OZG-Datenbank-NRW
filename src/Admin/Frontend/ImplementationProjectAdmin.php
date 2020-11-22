@@ -14,10 +14,8 @@ namespace App\Admin\Frontend;
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\FundingAdmin;
 use App\Admin\ImplementationStatusAdmin;
-use App\Admin\OrganisationAdmin;
 use App\Admin\PortalAdmin;
 use App\Admin\StateGroup\BureauAdmin;
-use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Admin\Traits\DatePickerTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\ImplementationStatus;
@@ -35,87 +33,22 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('solutions',
-            null, [
-                'admin_code' => SolutionAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('serviceSystems',
-            null,
-            [
-                'admin_code' => ServiceSystemAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('serviceSystems.situation.subject',
-            null,
-            ['label' => 'app.situation.entity.subject'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
         $datagridMapper->add('status');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'conceptStatusAt');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'implementationStatusAt');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'commissioningStatusAt');
-        $datagridMapper->add('fundings',
-            null, [
-                'admin_code' => FundingAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('services.bureaus',
-            null,
-            ['label' => 'app.implementation_project.entity.bureaus'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('services.portals',
-            null,
-            ['label' => 'app.implementation_project.entity.portals'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('projectLeaders',
-            null, [
-                'admin_code' => OrganisationAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('participationOrganisations',
-            null, [
-                'admin_code' => OrganisationAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('interestedOrganisations',
-            null, [
-                'admin_code' => OrganisationAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('services.communeTypes',
-            null,
-            [
-                'admin_code' => CommuneTypeAdmin::class,
-                'label' => 'app.service_system.entity.commune_types'
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('solutions.openDataItems',
-            null,
-            ['label' => 'app.solution.entity.open_data_items'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'conceptStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'implementationStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'commissioningStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'fundings');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.bureaus');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.portals', ['label' => 'app.implementation_project.entity.portals']);
+        $this->addDefaultDatagridFilter($datagridMapper, 'projectLeaders');
+        $this->addDefaultDatagridFilter($datagridMapper, 'participationOrganisations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'interestedOrganisations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
+        $this->addDefaultDatagridFilter($datagridMapper, 'solutions.openDataItems');
     }
 
     protected function configureListFields(ListMapper $listMapper)

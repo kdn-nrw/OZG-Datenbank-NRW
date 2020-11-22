@@ -128,17 +128,17 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addOrganisationsDatagridFilters($datagridMapper);
-        $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'projectEndAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'organisations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'projectEndAt');
         $datagridMapper
             ->add('description')
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
-        $this->addModelRegionsDatagridFilters($datagridMapper);
-        $this->addSolutionsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
     }
 
     protected function configureListFields(ListMapper $listMapper)

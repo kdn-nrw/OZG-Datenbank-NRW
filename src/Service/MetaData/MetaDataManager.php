@@ -16,39 +16,38 @@ use App\Entity\MetaData\AbstractMetaItem;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\MetaData\MetaItem;
 use App\Entity\MetaData\MetaItemProperty;
+use App\Service\InjectAdminManagerTrait;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use App\Translator\TranslatorAwareTrait;
 use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Admin\Pool;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MetaDataManager
 {
+    use InjectAdminManagerTrait;
     use InjectManagerRegistryTrait;
     use TranslatorAwareTrait;
 
     /**
-     * @var Pool
-     */
-    private $pool;
-
-    /**
      * MetaItemAdminController constructor.
      * @param TranslatorInterface $translator
-     * @param Pool $pool
      */
-    public function __construct(
-        TranslatorInterface $translator,
-        Pool $pool
-    )
+    public function __construct(TranslatorInterface $translator)
     {
         $this->setTranslator($translator);
-        $this->pool = $pool;
     }
 
+    /**
+     * Create meta data for all entities that implement HasMetaDateEntityInterface; add all properties defined in the
+     * admin (if an admin class exists)
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \ReflectionException
+     */
     public function createMetaItems(): void
     {
         $em = $this->getEntityManager();
@@ -62,7 +61,6 @@ class MetaDataManager
             $groupedItems[$metaItem->getMetaType()][$metaItem->getMetaKey()] = $metaItem;
         }
         $metaType = AbstractMetaItem::META_TYPE_ENTITY;
-        // TODO 1: persist registered entities
         $allMetaData = $em->getMetadataFactory()->getAllMetadata();
         foreach ($allMetaData as $metaData) {
             $entityClass = $metaData->getName();
@@ -86,10 +84,6 @@ class MetaDataManager
                 $this->addMetaProperties($metaItem, $entityClass);
             }
         }
-        // TODO 2: get properties for these entities
-        // TODO 3: get properties for list view fields
-        // TODO 4: get properties for show view fields
-        // TODO 5: predefine all properties
         $em->flush();
 
     }
@@ -104,17 +98,16 @@ class MetaDataManager
      */
     private function addMetaProperties(MetaItem $metaItem, string $entityClass): void
     {
-        $adminClasses = $this->pool->getAdminClasses();
         $reflectionClass = new \ReflectionClass($entityClass);
         $properties = $reflectionClass->getProperties();
         $entityPropertyNames = [];
         foreach ($properties as $property) {
             $entityPropertyNames[] = $property->getName();
         }
-        $objectAdminClasses = $adminClasses[ltrim($entityClass, '\\')] ?? null;
+        $objectAdminClasses = $this->adminManager->getEntityAdminClasses($entityClass);
         if (!empty($objectAdminClasses)) {
             foreach ($objectAdminClasses as $adminClass) {
-                $admin = $this->pool->getInstance($adminClass);
+                $admin = $this->adminManager->getAdminInstance($adminClass);
                 /** @var AbstractAdmin $admin */
                 $this->addFieldDescriptions($metaItem, $admin->getList(), $entityPropertyNames);
                 $this->addFieldDescriptions($metaItem, $admin->getShow(), $entityPropertyNames);

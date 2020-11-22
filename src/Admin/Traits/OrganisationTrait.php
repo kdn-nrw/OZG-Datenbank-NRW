@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\OrganisationAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
@@ -33,17 +32,6 @@ trait OrganisationTrait
         ], [
                 'admin_code' => OrganisationAdmin::class,
             ]
-        );
-    }
-
-    protected function addOrganisationsDatagridFilters(DatagridMapper $datagridMapper, $fieldName = 'organisations')
-    {
-        $datagridMapper->add($fieldName,
-            null, [
-                'admin_code' => OrganisationAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
         );
     }
 

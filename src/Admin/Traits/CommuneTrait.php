@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\StateGroup\CommuneAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -38,17 +37,6 @@ trait CommuneTrait
             [
                 'admin_code' => CommuneAdmin::class,
             ]
-        );
-    }
-
-    protected function addCommunesDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('communes',
-            null, [
-                'admin_code' => CommuneAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
         );
     }
 

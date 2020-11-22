@@ -26,13 +26,7 @@ class ModelRegionAdmin extends AbstractFrontendAdmin implements EnableFullTextSe
     {
         $datagridMapper->add('name');
         $this->addAddressDatagridFilters($datagridMapper);
-        $datagridMapper->add('modelRegionProjects',
-            null, [
-                'admin_code' => ModelRegionProjectAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
     }
 
     protected function configureListFields(ListMapper $listMapper)

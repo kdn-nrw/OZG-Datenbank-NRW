@@ -96,13 +96,7 @@ class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin implements EnableFull
     {
         $datagridMapper->add('name')
             ->add('shortName');
-        $datagridMapper->add('organisation.modelRegionProjects',
-            null, [
-                'admin_code' => ModelRegionProjectAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'organisation.modelRegionProjects');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
     }
 

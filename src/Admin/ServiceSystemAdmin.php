@@ -227,54 +227,18 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
     {
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
-        //$this->addLaboratoriesDatagridFilters($datagridMapper);
-        $datagridMapper->add('jurisdictions',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('situation',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('situation.subject',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('priority',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        // $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
+        $this->addDefaultDatagridFilter($datagridMapper, 'jurisdictions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'situation');
+        $this->addDefaultDatagridFilter($datagridMapper, 'situation.subject');
+        $this->addDefaultDatagridFilter($datagridMapper, 'priority');
         //$datagridMapper->add('status');
-        $this->addStateMinistriesDatagridFilters($datagridMapper);
-        $this->addSolutionsDatagridFilters($datagridMapper);
-        $datagridMapper->add('bureaus',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('services.portals',
-            null, [
-                'admin_code' => PortalAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('communeTypes',
-            null, [
-                'admin_code' => CommuneTypeAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'stateMinistries');
+        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'bureaus');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.portals');
+        $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects');
     }
 
     protected function configureListFields(ListMapper $listMapper)

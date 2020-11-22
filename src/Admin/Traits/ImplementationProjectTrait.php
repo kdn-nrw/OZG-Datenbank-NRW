@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\ImplementationProjectAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -36,17 +35,6 @@ trait ImplementationProjectTrait
                     'admin_code' => ImplementationProjectAdmin::class,
                 ]
             );
-    }
-
-    protected function addImplementationProjectsDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('implementationProjects',
-            null, [
-                'admin_code' => ImplementationProjectAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addImplementationProjectsListFields(ListMapper $listMapper)

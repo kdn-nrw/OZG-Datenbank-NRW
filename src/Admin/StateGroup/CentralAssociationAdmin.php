@@ -102,7 +102,7 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
         $datagridMapper->add('name')
             ->add('shortName');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addCommunesDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
     }
 
     protected function configureListFields(ListMapper $listMapper)

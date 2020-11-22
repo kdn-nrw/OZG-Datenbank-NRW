@@ -71,8 +71,8 @@ class CommuneTypeAdmin extends AbstractAppAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addCommunesDatagridFilters($datagridMapper);
-        $this->addServiceSystemsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
     }
 
     protected function configureListFields(ListMapper $listMapper)

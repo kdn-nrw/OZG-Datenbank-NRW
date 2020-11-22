@@ -69,10 +69,10 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addManufaturersDatagridFilters($datagridMapper);
-        $this->addApplicationCategoriesDatagridFilters($datagridMapper);
-        $this->addCommunesDatagridFilters($datagridMapper);
-        $this->addServiceProvidersDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'manufacturers');
+        $this->addDefaultDatagridFilter($datagridMapper, 'categories');
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
         $datagridMapper->add('inHouseDevelopment');
     }
 

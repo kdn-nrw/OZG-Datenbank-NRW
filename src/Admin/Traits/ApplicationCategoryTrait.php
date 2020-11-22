@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\ApplicationCategoryAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
@@ -33,17 +32,6 @@ trait ApplicationCategoryTrait
                     'admin_code' => ApplicationCategoryAdmin::class,
                 ]
             );
-    }
-
-    protected function addApplicationCategoriesDatagridFilters(DatagridMapper $datagridMapper): void
-    {
-        $datagridMapper->add('categories',
-            null, [
-                'admin_code' => ApplicationCategoryAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addApplicationCategoriesListFields(ListMapper $listMapper): void

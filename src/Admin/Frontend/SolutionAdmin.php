@@ -41,49 +41,13 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('serviceSolutions.service.serviceSystem',
-            null,
-            [
-                'label' => 'app.service.entity.service_system',
-                'admin_code' => ServiceSystemAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('serviceSolutions.service.serviceSystem.jurisdictions',
-            null,
-            ['label' => 'app.service_system.entity.jurisdictions'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('serviceSolutions.service.serviceSystem.situation.subject',
-            null,
-            ['label' => 'app.situation.entity.subject'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('maturity',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('serviceSolutions.service',
-            null,
-            [
-                'label' => 'app.service_solution.entity.service',
-                'admin_code' => \App\Admin\Frontend\ServiceAdmin::class
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem.jurisdictions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem.situation.subject');
+        $this->addDefaultDatagridFilter($datagridMapper, 'maturity');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service');
         $datagridMapper->add('status');
-        $datagridMapper->add('portals',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
         $datagridMapper->add('communeType', null,
             [
             ],
@@ -96,41 +60,14 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'expanded' => false,
                 'multiple' => false,
             ]);
-        $datagridMapper->add('communes',
-            null,
-            [
-                'admin_code' => CommuneAdmin::class
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('formServerSolutions.formServer',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('paymentTypes',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('authentications',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('analogServices',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'formServerSolutions.formServer');
+        $this->addDefaultDatagridFilter($datagridMapper, 'paymentTypes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'authentications');
+        $this->addDefaultDatagridFilter($datagridMapper, 'analogServices');
         $datagridMapper->add('name');
         $datagridMapper->add('description');
-        $this->addModelRegionProjectsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
     }
 
     /**
@@ -315,7 +252,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                     )
                 );
             $subQueryBuilder->setParameter('isPublished', 1);
-            $subQueryBuilder->setParameter('term', '%'.$searchTerm.'%');
+            $subQueryBuilder->setParameter('term', '%' . $searchTerm . '%');
             $result = $subQueryBuilder->getQuery()->getArrayResult();
             if (!empty($result)) {
                 $idList = array_column($result, 'id');

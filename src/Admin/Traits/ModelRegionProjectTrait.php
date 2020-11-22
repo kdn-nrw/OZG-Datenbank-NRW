@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\ModelRegionProjectAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -36,17 +35,6 @@ trait ModelRegionProjectTrait
         ], [
             'admin_code' => ModelRegionProjectAdmin::class,
         ]);
-    }
-
-    protected function addModelRegionProjectsDatagridFilters(DatagridMapper $datagridMapper): void
-    {
-        $datagridMapper->add('modelRegionProjects',
-            null, [
-                'admin_code' => ModelRegionProjectAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addModelRegionProjectsListFields(ListMapper $listMapper): void

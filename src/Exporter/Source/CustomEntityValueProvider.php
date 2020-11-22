@@ -14,7 +14,6 @@ namespace App\Exporter\Source;
 use App\Entity\Base\BaseEntity;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -81,56 +80,26 @@ class CustomEntityValueProvider
 
     /**
      * @param array $fields Fields to export
-     * @param string|null $cacheDir
+     * @param CacheItemPoolInterface $cache
      * @param string $context
      * @param string $dateTimeFormat
      */
-    public function __construct(array $fields, ?string $cacheDir, string $context, string $dateTimeFormat = 'r')
+    public function __construct(array $fields, CacheItemPoolInterface $cache, string $context, string $dateTimeFormat = 'r')
     {
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-
         foreach ($fields as $name => $field) {
-            if (\is_string($name) && \is_string($field)) {
+            if (is_string($name) && is_string($field)) {
                 $this->propertyPaths[$name] = new PropertyPath($field);
             } else {
                 $this->propertyPaths[$field] = new PropertyPath($field);
             }
         }
         $this->dateTimeFormat = $dateTimeFormat;
-        $this->setCache($cacheDir);
+        $this->cache = $cache;
         $this->context = $context;
-    }
-
-    /**
-     * @param string|null $cacheDir
-     */
-    private function setCache(?string $cacheDir): void
-    {
-        $this->cache = $this->initCache($cacheDir);
         // Add property accessor cache to improve performance
         $propertyAccessorBuilder = PropertyAccess::createPropertyAccessorBuilder();
         $propertyAccessorBuilder->setCacheItemPool($this->cache);
         $this->propertyAccessor = $propertyAccessorBuilder->getPropertyAccessor();
-    }
-
-    /**
-     * Get cache instance
-     *
-     * @param string|null $cacheDir
-     * @return FilesystemAdapter
-     */
-    private function initCache(?string $cacheDir): FilesystemAdapter
-    {
-
-        if (null === $cacheDir) {
-            $endPos = strrpos(__DIR__, '/src/');
-            if ($endPos === false) {
-                $endPos = strrpos(__DIR__, '/vendor/');
-            }
-            $cacheDir = substr(__DIR__, 0, $endPos) . '/var/cache/dev';
-        }
-        $cacheDir .= '/app';
-        return new FilesystemAdapter('pa_iterator', 14 * 86400, $cacheDir);
     }
 
     public function getItemData($objectOrArray)
@@ -279,7 +248,7 @@ class CustomEntityValueProvider
             $value = $this->getDuration($value);
         } elseif (\is_object($value)) {
             $value = (string)$value;
-        } elseif (\is_string($value)) {
+        } elseif (is_string($value)) {
             $value = trim(strip_tags($value));
         }
 

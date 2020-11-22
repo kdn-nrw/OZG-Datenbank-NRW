@@ -53,8 +53,8 @@ class LaboratoryAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addServiceProvidersDatagridFilters($datagridMapper);
-        $this->addServicesDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services');
     }
 
     protected function configureListFields(ListMapper $listMapper)

@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\ContactAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -79,17 +78,6 @@ trait ContactTrait
                 ]);
             }
         }
-    }
-
-    protected function addContactsDatagridFilters(DatagridMapper $datagridMapper, $fieldName = 'contacts'): void
-    {
-        $datagridMapper->add($fieldName,
-            null, [
-                'admin_code' => ContactAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addContactsListFields(ListMapper $listMapper, $fieldName = 'contacts'): void

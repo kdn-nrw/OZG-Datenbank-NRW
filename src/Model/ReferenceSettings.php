@@ -43,6 +43,11 @@ class ReferenceSettings
     ];
 
     /**
+     * @var string|null
+     */
+    protected $labelPrefix;
+
+    /**
      * @var string
      */
     protected $listTitle = 'app.common.fields.references';
@@ -124,6 +129,22 @@ class ReferenceSettings
             'enabled' => $enabled,
             'route' => $route,
         ];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLabelPrefix(): ?string
+    {
+        return $this->labelPrefix;
+    }
+
+    /**
+     * @param string|null $labelPrefix
+     */
+    public function setLabelPrefix(?string $labelPrefix): void
+    {
+        $this->labelPrefix = $labelPrefix;
     }
 
     /**

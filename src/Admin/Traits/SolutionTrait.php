@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\SolutionAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -36,17 +35,6 @@ trait SolutionTrait
                     'admin_code' => SolutionAdmin::class,
                 ]
             );
-    }
-
-    protected function addSolutionsDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('solutions',
-            null, [
-                'admin_code' => SolutionAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addSolutionsListFields(ListMapper $listMapper)

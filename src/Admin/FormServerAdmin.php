@@ -114,13 +114,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('formServerSolutions.solution',
-            null, [
-                'admin_code' => SolutionAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'formServerSolutions.solution');
     }
 
     protected function configureListFields(ListMapper $listMapper)

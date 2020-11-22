@@ -49,7 +49,7 @@ class ModelRegionAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
     {
         $datagridMapper->add('name');
         $this->addAddressDatagridFilters($datagridMapper);
-        $this->addModelRegionProjectsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
     }
 
     protected function configureListFields(ListMapper $listMapper)

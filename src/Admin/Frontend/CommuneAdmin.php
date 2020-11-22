@@ -50,8 +50,8 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         $datagridMapper->add('name');
         $datagridMapper->add('organisation.zipCode');
         $datagridMapper->add('organisation.town');
-        $this->addCentralAssociationsDatagridFilters($datagridMapper);
-        $this->addLaboratoriesDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'centralAssociations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
         $datagridMapper->add('constituency',
             null,
             [
@@ -64,18 +64,8 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'query_builder' => $this->getConstituencyQueryBuilder()
             ]
         );
-        $datagridMapper->add('administrativeDistrict',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('communeType',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'administrativeDistrict');
+        $this->addDefaultDatagridFilter($datagridMapper, 'communeType');
         $datagridMapper->add('officialCommunityKey');
     }
 

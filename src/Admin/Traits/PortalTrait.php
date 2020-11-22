@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\PortalAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -30,17 +29,6 @@ trait PortalTrait
             'by_reference' => false,
             'choice_translation_domain' => false,
         ]);
-    }
-
-    protected function addPortalsDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('portals',
-            null, [
-                'admin_code' => PortalAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addPortalsListFields(ListMapper $listMapper)

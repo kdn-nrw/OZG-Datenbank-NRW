@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\CategoryAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -36,17 +35,6 @@ trait CategoryTrait
                     'admin_code' => CategoryAdmin::class,
                 ]
             );
-    }
-
-    protected function addCategoriesDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('categories',
-            null, [
-                'admin_code' => CategoryAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addCategoriesListFields(ListMapper $listMapper)

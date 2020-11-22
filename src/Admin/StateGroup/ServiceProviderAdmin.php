@@ -111,8 +111,8 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $datagridMapper->add('name')
             ->add('shortName');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addCommunesDatagridFilters($datagridMapper);
-        $this->addSpecializedProceduresDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
     }
 
     protected function configureListFields(ListMapper $listMapper)

@@ -63,22 +63,8 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('service',
-            null,
-            [
-                'admin_code' => \App\Admin\ServiceAdmin::class
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('solution',
-            null,
-            [
-                'admin_code' => \App\Admin\SolutionAdmin::class
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'service');
+        $this->addDefaultDatagridFilter($datagridMapper, 'solution');
         /*$datagridMapper->add('description');
         $datagridMapper->add('status');*/
         $datagridMapper->add('maturity');

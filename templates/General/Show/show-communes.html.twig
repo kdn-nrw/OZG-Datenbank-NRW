@@ -24,8 +24,7 @@ file that was distributed with this source code.
                 <table class="table table-bordered table-condensed">
                     <tr>
                         {% set tableHeaders = ['name', 'street', 'zip_code', 'url', 'commune_type', 'constituency', 'main_email', 'official_community_key', 'administrative_district'] %}
-                        {% set labelPrefix = 'app.commune.entity.' %}
-                        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+                        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
                         {% if refSettings.edit.enabled %}
                             <th></th>
                         {% endif %}

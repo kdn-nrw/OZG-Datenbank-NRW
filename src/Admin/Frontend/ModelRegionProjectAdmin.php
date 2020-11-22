@@ -27,33 +27,17 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('organisations',
-            null, [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'projectEndAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'organisations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'projectEndAt');
         $datagridMapper
             ->add('description')
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
-        $datagridMapper->add('modelRegions',
-            null, [
-                'admin_code' => ModelRegionAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('solutions',
-            null, [
-                'admin_code' => SolutionAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
     }
 
     protected function configureListFields(ListMapper $listMapper)

@@ -46,12 +46,7 @@ class SituationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdm
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('subject',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'subject');
     }
 
     protected function configureListFields(ListMapper $listMapper)

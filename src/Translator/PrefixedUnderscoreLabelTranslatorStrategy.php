@@ -17,10 +17,6 @@ use Sonata\AdminBundle\Translator\LabelTranslatorStrategyInterface;
 
 /**
  * Class PrefixedUnderscoreLabelTranslatorStrategy
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
- * @since     2019-08-15
  */
 class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrategyInterface
 {
@@ -43,7 +39,13 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
      */
     private $customLabels = [];
 
-    public function setAdminClass(string $adminClassName, $customLabels = [])
+    /**
+     * Initializes the translator settings from the given admin class
+     *
+     * @param string $adminClassName
+     * @param array $customLabels
+     */
+    public function setAdminClass(string $adminClassName, $customLabels = []): void
     {
         if (preg_match('/^((.*Bundle|[^\\\\]+)?(\\\\.+)*\\\\)?([^\\\\]+)$/', $adminClassName, $matches) === 1) {
             $bundle = preg_replace('/^(.*)Bundle$/', '$1', str_replace('\\', '', $matches[2]));
@@ -60,24 +62,40 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
     }
 
     /**
-     * Creates the label key for the given
-     * @param string $entityClass
-     * @param string $property
+     * Creates the label key for the given entity class and property
+     *
+     * @param string $entityClass The fully qualified entity class name
+     * @param string $property A property name
      * @return string
      */
     public static function getClassPropertyLabel(string $entityClass, string $property = ''): string
+    {
+        if (!empty($property)) {
+            return self::getClassLabelPrefix($entityClass) . SnakeCaseConverter::camelCaseToSnakeCase($property);
+        }
+        return self::getClassLabelPrefix($entityClass, '') . 'list';
+    }
+
+    /**
+     * Creates the label prefix for the entity class with the optional translation (label key) group
+     *
+     * @param string $entityClass
+     * @param string $group Optional label key group
+     * @return string
+     */
+    public static function getClassLabelPrefix(string $entityClass, string $group = 'entity'): string
     {
         $classParts = explode('\\', $entityClass);
         $lastIndex = count($classParts) - 1;
         $className = $classParts[$lastIndex];
         unset($classParts[$lastIndex]);
         $prefix = strtolower($classParts[0]) === 'app' ? 'app.' : implode('.', $classParts) . '.';
-        if ($property) {
-            $key = '.entity.' . $property;
+        if ($group) {
+            $append = '.' . $group;
         } else {
-            $key = '.list';
+            $append = '';
         }
-        return SnakeCaseConverter::classNameToSnakeCase($prefix . $className . $key);
+        return SnakeCaseConverter::classNameToSnakeCase($prefix . $className . $append) . '.';
     }
 
     /**

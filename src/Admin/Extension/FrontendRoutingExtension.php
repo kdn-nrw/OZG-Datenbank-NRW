@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Admin\Extension;
 
-use App\Service\ApplicationContextHandler;
+use App\Service\InjectApplicationContextHandlerTrait;
 use Sonata\AdminBundle\Admin\AbstractAdminExtension;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Route\RouteCollection;
@@ -23,19 +23,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
  */
 class FrontendRoutingExtension extends AbstractAdminExtension
 {
-
-    /**
-     * @var ApplicationContextHandler
-     */
-    protected $applicationContextHandler;
-
-    /**
-     * @param ApplicationContextHandler $applicationContextHandler
-     */
-    public function __construct(ApplicationContextHandler $applicationContextHandler)
-    {
-        $this->applicationContextHandler = $applicationContextHandler;
-    }
+    use InjectApplicationContextHandlerTrait;
 
     public function configureRoutes(AdminInterface $admin, RouteCollection $collection)
     {

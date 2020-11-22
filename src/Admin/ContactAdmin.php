@@ -127,7 +127,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $datagridMapper->add('lastName');
         $datagridMapper->add('email');
         $datagridMapper->add('organisation');
-        $this->addCategoriesDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'categories');
         $this->addAddressDatagridFilters($datagridMapper);
     }
 

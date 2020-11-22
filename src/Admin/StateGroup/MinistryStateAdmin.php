@@ -101,7 +101,7 @@ class MinistryStateAdmin extends AbstractAppAdmin implements EnableFullTextSearc
     {
         $datagridMapper->add('name');
         $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addServiceSystemsDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
     }
 
     protected function configureListFields(ListMapper $listMapper)

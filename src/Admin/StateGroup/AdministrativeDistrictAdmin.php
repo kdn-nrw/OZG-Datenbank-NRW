@@ -41,7 +41,7 @@ class AdministrativeDistrictAdmin extends AbstractAppAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addCommunesDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
     }
 
     protected function configureListFields(ListMapper $listMapper)

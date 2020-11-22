@@ -34,13 +34,7 @@ trait OrganisationOneToOneTrait
 
     protected function addOrganisationOneToOneDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('organisation.contacts',
-            null, [
-                'admin_code' => ContactAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'organisation.contacts');
         $datagridMapper->add('organisation.zipCode');
         $datagridMapper->add('organisation.town');
     }

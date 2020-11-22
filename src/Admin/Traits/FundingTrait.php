@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\FundingAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -30,17 +29,6 @@ trait FundingTrait
             'by_reference' => false,
             'choice_translation_domain' => false,
         ]);
-    }
-
-    protected function addFundingsDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('fundings',
-            null, [
-                'admin_code' => FundingAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addFundingsListFields(ListMapper $listMapper)

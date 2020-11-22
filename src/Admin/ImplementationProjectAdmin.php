@@ -12,7 +12,6 @@
 namespace App\Admin;
 
 use App\Admin\StateGroup\BureauAdmin;
-use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\FundingTrait;
@@ -207,55 +206,26 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addLaboratoriesDatagridFilters($datagridMapper);
-        $this->addSolutionsDatagridFilters($datagridMapper);
-        $this->addServiceSystemsDatagridFilters($datagridMapper);
-        $this->addServicesDatagridFilters($datagridMapper);
-        $datagridMapper->add('serviceSystems.situation.subject',
-            null,
-            ['label' => 'app.situation.entity.subject'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
+        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
         $datagridMapper->add('status');
-
-        $this->addDatePickersDatagridFilters($datagridMapper, 'projectStartAt');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'conceptStatusAt');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'implementationStatusAt');
-        $this->addDatePickersDatagridFilters($datagridMapper, 'commissioningStatusAt');
-        $this->addContactsDatagridFilters($datagridMapper, 'contacts');
-        $this->addOrganisationsDatagridFilters($datagridMapper, 'projectLeaders');
-        $this->addOrganisationsDatagridFilters($datagridMapper, 'participationOrganisations');
-        $this->addOrganisationsDatagridFilters($datagridMapper, 'interestedOrganisations');
-        $this->addFundingsDatagridFilters($datagridMapper);
-        $datagridMapper->add('services.bureaus',
-            null,
-            ['label' => 'app.implementation_project.entity.bureaus'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('services.portals',
-            null,
-            ['label' => 'app.implementation_project.entity.portals'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('services.communeTypes',
-            null,
-            [
-                'admin_code' => CommuneTypeAdmin::class,
-                'label' => 'app.service_system.entity.commune_types'
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $this->addContactsDatagridFilters($datagridMapper, 'fimExperts');
-        $datagridMapper->add('solutions.openDataItems',
-            null,
-            ['label' => 'app.solution.entity.open_data_items'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'conceptStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'implementationStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'commissioningStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'contacts');
+        $this->addDefaultDatagridFilter($datagridMapper, 'projectLeaders');
+        $this->addDefaultDatagridFilter($datagridMapper, 'participationOrganisations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'interestedOrganisations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'fundings');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.bureaus');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.portals', ['label' => 'app.implementation_project.entity.portals']);
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
+        $this->addDefaultDatagridFilter($datagridMapper, 'fimExperts');
+        $this->addDefaultDatagridFilter($datagridMapper, 'solutions.openDataItems');
     }
 
     protected function configureListFields(ListMapper $listMapper)

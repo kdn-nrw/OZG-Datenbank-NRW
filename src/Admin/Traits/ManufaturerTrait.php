@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\ManufacturerAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -30,17 +29,6 @@ trait ManufaturerTrait
             'by_reference' => false,
             'choice_translation_domain' => false,
         ]);
-    }
-
-    protected function addManufaturersDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('manufacturers',
-            null, [
-                'admin_code' => ManufacturerAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addManufaturersListFields(ListMapper $listMapper)

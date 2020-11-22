@@ -14,6 +14,7 @@ namespace App\Exporter\Source;
 use App\Model\ExportSettings;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\ORM\Query;
+use Psr\Cache\CacheItemPoolInterface;
 use Sonata\Exporter\Exception\InvalidMethodCallException;
 use Sonata\Exporter\Source\SourceIteratorInterface;
 
@@ -43,18 +44,18 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
 
     /**
      * @param Query $query The Doctrine Query
-     * @param string|null $cacheDir
+     * @param CacheItemPoolInterface $cache
      * @param ExportSettings $exportSettings
      */
     public function __construct(
         Query $query,
-        ?string $cacheDir,
+        CacheItemPoolInterface $cache,
         ExportSettings $exportSettings
     )
     {
         parent::__construct(
             $exportSettings->getProcessedPropertyMap(),
-            $cacheDir,
+            $cache,
             $exportSettings->getContext(),
             $exportSettings->getDateTimeFormat()
         );

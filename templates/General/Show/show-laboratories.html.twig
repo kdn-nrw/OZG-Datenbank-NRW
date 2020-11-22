@@ -7,7 +7,7 @@ file that was distributed with this source code.
 {% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
     {% set refFieldDesc = field_description is defined ? field_description : null %}
-    {% set refSettings = app_get_reference_settings('App\\Entity\\Laboratory', refFieldDesc) %}
+    {% set refSettings = app_object_field_description_meta(object, refFieldDesc) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
     <div class="box box-primary">
         <div class="box-header">
@@ -20,8 +20,7 @@ file that was distributed with this source code.
             <table class="table table-bordered table-condensed">
                 <tr>
                     {% set tableHeaders = ['name', 'url', 'description', 'service_providers', 'participants_other'] %}
-                    {% set labelPrefix = 'app.laboratory.entity.' %}
-                    {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+                    {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
                     {% if refSettings.edit.enabled %}
                         <th></th>
                     {% endif %}

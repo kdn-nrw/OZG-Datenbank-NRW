@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\LaboratoryAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -30,17 +29,6 @@ trait LaboratoryTrait
             'by_reference' => false,
             'choice_translation_domain' => false,
         ]);
-    }
-
-    protected function addLaboratoriesDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('laboratories',
-            null, [
-                'admin_code' => LaboratoryAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addLaboratoriesListFields(ListMapper $listMapper)

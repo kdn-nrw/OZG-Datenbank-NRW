@@ -49,12 +49,7 @@ class SubjectAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $datagridMapper->add('situations',
-            null,
-            [],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'situations');
         $datagridMapper->add('contact');
     }
 

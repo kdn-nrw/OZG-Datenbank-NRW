@@ -71,22 +71,8 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('formServer',
-            null,
-            [
-                'admin_code' => FormServerAdmin::class
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
-        $datagridMapper->add('solution',
-            null,
-            [
-                'admin_code' => SolutionAdmin::class
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'formServer');
+        $this->addDefaultDatagridFilter($datagridMapper, 'solution');
         $datagridMapper->add('status');
         $datagridMapper->add('articleNumber');
     }

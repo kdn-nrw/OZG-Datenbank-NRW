@@ -13,36 +13,19 @@ namespace App\Twig\Extension;
 
 use App\Admin\ContextAwareAdminInterface;
 use App\Model\ReferenceSettings;
-use App\Service\ApplicationContextHandler;
+use App\Service\InjectAdminManagerTrait;
+use App\Service\InjectApplicationContextHandlerTrait;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Admin\Pool;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class ReferenceSettingsExtension extends AbstractExtension
 {
-    /**
-     * @var Pool
-     */
-    private $pool;
+    use InjectAdminManagerTrait;
 
-    /**
-     * @var ApplicationContextHandler
-     */
-    private $applicationContextHandler;
-
-    /**
-     * RenderPageContentExtension constructor.
-     * @param Pool $pool
-     * @param ApplicationContextHandler $applicationContextHandler
-     */
-    public function __construct(Pool $pool, ApplicationContextHandler $applicationContextHandler)
-    {
-        $this->pool = $pool;
-        $this->applicationContextHandler = $applicationContextHandler;
-    }
+    use InjectApplicationContextHandlerTrait;
 
     /**
      * Returns a list of functions to add to the existing list.
@@ -55,6 +38,7 @@ class ReferenceSettingsExtension extends AbstractExtension
             new TwigFunction('app_is_backend', [$this, 'getAdminContextIsBackend']),
             new TwigFunction('app_get_reference_settings', [$this, 'getReferenceSettings']),
             new TwigFunction('app_get_entity_label', [$this, 'getClassPropertyLabel']),
+            new TwigFunction('app_object_field_description_meta', [$this, 'getObjectFieldDescriptionMeta']),
         ];
     }
 
@@ -80,6 +64,20 @@ class ReferenceSettingsExtension extends AbstractExtension
     }
 
     /**
+     * @param object $object
+     * @param FieldDescriptionInterface $fieldDescription
+     * @return ReferenceSettings
+     */
+    public function getObjectFieldDescriptionMeta($object, FieldDescriptionInterface $fieldDescription): ReferenceSettings
+    {
+        $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($object, $fieldDescription->getName());
+        if ($propertyConfiguration['entity_class']) {
+            return $this->getReferenceSettings($propertyConfiguration['entity_class'], $fieldDescription);
+        }
+        return $this->getDefaultReferenceSettings(get_class($object));
+    }
+
+    /**
      * @param string $entityClass The entity class name for which the settings are loaded
      * @param FieldDescriptionInterface|null $fieldDescription The optional field description (not set for custom fields)
      * @return ReferenceSettings
@@ -98,25 +96,8 @@ class ReferenceSettingsExtension extends AbstractExtension
             $refAdmin = $tmpFieldAdmin;
             $editRouteName = $fieldDescription->getOption('route')['name'];
         } else {
-            $adminClasses = $this->pool->getAdminClasses();
-            $objectAdminClasses = $adminClasses[ltrim($entityClass, '\\')] ?? null;
-            if (!empty($objectAdminClasses)) {
-                if (count($objectAdminClasses) > 1) {
-                    $keyword = '\\Frontend\\';
-                    foreach ($objectAdminClasses as $adminClass) {
-                        if ($isBackendMode && strpos($adminClass, $keyword) === false) {
-                            $refAdmin = $this->pool->getInstance($adminClass);
-                            break;
-                        }
-                        if (!$isBackendMode && strpos($adminClass, $keyword) !== false) {
-                            $refAdmin = $this->pool->getInstance($adminClass);
-                            break;
-                        }
-                    }
-                } elseif ($this->pool->hasAdminByClass($objectAdminClasses[0])) {
-                    $refAdmin = $this->pool->getAdminByClass($objectAdminClasses[0]);
-                }
-            }
+            $adminClass = $this->adminManager->getAdminClassForEntityClass($entityClass);
+            $refAdmin = $adminClass ? $this->adminManager->getAdminInstance($adminClass) : null;
         }
         if (null !== $refAdmin) {
             if ($refAdmin instanceof ContextAwareAdminInterface) {
@@ -130,15 +111,28 @@ class ReferenceSettingsExtension extends AbstractExtension
                 $createEditLink = $isBackendMode && $refAdmin->hasRoute($editRouteName) && $refAdmin->hasAccess($editRouteName);
                 $settings->setShow($createShowLink, $showRouteName);
                 $settings->setEdit($createEditLink, $editRouteName);
+                $settings->setLabelPrefix(PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($entityClass));
             }
         } else {
-            $settings = new ReferenceSettings();
-            $settings->setShow(false);
-            $settings->setEdit(false);
-            $label = $this->getClassPropertyLabel($entityClass);
-            $settings->setListTitle($label);
+            $settings = $this->getDefaultReferenceSettings($entityClass);
         }
         $settings->setEntityClass($entityClass);
+        return $settings;
+    }
+
+    /**
+     * Creates default reference settings
+     * @param string $entityClass
+     * @return ReferenceSettings
+     */
+    private function getDefaultReferenceSettings(string $entityClass): ReferenceSettings
+    {
+        $settings = new ReferenceSettings();
+        $settings->setShow(false);
+        $settings->setEdit(false);
+        $label = $this->getClassPropertyLabel($entityClass);
+        $settings->setListTitle($label);
+        $settings->setLabelPrefix(PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($entityClass));
         return $settings;
     }
 }

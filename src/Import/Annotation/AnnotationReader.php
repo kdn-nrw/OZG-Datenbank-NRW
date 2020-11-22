@@ -13,17 +13,15 @@ declare(strict_types=1);
 
 namespace App\Import\Annotation;
 
+use App\Model\Annotation\BaseAnnotationReader;
+use App\Model\Annotation\BaseModelAnnotation;
 use Doctrine\Common\Annotations\Annotation;
-use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\ManyToOne;
 use ReflectionClass;
 
 /**
  * Class AnnotationReader
  */
-class AnnotationReader
+class AnnotationReader extends BaseAnnotationReader
 {
     /**
      * Cache for model annotations
@@ -43,12 +41,12 @@ class AnnotationReader
     {
         if (!array_key_exists($modelClass, $this->annotationCache)) {
             $annotations = [];
-            $annotationReader = new CachedReader(new \Doctrine\Common\Annotations\AnnotationReader(), new ArrayCache());
+            $annotationReader = $this->getReader();
             $reflectionClass = new ReflectionClass($modelClass);
             $classAnnotations = $annotationReader->getClassAnnotations($reflectionClass);
             $defaultTargetEntity = null;
             foreach ($classAnnotations as $classAnnotation) {
-                if ($classAnnotation instanceof ImportModelAnnotation) {
+                if ($classAnnotation instanceof BaseModelAnnotation) {
                     $defaultTargetEntity = $classAnnotation->getTargetEntity();
                 }
             }
@@ -56,14 +54,14 @@ class AnnotationReader
             foreach ($properties as $property) {
                 $propertyAnnotations = $annotationReader->getPropertyAnnotations($property);
                 foreach ($propertyAnnotations as $propertyAnnotation) {
-                    if ($propertyAnnotation instanceof ImportModelAnnotation) {
+                    if ($propertyAnnotation instanceof BaseModelAnnotation) {
                         $annotations[$property->getName()] = $propertyAnnotation;
                         continue;
                     }
                 }
             }
             if ($defaultTargetEntity) {
-                $this->extendAnnotations($defaultTargetEntity, $annotations, $annotationReader);
+                $this->extendAnnotations($defaultTargetEntity, $annotations);
             }
             $this->annotationCache[$modelClass] = $annotations;
         }
@@ -72,31 +70,20 @@ class AnnotationReader
 
     /**
      * @param string $targetEntity
-     * @param ImportModelAnnotation[]|array $annotations
-     * @param CachedReader $annotationReader
+     * @param BaseModelAnnotation[]|array $annotations
+     *
      * @throws \ReflectionException
      */
-    private function extendAnnotations(
-        string $targetEntity,
-        array $annotations,
-        CachedReader $annotationReader)
+    private function extendAnnotations(string $targetEntity, array $annotations): void
     {
         $entityReflectionClass = new ReflectionClass($targetEntity);
         foreach ($annotations as $propertyName => $propertyAnnotation) {
-            if (!$propertyAnnotation->getTargetEntity()) {
-                $propertyAnnotation->setTargetEntity($targetEntity);
-            }
-            if ($entityReflectionClass->hasProperty($propertyName)) {
-                $entityProperty = $entityReflectionClass->getProperty($propertyName);
-                $entityPropertyAnnotations = $annotationReader->getPropertyAnnotations($entityProperty);
-                foreach ($entityPropertyAnnotations as $entityPropertyAnnotation) {
-                    if ($entityPropertyAnnotation instanceof Column) {
-                        $propertyAnnotation->setTargetDataType($entityPropertyAnnotation->type);
-                    } elseif ($entityPropertyAnnotation instanceof ManyToOne) {
-                        $propertyAnnotation->setTargetEntity($entityPropertyAnnotation->targetEntity);
-                    }
-                }
-            }
+            $this->extendPropertyAnnotation(
+                $targetEntity,
+                $propertyName,
+                $propertyAnnotation,
+                $entityReflectionClass
+            );
         }
     }
 }

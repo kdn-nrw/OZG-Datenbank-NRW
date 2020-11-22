@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\ServiceAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
@@ -33,17 +32,6 @@ trait ServiceTrait
                     'admin_code' => ServiceAdmin::class,
                 ]
             );
-    }
-
-    protected function addServicesDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper->add('services',
-            null, [
-                'admin_code' => ServiceAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addServicesListFields(ListMapper $listMapper)

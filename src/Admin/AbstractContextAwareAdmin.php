@@ -14,20 +14,27 @@ namespace App\Admin;
 
 use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
+use App\Model\Annotation\BaseModelAnnotation;
 use App\Model\ExportSettings;
 use App\Model\ReferenceSettings;
 use App\Service\ApplicationContextHandler;
+use App\Service\InjectAdminManagerTrait;
+use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Doctrine\ORM\Query;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
+use Sonata\Form\Type\DateRangePickerType;
+use Sonata\Form\Type\DateTimeRangePickerType;
 
 /**
  * Class AbstractContextAwareAdmin
  */
 abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface, CustomExportAdminInterface
 {
+    use InjectAdminManagerTrait;
 
     public function getDataSourceIterator()
     {
@@ -90,16 +97,10 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
                 $query = $query->getQuery();
             }
         }
-        /** @var \Doctrine\ORM\Query $query */
-        $container = $this->getConfigurationPool()->getContainer();
-        $cacheDir = null;
-        if (null !== $container) {
-            $cacheDir = $container->getParameter('kernel.cache_dir');
-        }
         $exportSettings->setContext(ApplicationContextHandler::getDefaultAdminApplicationContext($this));
         return new CustomQuerySourceIterator(
             $query,
-            $cacheDir,
+            $this->adminManager->getCache(),
             $exportSettings
         );
     }
@@ -129,6 +130,37 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     }
 
     /**
+     * Adds the data grid filter base on the property configuration
+     * @param DatagridMapper $datagridMapper
+     * @param string $property
+     * @param array $filterOptions
+     */
+    protected function addDefaultDatagridFilter(DatagridMapper $datagridMapper, string $property, array $filterOptions = []): void
+    {
+        $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($this->getClass(), $property);
+        $type = null;
+        $fieldType = null;
+        $fieldDescriptionOptions = [];
+        if (!empty($propertyConfiguration['default_label']) && empty($filterOptions['label'])) {
+            $filterOptions['label'] = $propertyConfiguration['default_label'];
+        }
+        $dataType = $propertyConfiguration['data_type'];
+        if ($dataType === BaseModelAnnotation::DATA_TYPE_DATE_TIME) {
+            $type = 'doctrine_orm_datetime_range';
+            $filterOptions['field_type'] = DateTimeRangePickerType::class;
+        } elseif ($dataType === BaseModelAnnotation::DATA_TYPE_DATE) {
+            $type = 'doctrine_orm_date_range';
+            $filterOptions['field_type'] = DateRangePickerType::class;
+        } elseif (!empty($propertyConfiguration['entity_class'])) {
+            if (!empty($propertyConfiguration['admin_class'])) {
+                $filterOptions['admin_code'] = $propertyConfiguration['admin_class'];
+            }
+            $fieldDescriptionOptions = ['expanded' => false, 'multiple' => true];
+        }
+        $datagridMapper->add($property, $type, $filterOptions, $fieldType, $fieldDescriptionOptions);
+    }
+
+    /**
      * Returns the default reference settings for the reference lists in the detail views of other admins
      *
      * @param ApplicationContextHandler $applicationContextHandler The application context handler
@@ -145,7 +177,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         $isBackendMode = $applicationContextHandler->isBackend();
         // Don't create show link if admin is only visible in frontend
         $createShowLink = ($isBackendMode
-            || ApplicationContextHandler::getDefaultAdminApplicationContext($this) === ApplicationContextHandler::APP_CONTEXT_FE)
+                || ApplicationContextHandler::getDefaultAdminApplicationContext($this) === ApplicationContextHandler::APP_CONTEXT_FE)
             && $this->hasRoute($showRouteName) && $this->hasAccess($showRouteName);
         $createEditLink = $isBackendMode && $this->hasRoute($editRouteName) && $this->hasAccess($editRouteName);
         $enableSlug = false;
@@ -156,6 +188,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         $settings->setShow($createShowLink, $showRouteName, $enableSlug);
         $settings->setEdit($createEditLink, $editRouteName);
         $settings->setListTitle($this->getLabel());
+        $settings->setLabelPrefix(PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($this->getClass()));
         return $settings;
     }
 

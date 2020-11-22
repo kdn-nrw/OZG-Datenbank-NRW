@@ -42,13 +42,8 @@ class BureauAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminI
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addServiceSystemsDatagridFilters($datagridMapper);
-        $datagridMapper->add('serviceSystems.situation.subject',
-            null,
-            ['label' => 'app.situation.entity.subject'],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
+        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
     }
 
     protected function configureListFields(ListMapper $listMapper)

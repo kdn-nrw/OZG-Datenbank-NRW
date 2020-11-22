@@ -12,7 +12,6 @@
 namespace App\Admin\Traits;
 
 use App\Admin\StateGroup\CentralAssociationAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -34,17 +33,6 @@ trait CentralAssociationTrait
             'by_reference' => false,
             'choice_translation_domain' => false,
         ]);
-    }
-
-    protected function addCentralAssociationsDatagridFilters(DatagridMapper $datagridMapper): void
-    {
-        $datagridMapper->add('centralAssociations',
-            null, [
-                'admin_code' => CentralAssociationAdmin::class,
-            ],
-            null,
-            ['expanded' => false, 'multiple' => true]
-        );
     }
 
     protected function addCentralAssociationsListFields(ListMapper $listMapper): void
