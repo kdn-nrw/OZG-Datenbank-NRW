@@ -20,7 +20,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\Pool;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class AdminManager
 {
@@ -99,50 +99,50 @@ class AdminManager
         $key = SnakeCaseConverter::classNameToSnakeCase($entityClass);
         $context = $this->applicationContextHandler->getApplicationContext();
         $cacheKey = $context . '-' . $key . '-' . $property;
-        //return $this->cache->get($cacheKey, function (ItemInterface $item) use ($entityOrClass, $property) {
-        //$item->expiresAfter(86400);
-        $entityClass = is_object($entityOrClass) ? get_class($entityOrClass) : $entityOrClass;
-        $propertyParts = explode('.', $property);
-        $isPath = count($propertyParts) > 1;
-        $entityProperty = $propertyParts[0];
-        $propertyMeta = $this->annotationReader->getEntityPropertyMeta($entityClass, $entityProperty);
-        $targetEntityClass = $propertyMeta->getTargetEntity();
-        // Fallback functions for finding target class
-        if (null === $targetEntityClass && !$isPath) {
-            $targetEntityClass = $this->getPropertyTargetClassFromGetterDocComment($entityClass, $entityProperty);
-            if (null === $targetEntityClass && is_object($entityOrClass)) {
-                $propertyAccessor = PropertyAccess::createPropertyAccessor();
-                if ($propertyAccessor->isReadable($entityOrClass, $entityProperty)) {
-                    $checkValue = $propertyAccessor->getValue($entityOrClass, $entityProperty);
-                    if ($checkValue instanceof Collection) {
-                        $checkValue = $checkValue->first();
-                    }
-                    if ($checkValue instanceof BaseEntityInterface) {
-                        $targetEntityClass = get_class($checkValue);
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($entityOrClass, $property) {
+            $item->expiresAfter(86400);
+            $entityClass = is_object($entityOrClass) ? get_class($entityOrClass) : $entityOrClass;
+            $propertyParts = explode('.', $property);
+            $isPath = count($propertyParts) > 1;
+            $entityProperty = $propertyParts[0];
+            $propertyMeta = $this->annotationReader->getEntityPropertyMeta($entityClass, $entityProperty);
+            $targetEntityClass = $propertyMeta->getTargetEntity();
+            // Fallback functions for finding target class
+            if (null === $targetEntityClass && !$isPath) {
+                $targetEntityClass = $this->getPropertyTargetClassFromGetterDocComment($entityClass, $entityProperty);
+                if (null === $targetEntityClass && is_object($entityOrClass)) {
+                    $propertyAccessor = PropertyAccess::createPropertyAccessor();
+                    if ($propertyAccessor->isReadable($entityOrClass, $entityProperty)) {
+                        $checkValue = $propertyAccessor->getValue($entityOrClass, $entityProperty);
+                        if ($checkValue instanceof Collection) {
+                            $checkValue = $checkValue->first();
+                        }
+                        if ($checkValue instanceof BaseEntityInterface) {
+                            $targetEntityClass = get_class($checkValue);
+                        }
                     }
                 }
             }
-        }
-        if ($isPath && $targetEntityClass) {
-            unset($propertyParts[0]);
-            $deepPath = implode('.', $propertyParts);
-            $propertyMeta = $this->getConfigurationForEntityProperty($targetEntityClass, $deepPath);
-            return $propertyMeta;
-        }
-        if (null !== $targetEntityClass) {
-            $targetAdminClass = $this->getAdminClassForEntityClass($targetEntityClass);
-            $defaultLabel = PrefixedUnderscoreLabelTranslatorStrategy::getClassPropertyLabel($entityClass, $entityProperty);
-        } else {
-            $targetAdminClass = null;
-            $defaultLabel = null;
-        }
-        return [
-            'data_type' => $propertyMeta->getTargetDataType(),
-            'entity_class' => $targetEntityClass,
-            'admin_class' => $targetAdminClass,
-            'default_label' => $defaultLabel,
-        ];
-        //});
+            if ($isPath && $targetEntityClass) {
+                unset($propertyParts[0]);
+                $deepPath = implode('.', $propertyParts);
+                $propertyMeta = $this->getConfigurationForEntityProperty($targetEntityClass, $deepPath);
+                return $propertyMeta;
+            }
+            if (null !== $targetEntityClass) {
+                $targetAdminClass = $this->getAdminClassForEntityClass($targetEntityClass);
+                $defaultLabel = PrefixedUnderscoreLabelTranslatorStrategy::getClassPropertyLabel($entityClass, $entityProperty);
+            } else {
+                $targetAdminClass = null;
+                $defaultLabel = null;
+            }
+            return [
+                'data_type' => $propertyMeta->getTargetDataType(),
+                'entity_class' => $targetEntityClass,
+                'admin_class' => $targetAdminClass,
+                'default_label' => $defaultLabel,
+            ];
+        });
     }
 
     /**
@@ -161,7 +161,7 @@ class AdminManager
             if ((false !== $docComment = $refMethod->getDocComment())
                 && preg_match('/@return\s+([^\s]+)/', $docComment, $matches)) {
                 $returnTypes = array_filter(explode('|', $matches[1]), static function ($var) {
-                    return !in_array($var, ['ArrayCollection', 'Collection', 'null']);
+                    return !in_array($var, ['ArrayCollection', 'Collection', 'null', 'array']);
                 });
                 if (!empty($returnTypes)) {
                     $namespace = $entityReflectionClass->getNamespaceName();

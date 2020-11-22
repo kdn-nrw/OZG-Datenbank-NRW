@@ -22,16 +22,29 @@ const appOnReady = function() {
         import('./modules/chart').then(({ default: appChart }) => {
             appChart.setUpList(chartContainers);
 
-        }).catch(error => 'An error occurred while loading the chart component');
+        }).catch(error => {
+            console.log('An error occurred while loading the chart component', error);
+        });
     }
     let advancedSelectElements = document.querySelectorAll('select.js-advanced-select');
     if (advancedSelectElements.length > 0) {
         import('./modules/advanced-select').then(({ default: appAdvanceSelect }) => {
             appAdvanceSelect.setUpList(advancedSelectElements);
 
-        }).catch(error => 'An error occurred while loading the chart component');
+        }).catch(error => {
+            console.log('An error occurred while loading the advanced-select component', error);
+        });
     }
     jQuery('[data-toggle="popover"]').popover();
+    let filterAddLinks = document.querySelectorAll('.js-filter-add');
+    if (filterAddLinks.length > 0 && typeof Admin !== "undefined") {
+        import('./modules/filter').then(({ default: appFilter }) => {
+            appFilter.setUpList(filterAddLinks);
+
+        }).catch(error => {
+            console.log('An error occurred while loading the filter component', error);
+        });
+    }
 };
 
 if (

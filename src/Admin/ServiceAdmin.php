@@ -411,7 +411,8 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                     ['fieldName' => 'serviceSystem'],
                     ['fieldName' => 'situation'],
                     ['fieldName' => 'subject'],
-                ]
+                ],
+                'enable_filter_add' => true,
             ])
             ->add('serviceType')
             ->add('lawShortcuts')

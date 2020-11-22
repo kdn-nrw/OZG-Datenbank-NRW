@@ -19,7 +19,6 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Mapping;
 use ReflectionClass;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class BaseAnnotationReader
@@ -39,6 +38,15 @@ class BaseAnnotationReader
         return $this->annotationReader;
     }
 
+    /**
+     * Returns basic meta information about the given property belonging to the given class
+     * The meta data contains the data type and if set, the target entity for Doctrine ORM references
+     *
+     * @param string $entityClass
+     * @param string $propertyName
+     * @return BaseModelAnnotation
+     * @throws \ReflectionException
+     */
     public function getEntityPropertyMeta(string $entityClass, string $propertyName): BaseModelAnnotation
     {
         $entityReflectionClass = new ReflectionClass($entityClass);

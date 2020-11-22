@@ -38,6 +38,7 @@ app:
     add_sub_record: Neuen Eintrag bearbeiten
     actions: Aktionen
     full_text_search: Volltextsuche
+    add_filter: Filter hinzufügen
     yes_no_choices:
       1: Ja
       0: Nein

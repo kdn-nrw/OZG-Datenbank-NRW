@@ -59,6 +59,17 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'label' => 'app.situation.entity.subject',
                 //'associated_property' => 'name',
                 'template' => 'ImplementationProjectAdmin/list-service-system-subjects.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSystems'],
+                    ['fieldName' => 'situation'],
+                    ['fieldName' => 'subject'],
+                ],
+                'enable_filter_add' => true,
             ])
             ->add('status', 'choice', [
                 'editable' => false,

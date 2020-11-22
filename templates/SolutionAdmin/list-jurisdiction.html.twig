@@ -9,16 +9,18 @@ file that was distributed with this source code.
 {% block field %}
     {# @var object \App\Entity\Solution #}
     <div>
-        {% for serviceSystem in object.serviceSystems %}
+        {% for child in object.jurisdictions %}
             {% if loop.index > 1 %}
-                <br>
+                ,
             {% endif %}
-            {% for jurisdiction in serviceSystem.jurisdictions %}
-                {% if loop.index > 1 %}
-                    ,
-                {% endif %}
-                {{ jurisdiction.name }}
-            {% endfor %}
+            {{ child.name }}
+            {% if field_description.options.enable_filter_add is defined and field_description.options.enable_filter_add %}
+                {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+                <a href="#filter-container-{{ admin.uniqid() }}" title="{{ 'app.common.add_filter'|trans }}" class="list-field-filter-add js-filter-add" data-value="{{ child.id }}" data-target="filter-{{ admin.uniqid }}-{{ field_description.name }}" data-field="{{ field_description.name }}" data-container="filter-container-{{ admin.uniqid() }}" data-property="{{ field_description.name }}">
+                    <i class="fa fa-filter" aria-hidden="true"></i>
+                    <span class="sr-only">{{ 'app.common.add_filter'|trans }}</span>
+                </a>
+            {% endif %}
         {% endfor %}
     </div>
 {% endblock %}

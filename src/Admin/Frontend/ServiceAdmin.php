@@ -86,7 +86,8 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                     ['fieldName' => 'serviceSystem'],
                     ['fieldName' => 'situation'],
                     ['fieldName' => 'subject'],
-                ]
+                ],
+                'enable_filter_add' => true,
             ])
             ->add('serviceSystem.situation', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -97,7 +98,8 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'serviceSystem'],
                     ['fieldName' => 'situation'],
-                ]
+                ],
+                'enable_filter_add' => true,
             ])
             ->add('serviceSystem', null, [
                 'admin_code' => ServiceSystemAdmin::class,

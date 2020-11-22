@@ -11,7 +11,6 @@
 
 namespace App\Admin;
 
-use App\Admin\StateGroup\CommuneTypeAdmin;
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\ServiceTrait;
 use App\Admin\Traits\SolutionTrait;
@@ -246,9 +245,40 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
         $listMapper
             ->addIdentifier('name')
             ->add('serviceKey')
-            ->add('jurisdictions')
-            ->add('situation')
-            ->add('situation.subject')
+            ->add('jurisdictions', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'jurisdictions'],
+                ],
+                'enable_filter_add' => true,
+            ])
+            ->add('situation', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'situation'],
+                ],
+                'enable_filter_add' => true,
+            ])
+            ->add('situation.subject', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'situation'],
+                    ['fieldName' => 'subject'],
+                ],
+                'enable_filter_add' => true,
+            ])
             ->add('priority')/*
             ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => true,

@@ -128,6 +128,17 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'label' => 'app.service_system.entity.jurisdictions',
                 //'associated_property' => 'name',
                 'template' => 'SolutionAdmin/list-jurisdiction.html.twig',
+                /*'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSolutions'],
+                    ['fieldName' => 'service'],
+                    ['fieldName' => 'serviceSystem'],
+                    ['fieldName' => 'jurisdictions'],
+                ],*/
+                'enable_filter_add' => true,
             ])
             ->add('name')/*
             ->add('status', TemplateRegistry::TYPE_CHOICE, [
@@ -142,7 +153,8 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 ],
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'maturity'],
-                ]
+                ],
+                'enable_filter_add' => true,
             ])
             ->add('url', 'url', [
                 'required' => false

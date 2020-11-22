@@ -306,6 +306,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'label' => 'app.service_system.entity.jurisdictions',
                 //'associated_property' => 'name',
                 'template' => 'SolutionAdmin/list-jurisdiction.html.twig',
+                'enable_filter_add' => true,
             ])
             ->add('name')/*
             ->add('status', 'choice', [
@@ -321,7 +322,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'maturity'],
                 ],
-                'template' => 'General/List/list-color-coded.html.twig',
+                'enable_filter_add' => true,
             ])
             ->add('url', 'url');
         $this->addDefaultListActions($listMapper);

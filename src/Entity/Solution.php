@@ -1025,6 +1025,26 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     }
 
     /**
+     * Returns the subjects of the referenced service systems
+     *
+     * @return Jurisdiction[]|array
+     */
+    public function getJurisdictions(): array
+    {
+        $entities = [];
+        $serviceSystems = $this->getServiceSystems();
+        foreach ($serviceSystems as $serviceSystem) {
+            $ssJurisdictions = $serviceSystem->getJurisdictions();
+            foreach ($ssJurisdictions as $jurisdiction) {
+                if (!isset($entities[$jurisdiction->getId()])) {
+                    $entities[$jurisdiction->getId()] = $jurisdiction;
+                }
+            }
+        }
+        return $entities;
+    }
+
+    /**
      * Get name
      *
      * @return string

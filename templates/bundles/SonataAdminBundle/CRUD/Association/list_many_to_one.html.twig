@@ -1,0 +1,23 @@
+{#
+MOD: support for adding current value to filter
+
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% set appCustomClass = value is not empty and value.cssClass is defined and value.cssClass ? value.cssClass : '' %}
+
+{% extends '@!SonataAdmin/CRUD/Association/list_many_to_one.html.twig' %}
+
+{% block field %}
+    {{ parent() }}
+    {% if value is not null and field_description.options.enable_filter_add is defined and field_description.options.enable_filter_add %}
+        {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+        <a href="#filter-container-{{ admin.uniqid() }}" title="{{ 'app.common.add_filter'|trans }}" class="list-field-filter-add js-filter-add" data-value="{{ value.id }}" data-target="filter-{{ admin.uniqid }}-{{ field_description.name }}" data-container="filter-container-{{ admin.uniqid() }}" data-property="{{ field_description.name }}">
+            <i class="fa fa-filter" aria-hidden="true"></i>
+            <span class="sr-only">{{ 'app.common.add_filter'|trans }}</span>
+        </a>
+    {% endif %}
+{% endblock %}
