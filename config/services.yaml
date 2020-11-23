@@ -249,6 +249,19 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Admin\FederalInformationManagementTypeAdmin:
+    arguments:
+      - ~
+      - App\Entity\FederalInformationManagementType
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.federal_information_management_type.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Admin\FormServerAdmin:
     arguments:
       - ~

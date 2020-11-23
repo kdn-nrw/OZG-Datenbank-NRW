@@ -13,6 +13,7 @@ namespace App\Entity;
 
 use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Base\BaseEntity;
+use App\Entity\Base\CustomEntityLabelInterface;
 use App\Entity\FederalInformationManagementType as FederalInformationManagementEntity;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_fim")
  */
-class FederalInformationManagementType extends BaseEntity
+class FederalInformationManagementType extends BaseEntity implements CustomEntityLabelInterface
 {
     public const STATUS_IN_PROGRESS = 1;
     public const STATUS_SUBMITTED = 2;
@@ -37,18 +38,18 @@ class FederalInformationManagementType extends BaseEntity
     public const TYPE_REFERENCE_PROCESS = 'reference_process';
 
     public static $mapTypes = [
-        FederalInformationManagementEntity::TYPE_DESCRIPTION => 'app.service.fim.entity.type_choices.description',
-        FederalInformationManagementEntity::TYPE_MASTER_DATA_FIELDS => 'app.service.fim.entity.type_choices.master_data_fields',
-        FederalInformationManagementEntity::TYPE_ROOT_PROCESS => 'app.service.fim.entity.type_choices.root_process',
-        FederalInformationManagementEntity::TYPE_REFERENCE_DATA_FIELDS => 'app.service.fim.entity.type_choices.reference_data_fields',
-        FederalInformationManagementEntity::TYPE_REFERENCE_PROCESS => 'app.service.fim.entity.type_choices.reference_process',
+        FederalInformationManagementEntity::TYPE_DESCRIPTION => 'app.federal_information_management_type.entity.type_choices.description',
+        FederalInformationManagementEntity::TYPE_MASTER_DATA_FIELDS => 'app.federal_information_management_type.entity.type_choices.master_data_fields',
+        FederalInformationManagementEntity::TYPE_ROOT_PROCESS => 'app.federal_information_management_type.entity.type_choices.root_process',
+        FederalInformationManagementEntity::TYPE_REFERENCE_DATA_FIELDS => 'app.federal_information_management_type.entity.type_choices.reference_data_fields',
+        FederalInformationManagementEntity::TYPE_REFERENCE_PROCESS => 'app.federal_information_management_type.entity.type_choices.reference_process',
     ];
 
     public static $statusChoices = [
-        FederalInformationManagementEntity::STATUS_IN_PROGRESS => 'app.service.fim.entity.status_choices.in_progress',
-        FederalInformationManagementEntity::STATUS_SUBMITTED => 'app.service.fim.entity.status_choices.submitted',
-        FederalInformationManagementEntity::STATUS_APPROVED => 'app.service.fim.entity.status_choices.approved',
-        FederalInformationManagementEntity::STATUS_NOT_PROVIDED => 'app.service.fim.entity.status_choices.not_provided',
+        FederalInformationManagementEntity::STATUS_IN_PROGRESS => 'app.federal_information_management_type.entity.status_choices.in_progress',
+        FederalInformationManagementEntity::STATUS_SUBMITTED => 'app.federal_information_management_type.entity.status_choices.submitted',
+        FederalInformationManagementEntity::STATUS_APPROVED => 'app.federal_information_management_type.entity.status_choices.approved',
+        FederalInformationManagementEntity::STATUS_NOT_PROVIDED => 'app.federal_information_management_type.entity.status_choices.not_provided',
     ];
 
     /**
@@ -88,6 +89,15 @@ class FederalInformationManagementType extends BaseEntity
      * @ORM\JoinColumn(name="service_base_result_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $serviceBaseResult;
+
+    /**
+     * Implementation team proposal
+     *
+     * @var string|null
+     *
+     * @ORM\Column(name="implementation_team_proposal", type="text", nullable=true)
+     */
+    private $implementationTeamProposal;
 
     /**
      * @return Service|null
@@ -187,6 +197,30 @@ class FederalInformationManagementType extends BaseEntity
     public function setServiceBaseResult(?ServiceBaseResult $serviceBaseResult): void
     {
         $this->serviceBaseResult = $serviceBaseResult;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImplementationTeamProposal(): ?string
+    {
+        return $this->implementationTeamProposal;
+    }
+
+    /**
+     * @param string|null $implementationTeamProposal
+     */
+    public function setImplementationTeamProposal(?string $implementationTeamProposal): void
+    {
+        $this->implementationTeamProposal = $implementationTeamProposal;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLabelKey(): ?string
+    {
+        return $this->getDataTypeLabel();
     }
 
     /**

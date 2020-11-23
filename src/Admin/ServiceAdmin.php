@@ -21,7 +21,6 @@ use App\Entity\Priority;
 use App\Entity\Status;
 use App\Exporter\Source\ServiceFimValueFormatter;
 use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
-use App\Form\Type\FederalInformationManagementType;
 use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -76,8 +75,8 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'box_class' => 'box-tab',
             ]);*/
         $formMapper->add('name', TextareaType::class, [
-                'required' => true,
-            ])
+            'required' => true,
+        ])
             ->add('serviceKey', TextType::class, [
                 'required' => true,
             ]);
@@ -315,7 +314,20 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'class' => 'col-md-12 box-group-service-fim',
                 'box_class' => 'box-tab',
             ])
-            ->add('fimTypes', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+            ->add('fimTypes', CollectionType::class, [
+                'label' => false,
+                'type_options' => [
+                    'delete' => false,
+                ],
+                'btn_add' => false,
+                'required' => true,
+            ], [
+                'admin_code' => FederalInformationManagementTypeAdmin::class,
+                'edit' => 'inline',
+                'inline' => 'natural',
+                'ba_custom_hide_fields' => ['service'],
+            ])
+            /*->add('fimTypes', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
                 'entry_type' => FederalInformationManagementType::class,
                 'allow_add' => false,
                 'allow_delete' => false,
@@ -323,7 +335,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'attr' => [
                     'class' => 'block-fim-type',
                 ],
-            ])
+            ])**/
             ->end()
             ->end();
         $formMapper->tab('app.service.tabs.notes', [

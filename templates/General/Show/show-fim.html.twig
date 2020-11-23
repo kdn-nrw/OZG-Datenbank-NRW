@@ -10,7 +10,7 @@ file that was distributed with this source code.
         <div class="box-header">
             <h4 class="box-title">
                 <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                {{ 'app.service.fim.object_name'|trans }}
+                {{ 'app.federal_information_management_type.object_name'|trans }}
                 {% if fieldMetaHelp is defined %}{{ fieldMetaHelp|raw }}{% endif %}
             </h4>
         </div>
@@ -43,13 +43,21 @@ file that was distributed with this source code.
                             </h4>
                             #}
                             <div class="item-notes">
-                                {% if child.notes %}
-                                    {{ child.notes|raw }}
-                                {% endif %}
+                                {% set fimContent %}
+                                    {%- if child.notes %}
+                                        <strong>{{ 'app.federal_information_management_type.entity.notes'|trans }}</strong><br>
+                                        {{ child.notes|raw }}
+                                    {% endif -%}
+                                    {%- if child.implementationTeamProposal %}
+                                        <strong>{{ 'app.federal_information_management_type.entity.implementation_team_proposal'|trans }}</strong><br>
+                                        {{ child.implementationTeamProposal|raw }}
+                                    {% endif -%}
+                                {% endset %}
+                                {{- fimContent -}}
                                 {% if child.serviceBaseResult %}
                                     {% include 'Vsm/Partials/Show/service-base-result.html.twig' with {'serviceBaseResult': child.serviceBaseResult} %}
-                                {% elseif not child.notes %}
-                                    {{ 'app.service.fim.notes_empty'|trans }}
+                                {% elseif not fimContent %}
+                                    {{ 'app.federal_information_management_type.notes_empty'|trans }}
                                 {% endif %}
                             </div>
                         </div>

@@ -384,11 +384,28 @@ app:
       name: Name
       description: Beschreibung
   federal_information_management_type:
-    object_name: FIM
+    object_name: Föderales Informationsmanagement (FIM)
     list: Föderales Informationsmanagement
     create: FIM anlegen
+    notes_empty: Es wurden noch keine Informationen hinterlegt
     entity:
       service: Leika-Leistung
+      status: Status
+      notes: Notizen
+      data_type: Typ
+      status_choices:
+        in_progress: In Arbeit
+        submitted: Vorgelegt
+        approved: Freigegeben
+        not_provided: nicht vorgesehen
+      type_choices:
+        description: Beschreibung
+        master_data_fields: Stammdatenfelder
+        root_process: Stammprozess
+        reference_data_fields: Referenzdatenfelder
+        reference_process: Referenzprozess
+      implementation_team_proposal: Vorschlag vom kommunalen OZG-Umsetzungsteam NRW
+      service_base_result: Leistung Basisdaten
   form_server:
     object_name: Formularserver
     list: Formularserver
@@ -853,25 +870,6 @@ app:
       inherit_commune_types: Größenklassen von OZG-Leistung übernehmen
       inherit_commune_types.yes: Größenklassen der Leika-Leistung mit Größenklassen der OZG-Leistung erweitern
       inherit_commune_types.no: Größenklassen der OZG-Leistung nicht übernehmen
-    fim:
-      object_name: Föderales Informationsmanagement (FIM)
-      list: FIM
-      notes_empty: Es wurden noch keine Informationen hinterlegt
-      entity:
-        status: Status
-        notes: Notizen
-        data_type: Typ
-        status_choices:
-          in_progress: In Arbeit
-          submitted: Vorgelegt
-          approved: Freigegeben
-          not_provided: nicht vorgesehen
-        type_choices:
-          description: Beschreibung
-          master_data_fields: Stammdatenfelder
-          root_process: Stammprozess
-          reference_data_fields: Referenzdatenfelder
-          reference_process: Referenzprozess
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister
