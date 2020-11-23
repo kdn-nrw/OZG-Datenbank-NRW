@@ -54,12 +54,12 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
                 'choice_attr' => static function($choice, $key, $value) {
                     return ['class' => 'fim-status fim-status-' . $value];
                 },
-            ])
+            ])/*
             ->add('notes', SimpleFormatterType::class, [
                 'label' => 'app.federal_information_management_type.entity.notes',
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
-            ])
+            ])*/
             ->add('implementationTeamProposal', SimpleFormatterType::class, [
                 'label' => 'app.federal_information_management_type.entity.implementation_team_proposal',
                 'format' => 'richhtml',
@@ -93,7 +93,7 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
             ->add('service')
             ->add('dataType')
             ->add('status')
-            ->add('notes')
+            //->add('notes')
             ->add('implementationTeamProposal');
     }
 

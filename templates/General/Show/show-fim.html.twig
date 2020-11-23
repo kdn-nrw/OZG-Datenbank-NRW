@@ -44,19 +44,23 @@ file that was distributed with this source code.
                             #}
                             <div class="item-notes">
                                 {% set fimContent %}
+                                    {% if child.serviceBaseResult %}
+                                        {% include 'Vsm/Partials/Show/service-base-result.html.twig' with {'serviceBaseResult': child.serviceBaseResult} %}
+                                    {% endif %}
+                                    {#
                                     {%- if child.notes %}
                                         <strong>{{ 'app.federal_information_management_type.entity.notes'|trans }}</strong><br>
                                         {{ child.notes|raw }}
                                     {% endif -%}
+                                    #}
                                     {%- if child.implementationTeamProposal %}
                                         <strong>{{ 'app.federal_information_management_type.entity.implementation_team_proposal'|trans }}</strong><br>
                                         {{ child.implementationTeamProposal|raw }}
                                     {% endif -%}
                                 {% endset %}
-                                {{- fimContent -}}
-                                {% if child.serviceBaseResult %}
-                                    {% include 'Vsm/Partials/Show/service-base-result.html.twig' with {'serviceBaseResult': child.serviceBaseResult} %}
-                                {% elseif not fimContent %}
+                                {% if fimContent %}
+                                    {{- fimContent -}}
+                                {% else %}
                                     {{ 'app.federal_information_management_type.notes_empty'|trans }}
                                 {% endif %}
                             </div>
