@@ -12,9 +12,7 @@ file that was distributed with this source code.
 {% for field in displayFields %}
     {% set property = field|app_format_property_name %}
     {% set addValue = attribute(serviceBaseResult, property) %}
-    {% if addValue %}
-        <dt>{{ ('app.api.zu_fi.result.service_base_model.' ~ field)|trans }}</dt>
-        <dd>{{ addValue|app_format_custom_value }}</dd>
-    {% endif %}
+    <dt>{{ ('app.api.zu_fi.result.service_base_model.' ~ field)|trans }}</dt>
+    <dd>{{ addValue|app_format_custom_value(true, '-') }}</dd>
 {% endfor %}
 </dl>

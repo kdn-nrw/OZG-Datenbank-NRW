@@ -87,22 +87,26 @@ class FormatCustomDataExtension extends AbstractExtension
      * Returns the formatted value
      *
      * @param mixed $value
-     * @param bool $striptags
+     * @param bool $stripTags
+     * @param string|null $emptyValue
      * @return string
      */
-    public function getFormattedValue($value, bool $striptags = true): string
+    public function getFormattedValue($value, bool $stripTags = true, ?string $emptyValue = null): string
     {
         if (is_iterable($value)) {
             $flatValues = [];
             foreach ($value as $subVal) {
-                $flatValues[] = $this->getFormattedValue($subVal, $striptags);
+                $flatValues[] = $this->getFormattedValue($subVal, $stripTags);
             }
             $displayValue = implode(', ', $flatValues);
         } else {
             $displayValue = (string) $value;
         }
-        if ($striptags) {
+        if ($stripTags) {
             $displayValue = strip_tags($displayValue);
+        }
+        if (null !== $emptyValue && $displayValue == '') {
+            $displayValue = $emptyValue;
         }
         return $displayValue;
     }
