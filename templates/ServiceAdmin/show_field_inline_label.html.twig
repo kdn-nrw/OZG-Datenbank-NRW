@@ -6,7 +6,7 @@ file that was distributed with this source code.
 #}
 {# @var admin \Sonata\AdminBundle\Admin\AbstractAdmin #}
 {% set fieldMeta = app_object_property_meta_data(admin.class, field_description.name) %}
-<span{% if(is_diff|default(false)) %} class="diff"{% endif %}{% if fieldMeta is not null and fieldMeta.customLabel is not empty %} title="{{ fieldMeta.customLabel|raw|replace({'"': "'"}) }}"{% endif %}>
+<span class="field-label{% if(is_diff|default(false)) %} diff{% endif %}"{% if fieldMeta is not null and fieldMeta.customLabel is not empty %} title="{{ fieldMeta.customLabel|raw|replace({'"': "'"}) }}"{% endif %}>
     {% block name %}
         {{ field_description.label|trans({}, field_description.translationDomain ?: admin.translationDomain) }}
         {% include 'MetaData/help-popover.html.twig' with {'fieldMeta': fieldMeta} %}

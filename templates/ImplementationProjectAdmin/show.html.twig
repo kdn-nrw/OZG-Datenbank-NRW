@@ -8,7 +8,8 @@ file that was distributed with this source code.
 {% extends 'General/Show/show.html.twig' %}
 
 {% block show_title %}
-    {{ 'app.implementation_project.entity.name'|trans }}: <strong>{{ object.name }}</strong>
+    <span class="field-label">{{ 'app.implementation_project.entity.name'|trans }}:</span>
+    <strong>{{ object.name }}</strong>
 {% endblock %}
 
 {% block app_show_custom_box_body_classes %}{% endblock %}

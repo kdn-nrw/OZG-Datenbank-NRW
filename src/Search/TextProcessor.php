@@ -209,12 +209,35 @@ class TextProcessor
     {
         $filteredContent = html_entity_decode($content, ENT_COMPAT, 'utf-8');
         $filteredContent = self::filterUrls($filteredContent);
+        $filteredContent = self::removeLabelsAndComments($filteredContent);
         $filteredContent = preg_replace('/<th>[\wäöüÜÖÄß\s@:.\/\-]+<\/th>/u', '', $filteredContent);
-        $filteredContent = preg_replace('/<!-- [\wäöüÜÖÄß\s@:.\/\-]+-->/u', '', $filteredContent);
         //$filteredContent = str_replace(['>', PHP_EOL, '?', '*'], ['> ', ' ', ' ', ' '], $filteredContent);
         $filteredContent = str_replace(['>', PHP_EOL], ['> ', ' '], $filteredContent);
         $filteredContent = trim(strip_tags($filteredContent));
         return $filteredContent;
+    }
+
+    private static function removeLabelsAndComments($content): string
+    {
+        $filteredContent = $content;
+        //preg_match_all('/<h4 class="field-label[\s\w-]*"[^>]*>.*?<\/h4>/si', $filteredContent, $matchesTag);
+        $removeTagsWithClasses = ['field-label',];
+        foreach ($removeTagsWithClasses as $class) {
+            preg_match_all('/<(\w+)([^>]*'.preg_quote($class, '/').'[^>]*)>/i', $filteredContent, $matches);
+            if (!empty($matches[1])) {
+                foreach ($matches[0] as $offset => $textStart) {
+                    $tagName = $matches[1][$offset];
+                    $startPos = stripos($filteredContent, $textStart);
+                    $tagEnd = '</'.$tagName.'>';
+                    if ($startPos && $endPos = stripos($filteredContent, $tagEnd, $startPos + strlen($textStart))) {
+                        $filteredContent = substr($filteredContent, 0, $startPos) . substr($filteredContent, $endPos + strlen($tagEnd));
+                    }
+                }
+            }
+        }
+        // $filteredContent = preg_replace('/<!-- [\wäöüÜÖÄß\s@:.\/\-]+-->/u', '', $filteredContent);
+        // Remove comments
+        return preg_replace('/<!--(.*)-->/Us', '', $filteredContent);
     }
 
     /**

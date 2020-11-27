@@ -2,7 +2,7 @@
 {% if object.notes and (notesHtmlRendered is not defined or not notesHtmlRendered) %}
     <div class="box box-primary">
         <div class="box-header">
-            <h4 class="box-title">
+            <h4 class="field-label box-title">
                 {{ 'app.implementation_project.entity.notes'|trans }}
                 {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': object, 'propertyKey': 'notes'} %}
             </h4>

@@ -13,9 +13,9 @@ file that was distributed with this source code.
     <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
         <div class="{{ show_group.box_class }}">
             <div class="box-header">
-                <h4 class="box-title">
+                <h4 class="box-title main-title">
                     {% block show_title %}
-                        {{ 'app.service.entity.name'|trans }}: <strong>{{ object.name }}</strong>
+                        <span class="field-label">{{ 'app.service.entity.name'|trans }}:</span> <strong>{{ object.name }}</strong>
                         ({{ elements['serviceKey']|render_view_element(object)}})
                     {% endblock %}
                 </h4>
@@ -63,26 +63,26 @@ file that was distributed with this source code.
     <div class="col-xs-12">
         <div class="box box-primary">
             <div class="box-header">
-                <h4 class="box-title">
+                <h4 class="field-label box-title">
                     {{ 'app.service.groups.laws'|trans }}
                 </h4>
             </div>
             <div class="box-body">
                 <dl class="dl-horizontal">
-                    <dt>{{ 'app.service.entity.legal_basis'|trans }}
+                    <dt class="field-label">{{ 'app.service.entity.legal_basis'|trans }}
                         {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'legal_basis'} %}</dt>
                     <dd>{{ object.legalBasis }}</dd>
-                    <dt>{{ 'app.service.entity.laws'|trans }}
+                    <dt class="field-label">{{ 'app.service.entity.laws'|trans }}
                         {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'laws'} %}</dt>
                     <dd>{{ object.laws }}</dd>
-                    <dt>{{ 'app.service.entity.law_shortcuts'|trans }}
+                    <dt class="field-label">{{ 'app.service.entity.law_shortcuts'|trans }}
                         {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'law_shortcuts'} %}</dt>
                     <dd>{{ object.lawShortcuts }}</dd>
                     {% set fieldMetaHelp = include('MetaData/help-popover.html.twig', {'objectOrClass': admin.class, 'propertyKey': 'relevance1'}) %}
-                    <dt>{{ 'app.service.entity.relevance1'|trans }}
+                    <dt class="field-label">{{ 'app.service.entity.relevance1'|trans }}
                         {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'relevance1'} %}</dt>
                     <dd>{% if object.relevance1 %}Ja{% else %}Nein{% endif %}</dd>
-                    <dt>{{ 'app.service.entity.relevance2'|trans }}
+                    <dt class="field-label">{{ 'app.service.entity.relevance2'|trans }}
                         {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': admin.class, 'propertyKey': 'relevance2'} %}</dt>
                     <dd>{% if object.relevance2 %}Ja{% else %}Nein{% endif %}</dd>
                 </dl>
