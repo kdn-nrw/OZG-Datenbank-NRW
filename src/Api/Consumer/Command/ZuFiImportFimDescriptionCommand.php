@@ -18,6 +18,8 @@ use App\Api\Consumer\ApiManager;
 use App\Api\Consumer\InjectApiManagerTrait;
 use App\Api\Consumer\Model\ZuFiDemand;
 use App\Api\Consumer\ZuFiConsumer;
+use App\Entity\FederalInformationManagementType;
+use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,29 +27,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
+ * @CronJob("*\/17 * * * *")
+ * Will be executed every 17 minutes
  */
-class ZuFiImportCommand extends Command
+class ZuFiImportFimDescriptionCommand extends Command
 {
     use InjectApiManagerTrait;
 
-    protected static $defaultName = 'app:api:consumer:zufi';
+    protected static $defaultName = 'app:api:consumer:zufi-fim-desc';
 
     /**
      * Configure the command by defining the name, options and arguments
      */
     protected function configure()
     {
-        $this->setDescription('Import ZuFi service data from the API')
-            ->addArgument(
-                'regionalKey',
-                InputArgument::REQUIRED,
-                'the regional key'
-            )
-            ->addArgument(
-                'fimType',
-                InputArgument::REQUIRED,
-                'the fim type to be mapped to'
-            )
+        $this->setDescription('Import ZuFi service data for the FIM descriptions from the API')
             ->addArgument(
                 'serviceKeys',
                 InputArgument::OPTIONAL,
@@ -67,13 +61,13 @@ class ZuFiImportCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
-        $regionalKey = (string) $input->getArgument('regionalKey');
-        $fimType = (string) $input->getArgument('fimType');
-        $limit = (int) $input->getArgument('limit');
+        $regionalKey = '0500000000000';
+        $fimType = FederalInformationManagementType::TYPE_DESCRIPTION;
         $serviceKeys = array_filter(explode(',', (string) $input->getArgument('serviceKeys')));
         if (!empty($serviceKeys)) {
             $io->note(sprintf('Starting import process. Limiting imported items to services %s', implode(',', $serviceKeys)));
         }
+        $limit = (int) $input->getArgument('limit');
         $startTime = microtime(true);
         $consumer = $this->apiManager->getConfiguredConsumer(ApiManager::API_KEY_ZU_FI);
         /** @var ZuFiConsumer $consumer */

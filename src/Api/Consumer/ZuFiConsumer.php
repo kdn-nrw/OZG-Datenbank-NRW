@@ -76,12 +76,13 @@ class ZuFiConsumer extends AbstractApiConsumer
     /**
      * @param string|null $mapToFimType
      * @param int $limit Limit the number of rows to be imported
+     * @param array $serviceKeys Optional list of service keys to be imported
      * @return int
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \ReflectionException
      */
-    public function importServiceResults(?string $mapToFimType = null, int $limit = 100): int
+    public function importServiceResults(?string $mapToFimType = null, int $limit = 100, array $serviceKeys = []): int
     {
         $demand = $this->getDemand();
         /** @var ZuFiDemand $demand */
@@ -114,7 +115,8 @@ class ZuFiConsumer extends AbstractApiConsumer
             /** @var Service $service */
             $serviceKey = $service->getServiceKey();
             $lastUpdate = $serviceUpdateMap[$serviceKey] ?? null;
-            if ($lastUpdate && $lastUpdate > $updateThreshold) {
+            if (($lastUpdate && $lastUpdate > $updateThreshold)
+                || (!empty($serviceKeys) && !in_array($serviceKey, $serviceKeys, false))) {
                 continue;
             }
             $demand->setServiceKey($serviceKey);
