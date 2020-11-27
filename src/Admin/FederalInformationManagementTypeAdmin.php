@@ -57,11 +57,13 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
             ])/*
             ->add('notes', SimpleFormatterType::class, [
                 'label' => 'app.federal_information_management_type.entity.notes',
+                'required' => false,
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
             ])*/
             ->add('implementationTeamProposal', SimpleFormatterType::class, [
                 'label' => 'app.federal_information_management_type.entity.implementation_team_proposal',
+                'required' => false,
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
             ]);;
