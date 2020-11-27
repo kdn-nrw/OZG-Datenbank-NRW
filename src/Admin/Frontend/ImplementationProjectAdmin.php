@@ -33,6 +33,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
+        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
         $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
