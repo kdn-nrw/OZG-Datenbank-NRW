@@ -8,7 +8,7 @@ file that was distributed with this source code.
 {% if field_description.name ends with 'serviceSystems' %}
     {% include 'General/Show/Partials/service-systems-list.html.twig' %}
 {% elseif field_description.name ends with 'services' %}
-    {% include 'General/Show/Partials/services-list.html.twig' %}
+    {% include 'ServiceAdmin/Show/services-list.html.twig' %}
 {% elseif field_description.name ends with 'laboratories' %}
     {% include 'General/Show/Partials/laboratories-list.html.twig' %}
 {% elseif field_description.name ends with 'publishedModelRegionProjects'or field_description.name ends with 'modelRegionProjects' %}

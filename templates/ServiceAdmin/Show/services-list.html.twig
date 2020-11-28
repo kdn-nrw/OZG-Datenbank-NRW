@@ -7,7 +7,7 @@ file that was distributed with this source code.
 {# @var refSettings \App\Model\ReferenceSettings #}
 <table class="table table-bordered table-condensed">
     <tr>
-        {% include 'General/Show/Table/table-head-services.html.twig' %}
+        {% include 'ServiceAdmin/Show/table-head-services.html.twig' %}
         {% if refSettings.edit.enabled %}
             <th></th>
         {% endif %}
@@ -15,7 +15,7 @@ file that was distributed with this source code.
     {% for child in entities %}
         {# @var child \App\Entity\Service #}
         <tr>
-            {% include 'General/Show/Table/table-row-cells-services.html.twig' with {'child': child} %}
+            {% include 'ServiceAdmin/Show/table-row-cells-services.html.twig' with {'child': child} %}
 
             {% if refSettings.edit.enabled %}
                 <td>

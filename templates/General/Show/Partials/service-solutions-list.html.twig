@@ -15,7 +15,7 @@ file that was distributed with this source code.
             {% if showSolution %}
                 {% include 'General/Show/Table/table-head-solutions.html.twig' %}
             {% else %}
-                {% include 'General/Show/Table/table-head-services.html.twig' %}
+                {% include 'ServiceAdmin/Show/table-head-services.html.twig' %}
             {% endif %}
             <th>
                 {{ 'app.solution.entity.maturity'|trans }}
@@ -35,7 +35,7 @@ file that was distributed with this source code.
                 {% else %}
                     {% if child.service %}
                         {% set editObjectId = child.service.id %}
-                        {% include 'General/Show/Table/table-row-cells-services.html.twig' with {'child': child.service} %}
+                        {% include 'ServiceAdmin/Show/table-row-cells-services.html.twig' with {'child': child.service} %}
                     {% else %}
                         <td colspan="7" class="service-is-missing">
                             <span class="text-warning">{{ 'app.solution.messages.no_service_selected'|trans }}</span>

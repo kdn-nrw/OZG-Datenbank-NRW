@@ -81,7 +81,7 @@ class ZuFiImportCommand extends Command
         $demand = $consumer->getDemand();
         /** @var ZuFiDemand $demand */
         $demand->setRegionalKey($regionalKey);
-        $importedRowCount = $consumer->importServiceResults($fimType, $limit, $serviceKeys);
+        $importedRowCount = $consumer->importServiceResults($limit, $fimType, null, $serviceKeys);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }

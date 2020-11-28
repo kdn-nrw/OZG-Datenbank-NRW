@@ -111,6 +111,7 @@ class ReferenceSettingsExtension extends AbstractExtension
                 $createEditLink = $isBackendMode && $refAdmin->hasRoute($editRouteName) && $refAdmin->hasAccess($editRouteName);
                 $settings->setShow($createShowLink, $showRouteName);
                 $settings->setEdit($createEditLink, $editRouteName);
+                $settings->setIsBackendMode($isBackendMode);
                 $settings->setLabelPrefix(PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($entityClass));
             }
         } else {

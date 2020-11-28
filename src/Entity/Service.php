@@ -11,6 +11,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
@@ -1270,4 +1271,16 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
         $this->notes = $notes;
     }
 
+    /**
+     * Returns the service base result for the current service
+     *
+     * @return ServiceBaseResult|null
+     */
+    public function getServiceBaseResult(): ?ServiceBaseResult
+    {
+        if (null !== $fimDescription  = $this->getFimType(FederalInformationManagementType::TYPE_DESCRIPTION)) {
+            return $fimDescription->getServiceBaseResult();
+        }
+        return null;
+    }
 }

@@ -275,6 +275,7 @@ app:
       constituency: Kreis
       main_email: E-Mail
       official_community_key: AGS
+      regional_key: ARS
       administrative_district: Reg-Bez
       administrative_district_placeholder: Regierungsbezirk
   commune_type:
@@ -870,6 +871,7 @@ app:
       inherit_commune_types: Größenklassen von OZG-Leistung übernehmen
       inherit_commune_types.yes: Größenklassen der Leika-Leistung mit Größenklassen der OZG-Leistung erweitern
       inherit_commune_types.no: Größenklassen der OZG-Leistung nicht übernehmen
+      service_created_at: Datum
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister

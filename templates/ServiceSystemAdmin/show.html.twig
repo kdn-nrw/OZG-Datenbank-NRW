@@ -19,20 +19,18 @@ file that was distributed with this source code.
                 </h4>
             </div>
             <div class="box-body">
-                <div class="row">
-                    <div class="col-xs-12 col-md-8">
+                <div class="row field-value-row">
+                    <div class="col-xs-12 col-lg-6">
                         {{ elements['situation.subject']|render_view_element(object)}}
                         &gt;
                         {{ elements['situation']|render_view_element(object)}}
                     </div>
-                    <div class="col-xs-12 col-md-8">
-                    </div>
-                    <div class="col-xs-12 col-md-4 text-right">
+                    <div class="col-xs-12 col-lg-6 text-lg-right">
                         {{ elements['priority']|render_view_element(object)}}
                     </div>
-                    {% include 'General/Show/Partials/show-jurisdictions.html.twig' %}
-                    {% include 'General/Show/Partials/show-rule-authorities.html.twig' %}
                 </div>
+                {% include 'General/Show/Partials/show-jurisdictions.html.twig' %}
+                {% include 'General/Show/Partials/show-rule-authorities.html.twig' %}
                 {% if object.description %}
                     <div class="item-property">
                         {{ object.description|nl2br }}

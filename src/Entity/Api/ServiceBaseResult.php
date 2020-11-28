@@ -16,6 +16,8 @@ use App\Entity\FederalInformationManagementType;
 use App\Entity\ImportEntityInterface;
 use App\Entity\ImportTrait;
 use App\Entity\Service;
+use App\Entity\StateGroup\Commune;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,9 +37,24 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
     private $service;
 
     /**
-     * @var FederalInformationManagementType
+     * Regional key
+     * @var string|null
+     *
+     * @ORM\Column(type="string", name="regional_key", length=255, nullable=true)
+     */
+    private $regionalKey;
+
+    /**
+     * @var Commune|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\Commune", inversedBy="serviceBaseResults", cascade={"persist"})
+     * @ORM\JoinColumn(name="commune_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    private $commune;
+
+    /**
+     * @var FederalInformationManagementType|null
      * @ORM\OneToOne(targetEntity="App\Entity\FederalInformationManagementType", inversedBy="serviceBaseResult", cascade={"all"})
-     * @ORM\JoinColumn(name="fim_type_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="fim_type_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $fimType;
 
@@ -257,6 +274,13 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
     protected $hints;
 
     /**
+     * @var null|DateTime
+     *
+     * @ORM\Column(nullable=true, type="datetime", name="service_created_at")
+     */
+    protected $serviceCreatedAt;
+
+    /**
      * @return Service|null
      */
     public function getService(): ?Service
@@ -270,6 +294,38 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
     public function setService(?Service $service): void
     {
         $this->service = $service;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRegionalKey(): ?string
+    {
+        return $this->regionalKey;
+    }
+
+    /**
+     * @param string|null $regionalKey
+     */
+    public function setRegionalKey(?string $regionalKey): void
+    {
+        $this->regionalKey = $regionalKey;
+    }
+
+    /**
+     * @return Commune|null
+     */
+    public function getCommune(): ?Commune
+    {
+        return $this->commune;
+    }
+
+    /**
+     * @param Commune|null $commune
+     */
+    public function setCommune(?Commune $commune): void
+    {
+        $this->commune = $commune;
     }
 
     /**
@@ -737,19 +793,54 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
     }
 
     /**
-     * @return FederalInformationManagementType
+     * @return FederalInformationManagementType|null
      */
-    public function getFimType(): FederalInformationManagementType
+    public function getFimType(): ?FederalInformationManagementType
     {
         return $this->fimType;
     }
 
     /**
-     * @param FederalInformationManagementType $fimType
+     * @param FederalInformationManagementType|null $fimType
      */
-    public function setFimType(FederalInformationManagementType $fimType): void
+    public function setFimType(?FederalInformationManagementType $fimType): void
     {
         $this->fimType = $fimType;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getServiceCreatedAt(): ?DateTime
+    {
+        return $this->serviceCreatedAt;
+    }
+
+    /**
+     * Returns the date string converted to a DateTime instance or null of the date is empty or cannot be converted
+     * @return DateTime|null
+     */
+    public function getConvertedDate(): ?DateTime
+    {
+        if (null !== $dateStr = $this->getDate()) {
+            preg_match('/^(\d{2})[\.-](\d{2})[\.-](\d{4})(\s[\d:]*)/', $dateStr, $matches);
+            if (count($matches) > 3) {
+                $dateStr = trim($matches[3] . '-' . $matches[2] . '-' . $matches[1] . ($matches[4] ?? ''));
+            }
+            if (false !== $serviceCreatedAt = date_create($dateStr)) {
+                $serviceCreatedAt->setTimezone(new \DateTimeZone('UTC'));
+                return $serviceCreatedAt;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param DateTime|null $serviceCreatedAt
+     */
+    public function setServiceCreatedAt(?DateTime $serviceCreatedAt): void
+    {
+        $this->serviceCreatedAt = $serviceCreatedAt;
     }
 
     public function __toString(): string

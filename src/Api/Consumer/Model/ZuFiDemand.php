@@ -24,7 +24,7 @@ class ZuFiDemand extends AbstractDemand
      * Die Fremdadapter KiTa (99041004000000) und Finanzämter (99102008000000, 99102015000000, 99102011000000, 99102009000000,
      * 99102016000000) werden ebenfalls in der API berücksichtigt.
      */
-    const CUSTOM_SERACH_KEYS = [
+    public const CUSTOM_SEARCH_KEYS = [
         '99041004000000' => 'Fremdadapter KiTa (99041004000000)',
         '99102008000000' => 'Finanzämter (99102008000000)',
         '99102015000000' => 'Finanzämter (99102015000000)',
@@ -41,12 +41,6 @@ class ZuFiDemand extends AbstractDemand
 
     /**
      * @var string|null
-     * @ApiSearchModelAnnotation(parameter="leistungsSchluessel", dataType="string", required=false, customProperty=true)
-     */
-    protected $customKey;
-
-    /**
-     * @var string|null
      * @ApiSearchModelAnnotation(parameter="regionalSchluessel", dataType="string", required=false)
      */
     protected $regionalKey;
@@ -56,6 +50,12 @@ class ZuFiDemand extends AbstractDemand
      * @ApiSearchModelAnnotation(parameter="plz", dataType="string", required=false)
      */
     protected $zipCode;
+
+    /**
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="leistungsSchluessel", dataType="string", required=false, customProperty=true)
+     */
+    protected $customKey;
 
     /**
      * @return string|null

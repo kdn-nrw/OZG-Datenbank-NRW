@@ -21,21 +21,25 @@ file that was distributed with this source code.
                 </h4>
             </div>
             <div class="box-body">
-                <div class="row">
-                    <div class="col-xs-12 col-md-8">
-                        {{ elements['serviceSystem.situation.subject']|render_view_element(object)}}
-                        &gt;
-                        {{ elements['serviceSystem.situation']|render_view_element(object)}}
-                        &gt;
-                        {{ elements['serviceSystem']|render_view_element(object)}}
-                    </div>
-                    <div class="col-xs-12 col-md-4 text-right">
+                <div class="item-property field-value-row">
+                    {{ elements['serviceSystem.situation.subject']|render_view_element(object)}}
+                    &gt;
+                    {{ elements['serviceSystem.situation']|render_view_element(object)}}
+                    &gt;
+                    {{ elements['serviceSystem']|render_view_element(object)}}
+                </div>
+                <div class="row field-value-row">
+                    <div class="col-xs-12 col-md-6 col-lg-3">
                         {{ elements['status']|render_view_element(object)}}
                     </div>
-                    <div class="col-xs-12 col-md-8">
+                    <div class="col-xs-12 col-md-6 col-lg-3 text-md-right text-lg-left">
                         {{ elements['serviceType']|render_view_element(object)}}
                     </div>
-                    <div class="col-xs-12 col-md-4 text-right">
+                    <div class="col-xs-12 col-md-6 col-lg-2">
+                        <span class="field-label">{{ 'app.service.entity.service_created_at'|trans }}:</span>
+                        {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'child': object} %}
+                    </div>
+                    <div class="col-xs-12 col-md-6 col-lg-4 text-md-right">
                         {{ elements['serviceSystem.priority']|render_view_element(object)}}
                     </div>
                 </div>

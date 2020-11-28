@@ -1,0 +1,23 @@
+.field-value-row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.text-md-right {
+  @media (min-width: 992px) {
+    text-align: right;
+  }
+}
+@media (min-width: 1200px) {
+  .text-lg-left {
+    text-align: left;
+  }
+  .text-lg-right {
+    text-align: right;
+  }
+}

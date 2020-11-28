@@ -30,7 +30,7 @@ class ZuFiType extends ApiConsumerSearchType
         parent::buildForm($builder, $options);
         $builder->add('customKey', ChoiceType::class, [
             'label' => 'app.api.zu_fi.custom_key',
-            'choices' => array_flip(ZuFiDemand::CUSTOM_SERACH_KEYS),
+            'choices' => array_flip(ZuFiDemand::CUSTOM_SEARCH_KEYS),
             'required' => false,
             'attr' => [
                 'placeholder' => 'app.api.zu_fi.custom_key',

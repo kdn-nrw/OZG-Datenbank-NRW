@@ -15,10 +15,8 @@ declare(strict_types=1);
 namespace App\Api\Consumer\Command;
 
 use App\Api\Consumer\ApiManager;
+use App\Api\Consumer\ArsAgsConsumer;
 use App\Api\Consumer\InjectApiManagerTrait;
-use App\Api\Consumer\Model\ZuFiDemand;
-use App\Api\Consumer\ZuFiConsumer;
-use App\Entity\FederalInformationManagementType;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,33 +25,28 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @CronJob("*\/17 * * * *")
- * Will be executed every 17 minutes
+ * @CronJob("17 1 * * 7")
+ * Will be executed every sunday at 1:17
  */
-class ZuFiImportFimDescriptionCommand extends Command
+class ArsAgsImportCommand extends Command
 {
     use InjectApiManagerTrait;
 
-    protected static $defaultName = 'app:api:consumer:zufi-fim-desc';
+    protected static $defaultName = 'app:api:consumer:ars-ags';
 
     /**
      * Configure the command by defining the name, options and arguments
      */
     protected function configure()
     {
-        $this->setDescription('Import ZuFi service data for the FIM descriptions from the API')
-            ->addArgument(
-                'serviceKeys',
-                InputArgument::OPTIONAL,
-                'optional comma separated list of service keys for import'
-            )
+        $this->setDescription('Import ARS/AGS commune data from the API')
             ->addArgument(
                 'limit',
                 InputArgument::OPTIONAL,
                 'the maximum number of updated rows',
-                100
+                500
             )
-            ->setHelp('Imports the service data from the ZuFi API;'
+            ->setHelp('Imports the service data from the ARS/AGS API;'
                 . PHP_EOL . 'If you want to get more detailed information, use the --verbose option.');
     }
 
@@ -61,21 +54,12 @@ class ZuFiImportFimDescriptionCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
-        $regionalKey = '0500000000000';
-        $fimType = FederalInformationManagementType::TYPE_DESCRIPTION;
-        $serviceKeys = array_filter(explode(',', (string) $input->getArgument('serviceKeys')));
-        if (!empty($serviceKeys)) {
-            $io->note(sprintf('Starting import process. Limiting imported items to services %s', implode(',', $serviceKeys)));
-        }
-        $limit = (int) $input->getArgument('limit');
+        $limit = (int)$input->getArgument('limit');
         $startTime = microtime(true);
-        $consumer = $this->apiManager->getConfiguredConsumer(ApiManager::API_KEY_ZU_FI);
-        /** @var ZuFiConsumer $consumer */
+        $consumer = $this->apiManager->getConfiguredConsumer(ApiManager::API_KEY_ARS_AGS);
+        /** @var ArsAgsConsumer $consumer */
         $consumer->setOutput($output);
-        $demand = $consumer->getDemand();
-        /** @var ZuFiDemand $demand */
-        $demand->setRegionalKey($regionalKey);
-        $importedRowCount = $consumer->importServiceResults($limit, $fimType, null, $serviceKeys);
+        $importedRowCount = $consumer->importServiceResults($limit);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }

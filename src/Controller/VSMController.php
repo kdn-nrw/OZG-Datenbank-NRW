@@ -98,9 +98,11 @@ class VSMController extends AbstractController
         $consumerServices = $this->apiManager->getConfiguredConsumers($showAll);
         if (!empty($consumerServices)) {
             foreach ($consumerServices as $consumerService) {
+                $currentKey = $consumerService->getImportSourceKey();
                 $actionUrl = $this->generateUrl($this->baseRoute, ['consumerKey' => $consumerService->getImportSourceKey()]);
                 $demand = $consumerService->getDemand();
-                $consumerService->initializeDemand($query);
+                $demandQuery = $consumerKey === $currentKey ? $query : null;
+                $consumerService->initializeDemand($demandQuery);
                 if ($page > 1) {
                     $demand->setPage($page);
                 }

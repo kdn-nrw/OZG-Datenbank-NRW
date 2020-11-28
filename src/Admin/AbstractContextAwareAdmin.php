@@ -185,6 +185,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
             $class = new \ReflectionClass($this->getClass());
             $enableSlug = $class->implementsInterface(SluggableInterface::class);
         }
+        $settings->setIsBackendMode($isBackendMode);
         $settings->setShow($createShowLink, $showRouteName, $enableSlug);
         $settings->setEdit($createEditLink, $editRouteName);
         $settings->setListTitle($this->getLabel());

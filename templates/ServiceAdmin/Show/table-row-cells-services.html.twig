@@ -6,8 +6,11 @@ file that was distributed with this source code.
 #}
 
 {# @var child \App\Entity\Service #}
+{# @var refSettings \App\Model\ReferenceSettings #}
 <td>
     {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
+<td>
+    {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'child': child} %}
 </td>
 <td>
     {{ child.serviceKey }}

@@ -18,6 +18,7 @@ use App\Entity\Api\ApiConsumer;
 class ApiManager
 {
     public const API_KEY_ZU_FI = 'zu_fi';
+    public const API_KEY_ARS_AGS = 'ars_ags';
 
     use InjectManagerRegistryTrait;
 
@@ -83,11 +84,12 @@ class ApiManager
         $configuredConsumers = [];
         foreach ($consumerEntities as $consumerEntity) {
             /** @var ApiConsumer $consumerEntity */
-            if ($showAll || $consumerEntity->isShowInFrontend()) {
-                $consumerService = $this->getConfiguredConsumer(
-                    $consumerEntity->getConsumerKey(),
-                    $consumerEntity
-                );
+            $consumerService = $this->getConfiguredConsumer(
+                $consumerEntity->getConsumerKey(),
+                $consumerEntity,
+                $showAll
+            );
+            if (null !== $consumerService) {
                 $configuredConsumers[$consumerService->getImportSourceKey()] = $consumerService;
             }
         }
@@ -100,10 +102,11 @@ class ApiManager
      * @param string $consumerKey
      *
      * @param ApiConsumer|null $consumerEntity
-     * @return ApiConsumerInterface
+     * @param bool $showAll Show all consumers or only publicly visible?
+     * @return ApiConsumerInterface|null Returns null if the API is not accessible
      * @throws ApiConsumerNotFoundException
      */
-    public function getConfiguredConsumer(string $consumerKey, ApiConsumer $consumerEntity = null): ApiConsumerInterface
+    public function getConfiguredConsumer(string $consumerKey, ApiConsumer $consumerEntity = null, bool $showAll = true): ?ApiConsumerInterface
     {
         if (null === $consumerEntity) {
             $consumerRepository = $this->registry->getRepository(ApiConsumer::class);
@@ -115,8 +118,11 @@ class ApiManager
         if (null === $consumerEntity || null === $consumerService) {
             throw new ApiConsumerNotFoundException(sprintf('No consumer service found for key %s', $consumerEntity->getConsumerKey()));
         }
-        $consumerService->setApiConsumerEntity($consumerEntity);
-        return $consumerService;
+        if ($showAll || $consumerEntity->isShowInFrontend()) {
+            $consumerService->setApiConsumerEntity($consumerEntity);
+            return $consumerService;
+        }
+        return null;
     }
 
 }

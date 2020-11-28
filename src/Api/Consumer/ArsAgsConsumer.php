@@ -15,9 +15,14 @@ use App\Api\Consumer\DataProcessor\DefaultApiDataProcessor;
 use App\Api\Consumer\Model\ArsAgsDemand;
 use App\Api\Consumer\Model\ArsAgsResult;
 use App\Api\Form\Type\ArsAgsSearchType;
+use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
+use App\Entity\Repository\CommuneRepository;
+use App\Entity\StateGroup\Commune;
+use App\Import\Model\ResultCollection;
 
 class ArsAgsConsumer extends AbstractApiConsumer
 {
+    use InjectManagerRegistryTrait;
 
     /**
      * @required
@@ -65,5 +70,73 @@ class ArsAgsConsumer extends AbstractApiConsumer
     public function getImportModelClass(): string
     {
         return ArsAgsResult::class;
+    }
+
+    /**
+     * Import commune data
+     * @param int $limit Limit the number of rows to be imported
+     * @return int
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \ReflectionException
+     */
+    public function importServiceResults(int $limit = 100): int
+    {
+        /** @var CommuneRepository $repository */
+        $em = $this->getEntityManager();
+        $em->getConfiguration()->setSQLLogger(null);
+        $repository = $em->getRepository(Commune::class);
+        $communes = $repository->findAllWithMissingKeys('modifiedAt', 'DESC');
+        $dataProcessor = $this->dataProcessor;
+        $this->dataProvider->setApiConsumerEntity($this->getApiConsumerEntity());
+        $dataProcessor->setImportModelClass($this->getImportModelClass());
+        $dataProcessor->setOutput($this->output);
+        $dataProcessor->setImportSource($this->getImportSourceKey());
+        /** @var ArsAgsDemand $demand */
+        $demand = $this->getDemand();
+        $totalUpdatedRowCount = 0;
+        foreach ($communes as $commune) {
+            /** @var Commune $commune */
+            $communityKey = $commune->getOfficialCommunityKey();
+            $regionalKey = $commune->getRegionalKey();
+            $demand->setSearchTerm($commune->getName());
+            /** @noinspection DisconnectedForeachInstructionInspection */
+            $this->dataProvider->setDemand($demand);
+            /** @noinspection DisconnectedForeachInstructionInspection */
+            $this->dataProvider->process($dataProcessor);
+            $results = $this->dataProcessor->getResultCollection();
+            /** @var ResultCollection $results */
+            $bestMatchingResult = null;
+            foreach ($results as $result) {
+                /** @var ArsAgsResult $result */
+                if (null === $bestMatchingResult) {
+                    $bestMatchingResult = $result;
+                } elseif ((!empty($communityKey) && $communityKey === $result->getCommuneKey())
+                    || (!empty($regionalKey) && $regionalKey === $result->getRegionalKey())) {
+                    $bestMatchingResult = $result;
+                    break;
+                } elseif ($commune->getName() === $result->getName()
+                    || (!empty($communityKey) && rtrim($communityKey, '0') === $result->getCommuneKey())) {
+                    $bestMatchingResult = $result;
+                }
+            }
+            if (null !== $bestMatchingResult) {
+                if (empty($communityKey)) {
+                    $commune->setOfficialCommunityKey($bestMatchingResult->getCommuneKey());
+                }
+                if (empty($regionalKey)) {
+                    $commune->setRegionalKey($bestMatchingResult->getRegionalKey());
+                }
+                ++$totalUpdatedRowCount;
+
+                if ($limit && $totalUpdatedRowCount > $limit) {
+                    break;
+                }
+            }
+        }
+        if ($totalUpdatedRowCount > 0) {
+            $em->flush();
+        }
+        return $totalUpdatedRowCount;
     }
 }

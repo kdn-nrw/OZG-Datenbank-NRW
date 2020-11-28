@@ -103,6 +103,9 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])
             ->add('officialCommunityKey', TextType::class, [
                 'required' => false,
+            ])
+            ->add('regionalKey', TextType::class, [
+                'required' => false,
             ]);
         $formMapper->end();
         $formMapper->with('services_data', [
@@ -176,6 +179,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addDefaultDatagridFilter($datagridMapper, 'administrativeDistrict');
         $this->addDefaultDatagridFilter($datagridMapper, 'communeType');
         $datagridMapper->add('officialCommunityKey');
+        $datagridMapper->add('regionalKey');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -225,6 +229,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('organisation.town')
             ->add('organisation.url', 'url')
             ->add('officialCommunityKey')
+            ->add('regionalKey')
             ->add('administrativeDistrict')
             ->add('constituency', null, [
                 'admin_code' => self::class,

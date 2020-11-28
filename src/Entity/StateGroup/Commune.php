@@ -12,11 +12,13 @@
 namespace App\Entity\StateGroup;
 
 use App\Entity\AddressTrait;
+use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Base\AppBaseEntity;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
 use App\Entity\ContactTextTrait;
+use App\Entity\FederalInformationManagementType;
 use App\Entity\HasManufacturerEntityInterface;
 use App\Entity\Laboratory;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
@@ -24,6 +26,7 @@ use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
 use App\Entity\OrganisationTrait;
 use App\Entity\Portal;
+use App\Entity\Service;
 use App\Entity\Solution;
 use App\Entity\SpecializedProcedure;
 use App\Entity\UrlTrait;
@@ -179,12 +182,29 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     private $mainEmail;
 
     /**
-     * Official community_key
+     * Official community key
      * @var string|null
      *
      * @ORM\Column(type="string", name="official_community_key", length=255, nullable=true)
      */
     private $officialCommunityKey;
+
+    /**
+     * Regional key
+     * @var string|null
+     *
+     * @ORM\Column(type="string", name="regional_key", length=255, nullable=true)
+     */
+    private $regionalKey;
+
+    /**
+     * One commune has many service base results (imported through ZuFi api, mapped by regional key)
+     *
+     * @var ArrayCollection|ServiceBaseResult[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Api\ServiceBaseResult", mappedBy="commune", cascade={"all"})
+     * @ORM\JoinColumn(name="service_base_result_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    private $serviceBaseResults;
 
     public function __construct()
     {
@@ -195,6 +215,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
         $this->serviceProviders = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
+        $this->serviceBaseResults = new ArrayCollection();
     }
 
     /**
@@ -619,4 +640,82 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
         }
         return $manufacturers;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getRegionalKey(): ?string
+    {
+        return $this->regionalKey;
+    }
+
+    /**
+     * @param string|null $regionalKey
+     */
+    public function setRegionalKey(?string $regionalKey): void
+    {
+        $this->regionalKey = $regionalKey;
+    }
+
+    /**
+     * @param ServiceBaseResult $serviceBaseResult
+     * @return self
+     */
+    public function addServiceBaseResult($serviceBaseResult): self
+    {
+        if (!$this->serviceBaseResults->contains($serviceBaseResult)) {
+            $this->serviceBaseResults->add($serviceBaseResult);
+            $serviceBaseResult->setCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceBaseResult $serviceBaseResult
+     * @return self
+     */
+    public function removeServiceBaseResult($serviceBaseResult): self
+    {
+        if ($this->serviceBaseResults->contains($serviceBaseResult)) {
+            $this->serviceBaseResults->removeElement($serviceBaseResult);
+            $serviceBaseResult->setCommune(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ServiceBaseResult[]|Collection
+     */
+    public function getServiceBaseResults()
+    {
+        return $this->serviceBaseResults;
+    }
+
+    /**
+     * Returns the service base result for the given service
+     *
+     * @param Service $service
+     * @return ServiceBaseResult|null
+     */
+    public function getServiceBaseResult(Service $service): ?ServiceBaseResult
+    {
+        foreach ($this->serviceBaseResults as $serviceBaseResult) {
+            /** @var ServiceBaseResult $serviceBaseResult */
+            if ($serviceBaseResult->getService() === $service) {
+                return $serviceBaseResult;
+            }
+        }
+        return $service->getServiceBaseResult();
+    }
+
+    /**
+     * @param ServiceBaseResult[]|Collection $serviceBaseResults
+     */
+    public function setServiceBaseResults($serviceBaseResults): void
+    {
+        $this->serviceBaseResults = $serviceBaseResults;
+    }
+
 }

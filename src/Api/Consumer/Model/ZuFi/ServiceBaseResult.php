@@ -280,11 +280,11 @@ class ServiceBaseResult extends AbstractResult
     }
 
     /**
-     * @param array $synonyms
+     * @param array|null $synonyms
      */
-    public function setSynonyms(array $synonyms): void
+    public function setSynonyms(?array $synonyms): void
     {
-        $this->synonyms = array_filter($synonyms);
+        $this->synonyms = null !== $synonyms ? array_filter($synonyms) : [];
     }
 
     /**
@@ -312,11 +312,13 @@ class ServiceBaseResult extends AbstractResult
     }
 
     /**
-     * @param ResultCollection|UriResult[] $legalBasisUris
+     * @param ResultCollection|UriResult[]|null $legalBasisUris
      */
-    public function setLegalBasisUris(ResultCollection $legalBasisUris): void
+    public function setLegalBasisUris(?ResultCollection $legalBasisUris): void
     {
-        $this->legalBasisUris = $legalBasisUris;
+        if (null !== $legalBasisUris) {
+            $this->legalBasisUris = $legalBasisUris;
+        }
     }
 
     /**
@@ -464,11 +466,11 @@ class ServiceBaseResult extends AbstractResult
     }
 
     /**
-     * @param array $specialFeatures
+     * @param array|null $specialFeatures
      */
-    public function setSpecialFeatures(array $specialFeatures): void
+    public function setSpecialFeatures(?array $specialFeatures): void
     {
-        $this->specialFeatures = $specialFeatures;
+        $this->specialFeatures = $specialFeatures ?? [];
     }
 
     /**

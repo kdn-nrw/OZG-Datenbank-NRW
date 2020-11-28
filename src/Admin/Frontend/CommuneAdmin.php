@@ -67,6 +67,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         $this->addDefaultDatagridFilter($datagridMapper, 'administrativeDistrict');
         $this->addDefaultDatagridFilter($datagridMapper, 'communeType');
         $datagridMapper->add('officialCommunityKey');
+        $datagridMapper->add('regionalKey');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -116,6 +117,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ->add('organisation.town')
             ->add('organisation.url', 'url')
             ->add('officialCommunityKey')
+            ->add('regionalKey')
             ->add('administrativeDistrict')
             ->add('constituency', null, [
                 'admin_code' => self::class,

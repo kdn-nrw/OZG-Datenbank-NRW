@@ -19,7 +19,9 @@ use App\Api\Form\Type\ZuFiType;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Api\ServiceBaseResult;
 use App\Entity\FederalInformationManagementType;
+use App\Entity\Repository\CommuneRepository;
 use App\Entity\Service;
+use App\Entity\StateGroup\Commune;
 
 class ZuFiConsumer extends AbstractApiConsumer
 {
@@ -74,7 +76,7 @@ class ZuFiConsumer extends AbstractApiConsumer
     }
 
     /**
-     * @param string|null $mapToFimType
+     * Import commune data
      * @param int $limit Limit the number of rows to be imported
      * @param array $serviceKeys Optional list of service keys to be imported
      * @return int
@@ -82,20 +84,65 @@ class ZuFiConsumer extends AbstractApiConsumer
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \ReflectionException
      */
-    public function importServiceResults(?string $mapToFimType = null, int $limit = 100, array $serviceKeys = []): int
+    public function importCommuneServiceResults(int $limit = 500, array $serviceKeys = []): int
+    {
+        /** @var CommuneRepository $repository */
+        $em = $this->getEntityManager();
+        $em->getConfiguration()->setSQLLogger(null);
+        $repository = $em->getRepository(Commune::class);
+        $communes = $repository->findAll();
+        // Randomize order of communes
+        shuffle($communes);
+        $totalImportRowCount = 0;
+        foreach ($communes as $commune) {
+            /** @var Commune $commune */
+            if ($commune->getRegionalKey()) {
+                $totalImportRowCount += $this->importServiceResults($limit, null, $commune, $serviceKeys);
+                ++$totalImportRowCount;
+            }
+        }
+        return $totalImportRowCount;
+    }
+
+    /**
+     * Import service data
+     * @param int $limit Limit the number of rows to be imported
+     * @param string|null $mapToFimType
+     * @param Commune|null $commune
+     * @param array $serviceKeys Optional list of service keys to be imported
+     * @return int
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \ReflectionException
+     */
+    public function importServiceResults(
+        int $limit,
+        ?string $mapToFimType,
+        ?Commune $commune,
+        array $serviceKeys = []
+    ): int
     {
         $demand = $this->getDemand();
         /** @var ZuFiDemand $demand */
+        if (null !== $commune) {
+            $demand->setRegionalKey($commune->getRegionalKey());
+        }
         if (!$demand->getZipCode() && !$demand->getRegionalKey()) {
             throw new InvalidParametersException('The demand parameters are not set. You must set the zip code or regional key in the demand!');
         }
         $validFimTypes = array_keys(FederalInformationManagementType::$mapTypes);
-        if (null === $mapToFimType || !in_array($mapToFimType, $validFimTypes, false)) {
-            throw new InvalidParametersException('The given fim type %s is not valid. Valid values are %s', $mapToFimType, implode(', ', $validFimTypes));
+        if (null === $commune && (null === $mapToFimType || !in_array($mapToFimType, $validFimTypes, false))) {
+            throw new InvalidParametersException(sprintf(
+                'The given fim type %s is not valid. Valid values are %s',
+                $mapToFimType ?? 'NULL',
+                implode(', ', $validFimTypes)
+            ));
         }
-        $repository = $this->getEntityManager()->getRepository(Service::class);
-        $sbrRepository = $this->getEntityManager()->getRepository(ServiceBaseResult::class);
-        $sbrRows = $sbrRepository->findAll();
+        $em = $this->getEntityManager();
+        $em->getConfiguration()->setSQLLogger(null);
+        $repository = $em->getRepository(Service::class);
+        $sbrRepository = $em->getRepository(ServiceBaseResult::class);
+        $sbrRows = $sbrRepository->findBy(['commune' => $commune]);
         $serviceUpdateMap = [];
         $updateThreshold = strtotime('-2 weeks');
         foreach ($sbrRows as $sbrRow) {
@@ -129,14 +176,14 @@ class ZuFiConsumer extends AbstractApiConsumer
                 $dataProcessor->addServiceResult($service, $serviceModel);
                 ++$totalImportRowCount;
                 if ($totalImportRowCount % 100 === 0) {
-                    $dataProcessor->processImportedServiceResults($mapToFimType);
+                    $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
                 }
                 if ($totalImportRowCount >= $limit) {
                     break;
                 }
             }
         }
-        $dataProcessor->processImportedServiceResults($mapToFimType);
+        $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
         return $totalImportRowCount;
     }
 }
