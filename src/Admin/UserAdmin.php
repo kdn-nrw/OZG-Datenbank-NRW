@@ -12,10 +12,15 @@
 namespace App\Admin;
 
 
+use App\Admin\StateGroup\CommuneAdmin;
+use App\Admin\Traits\CommuneTrait;
+use App\Admin\Traits\ModelRegionTrait;
 use DateTime;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
@@ -27,6 +32,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
 {
     use AdminTranslatorStrategyTrait;
+    use ModelRegionTrait;
+    use CommuneTrait;
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
@@ -39,6 +46,32 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
         }
 
         return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureDatagridFilters(DatagridMapper $filter): void
+    {
+        parent::configureDatagridFilters($filter);
+        $filter->add('communes',
+            null, [
+                'label' => 'app.user.entity.communes',
+                'admin_code' => CommuneAdmin::class,
+                'translation_domain' => 'messages',
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $filter->add('modelRegions',
+            null, [
+                'label' => 'app.user.entity.model_regions',
+                'admin_code' => ModelRegionAdmin::class,
+                'translation_domain' => 'messages',
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     /**
@@ -117,7 +150,33 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
                 'dp_min_date' => '1-1-1900',
                 'dp_max_date' => $now->format('c'),
                 'required' => false,
-            ])
+            ]);
+        $formMapper->add('communes', ModelType::class,
+            [
+                'label' => 'app.user.entity.communes',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ],
+            [
+                'admin_code' => CommuneAdmin::class,
+            ]
+        );
+        $formMapper->add('modelRegions', ModelType::class, [
+            'label' => 'app.user.entity.model_regions',
+            'btn_add' => false,
+            'placeholder' => '',
+            'required' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'choice_translation_domain' => false,
+        ], [
+            'admin_code' => ModelRegionAdmin::class,
+        ]);
+        $formMapper
             ->end()
             ->end();
         if (!$this->isGranted('ROLE_SUPER_ADMIN')) {

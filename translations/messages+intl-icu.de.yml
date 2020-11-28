@@ -1070,6 +1070,14 @@ app:
     object_name: Verwaltungssuchmaschine
     list: Verwaltungssuchmaschine
     list_fe: Verwaltungs&shy;suchmaschine (VSM)
+  group:
+    object_name: Benutzergruppe
+    list: Benutzergruppen
+    create: Benutzergruppe anlegen
+    entity:
+      name: Name
+      sub_groups: Untergruppen
+      sub_groups_description: Die Rechte der Untergruppen gelten auch für die übergeordnete Gruppe.
   user:
     object_name: Benutzer
     list: Benutzer
@@ -1077,4 +1085,6 @@ app:
     entity:
       firstname: Vorname
       lastname: Nachname
+      communes: Kommunen
+      model_regions: Modellregionen
 

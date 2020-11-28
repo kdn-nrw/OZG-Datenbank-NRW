@@ -12,6 +12,7 @@
 namespace App\Controller;
 
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -22,9 +23,26 @@ class DefaultController extends AbstractController
 
     public function indexAction()
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return $this->redirectToRoute('sonata_admin_dashboard');
+        if ((null !== $user = $this->getUser()) && $this->isGranted('ROLE_SHOW_BACKEND')) {
+            $redirectRoute = 'sonata_admin_dashboard';
+            $redirectParams = [];
+            if ($user instanceof User) {
+                $rolePrefix = 'ROLE_APP\\ADMIN\\STATEGROUP\\COMMUNEADMIN_';
+                if (($this->isGranted($rolePrefix . 'ALL') || $this->isGranted($rolePrefix . 'VIEW'))
+                    && $user->getCommunes()->count() === 1) {
+                    $redirectRoute = 'admin_app_stategroup_commune_show';
+                    $redirectParams = ['id' => $user->getCommunes()->first()->getId()];
+                } else {
+                    $rolePrefix = 'ROLE_APP\\ADMIN\\MODELREGIONADMIN_';
+                    if (($this->isGranted($rolePrefix . 'ALL') || $this->isGranted($rolePrefix . 'VIEW'))
+                        && $user->getModelRegions()->count() === 1) {
+                        $redirectRoute = 'admin_app_modelregion_show';
+                        $redirectParams = ['id' => $user->getModelRegions()->first()->getId()];
+                    }
+                }
+            }
+            return $this->redirectToRoute($redirectRoute, $redirectParams, 302);
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_service_list', [], 302);
     }
 }

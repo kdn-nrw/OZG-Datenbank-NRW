@@ -6,3 +6,7 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
+
+sonata_admin_redirect:
+    path: /admin
+    controller: App\Controller\DefaultController::indexAction
