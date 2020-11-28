@@ -4,7 +4,9 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-{% if entities|length > 0 or showHasAll %}
+{# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+{% set entities = field_description.value(object) %}
+{% if entities|length > 0 %}
     {% set refSettings = app_object_field_description_meta(object, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
     <div class="box box-primary">
@@ -13,15 +15,8 @@ file that was distributed with this source code.
                 {% include 'General/Show/Partials/show-field-title.html.twig' %}
             </h4>
         </div>
-        {% if showHasAll %}
-            <div class="box-body">
-                <em>{{ 'app.solution.entity.commune_type_all'|trans }}</em>
-            </div>
-        {% else %}
-            <div class="box-body table-responsive no-padding">
-                {% include 'General/Show/Partials/communes-list.html.twig' %}
-            </div>
-        {% endif %}
+        <div class="box-body table-responsive no-padding">
+            {% include 'General/Show/Partials/show-record-list.html.twig' %}
+        </div>
     </div>
 {% endif %}
-

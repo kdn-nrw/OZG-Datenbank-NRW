@@ -60,7 +60,12 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
                     'required' => true,
                 ]);
             foreach (Organisation::$mapFields as $field) {
-                $this->addDefaultModelType($formMapper, $field);
+                $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($this->getClass(), $field);
+                $fieldDescriptionOptions = [];
+                if (!empty($propertyConfiguration['admin_class'])) {
+                    $fieldDescriptionOptions['admin_code'] = $propertyConfiguration['admin_class'];
+                }
+                $this->addDefaultModelType($formMapper, $field, $fieldDescriptionOptions);
             }
             $formMapper->end();
         }

@@ -126,14 +126,16 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         $showMapper->add('communeType.serviceSystems', null, [
             'label' => 'app.commune_type.entity.service_systems',
             'admin_code' => ServiceSystemAdmin::class,
-            'template' => 'CommuneAdmin/show-commune-type-system-services.html.twig',
             'is_custom_field' => true,
+            'is_tab_field' => true,
+            'is_custom_rendered' => true,
         ]);
         $showMapper->add('communeType.services', null, [
             'label' => 'app.commune_type.entity.services',
             'admin_code' => ServiceAdmin::class,
-            'template' => 'CommuneAdmin/show-commune-type-services.html.twig',
             'is_custom_field' => true,
+            'is_tab_field' => true,
+            'is_custom_rendered' => true,
         ]);
     }
 

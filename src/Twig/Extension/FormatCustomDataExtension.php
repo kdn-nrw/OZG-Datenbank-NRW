@@ -38,6 +38,7 @@ class FormatCustomDataExtension extends AbstractExtension
     {
         return [
             new TwigFilter('app_format_custom_label', [$this, 'getFormattedLabel']),
+            new TwigFilter('app_format_identifier', [$this, 'getFormattedIdentifier']),
             new TwigFilter('app_format_custom_value', [$this, 'getFormattedValue']),
             new TwigFilter('app_format_property_name', [$this, 'convertToPropertyName']),
             new TwigFilter('app_format_collection_item_label', [$this, 'getCollectionItemLabel']),
@@ -64,6 +65,17 @@ class FormatCustomDataExtension extends AbstractExtension
     public function getFormattedLabel(string $customLabel): string
     {
         return self::convertKeyToLabel($customLabel);
+    }
+
+    /**
+     * Formats the given custom key to an identifier string (lowercase, words separated by -)
+     *
+     * @param string $customKey
+     * @return string
+     */
+    public function getFormattedIdentifier(string $customKey): string
+    {
+        return strtolower(str_replace(' ', '-', self::convertKeyToLabel($customKey)));
     }
 
     /**
@@ -105,14 +117,14 @@ class FormatCustomDataExtension extends AbstractExtension
         if ($stripTags) {
             $displayValue = strip_tags($displayValue);
         }
-        if (null !== $emptyValue && $displayValue == '') {
+        if (null !== $emptyValue && $displayValue === '') {
             $displayValue = $emptyValue;
         }
         return $displayValue;
     }
 
     /**
-     * Returns the field description collection for the referenced fields
+     * Converts a custom label to readable text
      *
      * @param string $customLabel
      * @return string

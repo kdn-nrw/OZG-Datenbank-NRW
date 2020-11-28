@@ -7,3 +7,7 @@ file that was distributed with this source code.
 
 {% extends 'General/Show/show.html.twig' %}
 
+{% block app_show_custom_fields %}
+    {% include 'CommuneAdmin/show-service-nav-tab-fields.html.twig' %}
+    {{ parent() }}
+{% endblock %}

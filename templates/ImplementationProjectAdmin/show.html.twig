@@ -44,8 +44,8 @@ file that was distributed with this source code.
                 <div class="col-xs-12 col-lg-8">
                     {{ parent() }}
                     {% if subjectContactCount > 6 %}
-                        {% set fieldDescription = elements['notes'] %}
-                        {% include fieldDescription.template with {'object': object, 'field_description': fieldDescription} %}
+                        {% set notesFieldDescription = elements['notes'] %}
+                        {% include notesFieldDescription.template with {'object': object, 'field_description': notesFieldDescription} %}
                     {% endif %}
                 </div>
                 <div class="col-xs-12 col-lg-4">

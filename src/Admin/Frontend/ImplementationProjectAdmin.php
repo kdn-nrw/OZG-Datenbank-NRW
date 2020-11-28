@@ -136,7 +136,6 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
             ])
             ->add('services', null, [
                 'admin_code' => ServiceAdmin::class,
-                'template' => 'General/Show/show-services.html.twig',
                 'showFimTypes' => true,
                 'route' => [
                     'name' => 'show',

@@ -53,7 +53,6 @@ trait SolutionTrait
         $showMapper
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
-                'template' => 'General/Show/show-solutions.html.twig',
             ]);
     }
 }

@@ -1,0 +1,56 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var object \App\Entity\StateGroup\Commune #}
+{% set communeType = object.communeType %}
+{% if communeType is not null %}
+    {# @var communeType \App\Entity\StateGroup\CommuneType #}
+    <div class="col-xs-12">
+        <div class="nav-tabs-custom">
+            {% set navTabFields = ['communeType.serviceSystems', 'communeType.services'] %}
+            <ul class="nav nav-tabs">
+                {% for field_name in navTabFields %}
+                    {% set isActive = loop.first %}
+                    {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+                    {% set field_description = elements[field_name] %}
+                    {% set refSettings = app_object_field_description_meta(object, field_description) %}
+                    {# @var refSettings \App\Model\ReferenceSettings #}
+                    {% if field_name == 'communeType.serviceSystems' %}
+                        {% set customListTitle = 'app.commune_type.show.headline.service_systems'|trans({'communeType': communeType.name}) %}
+                    {% elseif field_name == 'communeType.services' %}
+                        {% set customListTitle = 'app.commune_type.show.headline.services'|trans({'communeType': communeType.name}) %}
+                    {% else %}
+                        {% set customListTitle = null %}
+                    {% endif %}
+                    <li{% if isActive %} class="active"{% endif %}>
+                        {% set tabId = field_description.name|app_format_identifier %}
+                        <a href="#show-service-tab-{{ tabId }}" data-toggle="tab">
+                            {% include 'General/Show/Partials/show-field-title.html.twig' %}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content no-padding">
+                {% for field_name in navTabFields %}
+                    {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+                    {% set field_description = elements[field_name] %}
+                    {% set isActive = loop.first %}
+                    {% set tabId = field_description.name|app_format_identifier %}
+                    <div class="{% if isActive %}active {% endif %}tab-pane" id="show-service-tab-{{ tabId }}">
+                        {% set refSettings = app_object_field_description_meta(object, field_description) %}
+                        {# @var refSettings \App\Model\ReferenceSettings #}
+                        {% set entities = field_description.value(object) %}
+                        {% if entities|length > 0 %}
+                            <div class="table-responsive">
+                                {% include 'General/Show/Partials/show-record-list.html.twig' %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

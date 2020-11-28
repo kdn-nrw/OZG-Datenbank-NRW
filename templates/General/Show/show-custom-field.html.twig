@@ -1,0 +1,35 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% set fieldMetaHelp = include('MetaData/help-popover.html.twig', {'objectOrClass': object, 'propertyKey': field_name}) %}
+{% if elements[field_name].option('is_custom_field') %}
+    <div class="col-xs-12">
+        {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+        {% set field_description = elements[field_name] %}
+        {% include field_description.template with {'object': object, 'field_description': field_description, 'fieldMetaHelp': fieldMetaHelp} %}
+    </div>
+{% elseif field_name in customShowFields %}
+    <div class="col-xs-12">
+        {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+        {% set field_description = elements[field_name] %}
+        {# {{ elements['field_name']|render_view_element(object) }} #}
+        {% if field_name == 'communes' %}
+            {% set showHasAll = field_description.option('check_has_all_modifier') and object.communeType == constant('App\\Entity\\Solution::COMMUNE_TYPE_ALL') %}
+            {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'showHasAll': showHasAll, 'field_description': field_description, 'fieldMetaHelp': fieldMetaHelp} %}
+        {% elseif field_name == 'serviceSolutions' %}
+            {% set showSolution = field_description.option('associated_property') == 'solution' %}
+            {% set displayServiceSolutions = app_is_backend() ? object.serviceSolutions : object.publishedServiceSolutions %}
+            {% include 'General/Show/show-service-solutions.html.twig' with {'entities': displayServiceSolutions, 'showSolution': showSolution, 'field_description': field_description, 'fieldMetaHelp': fieldMetaHelp} %}
+        {% elseif field_name == 'formServerSolutions' %}
+            {% set showSolution = field_description.option('associated_property') == 'solution' %}
+            {% include 'General/Show/show-form-server-solutions.html.twig' with {'entities': object.formServerSolutions, 'showSolution': showSolution, 'field_description': field_description, 'fieldMetaHelp': fieldMetaHelp} %}
+        {% elseif field_name == 'fimTypes' %}
+            {% include 'General/Show/show-fim.html.twig' with {'entities': object.fimTypes, 'field_description': field_description, 'fieldMetaHelp': fieldMetaHelp} %}
+        {% else %}
+            {% include 'General/Show/show-box-field.html.twig' %}
+        {% endif %}
+    </div>
+{% endif %}

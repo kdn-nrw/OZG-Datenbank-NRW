@@ -1,0 +1,51 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% set tabNavHtml = '' %}
+{% for field_name in show_group.fields %}
+    {% if elements[field_name].option('is_tab_field') and not elements[field_name].option('is_custom_rendered') %}
+        {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+        {% set field_description = elements[field_name] %}
+        {% set refSettings = app_object_field_description_meta(object, field_description) %}
+        {# @var refSettings \App\Model\ReferenceSettings #}
+        {% set isActive = loop.first %}
+        {% set tabNavHtml %}
+            {{ tabNavHtml }}
+        <li{% if isActive %} class="active"{% endif %}>
+            {% set tabId = field_description.name|app_format_identifier %}
+            <a href="#show-tab-{{ tabId }}" data-toggle="tab">
+                {% include 'General/Show/Partials/show-field-title.html.twig' %}
+            </a>
+        </li>
+        {% endset %}
+    {% endif %}
+{% endfor %}
+{% if tabNavHtml %}
+    <div class="col-xs-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                {{ tabNavHtml|raw }}
+            </ul>
+            <div class="tab-content no-padding">
+                {% for field_name in show_group.fields %}
+                    {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+                    {% set field_description = elements[field_name] %}
+                    {% if field_description.option('is_tab_field') and not field_description.option('is_custom_rendered') %}
+                        {% set tabId = field_description.name|app_format_identifier %}
+                        {% set isActive = loop.first %}
+                        <div class="{% if isActive %}active {% endif %}tab-pane" id="show-tab-{{ tabId }}">
+                            {% set refSettings = app_object_field_description_meta(object, field_description) %}
+                            {# @var refSettings \App\Model\ReferenceSettings #}
+                            <div class="table-responsive">
+                                {% include 'General/Show/Partials/show-record-list.html.twig' %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

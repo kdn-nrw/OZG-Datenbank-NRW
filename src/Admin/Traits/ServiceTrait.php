@@ -51,7 +51,6 @@ trait ServiceTrait
     {
         $fieldDescriptionOptions = array_merge([
             'admin_code' => ServiceAdmin::class,
-            'template' => 'General/Show/show-services.html.twig',
             'showFimTypes' => false,
         ], $overrideFieldDescriptionOptions);
         $showMapper

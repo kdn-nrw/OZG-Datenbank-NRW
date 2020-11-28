@@ -1,0 +1,22 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+{% if field_description.name ends with 'serviceSystems' %}
+    {% include 'General/Show/Partials/service-systems-list.html.twig' %}
+{% elseif field_description.name ends with 'services' %}
+    {% include 'General/Show/Partials/services-list.html.twig' %}
+{% elseif field_description.name ends with 'laboratories' %}
+    {% include 'General/Show/Partials/laboratories-list.html.twig' %}
+{% elseif field_description.name ends with 'publishedModelRegionProjects'or field_description.name ends with 'modelRegionProjects' %}
+    {% include 'General/Show/Partials/model-region-projects-list.html.twig' %}
+{% elseif field_description.name ends with 'serviceProviders' %}
+    {% include 'General/Show/Partials/service-providers-list.html.twig' %}
+{% elseif field_description.name ends with 'publishedSolutions' or field_description.name ends with 'solutions' %}
+    {% include 'General/Show/Partials/solutions-list.html.twig' %}
+{% elseif field_description.name ends with 'implementationProjects' %}
+    {% include 'General/Show/Partials/implementation-projects-list.html.twig' %}
+{% endif %}

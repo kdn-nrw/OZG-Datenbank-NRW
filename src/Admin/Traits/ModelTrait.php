@@ -25,14 +25,15 @@ trait ModelTrait
      *
      * @param FormMapper $formMapper
      * @param $fieldName
+     * @param array $fieldDescriptionOptions
      */
-    protected function addDefaultModelType(FormMapper $formMapper, $fieldName): void
+    protected function addDefaultModelType(FormMapper $formMapper, $fieldName, array $fieldDescriptionOptions = []): void
     {
         $formMapper->add($fieldName, ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
             'choice_translation_domain' => false,
-        ]);
+        ], $fieldDescriptionOptions);
     }
 }

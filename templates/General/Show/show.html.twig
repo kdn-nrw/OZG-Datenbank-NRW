@@ -53,52 +53,13 @@ file that was distributed with this source code.
                     </div>
                 {% endblock %}
                 {% block app_show_custom_fields %}
+                    {#
+                    Render blocks as tabs. Currently not used!
+                    {% include 'General/Show/show-nav-tab-fields.html.twig' %}
+                    #}
                     {% for field_name in show_group.fields %}
-                        {% set fieldMetaHelp = include('MetaData/help-popover.html.twig', {'objectOrClass': object, 'propertyKey': field_name}) %}
-                        {% if elements[field_name].option('is_custom_field') %}
-                            <div class="col-xs-12">
-                            {# @var fieldDescription \Sonata\AdminBundle\Admin\BaseFieldDescription #}
-                            {% set fieldDescription = elements[field_name] %}
-                            {% include fieldDescription.template with {'object': object, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                            </div>
-                        {% elseif field_name in customShowFields %}
-                            <div class="col-xs-12">
-                                {# @var fieldDescription \Sonata\AdminBundle\Admin\BaseFieldDescription #}
-                                {% set fieldDescription = elements[field_name] %}
-                                {# {{ elements['field_name']|render_view_element(object) }} #}
-                                {% if field_name == 'serviceSystems' %}
-                                    {% include 'General/Show/show-service-systems.html.twig' with {'entities': object.serviceSystems, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'services' %}
-                                    {% include fieldDescription.template with {'entities': object.services, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'laboratories' %}
-                                    {% include 'General/Show/show-laboratories.html.twig' with {'entities': object.laboratories, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'publishedSolutions' %}
-                                    {% include 'General/Show/show-solutions.html.twig' with {'entities': object.publishedSolutions, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'solutions' %}
-                                    {% include 'General/Show/show-solutions.html.twig' with {'entities': object.solutions, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'serviceProviders' %}
-                                    {% include 'General/Show/show-service-providers.html.twig' with {'entities': object.serviceProviders, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'communes' %}
-                                    {% set showHasAll = fieldDescription.option('check_has_all_modifier') and object.communeType == constant('App\\Entity\\Solution::COMMUNE_TYPE_ALL') %}
-                                    {% include 'General/Show/show-communes.html.twig' with {'entities': object.communes, 'showHasAll': showHasAll, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'implementationProjects' %}
-                                    {% include 'General/Show/show-implementation-projects.html.twig' with {'entities': object.implementationProjects, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'modelRegionProjects' %}
-                                    {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.modelRegionProjects, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'publishedModelRegionProjects' %}
-                                    {% include 'General/Show/show-model-region-projects.html.twig' with {'entities': object.publishedModelRegionProjects, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'serviceSolutions' %}
-                                    {% set showSolution = fieldDescription.option('associated_property') == 'solution' %}
-                                    {% set displayServiceSolutions = app_is_backend() ? object.serviceSolutions : object.publishedServiceSolutions %}
-                                    {% include 'General/Show/show-service-solutions.html.twig' with {'entities': displayServiceSolutions, 'showSolution': showSolution, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'formServerSolutions' %}
-                                    {% set showSolution = fieldDescription.option('associated_property') == 'solution' %}
-                                    {% include 'General/Show/show-form-server-solutions.html.twig' with {'entities': object.formServerSolutions, 'showSolution': showSolution, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% elseif field_name == 'fimTypes' %}
-                                    {% set showSolution = fieldDescription.option('associated_property') == 'solution' %}
-                                    {% include 'General/Show/show-fim.html.twig' with {'entities': object.fimTypes, 'field_description': fieldDescription, 'fieldMetaHelp': fieldMetaHelp} %}
-                                {% endif %}
-                            </div>
+                        {% if not elements[field_name].option('is_tab_field') and not elements[field_name].option('is_custom_rendered') %}
+                            {% include 'General/Show/show-custom-field.html.twig' %}
                         {% endif %}
                     {% endfor %}
                 {% endblock %}

@@ -1,0 +1,48 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var refSettings \App\Model\ReferenceSettings #}
+<table class="table table-bordered table-condensed">
+    <tr>
+        {% set tableHeaders = ['name', 'status', 'project_start_at', 'project_leaders'] %}
+        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
+        {% if refSettings.edit.enabled %}
+            <th></th>
+        {% endif %}
+    </tr>
+    {% for child in entities %}
+        {# @var child \App\Entity\ImplementationProject #}
+        <tr>
+            <td>
+                {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
+            </td>
+            <td>
+                {% if child.status %}
+                    {{ child.status.name }}
+                {% endif %}
+            </td>
+            <td>
+                {% if child.projectStartAt %}
+                    {{ child.projectStartAt|format_datetime('dd.MM.yyyy') }}
+                {% endif %}
+            </td>
+            <td>
+                {% if child.projectLeaders|length > 0 %}
+                    {% for organisation in child.projectLeaders %}
+                        {# @var organisation \App\Entity\Organisation #}
+                        {{ organisation.name }}
+                        {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </td>
+            {% if refSettings.edit.enabled %}
+                <td>
+                    {% include 'General/Show/Partials/link-to-child.html.twig' %}
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>

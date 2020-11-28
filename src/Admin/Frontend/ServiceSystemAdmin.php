@@ -142,11 +142,9 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
             ->add('communeTypes')
             ->add('services', null, [
                 'admin_code' => ServiceAdmin::class,
-                'template' => 'General/Show/show-services.html.twig',
             ])
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
-                'template' => 'General/Show/show-solutions.html.twig',
             ]);
         //$this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('situation.subject', null, [

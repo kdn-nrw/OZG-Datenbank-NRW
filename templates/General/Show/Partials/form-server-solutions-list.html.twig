@@ -7,8 +7,7 @@ file that was distributed with this source code.
 {% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
     {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\FormServer' %}
-    {% set refFieldDesc = field_description is defined ? field_description : null %}
-    {% set refSettings = app_get_reference_settings(entityClass, refFieldDesc) %}
+    {% set refSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
     {% set showContacts = refSettings.isBackendMode %}
     <table class="table table-bordered table-condensed">
