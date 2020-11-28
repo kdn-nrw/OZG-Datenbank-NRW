@@ -27,7 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 
 class StatisticsBlock extends AbstractBlockService
@@ -42,15 +42,15 @@ class StatisticsBlock extends AbstractBlockService
     protected $adminPool;
 
     /**
-     * @param EngineInterface $templating
+     * @param Environment $twig
      * @param ProviderLoader $providerLoader
      * @param Pool $adminPool
      */
-    public function __construct(EngineInterface $templating, ProviderLoader $providerLoader, Pool $adminPool = null)
+    public function __construct(Environment $twig, ProviderLoader $providerLoader, Pool $adminPool = null)
     {
         $this->providerLoader = $providerLoader;
         $this->adminPool = $adminPool;
-        parent::__construct($templating);
+        parent::__construct($twig);
     }
 
     /**

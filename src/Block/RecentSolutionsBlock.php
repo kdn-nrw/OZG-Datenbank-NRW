@@ -21,7 +21,7 @@ use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Doctrine\Model\ManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 
 class RecentSolutionsBlock extends AbstractBlockService
@@ -36,15 +36,15 @@ class RecentSolutionsBlock extends AbstractBlockService
     protected $adminPool;
 
     /**
-     * @param EngineInterface $templating
+     * @param Environment $twig
      * @param ManagerInterface $commentManager
      * @param Pool $adminPool
      */
-    public function __construct(EngineInterface $templating, ManagerInterface $commentManager, Pool $adminPool = null)
+    public function __construct(Environment $twig, ManagerInterface $commentManager, Pool $adminPool = null)
     {
         $this->manager = $commentManager;
         $this->adminPool = $adminPool;
-        parent::__construct($templating);
+        parent::__construct($twig);
     }
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)

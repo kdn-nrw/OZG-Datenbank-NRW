@@ -26,6 +26,8 @@ use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
+use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\Form\Type\DateRangePickerType;
 use Sonata\Form\Type\DateTimeRangePickerType;
 
@@ -146,10 +148,10 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         }
         $dataType = $propertyConfiguration['data_type'];
         if ($dataType === BaseModelAnnotation::DATA_TYPE_DATE_TIME) {
-            $type = 'doctrine_orm_datetime_range';
+            $type = DateTimeRangeFilter::class;
             $filterOptions['field_type'] = DateTimeRangePickerType::class;
         } elseif ($dataType === BaseModelAnnotation::DATA_TYPE_DATE) {
-            $type = 'doctrine_orm_date_range';
+            $type = DateRangeFilter::class;
             $filterOptions['field_type'] = DateRangePickerType::class;
         } elseif (!empty($propertyConfiguration['entity_class'])) {
             if (!empty($propertyConfiguration['admin_class'])) {

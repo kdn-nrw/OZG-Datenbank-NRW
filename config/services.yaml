@@ -807,7 +807,7 @@ services:
 
   App\Block\RecentSolutionsBlock:
     arguments:
-      - '@sonata.templating'
+      - '@twig'
       - '@App\Entity\Manager\SolutionManager'
       - '@?sonata.admin.pool'
     tags:
@@ -815,7 +815,7 @@ services:
 
   App\Block\StatisticsBlock:
     arguments:
-      - '@sonata.templating'
+      - '@twig'
       - '@App\Statistics\ProviderLoader'
       - '@?sonata.admin.pool'
     tags:
