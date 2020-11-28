@@ -11,10 +11,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Admin\ContextAwareAdminInterface;
 use App\Exporter\Source\CustomEntityValueProvider;
-use App\Service\ApplicationContextHandler;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -22,21 +19,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class UpdatePropertyAccessorCache implements EventSubscriberInterface
 {
-
-    /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
-
-    /**
-     * @param CacheItemPoolInterface $cache
-     * @required
-     */
-    public function injectCache(CacheItemPoolInterface $cache): void
-    {
-        $this->cache = $cache;
-    }
-
     /**
      * @inheritDoc
      */
@@ -50,24 +32,17 @@ class UpdatePropertyAccessorCache implements EventSubscriberInterface
     }
 
     /**
-     * Delete thumbnails for uploaded images
+     * Update property value cache for entity
      *
      * @param SearchIndexEntityEvent $event
      */
-    public function updateEntityPropertyCache(SearchIndexEntityEvent $event)
+    public function updateEntityPropertyCache(SearchIndexEntityEvent $event): void
     {
         $entity = $event->getObject();
         $admin = $event->getAdmin();
-        if ($admin instanceof ContextAwareAdminInterface) {
-            // Update the export value cache
-            $exportFields = $admin->getExportFields();
-            $customValueProvider = new CustomEntityValueProvider(
-                $exportFields,
-                $this->cache,
-                ApplicationContextHandler::getDefaultAdminApplicationContext($admin),
-                'd.m.Y H:i:s'
-            );
-            $customValueProvider->getCacheItemData($entity, true);
+        $dataSourceIterator = $admin->getDataSourceIterator();
+        if ($dataSourceIterator instanceof CustomEntityValueProvider) {
+            $dataSourceIterator->getCacheItemData($entity, true);
         }
     }
 }
