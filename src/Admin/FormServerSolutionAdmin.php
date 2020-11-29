@@ -29,9 +29,11 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
         $hideFields = $this->getFormHideFields();
         if (!in_array('formServer', $hideFields, false)) {
             $formMapper
-                ->add('formServer', ModelAutocompleteType::class, [
-                    'property' => 'name',
-                    'required' => true,
+                ->add('formServer', ModelType::class, [
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'choice_translation_domain' => false,
                 ], [
                     'admin_code' => FormServerAdmin::class
                 ]);

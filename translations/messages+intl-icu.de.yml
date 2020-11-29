@@ -51,6 +51,11 @@ app:
       modified_by: Geändert von
       references: Referenzen
       name: Bezeichnung
+    recent_activities:
+      block_title: Meine Aktivitäten
+      table_header_name: Titel
+      my_commune: Meine Kommune
+      my_model_region: Meine Modellregion
   object_references:
     headline: Referenzen auf dieses Objekt
     delete_error: Der Datensatz kann nicht gelöscht werden, da es andere Datnsätze gibt, die von diesem Datensatz abhängig sind. Bitte prüfen Sie die rot markierten Datensätze.

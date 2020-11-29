@@ -813,6 +813,13 @@ services:
     tags:
       - { name: sonata.block }
 
+  App\Block\RecentActivitiesBlock:
+    arguments:
+      - '@twig'
+      - '@Symfony\Component\Security\Core\Security'
+    tags:
+      - { name: sonata.block }
+
   App\Block\StatisticsBlock:
     arguments:
       - '@twig'

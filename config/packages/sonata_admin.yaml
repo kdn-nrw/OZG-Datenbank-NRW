@@ -52,14 +52,22 @@ sonata_admin:
             -
                 position: top
                 type: App\Block\RecentSolutionsBlock
-                class: 'col-xs-12'
+                class: 'col-xs-12 col-lg-8'
                 settings:
                     title: 'app.solution.recent_solutions'
                     translation_domain: 'messages'
                     mode: 'admin'
                     code:  App\Admin\SolutionAdmin
             -
-                class:    col-xs-12 col-sm-6 col-lg-4
+                position: top
+                type: App\Block\RecentActivitiesBlock
+                class: 'col-xs-12 col-lg-4'
+                settings:
+                    title: 'app.common.recent_activities.block_title'
+                    translation_domain: 'messages'
+                    mode: 'admin'
+            -
+                class:    clear-left-md col-xs-12 col-sm-6 col-lg-4
                 position: top                        # zone in the dashboard
                 type:     sonata.admin.block.stats   # block id
                 settings:

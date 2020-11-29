@@ -47,10 +47,17 @@ class RecentSolutionsBlock extends AbstractBlockService
         parent::__construct($twig);
     }
 
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    /**
+     * Creates the block content
+     *
+     * @param BlockContextInterface $blockContext
+     * @param Response|null $response
+     * @return Response
+     */
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null)
     {
-        $mode = $blockContext->getSetting('mode');
-        $isAdminMode = 'admin' === $blockContext->getSetting('mode');
+        $mode = (string) $blockContext->getSetting('mode');
+        $isAdminMode = 'admin' === $mode;
         $admin = $this->adminPool->getAdminByAdminCode($blockContext->getSetting('code'));
         $criteria = [
             'mode' => $mode,
@@ -63,7 +70,7 @@ class RecentSolutionsBlock extends AbstractBlockService
             'admin' => $admin,
             'isAdminMode' => $isAdminMode,
         ];
-        if ('admin' === $blockContext->getSetting('mode')) {
+        if ($isAdminMode) {
             return $this->renderPrivateResponse($blockContext->getTemplate(), $parameters, $response);
         }
         return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);

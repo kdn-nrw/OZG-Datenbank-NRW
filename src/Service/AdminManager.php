@@ -25,12 +25,8 @@ use Symfony\Contracts\Cache\ItemInterface;
 class AdminManager
 {
     use InjectApplicationContextHandlerTrait;
+    use InjectCacheTrait;
     use InjectBaseAnnotationReaderTrait;
-
-    /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
 
     /**
      * @var Pool
@@ -47,15 +43,8 @@ class AdminManager
     }
 
     /**
-     * @param CacheItemPoolInterface $cache
-     * @required
-     */
-    public function injectCache(CacheItemPoolInterface $cache): void
-    {
-        $this->cache = $cache;
-    }
-
-    /**
+     * This is public so it can be used in admin instances
+     *
      * @return CacheItemPoolInterface
      */
     public function getCache(): CacheItemPoolInterface
@@ -100,7 +89,7 @@ class AdminManager
         $context = $this->applicationContextHandler->getApplicationContext();
         $cacheKey = $context . '-' . $key . '-' . $property;
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($entityOrClass, $property) {
-            $item->expiresAfter(86400);
+            $item->expiresAfter(604800);
             $entityClass = is_object($entityOrClass) ? get_class($entityOrClass) : $entityOrClass;
             $propertyParts = explode('.', $property);
             $isPath = count($propertyParts) > 1;
