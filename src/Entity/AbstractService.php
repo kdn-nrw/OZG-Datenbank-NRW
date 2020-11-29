@@ -117,7 +117,7 @@ abstract class AbstractService extends BaseEntity implements BlameableInterface
     /**
      * @return Jurisdiction[]|Collection
      */
-    abstract public function getRuleAuthorities();
+    abstract public function getRuleAuthorities(): Collection;
 
 
     /**

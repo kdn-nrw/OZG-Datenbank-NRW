@@ -580,8 +580,11 @@ class ServiceSystem extends AbstractService implements SluggableInterface, HasMe
     /**
      * @return Jurisdiction[]|Collection
      */
-    public function getRuleAuthorities()
+    public function getRuleAuthorities(): Collection
     {
+        if (null === $this->ruleAuthorities) {
+            $this->ruleAuthorities = new ArrayCollection();
+        }
         return $this->ruleAuthorities;
     }
 

@@ -940,8 +940,11 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     /**
      * @return Jurisdiction[]|Collection
      */
-    public function getRuleAuthorities()
+    public function getRuleAuthorities(): Collection
     {
+        if (null === $this->ruleAuthorities) {
+            $this->ruleAuthorities = new ArrayCollection();
+        }
         if ($this->isInheritRuleAuthorities() && null !== $serviceSystem = $this->getServiceSystem()) {
             $ssRuleAuthorities = $serviceSystem->getRuleAuthorities();
             foreach ($ssRuleAuthorities as $ruleAuthority) {
