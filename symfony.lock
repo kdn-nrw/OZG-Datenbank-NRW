@@ -1,6 +1,21 @@
 {
+    "antishov/doctrine-extensions-bundle": {
+        "version": "1.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.4",
+            "ref": "6c1ceb662f8997085f739cd089bfbef67f245983"
+        },
+        "files": [
+            "config/packages/stof_doctrine_extensions.yaml"
+        ]
+    },
     "beberlei/doctrineextensions": {
         "version": "v1.2.8"
+    },
+    "behat/transliterator": {
+        "version": "v1.3.0"
     },
     "composer/installers": {
         "version": "v1.6.0"
@@ -96,6 +111,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "doctrine/sql-formatter": {
+        "version": "1.1.1"
+    },
     "egulias/email-validator": {
         "version": "2.1.11"
     },
@@ -116,6 +134,12 @@
     },
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
+    },
+    "gedmo/doctrine-extensions": {
+        "version": "v2.4.42"
+    },
+    "imagine/imagine": {
+        "version": "1.2.4"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
@@ -140,11 +164,27 @@
             "config/packages/prod/jms_serializer.yaml"
         ]
     },
+    "knplabs/knp-markdown-bundle": {
+        "version": "1.8.1"
+    },
     "knplabs/knp-menu": {
         "version": "2.6.0"
     },
     "knplabs/knp-menu-bundle": {
         "version": "v2.3.0"
+    },
+    "liip/imagine-bundle": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.8",
+            "ref": "5a5bdc2d0e2533ed6935d5ae562f2b318a8fc1ee"
+        },
+        "files": [
+            "config/packages/liip_imagine.yaml",
+            "config/routes/liip_imagine.yaml"
+        ]
     },
     "maennchen/zipstream-php": {
         "version": "2.1.0"
@@ -154,6 +194,9 @@
     },
     "markbaker/matrix": {
         "version": "1.2.0"
+    },
+    "michelf/php-markdown": {
+        "version": "1.9.0"
     },
     "mindbase/admin-bundle": {
         "version": "dev-master"
@@ -280,6 +323,9 @@
     "sonata-project/form-extensions": {
         "version": "0.1.1"
     },
+    "sonata-project/formatter-bundle": {
+        "version": "4.3.0"
+    },
     "sonata-project/intl-bundle": {
         "version": "2.7.0"
     },
@@ -361,6 +407,9 @@
     },
     "symfony/dotenv": {
         "version": "v4.2.4"
+    },
+    "symfony/error-handler": {
+        "version": "v4.4.16"
     },
     "symfony/event-dispatcher": {
         "version": "v4.2.4"
@@ -676,6 +725,9 @@
     },
     "twig/intl-extra": {
         "version": "v3.0.0"
+    },
+    "twig/string-extra": {
+        "version": "v3.1.1"
     },
     "twig/twig": {
         "version": "v2.7.2"
