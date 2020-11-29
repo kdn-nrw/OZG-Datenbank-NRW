@@ -21,11 +21,6 @@ class ReferenceSettings
     protected $admin;
 
     /**
-     * @var bool
-     */
-    protected $isBackendMode = false;
-
-    /**
      * @var array
      */
     protected $show = [
@@ -71,22 +66,6 @@ class ReferenceSettings
     public function setAdmin(AbstractAdmin $admin): void
     {
         $this->admin = $admin;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBackendMode(): bool
-    {
-        return $this->isBackendMode;
-    }
-
-    /**
-     * @param bool $isBackendMode
-     */
-    public function setIsBackendMode(bool $isBackendMode): void
-    {
-        $this->isBackendMode = $isBackendMode;
     }
 
     /**

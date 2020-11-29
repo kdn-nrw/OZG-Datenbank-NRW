@@ -17,6 +17,7 @@ use App\Api\Consumer\InjectApiManagerTrait;
 use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Service;
 use App\Entity\StateGroup\Commune;
+use App\Service\InjectApplicationContextHandlerTrait;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -24,6 +25,8 @@ use Twig\TwigFunction;
 class ApiQueryExtension extends AbstractExtension
 {
     use InjectApiManagerTrait;
+
+    use InjectApplicationContextHandlerTrait;
 
     /**
      * Store the accessibility state for the API keys
@@ -54,42 +57,16 @@ class ApiQueryExtension extends AbstractExtension
     }
 
     /**
-     * Determine if the api is accessible depending on the mode (backend or frontend)
-     * @param string $apiIdentifier The api identifier
-     * @param bool $isBackendMode True for backend, false for frontend
-     * @return bool
-     */
-    private function hasGeneralApiAccess(string $apiIdentifier, bool $isBackendMode): bool
-    {
-        $internalKey = $apiIdentifier . '_' . ($isBackendMode ? 'B' : 'F');
-        if (!array_key_exists($internalKey, $this->apiAccessStorage)) {
-            if ($isBackendMode) {
-                $hasAccess = $this->authorizationChecker->isGranted('ROLE_VSM');
-            } else {
-                try {
-                    $consumer = $this->apiManager->getConfiguredConsumer($apiIdentifier, null, false);
-                    $hasAccess = null !== $consumer;
-                } catch (ApiConsumerNotFoundException $e) {
-                    $hasAccess = false;
-                }
-            }
-            $this->apiAccessStorage[$internalKey] = $hasAccess;
-        }
-        return $this->apiAccessStorage[$internalKey];
-    }
-
-    /**
      * Returns the query parameter string for api calls
      *
      * @param string $apiIdentifier The api identifier
      * @param Commune|Service $parent
      * @param Service|null $service
-     * @param bool $isBackendMode
      * @return array|null
      */
-    public function getApiArguments(string $apiIdentifier, $parent, ?Service $service, bool $isBackendMode): ?array
+    public function getApiArguments(string $apiIdentifier, $parent, ?Service $service): ?array
     {
-        if ($this->hasGeneralApiAccess($apiIdentifier, $isBackendMode)) {
+        if ($this->hasGeneralApiAccess($apiIdentifier)) {
             $query = null;
             if ($apiIdentifier === ApiManager::API_KEY_ZU_FI) {
                 $query = null;
@@ -106,6 +83,31 @@ class ApiQueryExtension extends AbstractExtension
             }
         }
         return null;
+    }
+
+    /**
+     * Determine if the api is accessible depending on the mode (backend or frontend)
+     * @param string $apiIdentifier The api identifier
+     * @return bool
+     */
+    private function hasGeneralApiAccess(string $apiIdentifier): bool
+    {
+        $isBackendMode = $this->applicationContextHandler->isBackend();
+        $internalKey = $apiIdentifier . '_' . ($isBackendMode ? 'B' : 'F');
+        if (!array_key_exists($internalKey, $this->apiAccessStorage)) {
+            if ($isBackendMode) {
+                $hasAccess = $this->authorizationChecker->isGranted('ROLE_VSM');
+            } else {
+                try {
+                    $consumer = $this->apiManager->getConfiguredConsumer($apiIdentifier, null, false);
+                    $hasAccess = null !== $consumer;
+                } catch (ApiConsumerNotFoundException $e) {
+                    $hasAccess = false;
+                }
+            }
+            $this->apiAccessStorage[$internalKey] = $hasAccess;
+        }
+        return $this->apiAccessStorage[$internalKey];
     }
 
     /**

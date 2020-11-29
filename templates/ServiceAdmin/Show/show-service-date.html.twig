@@ -4,14 +4,12 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-{% if isBackendMode is not defined %}
-    {% set isBackendMode = app_is_backend() %}
-{% endif %}
 {% set date = app_format_service_date(object, child) %}
 {% set apiKey = constant('App\\Api\\Consumer\\ApiManager::API_KEY_ZU_FI') %}
-{% set apiArguments = app_get_api_arguments(apiKey, object, child, isBackendMode) %}
+{% set apiArguments = app_get_api_arguments(apiKey, object, child) %}
 {{ date }}
 {% if date|length > 1 and apiArguments is not null %}
+    {% set isBackendMode = app_is_backend() %}
     {% if isBackendMode %}
         <a href="{{ path('app_vsm_api_index', apiArguments) }}" target="_blank">
             <i class="fa fa-search" aria-hidden="true"></i>

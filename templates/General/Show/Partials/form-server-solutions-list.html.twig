@@ -9,8 +9,8 @@ file that was distributed with this source code.
     {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\FormServer' %}
     {% set refSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
-    {% set showContacts = refSettings.isBackendMode %}
-    <table class="table table-bordered table-condensed">
+    {% set showContacts = app_is_backend() %}
+    <table class="table table-bordered table-striped table-condensed">
         <tr>
             {% include 'General/Show/Table/table-head-form-server-solutions.html.twig' %}
             {% if refSettings.edit.enabled %}
@@ -28,6 +28,7 @@ file that was distributed with this source code.
                     {% set editObjectId = child.formServer.id %}
                     {% include 'General/Show/Table/table-row-cells-form-servers.html.twig' with {'child': child.formServer} %}
                 {% else %}
+                    {% set editObjectId = null %}
                     <td>
                     </td>
                     <td>

@@ -6,7 +6,7 @@ file that was distributed with this source code.
 #}
 
 {# @var child \App\Entity\Solution #}
-{% set createShowLink = refSettings.show.enabled and (refSettings.isBackendMode or child.isPublished) %}
+{% set createShowLink = refSettings.show.enabled and (app_is_backend() or child.isPublished) %}
 <td>
     {% include 'General/Show/Partials/link-child-name-show.html.twig' with {'displayName': child.displayName} %}
 </td>

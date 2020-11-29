@@ -9,8 +9,8 @@ file that was distributed with this source code.
     {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\Service' %}
     {% set refSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
-    {% set showContacts = refSettings.isBackendMode %}
-    <table class="table table-bordered table-condensed">
+    {% set showContacts = app_is_backend() %}
+    <table class="table table-bordered table-striped table-condensed">
         <tr>
             {% if showSolution %}
                 {% include 'General/Show/Table/table-head-solutions.html.twig' %}
