@@ -132,12 +132,13 @@ class RecentActivitiesBlock extends AbstractBlockService
                 ];
             }
         }
+        /*
         if (count($items) < $limit) {
             $this->addShowEntries($user, $limit, $items);
         }
         if (count($items) < $limit) {
             $this->addDefaultEntries($user, $limit, $items);
-        }
+        }*/
         return $items;
     }
 

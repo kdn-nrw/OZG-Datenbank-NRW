@@ -76,6 +76,20 @@ class LogEntry extends BaseEntity
     protected $user;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $title;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $titlePrefix;
+
+    /**
      * @return string|null
      */
     public function getRoute(): ?string
@@ -190,5 +204,36 @@ class LogEntry extends BaseEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string|null $title
+     */
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTitlePrefix(): ?string
+    {
+        return $this->titlePrefix;
+    }
+
+    /**
+     * @param string|null $titlePrefix
+     */
+    public function setTitlePrefix(?string $titlePrefix): void
+    {
+        $this->titlePrefix = $titlePrefix;
+    }
 
 }

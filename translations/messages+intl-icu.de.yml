@@ -52,7 +52,7 @@ app:
       references: Referenzen
       name: Bezeichnung
     recent_activities:
-      block_title: Meine Aktivitäten
+      block_title: Meine Daten
       table_header_name: Titel
       my_commune: Meine Kommune
       my_model_region: Meine Modellregion

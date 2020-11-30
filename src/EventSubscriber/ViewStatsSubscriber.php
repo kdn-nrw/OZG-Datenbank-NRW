@@ -93,9 +93,9 @@ class ViewStatsSubscriber implements EventSubscriberInterface
     {
         $route = $request->attributes->get('_route');
         $logEntry = new LogEntry();
-        if (null !== $this->security && null !== $user = $this->security->getUser()) {
+        /*if (null !== $this->security && null !== $user = $this->security->getUser()) {
             $logEntry->setUser($user);
-        }
+        }*/
         $logEntry->setPathInfo($request->getPathInfo());
         $logEntry->setRequestMethod($request->getMethod());
         $logEntry->setQueryParameters($request->query->all());
