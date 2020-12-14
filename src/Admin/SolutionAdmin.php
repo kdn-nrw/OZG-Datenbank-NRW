@@ -20,6 +20,7 @@ use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Status;
+use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Model\ExportSettings;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -334,10 +335,13 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     public function getExportSettings(): ExportSettings
     {
         $settings = parent::getExportSettings();
+        $customServiceFormatter = new ServiceSolutionValueFormatter();
+        $customServiceFormatter->setDisplayType(ServiceSolutionValueFormatter::DISPLAY_SERVICE_KEY);
         $settings->setAdditionFields([
             // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions', 'serviceProvider',
             'customProvider', 'name', 'maturity', 'url', 'status',
         ]);
+        $settings->addCustomPropertyValueFormatter('serviceSolutions', $customServiceFormatter);
         return $settings;
     }
 

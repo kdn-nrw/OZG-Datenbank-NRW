@@ -21,7 +21,7 @@ class ServiceFimValueFormatter implements CustomPropertyValueFormatterInterface
     /**
      * @var string[]|array
      */
-    public $fimStatusTranslations = [];
+    protected $fimStatusTranslations = [];
 
     /**
      * @param array|string[] $fimStatusTranslations

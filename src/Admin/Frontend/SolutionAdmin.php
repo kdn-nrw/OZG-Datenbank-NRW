@@ -18,6 +18,7 @@ use App\Datagrid\CustomDatagrid;
 use App\Entity\Solution;
 use App\Entity\Status;
 use App\Entity\Subject;
+use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -168,10 +169,16 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     public function getExportSettings(): ExportSettings
     {
         $settings = parent::getExportSettings();
+        $customServiceFormatter = new ServiceSolutionValueFormatter();
+        $customServiceFormatter->setDisplayType(ServiceSolutionValueFormatter::DISPLAY_SERVICE_KEY);
         $settings->setAdditionFields([
             // 'communes', 'serviceSystems', 'serviceSystems.jurisdictions', 'serviceProviders',
+            'publishedServiceSolutions',
             'customProvider', 'name', 'maturity', 'url', 'status',
         ]);
+        $settings->addExcludeFields(['serviceSolutions']);
+        $settings->addCustomLabel('publishedServiceSolutions', $this->trans('app.solution.entity.service_solutions'));
+        $settings->addCustomPropertyValueFormatter('publishedServiceSolutions', $customServiceFormatter);
         return $settings;
     }
 
