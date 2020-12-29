@@ -23,9 +23,12 @@ class DefaultController extends AbstractController
 
     public function indexAction()
     {
+        $redirectRoute = 'sonata_admin_dashboard';
+        if (!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'ozg.kdn.de') {
+            $redirectRoute = 'frontend_app_service_list';
+        }
+        $redirectParams = [];
         if ((null !== $user = $this->getUser()) && $this->isGranted('ROLE_SHOW_BACKEND')) {
-            $redirectRoute = 'sonata_admin_dashboard';
-            $redirectParams = [];
             if ($user instanceof User) {
                 $rolePrefix = 'ROLE_APP\\ADMIN\\STATEGROUP\\COMMUNEADMIN_';
                 if (($this->isGranted($rolePrefix . 'ALL') || $this->isGranted($rolePrefix . 'VIEW'))
@@ -41,8 +44,7 @@ class DefaultController extends AbstractController
                     }
                 }
             }
-            return $this->redirectToRoute($redirectRoute, $redirectParams, 302);
         }
-        return $this->redirectToRoute('frontend_app_service_list', [], 302);
+        return $this->redirectToRoute($redirectRoute, $redirectParams, 302);
     }
 }

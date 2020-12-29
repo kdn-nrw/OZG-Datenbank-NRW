@@ -151,6 +151,12 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
                 'dp_max_date' => $now->format('c'),
                 'required' => false,
             ]);
+        $formMapper
+            ->end()
+            ->end();
+        $formMapper
+            ->tab('User')
+            ->with('app.user.groups.references', ['class' => 'col-md-6']);
         $formMapper->add('communes', ModelType::class,
             [
                 'label' => 'app.user.entity.communes',

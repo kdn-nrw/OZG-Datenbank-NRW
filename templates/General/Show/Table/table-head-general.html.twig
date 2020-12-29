@@ -4,11 +4,21 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-{% for field in tableHeaders %}
-    {% set fieldMeta = app_object_property_meta_data(refSettings.entityClass, field) %}
-    <th{% if fieldMeta is not null and fieldMeta.customLabel is not empty %} title="{{ fieldMeta.customLabel|raw|replace({'"': "'"}) }}"{% endif %}>
-        {# @var fieldMeta \App\Entity\MetaData\MetaItemProperty #}
-        {{ (labelPrefix~field)|trans }}
-        {% include 'MetaData/help-popover.html.twig' with {'fieldMeta': fieldMeta, 'propertyKey': field} %}
-    </th>
-{% endfor %}
+{% if refSettings is defined and refSettings.entityClass %}
+    {% for field in tableHeaders %}
+        {% set fieldMeta = app_object_property_meta_data(refSettings.entityClass, field) %}
+        {% if fieldMeta is not null %}
+            {# @var fieldMeta \App\Entity\MetaData\MetaItemProperty #}
+            <th{% if fieldMeta.customLabel is not empty %} title="{{ fieldMeta.customLabel|raw|replace({'"': "'"}) }}"{% endif %}>
+                {{ (labelPrefix~field)|trans }}
+                {% include 'MetaData/help-popover.html.twig' with {'fieldMeta': fieldMeta, 'propertyKey': field} %}
+            </th>
+        {% else %}
+            <th>{{ (labelPrefix~field)|trans }}</th>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% for field in tableHeaders %}
+        <th>{{ (labelPrefix~field)|trans }}</th>
+    {% endfor %}
+{% endif %}

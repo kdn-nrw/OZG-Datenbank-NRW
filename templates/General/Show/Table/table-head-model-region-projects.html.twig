@@ -7,7 +7,9 @@ file that was distributed with this source code.
 
 <th>
     {{ 'app.model_region_project.list'|trans }}
-    {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': refSettings.entityClass, 'propertyKey': 'name', 'placement': 'top'} %}
+    {% if refSettings.entityClass %}
+        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': refSettings.entityClass, 'propertyKey': 'name', 'placement': 'top'} %}
+    {% endif %}
 </th>
 {% set tableHeaders = ['project_start_at', 'project_end_at', 'organisations'] %}
 {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}

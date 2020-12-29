@@ -876,7 +876,7 @@ app:
       inherit_commune_types: Größenklassen von OZG-Leistung übernehmen
       inherit_commune_types.yes: Größenklassen der Leika-Leistung mit Größenklassen der OZG-Leistung erweitern
       inherit_commune_types.no: Größenklassen der OZG-Leistung nicht übernehmen
-      service_created_at: Datum
+      service_created_at: VSM Letzte Änderung
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister

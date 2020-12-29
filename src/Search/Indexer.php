@@ -365,6 +365,7 @@ class Indexer extends AbstractSearchService
             $minReIndexTimestamp = strtotime(self::INDEX_THRESHOLD);
             $lastModifiedTimestamp = null !== $modifiedAt ? $modifiedAt->getTimestamp() : 0;
             $itemNeedsReindex = $lastIndexTimestamp < $minReIndexTimestamp || ($lastModifiedTimestamp > $lastIndexTimestamp);
+            //echo "Last index time of record ".$entity->getId()." was ".date('Y-m-d H:i:s', $lastIndexTimestamp)."; Reindex? ".($itemNeedsReindex ? 'Y' : 'N')." \n";
             /*if ($itemNeedsReindex) {
                 echo 'Indexing ' . $entityClass . ':' . $entity->getId()
                     . '; force index after: ' . date('d.m.Y H:i:s', $minReIndexTimestamp)

@@ -19,6 +19,7 @@ use App\Entity\Service;
 use App\Entity\StateGroup\Commune;
 use App\Service\InjectApplicationContextHandlerTrait;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -96,7 +97,12 @@ class ApiQueryExtension extends AbstractExtension
         $internalKey = $apiIdentifier . '_' . ($isBackendMode ? 'B' : 'F');
         if (!array_key_exists($internalKey, $this->apiAccessStorage)) {
             if ($isBackendMode) {
-                $hasAccess = $this->authorizationChecker->isGranted('ROLE_VSM');
+                try {
+                    $hasAccess = $this->authorizationChecker->isGranted('ROLE_VSM');
+                // Catch exception on console: The token storage contains no authentication token.
+                } catch (AuthenticationCredentialsNotFoundException $e) {
+                    $hasAccess = false;
+                }
             } else {
                 try {
                     $consumer = $this->apiManager->getConfiguredConsumer($apiIdentifier, null, false);

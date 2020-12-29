@@ -90,15 +90,28 @@ class ZuFiConsumer extends AbstractApiConsumer
         $em = $this->getEntityManager();
         $em->getConfiguration()->setSQLLogger(null);
         $repository = $em->getRepository(Commune::class);
-        $communes = $repository->findAll();
+        $queryBuilder = $repository->createQueryBuilder('c');
+        $queryBuilder->select('c.id')
+            ->orderBy('c.id', 'ASC');
+        $result = $queryBuilder->getQuery()->getArrayResult();
+        if (!empty($result)) {
+            $idList = array_column($result, 'id');
+        } else {
+            $idList = [0];
+        }
         // Randomize order of communes
-        shuffle($communes);
+        shuffle($idList);
         $totalImportRowCount = 0;
-        foreach ($communes as $commune) {
-            /** @var Commune $commune */
-            if ($commune->getRegionalKey()) {
+        foreach ($idList as $id) {
+            $commune = $repository->find($id);
+            /** @var Commune|null $commune */
+            if (null !== $commune && $commune->getRegionalKey()) {
                 $totalImportRowCount += $this->importServiceResults($limit, null, $commune, $serviceKeys);
                 ++$totalImportRowCount;
+                if ($totalImportRowCount > $limit) {
+                    break;
+                }
+                $em->clear();
             }
         }
         return $totalImportRowCount;

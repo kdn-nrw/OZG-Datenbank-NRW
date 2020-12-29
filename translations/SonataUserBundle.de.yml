@@ -11,6 +11,8 @@ app:
     object_name: Benutzer
     list: Benutzer
     create: Benutzer anlegen
+    groups:
+      references: Referenzen
     entity:
       firstname: Vorname
       lastname: Nachname

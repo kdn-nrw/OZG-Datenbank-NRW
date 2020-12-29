@@ -146,6 +146,7 @@ class SearchExtension extends AbstractAdminExtension
                 'label' => 'app.common.full_text_search',
                 'field_type' => SearchType::class,
                 'show_filter' => true,
+                'global_search' => true,
             ]);
     }
 }

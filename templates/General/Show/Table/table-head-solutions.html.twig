@@ -10,6 +10,8 @@ file that was distributed with this source code.
 {% if showContacts %}
 <th>
     {{ 'app.solution.entity.solution_contacts'|trans }}
-    {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': refSettings.entityClass, 'propertyKey': 'solution_contacts'} %}
+    {% if refSettings.entityClass %}
+        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': refSettings.entityClass, 'propertyKey': 'solution_contacts'} %}
+    {% endif %}
 </th>
 {% endif %}
