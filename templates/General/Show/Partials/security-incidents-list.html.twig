@@ -1,0 +1,103 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var refSettings \App\Model\ReferenceSettings #}
+<table class="table table-bordered table-striped table-condensed">
+    {% set tableHeaders = ['created_by', 'created_at', 'occurred_on', 'solved_on', 'subject_type', 'extent', 'method'] %}
+    {% set colCount = tableHeaders|length %}
+    <tr>
+        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
+        {% if refSettings.edit.enabled %}
+            <th></th>
+            {% set colCount = colCount + 1 %}
+        {% endif %}
+    </tr>
+    {% for child in entities %}
+        {# @var child \App\Entity\StateGroup\SecurityIncident #}
+        <tr>
+            <td>
+                {% if child.createdBy %}
+                    {% set user = child.createdBy %}
+                    {# @var user \App\Entity\User #}
+                    {{ user.fullname }} ({{ user.email }})
+                {% endif %}
+            </td>
+            <td>
+                {% if child.createdAt %}
+                    {{ child.createdAt|format_datetime('dd.MM.yyyy') }}
+                {% endif %}
+            </td>
+            <td>
+                {% if child.occurredOn %}
+                    {{ child.occurredOn|format_datetime('dd.MM.yyyy') }}
+                {% endif %}
+            </td>
+            <td>
+                {% if child.solvedOn %}
+                    {{ child.solvedOn|format_datetime('dd.MM.yyyy') }}
+                {% endif %}
+            </td>
+            <td>
+                {% if child.subjectType %}
+                    {{ ('app.security_incident.entity.subject_type_choices.' ~ child.subjectType)|trans }}
+                {% endif %}
+            </td>
+            <td>
+                {% if child.extent %}
+                    {{ ('app.security_incident.entity.extent_choices.' ~ child.extent)|trans }}
+                {% endif %}
+            </td>
+            <td>
+                {% if child.method %}
+                    {{ ('app.security_incident.entity.method_choices.' ~ child.method)|trans }}
+                {% endif %}
+            </td>
+            {% if refSettings.edit.enabled %}
+                <td>
+                    {% include 'General/Show/Partials/link-to-child.html.twig' %}
+                </td>
+            {% endif %}
+        </tr>
+        {% if child.description or child.affected %}
+            <tr>
+                <td colspan="{{ colCount }}" class="child-table-container">
+                    <dl class="dl-horizontal">
+                        {% if child.description %}
+                        <dt>{{ 'app.security_incident.entity.description'|trans }}</dt>
+                        <dd>
+                            {{ child.description|nl2br }}
+                        </dd>
+                        {% endif %}
+                        {% if child.affected %}
+                            <dt>{{ 'app.security_incident.entity.affected'|trans }}</dt>
+                            <dd>
+                                {{ child.affected|nl2br }}
+                            </dd>
+                        {% endif %}
+                        {% if child.cause %}
+                            <dt>{{ 'app.security_incident.entity.cause'|trans }}</dt>
+                            <dd>
+                                {{ child.cause|nl2br }}
+                            </dd>
+                        {% endif %}
+                        {% if child.measures %}
+                            <dt>{{ 'app.security_incident.entity.measures'|trans }}</dt>
+                            <dd>
+                                {{ child.measures|nl2br }}
+                            </dd>
+                        {% endif %}
+                        {% if child.informedParties %}
+                            <dt>{{ 'app.security_incident.entity.informed_parties'|trans }}</dt>
+                            <dd>
+                                {{ child.informedParties|nl2br }}
+                            </dd>
+                        {% endif %}
+                    </dl>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>

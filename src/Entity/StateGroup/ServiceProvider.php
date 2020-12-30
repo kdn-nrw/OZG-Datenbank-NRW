@@ -83,11 +83,20 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      */
     private $specializedProcedures;
 
+    /**
+     * One ServiceProvider has Many SecurityIncident.
+     * @var SecurityIncident[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\StateGroup\SecurityIncident", mappedBy="serviceProvider", cascade={"all"}, orphanRemoval=true)
+     */
+    private $securityIncidents;
+
     public function __construct()
     {
         $this->communes = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
+        $this->securityIncidents = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
     }
 
@@ -284,6 +293,49 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     public function setSpecializedProcedures($specializedProcedures): void
     {
         $this->specializedProcedures = $specializedProcedures;
+    }
+
+    /**
+     * @param SecurityIncident $securityIncident
+     * @return self
+     */
+    public function addSecurityIncident(SecurityIncident $securityIncident): self
+    {
+        if (!$this->securityIncidents->contains($securityIncident)) {
+            $this->securityIncidents->add($securityIncident);
+            $securityIncident->setServiceProvider($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param SecurityIncident $securityIncident
+     * @return self
+     */
+    public function removeSecurityIncident($securityIncident): self
+    {
+        if ($this->securityIncidents->contains($securityIncident)) {
+            $this->securityIncidents->removeElement($securityIncident);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return SecurityIncident[]|Collection
+     */
+    public function getSecurityIncidents()
+    {
+        return $this->securityIncidents;
+    }
+
+    /**
+     * @param SecurityIncident[]|Collection $securityIncidents
+     */
+    public function setSecurityIncidents($securityIncidents): void
+    {
+        $this->securityIncidents = $securityIncidents;
     }
 
     /**

@@ -18,3 +18,5 @@ app:
       lastname: Nachname
       communes: Kommunen
       model_regions: Modellregionen
+      organisation: Organisation
+      service_providers: IT Dienstleister

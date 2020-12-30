@@ -13,6 +13,7 @@ namespace App\Admin;
 
 
 use App\Admin\StateGroup\CommuneAdmin;
+use App\Admin\StateGroup\ServiceProviderAdmin;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ModelRegionTrait;
 use DateTime;
@@ -72,6 +73,24 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
             null,
             ['expanded' => false, 'multiple' => true]
         );
+        $filter->add('serviceProviders',
+            null, [
+                'label' => 'app.user.entity.service_providers',
+                'admin_code' => ServiceProviderAdmin::class,
+                'translation_domain' => 'messages',
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
+        $filter->add('organisation',
+            null, [
+                'label' => 'app.user.entity.organisation',
+                'admin_code' => OrganisationAdmin::class,
+                'translation_domain' => 'messages',
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
+        );
     }
 
     /**
@@ -119,6 +138,9 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
 
         $showMapper->removeGroup('Social');
         $showMapper->remove('biography');
+        $showMapper
+            ->with('Profile')
+            ->add('organisation');
 //        $showMapper->remove('timezone');
 //        $showMapper->remove('website');
 //        $showMapper->remove('phone');
@@ -157,6 +179,13 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
         $formMapper
             ->tab('User')
             ->with('app.user.groups.references', ['class' => 'col-md-6']);
+        $formMapper->add('organisation', ModelType::class, [
+            'label' => 'app.user.entity.organisation',
+            'btn_add' => false,
+            'placeholder' => '',
+            'required' => false,
+            'choice_translation_domain' => false,
+        ]);
         $formMapper->add('communes', ModelType::class,
             [
                 'label' => 'app.user.entity.communes',
@@ -181,6 +210,17 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
             'choice_translation_domain' => false,
         ], [
             'admin_code' => ModelRegionAdmin::class,
+        ]);
+        $formMapper->add('serviceProviders', ModelType::class, [
+            'label' => 'app.user.entity.service_providers',
+            'btn_add' => false,
+            'placeholder' => '',
+            'required' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'choice_translation_domain' => false,
+        ], [
+            'admin_code' => ServiceProviderAdmin::class,
         ]);
         $formMapper
             ->end()

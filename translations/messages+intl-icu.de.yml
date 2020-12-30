@@ -56,6 +56,7 @@ app:
       table_header_name: Titel
       my_commune: Meine Kommune
       my_model_region: Meine Modellregion
+      my_service_provider: Mein IT Dienstleister
   object_references:
     headline: Referenzen auf dieses Objekt
     delete_error: Der Datensatz kann nicht gelöscht werden, da es andere Datnsätze gibt, die von diesem Datensatz abhängig sind. Bitte prüfen Sie die rot markierten Datensätze.
@@ -801,6 +802,54 @@ app:
       save_success: Die Suche wurde erfolgreich gespeichert
       delete_success: Die Suche wurde erfolgreich gelöscht
       delete_confirm: Wollen Sie die gespeicherte Suche wirklich löschen?
+  security_incident:
+    object_name: Sicherheitsvorfall
+    list: Sicherheitsvorfälle
+    create: Sicherheitsvorfall anlegen
+    entity:
+      created_by: Erstellt von
+      modified_by: Geändert von
+      created_at: Erstellt am
+      service_provider: IT Dienstleister
+      occurred_on: 'Aufgetreten am'
+      solved_on: 'Gelöst am'
+      subject_type: Themengebiet
+      subject_type_choices:
+        1: Angriff
+        2: Verlust
+        3: Diebstahl
+        4: Virus
+        9: andere...
+      subject_type_help: 'Bitte wählen Sie aus den vorgegebenen Themangebieten zu denen der Vorfall am ehesten passt. Sollte das Themengebiet fehlen, geben Sie dies über "andere" an'
+      description: 'Vorfall/Mitteilung'
+      description_help: Kurze Beschreibung des Sachverhaltes
+      affected: 'Betroffene/Bedrohte Systeme'
+      affected_help: 'Bspw: Arbeitsplatz-PC XY, Server X, Anwendung Y'
+      extent: 'Ausmaß'
+      extent_choices:
+        1: ein System
+        2: wenige Systeme
+        3: alle Systeme
+        4: geringer finanz. Schaden
+        5: erheblicher finanz. Schaden
+        9: andere...
+      extent_help: Wie wirkt sich das Ereignis aus?
+      method: Methode
+      method_choices:
+        1: Virusinfektion
+        2: SQL-Injection
+        3: DDOS
+        4: Phishing E-Mail
+        5: Systemfehler
+        6: Einbruch
+        9: andere...
+      method_help: 'Falls bekannt, bitte angeben. Ggf. kann über "andere Methode oder Erläuterung" eine Methode individuell angegben werden.'
+      cause: Ursache
+      cause_help: 'Sofern bekannt, bitte kurz beschreiben.'
+      measures: Maßnahmen
+      measures_help: Was wurde zur Abwendung und zur Vermeidung des Wiederauftretens des Ereignisses unternommen?
+      informed_parties: Information
+      informed_parties_help: 'Wer wurde wann und wie informiert? Bspw. Meldungen an Behördenleitung, Krisenmanager, Presse, ...'
   service:
     type_label: "{count, plural,
         =0 {Keine Leika-Leistungen}
@@ -887,6 +936,7 @@ app:
     group:
       general_data: Basisdaten
       reference_data: Referenzen
+      security_incident: Sicherheitsvorfälle
     entity:
       organisation: Organisation
       name: Name
@@ -901,6 +951,7 @@ app:
       specialized_procedures: Fachverfahren
       manufacturers: Hersteller
       laboratories: Stichwörter
+      security_incidents: Sicherheitsvorfälle
   service_solution:
     object_name: Lösung für Leistung
     list: Lösung für Leistung
@@ -1092,4 +1143,6 @@ app:
       lastname: Nachname
       communes: Kommunen
       model_regions: Modellregionen
+      organisation: Organisation
+      service_providers: IT Dienstleister
 

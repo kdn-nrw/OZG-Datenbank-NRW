@@ -12,10 +12,11 @@
 namespace App\Entity;
 
 use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 
 /**
  * User entity class
@@ -33,6 +34,13 @@ class User extends BaseUser
      * @ORM\Column(type="integer")
      */
     protected $id;
+
+    /**
+     * @var Organisation|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\Organisation", cascade={"persist"})
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $organisation;
 
     /**
      * @var Commune[]|Collection
@@ -63,6 +71,20 @@ class User extends BaseUser
     private $modelRegions;
 
     /**
+     * @var ServiceProvider[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\ServiceProvider")
+     * @ORM\JoinTable(name="ozg_user_service_provider_mm",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", onDelete="CASCADE")
+     *   }
+     * )
+     */
+    private $serviceProviders;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -70,6 +92,7 @@ class User extends BaseUser
         parent::__construct();
         $this->communes = new ArrayCollection();
         $this->modelRegions = new ArrayCollection();
+        $this->serviceProviders = new ArrayCollection();
     }
 
     /**
@@ -81,6 +104,7 @@ class User extends BaseUser
     {
         return $this->id;
     }
+
     /**
      * Hook on pre-persist operations.
      * @ORM\PrePersist
@@ -236,4 +260,63 @@ class User extends BaseUser
     {
         $this->modelRegions = $modelRegions;
     }
+
+    /**
+     * @param ServiceProvider $serviceProvider
+     * @return self
+     */
+    public function addServiceProvider($serviceProvider): self
+    {
+        if (!$this->serviceProviders->contains($serviceProvider)) {
+            $this->serviceProviders->add($serviceProvider);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider $serviceProvider
+     * @return self
+     */
+    public function removeServiceProvider($serviceProvider): self
+    {
+        if ($this->serviceProviders->contains($serviceProvider)) {
+            $this->serviceProviders->removeElement($serviceProvider);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ServiceProvider[]|Collection
+     */
+    public function getServiceProviders()
+    {
+        return $this->serviceProviders;
+    }
+
+    /**
+     * @param ServiceProvider[]|Collection $serviceProviders
+     */
+    public function setServiceProviders($serviceProviders): void
+    {
+        $this->serviceProviders = $serviceProviders;
+    }
+
+    /**
+     * @return Organisation|null
+     */
+    public function getOrganisation(): ?Organisation
+    {
+        return $this->organisation;
+    }
+
+    /**
+     * @param Organisation|null $organisation
+     */
+    public function setOrganisation(?Organisation $organisation): void
+    {
+        $this->organisation = $organisation;
+    }
+
 }

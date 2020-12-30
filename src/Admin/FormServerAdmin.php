@@ -33,7 +33,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
         'app.form_server.entity.form_server_solutions_solution' => 'app.form_server.entity.form_server_solutions',
     ];
 
-    protected function configureTabMenuMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;

@@ -19,4 +19,6 @@ file that was distributed with this source code.
     {% include 'General/Show/Partials/solutions-list.html.twig' %}
 {% elseif field_description.name ends with 'implementationProjects' %}
     {% include 'General/Show/Partials/implementation-projects-list.html.twig' %}
+{% elseif field_description.name ends with 'securityIncidents' %}
+    {% include 'General/Show/Partials/security-incidents-list.html.twig' %}
 {% endif %}

@@ -617,6 +617,19 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Admin\StateGroup\SecurityIncidentAdmin:
+    arguments:
+      - ~
+      - App\Entity\StateGroup\SecurityIncident
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.security_incident.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Admin\SituationAdmin:
     arguments:
       - ~
@@ -701,6 +714,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'ServiceProviderAdmin/show.html.twig']]
+      - [addChild, ['@App\Admin\StateGroup\SecurityIncidentAdmin', 'serviceProvider']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -917,3 +931,9 @@ services:
       - '@App\Service\ApplicationContextHandler'
     tags:
       - { name: sonata.admin.extension, global: true }
+
+  App\Admin\Extension\SecurityIncidentExtension:
+    arguments:
+      - '@Symfony\Component\Security\Core\Security'
+    tags:
+      - { name: sonata.admin.extension, target: App\Admin\StateGroup\SecurityIncidentAdmin }

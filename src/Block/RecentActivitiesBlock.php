@@ -17,6 +17,7 @@ use App\Admin\AbstractContextAwareAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\ModelRegion;
 use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\ServiceProvider;
 use App\Entity\Statistics\LogEntry;
 use App\Entity\User;
 use App\Service\InjectAdminManagerTrait;
@@ -128,6 +129,20 @@ class RecentActivitiesBlock extends AbstractBlockService
                     'titlePrefix' => $prefix,
                     'title' => $modelRegion->getName(),
                     'url' => $admin->generateObjectUrl('show', $modelRegion),
+                    'isStatic' => true,
+                ];
+            }
+        }
+        $serviceProviders = $user->getServiceProviders();
+        if ($serviceProviders->count() > 0) {
+            $adminClass = $this->adminManager->getAdminClassForEntityClass(ServiceProvider::class);
+            $admin = $this->adminManager->getAdminInstance($adminClass);
+            $prefix = $this->translator->trans('app.common.recent_activities.my_service_provider');
+            foreach ($serviceProviders as $serviceProvider) {
+                $items['static_service_provider_' . $serviceProvider->getId()] = [
+                    'titlePrefix' => $prefix,
+                    'title' => $serviceProvider->getName(),
+                    'url' => $admin->generateObjectUrl('show', $serviceProvider),
                     'isStatic' => true,
                 ];
             }

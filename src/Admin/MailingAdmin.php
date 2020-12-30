@@ -42,7 +42,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     use CategoryTrait;
     use OrganisationTrait;
 
-    protected function configureTabMenuMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;

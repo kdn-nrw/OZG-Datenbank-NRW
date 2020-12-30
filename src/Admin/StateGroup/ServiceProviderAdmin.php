@@ -23,11 +23,14 @@ use App\Entity\Contact;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
 use App\Model\ExportSettings;
+use Knp\Menu\ItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
@@ -52,21 +55,72 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         'app.service_provider.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
+    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+            return;
+        }
+
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        if (null !== $admin) {
+            $id = $admin->getRequest()->get('id');
+
+            $menu->addChild('app.service_provider.actions.show', [
+                'uri' => $admin->generateUrl('show', ['id' => $id])
+            ]);
+
+            if ($this->isGranted('EDIT')) {
+                $menu->addChild('app.service_provider.actions.edit', [
+                    'uri' => $admin->generateUrl('edit', ['id' => $id])
+                ]);
+            }
+
+            if ($this->isGranted('LIST')) {
+                $menu->addChild('app.security_incident.list', [
+                    'uri' => $admin->getChild(SecurityIncidentAdmin::class)->generateUrl('list', ['id' => $id])
+                ]);
+            }
+        }
+    }
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
             ->tab('default', ['label' => 'app.service_provider.group.general_data']);
         $formMapper->with('general', [
-            'label' => 'app.service_provider.group.general_data',
+            'label' => false,
         ]);
         $this->addOrganisationOneToOneFormFields($formMapper);
-        $formMapper->add('shortName', TextType::class);
+        $formMapper->add('shortName', TextType::class, [
+            'required' => false,
+        ]);
         $formMapper->end();
+        $formMapper->end();
+
+        $formMapper->tab('app.service_provider.group.reference_data');
         $formMapper->with('services_data', [
-            'label' => 'app.service_provider.group.reference_data',
+            'label' => false,
         ]);
         $this->addCommunesFormFields($formMapper);
         $this->addSpecializedProceduresFormFields($formMapper);
+        $formMapper->end();
+        $formMapper->end();
+
+        $formMapper->tab('app.service_provider.group.security_incident');
+        $formMapper->with('security_incident', [
+            'label' => false,
+        ]);
+        $formMapper->add('securityIncidents', CollectionType::class, [
+            'label' => false,
+            'type_options' => [
+                'delete' => false,
+            ],
+            'by_reference' => false,
+        ], [
+            'edit' => 'inline',
+            'inline' => 'natural',
+            'ba_custom_hide_fields' => ['serviceProvider'],
+        ]);
         $formMapper->end();
         $formMapper->end();
     }
@@ -139,6 +193,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
             'admin_code' => ManufacturerAdmin::class,
             'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
         ]);
+        $showMapper->add('securityIncidents');
     }
 
     /**

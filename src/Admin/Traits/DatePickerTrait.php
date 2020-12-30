@@ -38,11 +38,11 @@ trait DatePickerTrait
             ]);
     }
 
-    protected function addDatePickersListFields(ListMapper $listMapper, string $fieldName, $addProgress = false): void
+    protected function addDatePickersListFields(ListMapper $listMapper, string $fieldName, $addProgress = false, bool $showOnlyMonth = true): void
     {
         $fieldDescriptionOptions = [
             // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
-            'pattern' => 'MMMM yyyy',
+            'pattern' => $showOnlyMonth ? 'MMMM yyyy' : 'dd.MM.yyyy',
         ];
         if ($addProgress) {
             $fieldDescriptionOptions['template'] = 'General/List/list_date_progress.html.twig';
@@ -50,12 +50,12 @@ trait DatePickerTrait
         $listMapper->add($fieldName, null, $fieldDescriptionOptions);
     }
 
-    public function addDatePickersShowFields(ShowMapper $showMapper, string $fieldName): void
+    public function addDatePickersShowFields(ShowMapper $showMapper, string $fieldName, bool $showOnlyMonth = true): void
     {
         $showMapper
             ->add($fieldName, null, [
                 // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
-                'pattern' => 'MMMM yyyy',
+                'pattern' => $showOnlyMonth ? 'MMMM yyyy' : 'dd.MM.yyyy',
             ]);
     }
 }

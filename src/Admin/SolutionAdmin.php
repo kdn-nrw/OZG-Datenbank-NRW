@@ -68,7 +68,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         'app.solution.entity.form_server_solutions_form_server' => 'app.solution.entity.form_server_solutions',
     ];
 
-    protected function configureTabMenuMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && $action !== 'edit') {
             return;
