@@ -261,8 +261,8 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     protected $authorityInheritBureaus = true;
 
     /**
-     * @var ImplementationProject[]|Collection
-     * @ORM\ManyToMany(targetEntity="App\Entity\ImplementationProject", mappedBy="services")
+     * @var ImplementationProjectService[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\ImplementationProjectService", mappedBy="service", cascade={"all"}, orphanRemoval=true)
      */
     private $implementationProjects;
 
@@ -1173,35 +1173,39 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     }
 
     /**
-     * @param ImplementationProject $implementationProject
+     * @param ImplementationProjectService $implementationProject
      * @return self
      */
-    public function addImplementationProject($implementationProject): self
+    public function addImplementationProject(ImplementationProjectService $implementationProject): self
     {
         if (!$this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->add($implementationProject);
-            $implementationProject->addService($this);
+            if (null !== $project = $implementationProject->getImplementationProject()) {
+                $project->addService($implementationProject);
+            }
         }
 
         return $this;
     }
 
     /**
-     * @param ImplementationProject $implementationProject
+     * @param ImplementationProjectService $implementationProject
      * @return self
      */
-    public function removeImplementationProject($implementationProject): self
+    public function removeImplementationProject(ImplementationProjectService $implementationProject): self
     {
         if ($this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->removeElement($implementationProject);
-            $implementationProject->removeService($this);
+            if (null !== $project = $implementationProject->getImplementationProject()) {
+                $project->removeService($implementationProject);
+            }
         }
 
         return $this;
     }
 
     /**
-     * @return ImplementationProject[]|Collection
+     * @return ImplementationProjectService[]|Collection
      */
     public function getImplementationProjects()
     {
@@ -1209,7 +1213,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     }
 
     /**
-     * @param ImplementationProject[]|Collection $implementationProjects
+     * @param ImplementationProjectService[]|Collection $implementationProjects
      */
     public function setImplementationProjects($implementationProjects): void
     {

@@ -324,11 +324,25 @@ services:
       - App\Entity\ImplementationProject
       - ~
     calls:
+      - [ addChild, [ '@App\Admin\ImplementationProjectServiceAdmin', 'implementationProject' ] ]
       - [setTemplate, ['show', 'ImplementationProjectAdmin/show.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
         label:        app.implementation_project.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\ImplementationProjectServiceAdmin:
+    arguments:
+      - ~
+      - App\Entity\ImplementationProjectService
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.implementation_project_service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true

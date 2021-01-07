@@ -37,18 +37,19 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
         $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.service');
         $datagridMapper->add('status');
         $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'conceptStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'implementationStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'commissioningStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'fundings');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.bureaus');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.portals', ['label' => 'app.implementation_project.entity.portals']);
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.bureaus');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.portals', ['label' => 'app.implementation_project.entity.portals']);
         $this->addDefaultDatagridFilter($datagridMapper, 'projectLeaders');
         $this->addDefaultDatagridFilter($datagridMapper, 'participationOrganisations');
         $this->addDefaultDatagridFilter($datagridMapper, 'interestedOrganisations');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
         $this->addDefaultDatagridFilter($datagridMapper, 'solutions.openDataItems');
     }
 
@@ -133,14 +134,17 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'route' => [
                     'name' => 'show',
                 ],
-            ])
-            ->add('services', null, [
-                'admin_code' => ServiceAdmin::class,
-                'showFimTypes' => true,
-                'route' => [
-                    'name' => 'show',
-                ],
             ]);
+        $showMapper->add('services', null, [
+            'admin_code' => ServiceAdmin::class,
+            'showFimTypes' => true,
+            'template' => 'ImplementationProjectAdmin/Show/show-project-services.html.twig',
+            'is_custom_field' => true,
+            'showProject' => false,
+            'route' => [
+                'name' => 'show',
+            ],
+        ]);
         $showMapper
             ->add('projectLeaders', null, [
                 'route' => [

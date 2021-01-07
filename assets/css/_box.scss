@@ -7,4 +7,10 @@
       padding: 10px 15px;
     }
   }
+  [data-widget="collapse"] {
+    cursor: pointer;
+    .fa {
+      font-size: 12px;
+    }
+  }
 }

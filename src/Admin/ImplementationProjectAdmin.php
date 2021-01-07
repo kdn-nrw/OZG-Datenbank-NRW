@@ -18,7 +18,6 @@ use App\Admin\Traits\FundingTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\ServiceSystemTrait;
-use App\Admin\Traits\ServiceTrait;
 use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
@@ -26,11 +25,14 @@ use App\Entity\Service;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use Knp\Menu\ItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\CollectionType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,8 +48,35 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     use LaboratoryTrait;
     use OrganisationTrait;
     use SolutionTrait;
-    use ServiceTrait;
     use ServiceSystemTrait;
+
+    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    {
+        if (!$childAdmin && $action !== 'edit') {
+            return;
+        }
+
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        if (null !== $admin) {
+            $id = $admin->getRequest()->get('id');
+
+            $menu->addChild('app.implementation_project.actions.show', [
+                'uri' => $admin->generateUrl('show', ['id' => $id])
+            ]);
+
+            if ($this->isGranted('EDIT')) {
+                $menu->addChild('app.implementation_project.actions.edit', [
+                    'uri' => $admin->generateUrl('edit', ['id' => $id])
+                ]);
+            }
+
+            if ($this->isGranted('LIST')) {
+                $menu->addChild('app.implementation_project.actions.list', [
+                    'uri' => $admin->getChild(ImplementationProjectServiceAdmin::class)->generateUrl('list', ['id' => $id])
+                ]);
+            }
+        }
+    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -165,6 +194,18 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         /** @var ImplementationProject $subject */
         $subject = $this->getSubject();
         $formMapper
+            ->add('services', CollectionType::class, [
+                'label' => false,
+                'type_options' => [
+                    'delete' => true,
+                ],
+                'by_reference' => false,
+            ], [
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable' => 'position',
+                'ba_custom_hide_fields' => ['implementationProject'],
+            ])/*
             ->add('services', ModelType::class, [
                 'property' => 'name',
                 'placeholder' => '',
@@ -183,7 +224,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 [
                     'admin_code' => ServiceAdmin::class,
                 ]
-            );
+            )*/;
         $formMapper->getFormBuilder()->addEventListener(FormEvents::POST_SET_DATA,
             static function (FormEvent $event) use ($formMapper, $subject, $em) {
                 $serviceSystems = $subject->getServiceSystems();
@@ -209,7 +250,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
         $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.service');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
         $datagridMapper->add('status');
         $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
@@ -221,9 +262,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDefaultDatagridFilter($datagridMapper, 'participationOrganisations');
         $this->addDefaultDatagridFilter($datagridMapper, 'interestedOrganisations');
         $this->addDefaultDatagridFilter($datagridMapper, 'fundings');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.bureaus');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.portals', ['label' => 'app.implementation_project.entity.portals']);
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.bureaus');
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.portals', ['label' => 'app.implementation_project.entity.portals']);
+        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
         $this->addDefaultDatagridFilter($datagridMapper, 'fimExperts');
         $this->addDefaultDatagridFilter($datagridMapper, 'solutions.openDataItems');
     }
@@ -295,7 +336,14 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
         $this->addOrganisationsShowFields($showMapper, 'interestedOrganisations');
         $this->addServiceSystemsShowFields($showMapper);
-        $this->addServicesShowFields($showMapper, ['showFimTypes' => true]);
+
+        $showMapper->add('services', null, [
+            'admin_code' => ServiceAdmin::class,
+            'showFimTypes' => true,
+            'template' => 'ImplementationProjectAdmin/Show/show-project-services.html.twig',
+            'is_custom_field' => true,
+            'showProject' => false,
+        ]);
         $this->addFundingsShowFields($showMapper);
         $showMapper->add('bureaus', null, [
             'admin_code' => BureauAdmin::class,

@@ -11,7 +11,6 @@
 
 namespace App\Admin;
 
-use App\Admin\Traits\ImplementationProjectTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\PortalTrait;
@@ -44,7 +43,6 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     use MinistryStateTrait;
     use PortalTrait;
     use SpecializedProcedureTrait;
-    use ImplementationProjectTrait;
 
     /**
      * @var string[]
@@ -375,7 +373,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addDefaultDatagridFilter($datagridMapper, 'bureaus');
         $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
         $this->addDefaultDatagridFilter($datagridMapper, 'portals');
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects');
+        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects.implementationProject');
         $this->addDefaultDatagridFilter($datagridMapper, 'ruleAuthorities');
         $this->addDefaultDatagridFilter($datagridMapper, 'stateMinistries');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.solution');
@@ -542,7 +540,12 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addSpecializedProceduresShowFields($showMapper);
         $this->addPortalsShowFields($showMapper);
         $this->addStateMinistriesShowFields($showMapper);
-        $this->addImplementationProjectsShowFields($showMapper);
+        $showMapper->add('implementationProjects', null, [
+            'admin_code' => ImplementationProjectAdmin::class,
+            'template' => 'ServiceAdmin/Show/show-service-projects.html.twig',
+            'is_custom_field' => true,
+            'showProject' => true,
+        ]);
         $showMapper
             ->add('modelRegionProjects', null, [
                 'admin_code' => ModelRegionProjectAdmin::class,

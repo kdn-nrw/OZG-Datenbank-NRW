@@ -453,6 +453,11 @@ app:
     object_name: OZG Umsetzungsprojekt
     list: OZG Umsetzungsprojekte
     create: OZG Umsetzungsprojekt anlegen
+    actions:
+      list: OZG Umsetzungsprojekt Übersicht
+      show: OZG Umsetzungsprojekt anzeigen
+      edit: OZG Umsetzungsprojekt bearbeiten
+      solutions_list: OZG Umsetzungsprojekt Leistungen verwalten
     tabs:
       general: Allgemein
       services: Leistungen
@@ -481,6 +486,17 @@ app:
       portals: voraussichtliches Zielportal
       fundings: Finanzierung
       fim_experts: FIM Methodenexperte
+  implementation_project_service:
+    object_name: OZG Umsetzungsprojekt - Leika Leistung
+    list: OZG Umsetzungsprojekt - Leika Leistungen
+    list_services: Leika Leistungen
+    create: OZG Umsetzungsprojekt - Leika Leistung anlegen
+    entity:
+      service: Leika Leistung
+      implementation_project: OZG Umsetzungsprojekt
+      status: Projekt-Umsetzungsstatus
+    messages:
+      no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   implementation_status:
     object_name: Umsetzungs-Status
     list: Umsetzungs-Status
@@ -804,7 +820,7 @@ app:
       delete_confirm: Wollen Sie die gespeicherte Suche wirklich löschen?
   security_incident:
     object_name: Sicherheitsvorfall
-    list: Sicherheitsvorfälle
+    list: Sicherheitsvorfälle im KDN
     create: Sicherheitsvorfall anlegen
     entity:
       created_by: Erstellt von

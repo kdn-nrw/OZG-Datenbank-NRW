@@ -1,0 +1,31 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var child \App\Entity\ImplementationProject #}
+<td>
+    {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
+</td>
+{% if showProjectStatus %}
+    <td>
+        {% if child.status %}
+            {{ child.status.name }}
+        {% endif %}
+    </td>
+{% endif %}
+<td>
+    {% if child.projectStartAt %}
+        {{ child.projectStartAt|format_datetime('dd.MM.yyyy') }}
+    {% endif %}
+</td>
+<td>
+    {% if child.projectLeaders|length > 0 %}
+        {% for organisation in child.projectLeaders %}
+            {# @var organisation \App\Entity\Organisation #}
+            {{ organisation.name }}
+            {% if not loop.last %}, {% endif %}
+        {% endfor %}
+    {% endif %}
+</td>

@@ -102,16 +102,8 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     private $serviceSystems;
 
     /**
-     * @var Service[]|Collection
-     * @ORM\ManyToMany(targetEntity="App\Entity\Service", inversedBy="implementationProjects")
-     * @ORM\JoinTable(name="ozg_implementation_project_service",
-     *     joinColumns={
-     *     @ORM\JoinColumn(name="implementation_project_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="service_id", referencedColumnName="id")
-     *   }
-     * )
+     * @var ImplementationProjectService[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\ImplementationProjectService", mappedBy="implementationProject", cascade={"all"}, orphanRemoval=true)
      */
     private $services;
 
@@ -398,35 +390,36 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     }
 
     /**
-     * @param Service $service
+     * @param ImplementationProjectService $service
      * @return self
      */
-    public function addService($service): self
+    public function addService(ImplementationProjectService $service): self
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
-            $service->addImplementationProject($this);
+            $service->setImplementationProject($this);
+            $service->getService()->addImplementationProject($service);
         }
 
         return $this;
     }
 
     /**
-     * @param Service $service
+     * @param ImplementationProjectService $service
      * @return self
      */
-    public function removeService($service): self
+    public function removeService(ImplementationProjectService $service): self
     {
         if ($this->services->contains($service)) {
             $this->services->removeElement($service);
-            $service->removeImplementationProject($this);
+            $service->getService()->removeImplementationProject($service);
         }
 
         return $this;
     }
 
     /**
-     * @return Service[]|Collection
+     * @return ImplementationProjectService[]|Collection
      */
     public function getServices(): Collection
     {
@@ -434,7 +427,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     }
 
     /**
-     * @param Service[]|Collection $services
+     * @param ImplementationProjectService[]|Collection $services
      */
     public function setServices(Collection $services): void
     {
@@ -792,11 +785,13 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     {
         $distinctEntities = [];
         $services = $this->getServices();
-        foreach ($services as $service) {
-            $serviceBureaus = $service->getBureaus();
-            foreach ($serviceBureaus as $entity) {
-                if (!isset($distinctEntities[$entity->getId()])) {
-                    $distinctEntities[$entity->getId()] = $entity;
+        foreach ($services as $projectService) {
+            if (null !== $service = $projectService->getService()) {
+                $serviceBureaus = $service->getBureaus();
+                foreach ($serviceBureaus as $entity) {
+                    if (!isset($distinctEntities[$entity->getId()])) {
+                        $distinctEntities[$entity->getId()] = $entity;
+                    }
                 }
             }
         }
@@ -812,11 +807,13 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     {
         $distinctEntities = [];
         $services = $this->getServices();
-        foreach ($services as $service) {
-            $servicePortals = $service->getPortals();
-            foreach ($servicePortals as $entity) {
-                if (!isset($distinctEntities[$entity->getId()])) {
-                    $distinctEntities[$entity->getId()] = $entity;
+        foreach ($services as $projectService) {
+            if (null !== $service = $projectService->getService()) {
+                $servicePortals = $service->getPortals();
+                foreach ($servicePortals as $entity) {
+                    if (!isset($distinctEntities[$entity->getId()])) {
+                        $distinctEntities[$entity->getId()] = $entity;
+                    }
                 }
             }
         }

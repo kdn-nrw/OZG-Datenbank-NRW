@@ -1,0 +1,21 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var object \App\Entity\ImplementationProject #}
+{% if object.services|length > 0 %}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="field-label box-title">
+                {{ 'app.implementation_project_service.list_services'|trans }}
+                {% if fieldMetaHelp is defined %}{{ fieldMetaHelp|raw }}{% endif %}
+            </h4>
+        </div>
+        <div class="box-body table-responsive no-padding">
+            {% set showProject = false %}
+            {% include 'General/Show/Partials/project-services-list.html.twig' with {'entities': object.services} %}
+        </div>
+    </div>
+{% endif %}

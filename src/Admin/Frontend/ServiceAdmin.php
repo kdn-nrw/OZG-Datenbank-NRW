@@ -70,7 +70,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ]
         );
         $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects');
+        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects.implementationProject');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -221,13 +221,18 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ->add('authorityStateMinistries')
             ->add('communeTypes')
             ->add('laboratories')
-            ->add('stateMinistries')
-            ->add('implementationProjects', null, [
-                'admin_code' => ImplementationProjectAdmin::class,
-                'route' => [
-                    'name' => 'show',
-                ],
-            ])
+            ->add('stateMinistries');
+        $showMapper->add('implementationProjects', null, [
+            'admin_code' => ImplementationProjectAdmin::class,
+            'template' => 'ServiceAdmin/Show/show-service-projects.html.twig',
+            'is_custom_field' => true,
+            'showProject' => true,
+            'associated_property' => 'implementationProject',
+            'route' => [
+                'name' => 'show',
+            ],
+        ]);
+        $showMapper
             ->add('publishedModelRegionProjects', null, [
                 'admin_code' => ModelRegionProjectAdmin::class,
                 'route' => [

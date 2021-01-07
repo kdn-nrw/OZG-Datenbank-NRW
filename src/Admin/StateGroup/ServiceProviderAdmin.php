@@ -113,7 +113,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $formMapper->add('securityIncidents', CollectionType::class, [
             'label' => false,
             'type_options' => [
-                'delete' => false,
+                'delete' => true,
             ],
             'by_reference' => false,
         ], [

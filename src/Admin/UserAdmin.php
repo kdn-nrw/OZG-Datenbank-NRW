@@ -21,6 +21,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DatePickerType;
@@ -211,6 +212,14 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
         ], [
             'admin_code' => ModelRegionAdmin::class,
         ]);
+        $formMapper->add('serviceProviders', ModelAutocompleteType::class, [
+            'label' => 'app.user.entity.service_providers',
+            'property' => ['name', 'shortName'],
+            'required' => false,
+            'multiple' => true,
+        ], [
+            'admin_code' => ServiceProviderAdmin::class,
+        ]);/*
         $formMapper->add('serviceProviders', ModelType::class, [
             'label' => 'app.user.entity.service_providers',
             'btn_add' => false,
@@ -221,7 +230,7 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
             'choice_translation_domain' => false,
         ], [
             'admin_code' => ServiceProviderAdmin::class,
-        ]);
+        ]);*/
         $formMapper
             ->end()
             ->end();

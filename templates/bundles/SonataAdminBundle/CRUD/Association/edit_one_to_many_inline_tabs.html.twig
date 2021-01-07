@@ -12,19 +12,15 @@ file that was distributed with this source code.
         {% set headlineData = isCollapsed ? nested_group_field.vars.data : null %}
         {% set boxHeadline = headlineData|app_format_collection_item_label %}
         <div class="box box-default box-solid{% if isCollapsed %} collapsed-box{% endif %}">
-            <div class="box-header with-border">
+            <div class="box-header with-border" data-widget="collapse">
+                {% if isCollapsed %}
+                    <i class="fa fa-plus pull-right"></i>
+                {% else %}
+                    <i class="fa fa-minus pull-right"></i>
+                {% endif %}
                 <h3 class="box-title">
                     {{ boxHeadline }}
                 </h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                        {% if isCollapsed %}
-                            <i class="fa fa-plus"></i>
-                        {% else %}
-                            <i class="fa fa-minus"></i>
-                        {% endif %}
-                    </button>
-                </div>
             </div>
             <div class="box-body" style="">
                 <div>
@@ -75,14 +71,16 @@ file that was distributed with this source code.
                             {% endfor %}
                         </div>
                     </div>
+                    {% if not loop.last %}
+                        <div class="ba-form-spacer">&nbsp;</div>
+                    {% endif %}
 
                     {% if nested_group_field['_delete'] is defined %}
-                        {{ form_row(nested_group_field['_delete'], {'label': 'action_delete', 'translation_domain': 'SonataAdminBundle'}) }}
+                        <div class="alert alert-warning collection-item-delete">
+                            {{ form_row(nested_group_field['_delete'], {'label': 'action_delete', 'translation_domain': 'SonataAdminBundle'}) }}
+                        </div>
                     {% endif %}
                 </div>
-                {% if not loop.last %}
-                    <div class="ba-form-spacer">&nbsp;</div>
-                {% endif %}
             </div>
         </div>
     {% endfor %}
