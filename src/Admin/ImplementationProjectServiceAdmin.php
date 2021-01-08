@@ -68,15 +68,36 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
     {
         $listMapper
             ->add('implementationProject', null, [
-                'admin_code' => \App\Admin\ImplementationProjectAdmin::class
+                'admin_code' => \App\Admin\ImplementationProjectAdmin::class,
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'implementationProject'],
+                ]
             ])
             ->add('service', null, [
-                'admin_code' => \App\Admin\ServiceAdmin::class
+                'admin_code' => \App\Admin\ServiceAdmin::class,
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'service'],
+                ]
             ])
             ->add('status', 'choice', [
-                'editable' => true,
+                //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'status'],
+                ]
             ]);
         $this->addDefaultListActions($listMapper);
     }
@@ -94,10 +115,9 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                 'admin_code' => \App\Admin\ServiceAdmin::class
             ])
             ->add('status', 'choice', [
-                'editable' => true,
+                //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
-                'template' => 'ServiceAdmin/show_choice.html.twig',
             ]);
     }
 }

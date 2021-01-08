@@ -381,7 +381,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'associated_property' => 'service'
             ])
             ->add('status', TemplateRegistry::TYPE_CHOICE, [
-                'editable' => true,
+                //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',

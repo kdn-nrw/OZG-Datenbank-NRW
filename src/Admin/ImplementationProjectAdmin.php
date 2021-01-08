@@ -49,7 +49,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     use OrganisationTrait;
     use SolutionTrait;
     use ServiceSystemTrait;
-
+/*
     protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && $action !== 'edit') {
@@ -76,7 +76,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 ]);
             }
         }
-    }
+    }*/
 
     protected function configureFormFields(FormMapper $formMapper)
     {

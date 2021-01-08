@@ -429,7 +429,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('relevance1')
             ->add('relevance2')
             ->add('status', 'choice', [
-                'editable' => true,
+                //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -512,14 +512,14 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
             ->add('status', TemplateRegistry::TYPE_CHOICE, [
-                'editable' => true,
+                //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
             ->add('serviceSystem.priority', TemplateRegistry::TYPE_CHOICE, [
                 'label' => 'app.service_system.entity.priority',
-                'editable' => true,
+                //'editable' => true,
                 'class' => Priority::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',

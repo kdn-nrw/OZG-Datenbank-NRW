@@ -123,7 +123,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             ])
             ->add('url', 'url')
             ->add('status', 'choice', [
-                'editable' => true,
+                //'editable' => true,
                 'class' => EFileStatus::class,
                 'catalogue' => 'messages',
                 'sortable' => true, // IMPORTANT! make the column sortable

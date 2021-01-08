@@ -92,7 +92,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
             ])
             ->add('articleNumber')
             ->add('status', 'choice', [
-                'editable' => true,
+                //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -123,7 +123,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('articleKey')
             ->add('usableAsPrintTemplate')
             ->add('status', 'choice', [
-                'editable' => true,
+                //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
