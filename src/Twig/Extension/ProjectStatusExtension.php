@@ -12,6 +12,7 @@
 namespace App\Twig\Extension;
 
 use App\Entity\ImplementationProject;
+use App\Entity\ImplementationProjectService;
 use App\Service\ImplementationProjectHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -41,11 +42,12 @@ class ProjectStatusExtension extends AbstractExtension
     {
         return [
             new TwigFunction('app_implementation_project_status_info', [$this, 'getImplementationProjectStatusInfo']),
+            new TwigFunction('app_implementation_project_service_status_info', [$this, 'getImplementationProjectServiceStatusInfo']),
         ];
     }
 
     /**
-     * Returns the field description collection for the referenced fields
+     * Returns the status info for the given implementation project
      *
      * @param ImplementationProject $object
      * @return array
@@ -53,5 +55,16 @@ class ProjectStatusExtension extends AbstractExtension
     public function getImplementationProjectStatusInfo(ImplementationProject $object): array
     {
         return $this->implementationProjectHelper->getProjectStatusInfo($object);
+    }
+
+    /**
+     * Returns the status info for the given implementation project service
+     *
+     * @param ImplementationProjectService $object
+     * @return array
+     */
+    public function getImplementationProjectServiceStatusInfo(ImplementationProjectService $object): array
+    {
+        return $this->implementationProjectHelper->getProjectServiceStatusInfo($object);
     }
 }

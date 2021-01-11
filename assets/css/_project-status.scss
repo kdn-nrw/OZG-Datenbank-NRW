@@ -9,7 +9,7 @@
   $project-status-arrow-size: $project-status-height / 2;
   .arrow {
     position: relative;
-    height: $project-status-height;
+    height: 100%;
     width: $project-status-arrow-size;
     z-index: 10;
     flex: 0 0 auto;
@@ -48,7 +48,7 @@
     display: flex;
     align-items: center;
     background: $gray-200;
-    height: $project-status-height;
+    height: 100%;
     line-height: 20px;
     padding: 10px 0 10px 20px;
     min-width: 120px;
@@ -58,6 +58,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    height: $project-status-height;
   }
   .project-status {
     margin-left: -20px;
@@ -88,12 +89,40 @@
       .name {
         background-color: $green;
       }
-      &::before,
-      &::after {
-        border-color: transparent $green transparent transparent;
+      .arrow {
+        &::before,
+        &::after {
+          border-color: transparent $green transparent transparent;
+        }
+        &::after {
+          border-color: transparent transparent $green transparent;
+        }
       }
-      &::after {
-        border-color: transparent transparent $green transparent;
+    }
+    &.inactive {
+      .name {
+        background-color: $app-yellow-700;
+        padding-left: 10px;
+      }
+      .arrow {
+        &.left {
+          display: none;
+        }
+        &::before,
+        &::after {
+          border-color: transparent $app-yellow-700 transparent transparent;
+        }
+        &::after {
+          border-color: transparent transparent $app-yellow-700 transparent;
+        }
+        &.right {
+          &::before {
+            border-color: transparent transparent transparent $app-yellow-700;
+          }
+          &::after {
+            border-color: $app-yellow-700 transparent transparent transparent;
+          }
+        }
       }
     }
   }
@@ -113,4 +142,49 @@
 }
 .list-status-reached {
   background-color: $app-green-light;
+}
+.project-service-status-info {
+  margin-top: 15px;
+  $project-service-status-height: 40px;
+  $project-service-status-arrow-size: $project-service-status-height / 2;
+  .project-status-info {
+
+  }
+  .arrow {
+    width: $project-service-status-arrow-size;
+    &::before,
+    &::after {
+      border-width: 0 $project-service-status-arrow-size $project-service-status-arrow-size 0;
+    }
+    &::after {
+      border-width: 0 0 $project-service-status-arrow-size $project-service-status-arrow-size;
+    }
+    &.right {
+      z-index: 9;
+      &::before {
+        border-width: $project-service-status-arrow-size 0 0 $project-service-status-arrow-size;
+      }
+      &::after {
+        border-width: $project-service-status-arrow-size $project-service-status-arrow-size 0 0;
+      }
+    }
+  }
+  .name {
+    min-width: 120px;
+    font-size: 16px;
+  }
+  .project-status-name {
+    height: $project-service-status-height;
+  }
+  .status-type-label {
+    font-weight: bold;
+    padding-bottom: 4px;
+  }
+  @media (min-width: 576px) {
+    .project-status {
+      &:not(:first-child) {
+        margin-left: -10px;
+      }
+    }
+  }
 }

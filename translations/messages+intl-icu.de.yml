@@ -490,6 +490,7 @@ app:
     object_name: OZG Umsetzungsprojekt - Leika Leistung
     list: OZG Umsetzungsprojekt - Leika Leistungen
     list_services: Leika Leistungen
+    list_services_status: Status der Leika Leistungen im Projekt
     create: OZG Umsetzungsprojekt - Leika Leistung anlegen
     entity:
       service: Leika Leistung

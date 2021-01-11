@@ -9,7 +9,7 @@
     <div class="box-body">
         <div class="project-status-info">
             {% for statusDetails in statusInfo %}
-                <div class="project-status{{ statusDetails.isActive ? ' active' : '' }}{{ statusDetails.isCurrent ? ' current' : '' }}">
+                <div class="project-status{{ statusDetails.isActive ? ' active' : '' }}{{ statusDetails.isCurrent ? ' current' : '' }}{{ statusDetails.setAutomatically ? '' : ' inactive' }}">
                     <div class="project-status-name">
                         <div class="arrow left"></div>
                         <div class="name">
@@ -32,5 +32,31 @@
                 </div>
             {% endfor %}
         </div>
+        {% if object.services|length > 0 %}
+        <div class="project-service-status-list">
+            <h4 class="box-inline-headline">{{ 'app.implementation_project_service.list_services_status'|trans }}</h4>
+            {% for projectService in object.services %}
+                <div class="project-service-status-info">
+                    {% set serviceStatusInfo = app_implementation_project_service_status_info(projectService) %}
+                    <div class="status-type-label">
+                        {{ projectService.service.name }}
+                    </div>
+                    <div class="project-status-info">
+                        {% for statusDetails in serviceStatusInfo %}
+                            <div class="project-status{{ statusDetails.isActive ? ' active' : '' }}{{ statusDetails.isCurrent ? ' current' : '' }}{{ statusDetails.setAutomatically ? '' : ' inactive' }}">
+                                <div class="project-status-name">
+                                    <div class="arrow left"></div>
+                                    <div class="name">
+                                        {{ statusDetails.name }}
+                                    </div>
+                                    <div class="arrow right"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 </div>
