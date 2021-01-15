@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -29,6 +30,20 @@ class EFile extends BaseNamedEntity implements ImportEntityInterface
 {
     use UrlTrait;
     use ImportTrait;
+
+    /**
+     * @var Commune[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune")
+     * @ORM\JoinTable(name="ozg_efile_commune",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="efile_id", referencedColumnName="id", onDelete="CASCADE")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id", onDelete="CASCADE")
+     *   }
+     * )
+     */
+    private $communes;
 
     /**
      * @var ServiceProvider
@@ -146,9 +161,52 @@ class EFile extends BaseNamedEntity implements ImportEntityInterface
 
     public function __construct()
     {
+        $this->communes = new ArrayCollection();
         $this->softwareModules = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
         $this->storageTypes = new ArrayCollection();
+    }
+
+    /**
+     * @param Commune $commune
+     * @return self
+     */
+    public function addCommune($commune): self
+    {
+        if (!$this->communes->contains($commune)) {
+            $this->communes->add($commune);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Commune $commune
+     * @return self
+     */
+    public function removeCommune($commune): self
+    {
+        if ($this->communes->contains($commune)) {
+            $this->communes->removeElement($commune);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Commune[]|Collection
+     */
+    public function getCommunes()
+    {
+        return $this->communes;
+    }
+
+    /**
+     * @param Commune[]|Collection $communes
+     */
+    public function setCommunes($communes): void
+    {
+        $this->communes = $communes;
     }
 
     /**

@@ -11,6 +11,7 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\EFileStatus;
 use App\Model\ExportSettings;
@@ -29,6 +30,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
+    use CommuneTrait;
     use SpecializedProcedureTrait;
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -37,7 +39,9 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
-            ])
+            ]);
+        $this->addCommunesFormFields($formMapper);
+        $formMapper
             ->add('serviceProvider', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -72,6 +76,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             ->add('notes', SimpleFormatterType::class, [
                 'label' => 'app.efile.entity.notes_placeholder',
                 'format' => 'richhtml',
+                'required' => false,
                 'ckeditor_context' => 'default', // optional
             ])
             ->add('hasEconomicViabilityAssessment', BooleanType::class, [
@@ -92,6 +97,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             ->add('savingPotentialNotes', SimpleFormatterType::class, [
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
+                'required' => false,
             ]);
         $formMapper
             ->end();
@@ -100,6 +106,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
+        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceProvider');
         $this->addDefaultDatagridFilter($datagridMapper,'leadingSystem');
         $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
@@ -144,7 +151,9 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
     {
         $showMapper
             ->add('name')
-            ->add('description')
+            ->add('description');
+        $this->addCommunesShowFields($showMapper);
+        $showMapper
             ->add('serviceProvider')
             ->add('status', 'choice', [
                 //'editable' => true,

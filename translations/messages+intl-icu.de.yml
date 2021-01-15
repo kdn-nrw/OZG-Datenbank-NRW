@@ -364,6 +364,7 @@ app:
       description: Kurzbeschreibung
       url: Url
       service_provider: Betreiber
+      communes: einsetzende Kommune(n)
       specialized_procedures: Softwarebasis
       status: Status eAkte
       leading_system: Führendes System
