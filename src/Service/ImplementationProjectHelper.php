@@ -78,7 +78,9 @@ class ImplementationProjectHelper
         if (null === $serviceStatus && null !== $project = $projectService->getImplementationProject()) {
             $serviceStatus = $project->getStatus();
         }
+        $hasCustomState = false;
         if (null !== $serviceStatus && !$serviceStatus->isSetAutomatically()) {
+            $hasCustomState = true;
             $statusInfo[$serviceStatus->getId()] = [
                 'name' => $serviceStatus->getName(),
                 'statusDate' => null,
@@ -89,13 +91,13 @@ class ImplementationProjectHelper
         }
         foreach ($statusChoices as $status) {
             /** @var ImplementationStatus $status */
-            $isCurrent = $serviceStatus === $status;
+            $isCurrent = !$hasCustomState && $serviceStatus === $status;
             $statusInfo[$status->getId()] = [
                 'name' => $status->getName(),
                 'statusDate' => null,
                 'isCurrent' => $isCurrent,
                 'setAutomatically' => true,
-                'isActive' => null !== $serviceStatus && $status->getLevel() <= $serviceStatus->getLevel(),
+                'isActive' => !$hasCustomState && (null !== $serviceStatus && $status->getLevel() <= $serviceStatus->getLevel()),
             ];
         }
         return $statusInfo;

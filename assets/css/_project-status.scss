@@ -143,12 +143,22 @@
 .list-status-reached {
   background-color: $app-green-light;
 }
+.project-service-status-list {
+  margin: 10px -10px 0;
+  .box-inline-headline {
+    background: #efefef;
+    border-top: 1px solid #3c8dbc;
+    padding: 5px 10px;
+    margin: 0;
+  }
+}
 .project-service-status-info {
-  margin-top: 15px;
+  padding: 5px 10px 0;
+  border-top: 1px solid #90A4AE;
   $project-service-status-height: 40px;
   $project-service-status-arrow-size: $project-service-status-height / 2;
-  .project-status-info {
-
+  &:not(:last-child) {
+    margin-bottom: 10px;
   }
   .arrow {
     width: $project-service-status-arrow-size;
