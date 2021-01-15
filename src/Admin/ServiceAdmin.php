@@ -342,12 +342,14 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         ])
             ->with('app.service.entity.notes', [
                 'label' => false,
+                'required' => false,
                 'class' => 'col-md-12 box-group-notes',
                 'box_class' => 'box-tab',
             ])
             ->add('notes', SimpleFormatterType::class, [
                 'label' => 'app.service.entity.notes_placeholder',
                 'format' => 'richhtml',
+                'required' => false,
                 'ckeditor_context' => 'default', // optional
             ]);
         $this->addLaboratoriesFormFields($formMapper);
