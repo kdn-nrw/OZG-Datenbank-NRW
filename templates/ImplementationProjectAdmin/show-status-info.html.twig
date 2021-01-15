@@ -39,7 +39,7 @@
                 <div class="project-service-status-info">
                     {% set serviceStatusInfo = app_implementation_project_service_status_info(projectService) %}
                     <div class="status-type-label">
-                        {{ projectService.service.name }}
+                        {{ projectService.service.serviceKey }} {{ projectService.service.name }}
                     </div>
                     <div class="project-status-info">
                         {% for statusDetails in serviceStatusInfo %}
