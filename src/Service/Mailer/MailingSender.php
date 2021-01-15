@@ -11,9 +11,9 @@
 
 namespace App\Service\Mailer;
 
+use App\Entity\Contact;
 use App\Entity\Mailing;
 use App\Entity\MailingAttachment;
-use App\Entity\MailingContact;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManager;
@@ -96,8 +96,9 @@ class MailingSender
             $setStatusFinished = true;
             foreach ($mailingContacts as $mc) {
                 if (!$mc->isHidden() && in_array($mc->getSendStatus(), $activeContactStatus, false)) {
-                    if (!$mailing->contactIsBlacklisted($mc->getContact())) {
-                        $isSent = $this->sendEmailForMailingContact($mailing, $mc);
+                    $contact = $mc->getContact();
+                    if (!$mailing->contactIsBlacklisted($contact) && null !== $contact->getEmail()) {
+                        $isSent = $this->sendEmailForMailingContact($mailing, $contact);
                         if ($isSent) {
                             $mc->finish();
                         } else {
@@ -123,11 +124,21 @@ class MailingSender
         }
     }
 
-    private function sendEmailForMailingContact(Mailing $mailing, MailingContact $mailingContact): bool
+    /**
+     * Sends the mailing email for the given contact
+     *
+     * @param Mailing $mailing
+     * @param Contact $contact
+     * @return bool
+     */
+    private function sendEmailForMailingContact(Mailing $mailing, Contact $contact): bool
     {
         $mailer = $this->mailer;
         $email = $mailer->createMessage();
-        $contact = $mailingContact->getContact();
+        $recipientEmail = $contact->getEmail();
+        if (empty($recipientEmail)) {
+            return false;
+        }
 
         $email->to($mailer->createAddress($contact->getEmail(), $contact->getFullName()));
         $plainText = $mailing->getTextPlain();
