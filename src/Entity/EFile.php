@@ -26,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_efile")
  * @ORM\HasLifecycleCallbacks
  */
-class EFile extends BaseNamedEntity implements ImportEntityInterface
+class EFile extends BaseNamedEntity implements ImportEntityInterface, HasManufacturerEntityInterface
 {
     use UrlTrait;
     use ImportTrait;
@@ -481,6 +481,26 @@ class EFile extends BaseNamedEntity implements ImportEntityInterface
     public function setSavingPotentialNotes(?string $savingPotentialNotes): void
     {
         $this->savingPotentialNotes = $savingPotentialNotes;
+    }
+
+
+    /**
+     * Returns the unique manufacturer list with the manufacturer determined through the specialized procedures
+     * @return Collection
+     */
+    public function getManufacturers(): Collection
+    {
+        $manufacturers = new ArrayCollection();
+        $specializedProcedures = $this->getSpecializedProcedures();
+        foreach ($specializedProcedures as $specializedProcedure) {
+            $spManufacturers = $specializedProcedure->getManufacturers();
+            foreach ($spManufacturers as $manufacturer) {
+                if (!$manufacturers->contains($manufacturer)) {
+                    $manufacturers->add($manufacturer);
+                }
+            }
+        }
+        return $manufacturers;
     }
 
 }

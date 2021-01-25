@@ -376,6 +376,7 @@ app:
       sum_investments: Investitionssumme
       follow_up_costs: Folgekosten (jährlich)
       saving_potential_notes: Einsparpotentiale
+      manufacturers: Hersteller
   efile_status:
     object_name: Umsetzungs-Status
     list: Umsetzungs-Status
