@@ -60,15 +60,21 @@ class EntityReferenceMapper
     /**
      * @param string $entityClass
      * @param string $action
+     * @param int $depth The depth of the mapping; use to prevent mapping loops
      * @return EntityReferenceMap
+     * @throws \Doctrine\Persistence\Mapping\MappingException
+     * @throws \ReflectionException
      */
-    private function getEntityClassReferenceMeta(string $entityClass, string $action): EntityReferenceMap
+    private function getEntityClassReferenceMeta(string $entityClass, string $action, int $depth = 0): EntityReferenceMap
     {
         if (isset($this->entityReferenceMeta[$entityClass])) {
             return $this->entityReferenceMeta[$entityClass];
         }
         $entityReferenceMap = new EntityReferenceMap($entityClass);
         $this->entityReferenceMeta[$entityClass] = $entityReferenceMap;
+        if ($depth > 5) {
+            return $this->entityReferenceMeta[$entityClass];
+        }
         $em = $this->getEntityManager();
         $metaData = $em->getMetadataFactory()->getMetadataFor($entityClass);
         $associationMappings = $metaData->getAssociationMappings();
@@ -77,7 +83,7 @@ class EntityReferenceMapper
             $entityReferenceProperty->setMapping($mapping);
             $targetEntityClass = $mapping['targetEntity'] !== $entityClass ? $mapping['targetEntity'] : $mapping['sourceEntity'];
             $associationAction = $entityReferenceProperty->getActionBasedOnMapping($action);
-            $targetEntityReferenceMap = $this->getEntityClassReferenceMeta($targetEntityClass, $associationAction);
+            $targetEntityReferenceMap = $this->getEntityClassReferenceMeta($targetEntityClass, $associationAction, $depth + 1);
             $entityReferenceProperty->setTargetEntityReferenceMap($targetEntityReferenceMap);
             $entityReferenceMap->addPropertyReferences($property, $entityReferenceProperty);
         }

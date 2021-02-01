@@ -945,6 +945,14 @@ app:
       inherit_commune_types.yes: Größenklassen der Leika-Leistung mit Größenklassen der OZG-Leistung erweitern
       inherit_commune_types.no: Größenklassen der OZG-Leistung nicht übernehmen
       service_created_at: Landesredaktion letzte Änderung
+  service_base_result:
+    object_name: Leistung Basisdaten
+    list: Leistungen Basisdaten
+    create: Leistung Basisdaten anlegen
+    entity:
+      service: Leika-Leistung
+      commune: Kommune
+      fim_types: FIM
   service_provider:
     object_name: IT Dienstleister
     list: IT Dienstleister
