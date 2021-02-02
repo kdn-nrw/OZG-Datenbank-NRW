@@ -398,7 +398,9 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
         if (!$this->services->contains($service)) {
             $this->services->add($service);
             $service->setImplementationProject($this);
-            $service->getService()->addImplementationProject($service);
+            if (null !== $serviceRef = $service->getService()) {
+                $serviceRef->addImplementationProject($service);
+            }
         }
 
         return $this;
@@ -412,7 +414,9 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     {
         if ($this->services->contains($service)) {
             $this->services->removeElement($service);
-            $service->getService()->removeImplementationProject($service);
+            if (null !== $serviceRef = $service->getService()) {
+                $serviceRef->removeImplementationProject($service);
+            }
         }
 
         return $this;
