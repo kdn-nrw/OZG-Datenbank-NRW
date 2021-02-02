@@ -15,7 +15,7 @@
         "friendsofsymfony/ckeditor-bundle": "^1.2",
         "jms/serializer-bundle": "^3.7",
         "liip/imagine-bundle": "^2.3",
-        "phpoffice/phpspreadsheet": "^1.15",
+        "phpoffice/phpspreadsheet": "^1.16",
         "sensio/framework-extra-bundle": "^5.6",
         "shapecode/cron-bundle": "^4.0",
         "sonata-project/admin-bundle": "^3.79",
