@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_model_region_project")
  * @ORM\HasLifecycleCallbacks
  */
-class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, HasDocumentsEntityInterface, HasMetaDateEntityInterface
+class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, HasDocumentsEntityInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {
     use ImportTrait;
     use SluggableEntityTrait;
@@ -365,7 +365,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }
@@ -432,7 +432,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
         $removeDocuments = [];
         foreach ($this->documents as $document) {
             /** @var ModelRegionProjectDocument $document */
-            if (0 < (int) $document->getId() && null === $document->getLocalName()) {
+            if (0 < (int)$document->getId() && null === $document->getLocalName()) {
                 $removeDocuments[] = $document;
             }
         }

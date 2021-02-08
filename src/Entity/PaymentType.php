@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_payment_type")
  * @ORM\HasLifecycleCallbacks
  */
-class PaymentType extends BaseNamedEntity
+class PaymentType extends BaseNamedEntity implements HasSolutionsEntityInterface
 {
     use UrlTrait;
 
@@ -78,7 +78,7 @@ class PaymentType extends BaseNamedEntity
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }

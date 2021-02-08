@@ -18,7 +18,10 @@ use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\SolutionTrait;
 use App\Entity\ModelRegionProject;
 use App\Entity\ModelRegionProjectDocument;
+use App\Exporter\Source\ManySolutionsValueFormatter;
+use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Form\Type\ModelRegionDocumentType;
+use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -148,6 +151,23 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $this->addDatePickersListFields($listMapper, 'projectEndAt');
         $this->addOrganisationsListFields($listMapper);
         $this->addDefaultListActions($listMapper);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExportSettings(): ExportSettings
+    {
+        $settings = parent::getExportSettings();
+        $customServiceFormatter = new ManySolutionsValueFormatter();
+        $customServiceFormatter->setDisplayType(ServiceSolutionValueFormatter::DISPLAY_SOLUTION_NAME);
+        $customServiceFormatter->setShowServiceKeys(true);
+        $settings->addCustomPropertyValueFormatter('solutions', $customServiceFormatter);
+        $customServiceFormatter = new ManySolutionsValueFormatter();
+        $customServiceFormatter->setDisplayType(ServiceSolutionValueFormatter::DISPLAY_SERVICE_KEY);
+        $settings->setAdditionFields(['serviceSolutions',]);
+        $settings->addCustomPropertyValueFormatter('serviceSolutions', $customServiceFormatter);
+        return $settings;
     }
 
     /**

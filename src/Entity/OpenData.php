@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_open_data")
  * @ORM\HasLifecycleCallbacks
  */
-class OpenData extends BaseNamedEntity
+class OpenData extends BaseNamedEntity implements HasSolutionsEntityInterface
 {
 
     /**
@@ -69,7 +69,7 @@ class OpenData extends BaseNamedEntity
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }

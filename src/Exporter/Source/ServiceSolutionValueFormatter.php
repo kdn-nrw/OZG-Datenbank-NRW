@@ -74,31 +74,51 @@ class ServiceSolutionValueFormatter implements CustomPropertyValueFormatterInter
         return $value;
     }
 
-    private function createServiceKeyValue(Collection $collection): string
+    /**
+     * Returns a comma-separated list of service keys
+     *
+     * @param Collection $collection
+     * @return string
+     */
+    protected function createServiceKeyValue(Collection $collection): string
     {
         $valueList = [];
         foreach ($collection as $entity) {
             /** @var ServiceSolution $entity */
             if (null !== $service = $entity->getService()) {
-                $valueList[] = $service->getServiceKey();
+                $valueList[$service->getServiceKey()] = $service->getServiceKey();
             }
         }
+        ksort($valueList);
         return implode(', ', $valueList);
     }
 
-    private function createServiceNameValue(Collection $collection): string
+    /**
+     * Returns a comma-separated list of service names
+     *
+     * @param Collection $collection
+     * @return string
+     */
+    protected function createServiceNameValue(Collection $collection): string
     {
         $valueList = [];
         foreach ($collection as $entity) {
             /** @var ServiceSolution $entity */
             if (null !== $service = $entity->getService()) {
-                $valueList[] = $service . ' ('.$service->getServiceKey().')';
+                $valueList[$service->getServiceKey()] = $service . ' ('.$service->getServiceKey().')';
             }
         }
+        ksort($valueList);
         return implode(', ', $valueList);
     }
 
-    private function createSolutionNameValue(Collection $collection): string
+    /**
+     * Returns a comma-separated list of solution names
+     *
+     * @param Collection $collection
+     * @return string
+     */
+    protected function createSolutionNameValue(Collection $collection): string
     {
         $valueList = [];
         foreach ($collection as $entity) {

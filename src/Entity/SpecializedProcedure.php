@@ -29,9 +29,9 @@ use App\Entity\Base\NamedEntityTrait;
  * @ORM\Table(name="ozg_specialized_procedure")
  * @ORM\HasLifecycleCallbacks
  */
-class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInterface, HasManufacturerEntityInterface
+class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInterface, HasManufacturerEntityInterface, HasSolutionsEntityInterface
 {
-    const DEFAULT_PARENT_APPLICATION_CATEGORY_ID = 1;
+    public const DEFAULT_PARENT_APPLICATION_CATEGORY_ID = 1;
 
     use NamedEntityTrait;
     use HideableEntityTrait;
@@ -190,7 +190,7 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }

@@ -27,7 +27,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(name="ozg_contact")
  * @Vich\Uploadable
  */
-class Contact extends BaseEntity implements ImportEntityInterface
+class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsEntityInterface
 {
     public const CONTACT_TYPE_DEFAULT = 'default';
     public const CONTACT_TYPE_IMPORT_CMS = 'cms_address';
@@ -460,7 +460,7 @@ class Contact extends BaseEntity implements ImportEntityInterface
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }

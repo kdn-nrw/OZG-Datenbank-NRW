@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="ozg_service_system")
  * @ORM\HasLifecycleCallbacks
  */
-class ServiceSystem extends AbstractService implements SluggableInterface, HasMetaDateEntityInterface
+class ServiceSystem extends AbstractService implements SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {
     use ContactTextTrait;
     use SluggableEntityTrait;
@@ -362,7 +362,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface, HasMe
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }

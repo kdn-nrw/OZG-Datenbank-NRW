@@ -15,6 +15,7 @@ use App\Entity\AddressTrait;
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\ContactTextTrait;
 use App\Entity\HasManufacturerEntityInterface;
+use App\Entity\HasSolutionsEntityInterface;
 use App\Entity\Laboratory;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
@@ -33,7 +34,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_provider")
  */
-class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface
+class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface, HasSolutionsEntityInterface
 {
     use AddressTrait;
     use ContactTextTrait;
@@ -150,7 +151,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }

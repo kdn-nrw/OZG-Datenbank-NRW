@@ -718,6 +718,7 @@ app:
       transferable_start: Beginn Übertragbarkeit
       model_regions: Modellregionen
       solutions: Lösungen
+      service_solutions: Enthaltene Leika-Leistungen
       documents: Dokumente
   model_region_project_document:
     object_name: DMR Umsetzungsprojekt Dokument

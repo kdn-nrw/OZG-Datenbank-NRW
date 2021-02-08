@@ -15,15 +15,14 @@ namespace App\Entity;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Interface for entities with manufacturers property
+ * Interface for entities with solutions property
  */
-interface HasManufacturerEntityInterface
+interface HasSolutionsEntityInterface
 {
-
     /**
-     * Returns the manufacturer list
+     * Returns the solution list
      *
-     * @return Manufacturer[]|Collection
+     * @return Solution[]|Collection
      */
-    public function getManufacturers(): Collection;
+    public function getSolutions(): Collection;
 }

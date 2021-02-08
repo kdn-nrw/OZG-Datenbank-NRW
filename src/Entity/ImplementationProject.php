@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_implementation_project")
  * @ORM\HasLifecycleCallbacks
  */
-class ImplementationProject extends BaseNamedEntity implements SluggableInterface, HasMetaDateEntityInterface
+class ImplementationProject extends BaseNamedEntity implements SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {
     use SluggableEntityTrait;
 
@@ -503,7 +503,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }

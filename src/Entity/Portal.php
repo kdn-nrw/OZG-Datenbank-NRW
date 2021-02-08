@@ -26,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_portal")
  * @ORM\HasLifecycleCallbacks
  */
-class Portal extends BaseNamedEntity
+class Portal extends BaseNamedEntity implements HasSolutionsEntityInterface
 {
     use UrlTrait;
 
@@ -125,7 +125,7 @@ class Portal extends BaseNamedEntity
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }

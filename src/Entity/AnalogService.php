@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_analog_service")
  * @ORM\HasLifecycleCallbacks
  */
-class AnalogService extends BaseNamedEntity
+class AnalogService extends BaseNamedEntity implements HasSolutionsEntityInterface
 {
 
     /**
@@ -69,7 +69,7 @@ class AnalogService extends BaseNamedEntity
     /**
      * @return Solution[]|Collection
      */
-    public function getSolutions()
+    public function getSolutions(): Collection
     {
         return $this->solutions;
     }
