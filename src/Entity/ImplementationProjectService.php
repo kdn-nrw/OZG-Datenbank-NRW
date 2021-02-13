@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseEntity;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Base\HideableEntityTrait;
 
@@ -22,6 +23,7 @@ use App\Entity\Base\HideableEntityTrait;
  * @ORM\Entity
  * @ORM\Table(name="ozg_implementation_project_service")
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class ImplementationProjectService extends BaseEntity
 {

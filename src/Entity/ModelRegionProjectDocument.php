@@ -15,6 +15,7 @@ use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\DocumentUploadEntityInterface;
 use App\Entity\Base\HasUploadsEntityInterface;
 use DateTime;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,6 +28,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity
  * @ORM\Table(name="ozg_model_region_project_document")
  * @Vich\Uploadable
+ * @ApiResource
  */
 class ModelRegionProjectDocument extends BaseNamedEntity implements DocumentUploadEntityInterface
 {

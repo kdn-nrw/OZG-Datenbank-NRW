@@ -15,6 +15,7 @@ use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\CustomEntityLabelInterface;
 use App\Entity\FederalInformationManagementType as FederalInformationManagementEntity;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -23,6 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_fim")
+ * @ApiResource
  */
 class FederalInformationManagementType extends BaseEntity implements CustomEntityLabelInterface
 {

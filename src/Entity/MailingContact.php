@@ -14,6 +14,7 @@ namespace App\Entity;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\HideableEntityTrait;
 use DateTime;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_mailing_contact")
+ * @ApiResource
  */
 class MailingContact extends BaseEntity
 {

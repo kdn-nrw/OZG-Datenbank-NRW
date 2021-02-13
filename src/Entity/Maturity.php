@@ -13,6 +13,7 @@ namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\ColorCodedEntityTrait;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_maturity")
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class Maturity extends BaseNamedEntity
 {

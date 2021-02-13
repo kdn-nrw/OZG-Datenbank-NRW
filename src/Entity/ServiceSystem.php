@@ -21,6 +21,7 @@ use App\Entity\StateGroup\MinistryState;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -30,7 +31,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_system")
  * @ORM\HasLifecycleCallbacks
- */
+ * @ApiResource
+*/
 class ServiceSystem extends AbstractService implements SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {
     use ContactTextTrait;

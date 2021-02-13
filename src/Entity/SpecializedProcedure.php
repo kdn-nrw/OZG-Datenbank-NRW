@@ -16,6 +16,7 @@ use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
@@ -28,6 +29,7 @@ use App\Entity\Base\NamedEntityTrait;
  * @ORM\Entity
  * @ORM\Table(name="ozg_specialized_procedure")
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInterface, HasManufacturerEntityInterface, HasSolutionsEntityInterface
 {

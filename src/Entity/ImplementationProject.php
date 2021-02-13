@@ -18,6 +18,7 @@ use App\Entity\MetaData\HasMetaDateEntityInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -27,6 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_implementation_project")
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class ImplementationProject extends BaseNamedEntity implements SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {

@@ -14,6 +14,7 @@ namespace App\Entity\MetaData;
 use App\Util\SnakeCaseConverter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="App\Entity\Repository\MetaItemRepository")
  * @ORM\Table(name="ozg_meta_item")
+ * @ApiResource
  */
 class MetaItem extends AbstractMetaItem
 {

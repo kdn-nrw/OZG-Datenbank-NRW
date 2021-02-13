@@ -20,6 +20,7 @@ use App\Entity\StateGroup\ServiceProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -29,6 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_organisation")
+ * @ApiResource
  */
 class Organisation extends BaseNamedEntity
 {
@@ -76,7 +78,7 @@ class Organisation extends BaseNamedEntity
     protected $organizationType;
 
     /**
-     * @var Contact[]|Collection
+     * @var \App\Entity\Contact[]|Collection
      * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="organisationEntity", cascade={"persist"})
      */
     private $contacts;
@@ -153,7 +155,7 @@ class Organisation extends BaseNamedEntity
 
 
     /**
-     * @param Contact $contact
+     * @param \App\Entity\Contact $contact
      * @return self
      */
     public function addContact($contact): self
@@ -167,7 +169,7 @@ class Organisation extends BaseNamedEntity
     }
 
     /**
-     * @param Contact $contact
+     * @param \App\Entity\Contact $contact
      * @return self
      */
     public function removeContact($contact): self
@@ -184,7 +186,7 @@ class Organisation extends BaseNamedEntity
     }
 
     /**
-     * @return Contact[]|Collection
+     * @return \App\Entity\Contact[]|Collection
      */
     public function getContacts()
     {
@@ -192,7 +194,7 @@ class Organisation extends BaseNamedEntity
     }
 
     /**
-     * @param Contact[]|Collection $contacts
+     * @param \App\Entity\Contact[]|Collection $contacts
      */
     public function setContacts($contacts): void
     {

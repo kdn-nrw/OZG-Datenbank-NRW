@@ -11,7 +11,8 @@
 
 namespace App\Entity;
 
-
+// use App\Entity\Contact statement is required for API platform!
+use App\Entity\Contact;
 use Doctrine\Common\Collections\Collection;
 
 /**
@@ -35,7 +36,7 @@ trait OrganisationTrait
     }
 
     /**
-     * @return Contact[]|Collection
+     * @return \App\Entity\Contact[]|Collection
      * @deprecated
      */
     public function getContacts()

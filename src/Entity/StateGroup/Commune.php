@@ -34,6 +34,7 @@ use App\Entity\UrlTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -43,6 +44,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Entity(repositoryClass="App\Entity\Repository\CommuneRepository")
  * @ORM\Table(name="ozg_commune")
+ * @ApiResource
  */
 class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface, SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {

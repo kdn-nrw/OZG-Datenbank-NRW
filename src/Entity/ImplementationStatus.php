@@ -11,6 +11,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -20,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_implementation_status")
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class ImplementationStatus extends AbstractStatus
 {

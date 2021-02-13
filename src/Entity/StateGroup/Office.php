@@ -17,6 +17,7 @@ use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\NamedEntityTrait;
 use App\Entity\ContactTextTrait;
 use App\Entity\UrlTrait;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -26,6 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_office")
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class Office extends BaseBlamableEntity implements NamedEntityInterface
 {

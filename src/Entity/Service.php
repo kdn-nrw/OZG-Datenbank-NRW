@@ -20,6 +20,7 @@ use App\Entity\StateGroup\CommuneType;
 use App\Entity\StateGroup\MinistryState;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -29,6 +30,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @ORM\Table(name="ozg_service")
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class Service extends AbstractService implements SluggableInterface, HasMetaDateEntityInterface
 {

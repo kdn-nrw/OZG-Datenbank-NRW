@@ -16,6 +16,7 @@ use App\Entity\Base\BlameableInterface;
 use App\Entity\Base\BlameableTrait;
 use App\Entity\User;
 use DateTime;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -24,6 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_provider_security_incident")
+ * @ApiResource
  */
 class SecurityIncident extends BaseEntity implements BlameableInterface
 {

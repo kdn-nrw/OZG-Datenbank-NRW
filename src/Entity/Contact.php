@@ -15,6 +15,7 @@ use App\Entity\Base\BaseEntity;
 use App\Entity\Base\HideableEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -26,6 +27,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity()
  * @ORM\Table(name="ozg_contact")
  * @Vich\Uploadable
+ * @ApiResource
  */
 class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsEntityInterface
 {

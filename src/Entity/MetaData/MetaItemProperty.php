@@ -11,6 +11,7 @@
 
 namespace App\Entity\MetaData;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -19,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_meta_item_property")
+ * @ApiResource
  */
 class MetaItemProperty extends AbstractMetaItem
 {

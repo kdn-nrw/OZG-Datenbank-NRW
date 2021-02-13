@@ -12,6 +12,7 @@
 namespace App\Entity\StateGroup;
 
 use App\Entity\Base\BaseNamedEntity;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -21,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_ministry_country")
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class MinistryCountry extends BaseNamedEntity
 {
