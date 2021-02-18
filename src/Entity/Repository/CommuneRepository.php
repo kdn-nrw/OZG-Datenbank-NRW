@@ -26,7 +26,7 @@ class CommuneRepository extends EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('c');
         $queryBuilder
-            ->where('c.officialCommunityKey IS NULL OR c.regionalKey IS NULL');
+            ->where('c.officialCommunityKey IS NULL OR c.regionalKey IS NULL OR c.regionalKey NOT LIKE CONCAT(SUBSTRING(c.officialCommunityKey, 1, 4), \'%\')');
         $queryBuilder->orderBy('c.' . $orderBy, $orderDirection === 'DESC' ? 'DESC' : 'ASC');
         $query = $queryBuilder->getQuery();
         return $query->getResult();

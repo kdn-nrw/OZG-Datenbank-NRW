@@ -92,35 +92,63 @@ class ArsAgsConsumer extends AbstractApiConsumer
         $dataProcessor->setImportModelClass($this->getImportModelClass());
         $dataProcessor->setOutput($this->output);
         $dataProcessor->setImportSource($this->getImportSourceKey());
-        /** @var ArsAgsDemand $demand */
-        $demand = $this->getDemand();
         $totalUpdatedRowCount = 0;
         foreach ($communes as $commune) {
             /** @var Commune $commune */
-            $communityKey = $commune->getOfficialCommunityKey();
-            $regionalKey = $commune->getRegionalKey();
+            $communityKey = rtrim((string)$commune->getOfficialCommunityKey(), '0');
+            $regionalKey = rtrim((string)$commune->getRegionalKey(), '0');
+            /** @var ArsAgsDemand $demand */
+            $demand = $this->getDemand();
             $demand->setSearchTerm($commune->getName());
-            /** @noinspection DisconnectedForeachInstructionInspection */
             $this->dataProvider->setDemand($demand);
-            /** @noinspection DisconnectedForeachInstructionInspection */
             $this->dataProvider->process($dataProcessor);
             $results = $this->dataProcessor->getResultCollection();
             /** @var ResultCollection $results */
             $bestMatchingResult = null;
+            $bestNameMatch = 0;
+            $communeTypeName = (string)$commune->getCommuneType();
             foreach ($results as $result) {
+
+                $compCommunityKey = rtrim($result->getCommuneKey(), '0');
+                $compRegionalKey = rtrim($result->getRegionalKey(), '0');
+                $compName = $result->getName();
+                $nameMatch = $commune->getName() === $result->getName() ? 100 : 0;
+                if (!$nameMatch) {
+                    $compName = trim(preg_replace('/\([\d\-]+\)/', '', $compName));
+                    $nameMatch = $commune->getName() === $compName ? 50 : 0;
+                    if (!$nameMatch) {
+                        $nameParts = explode(',', $compName);
+                        $nameMatch = $commune->getName() === trim($nameParts[0]) ? 25 : 0;
+                    }
+                    if (strpos($compName, $communeTypeName) !== false) {
+                        $nameMatch += 10;
+                    }
+                }
                 /** @var ArsAgsResult $result */
                 if (null === $bestMatchingResult) {
                     $bestMatchingResult = $result;
-                } elseif ((!empty($communityKey) && $communityKey === $result->getCommuneKey())
-                    || (!empty($regionalKey) && $regionalKey === $result->getRegionalKey())) {
+                    $bestNameMatch = $nameMatch;
+                } elseif ((!empty($communityKey) && $communityKey === $compCommunityKey)
+                    || (!empty($regionalKey) && $regionalKey === $compRegionalKey)) {
                     $bestMatchingResult = $result;
                     break;
-                } elseif ($commune->getName() === $result->getName()
-                    || (!empty($communityKey) && rtrim($communityKey, '0') === $result->getCommuneKey())) {
+                } elseif ($nameMatch > $bestNameMatch
+                    || (!empty($communityKey) && $compCommunityKey === $result->getCommuneKey())) {
                     $bestMatchingResult = $result;
+                    $bestNameMatch = $nameMatch;
                 }
             }
             if (null !== $bestMatchingResult) {
+                // Update either community key or regional key, if keys don't match
+                if (!empty($communityKey) && !empty($regionalKey)) {
+                    $compCommunityKey = rtrim($bestMatchingResult->getCommuneKey(), '0');
+                    $compRegionalKey = rtrim($bestMatchingResult->getRegionalKey(), '0');
+                    if ($communityKey === $compCommunityKey) {
+                        $commune->setRegionalKey($bestMatchingResult->getRegionalKey());
+                    } elseif ($regionalKey === $compRegionalKey) {
+                        $commune->setOfficialCommunityKey($bestMatchingResult->getCommuneKey());
+                    }
+                }
                 if (empty($communityKey)) {
                     $commune->setOfficialCommunityKey($bestMatchingResult->getCommuneKey());
                 }
@@ -133,6 +161,9 @@ class ArsAgsConsumer extends AbstractApiConsumer
                     break;
                 }
             }
+            //echo "Checked commune: " .$commune->getName() . ' [ID: '.$commune->getId().']' . "\n";
+            $results->clear();
+            $this->demand = null;
         }
         if ($totalUpdatedRowCount > 0) {
             $em->flush();
