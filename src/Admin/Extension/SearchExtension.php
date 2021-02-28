@@ -15,6 +15,7 @@ namespace App\Admin\Extension;
 
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Datagrid\FulltextSearchDatagridInterface;
+use App\Entity\Base\NamedEntityInterface;
 use App\Search\Finder;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdminExtension;
@@ -78,11 +79,11 @@ class SearchExtension extends AbstractAdminExtension
 
                     $matchingRecordIds = $this->finder->findMatchingRecordIds($entityClass, (string) $value['value']);
                     $extraSearchFields = null;
-                    $hasEnoughResults = false;
+                    $resultCount = 0;
                     if (null !== $matchingRecordIds) {
                         $matchingIdCount = count($matchingRecordIds);
-                        if ($matchingIdCount > 5 && $dataGrid instanceof FulltextSearchDatagridInterface) {
-                            $hasEnoughResults = true;
+                        $resultCount = $matchingIdCount;
+                        if ($matchingIdCount > 0 && $dataGrid instanceof FulltextSearchDatagridInterface) {
                             $filterParameters = $admin->getFilterParameters();
                             $maxPerPage = FulltextSearchDatagridInterface::DEFAULT_MAX_RESULTS_PER_PAGE;
                             if (isset($filterParameters['_per_page'])) {
@@ -116,21 +117,37 @@ class SearchExtension extends AbstractAdminExtension
                         // search index to make the search faster
                         $extraSearchFields = ['name', 'description'];
                     }
-                    if (!$hasEnoughResults) {
-                        $words = array_filter(array_map('trim', explode(' ', $value['value'])));
+                    $addSearchFields = [];
+                    // Name is already searched for in full text search
+                    if (is_a($entityClass, NamedEntityInterface::class, true)) {
+                        $addSearchFields['name'] = false;
+                    }
+                    $words = array_filter(array_map('trim', explode(' ', $value['value'])));
+                    if ($resultCount < 6) {
                         foreach ($props as $refProperty) {
                             if ((false !== $docComment = $refProperty->getDocComment())
                                 && preg_match('/@var\s+([^\s]+)/', $docComment, $matches)) {
                                 $field = $refProperty->getName();
                                 $type = $matches[1];
                                 if (($type === 'string' || $type === 'string|null')
+                                    && !isset($addSearchFields[$field])
                                     && (null === $extraSearchFields || in_array($field, $extraSearchFields, false))) {
-                                    foreach ($words as $word) {
-                                        $orConditions[] = $qb->expr()->like(
-                                            $alias . '.' . $field,
-                                            $queryBuilder->expr()->literal('%' . $word . '%')
-                                        );
-                                    }
+                                    $addSearchFields[$field] = 'both';
+                                }
+                            }
+                        }
+                    }
+                    if (!empty($addSearchFields)) {
+                        foreach ($addSearchFields as $addSearchField => $placeholderPosition) {
+                            if ($placeholderPosition !== false) {
+                                foreach ($words as $word) {
+                                    $literal = (in_array($placeholderPosition, ['before', 'both']) ? '%' : '')
+                                        . strtolower($word)
+                                        . (in_array($placeholderPosition, ['after', 'both']) ? '%' : '');
+                                    $orConditions[] = $qb->expr()->like(
+                                        'LOWER('.$alias . '.' . $addSearchField.')',
+                                        $queryBuilder->expr()->literal($literal)
+                                    );
                                 }
                             }
                         }
