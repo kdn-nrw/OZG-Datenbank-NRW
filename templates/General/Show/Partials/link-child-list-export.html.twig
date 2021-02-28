@@ -1,0 +1,16 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{# @var refSettings \App\Model\ReferenceSettings #}
+{% if refSettings.admin.hasAccess('export') %}
+    <div class="reference-list-toolbar" style="padding: 0 10px 10px">
+        <a href="{{ path('app_record_export', {'recordType': field_description.admin.code, 'recordId': object.id, 'property': field_description.name, 'format': 'xlsx'}) }}" class="link-record-export" target="_blank" title="{{ 'app.common.export_list'|trans }}">
+            <span class="sr-only">{{ 'app.common.export_list'|trans }}</span>
+            <i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>
+        </a>
+    </div>
+{% endif %}

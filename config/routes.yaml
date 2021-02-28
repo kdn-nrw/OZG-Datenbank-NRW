@@ -33,3 +33,7 @@ app_service_choices:
     path: /service/choices
     controller: App\Controller\ServiceController::getChoicesAction
     methods: [POST]
+
+app_record_export:
+    path: /record-export/{recordType}/{recordId}/{property}
+    controller: App\Controller\ExportController::exportAction

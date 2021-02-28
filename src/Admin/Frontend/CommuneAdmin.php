@@ -131,6 +131,8 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'is_custom_field' => true,
             'is_tab_field' => true,
             'is_custom_rendered' => true,
+            'reference_field_list' => ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority',],// 'status'
+            'show_export' => true,
         ]);
         $showMapper->add('communeType.services', null, [
             'label' => 'app.commune_type.entity.services',
@@ -138,6 +140,8 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'is_custom_field' => true,
             'is_tab_field' => true,
             'is_custom_rendered' => true,
+            'reference_field_list' => ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2',],// 'status'
+            'show_export' => true,
         ]);
     }
 

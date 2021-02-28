@@ -5,6 +5,11 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {# @var refSettings \App\Model\ReferenceSettings #}
+{% if field_description.option('reference_field_list') %}
+    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
+{% else %}
+    {% set referenceFieldNameList = ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority', 'status'] %}
+{% endif %}
 <table class="table table-bordered table-condensed">
     <tr>
         {% include 'ServiceAdmin/Show/table-head-services.html.twig' %}
@@ -32,3 +37,6 @@ file that was distributed with this source code.
         {% endif %}
     {% endfor %}
 </table>
+{% if field_description.option('show_export') %}
+    {% include 'General/Show/Partials/link-child-list-export.html.twig' %}
+{% endif %}

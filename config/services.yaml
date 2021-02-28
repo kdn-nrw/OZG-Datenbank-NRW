@@ -951,3 +951,6 @@ services:
       - '@Symfony\Component\Security\Core\Security'
     tags:
       - { name: sonata.admin.extension, target: App\Admin\StateGroup\SecurityIncidentAdmin }
+
+
+  Sonata\AdminBundle\Bridge\Exporter\AdminExporter: '@sonata.admin.admin_exporter'

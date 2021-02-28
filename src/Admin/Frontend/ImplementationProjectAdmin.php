@@ -112,16 +112,16 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
         $showMapper
             ->add('name')
             ->add('description');
-        $showMapper->add('statusInfo', null, [
-            'admin_code' => ImplementationStatusAdmin::class,
-            'template' => 'ImplementationProjectAdmin/show-status-info.html.twig',
-            'is_custom_field' => true,
-        ]);
         $showMapper
             ->add('notes', 'html', [
                 'template' => 'ImplementationProjectAdmin/show-notes.html.twig',
                 'is_custom_field' => true,
             ]);
+        $showMapper->add('statusInfo', null, [
+            'admin_code' => ImplementationStatusAdmin::class,
+            'template' => 'ImplementationProjectAdmin/show-status-info.html.twig',
+            'is_custom_field' => true,
+        ]);
         $showMapper
             ->add('publishedSolutions', null, [
                 'admin_code' => SolutionAdmin::class,

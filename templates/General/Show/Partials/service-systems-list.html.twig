@@ -5,10 +5,14 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {# @var refSettings \App\Model\ReferenceSettings #}
+{% if field_description.option('reference_field_list') %}
+    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
+{% else %}
+    {% set referenceFieldNameList = ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority', 'status'] %}
+{% endif %}
 <table class="table table-bordered table-striped table-condensed">
     <tr>
-        {% set tableHeaders = ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority', 'status'] %}
-        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
+        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': refSettings.labelPrefix} %}
         {% if refSettings.edit.enabled %}
             <th></th>
         {% endif %}
@@ -16,41 +20,25 @@ file that was distributed with this source code.
     {% for child in entities %}
         {# @var child \App\Entity\ServiceSystem #}
         <tr>
-            <td>
-                {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
-            </td>
-            <td>
-                {% if child.serviceKey %}
-                    {{ child.serviceKey }}
-                {% endif %}
-            </td>
-            <td>
-                {% if child.jurisdictions %}
+            {% for field in referenceFieldNameList %}
+                {% set property = field|app_format_property_name %}
+                <td>
+                {% if property == 'name' %}
+                    {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
+                {% elseif property == 'jurisdictions' %}
                     {% for grandChild in child.jurisdictions %}
                         <span class="badge">{{ grandChild.name }}</span>
                     {% endfor %}
+                {% elseif property == 'subject' %}
+                    {% if child.situation.subject %}
+                        {{ child.situation.subject.name }}
+                    {% endif %}
+                {% else %}
+                    {% set value = attribute(child, property) %}
+                    {{ value|app_format_custom_value }}
                 {% endif %}
-            </td>
-            <td>
-                {% if child.situation %}
-                    {{ child.situation.name }}
-                {% endif %}
-            </td>
-            <td>
-                {% if child.situation.subject %}
-                    {{ child.situation.subject.name }}
-                {% endif %}
-            </td>
-            <td>
-                {% if child.priority %}
-                    {{ child.priority.name }}
-                {% endif %}
-            </td>
-            <td>
-                {% if child.status %}
-                    {{ child.status.name }}
-                {% endif %}
-            </td>
+                </td>
+            {% endfor %}
             {% if refSettings.edit.enabled %}
                 <td>
                     {% if refSettings.admin.hasAccess(refSettings.edit.route, child) %}
@@ -72,3 +60,6 @@ file that was distributed with this source code.
         </tr>
     {% endfor %}
 </table>
+{% if field_description.option('show_export') %}
+    {% include 'General/Show/Partials/link-child-list-export.html.twig' %}
+{% endif %}

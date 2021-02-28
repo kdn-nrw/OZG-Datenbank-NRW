@@ -319,16 +319,16 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
             ]);
-        $showMapper->add('statusInfo', null, [
-            'admin_code' => ImplementationStatusAdmin::class,
-            'template' => 'ImplementationProjectAdmin/show-status-info.html.twig',
-            'is_custom_field' => true,
-        ]);
         $showMapper
             ->add('notes', 'html', [
                 'template' => 'ImplementationProjectAdmin/show-notes.html.twig',
                 'is_custom_field' => true,
             ]);
+        $showMapper->add('statusInfo', null, [
+            'admin_code' => ImplementationStatusAdmin::class,
+            'template' => 'ImplementationProjectAdmin/show-status-info.html.twig',
+            'is_custom_field' => true,
+        ]);
         $this->addLaboratoriesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
         $this->addContactsShowFields($showMapper, false, 'contacts');

@@ -7,28 +7,21 @@ file that was distributed with this source code.
 
 {# @var child \App\Entity\Service #}
 {# @var refSettings \App\Model\ReferenceSettings #}
-<td>
-    {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
-<td>
-    {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'child': child} %}
-</td>
-<td>
-    {{ child.serviceKey }}
-</td>
-<td>
-    {{ child.serviceType }}
-</td>
-<td>
-    {{ child.lawShortcuts }}
-</td>
-<td>
-    {{ child.relevance1 }}
-</td>
-<td>
-    {{ child.relevance2 }}
-</td>
-<td>
-    {% if child.status %}
-        {{ child.status.name }}
-    {% endif %}
-</td>
+{% if field_description.option('reference_field_list') %}
+    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
+{% else %}
+    {% set referenceFieldNameList = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'status'] %}
+{% endif %}
+{% for field in referenceFieldNameList %}
+    {% set property = field|app_format_property_name %}
+    <td>
+        {% if property == 'name' %}
+            {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
+        {% elseif property == 'serviceCreatedAt' %}
+            {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'child': child} %}
+        {% else %}
+            {% set value = attribute(child, property) %}
+            {{ value|app_format_custom_value }}
+        {% endif %}
+    </td>
+{% endfor %}

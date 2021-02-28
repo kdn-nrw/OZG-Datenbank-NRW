@@ -44,27 +44,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         /** @noinspection NullPointerExceptionInspection */
         $datagrid->buildPager();
 
-        $fields = [];
-        $exportSettings = $this->getExportSettings();
-
-        foreach ($this->getExportFields() as $key => $field) {
-            $transLabel = $exportSettings->getCustomLabel($field);
-            if (!$transLabel) {
-                $label = $this->getTranslationLabel($field, 'export', 'label');
-                $transLabel = $this->trans($label);
-            } else {
-                $label = $field;
-            }
-
-            // NEXT_MAJOR: Remove this hack, because all field labels will be translated with the major release
-            // No translation key exists
-            if ($transLabel === $label) {
-                $fields[$key] = $field;
-            } else {
-                $fields[$transLabel] = $field;
-            }
-        }
-        $exportSettings->setProcessedPropertyMap($fields);
+        $exportSettings = $this->getProcessedExportSettings();
         /** @noinspection NullPointerExceptionInspection */
         return $this->getCustomDataSourceIterator($datagrid, $exportSettings);
     }
@@ -115,9 +95,45 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         return new ExportSettings();
     }
 
+    /**
+     * Returns the available export formats
+     *
+     * @return array|string[]
+     */
     public function getExportFormats()
     {
         return $this->getExportSettings()->getFormats();
+    }
+
+    /**
+     * Returns the export settings with the processed fields
+     *
+     * @return ExportSettings
+     */
+    public function getProcessedExportSettings(): ExportSettings
+    {
+        $fields = [];
+        $exportSettings = $this->getExportSettings();
+
+        foreach ($this->getExportFields() as $key => $field) {
+            $transLabel = $exportSettings->getCustomLabel($field);
+            if (!$transLabel) {
+                $label = $this->getTranslationLabel($field, 'export', 'label');
+                $transLabel = $this->trans($label);
+            } else {
+                $label = $field;
+            }
+
+            // NEXT_MAJOR: Remove this hack, because all field labels will be translated with the major release
+            // No translation key exists
+            if ($transLabel === $label) {
+                $fields[$key] = $field;
+            } else {
+                $fields[$transLabel] = $field;
+            }
+        }
+        $exportSettings->setProcessedPropertyMap($fields);
+        return $exportSettings;
     }
 
     public function getFilterParameters()

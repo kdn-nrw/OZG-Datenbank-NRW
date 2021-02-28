@@ -4,6 +4,10 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-{% set tableHeaders = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'status'] %}
+{% if field_description.option('reference_field_list') %}
+    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
+{% else %}
+    {% set referenceFieldNameList = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'status'] %}
+{% endif %}
 {% set labelPrefix = 'app.service.entity.' %}
-{% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+{% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': labelPrefix} %}
