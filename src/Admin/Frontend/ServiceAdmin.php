@@ -12,8 +12,10 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\Traits\DatePickerTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\FederalInformationManagementType;
+use App\Entity\ImplementationStatus;
 use App\Entity\Priority;
 use App\Entity\Status;
 use App\Entity\Subject;
@@ -27,6 +29,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
+    use DatePickerTrait;
 
     /**
      * @var string[]
@@ -126,7 +129,44 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ])
             ->add('name')
             ->add('serviceKey');
+        $this->configureImplementationProjectStatusListFields($listMapper);
         $this->addDefaultListActions($listMapper);
+    }
+
+    protected function configureImplementationProjectStatusListFields(ListMapper $listMapper)
+    {
+        $listMapper->add('implementationProjectStatusInfo.status', 'choice', [
+            'editable' => false,
+            'class' => ImplementationStatus::class,
+            'catalogue' => 'messages',
+            'template' => 'ImplementationProjectAdmin/list-status.html.twig',
+            'sortable' => true, // IMPORTANT! make the column sortable
+            'sort_field_mapping' => [
+                'fieldName' => 'name'
+            ],
+            'sort_parent_association_mappings' => [
+                ['fieldName' => 'implementationProjects'],
+                ['fieldName' => 'status'],
+            ],
+            'fallbackToCustomValue' => true,
+        ]);
+        $dateFields = [
+            'projectStartAt', 'conceptStatusAt',
+            'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
+        ];
+        foreach ($dateFields as $dateField) {
+            $this->addDatePickersListFields($listMapper, 'implementationProjectStatusInfo.' . $dateField, true, true, [
+                'fallbackToCustomValue' => true,
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => $dateField
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'implementationProjects'],
+                    ['fieldName' => 'implementationProject'],
+                ]
+            ]);
+        }
     }
 
     /**
@@ -139,8 +179,16 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
 
         $additionalFields = [
             'serviceSystem.situation.subject', 'serviceSystem.situation', 'serviceSystem', 'serviceSystem.serviceKey',
-            'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
+            'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status',
+            'implementationProjectStatusInfo.status',
         ];
+        $dateFields = [
+            'projectStartAt', 'conceptStatusAt',
+            'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
+        ];
+        foreach ($dateFields as $dateField) {
+            $additionalFields[] = 'implementationProjectStatusInfo.' . $dateField;
+        }
         $customServiceFormatter = new ServiceFimValueFormatter();
         $fimStatusTypes = FederalInformationManagementType::$statusChoices;
         $statusTranslations = [];

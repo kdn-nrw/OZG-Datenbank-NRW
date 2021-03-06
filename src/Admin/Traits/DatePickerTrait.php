@@ -38,7 +38,13 @@ trait DatePickerTrait
             ]);
     }
 
-    protected function addDatePickersListFields(ListMapper $listMapper, string $fieldName, $addProgress = false, bool $showOnlyMonth = true): void
+    protected function addDatePickersListFields(
+        ListMapper $listMapper,
+        string $fieldName,
+        $addProgress = false,
+        bool $showOnlyMonth = true,
+        array $customFieldDescriptionOptions = []
+    ): void
     {
         $fieldDescriptionOptions = [
             // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
@@ -46,6 +52,9 @@ trait DatePickerTrait
         ];
         if ($addProgress) {
             $fieldDescriptionOptions['template'] = 'General/List/list_date_progress.html.twig';
+        }
+        if (!empty($customFieldDescriptionOptions)) {
+            $fieldDescriptionOptions = array_merge($fieldDescriptionOptions, $customFieldDescriptionOptions);
         }
         $listMapper->add($fieldName, null, $fieldDescriptionOptions);
     }

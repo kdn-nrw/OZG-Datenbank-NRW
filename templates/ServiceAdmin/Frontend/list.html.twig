@@ -12,4 +12,14 @@ file that was distributed with this source code.
         {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_SERVICES')} %}
     </section>
     {{ parent() }}
+    <section class="content content-bottom">
+        {% set filters = {'jurisdiction': constant('App\\Entity\\Jurisdiction::TYPE_COMMUNE') } %}
+        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+            'title': 'app.statistics.service_communal_implementation_status',
+            'translation_domain': 'messages',
+            'mode': 'admin',
+            'filters': filters|json_encode,
+            'provider':  'App\\Statistics\\Provider\\ServiceImplementationStatusChartProvider'
+        }) }}
+    </section>
 {% endblock sonata_page_content %}

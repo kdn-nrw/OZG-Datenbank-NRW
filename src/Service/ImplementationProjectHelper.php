@@ -15,6 +15,7 @@ use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\ImplementationProject;
 use App\Entity\ImplementationProjectService;
 use App\Entity\ImplementationStatus;
+use App\Model\ImplementationStatusInfoInterface;
 use Doctrine\ORM\EntityRepository;
 
 class ImplementationProjectHelper
@@ -43,22 +44,22 @@ class ImplementationProjectHelper
     /**
      * Returns the status info for the given implementation project
      *
-     * @param ImplementationProject $project
+     * @param ImplementationStatusInfoInterface $statusInfoModel
      * @return array
      */
-    public function getProjectStatusInfo(ImplementationProject $project): array
+    public function getProjectStatusInfo(ImplementationStatusInfoInterface $statusInfoModel): array
     {
         $statusChoices = $this->getStatusChoices();
         $statusInfo = [];
         foreach ($statusChoices as $status) {
             /** @var ImplementationStatus $status */
-            $isCurrent = $project->getStatus() === $status;
+            $isCurrent = $statusInfoModel->getStatus() === $status;
             $statusInfo[$status->getId()] = [
                 'name' => $status->getName(),
-                'statusDate' => $project->getStatusDate($status),
+                'statusDate' => $statusInfoModel->getStatusDate($status),
                 'isCurrent' => $isCurrent,
                 'setAutomatically' => true,
-                'isActive' => $project->isStatusActive($status),
+                'isActive' => $statusInfoModel->isStatusActive($status),
             ];
         }
         return $statusInfo;

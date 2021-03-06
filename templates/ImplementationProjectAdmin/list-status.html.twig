@@ -5,13 +5,16 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 
+{%- if field_description.options.fallbackToCustomValue is defined and field_description.options.fallbackToCustomValue -%}
+    {% set value = object|app_attribute_recursive(field_description.name) %}
+{%- endif -%}
 {% set appCustomClass = value is not empty and value.cssClass ? value.cssClass : '' %}
 
 {% extends '@SonataAdmin/CRUD/list_choice.html.twig' %}
 
 {% block field %}
 {% apply spaceless %}
-    {# @var object \App\Entity\ImplementationProject #}
-    {{ object.status }}
+    {# @var value \App\Entity\ImplementationStatus #}
+    {{ value }}
 {% endapply %}
 {% endblock %}

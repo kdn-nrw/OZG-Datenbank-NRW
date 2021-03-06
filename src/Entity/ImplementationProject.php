@@ -15,6 +15,8 @@ use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
+use App\Model\ImplementationStatusInfoInterface;
+use App\Model\ImplementationStatusInfoTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,8 +32,14 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ApiResource
  */
-class ImplementationProject extends BaseNamedEntity implements SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
+class ImplementationProject extends BaseNamedEntity
+    implements ImplementationStatusInfoInterface,
+        SluggableInterface,
+        HasMetaDateEntityInterface,
+        HasSolutionsEntityInterface
 {
+
+    use ImplementationStatusInfoTrait;
     use SluggableEntityTrait;
 
     /**
@@ -899,68 +907,6 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     public function prePersist(): void
     {
         $this->updateStatus();
-    }
-
-    /**
-     * Returns the true if the given status is active
-     *
-     * @param ImplementationStatus $status
-     * @return bool
-     */
-    public function isStatusActive(ImplementationStatus $status): bool
-    {
-        $isActive = $status === $this->getStatus();
-        if (!$isActive && null !== $statusId = $status->getId()) {
-            switch ($statusId) {
-                case ImplementationStatus::STATUS_ID_PREPARED:
-                    $isActive = null !== $this->projectStartAt && $this->projectStartAt->getTimestamp() <= time();
-                    break;
-                case ImplementationStatus::STATUS_ID_CONCEPT:
-                    $isActive = null !== $this->conceptStatusAt && $this->conceptStatusAt->getTimestamp() <= time();
-                    break;
-                case ImplementationStatus::STATUS_ID_IMPLEMENTATION:
-                    $isActive = null !== $this->implementationStatusAt && $this->implementationStatusAt->getTimestamp() <= time();
-                    break;
-                case ImplementationStatus::STATUS_ID_COMMISSIONING:
-                    $isActive = null !== $this->commissioningStatusAt && $this->commissioningStatusAt->getTimestamp() <= time();
-                    break;
-                case ImplementationStatus::STATUS_ID_NATIONWIDE_ROLLOUT:
-                    $isActive = null !== $this->nationwideRolloutAt && $this->nationwideRolloutAt->getTimestamp() <= time();
-                    break;
-            }
-        }
-        return $isActive;
-    }
-
-    /**
-     * Returns the status date for the given status
-     *
-     * @param ImplementationStatus $status
-     * @return DateTime|null
-     */
-    public function getStatusDate(ImplementationStatus $status): ?DateTime
-    {
-        $statusDate = null;
-        if (null !== $status && null !== $statusId = $status->getId()) {
-            switch ($statusId) {
-                case ImplementationStatus::STATUS_ID_PREPARED:
-                    $statusDate = $this->projectStartAt;
-                    break;
-                case ImplementationStatus::STATUS_ID_CONCEPT:
-                    $statusDate = $this->conceptStatusAt;
-                    break;
-                case ImplementationStatus::STATUS_ID_IMPLEMENTATION:
-                    $statusDate = $this->implementationStatusAt;
-                    break;
-                case ImplementationStatus::STATUS_ID_COMMISSIONING:
-                    $statusDate = $this->commissioningStatusAt;
-                    break;
-                case ImplementationStatus::STATUS_ID_NATIONWIDE_ROLLOUT:
-                    $statusDate = $this->nationwideRolloutAt;
-                    break;
-            }
-        }
-        return $statusDate;
     }
 
     /**

@@ -18,6 +18,7 @@ use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Bureau;
 use App\Entity\StateGroup\CommuneType;
 use App\Entity\StateGroup\MinistryState;
+use App\Model\ServiceImplementationStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -312,6 +313,13 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @ORM\Column(name="inherit_commune_types", type="boolean", nullable=true)
      */
     protected $inheritCommuneTypes = true;
+
+    /**
+     * The implementation status info from the implementation project service references
+     *
+     * @var ServiceImplementationStatus
+     */
+    private $serviceImplementationStatus;
 
     public function __construct()
     {
@@ -1220,6 +1228,19 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     public function setImplementationProjects($implementationProjects): void
     {
         $this->implementationProjects = $implementationProjects;
+    }
+
+    /**
+     * Returns the implementation status info from the implementation project service references
+     *
+     * @return ServiceImplementationStatus
+     */
+    public function getImplementationProjectStatusInfo(): ServiceImplementationStatus
+    {
+        if (null === $this->serviceImplementationStatus) {
+            $this->serviceImplementationStatus = new ServiceImplementationStatus($this);
+        }
+        return $this->serviceImplementationStatus;
     }
 
     /**

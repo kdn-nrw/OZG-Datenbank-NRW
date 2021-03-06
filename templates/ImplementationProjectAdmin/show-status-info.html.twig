@@ -1,38 +1,15 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% extends 'General/Show/show-status-info.html.twig' %}
+
 {# @var object \App\Entity\ImplementationProject #}
-{% set statusInfo = app_implementation_project_status_info(object) %}
-<div class="box box-primary">
-    <div class="box-header">
-        <h4 class="field-label box-title">
-            {{ 'app.implementation_status.object_name'|trans }}
-        </h4>
-    </div>
-    <div class="box-body">
-        <div class="project-status-info">
-            {% for statusDetails in statusInfo %}
-                <div class="project-status{{ statusDetails.isActive ? ' active' : '' }}{{ statusDetails.isCurrent ? ' current' : '' }}{{ statusDetails.setAutomatically ? '' : ' inactive' }}">
-                    <div class="project-status-name">
-                        <div class="arrow left"></div>
-                        <div class="name">
-                            {{ statusDetails.name }}
-                        </div>
-                        <div class="arrow right"></div>
-                    </div>
-                    {% if statusDetails.statusDate is not null %}
-                        <div class="project-status-date">
-                            {% if date(statusDetails.statusDate) > date() %}
-                                <span class="field-label">{{ 'app.implementation_status.common.status_from'|trans }}</span>
-                            {% else %}
-                                <span class="field-label">{{ 'app.implementation_status.common.status_since'|trans }}</span>
-                            {% endif %}
-                            {{ statusDetails.statusDate|date('d.m.Y') }}
-                        </div>
-                    {% else %}
-                        <div class="project-status-date not-assigned"></div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-        {% if object.services|length > 0 %}
+{% block servicesStatusInfo %}
+    {% if object.services|length > 0 %}
         <div class="project-service-status-list">
             <h4 class="box-inline-headline">{{ 'app.implementation_project_service.list_services_status'|trans }}</h4>
             {% for projectService in object.services %}
@@ -57,6 +34,5 @@
                 </div>
             {% endfor %}
         </div>
-        {% endif %}
-    </div>
-</div>
+    {% endif %}
+{% endblock %}

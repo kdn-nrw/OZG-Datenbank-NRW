@@ -29,7 +29,8 @@ class ImplementationStatus extends AbstractStatus
     public const STATUS_ID_CONCEPT = 3;
     public const STATUS_ID_IMPLEMENTATION = 4;
     public const STATUS_ID_COMMISSIONING = 6;
-    public const STATUS_ID_NATIONWIDE_ROLLOUT = 7;
+    public const STATUS_ID_DEFERRED = 7;
+    public const STATUS_ID_NATIONWIDE_ROLLOUT = 8;
 
     public const STATUS_SWITCH_PREPARED = 1;
     public const STATUS_SWITCH_CONCEPT = 2;

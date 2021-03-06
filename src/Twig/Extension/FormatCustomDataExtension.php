@@ -13,6 +13,8 @@ namespace App\Twig\Extension;
 
 use App\Entity\Base\CustomEntityLabelInterface;
 use App\Translator\TranslatorAwareTrait;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -42,6 +44,7 @@ class FormatCustomDataExtension extends AbstractExtension
             new TwigFilter('app_format_custom_value', [$this, 'getFormattedValue']),
             new TwigFilter('app_format_property_name', [$this, 'convertToPropertyName']),
             new TwigFilter('app_format_collection_item_label', [$this, 'getCollectionItemLabel']),
+            new TwigFilter('app_attribute_recursive', [$this, 'getAttributeRecursive']),
         ];
     }
 
@@ -141,5 +144,30 @@ class FormatCustomDataExtension extends AbstractExtension
                 array_pop($tmpParts)
             );
         return ucwords($text);
+    }
+
+    /**
+     * @param object|array                 $objectOrArray The object or array to traverse
+     * @param string|PropertyPathInterface $propertyPath  The property path to read
+     * @return mixed|null
+     */
+    public function getAttributeRecursive($objectOrArray, $propertyPath)
+    {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        if ($propertyAccessor->isReadable($objectOrArray, $propertyPath)) {
+            return $propertyAccessor->getValue($objectOrArray, $propertyPath);
+        }
+        $firstDotPos = strpos($propertyPath, '.');
+        if ($firstDotPos !== false) {
+            $firstProperty = trim(substr($propertyPath, 0, $firstDotPos), ' .');
+            $restProperty = trim(substr($propertyPath, $firstDotPos), ' .');
+            if ($propertyAccessor->isReadable($objectOrArray, $firstProperty)) {
+                $subObjectOrArray = $propertyAccessor->getValue($objectOrArray, $firstProperty);
+                if (null !== $subObjectOrArray) {
+                    return $this->getAttributeRecursive($subObjectOrArray, $restProperty);
+                }
+            }
+        }
+        return null;
     }
 }
