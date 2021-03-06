@@ -81,6 +81,13 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     protected $commissioningStatusAt;
 
     /**
+     * @var null|DateTime
+     *
+     * @ORM\Column(nullable=true, type="datetime", name="nationwide_rollout_at")
+     */
+    protected $nationwideRolloutAt;
+
+    /**
      * Notes
      *
      * @var string|null
@@ -329,6 +336,22 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     public function setCommissioningStatusAt(?DateTime $commissioningStatusAt): void
     {
         $this->commissioningStatusAt = $commissioningStatusAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getNationwideRolloutAt(): ?DateTime
+    {
+        return $this->nationwideRolloutAt;
+    }
+
+    /**
+     * @param DateTime|null $nationwideRolloutAt
+     */
+    public function setNationwideRolloutAt(?DateTime $nationwideRolloutAt): void
+    {
+        $this->nationwideRolloutAt = $nationwideRolloutAt;
     }
 
     /**
@@ -827,7 +850,7 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
     }
 
     /**
-     * @param Contact $contact
+     * @param Contact $fimExpert
      * @return self
      */
     public function addFimExpert(Contact $fimExpert): self
@@ -901,6 +924,9 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
                 case ImplementationStatus::STATUS_ID_COMMISSIONING:
                     $isActive = null !== $this->commissioningStatusAt && $this->commissioningStatusAt->getTimestamp() <= time();
                     break;
+                case ImplementationStatus::STATUS_ID_NATIONWIDE_ROLLOUT:
+                    $isActive = null !== $this->nationwideRolloutAt && $this->nationwideRolloutAt->getTimestamp() <= time();
+                    break;
             }
         }
         return $isActive;
@@ -929,6 +955,9 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
                 case ImplementationStatus::STATUS_ID_COMMISSIONING:
                     $statusDate = $this->commissioningStatusAt;
                     break;
+                case ImplementationStatus::STATUS_ID_NATIONWIDE_ROLLOUT:
+                    $statusDate = $this->nationwideRolloutAt;
+                    break;
             }
         }
         return $statusDate;
@@ -954,6 +983,9 @@ class ImplementationProject extends BaseNamedEntity implements SluggableInterfac
                     break;
                 case ImplementationStatus::STATUS_SWITCH_COMMISSIONING:
                     $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->implementationStatusAt, $this->commissioningStatusAt);
+                    break;
+                case ImplementationStatus::STATUS_SWITCH_NATIONWIDE_ROLLOUT:
+                    $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->commissioningStatusAt, $this->nationwideRolloutAt);
                     break;
                 default:
                     $newStatus = null;

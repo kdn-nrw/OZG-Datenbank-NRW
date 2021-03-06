@@ -43,6 +43,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
         $this->addDefaultDatagridFilter($datagridMapper, 'conceptStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'implementationStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'commissioningStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'nationwideRolloutAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'fundings');
         $this->addDefaultDatagridFilter($datagridMapper, 'services.service.bureaus');
         $this->addDefaultDatagridFilter($datagridMapper, 'services.service.portals', ['label' => 'app.implementation_project.entity.portals']);
@@ -90,6 +91,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
         $this->addDatePickersListFields($listMapper, 'conceptStatusAt', true);
         $this->addDatePickersListFields($listMapper, 'implementationStatusAt', true);
         $this->addDatePickersListFields($listMapper, 'commissioningStatusAt', true);
+        $this->addDatePickersListFields($listMapper, 'nationwideRolloutAt', true);
         $this->addDefaultListActions($listMapper);
     }
 
@@ -100,7 +102,10 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
     {
         $settings = parent::getExportSettings();
         $settings->addExcludeFields(['statusInfo']);
-        $settings->setAdditionFields(['status', 'projectStartAt', 'conceptStatusAt', 'implementationStatusAt', 'commissioningStatusAt']);
+        $settings->setAdditionFields([
+            'status', 'projectStartAt', 'conceptStatusAt',
+            'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
+        ]);
         return $settings;
     }
 

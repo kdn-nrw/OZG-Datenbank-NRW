@@ -25,8 +25,6 @@ use App\Entity\Service;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Knp\Menu\ItemInterface;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -103,6 +101,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDatePickerFormField($formMapper, 'conceptStatusAt');
         $this->addDatePickerFormField($formMapper, 'implementationStatusAt');
         $this->addDatePickerFormField($formMapper, 'commissioningStatusAt');
+        $this->addDatePickerFormField($formMapper, 'nationwideRolloutAt');
         $formMapper
             ->add('status', ModelType::class, [
                 'label' => 'app.implementation_project.entity.status_form',
@@ -257,6 +256,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDefaultDatagridFilter($datagridMapper, 'conceptStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'implementationStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'commissioningStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'nationwideRolloutAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'contacts');
         $this->addDefaultDatagridFilter($datagridMapper, 'projectLeaders');
         $this->addDefaultDatagridFilter($datagridMapper, 'participationOrganisations');
@@ -290,7 +290,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDatePickersListFields($listMapper, 'conceptStatusAt', true);
         $this->addDatePickersListFields($listMapper, 'implementationStatusAt', true);
         $this->addDatePickersListFields($listMapper, 'commissioningStatusAt', true);
-
+        $this->addDatePickersListFields($listMapper, 'nationwideRolloutAt', true);
         $this->addServiceSystemsListFields($listMapper);
         //$this->addSolutionsListFields($listMapper);
         $this->addDefaultListActions($listMapper);
@@ -303,7 +303,10 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     {
         $settings = parent::getExportSettings();
         $settings->addExcludeFields(['statusInfo']);
-        $settings->setAdditionFields(['status', 'projectStartAt', 'conceptStatusAt', 'implementationStatusAt', 'commissioningStatusAt']);
+        $settings->setAdditionFields([
+            'status', 'projectStartAt', 'conceptStatusAt',
+            'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
+        ]);
         return $settings;
     }
 

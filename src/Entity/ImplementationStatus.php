@@ -29,17 +29,20 @@ class ImplementationStatus extends AbstractStatus
     public const STATUS_ID_CONCEPT = 3;
     public const STATUS_ID_IMPLEMENTATION = 4;
     public const STATUS_ID_COMMISSIONING = 6;
+    public const STATUS_ID_NATIONWIDE_ROLLOUT = 7;
 
     public const STATUS_SWITCH_PREPARED = 1;
     public const STATUS_SWITCH_CONCEPT = 2;
     public const STATUS_SWITCH_IMPLEMENTATION = 3;
     public const STATUS_SWITCH_COMMISSIONING = 4;
+    public const STATUS_SWITCH_NATIONWIDE_ROLLOUT = 5;
 
     public static $statusSwitchChoices = [
         self::STATUS_SWITCH_PREPARED => 'app.implementation_status.entity.status_switch_choices.project_start_at',
         self::STATUS_SWITCH_CONCEPT => 'app.implementation_status.entity.status_switch_choices.concept_status_at',
         self::STATUS_SWITCH_IMPLEMENTATION => 'app.implementation_status.entity.status_switch_choices.implementation_status_at',
         self::STATUS_SWITCH_COMMISSIONING => 'app.implementation_status.entity.status_switch_choices.commissioning_status_at',
+        self::STATUS_SWITCH_NATIONWIDE_ROLLOUT => 'app.implementation_status.entity.status_switch_choices.nationwide_rollout_at',
     ];
 
     /**
