@@ -4,11 +4,12 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-{% extends '@SonataAdmin/CRUD/base_list.html.twig' %}
+
+{% extends 'Frontend/Admin/CRUD/list.html.twig' %}
 
 {% block sonata_page_content %}
     <section class="content">
-        {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_SERVICE_SYSTEMS')} %}
+        {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_COMMUNES')} %}
     </section>
     {{ parent() }}
 {% endblock sonata_page_content %}

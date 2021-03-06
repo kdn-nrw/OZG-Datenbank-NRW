@@ -1,0 +1,58 @@
+.app-container-filter {
+  display: flex;
+  flex-direction: column;
+  .app-filter-selection {
+    margin-bottom: 15px;
+    list-style: none;
+    padding: 0 15px;
+  }
+  .sonata-filters-box {
+    float: none;
+  }
+  @media (min-width: 1200px) {
+    flex-direction: row;
+    margin: 0 0 20px 0;
+    position: relative;
+    padding-bottom: 15px;
+    .app-filter-selection {
+      border-top: 3px solid #3c8dbc;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+      border-radius: 3px;
+      padding: 10px;
+      margin: 0 5px 0 0;
+      background: #fff;
+      flex: 0 0 auto;
+    }
+    .box {
+      margin-bottom: 0;
+    }
+    .sonata-filters-box {
+      padding: 0;
+    }
+    .sonata-filter-form {
+      flex: 1 1 auto;
+      padding: 0;
+      > .row {
+        display: flex;
+        flex-direction: row;
+        margin: 0;
+        > .col-lg-9 {
+          flex: 1 0 auto;
+          float: none;
+          width: auto;
+        }
+        > .col-lg-3 {
+          flex: 0 1 auto;
+          float: none;
+          margin: -10px;
+          padding: 10px 30px;
+          width: auto;
+          background: $gray-200;
+          .form-group:last-child {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}

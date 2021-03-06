@@ -1,6 +1,11 @@
 
 <ul class="sidebar-menu" data-widget="tree">
     {% set menuItems = {
+        'implementationproject': {
+            'routePrefix': 'frontend_app_implementationproject',
+            'label': 'app.implementation_project.list',
+            'icon': 'angle-double-right'
+        },
         'service_system': {
             'routePrefix': 'frontend_app_servicesystem',
             'label': 'app.service_system.list',
@@ -9,11 +14,6 @@
         'service': {
             'routePrefix': 'frontend_app_service',
             'label': 'app.service.frontend.list',
-            'icon': 'angle-double-right'
-        },
-        'implementationproject': {
-            'routePrefix': 'frontend_app_implementationproject',
-            'label': 'app.implementation_project.list',
             'icon': 'angle-double-right'
         },
     } %}

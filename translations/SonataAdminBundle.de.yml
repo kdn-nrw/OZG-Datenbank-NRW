@@ -11,6 +11,7 @@ app:
   situation:
     entity:
       subject_placeholder: Kein Themenfeld ausgewählt
+  btn_filter: 'Filter anwenden'
+  link_filters: 'Auswahl der Filter'
 export_format_xlsx: Excel (XLSX)
 Admin: 'Data Warehouse KDN'
-link_filters: Auswahl der Filter

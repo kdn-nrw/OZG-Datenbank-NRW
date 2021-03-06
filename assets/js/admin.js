@@ -45,6 +45,35 @@ const appOnReady = function() {
             console.log('An error occurred while loading the filter component', error);
         });
     }
+    let filterSelection = document.getElementById("navbar-filter-selection");
+    if (filterSelection) {
+        let navbarElement = filterSelection.parentNode;
+        let filterBox = document.querySelector(".sonata-filters-box");
+        let filterForm = filterBox ? filterBox.querySelector(".sonata-filter-form") : null;
+        if (filterBox && filterForm) {
+            let checkEmptyState = function(element) {
+                let checkHasAtLeastOneChildElement = function(parent) {
+                    let children = parent.childNodes;
+                    for (let i = 0, n = children.length; i < n; i++) {
+                        if (children[i].nodeName !== '#text' && !children[i].classList.contains('hide-empty-block')) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                if (!checkHasAtLeastOneChildElement(element)) {
+                    element.classList.add('hide-empty-block');
+                    if (element.parentNode) {
+                        checkEmptyState(element.parentNode);
+                    }
+                }
+            };
+            filterSelection.setAttribute('class', 'app-filter-selection');
+            filterBox.parentNode.classList.add('app-container-filter');
+            filterBox.parentNode.prepend(filterSelection);
+            checkEmptyState(navbarElement);
+        }
+    }
 };
 
 if (

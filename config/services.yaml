@@ -189,7 +189,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'CommuneAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'CommuneAdmin/list.html.twig']]
+      - [setTemplate, ['list', 'CommuneAdmin/Frontend/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -354,7 +354,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'ImplementationProjectAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'ImplementationProjectAdmin/list.html.twig']]
+      - [setTemplate, ['list', 'ImplementationProjectAdmin/Frontend/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -679,7 +679,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'ServiceSystemAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'ServiceSystemAdmin/list.html.twig']]
+      - [setTemplate, ['list', 'ServiceSystemAdmin/Frontend/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -711,7 +711,7 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'ServiceAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'ServiceAdmin/list.html.twig']]
+      - [setTemplate, ['list', 'ServiceAdmin/Frontend/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -782,6 +782,7 @@ services:
       - App\Entity\Solution
       - ~
     calls:
+      - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
       - [addChild, ['@App\Admin\ServiceSolutionAdmin', 'solution']]
       - [addChild, ['@App\Admin\FormServerSolutionAdmin', 'solution']]
     tags:
@@ -798,7 +799,8 @@ services:
       - App\Entity\Solution
       - ~
     calls:
-      - [setTemplate, ['list', 'SolutionAdmin/list.html.twig']]
+      - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
+      - [setTemplate, ['list', 'SolutionAdmin/Frontend/list.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm

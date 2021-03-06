@@ -58,3 +58,33 @@ Extend base template with custom class
     </tr>
     </thead>
 {% endblock %}
+
+{% block list_filters_actions %}
+    {%- if admin.datagrid.filters|length %}
+        <ul class="nav navbar-nav navbar-right" id="navbar-filter-selection">
+
+            <li class="dropdown sonata-actions">
+                <a href="#" class="dropdown-toggle sonata-ba-action" data-toggle="dropdown">
+                    <i class="fa fa-filter" aria-hidden="true"></i>
+                    {{ 'app.link_filters'|trans({}, 'SonataAdminBundle') }}
+                    <span class="badge sonata-filter-count"></span>
+                    <b class="caret"></b>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-scrollable" role="menu">
+                    {% for filter in admin.datagrid.filters|filter(filter => filter.options['show_filter'] is not same as (false)) %}
+                        {% set filterDisplayed = filter.isActive() or filter.options['show_filter'] is same as (true) %}
+                        <li>
+                            <a href="#" class="sonata-toggle-filter sonata-ba-action" filter-target="filter-{{ admin.uniqid }}-{{ filter.name }}" filter-container="filter-container-{{ admin.uniqid() }}">
+                                <i class="fa {{ filterDisplayed ? 'fa-check-square-o' : 'fa-square-o' }}"></i>
+                                {% if filter.label is not same as(false) %}
+                                    {{ filter.label|trans(filter.options['label_translation_parameters']|default({}), filter.translationDomain ?: admin.translationDomain) }}
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    {% endif -%}
+{% endblock %}
