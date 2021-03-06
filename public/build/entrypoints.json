@@ -3,10 +3,10 @@
     "admin": {
       "js": [
         "/build/runtime.5759267e.js",
-        "/build/admin.2146ca2b.js"
+        "/build/admin.f55028b1.js"
       ],
       "css": [
-        "/build/admin.3526e6fd.css"
+        "/build/admin.624869c8.css"
       ]
     }
   }
