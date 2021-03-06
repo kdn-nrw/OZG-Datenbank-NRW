@@ -79,20 +79,26 @@ class ZuFiConsumer extends AbstractApiConsumer
      * Import commune data
      * @param int $limit Limit the number of rows to be imported
      * @param array $serviceKeys Optional list of service keys to be imported
+     * @param string $sorting
      * @return int
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\Persistence\Mapping\MappingException
      * @throws \ReflectionException
      */
-    public function importCommuneServiceResults(int $limit = 500, array $serviceKeys = []): int
+    public function importCommuneServiceResults(int $limit = 500, array $serviceKeys = [], string $sorting = 'random'): int
     {
         /** @var CommuneRepository $repository */
         $em = $this->getEntityManager();
         $em->getConfiguration()->setSQLLogger(null);
         $repository = $em->getRepository(Commune::class);
         $queryBuilder = $repository->createQueryBuilder('c');
-        $queryBuilder->select('c.id')
-            ->orderBy('c.id', 'ASC');
+        $queryBuilder->select('c.id');
+        if ($sorting === 'modified') {
+            $queryBuilder->orderBy('c.modifiedAt', 'DESC');
+        } else {
+            $queryBuilder->orderBy('c.id', 'ASC');
+        }
         $result = $queryBuilder->getQuery()->getArrayResult();
         if (!empty($result)) {
             $idList = array_column($result, 'id');
@@ -100,12 +106,18 @@ class ZuFiConsumer extends AbstractApiConsumer
             $idList = [0];
         }
         // Randomize order of communes
-        shuffle($idList);
+        if ($sorting === 'random') {
+            shuffle($idList);
+        } elseif ($sorting === 'modified') {
+            $idList = array_slice($idList, 0, min(ceil($limit/200), count($idList)));
+            shuffle($idList);
+        }
         $totalImportRowCount = 0;
         foreach ($idList as $id) {
             $commune = $repository->find($id);
             /** @var Commune|null $commune */
             if (null !== $commune && $commune->getRegionalKey()) {
+                echo 'Importing commune service results: ' . $commune->getName() . ' [ID: '.$commune->getId().'][Modified at: '.(null !== $commune->getModifiedAt() ? $commune->getModifiedAt()->format('Y-m-d H:i:s') : '-').']' . "\n";
                 $totalImportRowCount += $this->importServiceResults($limit, null, $commune, $serviceKeys);
                 ++$totalImportRowCount;
                 if ($totalImportRowCount > $limit) {

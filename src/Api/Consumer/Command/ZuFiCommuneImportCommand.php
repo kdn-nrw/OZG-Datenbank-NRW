@@ -21,6 +21,7 @@ use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -45,11 +46,19 @@ class ZuFiCommuneImportCommand extends Command
                 InputArgument::OPTIONAL,
                 'optional comma separated list of service keys for import'
             )
-            ->addArgument(
+            ->addOption(
                 'limit',
-                InputArgument::OPTIONAL,
+                'l',
+                InputOption::VALUE_OPTIONAL,
                 'the maximum number of updated rows',
                 200
+            )
+            ->addOption(
+                'sorting',
+                's',
+                InputOption::VALUE_OPTIONAL,
+                'sort order of communes to be updated',
+                'random'
             )
             ->setHelp('Imports the commune service data from the ZuFi API;'
                 . PHP_EOL . 'If you want to get more detailed information, use the --verbose option.');
@@ -59,7 +68,7 @@ class ZuFiCommuneImportCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
-        $limit = (int)$input->getArgument('limit');
+        $limit = (int)$input->getOption('limit');
         $serviceKeys = array_filter(explode(',', (string)$input->getArgument('serviceKeys')));
         if (!empty($serviceKeys)) {
             $io->note(sprintf('Starting import process. Limiting imported items to services %s', implode(',', $serviceKeys)));
@@ -68,7 +77,8 @@ class ZuFiCommuneImportCommand extends Command
         $consumer = $this->apiManager->getConfiguredConsumer(ApiManager::API_KEY_ZU_FI);
         /** @var ZuFiConsumer $consumer */
         $consumer->setOutput($output);
-        $importedRowCount = $consumer->importCommuneServiceResults($limit, $serviceKeys);
+        $sorting = (string)$input->getOption('sorting');
+        $importedRowCount = $consumer->importCommuneServiceResults($limit, $serviceKeys, $sorting);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }
