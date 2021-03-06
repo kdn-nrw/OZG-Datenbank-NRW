@@ -98,7 +98,7 @@ class SearchExtension extends AbstractAdminExtension
                                 $page = $dataGrid->getPager()->getPage();
                                 $startOffset = ($page - 1) * $maxPerPage;
                                 // Load more records oin case other filters are active, so the $maxPerPage rows will be loaded
-                                $endOffset = min($startOffset + $maxPerPage * 1.25, $matchingIdCount - 1);
+                                $endOffset = min($startOffset + $maxPerPage, $matchingIdCount - 1);
                                 $loadIdList = [];
                                 for ($o = $startOffset; $o < $endOffset; $o++) {
                                     $loadIdList[] = $matchingRecordIds[$o];
