@@ -906,6 +906,26 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     }
 
     /**
+     * Returns the unique subjects as defined in the referenced service systems
+     *
+     * @return Subject[]|Collection
+     */
+    public function getSubjects(): Collection
+    {
+        $subjectCollection = new ArrayCollection();
+        $serviceSystems = $this->getServiceSystems();
+        foreach ($serviceSystems as $serviceSystem) {
+            /** @var ImplementationProject */
+            if ((null !== $situation = $serviceSystem->getSituation())
+                && (null !== $subject = $situation->getSubject())
+                && !$subjectCollection->contains($subject)) {
+                $subjectCollection->add($subject);
+            }
+        }
+        return $subjectCollection;
+    }
+
+    /**
      * @param ModelRegionProject $modelRegionProject
      * @return self
      */

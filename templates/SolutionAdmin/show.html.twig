@@ -1,0 +1,45 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% extends 'General/Show/show.html.twig' %}
+
+{# @var object \App\Entity\Solution #}
+{% set subjectContactCount = 0 %}
+{% set contactHtml = '' %}
+{% if object.subjects|length > 0 %}
+    {% set showCollapse = object.subjects|length > 2 %}
+    {% set contactHtml %}{% apply spaceless %}
+        {% for subject in object.subjects %}
+            {% if subject.contact %}
+                <h3 class="widget-headline wh-bold">{{ 'app.subject.frontend.contact_for'|trans }} {{ subject.name }}</h3>
+                {% include 'Frontend/Admin/Partials/_contact-widget.html.twig' with {'contact': subject.contact, 'showCollapse': showCollapse, 'collapseGroup': subject.id} %}
+                {% set subjectContactCount = subjectContactCount + 1 %}
+            {% endif %}
+        {% endfor %}
+    {% endapply %}{% endset %}
+{% endif %}
+
+{% block app_show_custom_box_body_classes %}{% endblock %}
+
+{% block app_show_default_fields_content %}
+    {% if object.subjects|length > 0 %}
+        {% if contactHtml|length > 0 %}
+            <div class="row">
+                <div class="col-xs-12 col-lg-8">
+                    {{ parent() }}
+                </div>
+                <div class="col-xs-12 col-lg-4">
+                    {{ contactHtml|raw }}
+                </div>
+            </div>
+        {% else %}
+            {{ parent()  }}
+        {% endif %}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
