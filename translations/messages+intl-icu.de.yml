@@ -949,12 +949,13 @@ app:
       inherit_commune_types.yes: Größenklassen der Leika-Leistung mit Größenklassen der OZG-Leistung erweitern
       inherit_commune_types.no: Größenklassen der OZG-Leistung nicht übernehmen
       service_created_at: Landesredaktion letzte Änderung
-      implementation_project_status_info_project_start_at: Vorbereitung
-      implementation_project_status_info_concept_status_at: Konzeption
-      implementation_project_status_info_implementation_status_at: Umsetzung
-      implementation_project_status_info_commissioning_status_at: Inbetriebnahme NRW
-      implementation_project_status_info_nationwide_rollout_at: Start bundesweiter Roll-out
-      implementation_project_status_info_status: Umsetzungsstatus
+      implementation_project_status_info:
+        project_start_at: Vorbereitung
+        concept_status_at: Konzeption
+        implementation_status_at: Umsetzung
+        commissioning_status_at: Inbetriebnahme NRW
+        nationwide_rollout_at: Start bundesweiter Roll-out
+        status: Umsetzungsstatus
   service_base_result:
     object_name: Leistung Basisdaten
     list: Leistungen Basisdaten

@@ -21,6 +21,7 @@ use App\Entity\Status;
 use App\Entity\Subject;
 use App\Exporter\Source\ServiceFimValueFormatter;
 use App\Model\ExportSettings;
+use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -71,6 +72,13 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             [
                 'choices' => array_flip(FederalInformationManagementType::$statusChoices)
             ]
+        );
+        $datagridMapper->add('implementationProjects.status',
+            null, [
+                'label' => 'app.implementation_project.entity.status',
+            ],
+            null,
+            ['expanded' => false, 'multiple' => true]
         );
         $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
         $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects.implementationProject');
@@ -136,6 +144,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     protected function configureImplementationProjectStatusListFields(ListMapper $listMapper)
     {
         $listMapper->add('implementationProjectStatusInfo.status', 'choice', [
+            'label' => 'app.implementation_project.entity.status',
             'editable' => false,
             'class' => ImplementationStatus::class,
             'catalogue' => 'messages',
@@ -155,7 +164,9 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
         ];
         foreach ($dateFields as $dateField) {
+            $labelKey = SnakeCaseConverter::camelCaseToSnakeCase($dateField);
             $this->addDatePickersListFields($listMapper, 'implementationProjectStatusInfo.' . $dateField, true, true, [
+                'label' => 'app.service.entity.implementation_project_status_info.' . $labelKey,
                 'fallbackToCustomValue' => true,
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
@@ -186,8 +197,13 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'projectStartAt', 'conceptStatusAt',
             'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
         ];
+        $labelKey = 'app.service.entity.implementation_project_status_info.status';
+        $settings->addCustomLabel('implementationProjectStatusInfo.status', $this->trans($labelKey));
         foreach ($dateFields as $dateField) {
-            $additionalFields[] = 'implementationProjectStatusInfo.' . $dateField;
+            $customField = 'implementationProjectStatusInfo.' . $dateField;
+            $additionalFields[] = $customField;
+            $labelKey = 'app.service.entity.implementation_project_status_info.' . SnakeCaseConverter::camelCaseToSnakeCase($dateField);
+            $settings->addCustomLabel($customField, $this->trans($labelKey));
         }
         $customServiceFormatter = new ServiceFimValueFormatter();
         $fimStatusTypes = FederalInformationManagementType::$statusChoices;

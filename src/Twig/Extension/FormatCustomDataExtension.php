@@ -24,6 +24,12 @@ class FormatCustomDataExtension extends AbstractExtension
     use TranslatorAwareTrait;
 
     /**
+     * Registry for property paths; set if property is readable by property accessor
+     * @var string[]
+     */
+    protected $attributeRegistry = [];
+
+    /**
      * @param TranslatorInterface $translator
      */
     public function __construct(TranslatorInterface $translator)
@@ -114,6 +120,8 @@ class FormatCustomDataExtension extends AbstractExtension
                 $flatValues[] = $this->getFormattedValue($subVal, $stripTags);
             }
             $displayValue = implode(', ', $flatValues);
+        } elseif ($value instanceof \DateTime) {
+            $displayValue = str_replace(' 00:00:00', '', date('d.m.Y H:i:s', $value->format('U')));
         } else {
             $displayValue = (string) $value;
         }
@@ -154,13 +162,18 @@ class FormatCustomDataExtension extends AbstractExtension
     public function getAttributeRecursive($objectOrArray, $propertyPath)
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
-        if ($propertyAccessor->isReadable($objectOrArray, $propertyPath)) {
-            return $propertyAccessor->getValue($objectOrArray, $propertyPath);
+        if (isset($this->attributeRegistry[$propertyPath])) {
+            return $propertyAccessor->getValue($objectOrArray, $this->attributeRegistry[$propertyPath]);
         }
-        $firstDotPos = strpos($propertyPath, '.');
+        $processedPropertyPath = $this->convertToPropertyName($propertyPath);
+        if ($propertyAccessor->isReadable($objectOrArray, $processedPropertyPath)) {
+            $this->attributeRegistry[$propertyPath] = $processedPropertyPath;
+            return $propertyAccessor->getValue($objectOrArray, $processedPropertyPath);
+        }
+        $firstDotPos = strpos($processedPropertyPath, '.');
         if ($firstDotPos !== false) {
-            $firstProperty = trim(substr($propertyPath, 0, $firstDotPos), ' .');
-            $restProperty = trim(substr($propertyPath, $firstDotPos), ' .');
+            $firstProperty = trim(substr($processedPropertyPath, 0, $firstDotPos), ' .');
+            $restProperty = trim(substr($processedPropertyPath, $firstDotPos), ' .');
             if ($propertyAccessor->isReadable($objectOrArray, $firstProperty)) {
                 $subObjectOrArray = $propertyAccessor->getValue($objectOrArray, $firstProperty);
                 if (null !== $subObjectOrArray) {

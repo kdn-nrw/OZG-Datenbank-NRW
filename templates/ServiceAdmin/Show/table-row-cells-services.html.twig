@@ -20,7 +20,7 @@ file that was distributed with this source code.
         {% elseif property == 'serviceCreatedAt' %}
             {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'child': child} %}
         {% else %}
-            {% set value = attribute(child, property) %}
+            {% set value = child|app_attribute_recursive(property) %}
             {{ value|app_format_custom_value }}
         {% endif %}
     </td>
