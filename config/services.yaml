@@ -956,3 +956,7 @@ services:
 
 
   Sonata\AdminBundle\Bridge\Exporter\AdminExporter: '@sonata.admin.admin_exporter'
+
+  App\OpenApi\JwtDecorator:
+    decorates: 'api_platform.openapi.factory'
+    autoconfigure: false
