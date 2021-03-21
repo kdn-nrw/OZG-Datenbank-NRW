@@ -77,7 +77,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
 
             if ($this->isGranted('LIST')) {
                 $menu->addChild('app.security_incident.list', [
-                    'uri' => $admin->getChild(SecurityIncidentAdmin::class)->generateUrl('list', ['id' => $id])
+                    'uri' => $admin->getChild(SecurityIncidentAdmin::class)->generateUrl('list')
                 ]);
             }
         }

@@ -70,7 +70,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
 
             if ($this->isGranted('LIST')) {
                 $menu->addChild('app.implementation_project.actions.list', [
-                    'uri' => $admin->getChild(ImplementationProjectServiceAdmin::class)->generateUrl('list', ['id' => $id])
+                    'uri' => $admin->getChild(ImplementationProjectServiceAdmin::class)->generateUrl('list')
                 ]);
             }
         }

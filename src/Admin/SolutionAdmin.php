@@ -90,7 +90,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
 
             if ($this->isGranted('LIST')) {
                 $menu->addChild('app.solution.actions.list', [
-                    'uri' => $admin->getChild(ServiceSolutionAdmin::class)->generateUrl('list', ['id' => $id])
+                    'uri' => $admin->getChild(ServiceSolutionAdmin::class)->generateUrl('list')
                 ]);
             }
         }
