@@ -12,9 +12,9 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseEntity;
+use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use DateTime;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -23,15 +23,14 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_mailing_contact")
- * @ApiResource
  */
-class MailingContact extends BaseEntity
+class MailingContact extends BaseEntity implements HideableEntityInterface
 {
     use HideableEntityTrait;
     use ContactEntityTrait;
 
-    const SEND_STATUS_FAILED = 3;
-    const SEND_STATUS_DISABLED = 5;
+    public const SEND_STATUS_FAILED = 3;
+    public const SEND_STATUS_DISABLED = 5;
 
     /**
      * @var Mailing

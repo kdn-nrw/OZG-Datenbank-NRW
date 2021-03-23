@@ -30,7 +30,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_ministry_state")
- * @ApiResource
  */
 class MinistryState extends BaseNamedEntity implements OrganisationEntityInterface
 {

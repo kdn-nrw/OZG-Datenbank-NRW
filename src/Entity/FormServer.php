@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_form_server")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class FormServer extends BaseNamedEntity
 {

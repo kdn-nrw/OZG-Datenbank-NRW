@@ -28,7 +28,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity
  * @ORM\Table(name="ozg_model_region_project_document")
  * @Vich\Uploadable
- * @ApiResource
  */
 class ModelRegionProjectDocument extends BaseNamedEntity implements DocumentUploadEntityInterface
 {

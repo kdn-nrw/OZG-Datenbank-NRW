@@ -12,9 +12,9 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseEntity;
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
+use Doctrine\ORM\Mapping as ORM;
 
 
 /**
@@ -23,9 +23,8 @@ use App\Entity\Base\HideableEntityTrait;
  * @ORM\Entity
  * @ORM\Table(name="ozg_implementation_project_service")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
-class ImplementationProjectService extends BaseEntity
+class ImplementationProjectService extends BaseEntity implements HideableEntityInterface
 {
     use HideableEntityTrait;
 
@@ -143,12 +142,12 @@ class ImplementationProjectService extends BaseEntity
             }
             $servicePrefix = '';
             if (null !== $serviceSystem) {
-                $servicePrefix = 'OZG-Leistung ' . $serviceSystem->getName() .': Leika-Leistung ';
+                $servicePrefix = 'OZG-Leistung ' . $serviceSystem->getName() . ': Leika-Leistung ';
             }
             $name .= $servicePrefix . $service->getName();
         }
         if (empty($name)) {
-            $name = (string) $this->getId();
+            $name = (string)$this->getId();
         }
         return $name;
     }

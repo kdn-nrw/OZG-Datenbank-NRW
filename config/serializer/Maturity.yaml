@@ -1,0 +1,7 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\Maturity:
+  attributes:
+    id:
+      groups: ['collection:read', 'read']
+    name:
+      groups: ['collection:read', 'read']

@@ -26,7 +26,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_commune_type")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class CommuneType extends BaseNamedEntity
 {

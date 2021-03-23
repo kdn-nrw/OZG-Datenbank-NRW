@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_efile_storage_type")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class EFileStorageType extends BaseNamedEntity
 {

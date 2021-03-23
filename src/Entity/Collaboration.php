@@ -17,12 +17,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * Class Server
+ * Class Collaboration
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_collaboration")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Collaboration extends BaseNamedEntity
 {

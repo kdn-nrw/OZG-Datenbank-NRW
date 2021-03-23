@@ -23,7 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_model_region_beneficiary")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class ModelRegionBeneficiary extends BaseNamedEntity implements OrganisationEntityInterface
 {

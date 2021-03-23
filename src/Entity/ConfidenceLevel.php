@@ -22,7 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_confidence_level")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class ConfidenceLevel extends BaseNamedEntity
 {

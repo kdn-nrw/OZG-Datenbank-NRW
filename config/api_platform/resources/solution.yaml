@@ -1,0 +1,22 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\Solution:
+  #shortName: 'Leika-Leistungen'
+  description: 'Lösungen'
+  attributes:
+    pagination_items_per_page: 25
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        groups: ['collection:read']
+  #    post:
+  #      security: 'is_granted("ROLE_ADMIN")'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        groups: ['read']
+  #    put:
+  #      method: 'PUT'

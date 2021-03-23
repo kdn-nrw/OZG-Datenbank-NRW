@@ -22,7 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_ministry_country")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class MinistryCountry extends BaseNamedEntity
 {

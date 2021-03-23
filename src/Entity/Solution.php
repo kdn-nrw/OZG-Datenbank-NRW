@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseBlamableEntity;
+use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableEntityTrait;
@@ -21,7 +22,6 @@ use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -31,9 +31,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_solution")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
-class Solution extends BaseBlamableEntity implements NamedEntityInterface, ImportEntityInterface, SluggableInterface, HasMetaDateEntityInterface
+class Solution extends BaseBlamableEntity implements NamedEntityInterface, ImportEntityInterface, SluggableInterface, HasMetaDateEntityInterface, HideableEntityInterface
 {
     public const COMMUNE_TYPE_ALL = 'all';
     public const COMMUNE_TYPE_SELECTED = 'selected';
@@ -974,9 +973,9 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
      */
     public function getDisplayName(): string
     {
-        $label = (string) $this->getName();
+        $label = (string)$this->getName();
         if (empty($label)) {
-            $label = (string) $this->getId();
+            $label = (string)$this->getId();
             if (empty($label)) {
                 $label = 'Neue Lösung';
             } else {
@@ -991,7 +990,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
      */
     public function isPublished(): bool
     {
-        return (bool) $this->isPublished;
+        return (bool)$this->isPublished;
     }
 
     /**

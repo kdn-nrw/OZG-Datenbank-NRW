@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_situation")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Situation extends BaseNamedEntity
 {

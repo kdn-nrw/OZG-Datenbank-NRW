@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_fim")
- * @ApiResource
  */
 class FederalInformationManagementType extends BaseEntity implements CustomEntityLabelInterface
 {

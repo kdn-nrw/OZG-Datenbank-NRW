@@ -44,7 +44,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Entity(repositoryClass="App\Entity\Repository\CommuneRepository")
  * @ORM\Table(name="ozg_commune")
- * @ApiResource
  */
 class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface, SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {

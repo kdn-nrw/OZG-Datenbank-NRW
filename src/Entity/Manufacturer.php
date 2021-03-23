@@ -23,7 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_manufacturer")
- * @ApiResource
  */
 class Manufacturer extends BaseNamedEntity implements OrganisationEntityInterface
 {

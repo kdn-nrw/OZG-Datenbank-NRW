@@ -21,7 +21,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_page_content")
- * @ApiResource
  */
 class PageContent extends BaseEntity
 {
