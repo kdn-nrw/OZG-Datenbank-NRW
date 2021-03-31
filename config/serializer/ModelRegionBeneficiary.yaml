@@ -2,6 +2,16 @@
 App\Entity\ModelRegionBeneficiary:
   attributes:
     id:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
     name:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
+    shortName:
+      groups: ['model_region_beneficiary:collection:read', 'model_region_beneficiary:read']
+    url:
+      groups: ['model_region_beneficiary:collection:read', 'model_region_beneficiary:read']
+    street:
+      groups: ['model_region_beneficiary:collection:read', 'model_region_beneficiary:read']
+    town:
+      groups: ['model_region_beneficiary:collection:read', 'model_region_beneficiary:read']
+    zipCode:
+      groups: ['model_region_beneficiary:collection:read', 'model_region_beneficiary:read']

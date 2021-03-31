@@ -3,6 +3,16 @@
 App\Entity\Portal:
   attributes:
     id:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
     name:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
+    description:
+      groups: ['portal:collection:read', 'portal:read']
+    url:
+      groups: ['portal:collection:read', 'portal:read']
+    serviceProvider:
+      groups: ['portal:collection:read', 'portal:read']
+    communes:
+      groups: ['portal:read']
+    solutions:
+      groups: ['portal:read']

@@ -1,0 +1,17 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\StateGroup\CommuneType:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    description:
+      groups: ['commune_type:collection:read', 'commune_type:read']
+    constituency:
+      groups: ['commune_type:collection:read', 'commune_type:read', 'service:read', 'service_system:read']
+    communes:
+      groups: ['commune_type:collection:read', 'commune_type:read']
+    serviceSystems:
+      groups: ['commune_type:read', 'commune:read']
+    services:
+      groups: ['commune_type:read']

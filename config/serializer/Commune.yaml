@@ -2,6 +2,22 @@
 App\Entity\StateGroup\Commune:
   attributes:
     id:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
     name:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
+    officialCommunityKey:
+      groups: ['collection:read', 'item:read']
+    regionalKey:
+      groups: ['commune:collection:read', 'item:read']
+    communeType:
+      groups: ['commune:collection:read', 'commune:read']
+    constituency:
+      groups: ['commune:collection:read', 'commune:read']
+    administrativeDistrict:
+      groups: ['commune:collection:read', 'commune:read']
+    organisation:
+      groups: ['commune:read']
+    centralAssociations:
+      groups: ['commune:read']
+    laboratories:
+      groups: ['commune:read']

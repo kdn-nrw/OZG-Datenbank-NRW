@@ -9,7 +9,10 @@ App\Entity\Subject:
     get:
       method: 'GET'
       normalization_context:
-        groups: ['collection:read']
+        enable_max_depth: 1
+        groups: ['collection:read', 'subject:collection:read', 'service-system-situation-subject']
+      openapi_context:
+        summary: 'Gibt eine Liste mit OZG Themenfeldern zurück'
 #    post:
 #      security: 'is_granted("ROLE_ADMIN")'
 
@@ -17,6 +20,9 @@ App\Entity\Subject:
     get:
       method: 'GET'
       normalization_context:
-        groups: ['read']
+        enable_max_depth: 1
+        groups: ['item:read', 'subject:read', 'service-system-situation-subject']
+      openapi_context:
+        summary: 'Gibt ein OZG Themenfeld zurück'
 #    put:
 #      method: 'PUT'

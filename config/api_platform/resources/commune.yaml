@@ -9,7 +9,11 @@ App\Entity\StateGroup\Commune:
     get:
       method: 'GET'
       normalization_context:
-        groups: ['collection:read']
+        enable_max_depth: 1
+        groups: ['collection:read', 'commune:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit Kommunen zurück'
+      filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
   #    post:
   #      security: 'is_granted("ROLE_ADMIN")'
 
@@ -17,6 +21,9 @@ App\Entity\StateGroup\Commune:
     get:
       method: 'GET'
       normalization_context:
-        groups: ['read']
+        enable_max_depth: 1
+        groups: ['item:read', 'commune:read']
+      openapi_context:
+        summary: 'Gibt eine Kommunen zurück'
   #    put:
   #      method: 'PUT'

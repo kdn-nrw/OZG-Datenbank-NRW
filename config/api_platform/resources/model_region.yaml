@@ -9,7 +9,11 @@ App\Entity\ModelRegion:
     get:
       method: 'GET'
       normalization_context:
-        groups: ['collection:read']
+        enable_max_depth: 1
+        groups: ['collection:read', 'model_region:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit OZG Modellregionen zurück'
+      filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
   #    post:
   #      security: 'is_granted("ROLE_ADMIN")'
 
@@ -17,6 +21,9 @@ App\Entity\ModelRegion:
     get:
       method: 'GET'
       normalization_context:
-        groups: ['read']
+        enable_max_depth: 1
+        groups: ['item:read', 'model_region:read']
+      openapi_context:
+        summary: 'Gibt eine OZG Modellregion zurück'
   #    put:
   #      method: 'PUT'

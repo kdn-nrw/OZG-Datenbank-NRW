@@ -1,0 +1,73 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\Api\ServiceBaseResult:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    service:
+      groups: ['fim:collection:read', 'fim:read']
+    regionalKey:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    commune:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    fimType:
+      ignore: true
+    serviceKey:
+      groups: ['fim:collection:read', 'fim:read']
+    group:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    callSign:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    performance:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    performanceDetail:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    name2:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    type:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    serviceType:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    date:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    specialFeatures:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    synonyms:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    shortText:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    description:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    legalBasis:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    legalBasisUris:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    requiredDocuments:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    requirements:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    costs:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    processingTime:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    processFlow:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    deadlines:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    forms:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    furtherInformation:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    urlOnlineService:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    teaser:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    pointOfContact:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    technicallyApprovedAt:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    technicallyApprovedBy:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    hints:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    serviceCreatedAt:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']

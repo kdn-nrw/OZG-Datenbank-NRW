@@ -1,0 +1,17 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\StateGroup\CommuneType:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    service:
+      groups: ['fim:collection:read', 'fim:read']
+    status:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    dataType:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    notes:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    serviceBaseResult:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']
+    implementationTeamProposal:
+      groups: ['fim:collection:read', 'fim:read', 'service:read']

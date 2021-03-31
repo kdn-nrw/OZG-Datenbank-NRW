@@ -2,6 +2,8 @@
 App\Entity\Maturity:
   attributes:
     id:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
     name:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
+    description:
+      groups: ['item:read']

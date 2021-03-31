@@ -1,11 +1,13 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
-App\Entity\ApplicationCategory:
+App\Entity\Status:
   attributes:
     id:
       groups: ['collection:read', 'item:read']
     name:
       groups: ['collection:read', 'item:read']
     description:
-      groups: ['item:read']
-    communes:
+      groups: ['status:collection:read', 'status:read']
+    prevStatus:
+      ignore: true
+    nextStatus:
       ignore: true

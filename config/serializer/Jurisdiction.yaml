@@ -2,6 +2,10 @@
 App\Entity\Jurisdiction:
   attributes:
     id:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
     name:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
+    serviceSystems:
+      groups: ['jurisdiction:collection:read', 'jurisdiction:read']
+    services:
+      ignore: true

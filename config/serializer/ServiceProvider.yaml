@@ -1,0 +1,25 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\StateGroup\ServiceProvider:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    shortName:
+      groups: ['service_provider:collection:read', 'service_provider:read', 'item:read']
+    url:
+      groups: ['service_provider:collection:read', 'service_provider:read', 'item:read']
+    street:
+      groups: ['service_provider:collection:read', 'service_provider:read']
+    town:
+      groups: ['service_provider:collection:read', 'service_provider:read']
+    zipCode:
+      groups: ['service_provider:collection:read', 'service_provider:read']
+    communes:
+      groups: ['service_provider:collection:read', 'service_provider:read']
+    solutions:
+      groups: ['service_provider:collection:read', 'service_provider:read']
+    laboratories:
+      groups: ['service_provider:collection:read', 'service_provider:read']
+    specializedProcedures:
+      groups: ['service_provider:collection:read', 'service_provider:read']

@@ -1,7 +1,7 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
-App\Entity\Solution:
+App\Entity\StateGroup\CommuneType:
   #shortName: 'Leika-Leistungen'
-  description: 'Lösungen'
+  description: 'Größenklasse der Kommunen'
   attributes:
     pagination_items_per_page: 25
 
@@ -10,10 +10,9 @@ App\Entity\Solution:
       method: 'GET'
       normalization_context:
         enable_max_depth: 1
-        groups: ['collection:read', 'solution:collection:read']
+        groups: ['collection:read', 'commune_type:collection:read']
       openapi_context:
-        summary: 'Gibt eine Liste mit OZG Lösungen zurück'
-      filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
+        summary: 'Gibt eine Liste mit OZG Größenklasse der Kommunen zurück'
   #    post:
   #      security: 'is_granted("ROLE_ADMIN")'
 
@@ -22,8 +21,8 @@ App\Entity\Solution:
       method: 'GET'
       normalization_context:
         enable_max_depth: 1
-        groups: ['item:read', 'solution:read']
+        groups: ['item:read', 'commune_type:read']
       openapi_context:
-        summary: 'Gibt eine OZG Lösung zurück'
+        summary: 'Gibt eine OZG Größenklasse der Kommunen zurück'
   #    put:
   #      method: 'PUT'

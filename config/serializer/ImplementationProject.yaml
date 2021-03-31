@@ -2,6 +2,40 @@
 App\Entity\ImplementationProject:
   attributes:
     id:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
     name:
-      groups: ['collection:read', 'read']
+      groups: ['collection:read', 'item:read']
+    slug:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
+    serviceSystems:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
+    status:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
+    projectStartAt:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
+    conceptStatusAt:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
+    implementationStatusAt:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
+    commissioningStatusAt:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
+    nationwideRolloutAt:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
+    notes:
+      groups: ['implementation_project:read']
+    publishedSolutions:
+      groups: ['implementation_project:read']
+    services:
+      groups: ['implementation_project:read']
+    projectLeaders:
+      groups: ['implementation_project:read']
+    participationOrganisations:
+      groups: ['implementation_project:read']
+    interestedOrganisations:
+      groups: ['implementation_project:read']
+    fundings:
+      groups: ['implementation_project:read']
+    bureaus:
+      groups: ['implementation_project:read']
+    portals:
+      groups: ['implementation_project:read']
