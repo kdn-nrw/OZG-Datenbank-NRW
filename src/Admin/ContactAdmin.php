@@ -37,12 +37,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $formMapper
             ->with('app.contact.groups.person_data', ['class' => 'col-md-6'])
             ->add('gender', ChoiceType::class, [
-                'choices' => [
-                    'app.contact.entity.gender_choices.male' => Contact::GENDER_MALE,
-                    'app.contact.entity.gender_choices.female' => Contact::GENDER_FEMALE,
-                    'app.contact.entity.gender_choices.other' => Contact::GENDER_OTHER,
-                    'app.contact.entity.gender_choices.unknown' => Contact::GENDER_UNKNOWN,
-                ],
+                'choices' => array_flip(Contact::$genderTypeChoices),
                 'required' => false,
             ])
             ->add('title', TextType::class, [
@@ -136,11 +131,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $listMapper
             ->add('gender', 'choice', [
                 'editable' => false,
-                'choices' => [
-                    Contact::GENDER_MALE => 'app.contact.entity.gender_choices.male',
-                    Contact::GENDER_FEMALE => 'app.contact.entity.gender_choices.female',
-                    Contact::GENDER_OTHER => 'app.contact.entity.gender_choices.other',
-                ],
+                'choices' => Contact::$genderTypeChoices,
                 'catalogue' => 'messages',
             ])
             ->add('title')
@@ -161,11 +152,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $showMapper
             ->add('gender', 'choice', [
                 'editable' => false,
-                'choices' => [
-                    Contact::GENDER_MALE => 'app.contact.entity.gender_choices.male',
-                    Contact::GENDER_FEMALE => 'app.contact.entity.gender_choices.female',
-                    Contact::GENDER_OTHER => 'app.contact.entity.gender_choices.other',
-                ],
+                'choices' => Contact::$genderTypeChoices,
                 'catalogue' => 'messages',
             ])
             ->add('title')

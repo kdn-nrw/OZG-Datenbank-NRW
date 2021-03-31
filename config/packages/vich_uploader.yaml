@@ -16,6 +16,13 @@ vich_uploader:
             inject_on_load:     false
             delete_on_update:   true
             delete_on_remove:   true
+        commune_info_image:
+            uri_prefix: /media/onboarding/commune-info
+            upload_destination: '%kernel.project_dir%/public/media/onboarding/commune-info'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load:     false
+            delete_on_update:   true
+            delete_on_remove:   true
         model_region_project_document:
             uri_prefix: /uploads/model-region/project/document
             upload_destination: '%kernel.project_dir%/secured-data/uploads/model-region/project/document'

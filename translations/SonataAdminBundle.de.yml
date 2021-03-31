@@ -8,6 +8,7 @@ app:
   ozg_implementation_group: OZG Umsetzung
   basic_group: Basisdienste
   system_group: Systemkonfiguration
+  onboarding_group: Kommunalportal Onboarding
   situation:
     entity:
       subject_placeholder: Kein Themenfeld ausgewählt

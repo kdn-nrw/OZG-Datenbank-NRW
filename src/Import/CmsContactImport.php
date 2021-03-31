@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace App\Import;
 
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
+use App\Entity\Base\PersonInterface;
 use App\Entity\Category;
 use App\Entity\Contact;
 use App\Entity\ImportEntityInterface;
@@ -203,14 +204,14 @@ class CmsContactImport
                 if ($importObject->getContactType() === Contact::CONTACT_TYPE_DEFAULT) {
                     $importObject->setContactType(Contact::CONTACT_TYPE_IMPORT_CMS);
                 }
-                $gender = Contact::GENDER_UNKNOWN;
+                $gender = PersonInterface::GENDER_UNKNOWN;
                 $rowGender = (string)$row['gender'];
                 if ($rowGender === 'f') {
-                    $gender = Contact::GENDER_FEMALE;
+                    $gender = PersonInterface::GENDER_FEMALE;
                 } elseif ($rowGender === 'm') {
-                    $gender = Contact::GENDER_MALE;
+                    $gender = PersonInterface::GENDER_MALE;
                 } elseif ($rowGender === 'v') {
-                    $gender = Contact::GENDER_OTHER;
+                    $gender = PersonInterface::GENDER_OTHER;
                 }
                 $importObject->setGender($gender);
                 break;

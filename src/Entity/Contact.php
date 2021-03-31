@@ -12,8 +12,11 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseEntity;
+use App\Entity\Base\ContactPropertiesTrait;
 use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
+use App\Entity\Base\PersonInterface;
+use App\Entity\Base\PersonPropertiesTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,15 +31,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(name="ozg_contact")
  * @Vich\Uploadable
  */
-class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsEntityInterface, HideableEntityInterface
+class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsEntityInterface, HideableEntityInterface, PersonInterface
 {
     public const CONTACT_TYPE_DEFAULT = 'default';
     public const CONTACT_TYPE_IMPORT_CMS = 'cms_address';
 
-    public const GENDER_MALE = 0;
-    public const GENDER_FEMALE = 1;
-    public const GENDER_OTHER = 2;
-    public const GENDER_UNKNOWN = 3;
+    use PersonPropertiesTrait;
+    use ContactPropertiesTrait;
 
     use CategoryTrait;
     use HideableEntityTrait;
@@ -52,36 +53,6 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $contactType = self::CONTACT_TYPE_DEFAULT;
-
-    /**
-     * @ORM\Column(type="integer", name="gender", nullable=true)
-     * @var int
-     */
-    private $gender = self::GENDER_UNKNOWN;
-
-    /**
-     * @ORM\Column(type="string", name="title", length=100, nullable=true)
-     * @var string|null
-     */
-    private $title;
-
-    /**
-     * @ORM\Column(type="string", name="first_name", length=100, nullable=true)
-     * @var string|null
-     */
-    private $firstName;
-
-    /**
-     * @ORM\Column(type="string", name="last_name", length=100, nullable=true)
-     * @var string|null
-     */
-    private $lastName;
-
-    /**
-     * @ORM\Column(type="string", name="email", length=255, nullable=true)
-     * @var string|null
-     */
-    protected $email;
 
     /**
      * @ORM\Column(type="string", name="organisation", length=255, nullable=true)
@@ -102,22 +73,10 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
     private $position;
 
     /**
-     * @ORM\Column(type="string", name="phone_number", length=100, nullable=true)
-     * @var string|null
-     */
-    private $phoneNumber;
-
-    /**
      * @ORM\Column(type="string", name="fax_number", length=100, nullable=true)
      * @var string|null
      */
     private $faxNumber;
-
-    /**
-     * @ORM\Column(type="string", name="mobile_number", length=100, nullable=true)
-     * @var string|null
-     */
-    private $mobileNumber;
 
     /**
      * @var Organisation|null
@@ -205,93 +164,6 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
         $this->contactType = $contactType;
     }
 
-    /**
-     * @return int
-     */
-    public function getGender(): int
-    {
-        if (null === $this->gender || $this->gender < 0) {
-            $this->gender = self::GENDER_UNKNOWN;
-        }
-        return $this->gender;
-    }
-
-    /**
-     * @param int|null $gender
-     */
-    public function setGender(?int $gender): void
-    {
-        if (null === $gender || $gender < 0) {
-            $this->gender = self::GENDER_UNKNOWN;
-        } else {
-            $this->gender = $gender;
-        }
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string|null $title
-     */
-    public function setTitle(?string $title): void
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @param string|null $firstName
-     */
-    public function setFirstName(?string $firstName): void
-    {
-        $this->firstName = $firstName;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @param string|null $lastName
-     */
-    public function setLastName(?string $lastName): void
-    {
-        $this->lastName = $lastName;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string|null $email
-     */
-    public function setEmail(?string $email): void
-    {
-        $this->email = $email;
-    }
-
 
     /**
      * @return string|null
@@ -344,22 +216,6 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
     /**
      * @return string|null
      */
-    public function getPhoneNumber(): ?string
-    {
-        return $this->phoneNumber;
-    }
-
-    /**
-     * @param string|null $phoneNumber
-     */
-    public function setPhoneNumber(?string $phoneNumber): void
-    {
-        $this->phoneNumber = $phoneNumber;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getFaxNumber(): ?string
     {
         return $this->faxNumber;
@@ -371,22 +227,6 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
     public function setFaxNumber(?string $faxNumber): void
     {
         $this->faxNumber = $faxNumber;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getMobileNumber(): ?string
-    {
-        return $this->mobileNumber;
-    }
-
-    /**
-     * @param string|null $mobileNumber
-     */
-    public function setMobileNumber(?string $mobileNumber): void
-    {
-        $this->mobileNumber = $mobileNumber;
     }
 
     /**
@@ -414,18 +254,6 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
         $organisation = $this->getOrganisation();
         if ($organisation) {
             $name .= ' (' . $organisation . ')';
-        }
-        return $name;
-    }
-
-    public function getFullName(): string
-    {
-        $name = trim($this->getFirstName() . ' ' . $this->getLastName());
-        if ($name) {
-            $title = $this->getTitle();
-            if ($title) {
-                $name = $title . ' ' . $name;
-            }
         }
         return $name;
     }

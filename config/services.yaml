@@ -954,6 +954,136 @@ services:
     tags:
       - { name: sonata.admin.extension, target: App\Admin\StateGroup\SecurityIncidentAdmin }
 
+  App\Admin\Onboarding\CommuneInfoAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\CommuneInfo
+      - App\Controller\Onboarding\CommuneInfoAdminController
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.commune_info.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Onboarding\DataclearingAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\Dataclearing
+      - App\Controller\Onboarding\DataclearingAdminController
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.dataclearing.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Onboarding\EpaymentAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\Epayment
+      - App\Controller\Onboarding\EpaymentAdminController
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.epayment.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Onboarding\ServiceAccountAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\ServiceAccount
+      - App\Controller\Onboarding\ServiceAccountAdminController
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.service_account.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Onboarding\InquiryAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\Inquiry
+      - App\Controller\Onboarding\InquiryAdminController
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.inquiry.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Frontend\CommuneInfoAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\CommuneInfo
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.commune_info.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Frontend\DataclearingAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\Dataclearing
+      - ~
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.dataclearing.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Frontend\EpaymentAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\Epayment
+      - ~
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.epayment.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Frontend\ServiceAccountAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\ServiceAccount
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label: app.service_account.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+    public: true
+
+  App\Admin\Configuration\CustomFieldAdmin:
+    arguments:
+      - ~
+      - App\Entity\Configuration\CustomFieldAdmin
+      - ~
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.custom_field.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
 
   Sonata\AdminBundle\Bridge\Exporter\AdminExporter: '@sonata.admin.admin_exporter'
 

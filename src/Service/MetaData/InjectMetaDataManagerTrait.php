@@ -16,7 +16,7 @@ trait InjectMetaDataManagerTrait
     /**
      * @var MetaDataManager
      */
-    private $metaDataManager;
+    protected $metaDataManager;
 
     /**
      * @required

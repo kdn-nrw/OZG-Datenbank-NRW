@@ -127,7 +127,7 @@ sonata_admin:
                     mode: 'admin'
                     provider: App\Statistics\Provider\ImplementationProjectStatusChartProvider
 
-            - { position: left,  type: sonata.admin.block.admin_list, settings: { groups: [app.ozg_implementation_group, app.settings_group, app.state_group] } }
+            - { position: left,  type: sonata.admin.block.admin_list, settings: { groups: [app.ozg_implementation_group, app.settings_group, app.state_group, app.onboarding_group] } }
             - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [app.implementation_group, app.digital_model_reqion_group, app.application_group, app.efile_group, app_admin.menu.system] } }
             -
                 class:    col-xs-6 col-lg-3
@@ -247,6 +247,16 @@ sonata_admin:
                     - App\Admin\EFileAdmin
                     - App\Admin\EFileStatusAdmin
                     - App\Admin\EFileStorageTypeAdmin
+            app.onboarding_group:
+                label: app.menu.onboarding_group
+                label_catalogue: messages
+                icon: '<i class="fa fa-ship"></i>'
+                items:
+                    - App\Admin\Onboarding\CommuneInfoAdmin
+                    - App\Admin\Onboarding\EpaymentAdmin
+                    - App\Admin\Onboarding\ServiceAccountAdmin
+                    - App\Admin\Onboarding\DataclearingAdmin
+                    - App\Admin\Onboarding\InquiryAdmin
             app_admin.menu.basic:
                 label: app.menu.basic_group
                 label_catalogue: messages
@@ -258,6 +268,7 @@ sonata_admin:
                     - App\Admin\OpenDataAdmin
                     - App\Admin\StateGroup\CommuneTypeAdmin
                     - App\Admin\PageContentAdmin
+                    - App\Admin\Configuration\CustomFieldAdmin
             app_admin.menu.system:
                 label: app.system_group
                 #label_catalogue: messages

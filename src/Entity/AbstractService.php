@@ -212,10 +212,6 @@ abstract class AbstractService extends BaseEntity implements BlameableInterface,
      */
     public function __toString(): string
     {
-        $name = (string)$this->getName();
-        if (null === $name) {
-            return '';
-        }
-        return $name;
+        return (string)$this->getName();
     }
 }

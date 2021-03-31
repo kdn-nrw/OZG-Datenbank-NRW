@@ -66,6 +66,12 @@ class MenuBuilderListener
         }
 
         $this->moveContactMenuToTop($menu, $currentRoute);
+        $onboardingGroup = $menu->getChild('app.onboarding_group');
+        if (null !== $onboardingGroup) {
+            $onboardingGroup->removeChild('app.service_account.list');
+            $onboardingGroup->removeChild('app.dataclearing.list');
+            $onboardingGroup->removeChild('app.inquiry.list');
+        }
     }
 
     private function addSearchNode(ItemInterface $menu, string $currentRoute): void

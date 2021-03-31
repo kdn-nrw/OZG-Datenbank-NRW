@@ -319,4 +319,19 @@ class User extends BaseUser
         $this->organisation = $organisation;
     }
 
+    /**
+     * Returns a string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $email = $this->getEmail();
+        $fullName = trim($this->getFullname());
+        if ($fullName && $email) {
+            return $fullName . ' ('.$email.')';
+        }
+        return $email ?: '-';
+    }
+
 }
