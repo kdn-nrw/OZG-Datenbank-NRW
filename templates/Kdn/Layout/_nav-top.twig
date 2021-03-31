@@ -1,0 +1,41 @@
+{% apply spaceless %}
+<div class="topnav">
+
+    <ul class="nav justify-content-end">
+
+        <li class="nav-item">
+            {% if app.user %}
+                <a href="{{ path('sonata_admin_dashboard') }}" class="nav-link">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <span>{{ 'app.menu.dashboard'|trans }}</span>
+                </a>
+            {% else %}
+                <a href="/admin/login" class="nav-link">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                    <span>{{ 'app.menu.login'|trans }}</span>
+                </a>
+            {% endif %}
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.kdn.de/ozg/" target="" title="OZG">
+                OZG
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.kdn.de/ozg/informationsverteiler/" target="" title="Informationsverteiler">
+                Informationsverteiler
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.kdn.de/kontakt/" target="" title="Kontakt">
+                Kontakt
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+{% endapply %}

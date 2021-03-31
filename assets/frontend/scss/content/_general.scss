@@ -1,0 +1,50 @@
+
+
+#content {
+  background: #ecf0f5;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  .content {
+    &:not(:first-child) {
+      margin-top: 2rem;
+    }
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+  }
+}
+.app-fe {
+  .content-header {
+    .navbar-header {
+      flex: 0 0 100%;
+      font-size: $h1-font-size;
+      float: none;
+      margin: 0;
+      .navbar-brand {
+        color: $primary;
+        margin: 0;
+        white-space: normal;
+        height: auto;
+        padding: 15px 0;
+      }
+    }
+    .navbar-collapse {
+      flex: 0 0 100%;
+    }
+    @include media-breakpoint-up(lg) {
+      .navbar-header {
+        flex: 1 1 auto;
+        .navbar-brand {
+          display: flex;
+          align-items: center;
+          padding: 0;
+        }
+      }
+      .navbar-collapse {
+        flex: 0 1 auto;
+      }
+    }
+  }
+}
+
+@import "typo";

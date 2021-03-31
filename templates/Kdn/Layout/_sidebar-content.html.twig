@@ -1,0 +1,23 @@
+{% apply spaceless %}
+{% set hasActive = false %}
+{% for menuGroup in frontendMenuMain %}
+    {% if not hasActive and menuGroup.menuItems is defined %}
+        {% set activeRoutePrefix = null %}
+        {% for menuItem in menuGroup.menuItems %}
+            {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
+            {% if miActive %}
+                {% set activeRoutePrefix = menuItem.routePrefix %}
+            {% endif %}
+        {% endfor %}
+        {% if menuGroup.menuItems is defined %}
+            {% for menuItem in menuGroup.menuItems %}
+                {% set miActive = not hasActive and activeRoutePrefix and menuItem.routePrefix == activeRoutePrefix %}
+                {% if miActive %}
+                    {% set hasActive = true %}
+                    {% include 'Frontend/Admin/CRUD/menu-datagrid-filter.html.twig' %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% endapply %}

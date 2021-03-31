@@ -1,0 +1,36 @@
+{% extends 'Kdn/Layout/layout.html.twig' %}
+
+{% block sonata_page_content %}
+    <div class="row">
+        <div class="col-12 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+            <div class="box box-widget box-page-content">
+                {% if app.user %}
+                    <div class="box-header with-border">
+                        <h1 class="box-title">{{ 'app.frontend.login.headline_logout'|trans }}</h1>
+                    </div>
+                    <div class="box-body">
+                        <div class="mb-3">
+                            {{ 'app.frontend.login.welcome'|trans({'username': app.user ~ ''})}}
+                        </div>
+                        <div class="app-auth-action">
+                            <a href="{{ path('app_logout') }}" class="btn btn-primary">
+                                {{ 'app.frontend.login.logout'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="box-header with-border">
+                        <h1 class="box-title">{{ 'app.frontend.login.headline'|trans }}</h1>
+                    </div>
+                    <div class="box-body">
+                        {% include 'Frontend/Admin/Partials/_login.html.twig' with {
+                            'loginRoute': 'app_login',
+                            'loginShowLogo': false,
+                            'reset_route': path('sonata_user_admin_resetting_request')
+                        } %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

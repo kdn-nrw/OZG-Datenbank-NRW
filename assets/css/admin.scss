@@ -2,20 +2,4 @@
 body {
     background-color: lightgray;
 }
-@import "login";
-@import "chart";
-@import "frontend";
-@import "backend";
-@import "nav";
-@import "tables";
-@import "form";
-@import "box";
-@import "show";
-@import "help";
-@import "fim";
-@import "search";
-@import "project-status";
-@import "widget";
-@import "list-filter";
-@import "utilities";
-@import "colors";
+@import "admin-include";

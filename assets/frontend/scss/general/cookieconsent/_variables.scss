@@ -1,0 +1,75 @@
+$primary: #4b81e8 !default;
+$secondary: #f1d600 !default;
+$ba-text-color-inverse: #fff !default;
+$success: #28a745 !default;
+$gray-500: #6c757d !default;
+$font-family-sans-serif: Helvetica, Calibri, Arial, sans-serif !default;
+
+$cc-btn-border-color-focus: #000 !default;//deprecated! use $cc-btn-focus-border-color
+$cc-btn-text-color-hover: $primary !default;//deprecated! use $cc-btn-hover-text-color
+$cc-btn-background-hover: #fff !default;//deprecated! use $cc-btn-hover-background
+
+$cc-window-background: $primary !default;
+$cc-link-color: $ba-text-color-inverse !default;
+$cc-link-text-decoration: underline !default;
+$cc-link-text-decoration-hover: none !default;
+$cc-window-text-color: $ba-text-color-inverse !default;
+$cc-btn-text-color: $primary !default;
+$cc-btn-background: $secondary !default;
+$cc-btn-border-color: $secondary !default;
+$cc-btn-focus-border-color: $cc-btn-border-color-focus !default;
+$cc-btn-focus-outline: none !default;
+$cc-btn-hover-text-color: $cc-btn-text-color-hover !default;
+$cc-btn-hover-background: $cc-btn-background-hover !default;
+$cc-window-border-top: none !default;
+$cc-toggle-help-color: $primary !default;
+$cc-toggle-help-size: 20px !default;
+$cc-tooltip-background: #fff !default;
+$cc-tooltip-border: none !default;
+$cc-tooltip-font-size: 12px !default;
+$cc-tooltip-line-height: 1.5 !default;
+$cc-checkbox-size: 24px !default;
+$cc-checkbox-check-offset-top: -4px !default;
+$cc-checkbox-check-offset-left: 0 !default;
+$cc-checkbox-check-font-size: $cc-checkbox-size + 2 !default;
+$cc-checkbox-check-text-shadow: 0 1px 3px rgba(150, 150, 150, .5) !default;
+$cc-checkbox-border: 2px solid $cc-btn-text-color !default;
+
+$cc-btn-padding: .4em .8em !default;
+$cc-btn-font-size: .9em !default;
+// Save all button
+$cc-btn-save-all-color: #fff !default;
+$cc-btn-save-all-background-color: $success !default;
+$cc-btn-save-all-border-color: $success !default;
+$cc-btn-save-all-focus-color: $success !default;
+$cc-btn-save-all-focus-background-color: #fff !default;
+$cc-btn-save-all-focus-border-color: $success !default;
+// Settings button
+$cc-btn-settings-color: $gray-500 !default;
+$cc-btn-settings-border-color: $gray-500 !default;
+$cc-btn-settings-background-color: $cc-btn-background !default;
+$cc-btn-settings-focus-color: $primary !default;
+$cc-btn-settings-focus-border-color: $secondary !default;
+$cc-btn-settings-focus-background-color: $cc-btn-background-hover !default;
+
+$cc-media-break-point-button-row: 420px !default;
+$cc-media-break-point-xs: 578px !default;
+$cc-media-break-point-md: 768px !default;
+$cc-media-break-point-xl: 1200px !default;
+
+$cc-container-max-width-lg: 996px !default;
+$cc-container-max-width-xl: 1060px !default;
+$cc-window-border-floating: $cc-window-border-top !default;
+$cc-window-font-size: 1rem !default;
+$cc-window-font-family: $font-family-sans-serif;
+$cc-window-line-height: 1.5em !default;
+$cc-message-line-height: 1.2em !default;
+$cc-window-banner-padding: 1em 0 !default;
+$cc-window-floating-padding: 1em 1.8em !default;
+$cc-window-floating-padding-xl: 1em 1.8em !default;
+$cc-revoke-padding: .5em !default;
+$cc-header-font-size: 1.25rem !default;
+$cc-header-font-weight: 700 !default;
+
+$cc-categories-btn-info-padding-left: 5px !default;
+$cc-categories-btn-info-padding-right: 15px !default;

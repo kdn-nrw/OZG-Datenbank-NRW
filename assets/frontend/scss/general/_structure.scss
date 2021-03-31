@@ -1,0 +1,102 @@
+.app-fe {
+  .app-title {
+    text-align: center;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    @include media-breakpoint-up(md) {
+      text-align: left;
+    }
+    @include media-breakpoint-up(lg) {
+      text-align: left;
+      margin-left: 150px;
+      margin-top: -28px;
+      padding-bottom: 0;
+      max-width: 600px;
+    }
+  }
+}
+.content-wrapper-content {
+  @include media-breakpoint-up(md) {
+    min-height: 400px;
+  }
+  .app-content-wrapper {
+    overflow-x: auto;
+  }
+  &.full-width {
+    .app-content-wrapper {
+      > .content {
+        margin-right: 0;
+        margin-left: 0;
+        padding: 0;
+      }
+    }
+  }
+  &.has-sidebar {
+    .app-sidebar {
+      display: none;
+    }
+    .app-content-wrapper {
+      overflow-x: auto;
+    }
+
+    @include media-breakpoint-up(md) {
+      display: flex;
+      flex-direction: row;
+      .app-sidebar {
+        flex: 0 0 200px;
+        display: block;
+        width: 200px;
+        font-size: .75rem;
+        margin-left: -15px;
+        background: $gray-700;
+        border-top: 2px solid $customer-secondary;
+        border-bottom: 2px solid $customer-secondary;
+        padding: 15px 10px 15px 0;
+      }
+      .app-content-wrapper{
+        flex: 1 1 auto;
+      }
+      .list-item-filter {
+        padding: 5px 0;
+        color: #fff;
+        white-space: normal;
+        a {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+//// #29056
+//.wrapper {
+//  background: $dark;
+//  //max-width: $ba-wrapper-width;
+//  margin: 0 auto;
+//  position: relative;
+//  overflow-x: hidden;
+//  min-height: 100vh;
+//  display:flex;
+//  flex-direction:column
+//}
+//header,main,footer, .above-footer {
+//   display:block;
+//   width:100%;
+//}
+//.content-wrapper {
+//  flex-grow:1;
+//}
+//.section-alerts {
+//  margin: $grid-gutter-width 0;
+//}
+//.cpx-extra {
+//  padding-left: $grid-gutter-width;
+//  padding-right: $grid-gutter-width;
+//}
+//
+////@media screen and (min-width: $ba-wrapper-width){
+////   .container-top {
+////     max-width: none;
+////     width: auto;
+////   }
+////}

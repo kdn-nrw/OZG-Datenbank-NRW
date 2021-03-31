@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="13" height="16">
+	<defs>
+		<clipPath id="clip_0">
+			<rect x="-248" y="-1091" width="2130" height="7849" clip-rule="evenodd"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip_0)">
+		<path fill="rgb(16,47,55)" stroke="none" transform="translate(1 4)" d="M11 0L0 0L0 12L11 12L11 0ZM1.65 10.3083L1.65 1.69167L9.35 1.69167L9.35 10.3083L1.65 10.3083Z" fill-rule="evenodd"/>
+	</g>
+	<defs>
+		<clipPath id="clip_1">
+			<rect x="-248" y="-1091" width="2130" height="7849" clip-rule="evenodd"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip_1)">
+		<path fill="rgb(216,216,216)" stroke="none" transform="translate(0 4)" d="M0 0L13 0L13 1L0 1L0 0Z"/>
+	</g>
+	<defs>
+		<clipPath id="clip_2">
+			<rect y="4" width="13" height="1" clip-rule="evenodd"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip_2)">
+		<path fill="none" stroke="rgb(16,47,55)" stroke-width="2.5999999" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 4)" d="M0 0L13 0L13 1L0 1L0 0Z"/>
+	</g>
+	<defs>
+		<clipPath id="clip_3">
+			<rect x="-248" y="-1091" width="2130" height="7849" clip-rule="evenodd"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip_3)">
+		<path fill="rgb(16,47,55)" stroke="none" transform="translate(3.34998 0.850006)" d="M3.15 0C1.38142 0 0 1.6577 0 3.65L0 4.3L6.3 4.3L6.3 3.65C6.3 1.6577 4.91858 0 3.15 0ZM3.15 1.3C3.97266 1.3 4.70216 2.00619 4.92808 3L1.37192 3C1.59784 2.00619 2.32734 1.3 3.15 1.3Z" fill-rule="evenodd"/>
+	</g>
+	<defs>
+		<clipPath id="clip_4">
+			<rect x="-248" y="-1091" width="2130" height="7849" clip-rule="evenodd"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip_4)">
+		<path fill="none" stroke="rgb(9,28,33)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" transform="translate(6.52991 7.02554)" d="M1 0L1 5.29548"/>
+	</g>
+	<defs>
+		<clipPath id="clip_5">
+			<rect x="-248" y="-1091" width="2130" height="7849" clip-rule="evenodd"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip_5)">
+		<path fill="none" stroke="rgb(9,28,33)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" transform="translate(4.52991 7.02554)" d="M1 0L1 5.29548"/>
+	</g>
+
+</svg>

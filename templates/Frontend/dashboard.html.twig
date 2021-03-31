@@ -10,9 +10,25 @@ file that was distributed with this source code.
 {% block breadcrumb %}{% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-xs-12">
+        <div class="{% if app.user %}col-12{% else %} col-md-7 col-lg-8{% endif %}">
             {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_HOME')} %}
         </div>
+        {% if not app.user %}
+        <div class="col-12 col-md-5 col-lg-4">
+            <div class="box box-widget box-page-content">
+                <div class="box-header with-border">
+                    <h1 class="box-title">{{ 'app.frontend.login.headline'|trans }}</h1>
+                </div>
+                <div class="box-body">
+                    {% include 'Frontend/Admin/Partials/_login.html.twig' with {
+                        'loginRoute': 'app_login',
+                        'loginShowLogo': false,
+                        'reset_route': path('sonata_user_admin_resetting_request')
+                    } %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
         {#
         <div class="col-xs-12">
             {{ sonata_block_render({ 'type': 'App\\Block\\RecentSolutionsBlock' }, {

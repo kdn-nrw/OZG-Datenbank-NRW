@@ -1,0 +1,313 @@
+
+
+    #kdnslider {
+        max-width: 1920px;
+        margin: 0 auto;
+        background-color: $kdnblau1;
+        ol.carousel-indicators {
+            top: 500px;
+            bottom: inherit;
+            margin: 0;
+            @include media-breakpoint-down(md) {
+                top: inherit;
+                bottom: 12px;
+            }
+            @include media-breakpoint-down(sm) {
+            }
+            @include media-breakpoint-down(xs) {
+            }
+            li {
+                background-color:white;
+                border: 1px solid transparent;
+                height: .5rem;
+                &.active {
+                    background-color:$kdnblau1;
+                    border:1px solid white;
+                }
+            }
+        }
+        .carousel-inner {
+            .carousel-item {
+                //background-color: $kdnblau1;
+                .bild-wrapper {
+                    height: 545px;
+                    overflow: hidden;
+
+                    @include media-breakpoint-down(md) {
+                        height: 300px;
+                        overflow: hidden;
+                        position: relative;
+                    }
+                    @include media-breakpoint-down(sm) {
+                        height: 270px;
+                        overflow: hidden;
+                        position: relative;
+                    }
+                    @include media-breakpoint-down(xs) {
+                        height: 240px;
+                        overflow: hidden;
+                        position: relative;
+                    }
+
+                    img {
+                        display: block;
+                        margin: 0 auto;
+
+                        @include media-breakpoint-down(md) {
+                            min-width: 100%;
+                            height: auto;
+                            width: 100%;
+                            overflow: hidden;
+                        }
+                        @include media-breakpoint-down(xs) {
+                            max-height: 240px;
+                            max-width: inherit;
+                            width: auto;
+                            overflow: hidden;
+                        }
+                    }
+                    position: relative;
+                    .info-wrapper {
+                        position: absolute;
+                        top: 50%;
+                        -webkit-transform: translateY(-50%);
+                        -ms-transform: translateY(-50%);
+                        transform: translateY(-50%);
+                            .app-info-box {
+                                display: none;
+                                h2.app-info-box-content-headline {
+                                    font-size:3.5rem;
+                                    text-shadow: 0 0px 20px #FFFFFF;
+                                    @include media-breakpoint-down(md) {
+                                        font-size:  2.75rem;
+                                    }
+                                    @include media-breakpoint-down(sm) {
+                                        font-size: 2.25rem;
+                                    }
+                                    @include media-breakpoint-down(xs) {
+                                        font-size: 1.75rem;
+                                    }
+
+                                }
+                                .app-info-box-content-text, .more {
+                                    display:none;
+                                }
+                            }
+                        &:hover {
+                                text-decoration: none;
+                                .app-info-box {
+                                    h2 {
+
+                                    }
+                                }
+                        }
+                    }
+                }
+
+                .infot-text {
+                    color: $kdnblau1;
+                    font-weight: 600;
+                    font-size:4rem;
+                    text-shadow: 0 0 25px rgba(255, 255, 255, 1);
+                    @include media-breakpoint-down(lg) {
+                        font-size:3.25rem;
+                    }
+                    @include media-breakpoint-down(md) {
+                        font-size:2.75rem;
+                    }
+                    @include media-breakpoint-down(sm) {
+                        font-size:2.5rem;
+                    }
+                    @include media-breakpoint-down(xs) {
+                        font-size:2.25rem;
+                    }
+                }
+                .info-wrapper-xs {
+                    .app-info-box {
+                        padding-top: 1rem;
+                        padding-bottom:2rem;
+                        display: block;
+                        position: relative;
+                        h2.app-info-box-content-headline {
+                            position: relative;
+                            display:block;
+                            color: $kdngrau;
+                            text-align: center;
+                            font-size:2.5rem;
+                            margin-bottom: 0.5rem;
+                            height: 48px;
+                            @include media-breakpoint-down(md) {
+                                font-size:  2.2rem;
+                                height: 38px;
+                            }
+                            @include media-breakpoint-down(sm) {
+                                font-size: 1.8rem;
+                                height: 30px;
+                            }
+                            @include media-breakpoint-down(xs) {
+                                font-size: 1.3rem;
+                            }
+                        }
+                        .app-info-box-content-text {
+                            position: relative;
+                            min-height: 110px;
+                            width: 80%;
+                            display: block;
+                            margin: 0 auto;
+                            @include media-breakpoint-down(lg) {
+                                height: 150px;
+                            }
+                            @include media-breakpoint-down(md) {
+                                height: 130px;
+                            }
+                            @include media-breakpoint-down(sm) {
+                                height: 150px;
+                            }
+                            @include media-breakpoint-down(xs) {
+                                height: 220px;
+                            }
+
+
+                            p {
+                                height: 110px;
+                                color: $kdngrau;
+                                font-style: normal; /*italic;*/
+                                text-align: center;
+                                font-size: 1.5rem;
+                                margin-bottom: 0;
+                                position: absolute;
+                                top: 50px;
+                                -webkit-transform: translateY(-50%);
+                                -ms-transform: translateY(-50%);
+                                transform: translateY(-50%);
+                                a {
+                                    font-size: 1.25rem;
+                                    color:$kdngrau2;
+                                }
+                                @include media-breakpoint-down(lg) {
+                                    font-size:1.5rem;
+
+                                }
+                                @include media-breakpoint-down(md) {
+                                    font-size:1.25rem;
+                                    a {
+                                        font-size:1.125rem;
+                                    }
+                                }
+                                @include media-breakpoint-down(sm) {
+                                    font-size:1.125rem;
+                                    a {
+                                        font-size:1rem;
+                                    }
+                                }
+                                @include media-breakpoint-down(xs) {
+                                    font-size:1.125rem;
+                                    a {
+                                        font-size:1rem;
+                                    }
+                                }
+                                &:before {
+                                    content: "\f101";
+                                    font-family: "Font Awesome 5 Free";
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    text-decoration: inherit;
+                                    /*--adjust as necessary--*/
+                                    color: #fff;
+                                    font-size: 48px;
+                                    position: absolute;
+                                    left: -58px;
+                                    top: 50%;
+                                    -webkit-transform: translateY(-50%);
+                                    -ms-transform: translateY(-50%);
+                                    transform: translateY(-50%);
+                                    @include media-breakpoint-down(md) {
+                                        font-size: 40px;
+                                    }
+                                }
+                                &:after {
+                                    content: "\f100";
+                                    font-family: "Font Awesome 5 Free";
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    text-decoration: inherit;
+                                    /*--adjust as necessary--*/
+                                    color: #fff;
+                                    font-size: 48px;
+                                    position: absolute;
+                                    right: -58px;
+                                    top: 50%;
+                                    -webkit-transform: translateY(-50%);
+                                    -ms-transform: translateY(-50%);
+                                    transform: translateY(-50%);
+                                    @include media-breakpoint-down(md) {
+                                        font-size: 40px;
+                                    }
+                                }
+                            }
+                        }
+                        .more {
+                            position: relative;
+                            display: block;
+                            text-transform: uppercase;
+                            font-weight: 400;
+                            font-size:20px;
+                            &:hover {
+                                background-color:transparent;
+                                color:$kdnorange;
+                            }
+                        }
+
+                    }
+                    &:hover {
+
+                            .more {
+                                color:$kdnorange;
+                            }
+                        .app-info-box-content-text {
+                            p {
+                                    &:before {
+                                        color:$kdnorange;
+                                    }
+                                    &:after {
+                                        color:$kdnorange;
+                                    }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    .carousel-fade {
+        .carousel-inner {
+            .item {
+                transition-property: opacity;
+            }
+
+            .item,
+            .active.left,
+            .active.right {
+                opacity: 0;
+            }
+
+            .active,
+            .next.left,
+            .prev.right {
+                opacity: 1;
+            }
+
+            .next,
+            .prev,
+            .active.left,
+            .active.right {
+                left: 0;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .carousel-control {
+            z-index: 2;
+        }
+    }

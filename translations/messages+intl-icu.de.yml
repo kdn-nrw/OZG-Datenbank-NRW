@@ -1,6 +1,15 @@
 app:
   frontend:
     page_title: 'OZG NRW kommunal – Onlinedienste zum Onlinezugangsgesetz'
+    you_are_here: 'Sie sind hier:'
+    login:
+      headline: Anmeldung
+      headline_logout: Willkommen
+      welcome: 'Sie sind angemeldet als {username}!'
+      welcome_short: 'Willkommen {username}!'
+      logout: 'Abmelden'
+      login: 'Anmelden'
+
   menu:
     settings_group: OZG Basisdaten
     state_group: NRW Basisdaten

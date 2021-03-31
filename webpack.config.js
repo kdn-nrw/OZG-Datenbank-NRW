@@ -7,6 +7,9 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
 
+let moduleDir = __dirname + '/node_modules/';
+let websiteSrcDir = './assets/frontend/';
+
 Encore
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
@@ -27,6 +30,11 @@ Encore
     .addEntry('admin', './assets/js/admin.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
+
+    .addStyleEntry('style', [
+        moduleDir + 'flatpickr/dist/flatpickr.min.css',
+        websiteSrcDir + 'scss/styles.scss'
+    ])
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -58,7 +66,20 @@ Encore
     })
 
     // enables Sass/SCSS support
-    .enableSassLoader()
+    .enableSassLoader(function(options) {
+        options.sourceMap = true;
+        options.sassOptions = {
+            outputStyle: 'compressed',
+            sourceComments: !Encore.isProduction(),
+            // add or set custom options
+            includePaths: [
+                moduleDir + "bootstrap/assets/stylesheets",
+                moduleDir + "font-awesome/scss",
+                moduleDir + "compass-mixins/lib",
+                moduleDir
+            ],
+        };
+    })
 
     // enables PostCssLoader
     .enablePostCssLoader(function (options) {
@@ -86,13 +107,30 @@ Encore
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
 
-    // .copyFiles([
-    //     {from: './node_modules/ckeditor/', to: 'third-party/ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
-    //     {from: './node_modules/ckeditor/adapters', to: 'third-party/ckeditor/adapters/[path][name].[ext]'},
-    //     {from: './node_modules/ckeditor/lang', to: 'third-party/ckeditor/lang/[path][name].[ext]'},
-    //     {from: './node_modules/ckeditor/plugins', to: 'third-party/ckeditor/plugins/[path][name].[ext]'},
-    //     {from: './node_modules/ckeditor/skins', to: 'third-party/ckeditor/skins/[path][name].[ext]'}
-    // ])
+
+    .copyFiles({
+        from: websiteSrcDir + 'fonts',
+
+        // optional target path, relative to the output dir
+        to: 'fonts/[path][name].[ext]',
+
+        // if versioning is enabled, add the file hash too
+        //to: 'images/[path][name].[hash:8].[ext]',
+
+        // only copy files matching this pattern
+        //pattern: /\.(png|jpg|jpeg)$/
+    },{
+        from: moduleDir + 'font-awesome/fonts',
+
+        // optional target path, relative to the output dir
+        to: 'fonts/[path][name].[ext]',
+
+        // if versioning is enabled, add the file hash too
+        //to: 'images/[path][name].[hash:8].[ext]',
+
+        // only copy files matching this pattern
+        //pattern: /\.(png|jpg|jpeg)$/
+    })
 
     // uncomment if you use API Platform Admin (composer req api-admin)
     //.enableReactPreset()

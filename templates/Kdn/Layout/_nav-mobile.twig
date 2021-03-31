@@ -1,0 +1,52 @@
+<nav class="navbar-default navbar-offcanvas navbar-offcanvas-touch d-lg-none mobile-navi" id="navbar-offcanvas">
+    <div class="menu-header">Navigation</div>
+    <ul class="nav-main">
+        {% for menuGroup in frontendMenuMain %}
+            {% if menuGroup.menuItems is defined %}
+                {% set activeRoutePrefix = null %}
+                {% for menuItem in menuGroup.menuItems %}
+                    {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
+                    {% if miActive %}
+                        {% set activeRoutePrefix = menuItem.routePrefix %}
+                    {% endif %}
+                {% endfor %}
+                <li class="{{ menuGroup.itemClasses }}{{ activeRoutePrefix ? ' active' : '' }}">
+                    <a href="#" class="mainnavigationItem dropdown-chevron dropdown-toggle" data-toggle="dropdown"
+                       role="button" aria-haspopup="true" aria-expanded="false" title="{{ menuGroup.label }}">
+                        <span>{{ menuGroup.label }}</span>
+                        <div class="fa fa-chevron-down"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% set hasActive = false %}
+                        {% for menuItem in menuGroup.menuItems %}
+                            {% set miActive = not hasActive and activeRoutePrefix and menuItem.routePrefix == activeRoutePrefix %}
+                            <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
+                                <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="canvas-hp nav-link">
+                                    <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
+                                    <span>{{ menuItem.label|trans }}</span>
+                                </a>
+                                {% if miActive %}
+                                    {% set hasActive = true %}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% else %}
+                {% set activeRoutePrefix = null %}
+                {% set menuItem = menuGroup %}
+                {% set defaultRouteAppend = menuItem.defaultRouteAppend is defined ? menuItem.defaultRouteAppend : '_list' %}
+                {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
+                <li class="nav-item{% if miActive %} active{% endif %}">
+                    <a href="{{ path(menuItem.routePrefix ~ defaultRouteAppend) }}" class="nav-link">
+                        <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
+                        <span>{{ menuItem.label|trans|raw }}</span>
+                    </a>
+                    {% if miActive %}
+                        {% set activeRoutePrefix = menuItem.routePrefix %}
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>

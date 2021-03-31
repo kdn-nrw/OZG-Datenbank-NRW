@@ -1,0 +1,3 @@
+{% block headScript %}
+    <script>document.documentElement.className = 'js ' + (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch ? 'touch' : 'no-touch');</script>
+{% endblock %}

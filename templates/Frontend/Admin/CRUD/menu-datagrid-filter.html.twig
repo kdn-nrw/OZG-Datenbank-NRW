@@ -5,7 +5,7 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {% if datagrid is defined and datagrid.filterMenuItems %}
-    <div class="list-item-filter" style="padding: 5px 5px 5px 15px;color: #fff; white-space: normal;">
+    <div class="list-item-filter">
         {% for filterName, filterMenu in datagrid.filterMenuItems %}
             {% set filterParamName = filterName|replace({'.': '__'}) %}
             {% if filterMenu.choices|length > 20 %}

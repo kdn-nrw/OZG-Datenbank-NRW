@@ -1,24 +1,31 @@
 {
+    "name": "kdn_ozg",
+    "author": "Gert Hammes <info@gerthammes.de",
+    "license": "MIT",
+    "private": true,
+    "version": "1.0.0",
+    "description": "KDN - OZG: Das Onlinezugangsgesetz (OZG) – die Kommunen in NRW und ihre IT-Dienstleister präsentieren hier ihre Lösungen und gemeinsamen Digitalisierungsprojekte. Bald sind alle Online-Dienste der kommunalen Verwaltung im Portalverbund – für ganz Nordrhein-Westfalen.",
+    "dependencies": {
+        "bootstrap": "^4.3.1",
+        "chart.js": "^2.9.3",
+        "chartjs-plugin-datalabels": "^0.7.0",
+        "cookieconsent": "^3.1.1",
+        "flatpickr": "^4.6.3",
+        "font-awesome": "^4.7.0",
+        "jquery": "^3.5.1",
+        "select2": "^4.0.13"
+    },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.10.1",
         "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.1",
         "@symfony/webpack-encore": "^0.30.2",
         "autoprefixer": "^9.8.0",
         "core-js": "^3.6.5",
-        "jquery": "^3.5.1",
         "node-sass": "^4.14.1",
         "postcss-loader": "^3.0.0",
         "regenerator-runtime": "^0.13.5",
         "sass-loader": "^8.0.2",
         "webpack-notifier": "^1.8.0"
-    },
-    "license": "MIT",
-    "private": true,
-    "scripts": {
-        "dev-server": "encore dev-server",
-        "dev": "encore dev",
-        "watch": "encore dev --watch",
-        "build": "encore production --progress"
     },
     "browserslist": [
         "> 0.5%",
@@ -26,9 +33,10 @@
         "Firefox ESR",
         "not dead"
     ],
-    "dependencies": {
-        "chart.js": "^2.9.3",
-        "chartjs-plugin-datalabels": "^0.7.0",
-        "select2": "^4.0.13"
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
     }
 }

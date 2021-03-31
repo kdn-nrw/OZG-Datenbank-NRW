@@ -4,6 +4,11 @@ module.exports = {
         // but make sure you install these via yarn or npm!
 
         // add browserslist config to package.json (see below)
-        autoprefixer: {}
+        autoprefixer: {
+            "cascade": false
+        },
+        cssnano: {
+            "zindex": false
+        },
     }
 }

@@ -28,6 +28,8 @@
   .widget-user-header {
     display: block;
     padding-left: 120px;
+    height: auto;
+    min-height: 120px;
   }
   .widget-user-image {
     top: 10px;

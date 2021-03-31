@@ -1,0 +1,18 @@
+<!--Partial Navigation-->
+<div id="mainnav" class="position-relative b-blau">
+    <div class="burger  d-block d-lg-none">
+        <button type="button" class="navbar-toggle offcanvas-toggle offcanvas-toggle-close" data-toggle="offcanvas"
+                data-target="#navbar-offcanvas">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="sr-only">Toggle navigation</span>
+        </button>
+    </div>
+    {% include 'Kdn/Layout/_nav-mobile.twig' %}
+    {% include 'Kdn/Layout/_nav-main.twig' %}
+
+    {% include 'Kdn/Layout/_search.twig' %}
+    <div id="mybtn" class="menuBorder" style="display:none;">
+    </div>
+</div>

@@ -16,9 +16,8 @@ security:
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
         fos_userbundle:
-            id: fos_user.user_provider.username
+            id: fos_user.user_provider.username_email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -51,14 +50,18 @@ security:
         main:
             anonymous: true
             pattern:             .*
-            context:             user
-            form_login:
-                provider:       fos_userbundle
-                login_path:    /login
-                use_forward:    false
-                check_path:     /login_check
-                failure_path:   null
+#            context:             user
+#            form_login:
+#                provider:       fos_userbundle
+#                login_path:    /login
+#                use_forward:    false
+#                check_path:     /login_check
+#                failure_path:   null
+            provider: 'fos_userbundle'
             logout:              true
+            guard:
+                authenticators:
+                    - App\Security\FrontendAuthenticator
 
             # activate different ways to authenticate
 
@@ -80,5 +83,5 @@ security:
         # Secured part of the site
         # This config requires being logged for the whole site and having the admin role for the admin part.
         # Change these rules to adapt them to your needs
-        - { path: ^/admin/, role: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -1,0 +1,265 @@
+html {
+  font-size: $font-size-base;
+}
+body {
+  font-size: $font-size-base;
+  font-family: 'Rubik', sans-serif;
+  /* margin-top: 138px; */
+  .b-blau {
+    background-color:$kdnblau1;
+    color:white;
+  }
+  .t-blau {
+    color:$kdnblau1;
+  }
+  .b-blau2 {
+    background-color:$kdnblau2;
+    color:white;
+  }
+  .b-orange{
+    background-color:$kdnorange;
+    color:white;
+  }
+  .b-grau{
+    background-color:$kdngrau3;
+    color:$kdnblau1;
+  }
+  .b-grau2{
+    background-color:$kdngrau2;
+    color:$kdnblau1;
+  }
+  .b-weiss{
+    background-color:#fff;
+    color:$kdnblau1;
+  }
+  .b-trans{
+    background-color:transparent;
+    color:$kdnblau1;
+  }
+  .btn {
+    border-radius: 0;
+  }
+  .more {
+    color: #fff;
+    background-color: $kdnblau1;
+    &:hover {
+      background-color: $kdnorange;
+    }
+  }
+
+  .bg-center {
+    padding-bottom: 4rem;
+    padding-top: 2rem;
+    position: relative;
+    z-index: 100;
+    height: 100%;
+  }
+}
+
+.btn-kdn  {
+  &:hover {
+    background-color: $kdnblau1;
+    color: white;
+  }
+}
+
+a {
+  color: $kdnblau1;
+}
+
+// Schriftsätze
+
+p {
+  font-size: 1.125rem;
+  &.sparte {
+    color: #007CCF;
+    font-weight: bold;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+  }
+  > a {
+    color: $kdnorange;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+
+
+// Schrift weiß bei blauem Hintergrund
+//.bg-wrapper-skew-r .b-blau,.bg-wrapper-skew-l .b-blau, .bg-wrapper-horz .b-blau {
+//  a {
+//    color:#fff;
+//    &:hover {
+//      text-decoration:none;
+//      color:$kdnorange;
+//      p {
+//        //color:$kdnblau1;
+//      }
+//    }
+//  }
+//  p,h1,h2,h3,h4 {
+//    color:#fff;
+//  }
+//  .more.btn {
+//    color: $kdnblau1;
+//    background-color: #fff;
+//    &:hover {
+//      background-color: $kdnorange;
+//    }
+//  }
+//  .b-blau {
+//    color:$kdnblau1;
+//  }
+//}
+//// Ende Schrift weiß bei blauem Hintergrund
+//
+//p,h1,h2,h3,h4 {
+//  color:$kdnblau1;
+//}
+.b-blau {
+  p,h1,h2,h3,h4 {
+
+    color:white;
+  }
+}
+
+a {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.middle {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+//.bg-wrapper-skew, .bg-wrapper-horz{
+//  height: 100%;
+//  padding: 0;
+//  margin-top: 0;
+//}
+
+
+
+
+
+////body {
+////  font-size: .9375rem;
+////}
+//body {
+//  font-size: $ba-font-size-default;
+//  line-height: $ba-line-height-default;
+//}
+//.pre-headline {
+//  color: $kdnblau1;
+//  font-weight: $font-weight-light;
+//  //margin-bottom: .625rem;
+//}
+//.lead {
+//  font-size: 1rem;
+//  padding: 15px 0;
+//  line-height: 1.6;
+//}
+//.text-normal {
+//  font-size: .875rem;
+//}
+//.text-small {
+//  font-size: $ba-font-size-sm;//12px
+//}
+//.text-tiny {
+//  font-size: $ba-font-size-xs; //11px
+//}
+//
+//.text-light {
+//  a {
+//    color: #fff;
+//    &.btn-primary {
+//      color: $primary;
+//    }
+//    &.link-icon-text {
+//      color: #fff;
+//    }
+//  }
+//  h1, h2, h3, h4,
+//  .h1, .h2, .h3, .h4 {
+//    color: #fff;
+//  }
+//}
+//.special-headline {
+//  text-align: center;
+//  margin-bottom: 60px;
+//}
+//// Make ol look good with more than 9 items
+//ol {
+//  list-style-type: decimal-leading-zero;
+//}
+////h1,
+////.h1 {
+////  line-height: 80/70;
+////}
+////h3,
+////.h3 {
+////  line-height: 46/36;
+////}
+////h4,
+////.h4 {
+////  line-height: 32/24;
+////}
+//
+//@include media-breakpoint-down(xs) {
+//  //h1, h2, h4, .h1, .h2, .h3 {
+//  //  word-wrap: break-word;
+//  //  -ms-word-break: break-all;
+//  //  word-break: break-all;
+//  //  word-break: break-word;
+//  //  -webkit-hyphens: auto;
+//  //  -moz-hyphens: auto;
+//  //  hyphens: auto;
+//  //}
+//  h1, .h1 {
+//    font-size: $ba-h1-font-size-down-xs;
+//  }
+//  h2, h2 {
+//    font-size: $ba-h2-font-size-down-xs;
+//  }
+//}
+//
+//
+//@include media-breakpoint-up(md) {
+//  .lead {
+//    font-size: 1.25rem;
+//    padding: 0;
+//    line-height: 1.3;
+//  }
+//}
+//
+//@include media-breakpoint-up(lg) {
+//  h1, .h1 {
+//    font-size: $ba-h1-font-size-lg;
+//    &.extra {
+//      font-size: $ba-h1-font-size-lg-extra;
+//    }
+//  }
+//  h2, .h2 {
+//    font-size: $ba-h2-font-size-lg;
+//  }
+//  h3, .h3 {
+//    font-size: $ba-h3-font-size-lg;
+//  }
+//  h4, .h4 {
+//    font-size: $ba-h4-font-size-lg;
+//  }
+//  .text-normal {
+//    font-size: $ba-font-size-default;
+//  }
+//  .pre-headline {
+//    font-weight: $font-weight-normal;
+//    //margin-bottom: .625rem;
+//  }
+//}

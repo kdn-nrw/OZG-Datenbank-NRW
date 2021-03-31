@@ -1,11 +1,11 @@
 app:
-  settings_group: OZG Basisdaten
+  settings_group: Kommunalportal Basisdaten
   state_group: NRW Basisdaten
   digital_model_reqion_group: Digitale Modellregionen
   implementation_group: Umsetzung Basisdaten
   application_group: Anwendungen im KDN
   efile_group: eAkten Kataster
-  ozg_implementation_group: OZG Umsetzung
+  ozg_implementation_group: Kommunalportal Umsetzung
   basic_group: Basisdienste
   system_group: Systemkonfiguration
   situation:
@@ -14,4 +14,5 @@ app:
   btn_filter: 'Filter anwenden'
   link_filters: 'Auswahl der Filter'
 export_format_xlsx: Excel (XLSX)
-Admin: 'Data Warehouse KDN'
+Admin: 'Kommunalportal KDN'
+search_placeholder: Wonach suchen Sie?

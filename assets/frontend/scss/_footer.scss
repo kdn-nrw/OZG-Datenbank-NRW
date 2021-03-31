@@ -1,0 +1,154 @@
+
+
+#footer {
+
+    .footer-nav {
+        padding-top: 2rem;
+        @include media-breakpoint-down(sm) {
+            padding-top: 0;
+        }
+        ul.nav {
+
+            li.nav-item {
+                ul.first {
+                    margin-top: 2rem;
+                    padding: .625rem;
+                    list-style:none;
+                    li.first {
+                        text-align: left;
+                        a {
+                            font-size: 0.9375rem;
+                            color:white;
+                            @include hover-focus-active{
+                                color:$kdnorange;
+                                text-decoration: none;
+                                background: transparent;
+                            }
+                        }
+
+                        &:first-child {
+                            padding-bottom:2rem;
+                            a {
+                                font-size: 1rem;
+                                font-weight: bold;
+                            }
+                        }
+                        ul {
+                            list-style: circle;
+                            li {
+
+                            }
+                        }
+                    }
+                    @include media-breakpoint-down(lg) {
+                        padding:1rem;
+                    }
+                }
+
+            }
+        }
+        .col-xl-achtel {
+            max-width: 12.5%;
+            flex: 0 0 12.5%;
+        }
+    }
+    .footer-meta {
+/*position: absolute;*/
+bottom: 0;
+        font-size: .9375rem;
+        a.footericon {
+            margin-right: 1rem;
+            img {
+                padding: 0;
+                border: 1px solid white;
+            }
+            &:hover {
+                img {
+                    background-color:$kdnorange;
+                }
+            }
+            @include media-breakpoint-down(sm) {
+                margin-right: .5rem;
+            }
+            @include media-breakpoint-down(xs) {
+                margin-right: .75rem;
+            }
+        }
+
+        margin-top: 4rem;
+        .footer-meta-nav {
+            ul.nav {
+                li.nav-item {
+                    text-align: left;
+                    a.nav-link {
+                        display: inline;
+                        color: white;
+                        padding: 0 1rem 0 0;
+                        background: transparent;
+                        &:before {
+                            content:"|";
+                            padding-right: 1rem;
+                            font-size: .625rem;
+                            font-weight: 600;
+                        }
+                        @include hover-focus-active{
+                            color: $kdnorange;
+                            background: transparent;
+                            &:before {
+                                color:white;
+                            }
+                        }
+                    }
+                    &:first-child {
+                        a.nav-link {
+                            &:before {
+                                content:"";
+                                padding-right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .footer-social-nav {
+            @include media-breakpoint-down(sm) {
+                margin-top: 1rem;
+            }
+            @include media-breakpoint-down(xs) {
+                margin-top: 2rem;
+            }
+        }
+        .footer-print {
+            a.footericon {
+                margin-right: 0;
+            }
+            @include media-breakpoint-down(sm) {
+                margin-top: 1rem;
+            }
+            @include media-breakpoint-down(xs) {
+                margin-top: 2rem;
+            }
+        }
+    }
+    #topBtn {
+        margin: 2rem auto 0;
+        padding: 0 3rem;
+        background-color:$kdngrau;
+        border: none;
+        cursor: pointer;
+        span.oi {
+            padding: .5rem 0;
+            font-size: 1.5rem;
+            color: $kdnblau1;
+        }
+        &:hover {
+            background-color: $kdnorange;
+        }
+    }
+    &.b-blau {
+        p {
+            color:white;
+            font-size: 0.9375rem;
+        }
+    }
+}

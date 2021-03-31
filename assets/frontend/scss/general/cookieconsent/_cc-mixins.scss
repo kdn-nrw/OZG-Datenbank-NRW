@@ -1,0 +1,24 @@
+@mixin cc-icon-angle($icon-color, $top-offset: 0, $right-offset: 0, $height: 10px, $width: 2px)
+{
+  position: relative;
+  &::before,
+  &::after {
+    content: "";
+    background: $icon-color;
+    display: block;
+    width: $width;
+    height: $height;
+    position: absolute;
+    left: 50%;
+    top: $top-offset;
+    transition: all .2s linear;
+  }
+  &::before {
+    transform: rotate(-50deg);
+    margin-left: $right-offset + 3px;
+  }
+  &::after {
+    transform: rotate(50deg);
+    margin-left: -3px + $right-offset;
+  }
+}

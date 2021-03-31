@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13.267" height="15.467" version="1.1" viewBox="0 0 13.267 15.467" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Info_Bubble_Übungsunterlagen</dc:title>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+<!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+ <title>Info_Bubble_Übungsunterlagen</title>
+ <desc>Created with Sketch.</desc>
+ <g id="Info_Bubble_Übungsunterlagen" transform="translate(-10.855 -9.7917)" fill="none">
+  <g id="noun_20841_cc" transform="translate(11,10)" fill="#102f37">
+   <g id="Group">
+    <path id="Shape" d="m9.6003 14.958h-9.4957v-14.917h12.721v11.741c0 0.27967-0.227 0.506-0.50567 0.506-0.27967 0-0.506-0.22633-0.506-0.506v-10.73h-10.698v12.894h8.4843c0.27967 0 0.506 0.22733 0.506 0.506-3.33e-4 0.279-0.22633 0.50533-0.506 0.50533z" stroke="#102f37" stroke-width=".5"/>
+    <rect id="Rectangle-path" x="2.5687" y="2.1057" width="4.8877" height="1.0113"/>
+    <rect x="2.5687" y="4.3217" width="6.6573" height="1.0113"/>
+    <path d="m9.6003 14.958c-0.27933 0-0.50567-0.22633-0.50567-0.50567v-3.1753h3.2167c0.27867 0 0.51033 0.22633 0.51033 0.50567 0 0.27967-0.22233 0.506-0.501 0.506h-2.214v2.164c-6.67e-4 0.279-0.22667 0.50533-0.50633 0.50533z" stroke="#102f37" stroke-width=".6"/>
+    <path d="m9.613 14.955c-0.131 0-0.26167-0.049-0.35933-0.14933-0.19633-0.19833-0.19467-0.51933 0.0043333-0.71467l2.695-2.666c0.19833-0.19667 0.51833-0.19533 0.71533 0.004334 0.19667 0.19767 0.19433 0.51833-0.004333 0.71533l-2.695 2.6653c-0.099 0.09667-0.22733 0.145-0.356 0.145z" stroke="#102f37" stroke-width=".5"/>
+   </g>
+  </g>
+ </g>
+</svg>

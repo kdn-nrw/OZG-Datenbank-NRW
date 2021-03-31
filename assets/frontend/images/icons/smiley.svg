@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15.5" height="15.5" version="1.1" viewBox="0 0 15.5 15.5" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Select_Emoji</dc:title>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+<!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+ <title>Select_Emoji</title>
+ <desc>Created with Sketch.</desc>
+ <g id="Select_Emoji" transform="translate(-8.75,-8.75)" fill="none">
+  <g id="emoji">
+   <g id="noun_966933_cc" transform="translate(9,9)" stroke="#091c21" stroke-width=".5">
+    <g fill="#102f37">
+     <path id="Shape" d="m7.5 0c-4.1421 0-7.5 3.3579-7.5 7.5 0 4.1421 3.3579 7.5 7.5 7.5 4.1421 0 7.5-3.3579 7.5-7.5-0.004351-4.1403-3.3597-7.4956-7.5-7.5zm0 14.211c-3.7061 0-6.7105-3.0044-6.7105-6.7105 0-3.7061 3.0044-6.7105 6.7105-6.7105 3.7061 0 6.7105 3.0044 6.7105 6.7105-0.0044 3.7043-3.0062 6.7062-6.7105 6.7105z"/>
+     <path d="m7.5 9.9868c-0.82855 0.04983-1.6437-0.25914-2.2893-0.86771-0.17241-0.17009-0.42788-0.1565-0.58633 0.031204-0.15845 0.1877-0.16647 0.48623-0.018398 0.68516 0.8058 0.79729 1.8389 1.2115 2.894 1.1603 1.0552 0.05117 2.0882-0.36302 2.894-1.1603 0.14807-0.19893 0.14005-0.49746-0.018399-0.68516s-0.41392-0.2013-0.58633-0.031204c-0.6456 0.60857-1.4608 0.91754-2.2893 0.86771z"/>
+     <path d="m6 6c0-0.55228-0.44772-1-1-1-0.55228 0-1 0.44772-1 1 0 0.55228 0.44772 1 1 1 0.55228 0 1-0.44772 1-1z"/>
+    </g>
+    <path d="m10 5c-0.55228 0-1 0.44772-1 1 0 0.55228 0.44772 1 1 1 0.55228 0 1-0.44772 1-1 0-0.55228-0.44772-1-1-1z" fill="#091c21"/>
+   </g>
+  </g>
+ </g>
+</svg>

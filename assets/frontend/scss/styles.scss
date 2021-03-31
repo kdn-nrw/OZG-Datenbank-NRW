@@ -1,0 +1,36 @@
+@import "bootstrap/scss/functions";
+@import "variables";
+@import "bootstrap/scss/variables";
+
+@import "general/bootstrap-includes";
+@import "general/mixins";
+@import "general/keyframes";
+
+//@import "font-awesome/scss/font-awesome";
+//@import "magnific-popup/src/css/main";
+//@import "swiper/src/swiper";
+//@import "swiper/src/components/navigation/navigation";
+//@import "swiper/src/components/controller/controller";
+//@import "swiper/src/components/thumbs/thumbs";
+
+@import "../../css/admin-include";
+@import "general/general";
+
+//Module
+@import 'content/general';
+@import 'header/general';
+@import 'breadcrumbs';
+@import 'footer';
+
+@import "admin-lte/general";
+//Extensions
+@import 'powermail';
+@import 'news';
+@import 'event';
+//@import 'cikoGallery';
+//@import 'cikobuerger';
+//@import 'cikodirectory';
+//@import '../provitako/less/gallery';
+//@import '../provitako/less/content';
+@import 'provitakoimport';
+@import "bootstrap.offcanvas";

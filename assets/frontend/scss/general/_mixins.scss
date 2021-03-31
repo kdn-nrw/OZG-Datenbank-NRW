@@ -1,0 +1,269 @@
+// Mixins
+
+// --------------------------------------------------
+@mixin ba-angle-right($color: $customer-secondary, $width: 11px, $height: 2px) {
+  position: relative;
+  &::before,
+  &::after {
+    content: "";
+    background: $color;
+    display: block;
+    width: $width;
+    height: $height;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 38%;
+    //left: 11px;
+  }
+  &::after {
+    transform: rotate(-45deg);
+    margin-top: 5px + $height;
+  }
+}
+
+@mixin ba-loader($diameter, $ringWidth, $foregroundRingColor, $backgroundRingColor, $speed) {
+  &,
+  &::after {
+    border-radius: 50%;
+    width: $diameter;
+    height: $diameter;
+  }
+  margin: 0;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border: $ringWidth solid $backgroundRingColor;
+  border-left-color: $foregroundRingColor;
+  //border-width: $ringWidth;
+  transform: translateZ(0);
+  animation: full-rotate $speed infinite linear;
+}
+
+@mixin ba-checkbox($checkbox-color, $mark-color) {
+  &:checked,
+  &:not(:checked)
+  {
+    position: absolute;
+    opacity: 0;
+  }
+  &:checked + label,
+  &:not(:checked) + label
+  {
+    position: relative;
+    padding-left: 36px;
+    cursor: pointer;
+    line-height: 28px;
+    display: inline-block;
+  }
+  &:checked + label::before,
+  &:not(:checked) + label::before
+  {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 27px;
+    height: 27px;
+    border-radius: 14px;
+    border: 1px solid $checkbox-color;
+  }
+  &:checked + label::after,
+  &:not(:checked) + label::after
+  {
+    content: "";
+    width: 5px;
+    height: 11px;
+    border-right: 1px solid $mark-color;
+    position: absolute;
+    top: 7px;
+    left: 11px;
+    transition: all .2s ease;
+    border-bottom: 1px solid $mark-color;
+    transform: rotate(45deg);
+  }
+  &:not(:checked) + label::after
+  {
+    opacity: 0;
+    transform: scale(0);
+  }
+  &:checked + label::after
+  {
+    opacity: 1;
+  }
+  &:disabled:checked + label::before,
+  &:disabled:not(:checked) + label::before
+  {
+    border-color: #ccc;
+    background-color: #eee;
+  }
+  &:disabled:checked + label::after
+  {
+    background: #aaa;
+  }
+}
+
+@mixin ba-radio($checkbox-color, $mark-color1, $mark-color2) {
+  &:checked,
+  &:not(:checked)
+  {
+    position: absolute;
+    opacity: 0;
+  }
+  &:checked + label,
+  &:not(:checked) + label
+  {
+    position: relative;
+    padding-left: 52px;
+    cursor: pointer;
+    line-height: 28px;
+    display: inline-block;
+  }
+  &:checked + label::before,
+  &:not(:checked) + label::before
+  {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 46px;
+    height: 27px;
+    border: 1px solid $checkbox-color;
+    border-radius: 16px;
+  }
+  &:checked + label::after,
+  &:not(:checked) + label::after
+  {
+    content: "";
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background-image: linear-gradient(135deg, $mark-color1, $mark-color2);
+    position: absolute;
+    top: 3px;
+    left: 21px;
+    transition: all .4s ease;
+  }
+  &:not(:checked) + label::after
+  {
+    left: 5px;
+    background-image: linear-gradient(135deg, $gray-300, $gray-200);
+  }
+  &:disabled:checked + label::before,
+  &:disabled:not(:checked) + label::before
+  {
+    border-color: #ccc;
+    background-color: #eee;
+  }
+  &:disabled:checked + label::after
+  {
+    background: #aaa;
+  }
+  @include media-breakpoint-up(md) {
+    &:checked + label::before,
+    &:not(:checked) + label::before {
+      width: 27px;
+      border-radius: 50%;
+    }
+    &:checked + label::after,
+    &:not(:checked) + label::after {
+      content: "";
+      width: 13px;
+      height: 13px;
+      top: 7px;
+      left: 7px;
+    }
+    &:not(:checked) + label::after
+    {
+      opacity: 0;
+      transform: scale(0);
+    }
+    &:checked + label::after
+    {
+      opacity: 1;
+      transform: scale(1);
+    }
+    &:checked + label,
+    &:not(:checked) + label
+    {
+      padding-left: 36px;
+    }
+  }
+}
+
+@mixin ba-fieldset($border-color: $input-border-color) {
+  border: 1px solid $border-color;
+  border-image-slice: 1 !important;
+  margin-bottom: 14px;
+  transition: all 2s;
+
+  label {
+    margin: 0;
+    font-size: .5rem;
+    text-transform: uppercase;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    padding: 0 11px 0 5px;
+    z-index: 2;
+  }
+  .required-symbol {
+    position: absolute;
+    margin: -3px 0 0 3px;
+    top: 0;
+    right: 4px;
+  }
+  legend {
+    margin-left: auto;
+    width: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+  }
+  input,
+  textarea {
+    margin-top: -5px;
+  }
+  @include media-breakpoint-up(lg) {
+    legend {
+      margin-left: 10px;
+    }
+  }
+}
+
+@mixin ba-label($border-color: $input-border-color) {
+  margin: 0 0 -5px 0;
+  font-size: .5rem;
+  text-transform: uppercase;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding-left: 20px;
+
+  &::before {
+    content: "";
+    display: block;
+    width: 13px;
+    height: 1px;
+    background: $border-color;
+    position: absolute;
+    margin: 6px 0 0 -20px;
+  }
+  &::after {
+    display: inline-block;
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 1px;
+    background: $border-color;
+    top: 6px;
+    margin-left: 7px;
+  }
+  &.required {
+    &::after {
+      margin-left: 12px;
+    }
+  }
+  .required-symbol {
+    position: absolute;
+    margin: -3px 0 0 3px;
+  }
+}

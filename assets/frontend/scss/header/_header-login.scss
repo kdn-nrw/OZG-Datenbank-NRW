@@ -1,0 +1,15 @@
+.header-top {
+  .app-user-info {
+    text-align: right;
+    .btn-link {
+      padding: 0 0 0 6px;
+    }
+    @include media-breakpoint-up(md) {
+      margin-top: auto;
+      display: flex;
+      margin-left: auto;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+}

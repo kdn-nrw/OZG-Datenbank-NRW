@@ -17,6 +17,16 @@ require('../css/admin.scss');
 import $ from 'jquery';
 //global.$ = $;
 const appOnReady = function() {
+    let frontendBody = document.querySelector('.app-fe');
+    if (frontendBody) {
+        import('./modules/frontend').then(({ default: appFrontend }) => {
+            appFrontend.setUp();
+
+        }).catch(error => {
+            console.log('An error occurred while loading the frontend component', error);
+        });
+        require('./modules/bootstrap.offcanvas');
+    }
     let chartContainers = document.querySelectorAll('.mb-chart-container');
     if (chartContainers.length > 0) {
         import('./modules/chart').then(({ default: appChart }) => {

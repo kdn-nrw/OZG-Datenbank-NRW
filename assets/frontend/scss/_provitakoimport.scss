@@ -1,0 +1,736 @@
+
+
+
+
+#kdnslider2 {
+    /* padding-top: 138px; */
+    max-height: 545px;
+    margin: 0 auto;
+    width: 80%;
+    z-index: 600;
+    margin-bottom: 40px;
+    margin-top: 20px;
+    @include media-breakpoint-down(sm) {
+        width: 90%;
+        padding-top: 0;
+    }
+    @include media-breakpoint-down(xs) {
+        width: 90%;
+        padding-top: 0;
+    }
+    ol.carousel-indicators {
+        margin-bottom: -30px;
+        li {
+            background-color: $kdngrau;
+            height: .5rem;
+            &.active {
+                background-color: $kdnblau1;
+                border: 1px solid #fff;
+            }
+        }
+        @include media-breakpoint-down(md) {
+            margin-bottom: 0;
+            bottom: -1.5rem;
+        }
+        @include media-breakpoint-down(sm) {
+
+        }
+
+    }
+    .carousel-inner {
+        background-color: transparent;
+        .carousel-item {
+            background-color: transparent;
+            a {
+                .info-wrapper {
+                    .info-text {
+                        color: white;
+                        h1.app-info-box-content-headline {
+                            color: white;
+                            margin-top: 20px;
+                            @include media-breakpoint-down(md) {
+                                font-size: 2.0rem;
+                            }
+                            @include media-breakpoint-down(xs) {
+                                font-size: 1.75rem;
+                            }
+                        }
+                        .app-info-box-content-text  {
+                            font-size: 1.2rem;
+                            @include media-breakpoint-down(md) {
+                                line-height: 120%;
+                                font-weight: 400;
+                                font-size: 0.9rem;
+                            }
+                        }
+                        height: 200px;
+                        padding: 0 20px;
+
+                    }
+                    .row {
+                        @include media-breakpoint-down(sm) {
+                            padding-top: 15px;
+                            display: block;
+                        }
+                    }
+                }
+                .info-skew-wrapper {
+                    display: none;
+                }
+            }
+
+        }
+
+    }
+    a {
+        &.carousel-control-prev {
+            color: $kdnorange;
+            font-size: 3rem;
+            margin-left: -130px;
+            margin-top: -40px;
+            z-index: 1000;
+        }
+        &.carousel-control-next {
+            color: $kdnorange;
+            font-size: 3rem;
+            margin-right: -130px;
+            margin-top: -40px;
+        }
+        @include media-breakpoint-down(sm) {
+            &.carousel-control-prev {
+                color: $kdnorange;
+                font-size: 2.5rem;
+                margin: 0;
+                left:-35px;
+                width:8%;
+            }
+            &.carousel-control-next {
+                color: $kdnorange;
+                font-size: 2.5rem;
+                margin: 0;
+                right:-35px;
+                width:8%;
+            }
+        }
+        @include media-breakpoint-down(xs) {
+            &.carousel-control-prev {
+                color: $kdnorange;
+                font-size: 2.5rem;
+                margin: 0;
+                left:-35px;
+                width:8%;
+            }
+            &.carousel-control-next {
+                color: $kdnorange;
+                font-size: 2.5rem;
+                margin: 0;
+                right:-35px;
+                width:8%;
+            }
+        }
+    }
+}
+
+
+
+#content {
+
+
+    /* ################################# Styles für das PROVITAKO HIGHLIGHTBOXEN  ################################## */
+
+    .highlights {
+        height: auto;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        @include media-breakpoint-down(md) {
+            margin-top: 20px;
+        }
+        @include media-breakpoint-down(xs) {
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+        .row {
+            margin-right: 0;
+            margin-left: 0;
+        }
+
+        .highlight-box-outer {
+            padding: 0 2px 0 2px;
+            position: relative;
+
+            a {
+
+                .highlight-box {
+                    position: relative;
+                    height: 500px;
+                    width: 100%;
+                    background-repeat: no-repeat;
+                    background-position: left top;
+                    background-size: cover;
+                    -webkit-filter: brightness(80%); /* Safari */
+                    filter: brightness(80%);
+
+                    @include media-breakpoint-down(md) {
+                        height: 300px;
+                    }
+                }
+                .highlight-box-small {
+                    position: relative;
+                    height: 350px;
+                    width: 100%;
+                    background-repeat: no-repeat;
+                    background-position: left top;
+                    background-size: cover;
+                    -webkit-filter: brightness(80%); /* Safari */
+                    filter: brightness(80%);
+                    @include media-breakpoint-down(md) {
+                        height: 300px;
+                    }
+                }
+
+                .highlight-content {
+                    position: absolute;
+                    left: 0%;
+                    text-align: center;
+                    color: #fff;
+
+                    -moz-transform: translateZ(0);
+                    -ms-transform: translateZ(0);
+                    -o-transform: translateZ(0);
+                    -webkit-transform: translateZ(0);
+                    transform: translateZ(0);
+                    -moz-transition: all .3s ease-in-out;
+                    -o-transition: all .3s ease-in-out;
+                    -webkit-transition: all .3s ease-in-out;
+                    transition: all .3s ease-in-out;
+
+                    &.big {
+                        top: 30%;
+                        padding: 0 20%;
+                        @include media-breakpoint-down(md) {
+                            top: 13%;
+                        }
+                    }
+                    &.small {
+                        top: 18%;
+                        padding: 0 10%;
+                        @include media-breakpoint-down(md) {
+                            top: 13%;
+                        }
+                    }
+
+                    &:hover {
+
+                        moz-transform: translateY(-15%) translateZ(0);
+                        -ms-transform: translateY(-15%) translateZ(0);
+                        -o-transform: translateY(-15%) translateZ(0);
+                        -webkit-transform: translateY(-15%) translateZ(0);
+                        transform: translateY(-15%) translateZ(0);
+                        .highbtn {
+                            opacity: 1;
+                        }
+
+                    }
+
+
+                    .highlight-slogan {
+                        h2 {
+                            color: #fff;
+                            @include media-breakpoint-down(md) {
+                                font-size: 2.0rem;
+                            }
+                            @include media-breakpoint-down(xs) {
+                                font-size: 1.5rem;
+                            }
+                        }
+                    }
+                    .highlight-text {
+                        font-size: 1.2rem;
+                        font-weight: 400;
+                        @include media-breakpoint-down(md) {
+                            font-size: 1.0rem;
+                        }
+                        @include media-breakpoint-down(xs) {
+                            font-size: 0.9rem;
+                        }
+                    }
+                    .highbtn {
+                        margin: 40px 0 ;
+                        background-color: transparent;
+                        border: 1px solid #fff;
+                        opacity: 0;
+                        transition: opacity .5s ease-in-out;
+                        @include media-breakpoint-down(sm) {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    /* ################################# Styles für das PROVITAKO TEASERBOXEN  ################################## */
+    .teaserboxen {
+        margin: 0 0 0 0;
+        h1 {
+            margin-left: 15px;
+            margin-bottom: 30px;
+        }
+    }
+    .flex-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: stretch;
+        flex-direction: column;
+
+        .teaser {
+            position: relative;
+            margin: 35px 0 65px 0;
+            z-index: 11;
+            height: 100%;
+            .category {
+                position: relative;
+                z-index: 1000;
+                margin: -30px 0;
+                padding: 7px 0 0 10px;
+                width: 180px;
+
+                &:after {
+                    display: none;
+                }
+                @include media-breakpoint-down(md) {
+                    width: 140px;
+                    font-size: .85rem;
+                    margin: -27px 0;
+                }
+
+            }
+            .category-null {
+                position: relative;
+                z-index: 1000;
+                margin: -15px 0;
+            }
+            /* Einstellungen, wenn kein KLink gesetzt */
+            .bild-wrapper {
+                margin-bottom: 1rem;
+                max-width: 370px;
+                max-height: 250px;
+                overflow: hidden;
+                z-index: 2;
+            }
+            .text-left {
+                position: absolute;
+                left: 0;
+                bottom: -25px;
+            }
+            .text-wrapper {
+                margin-bottom: 20px;
+                p.text-kat {
+                    font-weight: bold;
+                    font-size: 1.125rem;
+                    margin-bottom: 1rem;
+                }
+                h3 {
+                    transition: all .15s ease-in-out;
+                    font-size: 2.0rem;
+                    margin-bottom: 1rem;
+                }
+                p {
+                    font-size: 1.125rem;
+                }
+            }
+            &:hover {
+                .text-wrapper {
+                    h3 {
+                        color: $kdnorange;
+                    }
+                }
+                .bild-wrapper {
+                    img {
+                        transition: transform .5s;
+                        transform: scale(1.2);
+                    }
+                }
+            }
+
+
+            a {
+                .bild-wrapper {
+                    margin-bottom: 1rem;
+                    max-width: 370px;
+                    max-height: 250px;
+                    overflow: hidden;
+                    z-index: 2;
+                    .category {
+
+                    }
+
+                }
+                .text-left {
+                    position: absolute;
+                    left: 0;
+                    bottom: -25px;
+                }
+                .text-wrapper {
+                    margin-bottom: 20px;
+                    p.text-kat {
+                        font-weight: bold;
+                        font-size: 1.125rem;
+                        margin-bottom: 1rem;
+                    }
+                    h3 {
+                        transition: all .15s ease-in-out;
+                        font-size: 2.0rem;
+                        margin-bottom: 1rem;
+                    }
+                    p {
+                        font-size: 1.125rem;
+                    }
+                }
+                &:hover {
+                    .text-wrapper {
+                        h3 {
+                            color: $kdnorange;
+                        }
+                    }
+                    .bild-wrapper {
+                        img {
+                            transition: transform .5s;
+                            transform: scale(1.2);
+                        }
+                    }
+                }
+                .more {
+
+                    &:hover {
+                        background-color: $kdnorange;
+                    }
+                }
+                .btn {
+                    font-weight: 500;
+                    border-radius: 0;
+                    padding: 4px 35px 4px 35px;
+                }
+            }
+        }
+
+        .kontaktelement {
+            position: relative;
+            margin: 0;
+            z-index: 11;
+            background-color: white;
+            padding: 10px;
+            height: 100%;
+            a {
+                .bild-wrapper {
+                    margin-bottom: 1rem;
+                    max-height:280px;
+                    overflow: hidden;
+                    z-index: 2;
+                    background-color: $kdngrau;
+                    .category {
+
+                    }
+
+                }
+                .text-left {
+                    position: absolute;
+                    left: 5px;
+                    bottom: 5px;
+                }
+                .text-wrapper {
+                    margin-bottom: 40px;
+                    color: $kdnblau1;
+                    p.text-kat {
+                        font-weight: bold;
+                        font-size: 1.125rem;
+                        margin-bottom: 1rem;
+                    }
+                    h3 {
+                        transition: all .15s ease-in-out;
+                        font-size: 2.0rem;
+                        margin-bottom: 1rem;
+                        color: $kdnblau1;
+                    }
+                    p {
+                        font-size: 1.125rem;
+                        color: $kdnblau1;
+                    }
+                }
+                &:hover {
+                    .text-wrapper {
+                        h3 {
+                            color: $kdnorange;
+                        }
+                    }
+                    .bild-wrapper {
+                        img {
+                            transition: transform .5s;
+                            transform: scale(1.2);
+                        }
+                    }
+                }
+                .more {
+                    background-color: $kdnblau1;
+                    color: #fff;
+                    &:hover {
+                        background-color: $kdnorange;
+                    }
+                }
+                .btn {
+                    background-color: $kdnblau1;
+                    color: #fff;
+                    font-weight: 500;
+                    border-radius: 0;
+                    padding: 4px 35px 4px 35px;
+                }
+            }
+        }
+    }
+    .teaser_list {
+        z-index: 11;
+        position: relative;
+        h3 {
+            &:hover {
+                color: $kdnorange;
+            }
+            @include media-breakpoint-down(sm) {
+                margin-top: 1rem;
+            }
+        }
+        .text-stretch {
+            display: flex;
+
+            flex-wrap: wrap;
+            align-content: stretch;
+        }
+        .text-right {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            @include media-breakpoint-down(sm) {
+                margin-top: 0.5rem;
+                position: relative;
+            }
+        }
+        .text-left {
+            position: absolute;
+            bottom: 0;
+        }
+        .category {
+            font-weight: 500;
+            font-size: 1.2rem;
+            margin-top: -10px;
+            margin-bottom: 5px;
+            color: $kdnblau1;
+            &.blau2  {
+                color: $kdnblau2;
+            }
+            &.orange  {
+                color: $kdnorange;
+            }
+            &.grau  {
+                color: $kdngrau;
+            }
+        }
+        .teaser_image {
+            overflow: hidden;
+            &:hover {
+                img {
+                    transition: transform .5s;
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+
+
+    .teaser-list-item {
+        margin: 10px 0 0 0;
+        width: 100%;
+        border-bottom: 1px solid $kdngrau;
+        height: 65px;
+
+        a {
+            display: block;
+            height: 65px;
+            width: 100%;
+            font-size: 18px;
+            font-weight: 500;
+
+            padding-top: 10px;
+            .list_style_icon {
+                font-size: 33px;
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+                padding: 2px 0 0 10px;
+                display: inline-block;
+                background: $kdnblau2;
+                margin-right: 15px;
+                color: #fff;
+                transition: all 0.15s;
+                -ms-transition: all 0.15s;
+                -webkit-transition: all 0.15s;
+                -moz-transition: all 0.15s;
+                -o-transition: all 0.15s;
+
+            }
+            &:hover {
+                span {
+                    padding-left: 20px;
+                }
+                color: $kdnorange;
+            }
+        }
+
+
+    }
+
+
+
+    /* ################################# Styles für das Fluid Styled Content Element --  UPLOADS  ################################## */
+    .frame-type-uploads {
+        ul.ce-uploads {
+            margin-bottom: 35px;
+            a {
+                li {
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid $kdngrau;
+                    .ce-uploads-image i{
+                        color: $kdnorange;
+                    }
+                    .ce-uploads-content {
+                        .ce-uploads-fileName {
+                            font-size: 18px;
+                            font-weight: 500;
+                            color: $kdnorange;
+                        }
+                        .ce-uploads-description {
+                            font-weight: 400;
+                            color: $kdnblau1;
+                        }
+                        .ce-uploads-filesize {
+                            color: #999;
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                    .ce-uploads-image {
+                        float: left;
+                        font-size: 46px;
+                        font-weight: bold;
+                        margin: -8px 15px 0 0;
+                        color: #999;
+                    }
+                    .ce-uploads-filebox {
+                        float: left;
+                        width: 150px;
+                        height: 150px;
+                        overflow: hidden;
+                        margin-top: 8px;
+                    }
+                }
+                &:hover {
+                    .ce-uploads-fileName {
+                        text-decoration: underline;
+                    }
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+
+    /* ################################# Styles für das PROVITAKO KONTAKTE  ################################## */
+    .kontakte {
+        .kontakte-header.t-white {
+            h1 {
+                color: white;
+            }
+        }
+        .kontakte-intro.t-white {
+            p {
+                color: white;
+            }
+        }
+        .kontaktelement {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 3rem;
+        }
+    }
+
+    /* ################################# Styles für das PROVITAKO Accordeon  ################################## */
+    .content-panel {
+        width: 100%;
+        height: auto;
+        padding: 0 0 15px 0;
+        .content-panel-head {
+            background-color: $kdnblau1;
+            padding: 10px 10px 0 25px;
+            margin: 0;
+            min-height: 50px;
+            height: auto;
+            width: 100%;
+            color: #fff;
+            h3 {
+                width: 95%;
+                margin: 0;
+                color: #fff;
+            }
+
+            &:after {
+                /*
+                display: inline-block;
+                font-style: normal;
+                font-variant: normal;
+                text-rendering: auto;
+                */
+                margin-top: -9px;
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                content: "\f106";
+                color: $kdnorange;
+                font-size: 35px;
+            }
+
+            &.collapsed {
+                &:after{
+                    margin-top: -9px;
+                    font-family: "Font Awesome 5 Free";
+                    font-weight: 900;
+                    font-size: 35px;
+                    content: "\f107";
+                    color: $kdnorange;
+
+                }
+            }
+        }
+
+        .content-panel-item {
+            padding-top: 20px;
+            margin-bottom: 20px;
+        }
+    }
+
+}
+
+.bg-wrapper.b-blau {
+    .frame-type-uploads {
+        h2 {
+            color: #fff;
+        }
+        ul.ce-uploads {
+            a {
+                li {
+                    .ce-uploads-description {
+                        font-weight: 400;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
