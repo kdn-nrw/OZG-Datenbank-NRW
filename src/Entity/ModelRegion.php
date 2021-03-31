@@ -26,7 +26,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_model_region")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class ModelRegion extends BaseNamedEntity implements SluggableInterface, HasMetaDateEntityInterface
 {

@@ -20,7 +20,6 @@ use App\Model\ImplementationStatusInfoTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -30,13 +29,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_implementation_project")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class ImplementationProject extends BaseNamedEntity
     implements ImplementationStatusInfoInterface,
-        SluggableInterface,
-        HasMetaDateEntityInterface,
-        HasSolutionsEntityInterface
+    SluggableInterface,
+    HasMetaDateEntityInterface,
+    HasSolutionsEntityInterface
 {
 
     use ImplementationStatusInfoTrait;
@@ -958,9 +956,10 @@ class ImplementationProject extends BaseNamedEntity
         ImplementationStatus $status,
         ?DateTime $prevDateTime,
         ?DateTime $nextDateTime
-    ): ?ImplementationStatus {
+    ): ?ImplementationStatus
+    {
         $newStatus = null;
-        if (null !== $nextDateTime && $nextDateTime->getTimestamp() <= time())  {
+        if (null !== $nextDateTime && $nextDateTime->getTimestamp() <= time()) {
             $newStatus = $status->getNextStatus();
         } elseif (null === $prevDateTime || $prevDateTime->getTimestamp() > time()) {
             $newStatus = $status->getPrevStatus();

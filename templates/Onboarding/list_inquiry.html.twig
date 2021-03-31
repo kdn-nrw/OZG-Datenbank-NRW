@@ -1,0 +1,23 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    {% if admin_pool is defined %}
+        {% set inquiryUrl = inquiry_url(object) %}
+        {% set modalOptions = {
+            'title': 'app.inquiry.create'|trans,
+            'loadUrl': inquiryUrl,
+            'submitUrl': inquiryUrl,
+        } %}
+        <div class="js-modal-form" data-modal="{{ modalOptions|json_encode|raw }}">
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+            {{ 'app.inquiry.create'|trans }}
+        </div>
+    {% endif %}
+{% endblock field %}
+

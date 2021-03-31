@@ -22,7 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_internal_procedure")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class InternalProcedure extends BaseNamedEntity
 {

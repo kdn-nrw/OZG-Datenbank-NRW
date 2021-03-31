@@ -23,7 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="App\Entity\Repository\MetaItemRepository")
  * @ORM\Table(name="ozg_meta_item")
- * @ApiResource
  */
 class MetaItem extends AbstractMetaItem
 {

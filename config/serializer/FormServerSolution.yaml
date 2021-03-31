@@ -1,0 +1,19 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\FormServerSolution:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    formServer:
+      groups: ['solution:read']
+    solution:
+      groups: ['form_server:read']
+    status:
+      groups: ['form_server:read', 'solution:read']
+    articleNumber:
+      groups: ['form_server:read', 'solution:read']
+    assistantType:
+      groups: ['form_server:read', 'solution:read']
+    articleKey:
+      groups: ['form_server:read', 'solution:read']
+    usableAsPrintTemplate:
+      groups: ['form_server:read', 'solution:read']

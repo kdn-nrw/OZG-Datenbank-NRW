@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_payment_type")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class PaymentType extends BaseNamedEntity implements HasSolutionsEntityInterface
 {

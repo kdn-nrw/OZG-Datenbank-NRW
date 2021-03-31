@@ -1,0 +1,16 @@
+App\Model\ServiceImplementationStatus:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    status:
+      groups: ['service:collection:read', 'service:read']
+    projectStartAt:
+      groups: ['service:collection:read', 'service:read']
+    conceptStatusAt:
+      groups: ['service:collection:read', 'service:read']
+    implementationStatusAt:
+      groups: ['service:collection:read', 'service:read']
+    commissioningStatusAt:
+      groups: ['service:collection:read', 'service:read']
+    nationwideRolloutAt:
+      groups: ['service:collection:read', 'service:read']

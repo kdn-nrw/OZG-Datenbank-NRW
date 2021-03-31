@@ -1,0 +1,19 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\ModelRegion:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    slug:
+      groups: ['model_region:collection:read', 'model_region:read']
+    url:
+      groups: ['model_region:collection:read', 'model_region:read']
+    street:
+      groups: ['model_region:collection:read', 'model_region:read']
+    town:
+      groups: ['model_region:collection:read', 'model_region:read']
+    zipCode:
+      groups: ['model_region:collection:read', 'model_region:read']
+    modelRegionProjects:
+      groups: ['model_region:read']

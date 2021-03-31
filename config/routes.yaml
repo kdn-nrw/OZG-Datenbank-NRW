@@ -37,3 +37,7 @@ app_service_choices:
 app_record_export:
     path: /record-export/{recordType}/{recordId}/{property}
     controller: App\Controller\ExportController::exportAction
+
+authentication_token:
+    path: /api/authentication_token
+    methods: ['POST']

@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_funding")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Funding extends BaseNamedEntity
 {

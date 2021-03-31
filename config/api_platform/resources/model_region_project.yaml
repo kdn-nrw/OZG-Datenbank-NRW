@@ -1,0 +1,29 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\ModelRegionProject:
+  #shortName: 'Leika-Leistungen'
+  description: 'DMR Umsetzungsprojekte'
+  attributes:
+    pagination_items_per_page: 25
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'model_region_project:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit DMR Umsetzungsprojekten zurück'
+      filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
+  #    post:
+  #      security: 'is_granted("ROLE_ADMIN")'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'model_region_project:read']
+      openapi_context:
+        summary: 'Gibt ein DMR Umsetzungsprojekt zurück'
+  #    put:
+  #      method: 'PUT'

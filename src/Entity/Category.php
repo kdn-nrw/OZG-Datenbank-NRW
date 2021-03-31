@@ -23,7 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_category")
- * @ApiResource
  */
 class Category extends BaseNamedEntity implements CategoryEntityInterface, ImportEntityInterface
 {

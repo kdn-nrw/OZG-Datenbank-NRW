@@ -26,7 +26,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_efile")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class EFile extends BaseNamedEntity implements ImportEntityInterface, HasManufacturerEntityInterface
 {

@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_meta_item_property")
- * @ApiResource
  */
 class MetaItemProperty extends AbstractMetaItem
 {

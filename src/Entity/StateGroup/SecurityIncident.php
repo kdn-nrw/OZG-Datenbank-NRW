@@ -16,7 +16,6 @@ use App\Entity\Base\BlameableInterface;
 use App\Entity\Base\BlameableTrait;
 use App\Entity\User;
 use DateTime;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -25,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_provider_security_incident")
- * @ApiResource
  */
 class SecurityIncident extends BaseEntity implements BlameableInterface
 {
@@ -81,7 +79,7 @@ class SecurityIncident extends BaseEntity implements BlameableInterface
 
     /**
      * @var ServiceProvider
-     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\ServiceProvider", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\ServiceProvider", inversedBy="securityIncidents", cascade={"persist"})
      */
     private $serviceProvider;
 
@@ -348,9 +346,9 @@ class SecurityIncident extends BaseEntity implements BlameableInterface
                 if ($createdBy instanceof User && null !== $organisation = $createdBy->getOrganisation()) {
                     $text .= ', ' . $organisation;
                 }
-                $text .= ' ('.$createdBy->getEmail().')';
+                $text .= ' (' . $createdBy->getEmail() . ')';
             } else {
-                $text .= ' ('.$createdBy.')';
+                $text .= ' (' . $createdBy . ')';
             }
         }
         return $text;

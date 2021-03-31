@@ -43,6 +43,13 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
     protected $searchResultActions = ['show'];
 
     /**
+     * List of disabled routes
+     *
+     * @var string[]
+     */
+    protected $disabledRoutes = ['batch', 'create', 'edit', 'delete'];
+
+    /**
      * Initialized the routes and templates for this admin
      */
     public function initializeAppContext(): void
@@ -85,7 +92,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
      */
     public function hasRoute($name)
     {
-        if (in_array($name, ['batch', 'create', 'edit', 'delete'])) {
+        if (in_array($name, $this->disabledRoutes, false)) {
             return false;
         }
         return parent::hasRoute($name);

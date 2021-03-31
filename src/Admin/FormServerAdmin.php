@@ -55,7 +55,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
 
             if ($this->isGranted('LIST')) {
                 $menu->addChild('app.form_server.actions.solutions_list', [
-                    'uri' => $admin->getChild(FormServerSolutionAdmin::class)->generateUrl('list', ['id' => $id])
+                    'uri' => $admin->getChild(FormServerSolutionAdmin::class)->generateUrl('list')
                 ]);
             }
         }

@@ -22,7 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_implementation")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Implementation extends BaseNamedEntity
 {

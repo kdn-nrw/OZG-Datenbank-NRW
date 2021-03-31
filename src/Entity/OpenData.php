@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_open_data")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class OpenData extends BaseNamedEntity implements HasSolutionsEntityInterface
 {

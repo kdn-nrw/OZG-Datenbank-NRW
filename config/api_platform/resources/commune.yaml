@@ -1,0 +1,29 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\StateGroup\Commune:
+  #shortName: 'Leika-Leistungen'
+  description: 'Kommunen'
+  attributes:
+    pagination_items_per_page: 25
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'commune:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit Kommunen zurück'
+      filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
+  #    post:
+  #      security: 'is_granted("ROLE_ADMIN")'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'commune:read']
+      openapi_context:
+        summary: 'Gibt eine Kommunen zurück'
+  #    put:
+  #      method: 'PUT'

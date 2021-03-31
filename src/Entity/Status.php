@@ -21,7 +21,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_status")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Status extends AbstractStatus
 {

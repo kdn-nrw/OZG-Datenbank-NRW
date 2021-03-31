@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @ORM\Table(name="ozg_service_system")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
 */
 class ServiceSystem extends AbstractService implements SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {

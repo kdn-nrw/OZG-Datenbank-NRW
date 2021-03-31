@@ -12,15 +12,15 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseBlamableEntity;
+use App\Entity\Base\HideableEntityInterface;
+use App\Entity\Base\HideableEntityTrait;
+use App\Entity\Base\NamedEntityInterface;
+use App\Entity\Base\NamedEntityTrait;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Base\HideableEntityTrait;
-use App\Entity\Base\NamedEntityInterface;
-use App\Entity\Base\NamedEntityTrait;
 
 
 /**
@@ -29,9 +29,8 @@ use App\Entity\Base\NamedEntityTrait;
  * @ORM\Entity
  * @ORM\Table(name="ozg_specialized_procedure")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
-class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInterface, HasManufacturerEntityInterface, HasSolutionsEntityInterface
+class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInterface, HasManufacturerEntityInterface, HasSolutionsEntityInterface, HideableEntityInterface
 {
     public const DEFAULT_PARENT_APPLICATION_CATEGORY_ID = 1;
 
@@ -101,6 +100,7 @@ class SpecializedProcedure extends BaseBlamableEntity implements NamedEntityInte
         $this->solutions = new ArrayCollection();
         $this->services = new ArrayCollection();
     }
+
     /**
      * @return string|null
      */

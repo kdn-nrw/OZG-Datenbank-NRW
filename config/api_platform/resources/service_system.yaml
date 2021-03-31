@@ -1,0 +1,29 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\ServiceSystem:
+  #shortName: 'Leika-Leistungen'
+  description: 'OZG Leistungen'
+  attributes:
+    pagination_items_per_page: 25
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'service_system:collection:read', 'service-system-situation-subject']
+      openapi_context:
+        summary: 'Gibt eine Liste mit OZG Leistungen zurück'
+      filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
+  #    post:
+  #      security: 'is_granted("ROLE_ADMIN")'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'service_system:read', 'service-system-situation-subject']
+      openapi_context:
+        summary: 'Gibt eine OZG Leistung zurück'
+  #    put:
+  #      method: 'PUT'

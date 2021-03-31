@@ -1,0 +1,41 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\Solution:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    slug:
+      groups: ['solution:collection:read', 'solution:read']
+    description:
+      groups: ['solution:read']
+    url:
+      groups: ['solution:collection:read', 'solution:read']
+    communes:
+      groups: ['solution:collection:read', 'solution:read']
+    serviceSystems:
+      groups: ['solution:collection:read', 'solution:read']
+    jurisdictions:
+      groups: ['solution:collection:read', 'solution:read']
+    maturity:
+      groups: ['solution:collection:read', 'solution:read']
+    serviceProviders:
+      groups: ['solution:read']
+    customProvider:
+      groups: ['solution:read']
+    portals:
+      groups: ['solution:read']
+    formServerSolutions:
+      groups: ['solution:read']
+    paymentTypes:
+      groups: ['solution:read']
+    authentications:
+      groups: ['solution:read']
+    analogServices:
+      groups: ['solution:read']
+    openDataItems:
+      groups: ['solution:read']
+    serviceSolutions:
+      groups: ['solution:read']
+    status:
+      groups: ['solution:read']

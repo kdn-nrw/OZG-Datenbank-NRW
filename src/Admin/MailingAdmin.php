@@ -64,7 +64,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
 
             if ($this->isGranted('LIST')) {
                 $menu->addChild('app.mailing.actions.contact_list', [
-                    'uri' => $admin->getChild(MailingContactAdmin::class)->generateUrl('list', ['id' => $id])
+                    'uri' => $admin->getChild(MailingContactAdmin::class)->generateUrl('list')
                 ]);
             }
         }

@@ -28,7 +28,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="central_association")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class CentralAssociation extends BaseNamedEntity implements OrganisationEntityInterface
 {

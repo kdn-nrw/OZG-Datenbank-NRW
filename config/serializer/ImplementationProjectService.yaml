@@ -1,0 +1,13 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\ImplementationProjectService:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    implementationProject:
+      groups: ['service:read']
+    service:
+      groups: ['implementation_project:read']
+    description:
+      groups: ['item:read']
+    status:
+      groups: ['item:read']

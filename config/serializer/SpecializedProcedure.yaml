@@ -1,0 +1,16 @@
+App\Entity\SpecializedProcedure:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    solutions:
+      groups: ['specialized_procedure:collection:read', 'specialized_procedure:read']
+    manufacturers:
+      groups: ['specialized_procedure:collection:read', 'specialized_procedure:read',]
+    serviceProviders:
+      groups: ['specialized_procedure:collection:read', 'specialized_procedure:read']
+    communes:
+      groups: ['specialized_procedure:collection:read', 'specialized_procedure:read']
+    services:
+      groups: ['specialized_procedure:collection:read', 'specialized_procedure:read']

@@ -1,0 +1,12 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+# https://www.thinkbean.com/drupal-development-blog/defining-api-platform-resources-serialization-groups-yaml
+App\Entity\Subject:
+  enable_max_depth: 1
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    situations:
+      groups: ['subject:read']
+      max_depth: 1

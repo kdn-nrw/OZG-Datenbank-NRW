@@ -21,7 +21,6 @@ use App\Entity\StateGroup\MinistryState;
 use App\Model\ServiceImplementationStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -31,11 +30,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @ORM\Table(name="ozg_service")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Service extends AbstractService implements SluggableInterface, HasMetaDateEntityInterface
 {
     use SluggableEntityTrait;
+
     /**
      * @var string|null
      * @Gedmo\Slug(fields={"name", "serviceKey", "id"}, updatable=false)
@@ -1107,7 +1106,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      */
     public function isInheritCommuneTypes(): bool
     {
-        return (bool) $this->inheritCommuneTypes;
+        return (bool)$this->inheritCommuneTypes;
     }
 
     /**
@@ -1308,7 +1307,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      */
     public function getServiceBaseResult(): ?ServiceBaseResult
     {
-        if (null !== $fimDescription  = $this->getFimType(FederalInformationManagementType::TYPE_DESCRIPTION)) {
+        if (null !== $fimDescription = $this->getFimType(FederalInformationManagementType::TYPE_DESCRIPTION)) {
             return $fimDescription->getServiceBaseResult();
         }
         return null;

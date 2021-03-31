@@ -1,0 +1,13 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\StateGroup\MinistryState:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    shortName:
+      groups: ['ministry_state:collection:read', 'ministry_state:read', 'service:collection:read', 'service_system:collection:read', 'item:read']
+    serviceSystems:
+      ignore: true
+    serviceAuthorities:
+      ignore: true

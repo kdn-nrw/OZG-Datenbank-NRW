@@ -12,13 +12,13 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseBlamableEntity;
+use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\NamedEntityTrait;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -28,9 +28,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_laboratory")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
-class Laboratory extends BaseBlamableEntity implements NamedEntityInterface
+class Laboratory extends BaseBlamableEntity implements NamedEntityInterface, HideableEntityInterface
 {
     use NamedEntityTrait;
     use HideableEntityTrait;

@@ -1,0 +1,15 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\Laboratory:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    description:
+      groups: ['laboratory:collection:read', 'laboratory:read', 'service:read']
+    url:
+      groups: ['laboratory:collection:read', 'laboratory:read', 'service:read']
+    participantsOther:
+      groups: ['laboratory:collection:read', 'laboratory:read', 'service:read']
+    serviceProviders:
+      groups: ['laboratory:collection:read', 'laboratory:read', 'service:read']

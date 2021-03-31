@@ -14,7 +14,7 @@ namespace App\Entity\Base;
 /**
  * Base named entity (hideable)
  */
-abstract class BaseNamedEntity extends BaseEntity implements NamedEntityInterface
+abstract class BaseNamedEntity extends BaseEntity implements NamedEntityInterface, HideableEntityInterface
 {
     use NamedEntityTrait;
     use HideableEntityTrait;

@@ -1,0 +1,11 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\Jurisdiction:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    serviceSystems:
+      groups: ['jurisdiction:collection:read', 'jurisdiction:read']
+    services:
+      ignore: true

@@ -27,6 +27,7 @@ app:
     vsm_snippet_map: VSM Snippet + Karte
     vsm_api: VSM API
     meta_data: Metadaten
+    onboarding_group: Kommunalportal Onboarding
   block:
     solution:
       online: 'Lösungen: Online'
@@ -294,6 +295,119 @@ app:
       regional_key: ARS
       administrative_district: Reg-Bez
       administrative_district_placeholder: Regierungsbezirk
+  commune_info:
+    object_name: Basisdaten
+    list: Onboarding Basisdaten
+    create: Basisdaten erfassen
+    groups:
+      general: Basisdaten
+      contact_data: Kontakte
+      content_data: Inhalte
+      footer_data: Informationen für den Footer
+    entity:
+      description: Beschreibung
+      commune: Kommune
+      modified_at: Letzter Eintrag
+      status: Status
+      status_choices:
+        new: Noch keine Eingaben
+        incomplete: Unvollständig
+        complete: Vollständig
+      commune_name: Kommune
+      official_commune_key: AGS
+      custom_values: Benutzerdefinierte Werte
+      contacts: Kontakte
+      contact_default: Kontakt
+      contact_type_choices:
+        bis: BIS Admin
+        fs: FS-Admin
+        epay: ePayBL-Admin
+        super: Supersachbearbeiter
+        clerk: Sachbearbeiter
+        web: Webcontent-Admin
+      privacy_text: Datenschutzerklärung (TEXT)
+      privacy_url: Datenschutzerklärung (URL)
+      imprint_text: Impressum (TEXT)
+      imprint_url: Impressum (URL)
+      accessibility: Barrierefreiheitserklärung
+      image_file: Logo
+      opening_hours: Öffnungszeiten
+  dataclearing:
+    object_name: Dataclearing
+    list: Onboarding Dataclearing
+    create: Dataclearing erfassen
+    entity:
+      description: Beschreibung
+      commune: Kommune
+      modified_at: Letzter Eintrag
+      status: Status
+      status_choices:
+        new: Noch keine Eingaben
+        incomplete: Unvollständig
+        complete: Vollständig
+      custom_values: Benutzerdefinierte Werte
+  epayment:
+    object_name: ePayBL
+    list: Onboarding ePayBL
+    create: ePayBL erfassen
+    groups:
+      general: Allgemein
+      payment_provider: Zahlunsgverkehrsprovider
+      user: Benutzer
+      mandator_email: Kontakt E-Mail des Mandanten
+      mandator_email_description: 'Über die Mailadresse werden wichtige Informationen u.a. bzgl. Wartungsarbeiten oder ggf. Informationen zu Verträgen mit Zahlungsverkehrsdienstleistern kommuniziert.'
+      activation_system: Freischaltung Test-System
+      activation_system_description: 'Für das Produktivsystem ist keine separate Freischaltung in den Netzen des Betreibers notwendig. Das Integrationssystem steht dem Kunden als Testsystem zur Verfügung. Es kann über die URLs <a href="https://epay2.stadt-koeln.de/portal" target="_blank">https://epay2.stadt-koeln.de/portal</a> erreicht werden. Hierfür müssen entsprechende Freischaltungen eingerichtet werden.<br><br>Der Kunde teilt hierzu der Kundenbetreuung seine Ausgangs-IP mit. Diese kann vom Kunden bspw. über <a href="http://www.wieistmeineip.de" target="_blank">http://www.wieistmeineip.de</a> ermittelt werden.'
+    entity:
+      description: Beschreibung
+      commune: Kommune
+      commune_name: Kommune
+      official_commune_key: AGS
+      modified_at: Letzter Eintrag
+      status: Status
+      status_choices:
+        new: Noch keine Eingaben
+        incomplete: Unvollständig
+        complete: Vollständig
+      custom_values: Benutzerdefinierte Werte
+      payment_provider_account_id: 'Account-ID externer Zahlungsverkehrsprovider (Text)'
+      payment_provider: 'Zahlungsverkehrsprovider'
+      payment_user: Benutzer
+      payment_user_username: Benutzer-Racf
+      mandator_email: E-Mail
+      test_ip_address: IP-Adresse die Zugreifen muss
+  service_account:
+    object_name: Servicekonto
+    list: Onboarding Servicekonten
+    create: Servicekonto erfassen
+    entity:
+      description: Beschreibung
+      commune: Kommune
+      modified_at: Letzter Eintrag
+      status: Status
+      status_choices:
+        new: Noch keine Eingaben
+        incomplete: Unvollständig
+        complete: Vollständig
+      custom_values: Benutzerdefinierte Werte
+  inquiry:
+    object_name: Rückfrage
+    list: Onboarding Rückfragen
+    create: Rückfrage stellen
+    new_inquiries_message_prefix: Sie haben
+    new_inquiries_message: "{count, plural,
+        =0 {keine offenen Rückfragen}
+        one {1 offene Rückfrage}
+        other {# offene Rückfragen}
+      }"
+    message:
+      success: Die Frage wurde erfolgreich gestellt.
+    entity:
+      description: Inhalte
+      created_by: Rückfrage von
+      user: Empfänger
+      created_at: Erstellt am
+      is_read: 'Gelesen?'
   commune_type:
     object_name: Größenklasse
     list: Größenklassen
@@ -1193,4 +1307,33 @@ app:
       model_regions: Modellregionen
       organisation: Organisation
       service_providers: IT Dienstleister
+  custom_field:
+    object_name: Benutzerdefiniertes Feld
+    list: Benutzerdefinierte Felder
+    create: Benutzerdefiniertes Feld anlegen
+    entity:
+      name: Name (intern)
+      field_label: Bezeichnung (Anzeige)
+      description: Beschreibung
+      record_type: Datensatz-Typ
+      field_type: Eingabefeld-Typ
+      field_type_choices:
+        text: Textfeld (einzeilig)
+        textarea: Textfeld (mehrzeilig)
+        integer: Zahl
+      field_options: Eingabefeld-Optionen
+      required: Pflichtfeld
+      hidden: Inaktiv?
+      custom_values: Gespeicherte Werte
+  custom_value:
+    object_name: Benutzerdefinierter Wert
+    list: Benutzerdefinierte Werte
+    create: Benutzerdefinierten Wert anlegen
+    entity:
+      created_by: Erstellt von
+      created_at: Erstellt am
+      modified_at: Letzte Änderung
+      custom_field: Eingabefeld
+      value: Wert
+
 

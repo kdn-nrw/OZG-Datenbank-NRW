@@ -21,7 +21,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_form_servers_solutions")
- * @ApiResource
  */
 class FormServerSolution extends BaseEntity
 {

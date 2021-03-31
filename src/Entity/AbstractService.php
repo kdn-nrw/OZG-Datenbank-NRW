@@ -14,6 +14,7 @@ namespace App\Entity;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\BlameableInterface;
 use App\Entity\Base\BlameableTrait;
+use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\StateGroup\Bureau;
 use App\Entity\StateGroup\MinistryState;
@@ -24,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Abstract OZG service
  */
-abstract class AbstractService extends BaseEntity implements BlameableInterface
+abstract class AbstractService extends BaseEntity implements BlameableInterface, HideableEntityInterface
 {
     use BlameableTrait;
     use HideableEntityTrait;
@@ -211,10 +212,6 @@ abstract class AbstractService extends BaseEntity implements BlameableInterface
      */
     public function __toString(): string
     {
-        $name = (string)$this->getName();
-        if (null === $name) {
-            return '';
-        }
-        return $name;
+        return (string)$this->getName();
     }
 }

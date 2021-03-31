@@ -309,7 +309,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         ])
             ->with('app.service.entity.fim_types', [
                 'label' => false,
-                'class' => 'col-md-12 box-group-service-fim',
+                'class' => 'col-md-12 box-collection-static',
                 'box_class' => 'box-tab',
             ])
             ->add('fimTypes', CollectionType::class, [

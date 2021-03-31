@@ -1,0 +1,18 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+# https://www.thinkbean.com/drupal-development-blog/defining-api-platform-resources-serialization-groups-yaml
+App\Entity\Portal:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    description:
+      groups: ['portal:collection:read', 'portal:read']
+    url:
+      groups: ['portal:collection:read', 'portal:read']
+    serviceProvider:
+      groups: ['portal:collection:read', 'portal:read']
+    communes:
+      groups: ['portal:read']
+    solutions:
+      groups: ['portal:read']

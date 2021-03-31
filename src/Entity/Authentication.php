@@ -24,7 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_authentication")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Authentication extends BaseNamedEntity implements HasSolutionsEntityInterface
 {

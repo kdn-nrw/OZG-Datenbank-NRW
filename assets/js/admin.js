@@ -84,6 +84,17 @@ const appOnReady = function() {
             checkEmptyState(navbarElement);
         }
     }
+    let modalForms = document.querySelectorAll('.js-modal-form');
+    if (modalForms.length > 0) {
+        import('./modules/modal-form').then(({ default: ModalForm }) => {
+            for (let i = 0, n = modalForms.length; i < n; i++) {
+                new ModalForm(modalForms[i]);
+            }
+
+        }).catch(error => {
+            console.log('An error occurred while loading the form component', error);
+        });
+    }
 };
 
 if (

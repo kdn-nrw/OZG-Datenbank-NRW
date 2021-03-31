@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseBlamableEntity;
+use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use DateTime;
 use DateTimeZone;
@@ -28,7 +29,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(name="ozg_mailing")
  * @Vich\Uploadable
  */
-class Mailing extends BaseBlamableEntity
+class Mailing extends BaseBlamableEntity implements HideableEntityInterface
 {
     public const GREETING_TYPE_NONE = 'none';
     public const GREETING_TYPE_PREPEND = 'prepend';

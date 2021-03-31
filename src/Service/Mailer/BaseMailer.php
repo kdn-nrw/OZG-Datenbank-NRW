@@ -11,6 +11,7 @@
 
 namespace App\Service\Mailer;
 
+use App\Entity\Base\PersonInterface;
 use App\Entity\Contact;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -214,13 +215,13 @@ class BaseMailer
             $appendFirstName = false;
             $appendTitleAndName = true;
             switch ($gender) {
-                case Contact::GENDER_MALE:
+                case PersonInterface::GENDER_MALE:
                     $greeting = 'Sehr geehrter Herr';
                     break;
-                case Contact::GENDER_FEMALE:
+                case PersonInterface::GENDER_FEMALE:
                     $greeting = 'Sehr geehrte Frau';
                     break;
-                case Contact::GENDER_OTHER:
+                case PersonInterface::GENDER_OTHER:
                     $greeting = 'Guten Tag';
                     $appendFirstName = true;
                     break;

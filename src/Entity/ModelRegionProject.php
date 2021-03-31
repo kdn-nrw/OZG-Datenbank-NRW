@@ -28,7 +28,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_model_region_project")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, HasDocumentsEntityInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {

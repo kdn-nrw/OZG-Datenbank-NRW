@@ -1,0 +1,49 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\Service:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    serviceKey:
+      groups: ['collection:read', 'item:read']
+    slug:
+      groups: ['service:collection:read', 'service:read']
+    serviceSystem:
+      groups: ['service:collection:read', 'service:read']
+    serviceType:
+      groups: ['service:read']
+    legalBasis:
+      groups: ['service:read']
+    laws:
+      groups: ['service:read']
+    lawShortcuts:
+      groups: ['service:read']
+    relevance1:
+      groups: ['service:read']
+    relevance2:
+      groups: ['service:read']
+    status:
+      groups: ['service:read']
+    serviceSolutions:
+      groups: ['service:read']
+    jurisdictions:
+      groups: ['service:read']
+    bureaus:
+      groups: ['service:read']
+    ruleAuthorities:
+      groups: ['service:read']
+    authorityBureaus:
+      groups: ['service:read']
+    authorityStateMinistries:
+      groups: ['service:read']
+    communeTypes:
+      groups: ['service:read']
+    laboratories:
+      groups: ['service:read']
+    stateMinistries:
+      groups: ['service:read'];
+    implementationProjects:
+      groups: ['service:read']
+    publishedModelRegionProjects:
+      groups: ['service:read']

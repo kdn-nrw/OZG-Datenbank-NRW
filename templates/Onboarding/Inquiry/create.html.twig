@@ -1,0 +1,30 @@
+{% extends isModal ? 'base_ajax.html.twig' : 'base.html.twig' %}
+
+{% block sonata_page_content %}
+    {% if isModal %}
+        <div class="modal-body">
+            {{ form_start(form, { 'attr': { 'class': 'form-vertical' } }) }}
+
+            {{ form_rest(form) }}
+
+            <div class="form-group">
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+        <div class="form-submit-group modal-footer">
+            <button type="submit" class="js-submit btn btn-primary">{{ 'app.inquiry.create'|trans }}</button>
+        </div>
+    {% else %}
+        {{ form_start(form, { 'attr': { 'class': 'form-vertical' } }) }}
+        <div class="inquiry-form-body">
+            {{ form_rest(form) }}
+        </div>
+
+        <div class="form-submit-group inquiry-form-footer">
+            <button type="submit" class="btn btn-primary">{{ 'app.inquiry.create'|trans }}</button>
+        </div>
+        {{ form_end(form) }}
+    {% endif %}
+
+{% endblock sonata_page_content %}

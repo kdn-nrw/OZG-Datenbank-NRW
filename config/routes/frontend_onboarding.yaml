@@ -1,0 +1,79 @@
+frontend_app_onboarding_commune_info_list:
+  path: /onboarding/basisdaten
+  controller: App\Controller\Onboarding\CommuneInfoController::listAction
+
+frontend_app_onboarding_commune_info_show_default:
+  path: /onboarding/basisdaten/{id}/show
+  controller: App\Controller\Onboarding\CommuneInfoController::showAction
+
+frontend_app_onboarding_commune_info_show:
+  path: /onboarding/basisdaten/details/{slug}
+  controller: App\Controller\Onboarding\CommuneInfoController::showBySlugAction
+
+frontend_app_onboarding_commune_info_export:
+  path: /onboarding/basisdaten/export
+  controller: App\Controller\Onboarding\CommuneInfoController::exportAction
+
+frontend_app_onboarding_commune_info_edit:
+  path: /onboarding/basisdaten{id}/edit
+  controller: App\Controller\Onboarding\CommuneInfoController::editAction
+
+frontend_app_onboarding_dataclearing_list:
+  path: /onboarding/dataclearing
+  controller: App\Controller\Onboarding\DataclearingController::listAction
+
+frontend_app_onboarding_dataclearing_show_default:
+  path: /onboarding/dataclearing/{id}/show
+  controller: App\Controller\Onboarding\DataclearingController::showAction
+
+frontend_app_onboarding_dataclearing_show:
+  path: /onboarding/dataclearing/details/{slug}
+  controller: App\Controller\Onboarding\DataclearingController::showBySlugAction
+
+frontend_app_onboarding_dataclearing_export:
+  path: /onboarding/dataclearing/export
+  controller: App\Controller\Onboarding\DataclearingController::exportAction
+
+frontend_app_onboarding_dataclearing_edit:
+  path: /onboarding/dataclearing{id}/edit
+  controller: App\Controller\Onboarding\DataclearingController::editAction
+
+frontend_app_onboarding_epayment_list:
+  path: /onboarding/epaybl
+  controller: App\Controller\Onboarding\EpaymentController::listAction
+
+frontend_app_onboarding_epayment_show_default:
+  path: /onboarding/epaybl/{id}/show
+  controller: App\Controller\Onboarding\EpaymentController::showAction
+
+frontend_app_onboarding_epayment_show:
+  path: /onboarding/epaybl/details/{slug}
+  controller: App\Controller\Onboarding\EpaymentController::showBySlugAction
+
+frontend_app_onboarding_epayment_export:
+  path: /onboarding/epaybl/export
+  controller: App\Controller\Onboarding\EpaymentController::exportAction
+
+frontend_app_onboarding_epayment_edit:
+  path: /onboarding/epaybl{id}/edit
+  controller: App\Controller\Onboarding\EpaymentController::editAction
+
+frontend_app_onboarding_service_account_list:
+  path: /onboarding/servicekonto
+  controller: App\Controller\Onboarding\ServiceAccountController::listAction
+
+frontend_app_onboarding_service_account_show_default:
+  path: /onboarding/servicekonto/{id}/show
+  controller: App\Controller\Onboarding\ServiceAccountController::showAction
+
+frontend_app_onboarding_service_account_show:
+  path: /onboarding/servicekonto/details/{slug}
+  controller: App\Controller\Onboarding\ServiceAccountController::showBySlugAction
+
+frontend_app_onboarding_service_account_export:
+  path: /onboarding/servicekonto/export
+  controller: App\Controller\Onboarding\ServiceAccountController::exportAction
+
+frontend_app_onboarding_service_account_edit:
+  path: /onboarding/servicekonto/{id}/edit
+  controller: App\Controller\Onboarding\ServiceAccountController::editAction
