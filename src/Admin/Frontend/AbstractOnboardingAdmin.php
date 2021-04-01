@@ -21,7 +21,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\StringListFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
 {
@@ -56,13 +55,6 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
                     return ['class' => 'onboarding-status ob-status-' . $value];
                 },
             ]);
-        for ($i = 1; $i < 11; $i++) {
-            $fieldName = 'customField' . $i;
-            $formMapper->add($fieldName, TextType::class, [
-                'label' => 'app.commune_info.entity.custom_field_' . $i,
-                'required' => false,
-            ]);
-        }
         $formMapper->end();
     }
 

@@ -19,6 +19,7 @@ use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Configuration\CustomValue;
 use App\Entity\Configuration\CustomValuesCollectionAggregateTrait;
 use App\Entity\Configuration\HasCustomFieldsEntityInterface;
+use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="record_type", type="string")
  */
-abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableInterface, HideableEntityInterface, HasCustomFieldsEntityInterface
+abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableInterface, HideableEntityInterface, HasCustomFieldsEntityInterface, HasMetaDateEntityInterface
 {
     use BlameableTrait;
     use HideableEntityTrait;

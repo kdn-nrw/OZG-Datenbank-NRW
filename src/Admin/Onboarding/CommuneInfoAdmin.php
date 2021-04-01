@@ -14,6 +14,8 @@ namespace App\Admin\Onboarding;
 
 use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -51,26 +53,26 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ->end()
             ->with('app.commune_info.groups.content_data', ['class' => 'col-md-6']);
         $formMapper
-            ->add('privacyText', TextType::class, [
+            ->add('privacyText', TextareaType::class, [
                 'required' => false,
             ])
             ->add('privacyUrl', UrlType::class, [
                 'required' => false,
             ])
-            ->add('imprintText', TextType::class, [
+            ->add('imprintText', TextareaType::class, [
                 'required' => false,
             ])
             ->add('imprintUrl', UrlType::class, [
                 'required' => false,
             ])
-            ->add('accessibility', TextType::class, [
+            ->add('accessibility', TextareaType::class, [
                 'required' => false,
             ]);
         $formMapper
             ->end()
             ->with('app.commune_info.groups.footer_data', ['class' => 'col-md-6']);
         $formMapper
-            ->add('openingHours', TextType::class, [
+            ->add('openingHours', TextareaType::class, [
                 'required' => false,
             ]);
         $formMapper
@@ -91,5 +93,24 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ]);
         $formMapper
             ->end();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function configureShowFields(ShowMapper $showMapper)
+    {
+        $showMapper
+            ->add('communeName')
+            ->add('officialCommuneKey')
+            ->add('imageFile')
+            ->add('modifiedAt')
+            ->add('privacyText')
+            ->add('privacyUrl')
+            ->add('imprintText')
+            ->add('imprintUrl')
+            ->add('accessibility')
+            ->add('openingHours')
+            ->add('contacts');
     }
 }

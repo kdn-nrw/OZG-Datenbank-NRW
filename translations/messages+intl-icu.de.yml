@@ -296,6 +296,10 @@ app:
       regional_key: ARS
       administrative_district: Reg-Bez
       administrative_district_placeholder: Regierungsbezirk
+  abstract_onboarding_entity:
+    object_name: Onboarding
+    list: Onboarding Allgemein
+    create: Onboarding erfassen
   commune_info:
     object_name: Basisdaten
     list: Onboarding Basisdaten
