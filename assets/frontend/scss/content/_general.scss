@@ -15,6 +15,11 @@
 }
 .app-fe {
   .content-header {
+    &:empty {
+      margin-bottom: -20px;
+      height: 0;
+      overflow: hidden;
+    }
     .navbar-header {
       flex: 0 0 100%;
       font-size: $h1-font-size;
@@ -38,6 +43,7 @@
           display: flex;
           align-items: center;
           padding: 0;
+          font-size: 1rem;
         }
       }
       .navbar-collapse {
@@ -45,6 +51,10 @@
       }
     }
   }
+  .sonata-ba-show {
+    font-size: .875rem;
+  }
 }
 
 @import "typo";
+@import "custom-filter-content";

@@ -7,50 +7,50 @@
             }
         }
     }
-    .filter-menu-headline {
-        color: #fff;
-        font-weight:bold;
-        padding-left: 22px;
-    }
-    .filter-menu {
-        padding-bottom: 8px;
-        &.has-icon {
-            list-style: none;
-            margin-left: 0;
-            padding-left: 22px;
-        }
-    }
-    .filter-menu-item {
-        .custom-menu-filter-link {
-            transition: color .2s linear;
-            &:hover,
-            &:focus,
-            &:active {
-                color: #fff;
-            }
-        }
-        &.has-icon {
-            list-style: none;
-            padding-left: 0;
-            margin-left: 0;
-            margin-top: 5px;
-            .custom-menu-filter-link {
-                display: flex;
-                align-items: flex-start;
-            }
-            .icon {
-                display: inline-block;
-                filter: brightness(0) invert(1);
-                margin-right: 8px;
-                padding-top: 4px;
-            }
-        }
-        &.filter-subject-15 {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed #b8c7ce;
-        }
-    }
+    //.filter-menu-headline {
+    //    color: #fff;
+    //    font-weight:bold;
+    //    padding-left: 22px;
+    //}
+    //.filter-menu {
+    //    padding-bottom: 8px;
+    //    &.has-icon {
+    //        list-style: none;
+    //        margin-left: 0;
+    //        padding-left: 22px;
+    //    }
+    //}
+    //.filter-menu-item {
+    //    .custom-menu-filter-link {
+    //        transition: color .2s linear;
+    //        &:hover,
+    //        &:focus,
+    //        &:active {
+    //            color: #fff;
+    //        }
+    //    }
+    //    &.has-icon {
+    //        list-style: none;
+    //        padding-left: 0;
+    //        margin-left: 0;
+    //        margin-top: 5px;
+    //        .custom-menu-filter-link {
+    //            display: flex;
+    //            align-items: flex-start;
+    //        }
+    //        .icon {
+    //            display: inline-block;
+    //            filter: brightness(0) invert(1);
+    //            margin-right: 8px;
+    //            padding-top: 4px;
+    //        }
+    //    }
+    //    &.filter-subject-15 {
+    //        margin-top: 8px;
+    //        padding-top: 8px;
+    //        border-top: 1px dashed #b8c7ce;
+    //    }
+    //}
     .content-bottom {
         .mb-chart-container {
             max-width: 600px;

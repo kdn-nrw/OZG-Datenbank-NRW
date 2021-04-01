@@ -21,6 +21,7 @@ app:
     basic_group: Basisdienste
     ozg_overview: OZG Überblick
     login: Anmelden
+    login_backend: Data Warehouse
     dashboard: Startseite
     vsm_group: Verwaltungs&shy;suchmaschine (VSM)
     vsm_snippet: VSM Snippet
@@ -373,7 +374,7 @@ app:
       payment_provider_account_id: 'Account-ID externer Zahlungsverkehrsprovider (Text)'
       payment_provider: 'Zahlungsverkehrsprovider'
       payment_user: Benutzer
-      payment_user_username: Benutzer-Racf
+      payment_user_username: Benutzerkennung
       mandator_email: E-Mail
       test_ip_address: IP-Adresse die Zugreifen muss
   service_account:

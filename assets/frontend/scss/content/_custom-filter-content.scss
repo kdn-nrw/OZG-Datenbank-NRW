@@ -1,0 +1,47 @@
+.custom-filter-content {
+    display: none;
+    @include media-breakpoint-up(md) {
+        display: block;
+        margin-bottom: 20px;
+        .list-item-filter {
+            display: block;;
+        }
+        .filter-menu {
+            list-style: none;
+            margin: 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            font-size: 12px;
+            padding-left: 8px;
+            > li {
+                list-style: none;
+                display: block;
+                margin: 0 0 10px 10px;
+                padding: 0;
+            }
+            .custom-menu-filter-link {
+                display: flex;
+                align-items: flex-start;
+                padding: 4px 6px;
+                border-radius: 2px;
+                background: $kdngrau;
+                color: $kdnblau1;
+                transition: all .2s linear;
+                .icon {
+                    display: inline-block;
+                    transition: all .2s linear;
+                    margin-right: 8px;
+                }
+                &:hover, &:focus, &.active {
+                    background: $kdnblau1;
+                    color: #fff;
+
+                    .icon {
+                        filter: brightness(0) invert(1);
+                    }
+                }
+            }
+        }
+    }
+}

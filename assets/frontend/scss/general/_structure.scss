@@ -1,3 +1,9 @@
+@media (min-width: 1200px) {
+  html,
+  body{
+    min-height: 100%;
+  }
+}
 .app-fe {
   .app-title {
     text-align: center;
@@ -12,6 +18,18 @@
       margin-top: -28px;
       padding-bottom: 0;
       max-width: 600px;
+    }
+  }
+  @media (min-width: 1200px) {
+    min-height: 100%;
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+    }
+    #footer {
+      margin-top: auto;
     }
   }
 }

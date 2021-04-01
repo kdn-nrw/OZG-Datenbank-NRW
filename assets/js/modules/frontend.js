@@ -29,6 +29,8 @@
         },
         init: function () {
             let self = this;
+            document.querySelector('html').removeAttribute('style');
+            document.querySelector('body').removeAttribute('style');
             document.addEventListener('click', function (evt) {
                 let link;
                 if (evt.target.matches('.js-search-toggle')) {
