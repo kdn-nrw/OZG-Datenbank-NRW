@@ -12,24 +12,9 @@
 namespace App\Controller\Onboarding;
 
 
-use App\Entity\Onboarding\ServiceAccount;
-use App\Service\Onboarding\InjectOnboardingManagerTrait;
-use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Class ServiceAccountAdminController
  */
-class ServiceAccountAdminController extends CRUDController
+class ServiceAccountAdminController extends AbstractOnboardingAdminController
 {
-    use InjectOnboardingManagerTrait;
-
-    /**
-     * @inheritDoc
-     */
-    protected function preList(Request $request)
-    {
-        $this->onboardingManager->createItems(ServiceAccount::class);
-        return null;
-    }
 }

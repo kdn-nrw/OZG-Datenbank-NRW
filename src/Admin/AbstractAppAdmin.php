@@ -14,9 +14,11 @@ namespace App\Admin;
 
 use App\Entity\Base\CustomEntityLabelInterface;
 use App\Entity\Base\NamedEntityInterface;
+use App\Entity\Base\SortableEntityInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -38,6 +40,11 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
     protected $defaultShowGroupLabel = 'object_name';
 
     /**
+     * @var bool
+     */
+    private $sortableBehaviourEnabled = false;
+
+    /**
      * Returns the default fields for the given action; used to auto-configure CRUD display for simple admins
      *
      * @param string $adminAction The executed admin action (form, list, show or filter)
@@ -54,6 +61,40 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
             ];
         }
         return $defaultFields;
+    }
+
+    /**
+     * This method is called by autowiring
+     */
+    public function enableSortableBehavior()
+    {
+        // Install pixassociates/sortable-behavior-bundle to enable this feature
+        if (is_subclass_of($this->getClass(), SortableEntityInterface::class, true)
+            && method_exists($this->getBaseControllerName(), 'moveAction')) {
+            $this->sortableBehaviourEnabled = true;
+        }
+    }
+
+    /**
+     * Configures a list of default sort values.
+     *
+     * @phpstan-param array{_page?: int, _per_page?: int, _sort_by?: string, _sort_order?: string} $sortValues
+     * @param array $sortValues
+     */
+    protected function configureDefaultSortValues(array &$sortValues)
+    {
+        if ($this->sortableBehaviourEnabled = true) {
+            $sortValues['_sort_order'] = $sortValues['_sort_order'] ?? 'ASC';
+            $sortValues['_sort_by'] = $sortValues['_sort_by'] ?? 'sorting';
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSortableBehaviourEnabled(): bool
+    {
+        return $this->sortableBehaviourEnabled;
     }
 
 
@@ -95,18 +136,29 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
      * Adds the default list actions to the list mapper
      *
      * @param ListMapper $listMapper
+     * @param array|null $extraActions
      */
-    protected function addDefaultListActions(ListMapper $listMapper): void
+    protected function addDefaultListActions(ListMapper $listMapper, ?array $extraActions = null): void
     {
-        $listMapper->add('_action', null, [
-            'label' => 'app.common.actions',
-            'translation_domain' => 'messages',
-            'actions' => [
-                'show' => [],
-                'edit' => [],
-                'delete' => [],
-            ]
-        ]);
+        $actions = [
+            'show' => [],
+            'edit' => [],
+            'delete' => [],
+        ];
+        if ($extraActions) {
+            $actions = array_merge($actions, $extraActions);
+        }
+        // Install pixassociates/sortable-behavior-bundle to enable this feature
+        /*'if ($this->isSortableBehaviourEnabled()) {
+            $actions['move'] = ['template' => '@PixSortableBehavior/Default/_sort.html.twig'];
+        }*/
+        $listMapper
+            ->add('_action', null, [
+                'label' => 'app.common.actions',
+                'translation_domain' => 'messages',
+                'actions' => $actions,
+            ])
+        ;
     }
 
     /**
@@ -163,5 +215,24 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
             return $this->trans($object->getLabelKey());
         }
         return parent::toString($object);
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        parent::configureRoutes($collection);
+        if ($this->isSortableBehaviourEnabled()) {
+            $collection
+                ->add('move', $this->getRouterIdParameter().'/move/{position}')
+            ;
+        }
+    }
+
+    public function getAccessMapping()
+    {
+        if (!array_key_exists('move', $this->accessMapping)
+            && $this->isSortableBehaviourEnabled() ) {
+            $this->accessMapping['move'] = 'EDIT';
+        }
+        return parent::getAccessMapping();
     }
 }

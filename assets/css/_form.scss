@@ -83,6 +83,9 @@
     margin-bottom: 0;
   }
 }
+.form-textarea {
+  min-height: 160px;
+}
 @media (min-width: 400px) {
   .select2-drop {
     max-width: 400px;

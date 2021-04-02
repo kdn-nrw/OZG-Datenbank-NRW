@@ -1,0 +1,18 @@
+{% set route = actions.route|default(_key) %}
+
+{# @var admin \App\Admin\AbstractAppAdmin #}
+{% if admin.hasAccess(route, object) and admin.hasRoute(route) %}
+    {% set label = actions.label|default(admin.labelTranslatorStrategy.label(_key, 'actions')|trans({}, 'messages')) %}
+    {% set url = actions.url|default(_key) %}
+    {% set icon = actions.icon|default('fa-link') %}
+    <a
+            href="{{ admin.generateObjectUrl(route, object, actions.link_parameters|default([])) }}"
+            {%- block link_attributes -%}
+                class="btn btn-sm btn-default view_link {{ actions.class|default('') }}"
+                title="{{ label }}"
+            {%- endblock link_attributes -%}
+    >
+        <i class="fa {{ icon }}" aria-hidden="true"></i>
+        {{ label }}
+    </a>
+{% endif %}

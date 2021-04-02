@@ -25,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  * On-boarding inquiry entity
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_onboarding_inquiry")
+ * @ORM\Table(name="ozg_onboarding_inquiry",indexes={@ORM\Index(name="IDX_REFERENCE_KEY", columns={"reference_id", "reference_source"})})
  */
 class Inquiry extends BaseEntity implements BlameableInterface, HideableEntityInterface
 {

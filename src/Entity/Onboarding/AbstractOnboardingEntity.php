@@ -86,7 +86,7 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
      *
      * @var int
      *
-     * @ORM\Column(name="completion_rate", type="integer")
+     * @ORM\Column(name="completion_rate", type="integer", nullable=true)
      */
     protected $completionRate = 0;
 
@@ -107,6 +107,12 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
      * @ORM\OneToMany(targetEntity="App\Entity\Onboarding\OnboardingCustomValue", mappedBy="onboarding")
      */
     protected $customValues;
+
+    /**
+     * @ORM\Column(name="message_count", type="integer", nullable=true)
+     * @var int|null
+     */
+    protected $messageCount = 0;
 
     public function __construct(Commune $commune)
     {
@@ -345,6 +351,22 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
         $newCompletionRate = min(100, $completionRate);
         $this->setCompletionRate($newCompletionRate);
         return $newCompletionRate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMessageCount(): int
+    {
+        return (int) $this->messageCount;
+    }
+
+    /**
+     * @param int|null $messageCount
+     */
+    public function setMessageCount(?int $messageCount): void
+    {
+        $this->messageCount = (int) $messageCount;
     }
 
     /**

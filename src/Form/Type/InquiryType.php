@@ -30,6 +30,9 @@ class InquiryType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label' => 'app.inquiry.entity.description',
                 'required' => true,
+                'attr' => [
+                    'class' => 'form-control form-textarea',
+                ],
             ]);
 
         $builder->add('user', EntityType::class, [

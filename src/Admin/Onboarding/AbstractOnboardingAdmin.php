@@ -18,7 +18,6 @@ use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\DependencyInjection\InjectionTraits\InjectSecurityTrait;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\Onboarding\OnboardingCustomValue;
-use App\Entity\ServiceSystem;
 use App\Entity\User;
 use App\Form\DataMapper\CustomValueDataMapper;
 use App\Form\Type\CustomValueType;
@@ -116,7 +115,25 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin
                 'choices' => AbstractOnboardingEntity::$statusChoices,
                 //'catalogue' => 'SonataAdminBundle',
             ]);
-        $this->addDefaultListActions($listMapper);
+        $securityHandler = $this->getSecurityHandler();
+        if (null !== $securityHandler) {
+            $extraActions = [
+                'showQuestions' => [
+                    'template' => 'Onboarding/Inquiry/action_show_inquiries.html.twig',
+                    'route' => 'showQuestions',
+                    //'permission' => sprintf($baseRole, 'LIST')
+                ],
+                'askQuestion' => [
+                    'template' => 'General/CRUD/action_generic.html.twig',
+                    'icon' => 'fa-question-circle-o',
+                    'route' => 'askQuestion',
+                    //'permission' => sprintf($baseRole, 'LIST')
+                ],
+            ];
+        } else {
+            $extraActions = null;
+        }
+        $this->addDefaultListActions($listMapper, $extraActions);
     }
 
     /**
@@ -136,17 +153,6 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin
                 //'catalogue' => 'SonataAdminBundle',
             ])
             ->add('customValues');
-    }
-
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        parent::configureRoutes($collection);
-        $collection->clearExcept(['list', 'edit']);
-    }
-
-    public function hasRoute($name)
-    {
-        return in_array($name, ['list', 'edit'], false);
     }
 
     /**
@@ -207,5 +213,31 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin
             $query->setParameter('hidden', 0);
         }
         return $query;
+    }
+
+    public function getAccessMapping()
+    {
+        if (!array_key_exists('askQuestion', $this->accessMapping)) {
+            $this->accessMapping['askQuestion'] = 'ALL';
+        }
+        if (!array_key_exists('showQuestions', $this->accessMapping)) {
+            $this->accessMapping['showQuestions'] = 'LIST';
+        }
+        return parent::getAccessMapping();
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        parent::configureRoutes($collection);
+        $collection->clearExcept(['list', 'edit']);
+        $collection
+            ->add('askQuestion', $this->getRouterIdParameter() . '/ask-question')
+            ->add('showQuestions', $this->getRouterIdParameter() . '/show-questions')
+        ;
+    }
+
+    public function hasRoute($name)
+    {
+        return in_array($name, ['list', 'edit', 'askQuestion', 'showQuestions'], false);
     }
 }

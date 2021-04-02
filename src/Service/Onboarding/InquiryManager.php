@@ -12,7 +12,9 @@
 namespace App\Service\Onboarding;
 
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Onboarding\Inquiry;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class InquiryManager
 {
@@ -21,14 +23,40 @@ class InquiryManager
     /**
      * Create commune info items for all communes
      *
+     * @param Inquiry $inquiry
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \ReflectionException
      */
-    public function saveInquiry(Inquiry $inquiry): void
+    public function saveInquiry(Inquiry $inquiry, BaseEntityInterface $entity): void
     {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        if ($propertyAccessor->isReadable($entity, 'messageCount')
+            && $propertyAccessor->isWritable($entity, 'messageCount')) {
+            $messageCount = (int)$propertyAccessor->getValue($entity, 'messageCount') + 1;
+            $propertyAccessor->setValue($entity, 'messageCount', $messageCount);
+        }
         $em = $this->getEntityManager();
         $em->persist($inquiry);
         $em->flush();
+    }
+
+    /**
+     * @param BaseEntityInterface $entity
+     * @return int|mixed|string
+     */
+    public function findEntityInquiries(BaseEntityInterface $entity)
+    {
+        $repository = $this->getEntityManager()->getRepository(Inquiry::class);
+        $queryBuilder = $repository->createQueryBuilder('i');
+        $queryBuilder
+            ->where('i.referenceId = :referenceId')
+            ->andWhere('i.referenceSource = :referenceSource')
+            ->setParameters([
+                'referenceSource' => get_class($entity),
+                'referenceId' => $entity->getId()
+            ]);
+        $queryBuilder->orderBy('i.createdAt', 'DESC');
+        $query = $queryBuilder->getQuery();
+        return $query->getResult();
     }
 }

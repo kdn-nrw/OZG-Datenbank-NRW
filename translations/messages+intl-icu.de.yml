@@ -41,6 +41,8 @@ app:
       total: 'OZG-Leistungen insgesamt (Bund-Länder-Kommunen)'
       communal_execution: 'OZG-Leistungen in NRW im kommunalen Vollzug'
   common:
+    back: Zurück
+    back_to_list: Zurück zur Übersicht
     model_list_type:
       add: Neu
       edit: Bearbeiten
@@ -304,6 +306,9 @@ app:
     object_name: Basisdaten
     list: Onboarding Basisdaten
     create: Basisdaten erfassen
+    actions:
+      ask_question: Frage stellen
+      show_questions: Rückfragen
     groups:
       general: Basisdaten
       contact_data: Kontakte
@@ -341,6 +346,9 @@ app:
     object_name: Dataclearing
     list: Onboarding Dataclearing
     create: Dataclearing erfassen
+    actions:
+      ask_question: Frage stellen
+      show_questions: Rückfragen
     entity:
       description: Beschreibung
       commune: Kommune
@@ -355,6 +363,9 @@ app:
     object_name: ePayBL
     list: Onboarding ePayBL
     create: ePayBL erfassen
+    actions:
+      ask_question: Frage stellen
+      show_questions: Rückfragen
     groups:
       general: Allgemein
       payment_provider: Zahlunsgverkehrsprovider
@@ -385,6 +396,9 @@ app:
     object_name: Servicekonto
     list: Onboarding Servicekonten
     create: Servicekonto erfassen
+    actions:
+      ask_question: Frage stellen
+      show_questions: Rückfragen
     entity:
       description: Beschreibung
       commune: Kommune
@@ -399,11 +413,17 @@ app:
     object_name: Rückfrage
     list: Onboarding Rückfragen
     create: Rückfrage stellen
-    new_inquiries_message_prefix: Sie haben
+    inquiry_about: Rückfrage zu
+    new_inquiries_message_prefix: Es gibt
     new_inquiries_message: "{count, plural,
         =0 {keine offenen Rückfragen}
         one {1 offene Rückfrage}
         other {# offene Rückfragen}
+      }"
+    total_inquiries_message: "{count, plural,
+        =0 {keine Rückfragen}
+        one {1 Rückfrage}
+        other {# Rückfragen}
       }"
     message:
       success: Die Frage wurde erfolgreich gestellt.

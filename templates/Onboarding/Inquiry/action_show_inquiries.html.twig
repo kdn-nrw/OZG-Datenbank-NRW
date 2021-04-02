@@ -1,0 +1,18 @@
+{% set route = actions.route|default(_key) %}
+
+{# @var admin \App\Admin\AbstractAppAdmin #}
+{% if object.messageCount > 0 and admin.hasAccess(route, object) and admin.hasRoute(route) %}
+    {% set label = actions.label|default(admin.labelTranslatorStrategy.label(_key, 'actions')|trans({}, 'messages')) %}
+    {% set url = actions.url|default(_key) %}
+    {% set icon = actions.icon|default('fa-link') %}
+    <a
+            href="{{ admin.generateObjectUrl(route, object, actions.link_parameters|default([])) }}"
+            {%- block link_attributes -%}
+                class="btn btn-sm btn-default view_link {{ actions.class|default('') }}"
+                title="{{ 'app.inquiry.new_inquiries_message_prefix'|trans }} {{ 'app.inquiry.new_inquiries_message'|trans({'count': object.messageCount}) }}"
+            {%- endblock link_attributes -%}
+    >
+        <i class="fa fa-question-circle" aria-hidden="true"></i>
+        {{ 'app.inquiry.total_inquiries_message'|trans({'count': object.messageCount}) }}
+    </a>
+{% endif %}

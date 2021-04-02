@@ -12,24 +12,9 @@
 namespace App\Controller\Onboarding;
 
 
-use App\Entity\Onboarding\Epayment;
-use App\Service\Onboarding\InjectOnboardingManagerTrait;
-use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Class EpaymentAdminController
  */
-class EpaymentAdminController extends CRUDController
+class EpaymentAdminController extends AbstractOnboardingAdminController
 {
-    use InjectOnboardingManagerTrait;
-
-    /**
-     * @inheritDoc
-     */
-    protected function preList(Request $request)
-    {
-        $this->onboardingManager->createItems(Epayment::class);
-        return null;
-    }
 }
