@@ -1,0 +1,19 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+Extend base template with custom class
+@see vendor/sonata-project/admin-bundle/src/Resources/views/CRUD/base_list_field.html.twig
+#}
+{% extends '@!SonataAdmin/CRUD/base_edit.html.twig' %}
+
+{% block form %}
+    {{ parent() }}
+    {% set editObjectMetaData = app_entity_class_meta_data_array(object) %}
+    {% if editObjectMetaData %}
+        {# @var form \Symfony\Component\Form\FormView #}
+        <div class="app-form-meta" data-form-id="{{ form.vars.id }}" data-meta="{{ editObjectMetaData|json_encode }}"></div>
+    {% endif %}
+{% endblock %}

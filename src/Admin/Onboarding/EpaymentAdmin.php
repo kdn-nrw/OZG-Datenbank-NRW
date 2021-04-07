@@ -73,11 +73,24 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'tab' => true,
                 'description' => 'app.epayment.tabs.manager_description',
             ])
-                ->with('app.epayment.groups.activation_system', [
+                ->with('manager_info', [
+                    'label' => false,
                     'class' => 'col-md-12',
-                    'description' => 'app.epayment.groups.activation_system_description',
+                    //'description' => 'app.epayment.groups.activation_system_description',
                 ])
                 ->end()
+            ->end();
+        $formMapper
+            ->with('Testsystem', [
+                'label' => 'app.epayment.groups.activation_system',
+                'tab' => true,
+                'description' => 'app.epayment.groups.activation_system_description',
+            ])
+            ->with('activation_system', [
+                'label' => false,
+                'class' => 'col-md-12',
+            ])
+            ->end()
             ->end();
     }
 
@@ -131,38 +144,11 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
         $formMapper
             ->end();
     }
-
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function addManagerFormFields(FormMapper $formMapper)
     {
-        $this->configureFormGroups($formMapper);
-        $this->addMandatorFormFields($formMapper);
-        $formMapper
-            ->tab('Provider')
-            /*->with('payment_provider')
-            ->add('paymentProviderAccountId', TextType::class, [
-                'required' => false,
-            ])
-            ->add('paymentProvider', UrlType::class, [
-                'required' => false,
-                'disabled' => true,
-            ])
-            ->end()*/
-            ->with('project_group')
-            ->add('projects', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                'label' => false,
-                'entry_type' => EpaymentProjectType::class,
-                'entry_options' => [
-                    'parent_admin' => $this,
-                ],
-                'row_attr' => [
-                    'class' => 'form-group form-group-head',
-                ],
-            ])
-            ->end()
-            ->end();
         $formMapper
             ->tab('Manager')
-            ->with('app.epayment.groups.activation_system')
+            ->with('manager_info')
             ->add('clientNumberIntegration', TextType::class, [
                 'required' => false,
             ])
@@ -237,12 +223,59 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                     'placeholder' => 'Bspw. 12 Zeichen',
                 ],
             ]);
-            /*
+        /*
+        ->add('testIpAddress', TextType::class, [
+            'required' => false,
+            'help' => '<a href="https://www.wieistmeineip.de/" target="_blank">Aktuelle IP-Adresse?</a>',
+        ])*/
+        $formMapper
+            ->end()
+            ->end();
+    }
+
+    protected function configureFormFields(FormMapper $formMapper)
+    {
+        $this->configureFormGroups($formMapper);
+        $this->addMandatorFormFields($formMapper);
+        $formMapper
+            ->tab('Provider')
+            /*->with('payment_provider')
+            ->add('paymentProviderAccountId', TextType::class, [
+                'required' => false,
+            ])
+            ->add('paymentProvider', UrlType::class, [
+                'required' => false,
+                'disabled' => true,
+            ])
+            ->end()*/
+            ->with('project_group')
+            ->add('projects', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                'label' => false,
+                'entry_type' => EpaymentProjectType::class,
+                'entry_options' => [
+                    'parent_admin' => $this,
+                ],
+                'row_attr' => [
+                    'class' => 'form-group form-group-head',
+                ],
+            ])
+            ->end()
+            ->end();
+        $this->addManagerFormFields($formMapper);
+        $formMapper
+            ->with('Testsystem', [
+                'label' => 'app.epayment.groups.activation_system',
+                'tab' => true,
+                'description' => 'app.epayment.groups.activation_system_description',
+            ])
+            ->with('activation_system', [
+                'label' => false,
+                'class' => 'col-md-12',
+            ])
             ->add('testIpAddress', TextType::class, [
                 'required' => false,
                 'help' => '<a href="https://www.wieistmeineip.de/" target="_blank">Aktuelle IP-Adresse?</a>',
-            ])*/
-        $formMapper
+            ])
             ->end()
             ->end();
     }
@@ -258,7 +291,23 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('paymentProviderAccountId')
             ->add('paymentProvider')
             ->add('paymentUser')
+            ->add('projects')
             ->add('mandatorEmail')
-            ->add('testIpAddress');
+            ->add('testIpAddress')
+            ->add('clientNumberIntegration')
+            ->add('clientNumberProduction')
+            ->add('managerNumber')
+            ->add('budgetOffice')
+            ->add('objectNumber')
+            ->add('cashRegisterPersonalAccountNumber')
+            ->add('indicatorDunningProcedure')
+            ->add('bookingText')
+            ->add('descriptionOfTheBookingList')
+            ->add('managerNo')
+            ->add('applicationName')
+            ->add('lengthReceiptNumber')
+            ->add('cashRegisterCheckProcedureStatus')
+            ->add('lengthFirstAccountAssignmentInformation')
+            ->add('lengthSecondAccountAssignmentInformation');
     }
 }

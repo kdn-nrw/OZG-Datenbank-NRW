@@ -35,7 +35,8 @@ class InquiryAdminController extends CRUDController
     public function questionAction(Request $request, InquiryManager $inquiryManager, string $referenceSource, ?int $referenceId): Response
     {
         $isModal = $request->isXmlHttpRequest();
-        $inquiry = new Inquiry();
+        $inquiry = $this->admin->getNewInstance();
+        /** @var Inquiry $inquiry */
         $inquiry->setReferenceId($referenceId);
         $inquiry->setReferenceSource($referenceSource);
 
@@ -46,7 +47,7 @@ class InquiryAdminController extends CRUDController
         $form->handleRequest($request);
         $isSubmitted = $form->isSubmitted();
         if ($isSubmitted && $form->isValid()) {
-            $inquiryManager->saveInquiry($inquiry);
+            $inquiryManager->saveInquiry($inquiry, null);
             if ($isModal) {
                 $jsonData = [
                     'type'    => 'reload',

@@ -41,6 +41,40 @@
                     self.initCopyRowContainer(copyRowsContainers[i]);
                 }
             }
+            self.initFormMeta(formContainer);
+        },
+        initFormMeta: function(formContainer) {
+            // jQuery is loaded globally by Sonata Admin and therefore is not required here!
+            let formMeta = formContainer.querySelector('.app-form-meta');
+            if (formMeta) {
+                let metaProperties = JSON.parse(formMeta.dataset.meta);
+                if (typeof metaProperties === 'object') {
+                    let formId = formMeta.dataset.formId;
+                    let keys = Object.keys(metaProperties);
+                    keys.forEach(function (key) {
+                        const idSuffix = formId + '_' + metaProperties[key].property;
+                        const formGroupElt = document.getElementById('sonata-ba-field-container-' + idSuffix);
+                        let labelElt = null;
+                        if (formGroupElt) {
+                            labelElt = formGroupElt.querySelector('.control-label');
+                        }
+                        if (labelElt) {
+                            let description = metaProperties[key].description.replace('"', "'").replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br>');
+                            let helpTitle = (labelElt.textContent).replace(/(<([^>]+)>)/gi, "");
+                            let propertyHelpHtml = '\n' +
+                                '<span id="meta-help-'+idSuffix+'" class="has-popover">' +
+                                '<span class="field-help js-form-label-popover" data-toggle="popover" title="'+helpTitle+'" data-content="'+description+'"' +
+                                ' data-html="1" data-trigger="hover" data-placement="top" data-container="#meta-help-'+idSuffix+'">' +
+                                ' <i class="fa fa-question-circle" aria-hidden="true"></i>' +
+                                '</span>' +
+                                '</span>';
+                            labelElt.innerHTML = labelElt.innerHTML + propertyHelpHtml;
+                        }
+                    });
+                }
+                jQuery('.js-form-label-popover').popover();
+            }
+
         },
         initCopyRowContainer: function(copyRowsContainer) {
             let self = this;

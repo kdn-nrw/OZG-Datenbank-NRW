@@ -34,7 +34,7 @@ class InquiryType extends AbstractType
                     'class' => 'form-control form-textarea',
                 ],
             ]);
-
+        /*
         $builder->add('user', EntityType::class, [
             'class' => User::class,
             'attr' => [
@@ -43,7 +43,7 @@ class InquiryType extends AbstractType
             'label_attr' => [
                 'class' => 'hidden',
             ],
-        ]);
+        ]);*/
     }
 
     /**

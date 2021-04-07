@@ -39,7 +39,37 @@ class EntityMetaDataExtension extends AbstractExtension
         return [
             new TwigFunction('app_entity_class_meta_data', [$this, 'getObjectClassMetaData']),
             new TwigFunction('app_object_property_meta_data', [$this, 'getObjectClassMetaProperty']),
+            new TwigFunction('app_entity_class_meta_data_array', [$this, 'getObjectClassMetaDataAsArray']),
         ];
+    }
+
+    /**
+     * Returns the meta data for the entity class managed by this admin as a json string;
+     * returns null if entity has no meta data
+     *
+     * @param object|string $objectOrClass
+     * @return array|null
+     */
+    public function getObjectClassMetaDataAsArray($objectOrClass): ?array
+    {
+        if (null !== $metaItem = $this->getObjectClassMetaData($objectOrClass)) {
+            $data = [];
+            foreach ($metaItem->getMetaItemProperties() as $metaItemProperty) {
+                $customLabel = $metaItemProperty->getCustomLabel();
+                $description = $metaItemProperty->getDescription();
+                if ($customLabel || $description) {
+                    $propertyName = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $metaItemProperty->getMetaKey()))));
+                    $data[] = [
+                        'key' => $metaItemProperty->getMetaKey(),
+                        'property' => $propertyName,
+                        'customLabel' => $customLabel,
+                        'description' => $description,
+                    ];
+                }
+            }
+            return empty($data) ? null : $data;
+        }
+        return null;
     }
 
     /**

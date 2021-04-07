@@ -49,16 +49,24 @@ class InquiryManager
      */
     public function markInquiryListAsRead($inquiries): void
     {
+        $currentUser = $this->security->getUser();
+        $changeCount = 0;
         foreach ($inquiries as $inquiry) {
             /** @var Inquiry $inquiry */
-            if (!$inquiry->isRead()) {
+            if (!$inquiry->isRead()
+                && $inquiry->getCreatedBy() !== $currentUser
+                // Mark as read if inquiry is directed to current user or if inquiry is not user-specific
+                && (null === $inquiry->getUser() || $inquiry->getUser() === $currentUser)) {
                 $inquiry->setIsRead(true);
                 $inquiry->setReadAt(date_create());
-                $inquiry->setReadBy($this->security->getUser());
+                $inquiry->setReadBy($currentUser);
+                ++$changeCount;
             }
         }
-        $em = $this->getEntityManager();
-        $em->flush();
+        if ($changeCount > 0) {
+            $em = $this->getEntityManager();
+            $em->flush();
+        }
     }
 
     /**
