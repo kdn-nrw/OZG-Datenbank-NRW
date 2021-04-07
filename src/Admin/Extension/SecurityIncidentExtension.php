@@ -13,29 +13,17 @@ declare(strict_types=1);
 
 namespace App\Admin\Extension;
 
+use App\DependencyInjection\InjectionTraits\InjectSecurityTrait;
 use App\Entity\StateGroup\SecurityIncident;
 use Sonata\AdminBundle\Admin\AbstractAdminExtension;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Admin extension for configuring routes in the frontend
  */
 class SecurityIncidentExtension extends AbstractAdminExtension
 {
-
-    /**
-     * @var Security
-     */
-    private $security;
-
-    /**
-     * @param Security $security
-     */
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
+    use InjectSecurityTrait;
 
     public function alterNewInstance(AdminInterface $admin, $object)
     {

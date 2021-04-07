@@ -35,33 +35,6 @@ trait InquiryControllerTrait
      * @param InquiryManager $inquiryManager
      * @param BaseEntityInterface $entity
      *
-     * @param string $backUrl
-     * @return Response
-     */
-    protected function renderShowQuestions(
-        InquiryManager $inquiryManager,
-        BaseEntityInterface $entity,
-        string $backUrl
-    ): Response
-    {
-        $inquiries = $inquiryManager->findEntityInquiries($entity);
-        $viewParameters = [
-            'action' => 'showQuestions',
-            'object' => $entity,
-            'inquiries' => $inquiries,
-            'referenceSource' => get_class($entity),
-            'backUrl' => $backUrl,
-        ];
-        $data = $this->renderView('Onboarding/Inquiry/list.html.twig', $this->addRenderExtraParams($viewParameters));
-
-        return new Response($data);
-    }
-
-    /**
-     * @param Request $request
-     * @param InquiryManager $inquiryManager
-     * @param BaseEntityInterface $entity
-     *
      * @param string $formAction
      * @param string $backUrl
      * @return Response

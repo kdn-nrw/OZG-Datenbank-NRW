@@ -5,6 +5,7 @@
     {% set label = actions.label|default(admin.labelTranslatorStrategy.label(_key, 'actions')|trans({}, 'messages')) %}
     {% set url = actions.url|default(_key) %}
     {% set icon = actions.icon|default('fa-link') %}
+    {% set newMessageCount = object_inquiry_message_count(object, true) %}
     <a
             href="{{ admin.generateObjectUrl(route, object, actions.link_parameters|default([])) }}"
             {%- block link_attributes -%}
@@ -12,7 +13,14 @@
                 title="{{ 'app.inquiry.new_inquiries_message_prefix'|trans }} {{ 'app.inquiry.new_inquiries_message'|trans({'count': object.messageCount}) }}"
             {%- endblock link_attributes -%}
     >
-        <i class="fa fa-question-circle" aria-hidden="true"></i>
-        {{ 'app.inquiry.total_inquiries_message'|trans({'count': object.messageCount}) }}
+        {% if newMessageCount > 0 %}
+            <i class="fa fa-question-circle text-primary" aria-hidden="true"></i>
+            {{ 'app.inquiry.total_inquiries_new_message'|trans({'count': newMessageCount}) }}
+        {% else %}
+            <i class="fa fa-question-circle-o text-muted" aria-hidden="true"></i>
+            <span class="text-muted">
+                {{ 'app.inquiry.total_inquiries_message'|trans({'count': object.messageCount}) }}
+            </span>
+        {% endif %}
     </a>
 {% endif %}

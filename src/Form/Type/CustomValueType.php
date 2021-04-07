@@ -11,9 +11,10 @@
 
 namespace App\Form\Type;
 
-use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Configuration\CustomField;
+use App\Service\Configuration\InjectCustomFieldManagerTrait;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,7 +23,7 @@ class CustomValueType extends AbstractType
 {
     public const FIELD_PREFIX = 'dynamicCustomValue';
 
-    use InjectManagerRegistryTrait;
+    use InjectCustomFieldManagerTrait;
 
     /**
      * @param FormBuilderInterface $builder
@@ -41,21 +42,27 @@ class CustomValueType extends AbstractType
      */
     private function addCustomFieldsForEntity(FormBuilderInterface $builder, string $entityClass): void
     {
-        $repository = $this->getEntityManager()->getRepository(CustomField::class);
-        $customFields = $repository->findBy(['recordType' => $entityClass, 'hidden' => false], ['position' => 'ASC', 'id' => 'ASC']);
+        $customFields = $this->customFieldManager->getCustomFieldsForRecordType($entityClass);
         foreach ($customFields as $customField) {
             /** @var CustomField $customField */
             $fieldType = $customField->getFieldType() ?? TextType::class;
-            $builder->add(self::FIELD_PREFIX . '_' . $customField->getId(), $fieldType, [
+            $placeholder = $customField->getPlaceholder() ?? $customField->getFieldLabel();
+            $fieldOptions = [
                 'label' => $customField->getFieldLabel(),
                 'translation_domain' => false,
-                'required' => $customField->isRequired(),
                 'mapped' => false,
-                'attr' => [
-                    'placeholder' => $customField->getFieldLabel() . '',
+            ];
+            if ($fieldType !== HiddenType::class) {
+                $fieldOptions['required'] = $customField->isRequired();
+                $fieldOptions['attr'] = [
+                    'placeholder' => $placeholder . '',
                     'class' => 'form-control',
-                ],
-            ]);
+                ];
+            }
+            if (!empty($customField->getDescription())) {
+                $fieldOptions['help'] = $customField->getDescription();
+            }
+            $builder->add(self::FIELD_PREFIX . '_' . $customField->getId(), $fieldType, $fieldOptions);
         }
     }
 

@@ -13,14 +13,12 @@ namespace App\Admin\Onboarding;
 
 
 use App\Admin\AbstractAppAdmin;
+use App\Admin\CustomFieldAdminInterface;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\DependencyInjection\InjectionTraits\InjectSecurityTrait;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
-use App\Entity\Onboarding\OnboardingCustomValue;
 use App\Entity\User;
-use App\Form\DataMapper\CustomValueDataMapper;
-use App\Form\Type\CustomValueType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -32,10 +30,16 @@ use Sonata\DoctrineORMAdminBundle\Filter\StringListFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-abstract class AbstractOnboardingAdmin extends AbstractAppAdmin
+abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements CustomFieldAdminInterface
 {
     use InjectManagerRegistryTrait;
     use InjectSecurityTrait;
+
+    /**
+     * Commune limits for the current user
+     * @var bool|int[]
+     */
+    protected $currentUserCommuneLimits;
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -61,20 +65,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin
                     return ['class' => 'onboarding-status ob-status-' . $value];
                 },
             ]);
-        $this->addCustomFields($formMapper);
         $formMapper->end();
-    }
-
-    protected function addCustomFields(FormMapper $formMapper)
-    {
-        $formMapper->add('dynamicCustomValues', CustomValueType::class, [
-            'label' => false,
-            'entity_class' => $this->getClass(),
-        ]);
-        $formMapper->getFormBuilder()->setDataMapper(new CustomValueDataMapper(
-            $this->getEntityManager(),
-            OnboardingCustomValue::class
-        ));
     }
 
     public function preUpdate($object)
@@ -160,23 +151,26 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin
      *
      * @return bool|int[]
      */
-    protected function getCurrentUserCommuneLimits()
+    final public function getCurrentUserCommuneLimits()
     {
-        $result = [0];
-        $showAll = $this->isGranted('ALL');
-        if (!$showAll) {
-            if (null !== $this->security && null !== $user = $this->security->getUser()) {
-                /** @var User $user */
-                foreach ($user->getCommunes() as $commune) {
-                    if (!$commune->isHidden()) {
-                        $result[] = $commune->getId();
+        if (null === $this->currentUserCommuneLimits) {
+            $result = [0];
+            $showAll = $this->isGranted('ALL');
+            if (!$showAll) {
+                if (null !== $this->security && null !== $user = $this->security->getUser()) {
+                    /** @var User $user */
+                    foreach ($user->getCommunes() as $commune) {
+                        if (!$commune->isHidden()) {
+                            $result[] = $commune->getId();
+                        }
                     }
                 }
+            } else {
+                $result = true;
             }
-        } else {
-            $result = true;
+            $this->currentUserCommuneLimits = $result;
         }
-        return $result;
+        return $this->currentUserCommuneLimits;
     }
 
     /**
@@ -232,8 +226,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin
         $collection->clearExcept(['list', 'edit']);
         $collection
             ->add('askQuestion', $this->getRouterIdParameter() . '/ask-question')
-            ->add('showQuestions', $this->getRouterIdParameter() . '/show-questions')
-        ;
+            ->add('showQuestions', $this->getRouterIdParameter() . '/show-questions');
     }
 
     public function hasRoute($name)

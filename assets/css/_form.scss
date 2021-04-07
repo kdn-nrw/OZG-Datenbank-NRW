@@ -52,17 +52,20 @@
   }
   @media (min-width: 992px) {
     &.two-col {
-      .box-body > .sonata-ba-collapsed-fields > .form-group > .sonata-ba-field > div {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+      &::after {
+        content: "";
+        display: block;
+        clear: both;
       }
       .sonata-collection-row {
-        flex: 0 0 calc(50% - 10px);
-        max-width: calc(50% - 10px);
+        float: left;
+        width: calc(50% - 10px);
         padding: 15px;
         border: 2px solid $gray-200;
         margin-bottom: 20px;
+        &:nth-child(2n+1) {
+          clear: left;
+        }
         &:nth-child(2n+2) {
           margin-left: 20px;
         }
@@ -85,6 +88,107 @@
 }
 .form-textarea {
   min-height: 160px;
+}
+.box-clipboard-rows {
+  .sonata-collection-row {
+    position: relative;
+  }
+  .block-copy-paste {
+    position: absolute;
+    right: 15px;
+    top: 4px;
+    .fa {
+      transition: all .2s ease-in-out;
+      display: inline-block;
+      cursor: pointer;
+      color: #666;
+      opacity: .8;
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+      &:hover, &:focus {
+        color: $blue;
+      }
+      &.active {
+        opacity: 1;
+        color: $blue;
+      }
+      &.disabled {
+        cursor: default;
+        opacity: .5;
+        color: #999;
+        &:hover, &:focus {
+          color: #999;
+        }
+      }
+    }
+    .action-copy {
+
+    }
+    .action-paste {
+
+    }
+  }
+}
+.box-collection-table  {
+  .sonata-collection-row {
+    margin-bottom: 10px;
+  }
+  @media (min-width: 1200px) {
+    .sonata-collection-row {
+      margin-bottom: 0;
+      border-bottom: 1px solid #ccc;
+      &:first-child {
+        border-top: 1px solid #ccc;
+      }
+      &:not(:first-child) {
+        .control-label {
+          display: none;
+        }
+      }
+      .form-group {
+        margin-bottom: 0;
+      }
+      > .form-group > .sonata-ba-field > div {
+        display: flex;
+        .form-group {
+          padding: 4px;
+          border-left: 1px solid #ccc;
+          flex: 0 0 25%;
+          max-width: 25%;
+          &:last-child {
+            border-right: 1px solid #ccc;
+          }
+        }
+      }
+    }
+  }
+}
+.box-collection-epayment-projects {
+
+  @media (min-width: 1200px) {
+    .sonata-collection-row {
+      max-width: 1200px;
+      &:nth-child(2n + 3) {
+        margin-top: 10px;
+        border-top: 1px solid #ccc;
+      }
+      > .form-group > .sonata-ba-field > div {
+        .form-group {
+          flex: 0 0 35%;
+          max-width: 35%;
+          &:nth-child(1),
+          &:nth-child(2) {
+            flex: 0 0 15%;
+            max-width: 15%;
+            .control-label {
+              opacity: 0;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 @media (min-width: 400px) {
   .select2-drop {

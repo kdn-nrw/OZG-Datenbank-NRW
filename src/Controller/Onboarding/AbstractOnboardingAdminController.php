@@ -12,7 +12,9 @@
 namespace App\Controller\Onboarding;
 
 
+use App\Admin\Onboarding\AbstractOnboardingAdmin;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
+use App\Entity\Onboarding\Inquiry;
 use App\Service\Onboarding\InjectOnboardingManagerTrait;
 use App\Service\Onboarding\InquiryManager;
 use Sonata\AdminBundle\Controller\CRUDController;
@@ -51,15 +53,31 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         if (!$object || !$this->admin->isGranted('showQuestions')) {
             throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $id));
         }
+        /** @var AbstractOnboardingAdmin $admin */
+        $admin = $this->admin;
+        /** @var AbstractOnboardingEntity $object */
+        $inquiries = $inquiryManager->findEntityInquiries($object);
         //$formAction = $this->admin->generateObjectUrl('showQuestions', $object);
+        // Mark question as read if question is opened by user with limited access
+        if ($admin->getCurrentUserCommuneLimits() !== true) {
+            $inquiryManager->markInquiryListAsRead($inquiries);
+        }
 
         $parameters = [];
         if ($filter = $this->admin->getFilterParameters()) {
             $parameters['filter'] = $filter;
         }
         $backUrl = $this->admin->generateUrl('list', $parameters);
-        /** @var AbstractOnboardingEntity $object */
-        return $this->renderShowQuestions($inquiryManager, $object, $backUrl);
+        $viewParameters = [
+            'action' => 'showQuestions',
+            'object' => $object,
+            'inquiries' => $inquiries,
+            'referenceSource' => get_class($object),
+            'backUrl' => $backUrl,
+        ];
+        $data = $this->renderView('Onboarding/Inquiry/list.html.twig', $this->addRenderExtraParams($viewParameters));
+
+        return new Response($data);
     }
 
     /**

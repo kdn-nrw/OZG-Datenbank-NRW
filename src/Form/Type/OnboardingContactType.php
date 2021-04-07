@@ -95,15 +95,13 @@ class OnboardingContactType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class'       => Contact::class,
             'parent_admin' => null,
             'show_contact_type' => true,
             'enable_external_user' => false,
             'enable_mobile_number' => false,
-            //'intention'        => 'upload',
-            //'accept_file_type' => 'image/png,image/jpg,image/jpeg,application/pdf,application/zip',
-        ));
+        ]);
     }
 
 }

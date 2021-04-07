@@ -1075,7 +1075,7 @@ services:
   App\Admin\Configuration\CustomFieldAdmin:
     arguments:
       - ~
-      - App\Entity\Configuration\CustomFieldAdmin
+      - App\Entity\Configuration\CustomField
       - ~
     tags:
       - name: sonata.admin

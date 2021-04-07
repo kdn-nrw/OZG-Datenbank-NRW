@@ -2,9 +2,10 @@
 
 namespace App;
 
+use App\Api\Consumer\ApiConsumerInterface;
 use App\DependencyInjection\Compiler\ApiManagerCompilerPass;
 use App\DependencyInjection\Compiler\ChartStatisticsCompilerPass;
-use App\Api\Consumer\ApiConsumerInterface;
+use App\DependencyInjection\Compiler\CustomFieldAdminCompilerPass;
 use App\Statistics\ChartStatisticsProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -21,6 +22,7 @@ class Kernel extends BaseKernel
 
     public function registerBundles(): iterable
     {
+        /** @noinspection PhpIncludeInspection */
         $contents = require $this->getProjectDir() . '/config/bundles.php';
         foreach ($contents as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
@@ -70,5 +72,6 @@ class Kernel extends BaseKernel
         // https://symfony.com/doc/4.4/service_container/tags.html#create-a-compiler-pass
         $container->addCompilerPass(new ChartStatisticsCompilerPass());
         $container->addCompilerPass(new ApiManagerCompilerPass());
+        $container->addCompilerPass(new CustomFieldAdminCompilerPass());
     }
 }

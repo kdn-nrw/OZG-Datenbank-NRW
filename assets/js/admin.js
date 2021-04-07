@@ -95,6 +95,15 @@ const appOnReady = function() {
             console.log('An error occurred while loading the form component', error);
         });
     }
+    let formContainers = document.querySelectorAll('.sonata-ba-form');
+    if (formContainers.length > 0 && typeof Admin !== "undefined") {
+        import('./modules/form').then(({ default: appForm }) => {
+            appForm.setUpList(formContainers);
+
+        }).catch(error => {
+            console.log('An error occurred while loading the form component', error);
+        });
+    }
 };
 
 if (

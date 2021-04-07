@@ -19,6 +19,7 @@ use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\UserAssignedEntityTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 /**
@@ -69,6 +70,16 @@ class Inquiry extends BaseEntity implements BlameableInterface, HideableEntityIn
      * @ORM\Column(nullable=true, type="datetime", name="read_at")
      */
     protected $readAt;
+
+    /**
+     * The (first) user who read the message
+     *
+     * @ORM\ManyToOne(targetEntity="Symfony\Component\Security\Core\User\UserInterface", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(nullable=true, name="user_id", onDelete="SET NULL")
+     *
+     * @var UserInterface|null
+     */
+    protected $readBy;
 
     /**
      * @return string|null
@@ -148,6 +159,22 @@ class Inquiry extends BaseEntity implements BlameableInterface, HideableEntityIn
     public function setReadAt(?DateTime $readAt): void
     {
         $this->readAt = $readAt;
+    }
+
+    /**
+     * @return UserInterface|null
+     */
+    public function getReadBy(): ?UserInterface
+    {
+        return $this->readBy;
+    }
+
+    /**
+     * @param UserInterface|null $readBy
+     */
+    public function setReadBy(?UserInterface $readBy): void
+    {
+        $this->readBy = $readBy;
     }
 
 }

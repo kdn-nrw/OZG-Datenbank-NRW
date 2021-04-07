@@ -42,7 +42,7 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
     use CustomValuesCollectionAggregateTrait;
 
     /**
-     * @var Commune|null
+     * @var Commune
      * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\Commune", cascade={"persist"})
      * @ORM\JoinColumn(name="commune_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
@@ -123,17 +123,17 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
     }
 
     /**
-     * @return Commune|null
+     * @return Commune
      */
-    public function getCommune(): ?Commune
+    public function getCommune(): Commune
     {
         return $this->commune;
     }
 
     /**
-     * @param Commune|null $commune
+     * @param Commune $commune
      */
-    public function setCommune(?Commune $commune): void
+    public function setCommune(Commune $commune): void
     {
         $this->commune = $commune;
     }
@@ -143,8 +143,8 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
      */
     public function getCommuneName(): ?string
     {
-        if (!$this->communeName && null !== $commune = $this->getCommune()) {
-            return $commune->getName();
+        if (!$this->communeName) {
+            return $this->getCommune()->getName();
         }
         return $this->communeName;
     }
@@ -162,8 +162,8 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
      */
     public function getOfficialCommuneKey(): ?string
     {
-        if (!$this->officialCommuneKey && null !== $commune = $this->getCommune()) {
-            return $commune->getOfficialCommunityKey();
+        if (!$this->officialCommuneKey) {
+            return $this->getCommune()->getOfficialCommunityKey();
         }
         return $this->officialCommuneKey;
     }
@@ -301,6 +301,9 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
     protected function isPropertyCompleted(string $property): bool
     {
         $getter = 'get' . ucfirst($property);
+        if (!method_exists($this, $getter)) {
+            $getter = 'is' . ucfirst($property);
+        }
         $value = $this->$getter();
         if ($value instanceof Collection) {
             $itemCount = count($value);

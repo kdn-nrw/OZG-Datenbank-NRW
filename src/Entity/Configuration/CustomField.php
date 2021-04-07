@@ -37,6 +37,13 @@ class CustomField extends BaseNamedEntity implements SortableEntityInterface
     protected $fieldLabel;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="placeholder", type="string", length=255, nullable=true)
+     */
+    protected $placeholder;
+
+    /**
      * Description
      *
      * @var string|null
@@ -189,4 +196,19 @@ class CustomField extends BaseNamedEntity implements SortableEntityInterface
         $this->fieldLabel = $fieldLabel;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getPlaceholder(): ?string
+    {
+        return $this->placeholder;
+    }
+
+    /**
+     * @param string|null $placeholder
+     */
+    public function setPlaceholder(?string $placeholder): void
+    {
+        $this->placeholder = $placeholder;
+    }
 }

@@ -12,11 +12,12 @@
 namespace App\Admin\Onboarding;
 
 
+use App\Admin\StateGroup\CommuneAdmin;
+use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
@@ -27,17 +28,18 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->tab('general', [
+                'label' => 'app.commune_info.groups.general',
+            ])
             ->with('app.commune_info.groups.general', ['class' => 'col-md-6']);
         $formMapper
-            ->add('communeName', TextType::class, [
+            ->add('commune', CommuneType::class, [
+                'label' => false,
                 //'required' => true,
                 'disabled' => true,
-                'required' => false,
-            ])
-            ->add('officialCommuneKey', TextType::class, [
-                //'required' => true,
-                'disabled' => true,
-                'required' => false,
+                'required' => false
+            ], [
+                'admin_code' => CommuneAdmin::class,
             ]);
         $formMapper->add('imageFile', VichImageType::class, [
             'required' => false,
@@ -77,8 +79,14 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ]);
         $formMapper
             ->end()
-            ->with('app.commune_info.groups.contact_data', [
-                'class' => 'col-md-12 box-collection-static two-col',
+            ->end();
+        $formMapper
+            ->tab('contacts', [
+                'label' => 'app.commune_info.groups.contact_data',
+            ])
+            ->with('contact_data', [
+                'label' => false,
+                'class' => 'col-md-12 box-collection-static two-col box-clipboard-rows js-copy-row-values',
             ]);
         $formMapper
             ->add('contacts', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
@@ -92,6 +100,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
                 ],
             ]);
         $formMapper
+            ->end()
             ->end();
     }
 

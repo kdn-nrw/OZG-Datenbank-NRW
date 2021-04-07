@@ -17,7 +17,6 @@ use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Event\ConfigureMenuEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -64,10 +63,6 @@ class MenuBuilderListener
         $this->addSearchNode($menu, $currentRoute);
         if ($this->security->isGranted('ROLE_VSM')) {
             $this->addVsmNodes($menu, $currentRoute);
-        }
-        $menuGroupBasic = $menu->getChild('app_admin.menu.basic');
-        if (null !== $menuGroupBasic) {
-            $menuGroupBasic->removeChild('app.custom_field.list');
         }
         $this->moveContactMenuToTop($menu, $currentRoute);
         $onboardingGroup = $menu->getChild('app.onboarding_group');
