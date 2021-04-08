@@ -372,23 +372,7 @@ app:
       provider: Zahlungsverkehrsprovider
       provider_description: '<p>Die Abwicklung von Zahlungen im ePayment erfolgt i.A. über einen Zahlungsverkehrsprovider. Ihre Kommune muss dazu einen eigenen Vertrag mit einem ZV-Provider abschließen, über den die Nutzung einer oder mehrerer Schnittstellen gewährt wird. Beim Kommunalportal.NRW ist die Girocheckout-Schnittstelle vorgegeben.</p>
         <p>Die Kommunen in NRW können hierfür den bestehenden ZV-Provider-Rahmenvertrag der Entwicklergemeinschaft (EG) ePayBL nutzen. Die EG ePayBL hat ein abgestimmtes Verfahren zum Vertragsbeitritt entwickelt:</p>
-        <p><a href="https://fs.egov.sachsen.de/formserv/findform?shortname=sid_antrag_zvp&formtecid=2&areashortname=SMI_SID" target="_blank">https://fs.egov.sachsen.de/formserv/findform?shortname=sid_antrag_zvp&formtecid=2&areashortname=SMI_SID</a></p>
-        <p>Weitere Information finden Sie im Dokument zum Abruf aus dem Rahmenvertrag der EG. Dieser ist mit dem ZV-Provider PAYONE GmbH abgeschlossen und bietet unter Nutzung der Girocheckout-Schnittstelle die folgenden Zahlverfahren zur Auswahl an:</p>
-        <div class="well well-sm no-shadow">
-        <div class="row"><div class="col-xs-12 col-md-6">
-        Girocheckout (GiroSolution AG, Nutzung über Rahmenvertrag der EG via PAYONE GmbH möglich)
-        </div>
-        <div class="col-xs-12 col-md-6">
-        <ul>
-        <li>Giropay (mit Zahlgarantie)</li>
-        <li>Lastschrift (ohne Zahlgarantie)</li>
-        <li>Kreditkarte (Mastercard und Visa) (mit Zahlgarantie)</li>
-        <li>Paypal (u.U. mit Zahlgarantie durch AGB von PayPal)</li>
-        <li>Paydirekt (mit Zahlgarantie)</li>
-        </ul>
-        </div></div></div>
-        <p>Bei der Nutzung von Girocheckout werden zuerst auf dem Girocheckout-Server sogenannte Projekte angelegt . Ein Projekt entspricht dabei einer Zahlart. Das Projekt bekommt beim Anlegen eine Nummer, die durch Girocheckout erzeugt wird. Zur Nummer ist durch den Kunden ein Projektkennwort zu erstellen.</p>
-        <p>Hinweis: beim Anlegen der Projekte werden diese Standardmäßig auf „Test“ gestellt. Die Projekte müssen im GiroCockpit  (https://www.girocockpit.de/) auf „Produktiv“ geschaltet werden. Erst dann werden Zahlungen auch „in Echt“ durchgeführt. Hier müssen nur Projekte bei Zahlverfahren angegeben werden, die auch später genutzt werden sollen:</p>'
+        <p><a href="https://fs.egov.sachsen.de/formserv/findform?shortname=sid_antrag_zvp&formtecid=2&areashortname=SMI_SID" target="_blank">https://fs.egov.sachsen.de/formserv/findform?shortname=sid_antrag_zvp&formtecid=2&areashortname=SMI_SID</a></p>'
       manager: Bewirtschafter
       manager_description: '<p>Der „Bewirtschafter“ stellt das Gegenstück zum Online-Angebot dar. Er wird durch den Kunden eingerichtet. Wichtig ist, dass die Geldeingänge letztlich korrekt verbucht werden können.</p>
           <p>Hier wird die Einrichtung eines Bewirtschafters exemplarisch dargestellt. Bewirtschafter werden auf dem Testsystem sowie auf dem Produktivsystem jeweils separat eingerichtet.</p>
@@ -401,6 +385,21 @@ app:
       general: Basisdaten
       general_description: '<p>Für die Durchführung eines Online-Bezahlvorgangs im Sinne des eGoverments stellt die elektronische Bezahlplattform ePayBL vermittelnde Funktionen zur Verfügung. Um die Funktionalität ausüben zu können, sind bestimmte Informationen in der ePayBL zu hinterlegen. Dazu füllen Sie bitte die Felder mit den Informationen Ihrer Kommune.</p><p>ePayBL stellt als Middelware den Kontakt zwischen einem Online-Angebot, Zahlungsverkehrs-Providern (ZV-Provider) sowie den jeweils im Einsatz befindlichen Finanzsystemen des Kunden her. Somit kann ein Online-Bezahlvorgang in Gänze abgebildet werden. ePayBL stellt zur Abgrenzung keine Funktionen einer Finanzbuchhaltung zur Verfügung und ist somit auch kein System zur Durchführung der Finanzbuchhaltung im Sinne §93 GO NRW.</p>'
       payment_provider: Zahlunsgverkehrsprovider
+      account: Account
+      account_description: '<p>Weitere Information finden Sie im Dokument zum Abruf aus dem Rahmenvertrag der EG. Dieser ist mit dem ZV-Provider PAYONE GmbH abgeschlossen und bietet unter Nutzung der Girocheckout-Schnittstelle die folgenden Zahlverfahren zur Auswahl an:</p>
+        <div class="well well-sm no-shadow">
+        <div class="row"><div class="col-xs-12 col-md-6">
+        Girocheckout (GiroSolution AG, Nutzung über Rahmenvertrag der EG via PAYONE GmbH möglich)
+        </div><div class="col-xs-12 col-md-6">
+        <ul>
+        <li>Giropay (mit Zahlgarantie)</li>
+        <li>Kreditkarte (Mastercard und Visa) (mit Zahlgarantie)</li>
+        <li>Paypal (u.U. mit Zahlgarantie durch AGB von PayPal)</li>
+        <li>Paydirekt (mit Zahlgarantie)</li>
+        </ul>
+        </div></div></div>
+        <p>Bei der Nutzung von Girocheckout werden zuerst auf dem Girocheckout-Server sogenannte Projekte angelegt . Ein Projekt entspricht dabei einer Zahlart. Das Projekt bekommt beim Anlegen eine Nummer, die durch Girocheckout erzeugt wird. Zur Nummer ist durch den Kunden ein Projektkennwort zu erstellen.</p>
+        <p>Hinweis: beim Anlegen der Projekte werden diese Standardmäßig auf „Test“ gestellt. Die Projekte müssen im GiroCockpit  (https://www.girocockpit.de/) auf „Produktiv“ geschaltet werden. Erst dann werden Zahlungen auch „in Echt“ durchgeführt. Hier müssen nur Projekte bei Zahlverfahren angegeben werden, die auch später genutzt werden sollen:</p>'
       mandator_email: Kontakt E-Mail des Mandanten
       mandator_email_description: 'Über die Mailadresse werden wichtige Informationen u.a. bzgl. Wartungsarbeiten oder ggf. Informationen zu Verträgen mit Zahlungsverkehrsdienstleistern kommuniziert.'
       activation_system: Testsystem

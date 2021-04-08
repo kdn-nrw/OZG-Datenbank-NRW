@@ -14,6 +14,7 @@ namespace App\Service\Onboarding;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\DependencyInjection\InjectionTraits\InjectSecurityTrait;
 use App\Entity\Base\BaseEntityInterface;
+use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\Onboarding\Inquiry;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -75,7 +76,8 @@ class InquiryManager
      */
     public function findEntityInquiries(BaseEntityInterface $entity)
     {
-        $repository = $this->getEntityManager()->getRepository(Inquiry::class);
+        $em = $this->getEntityManager();
+        $repository = $em->getRepository(Inquiry::class);
         $queryBuilder = $repository->createQueryBuilder('i');
         $queryBuilder
             ->where('i.referenceId = :referenceId')
@@ -86,7 +88,12 @@ class InquiryManager
             ]);
         $queryBuilder->orderBy('i.createdAt', 'DESC');
         $query = $queryBuilder->getQuery();
-        return $query->getResult();
+        $inquiries = $query->getResult();
+        if ($entity instanceof AbstractOnboardingEntity && $entity->getMessageCount() !== count($inquiries)) {
+            $entity->setMessageCount(count($inquiries));
+            $em->flush();
+        }
+        return $inquiries;
     }
 
     /**

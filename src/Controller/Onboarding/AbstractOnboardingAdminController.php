@@ -50,7 +50,7 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         $id = $request->get($this->admin->getIdParameter());
         $object = $this->admin->getObject($id);
 
-        if (!$object || !$this->admin->isGranted('showQuestions')) {
+        if (!$object || !$this->admin->hasAccess('showQuestions', $object)) {
             throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $id));
         }
         /** @var AbstractOnboardingAdmin $admin */

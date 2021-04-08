@@ -61,9 +61,16 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                     'class' => 'col-md-12',
                 ])
                 ->end()*/
+                ->with('account', [
+                    'label' => false,//'app.epayment.groups.account',
+                    'class' => 'col-md-12',
+                ])
+                ->end()
                 ->with('project_group', [
                     'label' => false,//'app.epayment.groups.project_group',
                     'class' => 'col-md-12 box-collection-table four-col box-collection-epayment-projects',
+                    // Show text after account group!
+                    'description' => 'app.epayment.groups.account_description',
                 ])
                 ->end()
             ->end();
@@ -149,6 +156,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
         $formMapper
             ->tab('Manager')
             ->with('manager_info')
+            /*
             ->add('clientNumberIntegration', TextType::class, [
                 'required' => false,
             ])
@@ -157,7 +165,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ])
             ->add('managerNumber', TextType::class, [
                 'required' => false,
-            ])
+            ])*/
             ->add('budgetOffice', TextType::class, [
                 'required' => false,
                 'attr' => [
@@ -240,14 +248,16 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
         $formMapper
             ->tab('Provider')
             /*->with('payment_provider')
-            ->add('paymentProviderAccountId', TextType::class, [
-                'required' => false,
-            ])
             ->add('paymentProvider', UrlType::class, [
                 'required' => false,
                 'disabled' => true,
             ])
             ->end()*/
+            ->with('account')
+                ->add('paymentProviderAccountId', TextType::class, [
+                    'required' => false,
+                ])
+            ->end()
             ->with('project_group')
             ->add('projects', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
                 'label' => false,
