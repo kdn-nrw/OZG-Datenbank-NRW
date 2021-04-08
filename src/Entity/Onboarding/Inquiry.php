@@ -177,4 +177,21 @@ class Inquiry extends BaseEntity implements BlameableInterface, HideableEntityIn
         $this->readBy = $readBy;
     }
 
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        $text = trim(strip_tags($this->getDescription()));
+        $length = strlen($text);
+        if ($length > 50) {
+            $text = substr($text, 0, 50) . '...';
+        } elseif (!$text) {
+            $text = 'n.a.';
+        }
+        return $text;
+    }
+
 }

@@ -55,6 +55,8 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         }
         /** @var AbstractOnboardingAdmin $admin */
         $admin = $this->admin;
+        $adminPool = $admin->getConfigurationPool();
+        $inquiryAdmin = $adminPool->getAdminByClass(Inquiry::class);
         /** @var AbstractOnboardingEntity $object */
         $inquiries = $inquiryManager->findEntityInquiries($object);
         //$formAction = $this->admin->generateObjectUrl('showQuestions', $object);
@@ -71,6 +73,7 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         $viewParameters = [
             'action' => 'showQuestions',
             'object' => $object,
+            'inquiryAdmin' => $inquiryAdmin,
             'inquiries' => $inquiries,
             'referenceSource' => get_class($object),
             'backUrl' => $backUrl,

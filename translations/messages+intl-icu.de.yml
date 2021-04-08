@@ -504,6 +504,7 @@ app:
       created_by: Rückfrage von
       user: Empfänger
       created_at: Erstellt am
+      read_by: Gelesen von
       is_read: 'Gelesen?'
   commune_type:
     object_name: Größenklasse

@@ -18,6 +18,9 @@
                     <div class="box-comment">
                         <span class="text-muted pull-right">
                             {{ inquiry.createdAt|date("d.m.Y H:i:s", "Europe/Berlin") }}
+                            {% if inquiry.createdBy == app.user and inquiryAdmin is defined %}
+                                {% include 'Onboarding/Inquiry/inquiry-actions.html.twig' with {'admin': inquiryAdmin, 'object': inquiry} %}
+                            {% endif %}
                         </span>
                         <span class="username">
                             {% if inquiry.createdBy %}
