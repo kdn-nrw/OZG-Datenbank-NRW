@@ -70,6 +70,7 @@ app:
       my_commune: Meine Kommune
       my_model_region: Meine Modellregion
       my_service_provider: Mein IT Dienstleister
+      my_inquiries: Rückfrage
     export_list: Datensätze exportieren
   object_references:
     headline: Referenzen auf dieses Objekt
@@ -422,7 +423,7 @@ app:
         incomplete: Unvollständig
         complete: Vollständig
       custom_values: Benutzerdefinierte Werte
-      payment_provider_account_id: 'Account-ID externer Zahlungsverkehrsprovider (Text)'
+      payment_provider_account_id: 'Account-ID externer Zahlungsverkehrsprovider'
       payment_provider: 'Zahlungsverkehrsprovider'
       payment_user: Benutzer
       payment_user_username: Benutzerkennung
@@ -454,7 +455,7 @@ app:
       manager_no: Bewirtschafter-Nr.
       application_name: Name
       length_receipt_number: Länge des Kassenzeichens
-      cash_register_check_procedure_status: Kassenzeichenprüfverfahren Status
+      cash_register_check_procedure_status: Kassenzeichenprüfverfahren
       length_first_account_assignment_information: Länge Erste Kontierungsangabe
       length_second_account_assignment_information: Länge zweite Kontierungsangabe
 
@@ -487,7 +488,7 @@ app:
         other {# offene Rückfragen}
       }"
     total_inquiries_message: "{count, plural,
-        =0 {keine Rückfragen}
+        =0 {keine offenen Rückfragen}
         one {1 Rückfrage}
         other {# Rückfragen}
       }"
@@ -498,6 +499,9 @@ app:
         }"
     message:
       success: Die Frage wurde erfolgreich gestellt.
+      error: Sie haben keinen Zugriff auf diese Funktion. Bitte wendden Sie sich an den Administrator.
+    actions:
+      ask_question: Rückfrage beantworten
     entity:
       description: Inhalt
       created_by: Rückfrage von
@@ -505,6 +509,7 @@ app:
       created_at: Erstellt am
       read_by: Gelesen von
       is_read: 'Gelesen?'
+      read_at: Gelesen am
   commune_type:
     object_name: Größenklasse
     list: Größenklassen

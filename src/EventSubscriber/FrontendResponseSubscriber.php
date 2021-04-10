@@ -37,7 +37,7 @@ class FrontendResponseSubscriber implements EventSubscriberInterface
             $content = $response->getContent();
             if ($content) {
                 $parsedContent = str_replace('"USE_STICKYFORMS":true', '"USE_STICKYFORMS":false', $content);
-                $removeScripts = ['sidebar', 'markitup', 'markdown', 'masonry'];
+                $removeScripts = ['sidebar', 'markitup', 'markdown',];
                 foreach ($removeScripts as $script) {
                     $parsedContent = preg_replace('/<script.*' . $script . '.*<\/script>\s+/', '', $parsedContent);
                 }

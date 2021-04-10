@@ -1011,6 +1011,8 @@ services:
       - ~
       - App\Entity\Onboarding\Inquiry
       - App\Controller\Onboarding\InquiryAdminController
+    calls:
+      - [setTemplate, ['show', 'Onboarding/Inquiry/show.html.twig']]
     tags:
       - name: sonata.admin
         manager_type: orm

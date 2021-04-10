@@ -13,14 +13,17 @@ namespace App\Controller\Onboarding;
 
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Onboarding\Inquiry;
-use App\Form\Type\InquiryType;
+use App\Service\InjectAdminManagerTrait;
 use App\Service\Onboarding\InquiryManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class InquiryControllerTrait
+ * @property \Sonata\AdminBundle\Admin\AdminInterface $admin
  * @method createForm(string $type, $data = null, array $options = []): FormInterface
  * @method renderView(string $view, array $parameters = []): string
  * @method trans($id, array $parameters = [], $domain = null, $locale = null)
@@ -30,6 +33,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait InquiryControllerTrait
 {
+    use InjectAdminManagerTrait;
+
     /**
      * @param Request $request
      * @param InquiryManager $inquiryManager
@@ -44,18 +49,38 @@ trait InquiryControllerTrait
         InquiryManager $inquiryManager,
         BaseEntityInterface $entity,
         string $formAction,
-        string $backUrl
+        string $backUrl = null
     ): Response
     {
         $isModal = $request->isXmlHttpRequest();
         $inquiry = new Inquiry();
-        $inquiry->setReferenceId($entity->getId());
-        $inquiry->setReferenceSource(get_class($entity));
 
-        $form = $this->createForm(InquiryType::class, $inquiry, [
-            'action' => $formAction,
-        ]);
+        $form = $inquiryManager->createFormForEntity($inquiry, $entity, $formAction);
 
+        $inquiryAdmin = $this->adminManager->getAdminByEntityClass(Inquiry::class);
+        if ($entity instanceof Inquiry) {
+            $referencedObject = $inquiryManager->getReferencedObject($entity->getReferenceSource(), $entity->getReferenceId());
+            $parentInquiry = $entity;
+            $checkRouteAccess = 'showQuestions';
+        } else {
+            $referencedObject = $entity;
+            $parentInquiry = null;
+            $checkRouteAccess = 'askQuestion';
+        }
+        if (!$backUrl) {
+            $backUrl = $this->getInquiryBackUrl($referencedObject);
+        }
+        if (null !== $referencedObject) {
+            $referencedAdmin = $this->adminManager->getAdminByEntityClass(get_class($referencedObject));
+            if (null !== $referencedAdmin) {
+                if (!$referencedAdmin->hasRoute($checkRouteAccess)
+                    || !$referencedAdmin->hasAccess($checkRouteAccess, $referencedObject)) {
+                    $messageText = $this->trans('app.inquiry.message.error');
+                    $this->addFlash('danger', $messageText);
+                    return $this->redirect($backUrl);
+                }
+            }
+        }
         $form->handleRequest($request);
         $isSubmitted = $form->isSubmitted();
         if ($isSubmitted && $form->isValid()) {
@@ -72,11 +97,19 @@ trait InquiryControllerTrait
             $this->addFlash('success', $messageText);
             return $this->redirect($backUrl);
         }
+        if (method_exists($referencedObject, 'getDescription')) {
+            $showProperty = 'description';
+        } else {
+            $showProperty = null;
+        }
         $viewParameters = [
             'action' => 'askQuestion',
             'form' => $form->createView(),
-            'object' => $entity,
+            'object' => $referencedObject,
+            'parentInquiry' => $parentInquiry,
+            'showProperty' => $showProperty,
             'inquiry' => $inquiry,
+            'inquiryAdmin' => $inquiryAdmin,
             'isModal' => $isModal,
             'backUrl' => $backUrl,
         ];
@@ -91,5 +124,28 @@ trait InquiryControllerTrait
         }
 
         return new Response($data);
+    }
+
+    protected function getInquiryBackUrl(?BaseEntityInterface $referencedObject): ?string
+    {
+        if (null === $referencedObject) {
+            return null;
+        }
+        $referencedAdmin = $this->adminManager->getAdminByEntityClass(get_class($referencedObject));
+
+        $backUrl = null;
+        if (null !== $referencedAdmin) {
+            $parameters = [];
+            if ($filter = $referencedAdmin->getFilterParameters()) {
+                $parameters['filter'] = $filter;
+            }
+            if ($referencedAdmin->hasRoute('showQuestions')
+                && $referencedAdmin->hasAccess('showQuestions', $referencedObject)) {
+                $backUrl = $referencedAdmin->generateObjectUrl('showQuestions', $referencedObject);
+            } else {
+                $backUrl = $referencedAdmin->generateUrl('list', $parameters);
+            }
+        }
+        return $backUrl;
     }
 }

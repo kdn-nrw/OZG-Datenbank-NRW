@@ -18,6 +18,8 @@ use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\UserAssignedEntityTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -80,6 +82,30 @@ class Inquiry extends BaseEntity implements BlameableInterface, HideableEntityIn
      * @var UserInterface|null
      */
     protected $readBy;
+
+    /**
+     * @var Inquiry|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\Inquiry", inversedBy="answers", cascade={"persist"})
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    protected $parent;
+
+    /**
+     * Answers for this inquiry
+     *
+     * @var ArrayCollection|Inquiry[]
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Onboarding\Inquiry", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $answers;
+
+    /**
+     * Inquiry constructor.
+     */
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
 
     /**
      * @return string|null
@@ -175,6 +201,66 @@ class Inquiry extends BaseEntity implements BlameableInterface, HideableEntityIn
     public function setReadBy(?UserInterface $readBy): void
     {
         $this->readBy = $readBy;
+    }
+
+    /**
+     * @return Inquiry|null
+     */
+    public function getParent(): ?Inquiry
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Inquiry|null $parent
+     */
+    public function setParent(?Inquiry $parent): void
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return Inquiry[]|Collection
+     */
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
+
+    /**
+     * @param Inquiry[]|Collection $answers
+     */
+    public function setAnswers($answers): void
+    {
+        $this->answers = $answers;
+    }
+
+    /**
+     * @param Inquiry $answer
+     * @return self
+     */
+    public function addAnswer($answer): self
+    {
+        if (!$this->answers->contains($answer) && $answer->getId() !== $this->getId()) {
+            $this->answers->add($answer);
+            $answer->setParent($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Inquiry $answer
+     * @return self
+     */
+    public function removeAnswer($answer): self
+    {
+        if ($this->answers->contains($answer)) {
+            $this->answers->removeElement($answer);
+            $answer->setParent($this->getParent());
+        }
+
+        return $this;
     }
 
     /**

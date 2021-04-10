@@ -1,0 +1,27 @@
+{# @var inquiry \App\Entity\Onboarding\Inquiry #}
+<div class="box-inquiry">
+    <div class="box-comment">
+        <span class="text-muted pull-right">
+            {{ inquiry.createdAt|date("d.m.Y H:i:s", "Europe/Berlin") }}
+            {% if inquiry.createdBy == app.user and inquiryAdmin is defined %}
+                {% include 'Onboarding/Inquiry/Partials/_inquiry-actions.html.twig' with {'object': inquiry} %}
+            {% endif %}
+            {% include 'Onboarding/Inquiry/Partials/_inquiry-reply-action.html.twig' with {'object': inquiry} %}
+        </span>
+        <span class="username">
+            {% if inquiry.createdBy %}
+                {% set user = inquiry.createdBy %}
+                {# @var user \App\Entity\User #}
+                {{ user.fullname }} ({{ user.email }})
+            {% endif %}
+        </span>
+        <div class="message-content">{{ inquiry.description|nl2br }}</div>
+    </div>
+    {% if showAnswers and inquiry.answers|length > 0 %}
+        <div class="inquiry-answer-list box-answers">
+            {% for answer in inquiry.answers %}
+                {% include 'Onboarding/Inquiry/Partials/_list-item.html.twig' with {'inquiry': answer, 'showAnswers': true} %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

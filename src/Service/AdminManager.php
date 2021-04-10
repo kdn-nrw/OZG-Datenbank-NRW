@@ -165,6 +165,17 @@ class AdminManager
     }
 
     /**
+     * Returns the admin for the given entity class depending the current application context
+     * @param string $entityClass
+     * @return AdminInterface|null
+     */
+    public function getAdminByEntityClass(string $entityClass): ?AdminInterface
+    {
+        $adminClass = $this->getAdminClassForEntityClass($entityClass);
+        return $this->getAdminInstance($adminClass);
+    }
+
+    /**
      * Returns the admin instance for the given entity class.
      * If multiple admins are defined for the class, the admin for the current applicant context is returned
      * If no admins are registered for this class, null is returned

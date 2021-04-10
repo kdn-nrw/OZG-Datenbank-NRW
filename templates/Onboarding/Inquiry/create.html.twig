@@ -18,6 +18,9 @@
             <button type="submit" class="js-submit btn btn-primary">{{ 'app.inquiry.create'|trans }}</button>
         </div>
     {% else %}
+        {% block notice %}
+            {% include '@SonataTwig/FlashMessage/render.html.twig' %}
+        {% endblock notice %}
         {{ form_start(form, {'attr': {'class': 'form-inquiry'}}) }}
         <div class="box box-primary">
             <div class="box-header">
@@ -29,6 +32,19 @@
                 </h4>
             </div>
             <div class="box-body">
+                {% if object is defined and object is not null and showProperty is not null %}
+                    {% set content = attribute(object, showProperty) %}
+                    {% if content %}
+                    <div class="object-content">
+                        <p>{{ content|nl2br }}</p>
+                    </div>
+                    {% endif %}
+                {% endif %}
+                {% if parentInquiry is defined and parentInquiry is not null %}
+                    <div class="box-inquiry-parent box-comments">
+                        {% include 'Onboarding/Inquiry/Partials/_list-item.html.twig' with {'inquiry': parentInquiry, 'showAnswers': false} %}
+                    </div>
+                {% endif %}
                 <div class="inquiry-form-body">
                     {{ form_rest(form) }}
                 </div>
@@ -37,7 +53,11 @@
                 <div class="form-submit-group inquiry-form-footer">
                     <button type="submit" class="btn btn-primary">
                         <i class="fa fa-question-circle" aria-hidden="true"></i>
-                        {{ 'app.inquiry.create'|trans }}
+                        {% if parentInquiry is defined and parentInquiry is not null %}
+                            {{ 'app.inquiry.actions.ask_question'|trans }}
+                        {% else %}
+                            {{ 'app.inquiry.create'|trans }}
+                        {% endif %}
                     </button>
                     {% if backUrl %}
                         <a href="{{ backUrl }}" class="btn btn-default" title="{{ 'app.common.back_to_list'|trans }}">

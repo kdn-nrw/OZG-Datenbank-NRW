@@ -1,4 +1,56 @@
 .inquiry-list-body {
   border-top: 1px solid #f4f4f4;
-  padding: 10px;
+}
+.box-comments .box-comment {
+  padding: 8px 10px;
+  &:first-of-type {
+    padding-top: 8px;
+  }
+}
+.box-inquiry-parent {
+  margin-bottom: 10px;
+}
+.box-inquiry {
+  @media (min-width: 1200px) {
+    .box-comment {
+      position: relative;
+    }
+    .link-answer {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    .message-content {
+      max-width: 800px;
+    }
+  }
+}
+.box-answers {
+  background: #fcfcfc;
+  border-left: 15px solid #fff;
+  @media (min-width: 1200px) {
+    border-left-width: 25px;
+  }
+}
+.box-comments {
+  > .box-inquiry {
+    > .box-comment {
+      border-left: 4px solid #3c8dbc;
+    }
+    &:not(:first-child) {
+      border-top: 8px solid #fff;
+    }
+    > .box-answers {
+      > .box-inquiry {
+        > .box-comment {
+          border-left: 2px solid #f7f7f7;
+        }
+        &:not(:first-child) {
+          border-top: 4px solid #fff;
+        }
+      }
+    }
+  }
 }

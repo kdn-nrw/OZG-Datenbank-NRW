@@ -1,49 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block sonata_admin_content %}
+    {% block notice %}
+        {% include '@SonataTwig/FlashMessage/render.html.twig' %}
+    {% endblock notice %}
 
-    <div class="box box-primary">
-        <div class="box-header">
-            <h4 class="box-title">
-                {{ 'app.inquiry.inquiry_about'|trans }} {{ app_get_entity_label(referenceSource)|trans }}
-                {%- if object is defined and object is not null -%}
-                    : {{ object ~ '' }}
-                {%- endif -%}
-            </h4>
-        </div>
-        <div class="box-body no-padding">
-            <div class="inquiry-list-body box-comments">
-                {% for inquiry in inquiries %}
-                    {# @var inquiry \App\Entity\Onboarding\Inquiry #}
-                    <div class="box-comment">
-                        <span class="text-muted pull-right">
-                            {{ inquiry.createdAt|date("d.m.Y H:i:s", "Europe/Berlin") }}
-                            {% if inquiry.createdBy == app.user and inquiryAdmin is defined %}
-                                {% include 'Onboarding/Inquiry/inquiry-actions.html.twig' with {'admin': inquiryAdmin, 'object': inquiry} %}
-                            {% endif %}
-                        </span>
-                        <span class="username">
-                            {% if inquiry.createdBy %}
-                                {% set user = inquiry.createdBy %}
-                                {# @var user \App\Entity\User #}
-                                {{ user.fullname }} ({{ user.email }})
-                            {% endif %}
-                        </span>
-                        <div>{{ inquiry.description|nl2br }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="box-footer">
-            <div class="finquiry-list-footer">
-                {% if backUrl %}
-                    <a href="{{ backUrl }}" class="btn btn-default" title="{{ 'app.common.back_to_list'|trans }}">
-                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                        {{ 'app.common.back'|trans }}
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+    {% include 'Onboarding/Inquiry/Partials/_list-content.html.twig' %}
 
 {% endblock sonata_admin_content %}

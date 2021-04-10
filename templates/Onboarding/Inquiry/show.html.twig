@@ -1,0 +1,31 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% extends 'General/Show/show.html.twig' %}
+
+{% block show_groups %}
+    {{ parent() }}
+    {% if referencedObject is defined and referencedObject is not null %}
+        <div class="box box-primary">
+            <div class="box-header">
+                <h4 class="box-title">
+                    {{ 'app.inquiry.inquiry_about'|trans }} {{ app_get_entity_label(referenceSource)|trans }}
+                    {%- if object is defined and object is not null -%}
+                        : {{ object ~ '' }}
+                    {%- endif -%}
+                </h4>
+            </div>
+            <div class="box-body no-padding">
+                <div class="inquiry-list-body box-comments">
+                    {% for inquiry in inquiries %}
+                        {% include 'Onboarding/Inquiry/Partials/_list-item.html.twig' with {'showAnswers': true} %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

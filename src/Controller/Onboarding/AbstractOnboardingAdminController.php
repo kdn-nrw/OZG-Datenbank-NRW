@@ -55,15 +55,14 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         }
         /** @var AbstractOnboardingAdmin $admin */
         $admin = $this->admin;
-        $adminPool = $admin->getConfigurationPool();
-        $inquiryAdmin = $adminPool->getAdminByClass(Inquiry::class);
+        $inquiryAdmin = $this->adminManager->getAdminByEntityClass(Inquiry::class);
         /** @var AbstractOnboardingEntity $object */
         $inquiries = $inquiryManager->findEntityInquiries($object);
         //$formAction = $this->admin->generateObjectUrl('showQuestions', $object);
-        // Mark question as read if question is opened by user with limited access
-        if ($admin->getCurrentUserCommuneLimits() !== true) {
-            $inquiryManager->markInquiryListAsRead($inquiries);
-        }
+        // Mark question as read if question is opened by user with limited access or if question is directed at the
+        // current user
+        $onlyForRecipient = $admin->getCurrentUserCommuneLimits() === true;
+        $inquiryManager->markInquiryListAsRead($inquiries, $onlyForRecipient);
 
         $parameters = [];
         if ($filter = $this->admin->getFilterParameters()) {

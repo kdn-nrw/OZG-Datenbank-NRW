@@ -16,6 +16,7 @@ use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Onboarding\Inquiry;
 use App\Service\InjectAdminManagerTrait;
 use App\Service\Onboarding\InjectInquiryManagerTrait;
+use Sonata\UserBundle\Model\UserInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -61,12 +62,13 @@ class InquiryExtension extends AbstractExtension
 
     /**
      * @param BaseEntityInterface $entity
-     * @param bool $onlyNew Count only new messages
-     * @return int The nu,ber of messages
+     *
+     * @param UserInterface $user
+     * @return array|int[] The number of messages (new, answer, total)
      */
-    public function countEntityInquiries(BaseEntityInterface $entity, bool $onlyNew = true): int
+    public function countEntityInquiries(BaseEntityInterface $entity, UserInterface $user): array
     {
-        return $this->inquiryManager->countEntityInquiries($entity, $onlyNew);
+        return $this->inquiryManager->countEntityInquiries($entity, $user);
     }
 
 }

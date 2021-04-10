@@ -15,6 +15,7 @@ namespace App\Block;
 
 use App\Admin\AbstractContextAwareAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\ModelRegion;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
@@ -22,6 +23,7 @@ use App\Entity\Statistics\LogEntry;
 use App\Entity\User;
 use App\Service\InjectAdminManagerTrait;
 use App\Service\InjectCacheTrait;
+use App\Service\Onboarding\InjectInquiryManagerTrait;
 use App\Translator\InjectTranslatorTrait;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
@@ -40,6 +42,7 @@ class RecentActivitiesBlock extends AbstractBlockService
     use InjectManagerRegistryTrait;
     use InjectAdminManagerTrait;
     use InjectTranslatorTrait;
+    use InjectInquiryManagerTrait;
 
     /**
      * @var Security
@@ -107,8 +110,7 @@ class RecentActivitiesBlock extends AbstractBlockService
         $communes = $user->getCommunes();
         if ($communes->count() > 0) {
             /** @var AbstractContextAwareAdmin $admin */
-            $adminClass = $this->adminManager->getAdminClassForEntityClass(Commune::class);
-            $admin = $this->adminManager->getAdminInstance($adminClass);
+            $admin = $this->adminManager->getAdminByEntityClass(Commune::class);
             $prefix = $this->translator->trans('app.common.recent_activities.my_commune');
             foreach ($communes as $commune) {
                 $items['static_commune_' . $commune->getId()] = [
@@ -121,8 +123,7 @@ class RecentActivitiesBlock extends AbstractBlockService
         }
         $modelRegions = $user->getModelRegions();
         if ($modelRegions->count() > 0) {
-            $adminClass = $this->adminManager->getAdminClassForEntityClass(ModelRegion::class);
-            $admin = $this->adminManager->getAdminInstance($adminClass);
+            $admin = $this->adminManager->getAdminByEntityClass(ModelRegion::class);
             $prefix = $this->translator->trans('app.common.recent_activities.my_model_region');
             foreach ($modelRegions as $modelRegion) {
                 $items['static_model_region_' . $modelRegion->getId()] = [
@@ -145,6 +146,32 @@ class RecentActivitiesBlock extends AbstractBlockService
                     'url' => $admin->generateObjectUrl('show', $serviceProvider),
                     'isStatic' => true,
                 ];
+            }
+        }
+        $userMessages = $this->inquiryManager->findUserInquiries($user, true);
+        if ($userMessages) {
+            $prefix = $this->translator->trans('app.common.recent_activities.my_inquiries');
+            foreach ($userMessages as $message) {
+                $lines = array_filter(array_map('trim', explode("\n", $message['text'])));
+                $text = implode(' ', $lines);
+                if (strlen($text) > 75) {
+                    $text = substr($text, 0, 72) . '...';
+                }
+                $titlePrefix = $prefix;
+                if (!empty($message['createdByName'])) {
+                    $titlePrefix .= ' ' . $message['createdByName'];
+                }
+                /** @var BaseEntityInterface $referenceObject */
+                $referenceObject = $message['referencedObject'];
+                $admin = $this->adminManager->getAdminByEntityClass($message['referenceSource']);
+                if ($admin->hasRoute('showQuestions') && $admin->hasAccess('showQuestions', $referenceObject)) {
+                    $items['static_inquiry_' . $message['id']] = [
+                        'titlePrefix' => $titlePrefix,
+                        'title' => $text,
+                        'url' => $admin->generateObjectUrl('showQuestions', $referenceObject),
+                        'isStatic' => true,
+                    ];
+                }
             }
         }
         /*

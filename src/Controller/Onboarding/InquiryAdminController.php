@@ -11,13 +11,14 @@
 
 namespace App\Controller\Onboarding;
 
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Onboarding\Inquiry;
-use App\Form\Type\InquiryType;
-use App\Service\Onboarding\InquiryManager;
+use App\Service\Onboarding\InjectInquiryManagerTrait;
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class InquiryAdminController
@@ -25,56 +26,81 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class InquiryAdminController extends CRUDController
 {
+    use InquiryControllerTrait;
+    use InjectInquiryManagerTrait;
+
     /**
      * @param Request $request
-     * @param InquiryManager $inquiryManager
      * @param string $referenceSource
      * @param int|null $referenceId
      * @return Response
      */
-    public function questionAction(Request $request, InquiryManager $inquiryManager, string $referenceSource, ?int $referenceId): Response
+    public function questionAction(Request $request, string $referenceSource, ?int $referenceId): Response
     {
-        $isModal = $request->isXmlHttpRequest();
-        $inquiry = $this->admin->getNewInstance();
-        /** @var Inquiry $inquiry */
-        $inquiry->setReferenceId($referenceId);
-        $inquiry->setReferenceSource($referenceSource);
+        $object = $this->inquiryManager->getReferencedObject($referenceSource, $referenceId);
 
-        $form = $this->createForm(InquiryType::class, $inquiry, [
-            'action' => $this->admin->generateUrl('question', ['referenceSource' => $referenceSource, 'referenceId' => $referenceId]),
-        ]);
+        if (!$object) {
+            throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $referenceId));
+        }
+        $formAction = $this->admin->generateUrl('question', ['referenceSource' => $referenceSource, 'referenceId' => $referenceId]);
+        //$formAction = $this->admin->generateObjectUrl('askQuestion', $object);
+        /** @var BaseEntityInterface $object */
+        return $this->renderAskQuestion($request, $this->inquiryManager, $object, $formAction);
+    }
 
-        $form->handleRequest($request);
-        $isSubmitted = $form->isSubmitted();
-        if ($isSubmitted && $form->isValid()) {
-            $inquiryManager->saveInquiry($inquiry, null);
-            if ($isModal) {
-                $jsonData = [
-                    'type'    => 'reload',
-                    'status'  => 200,
-                    'content' => [],
-                ];
-                return new JsonResponse($jsonData);
+    /**
+     * Ask a question for the given object id
+     *
+     * @param Request $request
+     */
+    public function askQuestionAction(Request $request): Response
+    {
+        $id = $request->get($this->admin->getIdParameter());
+        $object = $this->admin->getObject($id);
+
+        if (!$object) {
+            throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $id));
+        }
+        $formAction = $this->admin->generateObjectUrl('askQuestion', $object);
+        /** @var Inquiry $object */
+        return $this->renderAskQuestion($request, $this->inquiryManager, $object, $formAction);
+    }
+
+    /**
+     * Redirect the user depend on this choice.
+     * Redirect to referenced entity after inquiry was edited
+     *
+     * @param object $object
+     *
+     * @return RedirectResponse
+     */
+    protected function redirectTo($object)
+    {
+        if ($object instanceof Inquiry) {
+            $referencedObject = $this->inquiryManager->getReferencedObject($object->getReferenceSource(), $object->getReferenceId());
+            if ($backUrl = $this->getInquiryBackUrl($referencedObject)) {
+                return new RedirectResponse($backUrl);
             }
-            $messageText = $this->trans('app.inquiry.message.success');
-            $this->addFlash('success', $messageText);
-            return $this->redirectToList();
+        }
+        return parent::redirectTo($object);
+    }
+
+    protected function addRenderExtraParams(array $parameters = []): array
+    {
+        $parameters = parent::addRenderExtraParams($parameters);
+        if ($parameters['action'] === 'show' && $parameters['object'] instanceof Inquiry) {
+            $object = $parameters['object'];
+            $referencedObject = $this->inquiryManager->getReferencedObject($object->getReferenceSource(), $object->getReferenceId());
+            $parameters['referencedObject'] = $referencedObject;
+            $parameters['inquiryAdmin'] = $this->admin;
+            $parameters['referenceSource'] = $object->getReferenceSource();
+            if (null !== $referencedObject) {
+                $parameters['inquiries'] = $this->inquiryManager->findEntityInquiries($referencedObject);
+            } else {
+                $parameters['inquiries'] = [];
+            }
         }
 
-        $data = $this->renderView('Onboarding/Inquiry/create.html.twig', [
-            'form' => $form->createView(),
-            'inquiry' => $inquiry,
-            'isModal' => $isModal,
-        ]);
-        if ($isModal) {
-            $jsonData = [
-                'type'    => 'content',
-                'status'  => 200,
-                'content' => $data,
-            ];
-            return new JsonResponse($jsonData);
-        }
-
-        return new Response($data);
+        return $parameters;
     }
 }
