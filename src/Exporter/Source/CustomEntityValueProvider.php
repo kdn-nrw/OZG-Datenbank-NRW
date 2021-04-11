@@ -137,7 +137,7 @@ class CustomEntityValueProvider
             return $this->dataGroupCache[$itemId];
         }
         $itemGroup = intdiv($itemId, 200);
-        $key = str_replace('\\', '.', get_class($objectOrArray)) . '..' . $itemGroup;
+        $key = str_replace('\\', '.', get_class($objectOrArray)) . '.' . $itemGroup;
         try {
             $item = $this->cache->getItem(self::CACHE_PREFIX . $this->context . rawurlencode($key));
             if (!$forceUpdate && $item->isHit()) {

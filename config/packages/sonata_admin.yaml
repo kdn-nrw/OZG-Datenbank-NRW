@@ -268,7 +268,6 @@ sonata_admin:
                     - App\Admin\OpenDataAdmin
                     - App\Admin\StateGroup\CommuneTypeAdmin
                     - App\Admin\PageContentAdmin
-                    - App\Admin\Configuration\CustomFieldAdmin
             app_admin.menu.system:
                 label: app.system_group
                 #label_catalogue: messages
@@ -279,6 +278,7 @@ sonata_admin:
                     - sonata.user.admin.group
                     - App\Admin\Api\ApiConsumerAdmin
                     - App\Admin\MetaData\MetaItemAdmin
+                    - App\Admin\Configuration\CustomFieldAdmin
                     #- shapecode_cron.cronjob
                     #- shapecode_cron.cronjob_result
 

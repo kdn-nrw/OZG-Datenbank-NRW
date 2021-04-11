@@ -16,13 +16,9 @@ use Sonata\UserBundle\Model\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
- * Class UserVoter
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
+ * Class ProtectSuperAdminVoter
  */
 class ProtectSuperAdminVoter extends Voter
 {
@@ -54,10 +50,10 @@ class ProtectSuperAdminVoter extends Voter
     protected function supports($attribute, $subject)
     {
         return in_array($attribute, [
-            'ROLE_SONATA_USER_ADMIN_USER_EDIT',
-            'ROLE_SONATA_USER_ADMIN_USER_DELETE',
-            'ROLE_SONATA_USER_ADMIN_USER_VIEW',
-        ]) && $subject instanceof UserInterface;
+                'ROLE_SONATA_USER_ADMIN_USER_EDIT',
+                'ROLE_SONATA_USER_ADMIN_USER_DELETE',
+                'ROLE_SONATA_USER_ADMIN_USER_VIEW',
+            ]) && $subject instanceof UserInterface;
     }
 
     /**

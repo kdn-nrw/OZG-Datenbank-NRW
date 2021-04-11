@@ -76,6 +76,16 @@ class AdminManager
     }
 
     /**
+     * Returns the entity classes which have an admin service assigned to
+     *
+     * @return array|string
+     */
+    public function getManagedEntityClasses(): array
+    {
+        return array_keys($this->pool->getAdminClasses());
+    }
+
+    /**
      * Returns the property configuration for the given entity property;
      * The configuration currently contains the admin class and the target entity class of the given property
      * @param BaseEntityInterface|string $entityOrClass

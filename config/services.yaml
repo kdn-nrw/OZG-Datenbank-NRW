@@ -868,6 +868,10 @@ services:
     tags:
       - { name: security.voter }
 
+  App\Security\Authorization\Voter\MetaDataVoter:
+    tags:
+      - { name: security.voter }
+
   App\Form\Type\SecurityRolesType:
     arguments:
       - '@kernel'
