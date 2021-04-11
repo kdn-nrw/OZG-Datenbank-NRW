@@ -276,6 +276,36 @@ class InquiryManager
     }
 
     /**
+     * Pre fill the inquiry based on the given entity
+     *
+     * @param Inquiry $inquiry
+     * @param BaseEntityInterface $entity
+     * @return bool
+     */
+    protected function prefillInquiry(Inquiry $inquiry, BaseEntityInterface $entity)
+    {
+        if ($entity instanceof Inquiry) {
+            $inquiry->setReferenceSource($entity->getReferenceSource());
+            $inquiry->setReferenceId($entity->getReferenceId());
+        } else {
+            $inquiry->setReferenceId($entity->getId());
+            $inquiry->setReferenceSource(get_class($entity));
+        }
+        $enableUser = true;
+        // Answer to previous inquiry
+        if ($entity instanceof Inquiry) {
+            $inquiry->setUser($entity->getCreatedBy());
+        }/* elseif ($entity instanceof BlameableInterface
+            && (null !== $modifiedBy = $entity->getModifiedBy())
+            && $modifiedBy !== $this->security->getUser()
+            && $modifiedBy !== $entity->getCreatedBy()) {
+            $inquiry->setUser($modifiedBy);
+            $enableUser = true;
+        }*/
+        return $enableUser;
+    }
+
+    /**
      * Creates an inquiry form
      *
      * @param Inquiry $inquiry
@@ -285,16 +315,10 @@ class InquiryManager
      */
     public function createFormForEntity(Inquiry $inquiry, BaseEntityInterface $entity, string $formAction): FormInterface
     {
-        if ($entity instanceof Inquiry) {
-            $inquiry->setReferenceSource($entity->getReferenceSource());
-            $inquiry->setReferenceId($entity->getReferenceId());
-        } else {
-            $inquiry->setReferenceId($entity->getId());
-            $inquiry->setReferenceSource(get_class($entity));
-        }
-
+        $enableUser = $this->prefillInquiry($inquiry, $entity);
         $form = $this->formFactory->create(InquiryType::class, $inquiry, [
             'action' => $formAction,
+            'enable_user' => $enableUser,
         ]);
         return $form;
     }

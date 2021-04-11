@@ -26,6 +26,12 @@ class InquiryType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if ($options['enable_user']) {
+            $builder->add('user', EntityType::class, [
+                'label' => 'app.inquiry.entity.user',
+                'class' => User::class,
+            ]);
+        }
         $builder
             ->add('description', TextareaType::class, [
                 'label' => 'app.inquiry.entity.description',
@@ -34,16 +40,6 @@ class InquiryType extends AbstractType
                     'class' => 'form-control form-textarea',
                 ],
             ]);
-        /*
-        $builder->add('user', EntityType::class, [
-            'class' => User::class,
-            'attr' => [
-                'class' => 'hidden',
-            ],
-            'label_attr' => [
-                'class' => 'hidden',
-            ],
-        ]);*/
     }
 
     /**
@@ -53,6 +49,7 @@ class InquiryType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Inquiry::class,
+            'enable_user' => false,
         ]);
     }
 
