@@ -37,7 +37,7 @@
         flex-direction: row;
         margin: 0;
         > .col-lg-9 {
-          flex: 1 0 auto;
+          flex: 1 1 auto;
           float: none;
           width: auto;
         }
@@ -52,6 +52,10 @@
             margin: 0;
           }
         }
+      }
+      // make width of default filter column bigger if advanced filter is disabled
+      .advanced-filter[style*="display: none;"] + .col-sm-4{
+        width: 66.6666666%;
       }
     }
   }
