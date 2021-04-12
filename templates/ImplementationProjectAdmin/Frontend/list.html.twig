@@ -12,7 +12,7 @@ file that was distributed with this source code.
         {% if filterSubject is defined and filterSubject is not null %}
             {% include 'ImplementationProjectAdmin/list-subject-header-content.html.twig' with {'subject': filterSubject} %}
         {% else %}
-            {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_IMPLEMENTATION_PROJECTS')} %}
+            {% include 'PageContent/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_IMPLEMENTATION_PROJECTS')} %}
         {% endif %}
     </section>
     {{ parent() }}

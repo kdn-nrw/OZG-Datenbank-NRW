@@ -12,6 +12,7 @@
 namespace App\EventListener;
 
 
+use App\Admin\Onboarding\EpaymentAdmin;
 use App\Translator\TranslatorAwareTrait;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Event\ConfigureMenuEvent;
@@ -61,7 +62,8 @@ class MenuBuilderListener
         $currentRoute = null !== $request ? $request->get('_route') : '_no_route';
         $this->moveSolutionMenuToTop($menu, $currentRoute);
         $this->addSearchNode($menu, $currentRoute);
-        if ($this->security->isGranted('ROLE_VSM')) {
+        $isSuperAdmin = $this->security->isGranted('ROLE_SUPER_ADMIN');
+        if ($isSuperAdmin || $this->security->isGranted('ROLE_VSM')) {
             $this->addVsmNodes($menu, $currentRoute);
         }
         $this->moveContactMenuToTop($menu, $currentRoute);
@@ -70,6 +72,30 @@ class MenuBuilderListener
             $onboardingGroup->removeChild('app.service_account.list');
             $onboardingGroup->removeChild('app.dataclearing.list');
             $onboardingGroup->removeChild('app.inquiry.list');
+            $checkRoles = ['ROLE_' . EpaymentAdmin::class . '_LIST'];
+            $isAnyOnboardingGranted = $isSuperAdmin;
+            if (!$isSuperAdmin) {
+                foreach ($checkRoles as $role) {
+                    if ($this->security->isGranted(strtoupper($role))) {
+                        $isAnyOnboardingGranted = true;
+                        break;
+                    }
+                }
+            }
+            if ($isAnyOnboardingGranted) {
+                $this->addVsmNodes($menu, $currentRoute);
+                $onboardingGroup->addChild('onboarding_dvdv', [
+                    'label' => 'app.menu.onboarding_dvdv',
+                    'route' => 'app_onboarding_dvdv',
+                    /*'extras' => [
+                        'routes' => [
+                            [
+                                'route' => 'app_search_list',
+                            ],
+                        ],
+                    ],*/
+                ]);
+            }
         }
     }
 

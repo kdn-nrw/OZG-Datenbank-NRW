@@ -29,6 +29,7 @@ app:
     vsm_api: VSM API
     meta_data: Metadaten
     onboarding_group: Kommunalportal Onboarding
+    onboarding_dvdv: Onboarding DVDV
   block:
     solution:
       online: 'Lösungen: Online'
@@ -304,6 +305,8 @@ app:
     object_name: Onboarding
     list: Onboarding Allgemein
     create: Onboarding erfassen
+    entity:
+      group_email: Funktionsadresse
   commune_info:
     object_name: Basisdaten
     list: Onboarding Basisdaten
@@ -1009,6 +1012,7 @@ app:
         implementation_projects: OZG Umsetzungsprojekte
         solutions: Lösungen
         communes: Kommunen
+        onboarding_dvdv: Onboarding DVDV
   payment_type:
     object_name: Bezahlverfahren
     list: Bezahlverfahren

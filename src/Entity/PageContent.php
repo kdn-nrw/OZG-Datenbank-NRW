@@ -12,7 +12,6 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseEntity;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -30,6 +29,7 @@ class PageContent extends BaseEntity
     public const PAGE_IMPLEMENTATION_PROJECTS = 4;
     public const PAGE_SOLUTIONS = 5;
     public const PAGE_COMMUNES = 6;
+    public const PAGE_ONBOARDING_DVDV = 7;
 
     public static $pageChoices = [
         self::PAGE_HOME => 'app.page_content.entity.page_choices.home',
@@ -38,6 +38,7 @@ class PageContent extends BaseEntity
         self::PAGE_IMPLEMENTATION_PROJECTS => 'app.page_content.entity.page_choices.implementation_projects',
         self::PAGE_SOLUTIONS => 'app.page_content.entity.page_choices.solutions',
         self::PAGE_COMMUNES => 'app.page_content.entity.page_choices.communes',
+        self::PAGE_ONBOARDING_DVDV => 'app.page_content.entity.page_choices.onboarding_dvdv',
     ];
 
     /**
@@ -89,7 +90,7 @@ class PageContent extends BaseEntity
      */
     public function getPosition(): int
     {
-        return (int) $this->position;
+        return (int)$this->position;
     }
 
     /**
@@ -97,7 +98,7 @@ class PageContent extends BaseEntity
      */
     public function setPosition(?int $position): void
     {
-        $this->position = (int) $position;
+        $this->position = (int)$position;
     }
 
     /**
@@ -139,7 +140,7 @@ class PageContent extends BaseEntity
      */
     public function __toString(): string
     {
-        $name = (string) $this->getHeadline();
+        $name = (string)$this->getHeadline();
         if (null === $name) {
             return 'NULL';
         }

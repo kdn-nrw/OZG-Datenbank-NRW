@@ -8,7 +8,7 @@ file that was distributed with this source code.
 
 {% block sonata_page_content %}
     <section class="content">
-        {% include 'Frontend/Admin/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_SOLUTIONS')} %}
+        {% include 'PageContent/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_SOLUTIONS')} %}
     </section>
     {{ parent() }}
     <section class="content content-bottom">

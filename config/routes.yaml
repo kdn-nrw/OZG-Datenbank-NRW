@@ -3,6 +3,10 @@ index:
     #controller: App\Controller\DefaultController::indexAction
     controller: App\Controller\DashboardController::indexAction
 
+app_onboarding_dvdv:
+    path: /admin/onboarding/dvdv
+    controller: App\Controller\PageController::onboardingDvdvAction
+
 app_search_list:
     path: /admin/saved-search
     controller: App\Controller\SearchController::indexAction
