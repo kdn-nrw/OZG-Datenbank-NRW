@@ -125,8 +125,9 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('town', TextType::class, [
                 'label' => 'app.epayment.entity.town',
                 'required' => false,
-            ])
-            ->end();
+            ]);
+        $this->addGroupEmailFormField($formMapper);
+        $formMapper->end();
         $formMapper
             ->with('admin_account')
             ->add('paymentUser', OnboardingContactType::class, [

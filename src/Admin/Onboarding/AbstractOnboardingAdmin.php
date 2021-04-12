@@ -28,6 +28,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\StringListFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements CustomFieldAdminInterface
@@ -65,7 +66,24 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
                     return ['class' => 'onboarding-status ob-status-' . $value];
                 },
             ]);
+        $this->addGroupEmailFormField($formMapper);
         $formMapper->end();
+    }
+
+    /**
+     * Adds the group email form field (if access to field is granted)
+     *
+     * @param FormMapper $formMapper
+     */
+    protected function addGroupEmailFormField(FormMapper $formMapper): void
+    {
+        if ($this->isGranted('ALL', $this->getSubject())) {
+            $formMapper
+                ->add('mainEmail', EmailType::class, [
+                    'label' => 'app.abstract_onboarding_entity.entity.group_email',
+                    'required' => false,
+                ]);
+        }
     }
 
     public function preUpdate($object)

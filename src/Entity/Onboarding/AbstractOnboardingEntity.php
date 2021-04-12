@@ -14,6 +14,7 @@ namespace App\Entity\Onboarding;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\BlameableInterface;
 use App\Entity\Base\BlameableTrait;
+use App\Entity\Base\HasGroupEmailEntityInterface;
 use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Configuration\CustomValue;
@@ -35,7 +36,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="record_type", type="string")
  */
-abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableInterface, HideableEntityInterface, HasCustomFieldsEntityInterface, HasMetaDateEntityInterface
+abstract class AbstractOnboardingEntity extends BaseEntity implements
+    BlameableInterface,
+    HideableEntityInterface,
+    HasCustomFieldsEntityInterface,
+    HasMetaDateEntityInterface,
+    HasGroupEmailEntityInterface
 {
     use BlameableTrait;
     use HideableEntityTrait;
@@ -64,6 +70,11 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
      * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected $serviceProvider;
+
+    /**
+     * @ORM\Column(type="string", name="group_email", length=255, nullable=true)
+     * @var string|null     */
+    protected $groupEmail;
 
     public const STATUS_NEW = 0;
     public const STATUS_INCOMPLETE = 2;
@@ -370,6 +381,26 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements BlameableI
     public function setMessageCount(?int $messageCount): void
     {
         $this->messageCount = (int) $messageCount;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGroupEmail(): ?string
+    {
+        if (null === $this->groupEmail && $mainCommuneEmail = $this->commune->getMainEmail()) {
+            $mailParts = explode('@', $mainCommuneEmail);
+            return 'epaybl@' . $mailParts[1];
+        }
+        return $this->groupEmail;
+    }
+
+    /**
+     * @param string|null $groupEmail
+     */
+    public function setGroupEmail(?string $groupEmail): void
+    {
+        $this->groupEmail = $groupEmail;
     }
 
     /**

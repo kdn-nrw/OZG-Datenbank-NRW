@@ -291,7 +291,7 @@ class InquiryManager
             $inquiry->setReferenceId($entity->getId());
             $inquiry->setReferenceSource(get_class($entity));
         }
-        $enableUser = true;
+        $enableUser = false;
         // Answer to previous inquiry
         if ($entity instanceof Inquiry) {
             $inquiry->setUser($entity->getCreatedBy());

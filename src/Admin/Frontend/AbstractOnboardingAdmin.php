@@ -102,11 +102,5 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
                 'choices' => AbstractOnboardingEntity::$statusChoices,
                 //'catalogue' => 'SonataAdminBundle',
             ]);
-        for ($i = 1; $i < 11; $i++) {
-            $fieldName = 'customField' . $i;
-            $showMapper->add($fieldName, null, [
-                'label' => 'app.commune_info.entity.custom_field_1',
-            ]);
-        }
     }
 }

@@ -41,6 +41,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ], [
                 'admin_code' => CommuneAdmin::class,
             ]);
+        $this->addGroupEmailFormField($formMapper);
         $formMapper->add('imageFile', VichImageType::class, [
             'required' => false,
             'allow_delete' => true,
