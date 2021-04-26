@@ -40,6 +40,11 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
     private $customLabels = [];
 
     /**
+     * @var array|string[]
+     */
+    protected static $classLabelPrefixCache = [];
+
+    /**
      * Initializes the translator settings from the given admin class
      *
      * @param string $adminClassName
@@ -85,17 +90,24 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
      */
     public static function getClassLabelPrefix(string $entityClass, string $group = 'entity'): string
     {
-        $classParts = explode('\\', $entityClass);
-        $lastIndex = count($classParts) - 1;
-        $className = $classParts[$lastIndex];
-        unset($classParts[$lastIndex]);
-        $prefix = strtolower($classParts[0]) === 'app' ? 'app.' : implode('.', $classParts) . '.';
+        if (!array_key_exists($entityClass, self::$classLabelPrefixCache)) {
+            $classParts = explode('\\', $entityClass);
+            $lastIndex = count($classParts) - 1;
+            $className = $classParts[$lastIndex];
+            unset($classParts[$lastIndex]);
+            $vendor = strtolower($classParts[0]);
+            if ($vendor !== 'app') {
+                $vendor .= '_' . str_replace('Bundle', '', $classParts[1]);
+            }
+            //$prefix = strtolower($classParts[0]) === 'app' ? 'app.' : implode('.', $classParts) . '.';
+            self::$classLabelPrefixCache[$entityClass] = $vendor . '.' . $className;
+        }
         if ($group) {
             $append = '.' . $group;
         } else {
             $append = '';
         }
-        return SnakeCaseConverter::classNameToSnakeCase($prefix . $className . $append) . '.';
+        return SnakeCaseConverter::classNameToSnakeCase(self::$classLabelPrefixCache[$entityClass] . $append) . '.';
     }
 
     /**
@@ -105,7 +117,7 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
      *
      * @return string
      */
-    public function getLabel($label, $context = '', $type = '')
+    public function getLabel($label, $context = '', $type = ''): string
     {
         if (array_key_exists($label, self::$commonTranslations)) {
             return self::$commonTranslations[$label];

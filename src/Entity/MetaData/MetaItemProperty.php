@@ -27,6 +27,8 @@ class MetaItemProperty extends AbstractMetaItem
     public const META_TYPES = [
         MetaItemProperty::META_TYPE_FIELD => 'app.meta_item.entity.meta_type_choices.field',
         MetaItemProperty::META_TYPE_ADMIN_FIELD => 'app.meta_item.entity.meta_type_choices.custom_field',
+        MetaItem::META_TYPE_TAB => 'app.meta_item.entity.meta_type_choices.tab',
+        MetaItem::META_TYPE_GROUP => 'app.meta_item.entity.meta_type_choices.group',
     ];
 
     /**

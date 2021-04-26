@@ -13,6 +13,7 @@ namespace App\Admin\MetaData;
 
 use App\Admin\AbstractAppAdmin;
 use App\Entity\FederalInformationManagementType;
+use App\Entity\MetaData\MetaItemProperty;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -37,17 +38,22 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
                     'admin_code' => MetaItemAdmin::class
                 ]);
         }
+        $subject = $this->getSubject();
+        /** @var MetaItemProperty|null $subject */
+        if (null !== $subject && $subject->getMetaType() !== MetaItemProperty::META_TYPE_FIELD) {
+            $formMapper
+                ->add('metaType', ChoiceType::class, [
+                    'choices' => array_flip(MetaItemProperty::META_TYPES),
+                    'attr' => [
+                        'class' => 'form-control',
+                        'data-sonata-select2' => 'false'
+                    ],
+                    'label' => false,
+                    'required' => true,
+                    'disabled' => true,
+                ]);
+        }
         $formMapper
-            ->add('metaKey', ChoiceType::class, [
-                'choices' => array_flip(FederalInformationManagementType::$mapTypes),
-                'attr' => [
-                    'class' => 'form-control',
-                    'data-sonata-select2' => 'false'
-                ],
-                'label' => false,
-                'required' => true,
-                'disabled' => true,
-            ])
             ->add('customLabel', TextType::class, [
                 'required' => false,
             ])

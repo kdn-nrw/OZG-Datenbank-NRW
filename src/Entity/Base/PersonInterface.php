@@ -36,4 +36,9 @@ interface PersonInterface extends BaseEntityInterface
      * @return string|null
      */
     public function getEmail(): ?string;
+
+    /**
+     * @return int
+     */
+    public function getGender(): int;
 }

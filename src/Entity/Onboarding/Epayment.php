@@ -14,6 +14,7 @@ namespace App\Entity\Onboarding;
 use App\Entity\AddressTrait;
 use App\Entity\Base\ContactPropertiesTrait;
 use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -159,15 +160,42 @@ class Epayment extends AbstractOnboardingEntity
     protected $lengthFirstAccountAssignmentInformation;
 
     /**
+     * @ORM\Column(name="content_first_account_assignment_information", type="text", nullable=true)
+     * @var string|null
+     */
+    protected $contentFirstAccountAssignmentInformation;
+
+    /**
      * @ORM\Column(type="string", name="length_second_account_assignment_information", length=255, nullable=true)
      * @var string|null
      */
     protected $lengthSecondAccountAssignmentInformation;
 
+    /**
+     * @ORM\Column(name="content_second_account_assignment_information", type="text", nullable=true)
+     * @var string|null
+     */
+    protected $contentSecondAccountAssignmentInformation;
+
+    /**
+     * @var ServiceProvider|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\ServiceProvider", cascade={"persist"})
+     * @ORM\JoinColumn(name="payment_operator_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $paymentOperator;
+
+    /**
+     * @var EpaymentService[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Onboarding\EpaymentService", mappedBy="epayment", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
+     */
+    private $epaymentServices;
+
     public function __construct(Commune $commune)
     {
         parent::__construct($commune);
         $this->projects = new ArrayCollection();
+        $this->epaymentServices = new ArrayCollection();
     }
 
     /**
@@ -580,6 +608,100 @@ class Epayment extends AbstractOnboardingEntity
         $this->lengthSecondAccountAssignmentInformation = $lengthSecondAccountAssignmentInformation;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getContentFirstAccountAssignmentInformation(): ?string
+    {
+        return $this->contentFirstAccountAssignmentInformation;
+    }
+
+    /**
+     * @param string|null $contentFirstAccountAssignmentInformation
+     */
+    public function setContentFirstAccountAssignmentInformation(?string $contentFirstAccountAssignmentInformation): void
+    {
+        $this->contentFirstAccountAssignmentInformation = $contentFirstAccountAssignmentInformation;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getContentSecondAccountAssignmentInformation(): ?string
+    {
+        return $this->contentSecondAccountAssignmentInformation;
+    }
+
+    /**
+     * @param string|null $contentSecondAccountAssignmentInformation
+     */
+    public function setContentSecondAccountAssignmentInformation(?string $contentSecondAccountAssignmentInformation): void
+    {
+        $this->contentSecondAccountAssignmentInformation = $contentSecondAccountAssignmentInformation;
+    }
+
+    /**
+     * @return ServiceProvider|null
+     */
+    public function getPaymentOperator(): ?ServiceProvider
+    {
+        if (null === $this->paymentOperator && null !== $district = $this->getCommune()->getAdministrativeDistrict()) {
+            $this->paymentOperator = $district->getPaymentOperator();
+        }
+        return $this->paymentOperator;
+    }
+
+    /**
+     * @param ServiceProvider|null $paymentOperator
+     */
+    public function setPaymentOperator(?ServiceProvider $paymentOperator): void
+    {
+        $this->paymentOperator = $paymentOperator;
+    }
+
+    /**
+     * @param EpaymentService $epaymentService
+     * @return self
+     */
+    public function addEpaymentService(EpaymentService $epaymentService): self
+    {
+        if (!$this->epaymentServices->contains($epaymentService)) {
+            $this->epaymentServices->add($epaymentService);
+            $epaymentService->setEpayment($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param EpaymentService $epaymentService
+     * @return self
+     */
+    public function removeEpaymentService($epaymentService): self
+    {
+        if ($this->epaymentServices->contains($epaymentService)) {
+            $this->epaymentServices->removeElement($epaymentService);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return EpaymentService[]|Collection
+     */
+    public function getEpaymentServices()
+    {
+        return $this->epaymentServices;
+    }
+
+    /**
+     * @param EpaymentService[]|Collection $epaymentServices
+     */
+    public function setEpaymentServices($epaymentServices): void
+    {
+        $this->epaymentServices = $epaymentServices;
+    }
+
     protected function getRequiredPropertiesForCompletion(): array
     {
         return [
@@ -592,6 +714,7 @@ class Epayment extends AbstractOnboardingEntity
             'cashRegisterPersonalAccountNumber', 'indicatorDunningProcedure', 'bookingText', 'descriptionOfTheBookingList',
             'managerNo', 'applicationName', 'lengthReceiptNumber', 'cashRegisterCheckProcedureStatus',
             'lengthFirstAccountAssignmentInformation', 'lengthSecondAccountAssignmentInformation',
+            'contentFirstAccountAssignmentInformation', 'contentSecondAccountAssignmentInformation',
         ];
     }
 }

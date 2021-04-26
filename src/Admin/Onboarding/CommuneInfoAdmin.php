@@ -121,6 +121,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ->add('imprintUrl')
             ->add('accessibility')
             ->add('openingHours')
-            ->add('contacts');
+            ->add('contacts')
+            ->add('groupEmail');
     }
 }

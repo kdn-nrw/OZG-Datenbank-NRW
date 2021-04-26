@@ -39,6 +39,23 @@ file that was distributed with this source code.
 
                     return defaultFieldId;
                 };
+                var cfmHideField = function (field) {
+                    var $fieldContainer = jQuery(controlGroupIdFunc(field));
+                    $fieldContainer.hide();
+                    $fieldContainer.find('[required="required"]').attr('data-required', 'required').removeAttr("required");
+                    var $box = $fieldContainer.parents('.box').first();
+                    if ($box.length > 0 && $box.find('.form-group:visible').length === 0) {
+                        $box.attr('data-cfm-hidden', 1).hide();
+                    }
+                };
+                var cfmShowField = function (field) {
+                    var $fieldContainer = jQuery(controlGroupIdFunc(field));
+                    $fieldContainer.show();
+                    $fieldContainer.find('[data-required="required"]').attr("required", "required");
+                    $fieldContainer.parents('[data-cfm-hidden="1"]').each(function(){
+                        $(this).removeAttr('data-cfm-hidden').show();
+                    });
+                };
                 if (val && (typeof val === 'object' || typeof val.isArray !== 'undefined' && val.isArray)) {
                     var showFields = [];
                     val.forEach(function(item){
@@ -51,26 +68,19 @@ file that was distributed with this source code.
                         }
                     });
                     jQuery.each(allFields, function (i, field) {
-                        var fieldContainer = controlGroupIdFunc(field);
                         if (showFields.includes(field)) {
-                            jQuery(fieldContainer).show();
-                            jQuery(fieldContainer).find('[data-required="required"]').attr("required", "required");
+                            cfmShowField(field);
                         } else {
-                            jQuery(fieldContainer).hide();
-                            jQuery(fieldContainer).find('[required="required"]').attr('data-required', 'required').removeAttr("required");
+                            cfmHideField(field);
                         }
                     });
                 } else {
                     jQuery.each(allFields, function (i, field) {
-                        var fieldContainer = controlGroupIdFunc(field);
-                        jQuery(fieldContainer).hide();
-                        jQuery(fieldContainer).find('[required="required"]').attr('data-required', 'required').removeAttr("required");
+                        cfmHideField(field);
                     });
                     if (map[val]) {
                         jQuery.each(map[val], function (i, field) {
-                            var fieldContainer = controlGroupIdFunc(field);
-                            jQuery(fieldContainer).show();
-                            jQuery(fieldContainer).find('[data-required="required"]').attr("required", "required");
+                            cfmShowField(field);
                         });
                     }
                 }

@@ -12,17 +12,23 @@
 namespace App\Admin\Onboarding;
 
 use App\Admin\StateGroup\CommuneAdmin;
+use App\Admin\Traits\ServiceProviderTrait;
 use App\Form\Type\CommuneType;
 use App\Form\Type\EpaymentProjectType;
 use App\Form\Type\OnboardingContactType;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class EpaymentAdmin extends AbstractOnboardingAdmin
 {
+    use ServiceProviderTrait;
+
     protected $baseRoutePattern = 'onboarding/epaybl';
 
     protected function configureFormGroups(FormMapper $formMapper)
@@ -32,23 +38,23 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'label' => 'app.epayment.tabs.mandator',
                 'tab' => true,
             ])
-                ->with('general', [
-                    'label' => 'app.epayment.groups.general',
-                    'class' => 'col-md-12',
-                    'description' => 'app.epayment.groups.general_description',
-                ])
-                ->end()
-                ->with('admin_account', [
-                    'label' => 'app.epayment.groups.admin_account',
-                    'class' => 'col-md-12',
-                ])
-                ->end()
-                ->with('mandator_email', [
-                    'label' => 'app.epayment.groups.mandator_email',
-                    'class' => 'col-md-12',
-                    'description' => 'app.epayment.groups.mandator_email_description',
-                ])
-                ->end()
+            ->with('general', [
+                'label' => 'app.epayment.groups.general',
+                'class' => 'col-md-12',
+                'description' => 'app.epayment.groups.general_description',
+            ])
+            ->end()
+            ->with('admin_account', [
+                'label' => 'app.epayment.groups.admin_account',
+                'class' => 'col-md-12',
+            ])
+            ->end()
+            ->with('mandator_email', [
+                'label' => 'app.epayment.groups.mandator_email',
+                'class' => 'col-md-12',
+                'description' => 'app.epayment.groups.mandator_email_description',
+            ])
+            ->end()
             ->end();
         $formMapper
             ->with('Provider', [
@@ -56,23 +62,23 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'tab' => true,
                 'description' => 'app.epayment.tabs.provider_description',
             ])
-                /*->with('payment_provider', [
-                    'label' => false,//'app.epayment.groups.payment_provider',
-                    'class' => 'col-md-12',
-                ])
-                ->end()*/
-                ->with('account', [
-                    'label' => false,//'app.epayment.groups.account',
-                    'class' => 'col-md-12',
-                ])
-                ->end()
-                ->with('project_group', [
-                    'label' => false,//'app.epayment.groups.project_group',
-                    'class' => 'col-md-12 box-collection-table four-col box-collection-epayment-projects',
-                    // Show text after account group!
-                    'description' => 'app.epayment.groups.account_description',
-                ])
-                ->end()
+            /*->with('payment_provider', [
+                'label' => false,//'app.epayment.groups.payment_provider',
+                'class' => 'col-md-12',
+            ])
+            ->end()*/
+            ->with('account', [
+                'label' => false,//'app.epayment.groups.account',
+                'class' => 'col-md-12',
+            ])
+            ->end()
+            ->with('project_group', [
+                'label' => false,//'app.epayment.groups.project_group',
+                'class' => 'col-md-12 box-collection-table four-col box-collection-epayment-projects',
+                // Show text after account group!
+                'description' => 'app.epayment.groups.account_description',
+            ])
+            ->end()
             ->end();
         $formMapper
             ->with('Manager', [
@@ -80,12 +86,12 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'tab' => true,
                 'description' => 'app.epayment.tabs.manager_description',
             ])
-                ->with('manager_info', [
-                    'label' => false,
-                    'class' => 'col-md-12',
-                    //'description' => 'app.epayment.groups.activation_system_description',
-                ])
-                ->end()
+            ->with('manager_info', [
+                'label' => false,
+                'class' => 'col-md-12',
+                //'description' => 'app.epayment.groups.activation_system_description',
+            ])
+            ->end()
             ->end();
         $formMapper
             ->with('Testsystem', [
@@ -94,6 +100,17 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'description' => 'app.epayment.groups.activation_system_description',
             ])
             ->with('activation_system', [
+                'label' => false,
+                'class' => 'col-md-12',
+            ])
+            ->end()
+            ->end();
+        $formMapper
+            ->with('Services', [
+                'label' => 'app.epayment.tabs.services',
+                'tab' => true,
+            ])
+            ->with('epayment_services', [
                 'label' => false,
                 'class' => 'col-md-12',
             ])
@@ -126,7 +143,8 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'label' => 'app.epayment.entity.town',
                 'required' => false,
             ]);
-        $this->addGroupEmailFormField($formMapper);
+
+        $this->addServiceProvidersFormFields($formMapper, 'paymentOperator', 'paymentProvider');
         $formMapper->end();
         $formMapper
             ->with('admin_account')
@@ -147,11 +165,14 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                     'placeholder' => 'bevorzugt eine Funktionsadresse (z.B. epaybl@musterkommune.de)',
                 ],
                 //'help' => 'bevorzugt eine Funktionsadresse',
-            ])
-            ->end();
+            ]);
+
+        $this->addGroupEmailFormField($formMapper, true);
+        $formMapper->end();
         $formMapper
             ->end();
     }
+
     protected function addManagerFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -167,6 +188,39 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('managerNumber', TextType::class, [
                 'required' => false,
             ])*/
+            ->add('cashRegisterPersonalAccountNumber', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'kann von ePayBL zur Verfügung gestellt werden',
+                ],
+            ])
+            ->add('lengthReceiptNumber', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Bspw. 12 Zeichen',
+                ],
+            ])
+            ->add('cashRegisterCheckProcedureStatus', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('lengthFirstAccountAssignmentInformation', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Bspw. 12 Zeichen',
+                ],
+            ])
+            ->add('contentFirstAccountAssignmentInformation', TextareaType::class, [
+                'required' => false,
+            ])
+            ->add('lengthSecondAccountAssignmentInformation', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Bspw. 12 Zeichen',
+                ],
+            ])
+            ->add('contentSecondAccountAssignmentInformation', TextareaType::class, [
+                'required' => false,
+            ])
             ->add('budgetOffice', TextType::class, [
                 'required' => false,
                 'attr' => [
@@ -177,12 +231,6 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Sachkonto',
-                ],
-            ])
-            ->add('cashRegisterPersonalAccountNumber', TextType::class, [
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'kann von ePayBL zur Verfügung gestellt werden',
                 ],
             ])
             ->add('indicatorDunningProcedure', TextType::class, [
@@ -210,27 +258,6 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('applicationName', TextType::class, [
                 'required' => false,
                 'disabled' => true
-            ])
-            ->add('lengthReceiptNumber', TextType::class, [
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Bspw. 12 Zeichen',
-                ],
-            ])
-            ->add('cashRegisterCheckProcedureStatus', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add('lengthFirstAccountAssignmentInformation', TextType::class, [
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Bspw. 12 Zeichen',
-                ],
-            ])
-            ->add('lengthSecondAccountAssignmentInformation', TextType::class, [
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Bspw. 12 Zeichen',
-                ],
             ]);
         /*
         ->add('testIpAddress', TextType::class, [
@@ -247,17 +274,19 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
         $this->configureFormGroups($formMapper);
         $this->addMandatorFormFields($formMapper);
         $formMapper
-            ->tab('Provider')
-            /*->with('payment_provider')
-            ->add('paymentProvider', UrlType::class, [
+            ->tab('Provider');
+        /*->with('payment_provider')
+        ->add('paymentProvider', UrlType::class, [
+            'required' => false,
+            'disabled' => true,
+        ])
+        ->end()*/
+        $formMapper
+            ->with('account');
+        $formMapper
+            ->add('paymentProviderAccountId', TextType::class, [
                 'required' => false,
-                'disabled' => true,
             ])
-            ->end()*/
-            ->with('account')
-                ->add('paymentProviderAccountId', TextType::class, [
-                    'required' => false,
-                ])
             ->end()
             ->with('project_group')
             ->add('projects', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
@@ -289,6 +318,36 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ])
             ->end()
             ->end();
+        $formMapper
+            ->tab('Services')
+            ->with('epayment_services')
+            ->add('epaymentServices', CollectionType::class, [
+                'label' => false,
+                'type_options' => [
+                    'delete' => true,
+                ],
+                'by_reference' => false,
+            ], [
+                'edit' => 'inline',
+                'inline' => 'natural',
+                'sortable' => 'position',
+                'ba_custom_hide_fields' => ['epayment'],
+            ])
+            ->end()
+            ->end();
+    }
+
+    protected function configureListFields(ListMapper $listMapper)
+    {
+        $listMapper
+            ->addIdentifier('commune', null, [
+                'admin_code' => CommuneAdmin::class,
+            ]);
+        $this->addServiceProvidersListFields($listMapper, 'paymentOperator');
+        $listMapper
+            ->add('modifiedAt');
+        $this->addListStatusField($listMapper);
+        $this->addOnboardingDefaultListActions($listMapper);
     }
 
     /**
@@ -304,6 +363,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('paymentUser')
             ->add('projects')
             ->add('mandatorEmail')
+            ->add('groupEmail')
             ->add('testIpAddress')
             ->add('clientNumberIntegration')
             ->add('clientNumberProduction')

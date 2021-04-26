@@ -31,6 +31,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
@@ -92,6 +93,9 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         ]);
         $this->addOrganisationOneToOneFormFields($formMapper);
         $formMapper->add('shortName', TextType::class, [
+            'required' => false,
+        ]);
+        $formMapper->add('enablePaymentProvider', CheckboxType::class, [
             'required' => false,
         ]);
         $formMapper->end();

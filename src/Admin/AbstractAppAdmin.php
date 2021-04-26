@@ -12,9 +12,13 @@
 namespace App\Admin;
 
 
+use App\DependencyInjection\InjectionTraits\InjectEventDispatcherTrait;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\CustomEntityLabelInterface;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SortableEntityInterface;
+use App\EventSubscriber\EntityPostCreateEvent;
+use App\EventSubscriber\EntityPostUpdateEvent;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -32,6 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
 {
     use AdminTranslatorStrategyTrait;
+    use InjectEventDispatcherTrait;
 
     /**
      * Label for the default show group header
@@ -234,5 +239,27 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
             $this->accessMapping['move'] = 'EDIT';
         }
         return parent::getAccessMapping();
+    }
+
+    /**
+     * @param object $object
+     */
+    public function postUpdate($object)
+    {
+        if (null !== $this->eventDispatcher && $object instanceof BaseEntityInterface) {
+            $postUpdateEvent = new EntityPostUpdateEvent($this, $object);
+            $this->eventDispatcher->dispatch($postUpdateEvent);
+        }
+    }
+
+    /**
+     * @param object $object
+     */
+    public function postPersist($object)
+    {
+        if (null !== $this->eventDispatcher && $object instanceof BaseEntityInterface) {
+            $postUpdateEvent = new EntityPostCreateEvent($this, $object);
+            $this->eventDispatcher->dispatch($postUpdateEvent);
+        }
     }
 }

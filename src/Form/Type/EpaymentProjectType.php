@@ -26,7 +26,7 @@ class EpaymentProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('providerType', ChoiceType::class, [
-            'label' => 'app.epayment.entity.projects.provider_type',
+            'label' => 'app.epayment.entity.project_properties.provider_type',
             'choices' => EpaymentProject::$providerTypeChoices,
             'disabled' => true,
             'row_attr' => [
@@ -34,7 +34,7 @@ class EpaymentProjectType extends AbstractType
             ],
         ]);
         $builder->add('projectEnvironment', ChoiceType::class, [
-            'label' => 'app.epayment.entity.projects.project_environment',
+            'label' => 'app.epayment.entity.project_properties.project_environment',
             'choices' => EpaymentProject::$projectEnvironmentChoices,
             'disabled' => true,
             'row_attr' => [
@@ -42,14 +42,14 @@ class EpaymentProjectType extends AbstractType
             ],
         ]);
         $builder->add('projectId', TextType::class, [
-            'label' => 'app.epayment.entity.projects.project.id',
+            'label' => 'app.epayment.entity.project_properties.project.id',
             'required' => false,
             'row_attr' => [
                 'class' => 'form-group-col',
             ],
         ]);
         $builder->add('projectPassword', TextType::class, [
-            'label' => 'app.epayment.entity.projects.project.password',
+            'label' => 'app.epayment.entity.project_properties.project.password',
             'required' => false,
             'row_attr' => [
                 'class' => 'form-group-col',

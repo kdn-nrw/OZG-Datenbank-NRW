@@ -11,23 +11,15 @@
 
 namespace App\Twig\Extension;
 
-use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
-use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\MetaData\MetaItem;
 use App\Entity\MetaData\MetaItemProperty;
-use App\Util\SnakeCaseConverter;
-use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use App\Service\MetaData\InjectMetaDataManagerTrait;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class EntityMetaDataExtension extends AbstractExtension
 {
-    use InjectManagerRegistryTrait;
-
-    /**
-     * @var array|MetaItem[]
-     */
-    protected $metaCache = [];
+    use InjectMetaDataManagerTrait;
 
     /**
      * Returns a list of functions to add to the existing list.
@@ -79,20 +71,7 @@ class EntityMetaDataExtension extends AbstractExtension
      */
     public function getObjectClassMetaData($objectOrClass): ?MetaItem
     {
-        $objectClassName = is_object($objectOrClass) ? get_class($objectOrClass) : $objectOrClass;
-        $metaKey = SnakeCaseConverter::classNameToSnakeCase($objectClassName);
-        if (!array_key_exists($metaKey, $this->metaCache)) {
-            $metaItem = null;
-            if (is_a($objectClassName, HasMetaDateEntityInterface::class, true)) {
-                $em = $this->getEntityManager();
-                /** @var ModelManager $modelManager */
-                $repository = $em->getRepository(MetaItem::class);
-                $metaItem = $repository->findOneBy(['metaKey' => $metaKey]);
-                /** @var MetaItem|null $metaItem */
-            }
-            $this->metaCache[$metaKey] = $metaItem;
-        }
-        return $this->metaCache[$metaKey];
+        return $this->metaDataManager->getObjectClassMetaData($objectOrClass);
     }
 
     /**

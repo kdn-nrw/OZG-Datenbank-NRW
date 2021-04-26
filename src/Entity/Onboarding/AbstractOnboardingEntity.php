@@ -73,7 +73,8 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
 
     /**
      * @ORM\Column(type="string", name="group_email", length=255, nullable=true)
-     * @var string|null     */
+     * @var string|null
+     */
     protected $groupEmail;
 
     public const STATUS_NEW = 0;
@@ -384,11 +385,12 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     }
 
     /**
+     * @param bool $fallbackToDefault
      * @return string|null
      */
-    public function getGroupEmail(): ?string
+    public function getGroupEmail($fallbackToDefault = false): ?string
     {
-        if (null === $this->groupEmail && $mainCommuneEmail = $this->commune->getMainEmail()) {
+        if ($fallbackToDefault && null === $this->groupEmail && $mainCommuneEmail = $this->commune->getMainEmail()) {
             $mailParts = explode('@', $mainCommuneEmail);
             return 'epaybl@' . $mailParts[1];
         }

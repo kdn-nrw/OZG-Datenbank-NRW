@@ -17,8 +17,11 @@ use App\Admin\CustomFieldAdminInterface;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\DependencyInjection\InjectionTraits\InjectSecurityTrait;
+use App\Entity\MetaData\MetaItemProperty;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\User;
+use App\Service\MetaData\InjectMetaDataManagerTrait;
+use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -33,6 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements CustomFieldAdminInterface
 {
+    use InjectMetaDataManagerTrait;
     use InjectManagerRegistryTrait;
     use InjectSecurityTrait;
 
@@ -70,17 +74,58 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         $formMapper->end();
     }
 
+    public function getFormBuilder()
+    {
+        $formBuilder = parent::getFormBuilder();
+        $metaItem = $this->metaDataManager->getObjectClassMetaData($this->getClass());
+        if (null === $metaItem) {
+            return $formBuilder;
+        }
+
+        $data = [
+            MetaItemProperty::META_TYPE_GROUP => $this->getFormGroups(),
+            MetaItemProperty::META_TYPE_TAB => $this->getFormTabs()
+        ];
+        foreach ($data as $metaType => &$metaTypeData) {
+            if (empty($metaTypeData)) {
+                continue;
+            }
+            foreach ($metaTypeData as $name => &$options) {
+                $groupKey = SnakeCaseConverter::camelCaseToSnakeCase(str_replace('.', '_', $name));
+                $metaKey = $metaType . '_' . $groupKey;
+                $property = $metaItem->getMetaItemProperty($metaKey);
+                if (null !== $property) {
+                    $description = $property->getDescription();
+                    if ($options['label'] !== false && $labelKey = $property->getLabelKey()) {
+                        $options['label'] = $this->trans($labelKey);
+                        $options['translation_domain'] = false;
+                    }
+                    if ($description) {
+                        $options['description'] = $description;
+                    }
+                }
+            }
+            unset($options);
+        }
+        unset($metaTypeData);
+        $this->setFormGroups($data[MetaItemProperty::META_TYPE_GROUP]);
+        $this->setFormTabs($data[MetaItemProperty::META_TYPE_TAB]);
+
+        return $formBuilder;
+    }
+
     /**
      * Adds the group email form field (if access to field is granted)
      *
      * @param FormMapper $formMapper
+     * @param bool $useCustomLabel
      */
-    protected function addGroupEmailFormField(FormMapper $formMapper): void
+    protected function addGroupEmailFormField(FormMapper $formMapper, $useCustomLabel = false): void
     {
         if ($this->isGranted('ALL', $this->getSubject())) {
             $formMapper
-                ->add('mainEmail', EmailType::class, [
-                    'label' => 'app.abstract_onboarding_entity.entity.group_email',
+                ->add('groupEmail', EmailType::class, [
+                    'label' => 'app.abstract_onboarding_entity.entity.group_email' . ($useCustomLabel ? '_custom' : ''),
                     'required' => false,
                 ]);
         }
@@ -116,7 +161,19 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
             ->addIdentifier('commune', null, [
                 'admin_code' => CommuneAdmin::class,
             ])
-            ->add('modifiedAt')
+            ->add('modifiedAt');
+        $this->addListStatusField($listMapper);
+        $this->addOnboardingDefaultListActions($listMapper);
+    }
+
+    /**
+     * Adds the list status field
+     *
+     * @param ListMapper $listMapper
+     */
+    protected function addListStatusField(ListMapper $listMapper): void
+    {
+        $listMapper
             ->add('status', 'choice', [
                 'label' => 'app.commune_info.entity.status',
                 'template' => 'Onboarding/list-status.html.twig',
@@ -124,9 +181,22 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
                 'choices' => AbstractOnboardingEntity::$statusChoices,
                 //'catalogue' => 'SonataAdminBundle',
             ]);
+    }
+
+    /**
+     * Adds the default list actions to the list mapper
+     *
+     * @param ListMapper $listMapper
+     * @param array|null $extraActions
+     */
+    protected function addOnboardingDefaultListActions(ListMapper $listMapper, ?array $extraActions = null): void
+    {
         $securityHandler = $this->getSecurityHandler();
         if (null !== $securityHandler) {
-            $extraActions = [
+            if (null === $extraActions) {
+                $extraActions = [];
+            }
+            $extraActions = array_merge([
                 'showQuestions' => [
                     'template' => 'Onboarding/Inquiry/action_show_inquiries.html.twig',
                     'route' => 'showQuestions',
@@ -138,9 +208,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
                     'route' => 'askQuestion',
                     //'permission' => sprintf($baseRole, 'LIST')
                 ],
-            ];
-        } else {
-            $extraActions = null;
+            ], $extraActions);
         }
         $this->addDefaultListActions($listMapper, $extraActions);
     }

@@ -64,6 +64,13 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
      */
     protected $epayment;
 
+    /**
+     * @var ServiceAccount|null
+     * @ORM\OneToOne(targetEntity="App\Entity\Onboarding\ServiceAccount", inversedBy="paymentUser", cascade={"persist"})
+     * @ORM\JoinColumn(name="service_account_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    protected $serviceAccount;
+
     use PersonPropertiesTrait;
     use ContactPropertiesTrait;
 
@@ -100,8 +107,9 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
             $this->communeInfo = $onboarding;
         } elseif ($onboarding instanceof Epayment) {
             $this->epayment = $onboarding;
+        } elseif ($onboarding instanceof ServiceAccount) {
+            $this->serviceAccount = $onboarding;
         }
-
     }
 
     /**
@@ -160,6 +168,30 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
             $labelKey = 'app.commune_info.entity.contact_default';
         }
         return $labelKey;
+    }
+
+    /**
+     * @return CommuneInfo|null
+     */
+    public function getCommuneInfo(): ?CommuneInfo
+    {
+        return $this->communeInfo;
+    }
+
+    /**
+     * @return Epayment|null
+     */
+    public function getEpayment(): ?Epayment
+    {
+        return $this->epayment;
+    }
+
+    /**
+     * @return ServiceAccount|null
+     */
+    public function getServiceAccount(): ?ServiceAccount
+    {
+        return $this->serviceAccount;
     }
 
     public function calculateCompletionRate(): int

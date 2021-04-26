@@ -257,6 +257,7 @@ sonata_admin:
                     - App\Admin\Onboarding\ServiceAccountAdmin
                     - App\Admin\Onboarding\DataclearingAdmin
                     - App\Admin\Onboarding\InquiryAdmin
+                    - App\Admin\Onboarding\OnboardingServiceAdmin
             app_admin.menu.basic:
                 label: app.menu.basic_group
                 label_catalogue: messages
@@ -279,6 +280,7 @@ sonata_admin:
                     - App\Admin\Api\ApiConsumerAdmin
                     - App\Admin\MetaData\MetaItemAdmin
                     - App\Admin\Configuration\CustomFieldAdmin
+                    - App\Admin\Configuration\EmailTemplateAdmin
                     #- shapecode_cron.cronjob
                     #- shapecode_cron.cronjob_result
 

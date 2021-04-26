@@ -14,7 +14,6 @@ namespace App\Entity\StateGroup;
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -40,6 +39,13 @@ class AdministrativeDistrict extends BaseNamedEntity
      * @ORM\OneToMany(targetEntity="App\Entity\StateGroup\Commune", mappedBy="administrativeDistrict", cascade={"all"})
      */
     private $communes;
+
+    /**
+     * @var ServiceProvider|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\ServiceProvider", cascade={"persist"})
+     * @ORM\JoinColumn(name="payment_operator_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $paymentOperator;
 
     public function __construct()
     {
@@ -104,5 +110,21 @@ class AdministrativeDistrict extends BaseNamedEntity
     public function setCommunes($communes): void
     {
         $this->communes = $communes;
+    }
+
+    /**
+     * @return ServiceProvider|null
+     */
+    public function getPaymentOperator(): ?ServiceProvider
+    {
+        return $this->paymentOperator;
+    }
+
+    /**
+     * @param ServiceProvider|null $paymentOperator
+     */
+    public function setPaymentOperator(?ServiceProvider $paymentOperator): void
+    {
+        $this->paymentOperator = $paymentOperator;
     }
 }

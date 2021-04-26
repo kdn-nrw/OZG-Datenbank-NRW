@@ -38,6 +38,10 @@ class OnboardingContactType extends AbstractType
             $builder->add('externalUserName', TextType::class, [
                 'label' => 'app.epayment.entity.payment_user_username',
                 'required'    => false,
+                'attr' => [
+                    'placeholder' => 'app.epayment.entity.payment_user_username_placeholder',
+                    'maxlength' => 20,
+                ],
             ]);
         }
         $calcProperties[] = 'externalUserName';

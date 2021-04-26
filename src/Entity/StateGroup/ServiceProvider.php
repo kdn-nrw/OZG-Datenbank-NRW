@@ -92,6 +92,13 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      */
     private $securityIncidents;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="enable_payment_provider", type="boolean", nullable=true)
+     */
+    protected $enablePaymentProvider = false;
+
     public function __construct()
     {
         $this->communes = new ArrayCollection();
@@ -356,6 +363,22 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
             }
         }
         return $manufacturers;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnablePaymentProvider(): bool
+    {
+        return (bool) $this->enablePaymentProvider;
+    }
+
+    /**
+     * @param bool|null $enablePaymentProvider
+     */
+    public function setEnablePaymentProvider(?bool $enablePaymentProvider): void
+    {
+        $this->enablePaymentProvider = (bool) $enablePaymentProvider;
     }
 
 }

@@ -192,6 +192,7 @@ app:
       name: Name
       description: Beschreibung
       communes: Kommunen
+      payment_operator: 'ePayBL-Betreiber'
   application:
     object_name: Anwendung
     list: Anwendungen
@@ -306,7 +307,8 @@ app:
     list: Onboarding Allgemein
     create: Onboarding erfassen
     entity:
-      group_email: Funktionsadresse
+      group_email: E-Mail-Adresse für Onboarding-Rückfragen
+      group_email_custom: '[Optional/falls abweichend] E-Mail-Adresse für Onboarding-Rückfragen'
   commune_info:
     object_name: Basisdaten
     list: Onboarding Basisdaten
@@ -350,6 +352,7 @@ app:
       accessibility: Barrierefreiheitserklärung
       image_file: Logo
       opening_hours: Öffnungszeiten
+      group_email: E-Mail-Adresse für Onboarding-Rückfragen
   dataclearing:
     object_name: Dataclearing
     list: Onboarding Dataclearing
@@ -375,17 +378,23 @@ app:
       mandator: Kundenmandant
       provider: Zahlungsverkehrsprovider
       provider_description: '<p>Die Abwicklung von Zahlungen im ePayment erfolgt i.A. über einen Zahlungsverkehrsprovider. Ihre Kommune muss dazu einen eigenen Vertrag mit einem ZV-Provider abschließen, über den die Nutzung einer oder mehrerer Schnittstellen gewährt wird. Beim Kommunalportal.NRW ist die Girocheckout-Schnittstelle vorgegeben.</p>
-        <p>Die Kommunen in NRW können hierfür den bestehenden ZV-Provider-Rahmenvertrag der Entwicklergemeinschaft (EG) ePayBL nutzen. Die EG ePayBL hat ein abgestimmtes Verfahren zum Vertragsbeitritt entwickelt:</p>
+        <p>Die Kommunen in NRW müssen hierfür den bestehenden ZV-Provider-Rahmenvertrag der Entwicklergemeinschaft (EG) ePayBL nutzen.</p>
+        <p>Bei der Nutzung von Girocheckout werden zuerst auf dem Girocheckout-Server sogenannte Projekte angelegt . Ein Projekt entspricht dabei einer Zahlart. Das Projekt bekommt beim Anlegen eine Nummer (sog. Projekt-ID), die durch Girocheckout erzeugt wird. Zur Nummer ist durch den Kunden ein Projektkennwort (Projekt-Password) zu erstellen.</p>
+        <p>Hinweis: beim Anlegen der Projekte werden diese Standardmäßig auf „Test“ gestellt. Die Projekte müssen im GiroCockpit (https://www.girocockpit.de/) auf „live“ (d.h. produktiv) geschaltet werden. Erst dann werden Zahlungen auch „in Echt“ durchgeführt. Hier müssen nur Projekte bei Zahlverfahren angegeben werden, die auch später genutzt werden sollen. Bitte erstellen Sie je gewünschter Zahlart ein Projekt für Produktion und für Integration (Testzwecke):</p>
         <p><a href="https://fs.egov.sachsen.de/formserv/findform?shortname=sid_antrag_zvp&formtecid=2&areashortname=SMI_SID" target="_blank">https://fs.egov.sachsen.de/formserv/findform?shortname=sid_antrag_zvp&formtecid=2&areashortname=SMI_SID</a></p>'
       manager: Bewirtschafter
-      manager_description: '<p>Der „Bewirtschafter“ stellt das Gegenstück zum Online-Angebot dar. Er wird durch den Kunden eingerichtet. Wichtig ist, dass die Geldeingänge letztlich korrekt verbucht werden können.</p>
-          <p>Hier wird die Einrichtung eines Bewirtschafters exemplarisch dargestellt. Bewirtschafter werden auf dem Testsystem sowie auf dem Produktivsystem jeweils separat eingerichtet.</p>
+      manager_description: '<p>Der „Bewirtschafter“ stellt das Gegenstück zum Online-Angebot dar. In ihm werden u.a. Einstellungen zur Prüfung der Kontierung vorgenommen, damit letztlich die Geschäftsvorfälle korrekt verbucht werden können.</p>
           <p>Damit ein Fachverfahren mit ePayBL einen Bezahlvorgang durchführen kann, sind grundsätzlich folgende Informationen im Online-Angebot zu konfigurieren:</p>'
       custom_fields: Weitere Daten
+      services: Dienste
     actions:
       ask_question: Frage stellen
       show_questions: Rückfragen
     groups:
+      provider_account: Zahlungsverkehrsprovider Account
+      provider_project_group: Zahlungsverkehrsprovider Projekte
+      manager_manager_info: Bewirtschafter
+      testsystem_activation_system: Testsystem
       general: Basisdaten
       general_description: '<p>Für die Durchführung eines Online-Bezahlvorgangs im Sinne des eGoverments stellt die elektronische Bezahlplattform ePayBL vermittelnde Funktionen zur Verfügung. Um die Funktionalität ausüben zu können, sind bestimmte Informationen in der ePayBL zu hinterlegen. Dazu füllen Sie bitte die Felder mit den Informationen Ihrer Kommune.</p><p>ePayBL stellt als Middelware den Kontakt zwischen einem Online-Angebot, Zahlungsverkehrs-Providern (ZV-Provider) sowie den jeweils im Einsatz befindlichen Finanzsystemen des Kunden her. Somit kann ein Online-Bezahlvorgang in Gänze abgebildet werden. ePayBL stellt zur Abgrenzung keine Funktionen einer Finanzbuchhaltung zur Verfügung und ist somit auch kein System zur Durchführung der Finanzbuchhaltung im Sinne §93 GO NRW.</p>'
       payment_provider: Zahlunsgverkehrsprovider
@@ -409,6 +418,7 @@ app:
       activation_system: Testsystem
       activation_system_description: 'Für das Produktivsystem ist keine separate Freischaltung in den Netzen des Betreibers notwendig. Das Integrationssystem steht dem Kunden als Testsystem zur Verfügung. Es kann über die URLs <a href="https://epay2.stadt-koeln.de/portal" target="_blank">https://epay2.stadt-koeln.de/portal</a> erreicht werden. Hierfür müssen entsprechende Freischaltungen eingerichtet werden.<br><br>Der Kunde teilt hierzu der Kundenbetreuung seine Ausgangs-IP mit. Diese kann vom Kunden bspw. über <a href="http://www.wieistmeineip.de" target="_blank">http://www.wieistmeineip.de</a> ermittelt werden.'
       admin_account: Einrichtung dezentraler Admin
+      epayment_services: Dienste
     entity:
       description: Beschreibung
       commune: Name des Mandanten
@@ -428,11 +438,14 @@ app:
       custom_values: Benutzerdefinierte Werte
       payment_provider_account_id: 'Account-ID externer Zahlungsverkehrsprovider'
       payment_provider: 'Zahlungsverkehrsprovider'
+      payment_operator: 'ePayBL-Betreiber'
       payment_user: Benutzer
       payment_user_username: Benutzerkennung
+      payment_user_username_placeholder: max. 20 Zeichen
       mandator_email: E-Mail
       test_ip_address: IP-Adresse die Zugreifen muss
-      projects:
+      projects: Projekte
+      project_properties:
         project:
           id: Projekt-ID
           password: Projekt-Password
@@ -458,10 +471,40 @@ app:
       manager_no: Bewirtschafter-Nr.
       application_name: Name
       length_receipt_number: Länge des Kassenzeichens
-      cash_register_check_procedure_status: Kassenzeichenprüfverfahren
+      cash_register_check_procedure_status: Kassenzeichenprüfverfahren aktiv
       length_first_account_assignment_information: Länge Erste Kontierungsangabe
+      content_first_account_assignment_information: Inhalt/Bedeutung der ersten Kontierungsangabe
       length_second_account_assignment_information: Länge zweite Kontierungsangabe
-
+      content_second_account_assignment_information: Inhalt/Bedeutung der zweiten Kontierungsangabe
+      group_email: E-Mail-Adresse für Onboarding-Rückfragen
+  onboarding_service:
+    object_name: Onboarding Dienst
+    list: Onboarding Dienste
+    create: Onboarding Dienst erfassen
+    entity:
+      name: Name
+      url: URL
+  epayment_service:
+    object_name: Onboarding ePayBL Dienst
+    list: Onboarding ePayBL Dienste
+    list_services: Dienste
+    list_services_status: Status der Dienste im ePayBL/Eintrag
+    create: Onboarding ePayBL Dienst anlegen
+    groups:
+      general: Basisdaten
+      optional: Optional Daten
+      optional_description: '<p>Folgende Angaben sind optional und werden nur in der XFinanz-Datei mit übergeben (vgl. Tooltipps). Sie sind nicht in den Berichten der ePayBL sichtbar:</p>'
+    entity:
+      service: Dienst
+      epayment: ePayBL
+      booking_text: Buchungstext
+      description: Beschreibung der Buchungsliste
+      value_first_account_assignment_information: Wert der ersten Kontierungsangabe
+      value_second_account_assignment_information: Wert der zweiten Kontierungsangabe
+      cost_unit: Kostenstelle kst
+      payers: Kostenträger anst
+      product_description: Produktbeschreibung/CO-Kontierungssatz psp
+      tax_number: Steuer-Kennzeichen stsl
   service_account:
     object_name: Servicekonto
     list: Onboarding Servicekonten
@@ -469,9 +512,27 @@ app:
     actions:
       ask_question: Frage stellen
       show_questions: Rückfragen
+    tabs:
+      general: Kontakt
+      general_description: Kontaktdaten Servicekonto
+      mandator: Mandant Servicekonto
+    groups:
+      general: Kontakt
+      mandator_email: Kontakt E-Mail des Mandanten
+      mandator_email_description: 'Über die Mailadresse werden wichtige Informationen u.a. bzgl. Wartungsarbeiten oder ggf. Informationen zu Verträgen mit Zahlungsverkehrsdienstleistern kommuniziert.'
+      activation_system: Testsystem
+      activation_system_description: 'Für das Produktivsystem ist keine separate Freischaltung in den Netzen des Betreibers notwendig. Das Integrationssystem steht dem Kunden als Testsystem zur Verfügung. Es kann über die URLs <a href="https://epay2.stadt-koeln.de/portal" target="_blank">https://epay2.stadt-koeln.de/portal</a> erreicht werden. Hierfür müssen entsprechende Freischaltungen eingerichtet werden.<br><br>Der Kunde teilt hierzu der Kundenbetreuung seine Ausgangs-IP mit. Diese kann vom Kunden bspw. über <a href="http://www.wieistmeineip.de" target="_blank">http://www.wieistmeineip.de</a> ermittelt werden.'
+      admin_account: Einrichtung dezentraler Admin
     entity:
       description: Beschreibung
       commune: Kommune
+      commune_name: Kommune
+      official_commune_key: Amtlicher Gemeindeschlüssel
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      email: E-Mail-Adresse
+      phone_number: Telefon
       modified_at: Letzter Eintrag
       status: Status
       status_choices:
@@ -479,6 +540,24 @@ app:
         incomplete: Unvollständig
         complete: Vollständig
       custom_values: Benutzerdefinierte Werte
+      payment_provider_account_id: 'Account-ID externer Zahlungsverkehrsprovider'
+      payment_provider: 'Zahlungsverkehrsprovider'
+      payment_operator: 'Servicekonto-Betreiber'
+      payment_user: Benutzer
+      payment_user_username: Benutzerkennung
+      payment_user_username_placeholder: max. 20 Zeichen
+      mandator_email: E-Mail
+      answer_url1: Antwort URL 1
+      answer_url2: Antwort URL 2
+      client_id: Client ID
+      client_id_placeholder: wird von Servicekonto Betreiber ausgefüllt
+      client_password: Client Passwort
+      client_password_placeholder: wird von Servicekonto Betreiber ausgefüllt
+      account_mandator_state: 'Hat die Kommune bereits einen Servicekonto.NRW Mandanten?'
+      account_mandator_state_choices:
+        choose: Bitte wählen
+        yes: Ja, die Kommune hat bereits einen Servicekonto.NRW Mandanten
+        no: Nein, die Kommune hat noch keinen Servicekonto.NRW Mandanten
   inquiry:
     object_name: Rückfrage
     list: Onboarding Rückfragen
@@ -545,6 +624,16 @@ app:
         female: Frau
         other: Andere
         unknown: n.a.
+      email_greeting_choices:
+        male: Sehr geehrter Herr
+        female: Sehr geehrte Frau
+        other: Guten Tag
+        unknown: Sehr geehrte Damen und Herren
+      email_greeting_personal_choices:
+        male: Hallo
+        female: Hallo
+        other: Guten Tag
+        unknown: Hallo
       title: Titel
       first_name: Vorname
       last_name: Nachname
@@ -621,6 +710,28 @@ app:
     entity:
       name: Name
       description: Beschreibung
+  email_template:
+    object_name: E-Mail Vorlage
+    list: E-Mail Vorlagen
+    create: E-Mail Vorlage anlegen
+    groups:
+      general: Allgemein
+      content: Inhalt
+    entity:
+      template_key: Typ
+      template_key_choices:
+        service_account_update: 'Onboarding Service-Konto - Update'
+        commune_info_update: 'Onboarding Basisdaten - Update'
+        epayment_update: 'Onboarding ePayBL - Update'
+      hidden: Deaktiviert?
+      reply_to_email: Antwort an
+      default_recipient: Empfänger (Standard)
+      sender_email: Absender E-Mail
+      sender_name: Absender Name
+      description: Beschreibung
+      subject: Betreff
+      body: Inhalt
+      cc_addresses: CC (kommasepariert)
   federal_information_management_type:
     object_name: Föderales Informationsmanagement (FIM)
     list: Föderales Informationsmanagement
@@ -868,6 +979,8 @@ app:
         entity: Datentyp
         field: Datenfeld  (gehört zum ausgewählten Datentyp)
         custom_field: Sonstiges Feld (aus anderen Datenquellen)
+        tab: Formular-Tabs
+        group: Formular-Gruppe
       meta_key: Datentyp
   meta_item_property:
     object_name: Meta-Eigenschaft
@@ -1219,6 +1332,7 @@ app:
       manufacturers: Hersteller
       laboratories: Stichwörter
       security_incidents: Sicherheitsvorfälle
+      enable_payment_provider: 'Dieser IT Dienstleister ist ein ePayBl-Betreiber'
   service_solution:
     object_name: Lösung für Leistung
     list: Lösung für Leistung

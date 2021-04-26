@@ -198,11 +198,11 @@ class CommuneInfo extends AbstractOnboardingEntity
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      *
      * @return Contact|null
      */
-    public function getContactByType($type): ?Contact
+    public function getContactByType(?string $type = null): ?Contact
     {
         $collection = $this->getContacts();
         foreach ($collection as $contact) {

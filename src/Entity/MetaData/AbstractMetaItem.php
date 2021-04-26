@@ -24,6 +24,8 @@ abstract class AbstractMetaItem extends BaseEntity implements CustomEntityLabelI
     public const META_TYPE_ENTITY = 'entity';
     public const META_TYPE_FIELD = 'field';
     public const META_TYPE_ADMIN_FIELD = 'admin_field';
+    public const META_TYPE_TAB = 'tab';
+    public const META_TYPE_GROUP = 'group';
 
     public const META_TYPES = [
         MetaItem::META_TYPE_ENTITY => 'app.meta_item.entity.meta_type_choices.entity',

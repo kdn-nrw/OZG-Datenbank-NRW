@@ -182,7 +182,10 @@ class AdminManager
     public function getAdminByEntityClass(string $entityClass): ?AdminInterface
     {
         $adminClass = $this->getAdminClassForEntityClass($entityClass);
-        return $this->getAdminInstance($adminClass);
+        if ($adminClass) {
+            return $this->getAdminInstance($adminClass);
+        }
+        return null;
     }
 
     /**

@@ -11,6 +11,7 @@
 
 namespace App\Service\MetaData;
 
+use App\Admin\Onboarding\AbstractOnboardingAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\MetaData\AbstractMetaItem;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
@@ -23,6 +24,7 @@ use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MetaDataManager
@@ -30,6 +32,11 @@ class MetaDataManager
     use InjectAdminManagerTrait;
     use InjectManagerRegistryTrait;
     use TranslatorAwareTrait;
+
+    /**
+     * @var array|MetaItem[]
+     */
+    protected $metaCache = [];
 
     /**
      * MetaItemAdminController constructor.
@@ -111,6 +118,47 @@ class MetaDataManager
                 /** @var AbstractAdmin $admin */
                 $this->addFieldDescriptions($metaItem, $admin->getList(), $entityPropertyNames);
                 $this->addFieldDescriptions($metaItem, $admin->getShow(), $entityPropertyNames);
+                if ($admin instanceof AbstractOnboardingAdmin) {
+                    $this->addFormGroupsAndTabs($metaItem, $admin);
+                }
+            }
+        }
+    }
+
+    protected function addFormGroupsAndTabs(MetaItem $metaItem, AbstractAdmin $admin)
+    {
+        $em = $this->getEntityManager();
+        $admin->getFormBuilder();
+        $data = [
+            MetaItemProperty::META_TYPE_GROUP => $admin->getFormGroups(),
+            MetaItemProperty::META_TYPE_TAB => $admin->getFormTabs()
+        ];
+        foreach ($data as $metaType => $metaTypeData) {
+            if (empty($metaTypeData)) {
+                continue;
+            }
+            foreach ($metaTypeData as $name => $options) {
+                $groupKey = SnakeCaseConverter::camelCaseToSnakeCase(str_replace('.', '_', $name));
+                $metaKey = $metaType . '_' . $groupKey;
+                $property = $metaItem->getMetaItemProperty($metaKey);
+                $label = $options['label'];
+                if (!$label && $itemLabel = $metaItem->getInternalLabel()) {
+                    $label = str_replace('.list', '', $itemLabel)
+                        . '.' . $metaType . 's.' . str_replace('.', '_', $groupKey);
+                }
+                if (null === $property) {
+                    $property = new MetaItemProperty();
+                    $property->setMetaType($metaType);
+                    $property->setMetaKey($metaKey);
+                    $em->persist($property);
+                    $metaItem->addMetaItemProperty($property);
+                }
+                if (!$property->getDescription() && $options['description']) {
+                    $property->setDescription($admin->trans($options['description']));
+                }
+                if ($label && $label !== $property->getInternalLabel()) {
+                    $property->setInternalLabel($label);
+                }
             }
         }
     }
@@ -154,5 +202,28 @@ class MetaDataManager
                 }
             }
         }
+    }
+
+    /**
+     * Returns the meta data for the entity class managed by this admin; returns null if entity has no meta data
+     * @param object|string $objectOrClass
+     * @return MetaItem|null
+     */
+    public function getObjectClassMetaData($objectOrClass): ?MetaItem
+    {
+        $objectClassName = is_object($objectOrClass) ? get_class($objectOrClass) : $objectOrClass;
+        $metaKey = SnakeCaseConverter::classNameToSnakeCase($objectClassName);
+        if (!array_key_exists($metaKey, $this->metaCache)) {
+            $metaItem = null;
+            if (is_a($objectClassName, HasMetaDateEntityInterface::class, true)) {
+                $em = $this->getEntityManager();
+                /** @var ModelManager $modelManager */
+                $repository = $em->getRepository(MetaItem::class);
+                $metaItem = $repository->findOneBy(['metaKey' => $metaKey]);
+                /** @var MetaItem|null $metaItem */
+            }
+            $this->metaCache[$metaKey] = $metaItem;
+        }
+        return $this->metaCache[$metaKey];
     }
 }

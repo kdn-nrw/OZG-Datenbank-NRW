@@ -1056,10 +1056,25 @@ services:
       - ~
       - App\Entity\Onboarding\Epayment
       - ~
+    calls:
+      - [ addChild, [ '@App\Admin\Onboarding\EpaymentServiceAdmin', 'epayment' ] ]
     tags:
       - name: sonata.admin
         manager_type: orm
         label: app.epayment.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Onboarding\EpaymentServiceAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\EpaymentService
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.epayment_service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
@@ -1078,6 +1093,20 @@ services:
         persist_filters: true
     public: true
 
+  App\Admin\Onboarding\OnboardingServiceAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\OnboardingService
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label: app.onboarding_service.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+    public: true
+
   App\Admin\Configuration\CustomFieldAdmin:
     arguments:
       - ~
@@ -1087,6 +1116,21 @@ services:
       - name: sonata.admin
         manager_type: orm
         label: app.custom_field.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Configuration\EmailTemplateAdmin:
+    arguments:
+      - ~
+      - App\Entity\Configuration\EmailTemplate
+      - App\Controller\Configuration\EmailTemplateAdminController
+    calls:
+      - [setTemplate, ['edit', 'EmailTemplate/edit.html.twig']]
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.email_template.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true

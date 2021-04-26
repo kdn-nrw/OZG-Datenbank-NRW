@@ -37,7 +37,7 @@ class DataParser
         return $cleanedValue;//$this->cleanStringValue($cleanedValue);
     }
 
-    public function cleanStringValue(string $value): string
+    public static function cleanStringValue(string $value): string
     {
         $cleanVal = $value;
         $chIn = array('ç', 'ä', 'ü', 'ö', 'Ä', 'Ü', 'Ö', 'ß', 'á', 'à',
@@ -303,7 +303,7 @@ class DataParser
         return strtolower(
             str_replace(['/', ' ', '-', '(', ')', '.', '___', '__'],
                 '_',
-                $this->cleanStringValue($this->formatString(trim($name))))
+                self::cleanStringValue($this->formatString(trim($name))))
         );
     }
 }

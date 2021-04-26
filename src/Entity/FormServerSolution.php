@@ -13,6 +13,8 @@ namespace App\Entity;
 
 use App\Entity\Base\BaseEntity;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Base\SortableEntityInterface;
+use App\Entity\Base\SortableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,8 +24,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ozg_form_servers_solutions")
  */
-class FormServerSolution extends BaseEntity
+class FormServerSolution extends BaseEntity implements SortableEntityInterface
 {
+    use SortableEntityTrait;
 
     /**
      * @var FormServer|null
@@ -31,12 +34,6 @@ class FormServerSolution extends BaseEntity
      * @ORM\JoinColumn(name="form_server_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $formServer;
-
-    /**
-     * @ORM\Column(type="integer", name="position", nullable=true)
-     * @var int
-     */
-    private $position = 0;
 
     /**
      * @var Solution|null
@@ -100,22 +97,6 @@ class FormServerSolution extends BaseEntity
     public function setFormServer(FormServer $formServer): void
     {
         $this->formServer = $formServer;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPosition(): int
-    {
-        return (int) $this->position;
-    }
-
-    /**
-     * @param int|null $position
-     */
-    public function setPosition(?int $position): void
-    {
-        $this->position = (int) $position;
     }
 
     /**

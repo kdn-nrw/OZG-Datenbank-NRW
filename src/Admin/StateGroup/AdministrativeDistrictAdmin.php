@@ -14,6 +14,7 @@ namespace App\Admin\StateGroup;
 
 use App\Admin\AbstractAppAdmin;
 use App\Admin\Traits\CommuneTrait;
+use App\Admin\Traits\ServiceProviderTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -23,6 +24,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AdministrativeDistrictAdmin extends AbstractAppAdmin
 {
+    use ServiceProviderTrait;
+
     protected $baseRoutePattern = 'state/administrative-district';
 
     use CommuneTrait;
@@ -35,6 +38,7 @@ class AdministrativeDistrictAdmin extends AbstractAppAdmin
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
+        $this->addServiceProvidersFormFields($formMapper, 'paymentOperator', 'paymentProvider');
         $formMapper->end();
     }
 

@@ -37,18 +37,18 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface
      * @var array Supported payment provider types
      */
     public static $providerTypeChoices = [
-        'app.epayment.entity.projects.provider_choices.giropay' => self::PROVIDER_TYPE_GIROPAY,
-        'app.epayment.entity.projects.provider_choices.credit' => self::PROVIDER_TYPE_CREDIT_CARD,
-        'app.epayment.entity.projects.provider_choices.paypal' => self::PROVIDER_TYPE_PAYPAL,
-        'app.epayment.entity.projects.provider_choices.paydirekt' => self::PROVIDER_TYPE_PAYDIREKT,
+        'app.epayment.entity.project_properties.provider_choices.giropay' => self::PROVIDER_TYPE_GIROPAY,
+        'app.epayment.entity.project_properties.provider_choices.credit' => self::PROVIDER_TYPE_CREDIT_CARD,
+        'app.epayment.entity.project_properties.provider_choices.paypal' => self::PROVIDER_TYPE_PAYPAL,
+        'app.epayment.entity.project_properties.provider_choices.paydirekt' => self::PROVIDER_TYPE_PAYDIREKT,
     ];
 
     /**
      * @var array Supported project environments
      */
     public static $projectEnvironmentChoices = [
-        'app.epayment.entity.projects.project_environment_choices.sandbox' => self::PROJECT_ENIRONMENT_SANDBOX,
-        'app.epayment.entity.projects.project_environment_choices.production' => self::PROJECT_ENIRONMENT_PRODUCTION,
+        'app.epayment.entity.project_properties.project_environment_choices.sandbox' => self::PROJECT_ENIRONMENT_SANDBOX,
+        'app.epayment.entity.project_properties.project_environment_choices.production' => self::PROJECT_ENIRONMENT_PRODUCTION,
     ];
 
     use HideableEntityTrait;
@@ -203,7 +203,7 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface
     {
         $labelKey = array_search($this->getProviderType(), self::$providerTypeChoices, false);
         if (!$labelKey) {
-            $labelKey = 'app.epayment.entity.projects.provider_choices.giropay';
+            $labelKey = 'app.epayment.entity.project_properties.provider_choices.giropay';
         }
         return $labelKey;
     }

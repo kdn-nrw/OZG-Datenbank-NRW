@@ -14,7 +14,6 @@ namespace App\Entity\MetaData;
 use App\Util\SnakeCaseConverter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -26,9 +25,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class MetaItem extends AbstractMetaItem
 {
-    public const META_TYPES = [
-        MetaItem::META_TYPE_ENTITY => 'app.meta_item.entity.meta_type_choices.entity',
-    ];
 
     /**
      * The meta data type
