@@ -163,6 +163,15 @@ abstract class AbstractMetaItem extends BaseEntity implements CustomEntityLabelI
     }
 
     /**
+     * @return string|null
+     */
+    public function getTypeLabelKey(): ?string
+    {
+        $type = $this->getMetaType();
+        return self::META_TYPES[$type] ?? null;
+    }
+
+    /**
      * Returns the string representation of this item
      * @return string
      */

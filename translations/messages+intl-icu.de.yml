@@ -518,11 +518,13 @@ app:
       mandator: Mandant Servicekonto
     groups:
       general: Kontakt
+      general_general: Kontakt
       mandator_email: Kontakt E-Mail des Mandanten
       mandator_email_description: 'Über die Mailadresse werden wichtige Informationen u.a. bzgl. Wartungsarbeiten oder ggf. Informationen zu Verträgen mit Zahlungsverkehrsdienstleistern kommuniziert.'
       activation_system: Testsystem
       activation_system_description: 'Für das Produktivsystem ist keine separate Freischaltung in den Netzen des Betreibers notwendig. Das Integrationssystem steht dem Kunden als Testsystem zur Verfügung. Es kann über die URLs <a href="https://epay2.stadt-koeln.de/portal" target="_blank">https://epay2.stadt-koeln.de/portal</a> erreicht werden. Hierfür müssen entsprechende Freischaltungen eingerichtet werden.<br><br>Der Kunde teilt hierzu der Kundenbetreuung seine Ausgangs-IP mit. Diese kann vom Kunden bspw. über <a href="http://www.wieistmeineip.de" target="_blank">http://www.wieistmeineip.de</a> ermittelt werden.'
       admin_account: Einrichtung dezentraler Admin
+      mandator_account: Kontakt
     entity:
       description: Beschreibung
       commune: Kommune
@@ -723,7 +725,7 @@ app:
         service_account_update: 'Onboarding Service-Konto - Update'
         commune_info_update: 'Onboarding Basisdaten - Update'
         epayment_update: 'Onboarding ePayBL - Update'
-      hidden: Deaktiviert?
+      hidden: E-Mail-Versand deaktiviert?
       reply_to_email: Antwort an
       default_recipient: Empfänger (Standard)
       sender_email: Absender E-Mail
@@ -977,7 +979,7 @@ app:
       meta_type: Typ
       meta_type_choices:
         entity: Datentyp
-        field: Datenfeld  (gehört zum ausgewählten Datentyp)
+        field: Datenfeld
         custom_field: Sonstiges Feld (aus anderen Datenquellen)
         tab: Formular-Tabs
         group: Formular-Gruppe

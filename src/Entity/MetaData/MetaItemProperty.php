@@ -11,7 +11,6 @@
 
 namespace App\Entity\MetaData;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -76,5 +75,14 @@ class MetaItemProperty extends AbstractMetaItem
             && $mergeItem->getCustomLabel() !== $this->getCustomLabel()) {
             $this->setCustomLabel($mergeItem->getCustomLabel());
         }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTypeLabelKey(): ?string
+    {
+        $type = $this->getMetaType();
+        return self::META_TYPES[$type] ?? null;
     }
 }

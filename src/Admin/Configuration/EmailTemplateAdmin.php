@@ -48,6 +48,7 @@ class EmailTemplateAdmin extends AbstractAppAdmin
                 //'disabled' => true,
             ])
             ->add('hidden', CheckboxType::class, [
+                'label' => 'app.email_template.entity.hidden',
                 'required' => false,
             ])
             ->add('description', TextareaType::class, [
@@ -95,7 +96,9 @@ class EmailTemplateAdmin extends AbstractAppAdmin
             ])
             ->add('subject')
             ->add('defaultRecipient')
-            ->add('hidden');
+            ->add('hidden', null, [
+                'label' => 'app.email_template.entity.hidden',
+            ]);
         $listMapper->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',

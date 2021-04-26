@@ -96,7 +96,11 @@ class FormatCustomDataExtension extends AbstractExtension
     public function getCollectionItemLabel($data): string
     {
         if ($data instanceof CustomEntityLabelInterface) {
-            return $this->translate($data->getLabelKey());
+            $label = $this->translate($data->getLabelKey());
+            if (method_exists($data, 'getTypeLabelKey') && $typeLabelKey = $data->getTypeLabelKey()) {
+                $label = $this->translate($typeLabelKey) . ': ' . $label;
+            }
+            return $label;
         }
         if (null !== $data) {
             return $data . '';
@@ -123,7 +127,7 @@ class FormatCustomDataExtension extends AbstractExtension
         } elseif ($value instanceof \DateTime) {
             $displayValue = str_replace(' 00:00:00', '', date('d.m.Y H:i:s', $value->format('U')));
         } else {
-            $displayValue = (string) $value;
+            $displayValue = (string)$value;
         }
         if ($stripTags) {
             $displayValue = strip_tags($displayValue);
@@ -155,8 +159,8 @@ class FormatCustomDataExtension extends AbstractExtension
     }
 
     /**
-     * @param object|array                 $objectOrArray The object or array to traverse
-     * @param string|PropertyPathInterface $propertyPath  The property path to read
+     * @param object|array $objectOrArray The object or array to traverse
+     * @param string|PropertyPathInterface $propertyPath The property path to read
      * @return mixed|null
      */
     public function getAttributeRecursive($objectOrArray, $propertyPath)
