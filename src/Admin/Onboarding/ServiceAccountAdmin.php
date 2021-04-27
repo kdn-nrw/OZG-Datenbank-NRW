@@ -13,7 +13,6 @@ namespace App\Admin\Onboarding;
 
 
 use App\Admin\StateGroup\CommuneAdmin;
-use App\Admin\Traits\ServiceProviderTrait;
 use App\Entity\Onboarding\ServiceAccount;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
@@ -25,8 +24,6 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class ServiceAccountAdmin extends AbstractOnboardingAdmin
 {
-    use ServiceProviderTrait;
-
     protected $baseRoutePattern = 'onboarding/servicekonto';
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -88,7 +85,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
                 'choices' => ServiceAccount::$accountMandatorChoices,
                 'map' => [
                     1 => [],
-                    2 => ['commune', 'street', 'zipCode', 'town', 'paymentOperator', 'paymentUser', 'mandatorEmail', 'groupEmail'],
+                    2 => ['commune', 'street', 'zipCode', 'town', 'paymentUser', 'mandatorEmail', 'groupEmail'],
                 ],
                 'required' => true,
             ])
@@ -113,7 +110,6 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
                 'required' => false,
             ]);
 
-        $this->addServiceProvidersFormFields($formMapper, 'paymentOperator', 'paymentProvider');
         $formMapper->end();
         $formMapper
             ->with('admin_account')
