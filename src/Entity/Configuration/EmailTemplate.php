@@ -244,9 +244,47 @@ class EmailTemplate extends BaseEntity implements HideableEntityInterface
      */
     public function setCcAddresses(?string $ccAddresses): void
     {
-        $addressList = explode("\n", str_replace([',', ';', '|', ' ', '|'], "\n", trim($ccAddresses)));
-        $addressList = array_filter(array_map('trim', $addressList));
-        $this->ccAddresses = implode(',', $addressList);
+        $this->ccAddresses = implode(',', $this->processAddressText($ccAddresses));
+    }
+
+    /**
+     * @return string[]|array
+     */
+    public function getCcAddressList(): array
+    {
+        return $this->getAddressList($this->ccAddresses);
+    }
+
+    /**
+     * @param string|null $addressText
+     * @return string[]|array
+     */
+    protected function getAddressList(?string $addressText): array
+    {
+        $addressList = [];
+        $unfilteredList = $this->processAddressText($addressText);
+        if (!empty($unfilteredList)) {
+            foreach ($unfilteredList as $entry) {
+                if (filter_var($entry, FILTER_VALIDATE_EMAIL)) {
+                    $addressList[] = $entry;
+                }
+            }
+        }
+        return $addressList;
+    }
+
+    /**
+     * @param string|null $addressText
+     * @return string[]|array
+     */
+    protected function processAddressText(?string $addressText): array
+    {
+        $processText = trim(strip_tags($addressText));
+        if ($processText) {
+            $addressList = explode("\n", str_replace([',', ';', '|', ' ', "\r\n"], "\n", trim($addressText)));
+            return array_filter(array_map('trim', $addressList));
+        }
+        return [];
     }
 
     public function __toString(): string

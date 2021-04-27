@@ -129,6 +129,12 @@ class EmailTemplateManager
         if ($senderEmail = $emailTemplate->getSenderEmail()) {
             $email->from($mailer->createAddress($senderEmail, $emailTemplate->getSenderName()));
         }
+        $ccEmailArray = $emailTemplate->getCcAddressList();
+        if (!empty($ccEmailArray)) {
+            foreach ($ccEmailArray as $ccEmail) {
+                $email->addCc($mailer->createAddress($ccEmail, null));
+            }
+        }
         $markers = $this->markerService->getModelMarkers($model);
         $search = array_keys($markers);
         $user = $this->security->getUser();
