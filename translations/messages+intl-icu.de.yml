@@ -506,8 +506,8 @@ app:
       product_description: Produktbeschreibung/CO-Kontierungssatz psp
       tax_number: Steuer-Kennzeichen stsl
   service_account:
-    object_name: Servicekonto
-    list: Onboarding Servicekonten
+    object_name: Servicekonto NRW
+    list: Onboarding Servicekonto NRW
     create: Servicekonto erfassen
     actions:
       ask_question: Frage stellen
@@ -722,7 +722,7 @@ app:
     entity:
       template_key: Typ
       template_key_choices:
-        service_account_update: 'Onboarding Service-Konto - Update'
+        service_account_update: 'Onboarding Servicekonto NRW - Update'
         commune_info_update: 'Onboarding Basisdaten - Update'
         epayment_update: 'Onboarding ePayBL - Update'
       hidden: E-Mail-Versand deaktiviert?
