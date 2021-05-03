@@ -250,11 +250,11 @@ class InquiryManager
     /**
      * Returns an entity referenced by an inquiry
      *
-     * @param string $referenceSource A class name
+     * @param string|null $referenceSource A class name
      * @param int|null $referenceId The referenced entity id
      * @return object|null
      */
-    public function getReferencedObject(string $referenceSource, ?int $referenceId): ?BaseEntityInterface
+    public function getReferencedObject(?string $referenceSource, ?int $referenceId): ?BaseEntityInterface
     {
         if (empty($referenceSource) || (int)$referenceId <= 0) {
             return null;
