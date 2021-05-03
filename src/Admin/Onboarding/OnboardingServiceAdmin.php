@@ -22,6 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class OnboardingServiceAdmin extends AbstractAppAdmin
 {
+    protected $baseRoutePattern = 'onboarding/onboarding-service';
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper

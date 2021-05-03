@@ -65,6 +65,7 @@ app:
       modified_by: Geändert von
       references: Referenzen
       name: Bezeichnung
+      slug: URL Segment (Frontend)
     recent_activities:
       block_title: Meine Daten
       table_header_name: Titel

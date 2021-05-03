@@ -15,6 +15,7 @@ use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\ModelRegionTrait;
 use App\Admin\Traits\OrganisationTrait;
+use App\Admin\Traits\SluggableTrait;
 use App\Admin\Traits\SolutionTrait;
 use App\Entity\ModelRegionProject;
 use App\Entity\ModelRegionProjectDocument;
@@ -40,6 +41,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     use ModelRegionTrait;
     use OrganisationTrait;
     use SolutionTrait;
+    use SluggableTrait;
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -82,6 +84,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         ]);
         $this->addModelRegionsFormFields($formMapper);
         $this->addSolutionsFormFields($formMapper);
+        $this->addSlugFormField($formMapper, $this->getSubject());
         $formMapper->end();
         $formMapper->with('documents', [
             'label' => 'app.model_region_project.group.documents',

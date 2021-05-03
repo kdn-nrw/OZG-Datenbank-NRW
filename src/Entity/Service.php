@@ -40,7 +40,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @Gedmo\Slug(fields={"name", "serviceKey", "id"}, updatable=false)
      * @ORM\Column(length=128, unique=true)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * LeiKa-Typ

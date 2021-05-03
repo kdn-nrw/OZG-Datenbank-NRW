@@ -24,7 +24,7 @@ trait SluggableEntityTrait
      * @Gedmo\Slug(fields={"name", "id"}, updatable=false)
      * @ORM\Column(length=128, unique=true)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @return string|null

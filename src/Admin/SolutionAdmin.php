@@ -18,6 +18,7 @@ use App\Admin\Traits\ModelRegionProjectTrait;
 use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\ServiceSystemTrait;
+use App\Admin\Traits\SluggableTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Status;
 use App\Exporter\Source\ServiceSolutionValueFormatter;
@@ -48,6 +49,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     use ServiceProviderTrait;
     use ServiceSystemTrait;
     use SpecializedProcedureTrait;
+    use SluggableTrait;
 
     protected $datagridValues = [
 
@@ -125,7 +127,9 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $this->addContactsFormFields($formMapper, true, false, 'solutionContacts');
         $formMapper->add('isPublished', CheckboxType::class, [
             'required' => false,
-        ])
+        ]);
+        $this->addSlugFormField($formMapper, $this->getSubject());
+        $formMapper
             /*
             ->add('serviceSolutions', ModelType::class, [
                 'expanded' => true,

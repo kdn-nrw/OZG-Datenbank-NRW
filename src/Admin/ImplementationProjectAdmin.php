@@ -18,6 +18,7 @@ use App\Admin\Traits\FundingTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\ServiceSystemTrait;
+use App\Admin\Traits\SluggableTrait;
 use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
@@ -47,6 +48,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     use OrganisationTrait;
     use SolutionTrait;
     use ServiceSystemTrait;
+    use SluggableTrait;
 /*
     protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
     {
@@ -127,6 +129,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addOrganisationsFormFields($formMapper, 'interestedOrganisations');
         $this->addFundingsFormFields($formMapper);
         $this->addContactsFormFields($formMapper, false, false, 'fimExperts', false);
+        $this->addSlugFormField($formMapper, $this->getSubject());
         $formMapper->end()
             ->end()
             ->tab('app.implementation_project.tabs.services')

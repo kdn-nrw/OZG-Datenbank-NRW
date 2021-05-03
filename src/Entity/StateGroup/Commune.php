@@ -18,7 +18,6 @@ use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
 use App\Entity\ContactTextTrait;
-use App\Entity\FederalInformationManagementType;
 use App\Entity\HasManufacturerEntityInterface;
 use App\Entity\HasSolutionsEntityInterface;
 use App\Entity\Laboratory;
@@ -34,7 +33,6 @@ use App\Entity\UrlTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -66,7 +64,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @Gedmo\Slug(fields={"name", "id"}, updatable=false)
      * @ORM\Column(length=128, unique=true)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @var Organisation

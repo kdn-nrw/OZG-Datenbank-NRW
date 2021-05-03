@@ -21,7 +21,6 @@ use App\Entity\StateGroup\MinistryState;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -41,7 +40,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface, HasMe
      * @Gedmo\Slug(fields={"name", "serviceKey", "id"}, updatable=false)
      * @ORM\Column(length=128, unique=true)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * Status

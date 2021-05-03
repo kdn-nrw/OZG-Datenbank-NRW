@@ -15,9 +15,12 @@ namespace App\Controller;
 use App\Admin\Frontend\ContextFrontendAdminInterface;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Base\BaseEntityInterface;
+use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableInterface;
+use Behat\Transliterator\Transliterator;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Controller\CRUDController;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -65,7 +68,7 @@ abstract class AbstractFrontendCRUDController extends CRUDController
      */
     public function showBySlugAction(string $slug): ?Response
     {
-        if (is_numeric($slug)) {
+        if (is_numeric($slug) && (int)$slug > 0) {
             $object = $this->admin->getObject((int)$slug);
             if ($object instanceof SluggableInterface
                 && ($redirectSlug = $object->getSlug())
@@ -74,12 +77,28 @@ abstract class AbstractFrontendCRUDController extends CRUDController
                 $status = 301;
                 return $this->redirect($redirectUrl, $status);
             }
-        } else {
+        } elseif (is_a($this->admin->getClass(), SluggableInterface::class, true)) {
             $modelManager = $this->admin->getModelManager();
             $object = $modelManager->findOneBy($this->admin->getClass(), ['slug' => $slug]);
+            if (($object instanceof NamedEntityInterface) && strlen($slug) < 4
+                && ($name = $object->getName()) && strlen($name) > 3) {
+                /** @var SluggableInterface $object */
+                $newSlug = Transliterator::urlize($name);
+                if (strlen($newSlug) > strlen($slug)) {
+                    $entityClass = $this->admin->getClass();
+                    $checkObject = $modelManager->findOneBy($entityClass, ['slug' => $newSlug]);
+                    if (null === $checkObject && $modelManager instanceof ModelManager) {
+                        $object->setSlug($newSlug);
+                        $redirectUrl = $this->admin->generateUrl('show', ['slug' => $newSlug]);
+                        $status = 301;
+                        $modelManager->getEntityManager($entityClass)->flush();
+                        return $this->redirect($redirectUrl, $status);
+                    }
+                }
+            }
         }
         if (null === $object) {
-            throw $this->createNotFoundException(sprintf('unable to find the object with id: %s', $slug));
+            throw $this->createNotFoundException(sprintf('unable to find the object with path: %s', $slug));
         }
         /** @var BaseEntityInterface $object */
         return $this->showObject($object);
@@ -133,7 +152,7 @@ abstract class AbstractFrontendCRUDController extends CRUDController
         }
         if ($object instanceof SluggableInterface
             && ($redirectSlug = $object->getSlug())
-            && (string) $id !== $redirectSlug) {
+            && (string)$id !== $redirectSlug) {
             $redirectUrl = $this->admin->generateUrl('show', ['slug' => $redirectSlug]);
             $status = 301;
             return $this->redirect($redirectUrl, $status);

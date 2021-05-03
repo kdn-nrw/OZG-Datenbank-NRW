@@ -23,6 +23,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class EpaymentServiceAdmin extends AbstractAppAdmin
 {
+    protected $baseRoutePattern = 'onboarding/epayment-service';
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
