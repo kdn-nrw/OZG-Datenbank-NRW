@@ -16,6 +16,7 @@ use App\Model\Annotation\InjectBaseAnnotationReaderTrait;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use App\Util\SnakeCaseConverter;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Util\ClassUtils;
 use Psr\Cache\CacheItemPoolInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\Pool;
@@ -60,8 +61,9 @@ class AdminManager
      */
     public function getEntityAdminClasses(string $entityClass): ?array
     {
+        $realClass = ClassUtils::getRealClass($entityClass);
         $adminClasses = $this->pool->getAdminClasses();
-        return $adminClasses[ltrim($entityClass, '\\')] ?? null;
+        return $adminClasses[ltrim($realClass, '\\')] ?? null;
     }
 
     /**
@@ -94,13 +96,13 @@ class AdminManager
      */
     public function getConfigurationForEntityProperty($entityOrClass, string $property): array
     {
-        $entityClass = is_object($entityOrClass) ? get_class($entityOrClass) : $entityOrClass;
+        $tmpClass = is_object($entityOrClass) ? get_class($entityOrClass) : $entityOrClass;
+        $entityClass = ClassUtils::getRealClass($tmpClass);
         $key = SnakeCaseConverter::classNameToSnakeCase($entityClass);
         $context = $this->applicationContextHandler->getApplicationContext();
         $cacheKey = $context . '-' . $key . '-' . $property;
-        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($entityOrClass, $property) {
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($entityOrClass, $entityClass, $property) {
             $item->expiresAfter(604800);
-            $entityClass = is_object($entityOrClass) ? get_class($entityOrClass) : $entityOrClass;
             $propertyParts = explode('.', $property);
             $isPath = count($propertyParts) > 1;
             $entityProperty = $propertyParts[0];
@@ -153,7 +155,8 @@ class AdminManager
     private function getPropertyTargetClassFromGetterDocComment(string $entityClass, string $entityProperty): ?string
     {
         $targetEntityClass = null;
-        $entityReflectionClass = new \ReflectionClass($entityClass);
+        $realClass = ClassUtils::getRealClass($entityClass);
+        $entityReflectionClass = new \ReflectionClass($realClass);
         $getter = 'get' . ucfirst($entityProperty);
         if ($entityReflectionClass->hasMethod($getter)) {
             $refMethod = $entityReflectionClass->getMethod($getter);

@@ -102,6 +102,7 @@ class InquiryAdmin extends AbstractAppAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         parent::configureRoutes($collection);
+        $collection->remove('create');
         $collection
             ->add('askQuestion', $this->getRouterIdParameter() . '/ask-question');
     }

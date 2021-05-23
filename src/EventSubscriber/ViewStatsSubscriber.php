@@ -65,6 +65,7 @@ class ViewStatsSubscriber implements EventSubscriberInterface
             $route = $request->attributes->get('_route');
             $excludeRoutePrefixes = [
                 '_wdt',
+                'api_entrypoint',
                 'admin_app_user',
                 'admin_app_group',
                 'admin_app_api_apiconsumer',

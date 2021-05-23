@@ -27,9 +27,11 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\DoctrineORMAdminBundle\Filter\StringListFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -146,13 +148,34 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $this->addDefaultDatagridFilter($datagridMapper, 'commune');
-        $datagridMapper
-            ->add('status', StringListFilter::class, [], ChoiceType::class, [
+        $datagridMapper->add('status',
+            CallbackFilter::class, [
+                'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) {
+                    if (!is_array($value) || !\array_key_exists('value', $value)) {
+                        return false;
+                    }
+
+                    if (!\is_array($value['value'])) {
+                        $value['value'] = [$value['value']];
+                    }
+                    $type = $value['type'] ?? NumberOperatorType::TYPE_EQUAL;
+                    $operator = NumberFilter::CHOICES[$type] ?? NumberFilter::CHOICES[NumberOperatorType::TYPE_EQUAL];
+                    $andConditions = $queryBuilder->expr()->andX();
+                    foreach ($value['value'] as $item) {
+                        $andConditions->add(sprintf('%s.%s %s %d', $alias, $field, $operator, (int)$item));
+                    }
+                    $queryBuilder->andWhere($andConditions);
+                    return true;
+                },
+            ],
+            ChoiceType::class,
+            [
                 'label' => 'app.commune_info.entity.status',
                 'choices' => array_flip(AbstractOnboardingEntity::$statusChoices),
                 'multiple' => true,
-                //'choice_translation_domain' => 'SonataAdminBundle',
-            ]);
+                'expanded' => false,
+            ]
+        );
     }
 
     protected function configureListFields(ListMapper $listMapper)

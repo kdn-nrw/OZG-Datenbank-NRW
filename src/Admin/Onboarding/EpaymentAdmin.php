@@ -16,6 +16,7 @@ use App\Admin\Traits\ServiceProviderTrait;
 use App\Form\Type\CommuneType;
 use App\Form\Type\EpaymentProjectType;
 use App\Form\Type\OnboardingContactType;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -221,6 +222,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('contentSecondAccountAssignmentInformation', TextareaType::class, [
                 'required' => false,
             ])
+            /*
             ->add('budgetOffice', TextType::class, [
                 'required' => false,
                 'attr' => [
@@ -250,7 +252,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'attr' => [
                     'placeholder' => 'Antrag Ehefähigkeitszeugnis',
                 ],
-            ])
+            ])*/
             ->add('managerNo', TextType::class, [
                 'required' => false,
                 'disabled' => true,
@@ -336,6 +338,11 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->end()
             ->end();
     }
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        parent::configureDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($datagridMapper, 'paymentOperator');
+    }
 
     protected function configureListFields(ListMapper $listMapper)
     {
@@ -368,12 +375,12 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('clientNumberIntegration')
             ->add('clientNumberProduction')
             ->add('managerNumber')
-            ->add('budgetOffice')
-            ->add('objectNumber')
             ->add('cashRegisterPersonalAccountNumber')
+            /*->add('budgetOffice')
+            ->add('objectNumber')
             ->add('indicatorDunningProcedure')
             ->add('bookingText')
-            ->add('descriptionOfTheBookingList')
+            ->add('descriptionOfTheBookingList')*/
             ->add('managerNo')
             ->add('applicationName')
             ->add('lengthReceiptNumber')

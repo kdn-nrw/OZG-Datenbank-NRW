@@ -41,7 +41,10 @@ class CmsContactImport
         $em = $this->getEntityManager();
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->registry->getConnection('cms');
-        $sql = 'SELECT * FROM typo3kdn.tt_address WHERE deleted = 0 AND hidden = 0 ORDER BY uid ASC';
+        if ((null !== $schemaManager = $connection->getSchemaManager()) && !$schemaManager->tablesExist(['tt_address'])) {
+            return [];
+        }
+        $sql = 'SELECT * FROM tt_address WHERE deleted = 0 AND hidden = 0 ORDER BY uid ASC';
         /** @noinspection PhpUnhandledExceptionInspection */
         $stmt = $connection->query($sql);
         $mapObjects = $this->getMappedObjects(Contact::class);
@@ -72,13 +75,13 @@ class CmsContactImport
             if ($rowCount > 50) {
                 $em->flush();
                 $rowCount = 0;
-                $sql = 'UPDATE typo3kdn.tt_address SET hidden = 1 WHERE uid IN (' . implode(',', $importedIds) . ')';
+                $sql = 'UPDATE tt_address SET hidden = 1 WHERE uid IN (' . implode(',', $importedIds) . ')';
                 $connection->executeUpdate($sql);
                 $importedIds = [];
             }
         }
         if (!empty($importedIds)) {
-            $sql = 'UPDATE typo3kdn.tt_address SET hidden = 1 WHERE uid IN (' . implode(',', $importedIds) . ')';
+            $sql = 'UPDATE tt_address SET hidden = 1 WHERE uid IN (' . implode(',', $importedIds) . ')';
             $connection->executeUpdate($sql);
         }
         $em->flush();
@@ -91,7 +94,7 @@ class CmsContactImport
     {
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->registry->getConnection('cms');
-        $sql = 'SELECT uid_local, uid_foreign FROM typo3kdn.sys_category_record_mm WHERE tablenames = \'tt_address\' AND fieldname = \'categories\' ORDER BY sorting_foreign ASC';
+        $sql = 'SELECT uid_local, uid_foreign FROM sys_category_record_mm WHERE tablenames = \'tt_address\' AND fieldname = \'categories\' ORDER BY sorting_foreign ASC';
         /** @noinspection PhpUnhandledExceptionInspection */
         $stmt = $connection->query($sql);
         $mapContactCategories = [];
@@ -112,7 +115,10 @@ class CmsContactImport
         $em = $this->getEntityManager();
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->registry->getConnection('cms');
-        $sql = 'SELECT * FROM typo3kdn.sys_category WHERE deleted = 0 AND hidden = 0 ORDER BY uid ASC';
+        if ((null !== $schemaManager = $connection->getSchemaManager()) && !$schemaManager->tablesExist(['sys_category'])) {
+            return [];
+        }
+        $sql = 'SELECT * FROM sys_category WHERE deleted = 0 AND hidden = 0 ORDER BY uid ASC';
         /** @noinspection PhpUnhandledExceptionInspection */
         $stmt = $connection->query($sql);
         $mapObjects = $this->getMappedObjects(Category::class);

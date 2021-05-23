@@ -17,4 +17,4 @@ api_platform:
         api_keys:
             apiKey:
                 name: Authorization
-                type: header
+                type: query

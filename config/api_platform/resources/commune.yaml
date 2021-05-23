@@ -24,6 +24,6 @@ App\Entity\StateGroup\Commune:
         enable_max_depth: 1
         groups: ['item:read', 'commune:read']
       openapi_context:
-        summary: 'Gibt eine Kommunen zurück'
+        summary: 'Gibt eine Kommune zurück'
   #    put:
   #      method: 'PUT'
