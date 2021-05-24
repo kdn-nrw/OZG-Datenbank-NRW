@@ -256,6 +256,7 @@ sonata_admin:
                     - App\Admin\Onboarding\EpaymentAdmin
                     - App\Admin\Onboarding\ServiceAccountAdmin
                     - App\Admin\Onboarding\DataclearingAdmin
+                    - App\Admin\Onboarding\FormSolutionAdmin
                     - App\Admin\Onboarding\InquiryAdmin
                     - App\Admin\Onboarding\OnboardingServiceAdmin
             app_admin.menu.basic:

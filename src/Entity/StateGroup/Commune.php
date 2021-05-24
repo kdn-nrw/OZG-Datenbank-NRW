@@ -50,6 +50,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     use OrganisationTrait;
     use SluggableEntityTrait;
     use UrlTrait;
+    use AdministrationContactPropertiesTrait;
 
     public const TYPE_CITY_REGION = 1;
     public const TYPE_CONSTITUENCY = 2;

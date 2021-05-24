@@ -277,6 +277,8 @@ app:
       solution_list: Lösungen anzeigen
     group:
       general_data: Basisdaten
+      administration_contact: Kontaktdaten der Verwaltung
+      meta_data: Metadaten
       reference_data: Referenzen
     entity:
       organisation: Organisation
@@ -303,6 +305,10 @@ app:
       regional_key: ARS
       administrative_district: Reg-Bez
       administrative_district_placeholder: Regierungsbezirk
+      administration_phone_number: Telefon
+      administration_fax_number: Fax
+      administration_email: E-Mail
+      administration_url: Web
   abstract_onboarding_entity:
     object_name: Onboarding
     list: Onboarding Allgemein
@@ -403,7 +409,7 @@ app:
       account_description: '<p>Weitere Information finden Sie im Dokument zum Abruf aus dem Rahmenvertrag der EG. Dieser ist mit dem ZV-Provider PAYONE GmbH abgeschlossen und bietet unter Nutzung der Girocheckout-Schnittstelle die folgenden Zahlverfahren zur Auswahl an:</p>
         <div class="well well-sm no-shadow">
         <div class="row"><div class="col-xs-12 col-md-6">
-        Girocheckout (GiroSolution AG, Nutzung über Rahmenvertrag der EG via PAYONE GmbH möglich)
+        Girocheckout (S-Public Services GmbH, Nutzung über Rahmenvertrag der EG via PAYONE GmbH möglich)
         </div><div class="col-xs-12 col-md-6">
         <ul>
         <li>Giropay (mit Zahlgarantie)</li>
@@ -465,10 +471,10 @@ app:
       manager_number: Bewirtschafter-Nummer
       budget_office: Haushaltsstelle
       object_number: Objektnummer
-      cash_register_personal_account_number: Kassenzeichen/Personenkto. Präfix
       indicator_dunning_procedure: Kennzeichen Mahnverfahren
       booking_text: Buchungstext
       description_of_the_booking_list: Beschreibung der Buchungsliste
+      cash_register_personal_account_number: Kassenzeichen/Personenkto. Präfix
       manager_no: Bewirtschafter-Nr.
       application_name: Name
       length_receipt_number: Länge des Kassenzeichens
@@ -478,6 +484,53 @@ app:
       length_second_account_assignment_information: Länge zweite Kontierungsangabe
       content_second_account_assignment_information: Inhalt/Bedeutung der zweiten Kontierungsangabe
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
+  form_solution:
+    object_name: Formsolution
+    list: Onboarding Formsolutions
+    create: Formsolution erfassen
+    actions:
+      ask_question: Frage stellen
+      show_questions: Rückfragen
+    tabs:
+      general: Basisdaten
+      contact_data: Kontakte
+    groups:
+      general: Basisdaten
+      administration_contact: Kontaktdaten der Verwaltung
+      contact_data: Kontakte
+      content_data: Inhalte
+      footer_data: Informationen für den Footer
+      header_data: Darstellung der Kommune im Kopfbogen
+    entity:
+      description: Beschreibung
+      commune: Kommune
+      modified_at: Letzter Eintrag
+      status: Status
+      status_choices:
+        new: Noch keine Eingaben
+        incomplete: Unvollständig
+        complete: Vollständig
+      commune_name: Kommune
+      official_commune_key: AGS
+      custom_values: Benutzerdefinierte Werte
+      contacts: Kontakte
+      contact_default: Kontakt
+      contact_type_choices:
+        bis: BIS Admin
+        fs: FS-Admin
+        epay: ePayBL-Admin
+        super: Supersachbearbeiter
+        clerk: Sachbearbeiter
+        web: Webcontent-Admin
+      privacy_text: Datenschutzerklärung (TEXT)
+      privacy_url: Datenschutzerklärung (URL)
+      imprint_text: Impressum (TEXT)
+      imprint_url: Impressum (URL)
+      accessibility: Barrierefreiheitserklärung
+      image_file: Logo
+      opening_hours: Öffnungszeiten
+      group_email: E-Mail-Adresse für Onboarding-Rückfragen
+      letterhead_address: Darstellung der Kommune im Kopfbogen
   onboarding_service:
     object_name: Onboarding Dienst
     list: Onboarding Dienste
@@ -725,6 +778,7 @@ app:
       template_key_choices:
         service_account_update: 'Onboarding Servicekonto NRW - Update'
         commune_info_update: 'Onboarding Basisdaten - Update'
+        form_solution_update: 'Onboarding Formsolutions - Update'
         epayment_update: 'Onboarding ePayBL - Update'
       hidden: E-Mail-Versand deaktiviert?
       reply_to_email: Antwort an

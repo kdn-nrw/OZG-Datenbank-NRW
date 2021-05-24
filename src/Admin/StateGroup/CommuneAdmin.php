@@ -40,6 +40,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
@@ -72,8 +73,14 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->tab('default', ['label' => 'app.commune.group.general_data']);
         $formMapper->with('general', [
             'label' => 'app.commune.group.general_data',
+            'class' => 'col-xs-12 col-md-6',
         ]);
         $this->addOrganisationOneToOneFormFields($formMapper);
+        $formMapper->end();
+        $formMapper->with('meta_data', [
+            'label' => 'app.commune.group.meta_data',
+            'class' => 'col-xs-12 col-md-6',
+        ]);
         $formMapper
             ->add('communeType', ModelType::class, [
                 'btn_add' => false,
@@ -108,8 +115,27 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'required' => false,
             ]);
         $formMapper->end();
+        $formMapper->with('administration_contact', [
+            'label' => 'app.commune.group.administration_contact',
+            'class' => 'clear-left-md col-xs-12 col-md-6',
+        ]);
+        $formMapper
+            ->add('administrationPhoneNumber', TextType::class, [
+                'required' => false,
+            ])
+            ->add('administrationFaxNumber', TextType::class, [
+                'required' => false,
+            ])
+            ->add('administrationEmail', EmailType::class, [
+                'required' => false,
+            ])
+            ->add('administrationUrl', UrlType::class, [
+                'required' => false,
+            ]);
+        $formMapper->end();
         $formMapper->with('services_data', [
             'label' => 'app.commune.group.reference_data',
+            'class' => 'col-xs-12 col-md-6',
         ]);
         $this->addServiceProvidersFormFields($formMapper);
         $this->addCentralAssociationsFormFields($formMapper);

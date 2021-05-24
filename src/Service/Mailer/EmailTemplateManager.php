@@ -22,6 +22,7 @@ use App\Entity\Configuration\EmailTemplate;
 use App\Model\EmailTemplate\AbstractTemplateModel;
 use App\Model\EmailTemplate\OnboardingCommuneInfoUpdateModel;
 use App\Model\EmailTemplate\OnboardingEpaymentUpdateModel;
+use App\Model\EmailTemplate\OnboardingFormSolutionUpdateModel;
 use App\Model\EmailTemplate\OnboardingServiceAccountUpdateModel;
 use App\Service\InjectAdminManagerTrait;
 use App\Translator\TranslatorAwareTrait;
@@ -248,6 +249,7 @@ class EmailTemplateManager
             OnboardingServiceAccountUpdateModel::TEMPLATE_KEY => OnboardingServiceAccountUpdateModel::class,
             OnboardingCommuneInfoUpdateModel::TEMPLATE_KEY => OnboardingCommuneInfoUpdateModel::class,
             OnboardingEpaymentUpdateModel::TEMPLATE_KEY => OnboardingEpaymentUpdateModel::class,
+            OnboardingFormSolutionUpdateModel::TEMPLATE_KEY => OnboardingFormSolutionUpdateModel::class,
         ];
     }
 

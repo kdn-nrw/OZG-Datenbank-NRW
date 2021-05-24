@@ -18,6 +18,7 @@ use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\PersonInterface;
 use App\Entity\Base\PersonPropertiesTrait;
+use App\Entity\StateGroup\Commune;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -51,6 +52,13 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
     ];
 
     /**
+     * @var Commune|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\StateGroup\Commune", cascade={"persist"})
+     * @ORM\JoinColumn(name="commune_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    protected $commune;
+
+    /**
      * @var CommuneInfo|null
      * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\CommuneInfo", inversedBy="contacts", cascade={"persist"})
      * @ORM\JoinColumn(name="commune_info_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
@@ -63,6 +71,13 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
      * @ORM\JoinColumn(name="epayment_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected $epayment;
+
+    /**
+     * @var FormSolution|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\FormSolution", inversedBy="contacts", cascade={"persist"})
+     * @ORM\JoinColumn(name="form_solution_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    protected $formSolution;
 
     /**
      * @var ServiceAccount|null
@@ -109,7 +124,10 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
             $this->epayment = $onboarding;
         } elseif ($onboarding instanceof ServiceAccount) {
             $this->serviceAccount = $onboarding;
+        } elseif ($onboarding instanceof FormSolution) {
+            $this->formSolution = $onboarding;
         }
+        $this->commune = $onboarding->getCommune();
     }
 
     /**
@@ -131,6 +149,14 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
     public function getDisplayName(): string
     {
         return $this->getFullName();
+    }
+
+    /**
+     * @return Commune|null
+     */
+    public function getCommune(): ?Commune
+    {
+        return $this->commune;
     }
 
     /**
