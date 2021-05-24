@@ -104,6 +104,44 @@ const appOnReady = function() {
             console.log('An error occurred while loading the form component', error);
         });
     }
+    document.addEventListener('click', function (evt) {
+        let link;
+        if (evt.target.matches('.js-click-toggle')) {
+            link = evt.target;
+        } else {
+            link = evt.target.closest('.js-click-toggle')
+        }
+        if (link) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            let toggleElt = document.getElementById(link.dataset.toggle);
+            if (toggleElt) {
+                toggleElt.classList.remove('updating');
+                if (toggleElt.classList.contains('open')) {
+                    toggleElt.classList.remove('open');
+                    toggleElt.style.display = 'none';
+                    link.classList.remove('active');
+                } else {
+                    let targets = document.querySelectorAll('.js-toggle-target');
+                    for (let i = 0, n = targets.length; i < n; i++) {
+                        if (targets[i] !== toggleElt) {
+                            targets[i].classList.remove('open');
+                            targets[i].style.display = 'none';
+                        }
+                    }
+                    toggleElt.classList.add('open');
+                    toggleElt.removeAttribute('style');
+                    let toggles = document.querySelectorAll('.js-click-toggle');
+                    for (let i = 0, n = toggles.length; i < n; i++) {
+                        if (toggles[i] !== link) {
+                            toggles[i].classList.remove('active');
+                        }
+                    }
+                    link.classList.add('active');
+                }
+            }
+        }
+    }, false);
 };
 
 if (

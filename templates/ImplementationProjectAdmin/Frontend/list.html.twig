@@ -15,6 +15,7 @@ file that was distributed with this source code.
             {% include 'PageContent/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_IMPLEMENTATION_PROJECTS')} %}
         {% endif %}
     </section>
+    <div class="mb-chart-container" data-url="{{ path('frontend_app_implementationproject_timeline') }}"></div>
     {{ parent() }}
     {% if filterSubject is defined and filterSubject is not null %}
     {% else %}

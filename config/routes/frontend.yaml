@@ -46,6 +46,10 @@ frontend_app_implementationproject_export:
   path: /umsetzungsprojekte/export
   controller: App\Controller\ImplementationProjectController::exportAction
 
+frontend_app_implementationproject_timeline:
+  path: /umsetzungsprojekte/timeline
+  controller: App\Controller\ImplementationProjectController::timelineAction
+
 frontend_app_solution_list:
   path: /loesungen
   controller: App\Controller\SolutionController::listAction

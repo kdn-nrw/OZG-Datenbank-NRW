@@ -1,0 +1,87 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{% extends app.request.isXmlHttpRequest ? 'base_ajax.html.twig' : 'base.html.twig' %}
+
+{% block sonata_page_content %}
+    {% if sortedResults|length > 0 %}
+    <section class="content">
+        <div class="box box-widget box-page-content">
+            <div class="box-header with-border">
+                <h2 class="box-title">Zeitplan Inbetriebnahme NRW</h2>
+            </div>
+            <div class="box-body no-padding">
+                <div class="project-month-data">
+                    <div class="slider-horizontal">
+                        <div class="inner">
+                            {% for key, monthData in sortedResults %}
+                                {% set monthToggleKey = 'subject-projects-' ~ key %}
+                                <div class="month-data" id="meta-project-month-{{ key }}">
+                                    <div class="month-content">
+                                        {% set monthLabel = 'Inbetriebnahme ' ~ monthData.date|format_date('MMMM YYYY') %}
+                                        {% for subjectData in monthData.subjects %}
+                                            <div class="month-subject js-click-toggle" data-toggle="{{ monthToggleKey }}-{{ subjectData.id }}">
+                                                <div class="icon-wrap" title="{{ subjectData.name }}">
+                                                    {% if subjectData.icon %}
+                                                        <img src="{{ subjectData.icon }}" class="icon" alt="{{ subjectData.name }}">
+                                                    {% else %}
+                                                        <span  class="icon">
+                                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="date">{{ monthData.date|format_date('MMMM YYYY') }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="project-month-details">
+                        {% for key, monthData in sortedResults %}
+                            {% set monthToggleKey = 'subject-projects-' ~ key %}
+                            {% for subjectData in monthData.subjects %}
+                                <div class="subject-projects js-toggle-target" id="{{ monthToggleKey }}-{{ subjectData.id }}" style="display: none;">
+                                    <div class="title">
+                                        Inbetriebnahme(n) {{ monthData.date|format_date('MMMM YYYY') }} für Themengebiet <em>{{ subjectData.name }}</em>
+                                    </div>
+                                    <div class="body">
+                                        <ul class="list-projects list-unstyled">
+                                            {% for item in subjectData.items %}
+                                                {# @var item \App\Entity\ImplementationProject #}
+                                                <li class="list-item">
+                                                    <a class="list-item-action" href="{{ admin.generateObjectUrl('show', item, {'id': item.id}) }}">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                        {{ item.name }}
+                                                    </a>
+                                                    {% if item.commissioningStatusAt is not null %}
+                                                    <div class="project-date">{{ 'app.implementation_project.entity.commissioning_status_at'|trans }}: {{ item.commissioningStatusAt|format_date }}</div>
+                                                    {% endif %}
+                                                    {% if item.projectLeaders|length > 0 %}
+                                                        <div class="project-leaders">
+                                                            {{ 'app.implementation_project.entity.project_leaders'|trans }}:
+                                                            {% for leader in item.projectLeaders %}
+                                                                {% if loop.index > 1 %}, {% endif %}
+                                                                {{ leader ~ '' }}
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+{% endblock sonata_page_content %}

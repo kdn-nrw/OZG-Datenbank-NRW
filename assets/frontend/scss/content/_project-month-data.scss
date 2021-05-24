@@ -1,0 +1,138 @@
+.project-month-data {
+  background: $gray-200;
+  .slider-horizontal {
+    width: 100%;
+    overflow: hidden;
+    .inner {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      width: 100%;
+      overflow: auto;
+    }
+  }
+  .month-data {
+    background: #fff;
+    flex: 0 0 auto;
+    min-width: 120px;
+    &:not(:first-child) {
+      border-left: 1px solid $gray-400;
+    }
+    .month-content {
+      padding: 8px 8px 0;
+      display: flex;
+      justify-content: center;
+      min-height: 48px;
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+    .month-subject {
+      position: relative;
+      width: 24px;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+      &::after {
+        content: "";
+        background-color: $ba-dark-blue-grey;
+        position: absolute;
+        left: 50%;
+        top: 0;
+        height: 100%;
+        width: 1px;
+        transition: background-color .2s linear;
+        z-index: 0;
+      }
+      .icon-wrap {
+        cursor: pointer;
+        background: #fff;
+        display: flex;
+        position: relative;
+        width: 24px;
+        height: 24px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px solid $ba-dark-blue-grey;
+        transition: all .2s linear;
+        z-index: 1;
+        &::after {
+          content: "";
+          position: absolute;
+          width: 16px;
+          height: 24px;
+          left: 40%;
+          top: 0;
+          background: #fff;
+          z-index: 1;
+          border-radius: 100%;
+          clip: rect(0px, 24px, 24px, 10px);
+        }
+        .icon {
+          display: inline-block;
+          position: relative;
+          z-index: 10;
+        }
+      }
+      &:hover,
+      &:active,
+      &.active {
+        &::after {
+          background-color: $customer-secondary;
+        }
+        .icon-wrap {
+          border: 1px solid $customer-secondary;
+        }
+      }
+    }
+    .date {
+      background: $gray-200;
+      font-size: 14px;
+      display: block;
+      text-align: center;
+      font-weight: bold;
+      padding: 4px 6px;
+      white-space: nowrap;
+    }
+  }
+  .project-month-details {
+    flex: 0 0 100%;
+    .subject-projects {
+      position: relative;
+      .title {
+        border-top: 1px solid $gray-400;
+        background: $ba-dark-blue-grey;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 4px 12px 4px 12px;
+        position: relative;
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 4px;
+          height: 100%;
+          background: $customer-secondary;
+          z-index: 0;
+        }
+      }
+      .body {
+        background: #fff;
+        padding: 4px 12px;
+      }
+    }
+    .list-projects {
+      .list-item {
+        display: block;
+        padding: 4px 0;
+        margin-top: 4px;
+      }
+      .list-item-action {
+        font-weight: bold;
+      }
+    }
+  }
+}

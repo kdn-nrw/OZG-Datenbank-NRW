@@ -90,6 +90,8 @@
                     const data = JSON.parse(this.responseText);
                     if (data && data.chartConfig) {
                         self.initializeCanvas(container, data.chartConfig);
+                    } else if (data && data.html) {
+                        container.innerHTML = data.html;
                     } else {
                         container.innerHTML = '<div class="message-chart-empty">No data found</div>';
                     }
@@ -97,6 +99,8 @@
             };
 
             xhttp.open("GET", container.getAttribute('data-url'), true);
+            xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            //xhttp.setRequestHeader("Content-Type", "application/json");
             xhttp.send();
         },
         addLoader: function(container) {
