@@ -83,9 +83,9 @@ Encore
 
     // enables PostCssLoader
     .enablePostCssLoader(function (options) {
-        options.config = {
+        options.postcssOptions = {
             // the directory where the postcss.config.js file is stored
-            path: 'assets/config'
+            config: 'assets/config'
         };
     })
     // Only include moment localisation for de.js and en.js:
@@ -109,17 +109,6 @@ Encore
 
 
     .copyFiles({
-        from: websiteSrcDir + 'fonts',
-
-        // optional target path, relative to the output dir
-        to: 'fonts/[path][name].[ext]',
-
-        // if versioning is enabled, add the file hash too
-        //to: 'images/[path][name].[hash:8].[ext]',
-
-        // only copy files matching this pattern
-        //pattern: /\.(png|jpg|jpeg)$/
-    },{
         from: moduleDir + 'font-awesome/fonts',
 
         // optional target path, relative to the output dir
