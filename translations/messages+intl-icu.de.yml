@@ -863,6 +863,10 @@ app:
     groups:
       general_data: Basisdaten
       dates: Daten Umsetzungsstatus
+    frontend:
+      tab_commissioning_schedule: Zeitplan Inbetriebnahme
+      tab_commissioning_status_at: Zeitplan Inbetriebnahme NRW
+      tab_nationwide_rollout_at: Zeitplan bundesweiter Roll-out
     entity:
       name: Umsetzungsprojektname
       description: Projektinformationen

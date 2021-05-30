@@ -1,3 +1,14 @@
+#container-project-timeline {
+  .content {
+    min-height: 0;
+  }
+  .box {
+    min-height: 137px;
+  }
+  .nav-tabs > li.active {
+    font-weight: bold;
+  }
+}
 .project-month-data {
   background: $gray-200;
   .slider-horizontal {
@@ -132,6 +143,10 @@
       }
       .list-item-action {
         font-weight: bold;
+        transition: color .2s ease-in-out;
+        &:hover, &:focus, &:active {
+          color: $customer-secondary;
+        }
       }
     }
   }

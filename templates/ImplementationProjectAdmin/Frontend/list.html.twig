@@ -15,7 +15,20 @@ file that was distributed with this source code.
             {% include 'PageContent/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_IMPLEMENTATION_PROJECTS')} %}
         {% endif %}
     </section>
-    <div class="mb-chart-container" data-url="{{ path('frontend_app_implementationproject_timeline') }}"></div>
+    <div class="mb-chart-container" id="container-project-timeline" data-url="{{ path('frontend_app_implementationproject_timeline') }}">
+        <section class="content">
+            <div class="box box-widget box-page-content">
+                <div class="box-header with-border">
+                    <h3>{{ 'app.implementation_project.frontend.tab_commissioning_schedule'|trans }}</h3>
+                </div>
+                <div class="box-body no-padding">
+                    <div class="overlay">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
     {{ parent() }}
     {% if filterSubject is defined and filterSubject is not null %}
     {% else %}

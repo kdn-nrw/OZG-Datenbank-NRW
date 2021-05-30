@@ -2,19 +2,19 @@
   "entrypoints": {
     "admin": {
       "js": [
-        "/build/runtime.f4b3fb49.js",
-        "/build/admin.8d8907dd.js"
+        "/build/runtime.0bbced18.js",
+        "/build/admin.4ca0ecb8.js"
       ],
       "css": [
-        "/build/admin.f2d63d2d.css"
+        "/build/admin.356eea6f.css"
       ]
     },
     "style": {
       "js": [
-        "/build/runtime.f4b3fb49.js"
+        "/build/runtime.0bbced18.js"
       ],
       "css": [
-        "/build/style.4855ed6a.css"
+        "/build/style.91d19ebb.css"
       ]
     }
   }
