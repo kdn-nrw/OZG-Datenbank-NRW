@@ -7,7 +7,7 @@
     "description": "KDN - OZG: Das Onlinezugangsgesetz (OZG) – die Kommunen in NRW und ihre IT-Dienstleister präsentieren hier ihre Lösungen und gemeinsamen Digitalisierungsprojekte. Bald sind alle Online-Dienste der kommunalen Verwaltung im Portalverbund – für ganz Nordrhein-Westfalen.",
     "dependencies": {
         "bootstrap": "^4.6.0",
-        "chart.js": "^3.3.0",
+        "chart.js": "^2.9.4",
         "chartjs-plugin-datalabels": "^1.0.0",
         "cookieconsent": "^3.1.1",
         "flatpickr": "^4.6.9",
