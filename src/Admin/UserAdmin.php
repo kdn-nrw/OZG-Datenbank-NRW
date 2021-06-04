@@ -17,6 +17,8 @@ use App\Admin\StateGroup\ServiceProviderAdmin;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ModelRegionTrait;
 use DateTime;
+use FOS\UserBundle\Model\UserManagerInterface;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -24,18 +26,71 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\Form\Type\DatePickerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User admin
  */
-class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
+class UserAdmin extends AbstractAdmin
 {
     use AdminTranslatorStrategyTrait;
     use ModelRegionTrait;
     use CommuneTrait;
+
+    /**
+     * @var UserManagerInterface
+     */
+    protected $userManager;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFormBuilder()
+    {
+        $this->formOptions['data_class'] = $this->getClass();
+
+        $options = $this->formOptions;
+        $options['validation_groups'] = ['Default', 'Profile'];
+
+        if (!$this->getSubject() || null === $this->getSubject()->getId()) {
+            $options['validation_groups'] = ['Default', 'Registration'];
+        }
+
+        $formBuilder = $this->getFormContractor()->getFormBuilder($this->getUniqid(), $options);
+
+        $this->defineFormBuilder($formBuilder);
+
+        return $formBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function preUpdate($user): void
+    {
+        if ($user instanceof UserInterface) {
+            $this->getUserManager()->updateCanonicalFields($user);
+            $this->getUserManager()->updatePassword($user);
+        }
+    }
+
+    public function setUserManager(UserManagerInterface $userManager): void
+    {
+        $this->userManager = $userManager;
+    }
+
+    /**
+     * @return UserManagerInterface
+     */
+    public function getUserManager()
+    {
+        return $this->userManager;
+    }
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
@@ -55,7 +110,11 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
      */
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        parent::configureDatagridFilters($filter);
+        $filter
+            ->add('id')
+            ->add('username')
+            ->add('email')
+            ->add('groups');
         $filter->add('communes',
             null, [
                 'label' => 'app.user.entity.communes',
@@ -133,47 +192,117 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
         }
     }
 
-    protected function configureShowFields(ShowMapper $showMapper): void
-    {
-        parent::configureShowFields($showMapper);
 
-        $showMapper->removeGroup('Social');
-        $showMapper->remove('biography');
-        $showMapper
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureDefaultUserFormFields(FormMapper $formMapper): void
+    {
+        // define group zoning
+        $formMapper
+            ->tab('User')
+            ->with('Profile', ['class' => 'col-md-6'])->end()
+            ->with('General', ['class' => 'col-md-6'])->end()
+            ->with('Social', ['class' => 'col-md-6'])->end()
+            ->end()
+            ->tab('Security')
+            ->with('Status', ['class' => 'col-md-4'])->end()
+            ->with('Groups', ['class' => 'col-md-4'])->end()
+            ->with('Keys', ['class' => 'col-md-4'])->end()
+            ->with('Roles', ['class' => 'col-md-12'])->end()
+            ->end();
+
+        $now = new \DateTime();
+
+        $genderOptions = [
+            'choices' => \call_user_func([$this->getUserManager()->getClass(), 'getGenderList']),
+            'required' => true,
+            'translation_domain' => $this->getTranslationDomain(),
+        ];
+
+        $formMapper
+            ->tab('User')
+            ->with('General')
+            ->add('username')
+            ->add('email')
+            ->add('plainPassword', TextType::class, [
+                'required' => (!$this->getSubject() || null === $this->getSubject()->getId()),
+            ])
+            ->end()
             ->with('Profile')
-            ->add('organisation');
-//        $showMapper->remove('timezone');
-//        $showMapper->remove('website');
-//        $showMapper->remove('phone');
+            /*->add('dateOfBirth', DatePickerType::class, [
+                'years' => range(1900, $now->format('Y')),
+                'dp_min_date' => '1-1-1900',
+                'dp_max_date' => $now->format('c'),
+                'required' => false,
+            ])*/
+            ->add('firstname', null, ['required' => false])
+            ->add('lastname', null, ['required' => false])
+            ->add('website', UrlType::class, ['required' => false])
+            ->add('gender', ChoiceType::class, $genderOptions)
+            ->add('locale', LocaleType::class, ['required' => false])
+            ->add('timezone', TimezoneType::class, ['required' => false])
+            ->add('phone', null, ['required' => false])
+            ->end()
+            /*
+                ->with('Social')
+                    ->add('facebookUid', null, ['required' => false])
+                    ->add('facebookName', null, ['required' => false])
+                    ->add('twitterUid', null, ['required' => false])
+                    ->add('twitterName', null, ['required' => false])
+                    ->add('gplusUid', null, ['required' => false])
+                    ->add('gplusName', null, ['required' => false])
+                ->end()*/
+            ->end()
+            ->tab('Security')
+            ->with('Status')
+            ->add('enabled', null, ['required' => false])
+            ->end()
+            ->with('Groups')
+            ->add('groups', ModelType::class, [
+                'required' => false,
+                'expanded' => true,
+                'multiple' => true,
+            ])
+            ->end()
+            /*->with('Roles')
+            ->add('realRoles', SecurityRolesType::class, [
+                'label' => 'form.label_roles',
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
+            ])
+            ->end()*/
+            /*->with('Keys')
+            ->add('token', null, ['required' => false])
+            ->add('twoStepVerificationCode', null, ['required' => false])
+            ->end()*/
+            ->end();
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
-        parent::configureFormFields($formMapper);
+        $this->configureDefaultUserFormFields($formMapper);
 
-        $formMapper->removeGroup('Social', 'User');
-        $formMapper->remove('biography');
 //        $formMapper->remove('timezone');
 //        $formMapper->remove('website');
 //        $formMapper->remove('phone');
 
-        $formMapper->removeGroup('Roles', 'Security');
-        $formMapper->removeGroup('Keys', 'Security');
-        $formMapper->remove('dateOfBirth');
+        //$formMapper->removeGroup('Roles', 'Security');
+        //$formMapper->removeGroup('Keys', 'Security');
         $now = new DateTime();
         $formMapper
             ->tab('User')
             ->with('Profile')
             ->add('website', UrlType::class, ['required' => false])
-            //->add('biography', TextType::class, ['required' => false])
             ->add('timezone', TimezoneType::class, ['required' => false])
-            ->add('phone', null, ['required' => false])
-            ->add('dateOfBirth', DatePickerType::class, [
+            ->add('phone', null, ['required' => false])/*->add('dateOfBirth', DatePickerType::class, [
                 'years' => range(1900, $now->format('Y')),
                 'dp_min_date' => '1-1-1900',
                 'dp_max_date' => $now->format('c'),
                 'required' => false,
-            ]);
+            ])*/
+        ;
         $formMapper
             ->end()
             ->end();
@@ -241,6 +370,44 @@ class UserAdmin extends \Sonata\UserBundle\Admin\Model\UserAdmin
             $formMapper->removeGroup('Groups', 'Security', true);
             $formMapper->removeGroup('Status', 'Security', true);
         }
+    }
+
+    protected function configureExportFields(): array
+    {
+        // Avoid sensitive properties to be exported.
+        return array_filter(parent::configureExportFields(), static function (string $v): bool {
+            return !\in_array($v, ['password', 'salt'], true);
+        });
+    }
+
+    protected function configureShowFields(ShowMapper $showMapper): void
+    {
+        $showMapper
+            ->with('General')
+            ->add('username')
+            ->add('email')
+            ->end()
+            ->with('Groups')
+            ->add('groups')
+            ->end()
+            ->with('Profile')
+            ->add('firstname')
+            ->add('lastname')
+            ->add('organisation', null, [
+                'label' => 'app.user.entity.organisation',
+            ])
+            ->add('website')
+            ->add('biography')
+            ->add('gender')
+            ->add('locale')
+            ->add('timezone')
+            ->add('phone')
+            //->add('dateOfBirth')
+            ->end()
+            ->with('Security')
+            ->add('token')
+            ->add('twoStepVerificationCode')
+            ->end();
     }
 
 }
