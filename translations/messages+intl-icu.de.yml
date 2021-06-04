@@ -614,6 +614,43 @@ app:
         choose: Bitte wählen
         yes: Ja, die Kommune hat bereits einen Servicekonto.NRW Mandanten
         no: Nein, die Kommune hat noch keinen Servicekonto.NRW Mandanten
+  release:
+    object_name: Go-Live
+    list: Go-Live
+    create: Go-Live erfassen
+    actions:
+      ask_question: Frage stellen
+      show_questions: Rückfragen
+    groups:
+      general: Basisdaten
+      release: Termin
+      release_description: Termin für Go-Live
+      confirmation: Bestätigung
+      confirmation_description: Bestätigung für Go-Live
+    entity:
+      description: Beschreibung
+      commune: Kommune
+      commune_name: Kommune
+      official_commune_key: Amtlicher Gemeindeschlüssel
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      email: E-Mail-Adresse
+      phone_number: Telefon
+      modified_at: Letzter Eintrag
+      status: Status
+      status_choices:
+        new: Noch keine Eingaben
+        incomplete: Unvollständig
+        complete: Vollständig
+      release_status: Status Go-Live
+      release_status_choices:
+        offline: Offline
+        planned: Termin festgelegt
+        online: Online
+      custom_values: Benutzerdefinierte Werte
+      release_date: Termin
+      release_confirmed:  Liveschaltung bestätigt
   inquiry:
     object_name: Rückfrage
     list: Onboarding Rückfragen

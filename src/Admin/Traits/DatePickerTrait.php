@@ -23,19 +23,26 @@ use Sonata\Form\Type\DatePickerType;
  */
 trait DatePickerTrait
 {
-    protected function addDatePickerFormField(FormMapper $formMapper, string $fieldName, int $maxYearOffset = 2): void
+    protected function addDatePickerFormField(
+        FormMapper $formMapper,
+        string $fieldName,
+        int $maxYearOffset = 2,
+        array $customOptions = []): void
     {
         $now = new DateTime();
         $maxYear = (int)$now->format('Y') + $maxYearOffset;
-        $formMapper
-            ->add($fieldName, DatePickerType::class, [
-                //'years' => range(2018, (int)$now->format('Y') + 2),
-                'dp_min_date' => new DateTime('2018-01-01 00:00:00'),
-                'dp_max_date' => new DateTime($maxYear . '-12-31 23:59:59'),
-                'dp_use_current' => false,
-                'datepicker_use_button' => true,
-                'required' => false,
-            ]);
+        $options = [
+            //'years' => range(2018, (int)$now->format('Y') + 2),
+            'dp_min_date' => date_create('2018-01-01 00:00:00'),
+            'dp_max_date' => date_create($maxYear . '-12-31 23:59:59'),
+            'dp_use_current' => false,
+            'datepicker_use_button' => true,
+            'required' => false,
+        ];
+        if (!empty($customOptions)) {
+            $options = array_merge($options, $customOptions);
+        }
+        $formMapper->add($fieldName, DatePickerType::class, $options);
     }
 
     protected function addDatePickersListFields(

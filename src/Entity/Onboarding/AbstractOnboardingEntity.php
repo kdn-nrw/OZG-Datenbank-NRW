@@ -279,7 +279,11 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
      */
     public function getStatusLabelKey(): string
     {
-        return self::$statusChoices[$this->getStatus()] ?? self::$statusChoices[self::STATUS_NEW];
+        $status = $this->getStatus();
+        if (array_key_exists($status, self::$statusChoices)) {
+            return self::$statusChoices[$status];
+        }
+        return self::$statusChoices[self::STATUS_NEW];
     }
 
     /**

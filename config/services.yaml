@@ -1010,6 +1010,19 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Admin\Onboarding\ReleaseAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\Release
+      - App\Controller\Onboarding\ReleaseAdminController
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.release.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Admin\Onboarding\InquiryAdmin:
     arguments:
       - ~

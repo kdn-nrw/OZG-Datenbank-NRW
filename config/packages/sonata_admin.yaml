@@ -259,6 +259,7 @@ sonata_admin:
                     - App\Admin\Onboarding\FormSolutionAdmin
                     - App\Admin\Onboarding\InquiryAdmin
                     - App\Admin\Onboarding\OnboardingServiceAdmin
+                    - App\Admin\Onboarding\ReleaseAdmin
             app_admin.menu.basic:
                 label: app.menu.basic_group
                 label_catalogue: messages
