@@ -12,10 +12,10 @@
 namespace App\Admin\Configuration;
 
 use App\Admin\AbstractAppAdmin;
-use App\Entity\Configuration\EmailTemplate;
 use App\Service\Mailer\InjectEmailTemplateManagerTrait;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -106,5 +106,12 @@ class EmailTemplateAdmin extends AbstractAppAdmin
                 'edit' => [],
             ]
         ]);
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->remove('create');
+        $collection->remove('delete');
+        $collection->remove('export');
     }
 }

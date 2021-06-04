@@ -18,8 +18,6 @@ use App\Service\Onboarding\InquiryManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class InquiryControllerTrait

@@ -16,7 +16,6 @@ use App\Admin\Frontend\ImplementationProjectAdmin;
 use App\Entity\ImplementationProject;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class ImplementationProjectController

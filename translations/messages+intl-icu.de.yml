@@ -817,6 +817,7 @@ app:
         commune_info_update: 'Onboarding Basisdaten - Update'
         form_solution_update: 'Onboarding Formsolutions - Update'
         epayment_update: 'Onboarding ePayBL - Update'
+        release_update: 'Go-Live - Update'
       hidden: E-Mail-Versand deaktiviert?
       reply_to_email: Antwort an
       default_recipient: Empfänger (Standard)

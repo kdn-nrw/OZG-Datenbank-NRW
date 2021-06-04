@@ -23,6 +23,7 @@ use App\Model\EmailTemplate\AbstractTemplateModel;
 use App\Model\EmailTemplate\OnboardingCommuneInfoUpdateModel;
 use App\Model\EmailTemplate\OnboardingEpaymentUpdateModel;
 use App\Model\EmailTemplate\OnboardingFormSolutionUpdateModel;
+use App\Model\EmailTemplate\OnboardingReleaseUpdateModel;
 use App\Model\EmailTemplate\OnboardingServiceAccountUpdateModel;
 use App\Service\InjectAdminManagerTrait;
 use App\Translator\TranslatorAwareTrait;
@@ -114,6 +115,12 @@ class EmailTemplateManager
         }
     }
 
+    /**
+     * Replace markers in the email template subject and body and send the email
+     * @param AbstractTemplateModel $model
+     * @param bool $sendHtmlPart
+     * @return bool
+     */
     protected function sendMarkerEmail(AbstractTemplateModel $model, $sendHtmlPart = false): bool
     {
         $emailTemplate = $model->getEmailTemplate();
@@ -250,6 +257,7 @@ class EmailTemplateManager
             OnboardingCommuneInfoUpdateModel::TEMPLATE_KEY => OnboardingCommuneInfoUpdateModel::class,
             OnboardingEpaymentUpdateModel::TEMPLATE_KEY => OnboardingEpaymentUpdateModel::class,
             OnboardingFormSolutionUpdateModel::TEMPLATE_KEY => OnboardingFormSolutionUpdateModel::class,
+            OnboardingReleaseUpdateModel::TEMPLATE_KEY => OnboardingReleaseUpdateModel::class,
         ];
     }
 
