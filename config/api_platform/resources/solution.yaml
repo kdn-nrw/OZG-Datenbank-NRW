@@ -1,7 +1,7 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
 App\Entity\Solution:
   #shortName: 'Leika-Leistungen'
-  description: 'Lösungen'
+  description: 'Online-Dienste'
   attributes:
     pagination_items_per_page: 25
 
@@ -12,7 +12,7 @@ App\Entity\Solution:
         enable_max_depth: 1
         groups: ['collection:read', 'solution:collection:read']
       openapi_context:
-        summary: 'Gibt eine Liste mit OZG Lösungen zurück'
+        summary: 'Gibt eine Liste mit OZG Online-Diensten zurück'
       filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
   #    post:
   #      security: 'is_granted("ROLE_ADMIN")'
@@ -24,6 +24,6 @@ App\Entity\Solution:
         enable_max_depth: 1
         groups: ['item:read', 'solution:read']
       openapi_context:
-        summary: 'Gibt eine OZG Lösung zurück'
+        summary: 'Gibt einen OZG Online-Dienst zurück'
   #    put:
   #      method: 'PUT'

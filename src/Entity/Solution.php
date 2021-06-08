@@ -977,7 +977,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
         if (empty($label)) {
             $label = (string)$this->getId();
             if (empty($label)) {
-                $label = 'Neue Lösung';
+                $label = 'Neuer Online-Dienst';
             } else {
                 $label = 'ID:' . $label;
             }

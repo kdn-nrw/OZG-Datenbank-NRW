@@ -16,7 +16,7 @@ use App\Entity\Solution;
 class SolutionStatusChartProvider extends AbstractForeignNamedPropertyChartProvider
 {
 
-    protected $chartLabel = 'Anzahl der Lösungen';
+    protected $chartLabel = 'Anzahl der Online-Dienste';
     protected $foreignColorProperty = 'color';
 
     protected function getEntityClass(): string

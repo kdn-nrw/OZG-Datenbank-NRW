@@ -1,6 +1,6 @@
 # KDN OZG
 
-Die Kommunen in NRW und ihre IT-Dienstleister im KDN präsentieren hier ihre Lösungen und gemeinsamen Digitalisierungsprojekte zur Umsetzung des Onlinezugangsgesetzes (OZG):
+Die Kommunen in NRW und ihre IT-Dienstleister im KDN präsentieren hier ihre Online-Dienste und gemeinsamen Digitalisierungsprojekte zur Umsetzung des Onlinezugangsgesetzes (OZG):
 
 * Zuständigkeiten und Beteiligte
 * Priorisierungen

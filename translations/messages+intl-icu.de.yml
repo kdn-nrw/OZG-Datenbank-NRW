@@ -32,10 +32,10 @@ app:
     onboarding_dvdv: Onboarding DVDV
   block:
     solution:
-      online: 'Lösungen: Online'
-      partially_online: 'Lösungen: Teilweise online'
-      offline: 'Lösungen: offline'
-      maturity_4: 'Lösungen: Reifegrad 4'
+      online: 'Dienste: Online'
+      partially_online: 'Dienste: Teilweise online'
+      offline: 'Dienste: offline'
+      maturity_4: 'Dienste: Reifegrad 4'
     implementation_project:
       total: 'gemeinsame kommunale OZG Umsetzungsprojekte in NRW'
     service_system:
@@ -224,14 +224,14 @@ app:
     create: Analogen Dienst anlegen
     entity:
       name: Name
-      solutions: Lösungen
+      solutions: Online-Dienste
   authentication:
     object_name: Authentifizierung
     list: Authentifizierungen
     create: Authentifizierung anlegen
     entity:
       name: Methode
-      solutions: Lösungen
+      solutions: Online-Dienste
   bureau:
     object_name: Fachlichkeit
     list: Fachlichkeit
@@ -274,7 +274,7 @@ app:
       list: Kommunen Übersicht
       show: Kommune anzeigen
       edit: Kommune bearbeiten
-      solution_list: Lösungen anzeigen
+      solution_list: Online-Dienste anzeigen
     group:
       general_data: Basisdaten
       administration_contact: Kontaktdaten der Verwaltung
@@ -295,7 +295,7 @@ app:
       portals: Portale
       manufacturers: Hersteller
       offices: Ämter
-      solutions: Lösungen
+      solutions: Online-Dienste
       laboratories: Stichwörter
       commune_type: Größenklasse
       constituency: Kreis
@@ -758,7 +758,7 @@ app:
       categories: Kategorien
       image_file: Profilbild
       implementation_projects: OZG Umsetzungsprojekte
-      solutions: Lösungen
+      solutions: Online-Dienste
   efile:
     object_name: eAkten Kataster
     list: eAkten Kataster
@@ -769,7 +769,7 @@ app:
       edit: eAkten Kataster bearbeiten
     tabs:
       general: Allgemein
-      solutions: Lösungen
+      solutions: Online-Dienste
     entity:
       name: DMS-Anwendung
       description: Kurzbeschreibung
@@ -858,21 +858,21 @@ app:
       list: Formularserver Übersicht
       show: Formularserver anzeigen
       edit: Formularserver bearbeiten
-      solutions_list: Formularserver Lösungen verwalten
+      solutions_list: Formularserver Online-Dienste verwalten
     tabs:
       general: Allgemein
-      solutions: Lösungen
+      solutions: Online-Dienste
     entity:
       name: Name
       url: Url
-      form_server_solutions: Lösungen
+      form_server_solutions: Online-Dienste
   form_server_solution:
-    object_name: Formularserver - Lösung
-    list: Formularserver - Lösungen
-    create: Formularserver-Lösung anlegen
+    object_name: Formularserver - Online-Dienst
+    list: Formularserver - Online-Dienste
+    create: Formularserver-Online-Dienst anlegen
     entity:
       form_server: Formularserver
-      solution: Lösung
+      solution: Online-Dienst
       article_number: Artikelnummer
       assistant_type: Assistententyp
       article_key: Identifikationsnummer
@@ -917,7 +917,7 @@ app:
       status_form: Umsetzungsstatus (sonstige)
       service_systems: OZG-Leistungen
       services: Leika-Leistungen
-      solutions: Lösungen
+      solutions: Online-Dienste
       contacts: Ansprechpartner
       notes: Notizen
       project_leaders: Projektleitung
@@ -1160,7 +1160,7 @@ app:
       transferable_service: übertragbare/lizenzfreie Leistung
       transferable_start: Beginn Übertragbarkeit
       model_regions: Modellregionen
-      solutions: Lösungen
+      solutions: Online-Dienste
       service_solutions: Enthaltene Leika-Leistungen
       documents: Dokumente
   model_region_project_document:
@@ -1175,7 +1175,7 @@ app:
     create: Open Data anlegen
     entity:
       name: Name
-      solutions: Lösungen
+      solutions: Online-Dienste
   organisation:
     object_name: Organisation
     list: Organisationen
@@ -1222,7 +1222,7 @@ app:
         service_systems: OZG-Leistungen
         services: Leika-Katalog
         implementation_projects: OZG Umsetzungsprojekte
-        solutions: Lösungen
+        solutions: Online-Dienste
         communes: Kommunen
         onboarding_dvdv: Onboarding DVDV
   payment_type:
@@ -1232,7 +1232,7 @@ app:
     entity:
       name: Name
       url: Url
-      solutions: Lösungen
+      solutions: Online-Dienste
   portal:
     object_name: Portal
     list: Portale
@@ -1328,7 +1328,7 @@ app:
     tabs:
       general: Allgemein
       relations: Relationen
-      service_solutions: Lösungen
+      service_solutions: Online-Dienste
       # Federal information management
       fim: FIM
       notes: Zusatz-Infos
@@ -1349,7 +1349,7 @@ app:
       relevance2: SDG2
       status: Status
       priority: Priorität
-      service_solutions: Lösungen
+      service_solutions: Online-Dienste
       laboratories: Stichwörter
       bureaus: Fachlichkeiten
       inherit_bureaus: Fachlichkeiten von OZG-Leistung übernehmen
@@ -1425,7 +1425,7 @@ app:
       town: Ort
       url: Url
       contact: OZG-Ansprechpartner (alt)
-      solutions: Lösungen
+      solutions: Online-Dienste
       communes: Kommunen
       specialized_procedures: Fachverfahren
       manufacturers: Hersteller
@@ -1433,11 +1433,11 @@ app:
       security_incidents: Sicherheitsvorfälle
       enable_payment_provider: 'Dieser IT Dienstleister ist ein ePayBl-Betreiber'
   service_solution:
-    object_name: Lösung für Leistung
-    list: Lösung für Leistung
-    create: Lösung für Leistung anlegen
+    object_name: Online-Dienst für Leistung
+    list: Online-Dienst für Leistung
+    create: Online-Dienst für Leistung anlegen
     entity:
-      solution: Lösung
+      solution: Online-Dienst
       service: Leistung
       description: Kommentar
       status: Status
@@ -1450,7 +1450,7 @@ app:
       general: Allgemein
       relations: Relationen
       services: Leika-Leistungen
-      solutions: Lösungen
+      solutions: Online-Dienste
     entity:
       name: OZG-Leistung
       service_key: OZG-ID
@@ -1468,7 +1468,7 @@ app:
       laboratories: Stichwörter
       bureaus: Fachlichkeiten
       bureaus_form: Fachlichkeiten (werden an Leika-Leistungen vererbt und auf Umsetzungsprojekten angezeigt)
-      solutions: Lösungen
+      solutions: Online-Dienste
       rule_authorities: Regelungskompetenz
       rule_authorities_form: Regelungskompetenz (werden an Leika-Leistungen vererbt)
       authority_bureaus: Regelungskompetenz Fachlichkeiten
@@ -1490,14 +1490,14 @@ app:
       subject: Themenfeld
       services: Dienstleistungen
   solution:
-    object_name: Lösung
-    list: Lösungen
-    create: Lösung anlegen
-    recent_solutions: Neu eingepflegte Lösungen
+    object_name: Online-Dienst
+    list: Online-Dienste
+    create: Online-Dienst anlegen
+    recent_solutions: Neu eingepflegte Online-Dienste
     actions:
-      list: Lösungen Übersicht
-      show: Lösung anzeigen
-      edit: Lösung bearbeiten
+      list: Online-Dienste Übersicht
+      show: Online-Dienst anzeigen
+      edit: Online-Dienst bearbeiten
       service_solution_list: Enthaltene Leika-Leistungen anzeigen
     tabs:
       general: Allgemein
@@ -1508,15 +1508,15 @@ app:
       created_by: Erstellt von
       modified_by: Geändert von
       created_at: Erstellt am
-      view_all: Alle Lösungen anzeigen
-      no_solution_found: Keine Lösungen gefunden
+      view_all: Alle Online-Dienste anzeigen
+      no_solution_found: Keine Online-Dienste gefunden
       service_providers: IT Dienstleister
       custom_provider: Anbieter (sonstige)
       specialized_procedures: Anbindung Fachverfahren
       portals: Portale
       commune_type: Kommunenauswahl
-      commune_type_all: Lösung für alle Kommunen
-      commune_type_selected: Lösung für ausgewählte Kommunen
+      commune_type_all: Online-Dienst für alle Kommunen
+      commune_type_selected: Online-Dienst für ausgewählte Kommunen
       communes: Kommunen
       name: Name
       description: Beschreibung
@@ -1532,7 +1532,7 @@ app:
       maturity: Reifegrad
       form_server_solutions: Formularserver
       payment_types: Bezahlverfahren
-      is_published: Lösung öffentlich sichtbar?
+      is_published: Online-Dienst öffentlich sichtbar?
       model_region_projects: DMR Umsetzungsprojekte
       implementation_projects: OZG Umsetzungsprojekte
     messages:
@@ -1545,13 +1545,13 @@ app:
       name: Name
       description: Beschreibung
       url: Url
-      solutions: Lösungen
+      solutions: Online-Dienste
       manufacturers: Hersteller
       service_providers: IT Dienstleister
       communes: Kommunen
   statistics:
-    solution_maturity: 'Lösungen: Reifegrade'
-    solution_status: 'Lösungen: Status'
+    solution_maturity: 'Online-Dienste: Reifegrade'
+    solution_status: 'Online-Dienste: Status'
     service_status: 'Leika-Leistungen: Status'
     implementation_project_status: 'OZG Umsetzungsprojekte: Status'
     service_communal_implementation_status: 'Kommunale Leistungen: Umsetzungs-Status in NRW'

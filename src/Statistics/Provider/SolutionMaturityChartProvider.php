@@ -16,7 +16,7 @@ use App\Entity\Solution;
 class SolutionMaturityChartProvider extends AbstractForeignNamedPropertyChartProvider
 {
 
-    protected $chartLabel = 'Anzahl der Lösungen';
+    protected $chartLabel = 'Anzahl der Online-Dienste';
     protected $foreignProperty = 'maturity';
     protected $foreignColorProperty = 'color';
 
@@ -31,7 +31,7 @@ class SolutionMaturityChartProvider extends AbstractForeignNamedPropertyChartPro
                 var label = item.xLabel ? item.xLabel : data.labels[item.index];
                 var count = item.yLabel ? item.yLabel : data.datasets[item.datasetIndex].data[item.index];
                 var value = label === "n.a" ? "Kein Reifegrad" : "Reifegrad " + label;
-                value += ": " + count + " Lösungen";
+                value += ": " + count + " Online-Dienste";
                 return value;
             }',
         ],
