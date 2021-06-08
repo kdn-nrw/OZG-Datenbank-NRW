@@ -203,14 +203,19 @@ class UserAdmin extends AbstractAdmin
             ->tab('User')
             ->with('Profile', ['class' => 'col-md-6'])->end()
             ->with('General', ['class' => 'col-md-6'])->end()
-            ->with('Social', ['class' => 'col-md-6'])->end()
-            ->end()
-            ->tab('Security')
-            ->with('Status', ['class' => 'col-md-4'])->end()
-            ->with('Groups', ['class' => 'col-md-4'])->end()
-            ->with('Keys', ['class' => 'col-md-4'])->end()
-            ->with('Roles', ['class' => 'col-md-12'])->end()
+            //->with('Social', ['class' => 'col-md-6'])->end()
             ->end();
+
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+
+            $formMapper
+                ->tab('Security')
+                ->with('Status', ['class' => 'col-md-4'])->end()
+                ->with('Groups', ['class' => 'col-md-4'])->end()
+                //->with('Keys', ['class' => 'col-md-4'])->end()
+                ->with('Roles', ['class' => 'col-md-12'])->end()
+                ->end();
+        }
 
         $now = new \DateTime();
 
@@ -253,31 +258,34 @@ class UserAdmin extends AbstractAdmin
                     ->add('gplusUid', null, ['required' => false])
                     ->add('gplusName', null, ['required' => false])
                 ->end()*/
-            ->end()
-            ->tab('Security')
-            ->with('Status')
-            ->add('enabled', null, ['required' => false])
-            ->end()
-            ->with('Groups')
-            ->add('groups', ModelType::class, [
-                'required' => false,
-                'expanded' => true,
-                'multiple' => true,
-            ])
-            ->end()
-            /*->with('Roles')
-            ->add('realRoles', SecurityRolesType::class, [
-                'label' => 'form.label_roles',
-                'expanded' => true,
-                'multiple' => true,
-                'required' => false,
-            ])
-            ->end()*/
-            /*->with('Keys')
-            ->add('token', null, ['required' => false])
-            ->add('twoStepVerificationCode', null, ['required' => false])
-            ->end()*/
             ->end();
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $formMapper
+                ->tab('Security')
+                ->with('Status')
+                ->add('enabled', null, ['required' => false])
+                ->end()
+                ->with('Groups')
+                ->add('groups', ModelType::class, [
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => true,
+                ])
+                ->end()
+                /*->with('Roles')
+                ->add('realRoles', SecurityRolesType::class, [
+                    'label' => 'form.label_roles',
+                    'expanded' => true,
+                    'multiple' => true,
+                    'required' => false,
+                ])
+                ->end()*/
+                /*->with('Keys')
+                ->add('token', null, ['required' => false])
+                ->add('twoStepVerificationCode', null, ['required' => false])
+                ->end()*/
+                ->end();
+        }
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
@@ -306,69 +314,64 @@ class UserAdmin extends AbstractAdmin
         $formMapper
             ->end()
             ->end();
-        $formMapper
-            ->tab('User')
-            ->with('app.user.groups.references', ['class' => 'col-md-6']);
-        $formMapper->add('organisation', ModelType::class, [
-            'label' => 'app.user.entity.organisation',
-            'btn_add' => false,
-            'placeholder' => '',
-            'required' => false,
-            'choice_translation_domain' => false,
-        ]);
-        $formMapper->add('communes', ModelType::class,
-            [
-                'label' => 'app.user.entity.communes',
+        if ($this->isGranted('ALL')) {
+            $formMapper
+                ->tab('User')
+                ->with('app.user.groups.references', ['class' => 'col-md-6']);
+            $formMapper->add('organisation', ModelType::class, [
+                'label' => 'app.user.entity.organisation',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'choice_translation_domain' => false,
+            ]);
+            $formMapper->add('communes', ModelType::class,
+                [
+                    'label' => 'app.user.entity.communes',
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ],
+                [
+                    'admin_code' => CommuneAdmin::class,
+                ]
+            );
+            $formMapper->add('modelRegions', ModelType::class, [
+                'label' => 'app.user.entity.model_regions',
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
                 'multiple' => true,
                 'by_reference' => false,
                 'choice_translation_domain' => false,
-            ],
-            [
-                'admin_code' => CommuneAdmin::class,
-            ]
-        );
-        $formMapper->add('modelRegions', ModelType::class, [
-            'label' => 'app.user.entity.model_regions',
-            'btn_add' => false,
-            'placeholder' => '',
-            'required' => false,
-            'multiple' => true,
-            'by_reference' => false,
-            'choice_translation_domain' => false,
-        ], [
-            'admin_code' => ModelRegionAdmin::class,
-        ]);
-        $formMapper->add('serviceProviders', ModelAutocompleteType::class, [
-            'label' => 'app.user.entity.service_providers',
-            'property' => ['name', 'shortName'],
-            'required' => false,
-            'multiple' => true,
-        ], [
-            'admin_code' => ServiceProviderAdmin::class,
-        ]);/*
-        $formMapper->add('serviceProviders', ModelType::class, [
-            'label' => 'app.user.entity.service_providers',
-            'btn_add' => false,
-            'placeholder' => '',
-            'required' => false,
-            'multiple' => true,
-            'by_reference' => false,
-            'choice_translation_domain' => false,
-        ], [
-            'admin_code' => ServiceProviderAdmin::class,
-        ]);*/
-        $formMapper
-            ->end()
-            ->end();
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
-            $formMapper->remove('enabled');
-            $formMapper->remove('realRoles');
-            $formMapper->remove('groups');
-            $formMapper->removeGroup('Groups', 'Security', true);
-            $formMapper->removeGroup('Status', 'Security', true);
+            ], [
+                'admin_code' => ModelRegionAdmin::class,
+            ]);
+            $formMapper->add('serviceProviders', ModelAutocompleteType::class, [
+                'label' => 'app.user.entity.service_providers',
+                'property' => ['name', 'shortName'],
+                'required' => false,
+                'multiple' => true,
+            ], [
+                'admin_code' => ServiceProviderAdmin::class,
+            ]);/*
+                $formMapper->add('serviceProviders', ModelType::class, [
+                    'label' => 'app.user.entity.service_providers',
+                    'btn_add' => false,
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                ], [
+                    'admin_code' => ServiceProviderAdmin::class,
+                ]);*/
+            $formMapper
+                ->end()
+                ->end();
         }
     }
 
