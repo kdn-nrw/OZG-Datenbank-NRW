@@ -16,6 +16,7 @@ use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\SortableEntityInterface;
 use App\Entity\Base\SortableEntityTrait;
+use App\Entity\Solution;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -32,11 +33,11 @@ class EpaymentService extends BaseEntity implements HideableEntityInterface, Sor
     use SortableEntityTrait;
 
     /**
-     * @var OnboardingService|null
-     * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\OnboardingService", inversedBy="epaymentServices", cascade={"persist"})
-     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     * @var Solution|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\Solution", cascade={"persist"})
+     * @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
      */
-    private $service;
+    private $solution;
 
     /**
      * @var Epayment|null
@@ -102,19 +103,19 @@ class EpaymentService extends BaseEntity implements HideableEntityInterface, Sor
     private $taxNumber;
 
     /**
-     * @return OnboardingService|null
+     * @return Solution|null
      */
-    public function getService(): ?OnboardingService
+    public function getSolution(): ?Solution
     {
-        return $this->service;
+        return $this->solution;
     }
 
     /**
-     * @param OnboardingService $service
+     * @param Solution $solution
      */
-    public function setService(OnboardingService $service): void
+    public function setSolution(Solution $solution): void
     {
-        $this->service = $service;
+        $this->solution = $solution;
     }
 
     /**
@@ -270,12 +271,12 @@ class EpaymentService extends BaseEntity implements HideableEntityInterface, Sor
     {
         $name = '';
         $project = $this->getEpayment();
-        $service = $this->getService();
+        $solution = $this->getSolution();
         if (null !== $project) {
             $name = $project . '';
         }
-        if (null !== $service) {
-            $name .= $service . '';
+        if (null !== $solution) {
+            $name .= ($name ? ': ' : '') . $solution . '';
         }
         if (empty($name)) {
             $name = (string)$this->getId();

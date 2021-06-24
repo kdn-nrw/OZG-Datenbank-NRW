@@ -92,9 +92,9 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 ]);
             }
 
-            if ($this->isGranted('LIST')) {
+            if ($this->isGranted('LIST') && null !== $childAdmin = $admin->getChild(ServiceSolutionAdmin::class)) {
                 $menu->addChild('app.solution.actions.list', [
-                    'uri' => $admin->getChild(ServiceSolutionAdmin::class)->generateUrl('list')
+                    'uri' => $childAdmin->generateUrl('list')
                 ]);
             }
         }
@@ -147,23 +147,32 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'label' => false,
             ]);
         $this->addPortalsFormFields($formMapper);
-        $formMapper
-            ->add('communeType', ChoiceFieldMaskType::class, [
-                'choices' => [
-                    'app.solution.entity.commune_type_all' => 'all',
-                    'app.solution.entity.commune_type_selected' => 'selected',
-                ],
-                'map' => [
-                    'all' => [],
-                    'selected' => ['communes'],
-                ],
-                'required' => true,
-            ]);
         $overrideOptions = [];
         if (!$this->authorizationChecker->isGranted('ROLE_APP_SOLUTION_COMMUNE_EDIT', $this->getSubject())) {
             $overrideOptions = [
                 'disabled' => true,
             ];
+            $formMapper
+                ->add('communeType', ChoiceType::class, [
+                    'choices' => [
+                        'app.solution.entity.commune_type_all' => 'all',
+                        'app.solution.entity.commune_type_selected' => 'selected',
+                    ],
+                    'disabled' => true,
+                ]);
+        } else {
+            $formMapper
+                ->add('communeType', ChoiceFieldMaskType::class, [
+                    'choices' => [
+                        'app.solution.entity.commune_type_all' => 'all',
+                        'app.solution.entity.commune_type_selected' => 'selected',
+                    ],
+                    'map' => [
+                        'all' => [],
+                        'selected' => ['communes'],
+                    ],
+                    'required' => true,
+                ]);
         }
         $this->addCommunesFormFields($formMapper, $overrideOptions);
         $this->addSpecializedProceduresFormFields($formMapper);

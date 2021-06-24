@@ -12,6 +12,11 @@
 namespace App\Admin\Onboarding;
 
 use App\Admin\AbstractAppAdmin;
+use App\Admin\SolutionAdmin;
+use App\Entity\Onboarding\EpaymentService;
+use App\Entity\Solution;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -48,13 +53,16 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                     'admin_code' => \App\Admin\Onboarding\EpaymentAdmin::class
                 ]);
         }
-        if (!in_array('service', $hideFields, false)) {
+        if (!in_array('solution', $hideFields, false)) {
             $formMapper
-                ->add('service', ModelType::class, [
+                ->add('solution', ModelType::class, [
                         'btn_add' => false,
                         'required' => false,
                         'choice_translation_domain' => false,
                         'placeholder' => '',
+                        'query' => $this->getSolutionQueryBuilder(),
+                    ], [
+                        'admin_code' => \App\Admin\Onboarding\OnboardingServiceAdmin::class,
                     ]
                 );
         }
@@ -94,10 +102,39 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
             ->end();
     }
 
+    /**
+     * Returns the query builder for the status
+     *
+     * @return QueryBuilder
+     */
+    private function getSolutionQueryBuilder(): QueryBuilder
+    {
+        /** @var EntityManager $em */
+        $em = $this->modelManager->getEntityManager(Solution::class);
+
+        /** @var EpaymentService $subject */
+        $subject = $this->getSubject();
+        $selectedEntity = $subject->getSolution();
+        $queryBuilder = $em->createQueryBuilder()
+            ->select('s')
+            ->from(Solution::class, 's');
+        if (null !== $selectedEntity) {
+            $queryBuilder->where($queryBuilder->expr()->orX(
+                's.communeType = :communeType',
+                $queryBuilder->expr()->eq('s', $selectedEntity->getId())
+            ));
+        } else {
+            $queryBuilder->where('s.communeType = :communeType');
+        }
+        $queryBuilder->setParameter('communeType', Solution::COMMUNE_TYPE_ALL);
+        //$queryBuilder->orderBy('s.name', 'ASC');
+        return $queryBuilder;
+    }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $this->addDefaultDatagridFilter($datagridMapper, 'epayment');
-        $this->addDefaultDatagridFilter($datagridMapper, 'service');
+        $this->addDefaultDatagridFilter($datagridMapper, 'solution');
         /*$datagridMapper->add('description');*/
     }
 
@@ -114,14 +151,14 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                     ['fieldName' => 'epayment'],
                 ]
             ])
-            ->add('service', null, [
+            ->add('solution', null, [
                 'admin_code' => \App\Admin\Onboarding\OnboardingServiceAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
                 ],
                 'sort_parent_association_mappings' => [
-                    ['fieldName' => 'service'],
+                    ['fieldName' => 'solution'],
                 ]
             ]);
         $this->addDefaultListActions($listMapper);
@@ -136,7 +173,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
             ->add('epayment', null, [
                 'admin_code' => \App\Admin\Onboarding\EpaymentAdmin::class
             ])
-            ->add('service', null, [
+            ->add('solution', null, [
                 'admin_code' => \App\Admin\Onboarding\OnboardingServiceAdmin::class
             ])
             ->add('description')

@@ -1109,7 +1109,7 @@ services:
   App\Admin\Onboarding\OnboardingServiceAdmin:
     arguments:
       - ~
-      - App\Entity\Onboarding\OnboardingService
+      - App\Entity\Solution
       - ~
     tags:
       - name:         sonata.admin

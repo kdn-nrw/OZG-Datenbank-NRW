@@ -329,8 +329,9 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('epaymentServices', CollectionType::class, [
                 'label' => false,
                 'type_options' => [
-                    'delete' => true,
+                    'delete' => false,
                 ],
+                'btn_add' => false,
                 'by_reference' => false,
             ], [
                 'edit' => 'inline',

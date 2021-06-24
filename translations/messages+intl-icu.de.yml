@@ -549,7 +549,7 @@ app:
       optional: Optional Daten
       optional_description: '<p>Folgende Angaben sind optional und werden nur in der XFinanz-Datei mit übergeben (vgl. Tooltipps). Sie sind nicht in den Berichten der ePayBL sichtbar:</p>'
     entity:
-      service: Dienst
+      solution: Dienst
       epayment: ePayBL
       booking_text: Buchungstext
       description: Beschreibung der Buchungsliste
