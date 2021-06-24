@@ -18,7 +18,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\DoctrineORMAdminBundle\Filter\StringListFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -62,11 +62,16 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
     {
         $this->addDefaultDatagridFilter($datagridMapper, 'commune');
         $datagridMapper
-            ->add('status', StringListFilter::class, [], ChoiceType::class, [
+            ->add('status', ChoiceFilter::class, [
                 'label' => 'app.commune_info.entity.status',
-                'choices' => array_flip(AbstractOnboardingEntity::$statusChoices),
-                'multiple' => true,
-                //'choice_translation_domain' => 'SonataAdminBundle',
+                'field_options' => [
+                    'choices' => array_flip(AbstractOnboardingEntity::$statusChoices),
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => false,
+                    //'choice_translation_domain' => 'SonataAdminBundle',
+                ],
+                'field_type' => ChoiceType::class,
             ]);
     }
 

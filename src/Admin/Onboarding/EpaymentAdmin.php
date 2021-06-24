@@ -13,6 +13,7 @@ namespace App\Admin\Onboarding;
 
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\ServiceProviderTrait;
+use App\Entity\Onboarding\Epayment;
 use App\Form\Type\CommuneType;
 use App\Form\Type\EpaymentProjectType;
 use App\Form\Type\OnboardingContactType;
@@ -320,6 +321,8 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ])
             ->end()
             ->end();
+        /** @var Epayment|null $subject */
+        $subject = $this->getSubject();
         $formMapper
             ->tab('Services')
             ->with('epayment_services')
@@ -334,6 +337,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'inline' => 'natural',
                 'sortable' => 'position',
                 'ba_custom_hide_fields' => ['epayment'],
+                'ba_disable_required_fields' => null !== $subject && null !== $subject->getId(),
             ])
             ->end()
             ->end();

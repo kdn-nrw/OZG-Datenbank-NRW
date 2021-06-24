@@ -27,6 +27,12 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $enableRequiredFields = true;
+        $parentFieldDescription = $this->getParentFieldDescription();
+        if (null !== $parentFieldDescription) {
+            $parentOptions = $parentFieldDescription->getOptions();
+            $enableRequiredFields = empty($parentOptions['ba_disable_required_fields']);
+        }
         $formMapper
             ->with('general', [
                 'label' => 'app.epayment_service.groups.general',
@@ -37,7 +43,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
             $formMapper
                 ->add('epayment', ModelAutocompleteType::class, [
                     'property' => ['communeName',],
-                    'required' => true,
+                    'required' => $enableRequiredFields,
                 ], [
                     'admin_code' => \App\Admin\Onboarding\EpaymentAdmin::class
                 ]);
@@ -54,16 +60,16 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
         }
         $formMapper
             ->add('description', TextareaType::class, [
-                'required' => true,
+                'required' => $enableRequiredFields,
             ])
             ->add('bookingText', TextareaType::class, [
-                'required' => true,
+                'required' => $enableRequiredFields,
             ])
             ->add('valueFirstAccountAssignmentInformation', TextareaType::class, [
-                'required' => true,
+                'required' => $enableRequiredFields,
             ])
             ->add('valueSecondAccountAssignmentInformation', TextareaType::class, [
-                'required' => true,
+                'required' => $enableRequiredFields,
             ])
             ->end();
         $formMapper

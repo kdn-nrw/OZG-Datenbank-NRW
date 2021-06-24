@@ -124,13 +124,11 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
      */
     protected function addGroupEmailFormField(FormMapper $formMapper, $useCustomLabel = false): void
     {
-        if ($this->isGranted('ALL', $this->getSubject())) {
-            $formMapper
-                ->add('groupEmail', EmailType::class, [
-                    'label' => 'app.abstract_onboarding_entity.entity.group_email' . ($useCustomLabel ? '_custom' : ''),
-                    'required' => false,
-                ]);
-        }
+        $formMapper
+            ->add('groupEmail', EmailType::class, [
+                'label' => 'app.abstract_onboarding_entity.entity.group_email' . ($useCustomLabel ? '_custom' : ''),
+                'required' => false,
+            ]);
     }
 
     public function preUpdate($object)
