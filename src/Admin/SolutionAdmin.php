@@ -20,6 +20,7 @@ use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SluggableTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
+use App\DependencyInjection\InjectionTraits\InjectAuthorizationCheckerTrait;
 use App\Entity\Status;
 use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Model\ExportSettings;
@@ -50,6 +51,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     use ServiceSystemTrait;
     use SpecializedProcedureTrait;
     use SluggableTrait;
+    use InjectAuthorizationCheckerTrait;
 
     protected $datagridValues = [
 
@@ -157,7 +159,13 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 ],
                 'required' => true,
             ]);
-        $this->addCommunesFormFields($formMapper);
+        $overrideOptions = [];
+        if (!$this->authorizationChecker->isGranted('ROLE_APP_SOLUTION_COMMUNE_EDIT', $this->getSubject())) {
+            $overrideOptions = [
+                'disabled' => true,
+            ];
+        }
+        $this->addCommunesFormFields($formMapper, $overrideOptions);
         $this->addSpecializedProceduresFormFields($formMapper);
         $formMapper
             ->add('paymentTypes', ModelType::class, [

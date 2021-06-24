@@ -12,10 +12,12 @@
 namespace App\Admin\Traits;
 
 use App\Admin\StateGroup\CommuneAdmin;
+use App\Entity\StateGroup\Commune;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * Trait CommuneTrait
@@ -23,21 +25,33 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 trait CommuneTrait
 {
-    protected function addCommunesFormFields(FormMapper $formMapper)
+    protected function addCommunesFormFields(FormMapper $formMapper, array $overrideOptions = [])
     {
-        $formMapper->add('communes', ModelType::class,
-            [
+        $fieldDescriptionOptions = [
+            'admin_code' => CommuneAdmin::class,
+        ];
+        if (!empty($overrideOptions['disabled'])) {
+            $options = [
+                'class' => Commune::class,
+                'multiple' => true,
+            ];
+            $options = array_merge($options, $overrideOptions);
+            $formMapper->add('communes', EntityType::class, $options, $fieldDescriptionOptions);
+
+        } else {
+            $options = [
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
                 'multiple' => true,
                 'by_reference' => false,
                 'choice_translation_domain' => false,
-            ],
-            [
-                'admin_code' => CommuneAdmin::class,
-            ]
-        );
+            ];
+            if (!empty($overrideOptions)) {
+                $options = array_merge($options, $overrideOptions);
+            }
+            $formMapper->add('communes', ModelType::class, $options, $fieldDescriptionOptions);
+        }
     }
 
     protected function addCommunesListFields(ListMapper $listMapper)
