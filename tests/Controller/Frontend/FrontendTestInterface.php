@@ -16,5 +16,5 @@ namespace App\Tests\Controller\Frontend;
  */
 interface FrontendTestInterface
 {
-    const SELECTOR_CONTENT_SECTION = '.content-wrapper';
+    const SELECTOR_CONTENT_SECTION = '.app-content-wrapper';
 }

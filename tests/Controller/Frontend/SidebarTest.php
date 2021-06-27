@@ -42,8 +42,8 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
         $client->catchExceptions(false);
         $crawler = $client->request('GET', '/');
         self::assertResponseIsSuccessful();
-        $crawlerSidebar = $crawler->filter('.main-sidebar')->first();
-        $navLinkInfo = $crawlerSidebar->filter('a.nav-link')->extract(['href']);
+        $crawlerSidebar = $crawler->filter('#mainnav')->first();
+        $navLinkInfo = $crawlerSidebar->filter('a.dropdown-item')->extract(['href']);
         self::assertThat(
             count($navLinkInfo),
             new GreaterThan(0),
@@ -54,7 +54,7 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
                 $navPageCrawler = $client->request('GET', $url);
                 self::assertResponseIsSuccessful();
                 self::assertThat(
-                    $navPageCrawler->filter('.main-sidebar')->count(),
+                    $navPageCrawler->filter('#mainnav')->count(),
                     new GreaterThan(0),
                     'The navigation page contains a sidebar.'
                 );
@@ -68,7 +68,7 @@ class SidebarTest extends WebTestCase implements FrontendTestInterface
         $client->catchExceptions(false);
         $crawler = $client->request('GET', '/ozg-leistungen');
         self::assertResponseIsSuccessful();
-        $crawlerSidebar = $crawler->filter('.main-sidebar')->first();
+        $crawlerSidebar = $crawler->filter('.app-content-wrapper')->first();
         $filterLinkCrawler = $crawlerSidebar->filter('a.custom-menu-filter-link');
         foreach ($filterLinkCrawler as $elementCrawler) {
 

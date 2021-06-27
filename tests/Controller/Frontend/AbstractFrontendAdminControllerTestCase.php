@@ -71,8 +71,8 @@ abstract class AbstractFrontendAdminControllerTestCase extends AbstractWebTestCa
             false
         );
         self::assertContains(
-            'custom-search-form',
-            $crawler->filter('.main-sidebar')->html(),
+            'global-search-form',
+            $crawler->filter('#mainnav')->html(),
             'The global search form is present.',
             false,
             false
