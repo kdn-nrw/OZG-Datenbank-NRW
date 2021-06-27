@@ -6,16 +6,28 @@ file that was distributed with this source code.
 #}
 {% if entities|length > 0 %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
-    {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\Service' %}
+    {% set showContacts = app_is_backend() %}
+    {% if showSolution %}
+        {% set tableHeaders = ['name', 'url', 'description'] %}
+        {% set labelPrefix = 'app.solution.entity.' %}
+        {% set entityClass = 'App\\Entity\\Solution' %}
+    {% else %}
+        {% if field_description.option('reference_field_list') %}
+            {% set tableHeaders = field_description.option('reference_field_list') %}
+        {% else %}
+            {% set tableHeaders = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'status'] %}
+        {% endif %}
+        {% set labelPrefix = 'app.service.entity.' %}
+        {% set entityClass = 'App\\Entity\\Service' %}
+    {% endif %}
     {% set refSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
-    {% set showContacts = app_is_backend() %}
     <table class="table table-bordered table-striped table-condensed">
         <tr>
             {% if showSolution %}
-                {% include 'General/Show/Table/table-head-solutions.html.twig' %}
+                {% include 'General/Show/Table/table-head-solutions.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
             {% else %}
-                {% include 'ServiceAdmin/Show/table-head-services.html.twig' %}
+                {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
             {% endif %}
             <th>
                 {{ 'app.solution.entity.maturity'|trans }}
@@ -31,7 +43,7 @@ file that was distributed with this source code.
             <tr>
                 {% if showSolution %}
                     {% set editObjectId = child.solution.id %}
-                    {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child.solution} %}
+                    {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child.solution, 'fields': tableHeaders} %}
                 {% else %}
                     {% if child.service %}
                         {% set editObjectId = child.service.id %}

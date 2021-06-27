@@ -9,9 +9,21 @@ file that was distributed with this source code.
     {% set entityClass = showSolution ? 'App\\Entity\\Solution' : 'App\\Entity\\FormServer' %}
     {% set refSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
+    {% if showSolution %}
+        {% set tableHeaders = ['name', 'url', 'description'] %}
+        {% set labelPrefix = 'app.solution.entity.' %}
+    {% else %}
+        {% set tableHeaders = ['name', 'url',] %}
+        {% set labelPrefix = 'app.form_server.entity.' %}
+    {% endif %}
     {% set showContacts = app_is_backend() %}
     <table class="table table-bordered table-striped table-condensed">
         <tr>
+            {% if showSolution %}
+                {% include 'General/Show/Table/table-head-solutions.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+            {% else %}
+                {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+            {% endif %}
             {% include 'General/Show/Table/table-head-form-server-solutions.html.twig' %}
             {% if refSettings.edit.enabled %}
                 <th>
@@ -23,7 +35,7 @@ file that was distributed with this source code.
             <tr>
                 {% if showSolution %}
                     {% set editObjectId = child.solution.id %}
-                    {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child.solution} %}
+                    {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child.solution, 'fields': tableHeaders} %}
                 {% elseif child.formServer is not null %}
                     {% set editObjectId = child.formServer.id %}
                     {% include 'General/Show/Table/table-row-cells-form-servers.html.twig' with {'child': child.formServer} %}

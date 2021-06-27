@@ -7,9 +7,15 @@ file that was distributed with this source code.
 {# @var refSettings \App\Model\ReferenceSettings #}
 {% set showContacts = app_is_backend() %}
 {% set showServices = field_description.options.showServices is defined and field_description.options.showServices %}
+{% if field_description.option('reference_field_list') %}
+    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
+{% else %}
+    {% set referenceFieldNameList = ['name', 'url', 'description'] %}
+{% endif %}
+{% set labelPrefix = 'app.solution.entity.' %}
 <table class="table table-bordered table-striped table-condensed">
     <tr>
-        {% include 'General/Show/Table/table-head-solutions.html.twig' %}
+        {% include 'General/Show/Table/table-head-solutions.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': labelPrefix} %}
         {% if refSettings.edit.enabled %}
             <th></th>
         {% endif %}
@@ -17,7 +23,7 @@ file that was distributed with this source code.
     {% for child in entities %}
         {# @var child \App\Entity\Solution #}
         <tr>
-            {% include 'General/Show/Table/table-row-cells-solutions.html.twig' %}
+            {% include 'General/Show/Table/table-row-cells-solutions.html.twig' with {'child': child, 'fields': referenceFieldNameList} %}
             {% if refSettings.edit.enabled %}
                 <td>
                     {% include 'General/Show/Partials/link-to-child.html.twig' %}
@@ -27,7 +33,7 @@ file that was distributed with this source code.
         {% if showServices %}
             {% if child.serviceSolutions|length > 0 %}
                 <tr>
-                    <td colspan="{{ showContacts ? 5 : 4 }}" class="child-table-container">
+                    <td colspan="{{ referenceFieldNameList|length + (showContacts ? 1 : 0) }}" class="child-table-container">
                         <h4 class="headline"><i class="fa fa-arrow-right" aria-hidden="true"></i>
                             {{ 'app.service.list'|trans }}</h4>
                         {% include 'General/Show/Partials/service-solutions-list.html.twig' with {'entities': child.serviceSolutions, 'showSolution': false} %}

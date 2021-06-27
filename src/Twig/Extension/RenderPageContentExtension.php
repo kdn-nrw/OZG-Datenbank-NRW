@@ -11,26 +11,14 @@
 
 namespace App\Twig\Extension;
 
+use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\PageContent;
-use Doctrine\Persistence\ManagerRegistry;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class RenderPageContentExtension extends AbstractExtension
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private $registry;
-
-    /**
-     * RenderPageContentExtension constructor.
-     * @param ManagerRegistry $registry
-     */
-    public function __construct(ManagerRegistry $registry)
-    {
-        $this->registry = $registry;
-    }
+    use InjectManagerRegistryTrait;
 
     /**
      * Returns a list of functions to add to the existing list.

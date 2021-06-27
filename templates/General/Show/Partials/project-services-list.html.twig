@@ -15,7 +15,13 @@ file that was distributed with this source code.
             {% if showProject %}
                 {% include 'General/Show/Table/table-head-implementation-projects.html.twig' %}
             {% else %}
-                {% include 'ServiceAdmin/Show/table-head-services.html.twig' %}
+                {% if field_description.option('reference_field_list') %}
+                    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
+                {% else %}
+                    {% set referenceFieldNameList = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'status'] %}
+                {% endif %}
+                {% set labelPrefix = 'app.service.entity.' %}
+                {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': labelPrefix} %}
             {% endif %}
             <th>
                 {{ 'app.implementation_project_service.entity.status'|trans }}
@@ -59,7 +65,7 @@ file that was distributed with this source code.
                     </td>
                 {% endif %}
             </tr>
-            {% if not showProject and field_description.option('showFimTypes') %}
+            {% if not showProject and child.service and field_description.option('showFimTypes') %}
                 <tr>
                     <td colspan="{{ refSettings.edit.enabled ? 10 : 9 }}" class="child-table-container">
                         {% include 'General/Show/show-fim.html.twig' with {'entities': child.service.fimTypes} %}

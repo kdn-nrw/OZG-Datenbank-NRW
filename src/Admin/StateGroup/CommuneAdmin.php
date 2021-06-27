@@ -17,6 +17,7 @@ use App\Admin\ExtendedSearchAdminInterface;
 use App\Admin\ManufacturerAdmin;
 use App\Admin\ServiceAdmin;
 use App\Admin\ServiceSystemAdmin;
+use App\Admin\SolutionAdmin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\CentralAssociationTrait;
 use App\Admin\Traits\ContactTrait;
@@ -272,6 +273,15 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,
             'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
+        ]);
+        $showMapper->add('solutions', null, [
+            'label' => 'app.commune_type.entity.online_solutions',
+            'admin_code' => SolutionAdmin::class,
+            'is_custom_field' => true,
+            'is_tab_field' => true,
+            'is_custom_rendered' => true,
+            'reference_field_list' => ['name', 'url', 'description', 'jurisdictions', 'maturity',],// 'status'
+            'show_export' => true,
         ]);
         $showMapper->add('communeType.serviceSystems', null, [
             'label' => 'app.commune_type.entity.service_systems',

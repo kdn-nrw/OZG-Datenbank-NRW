@@ -691,6 +691,7 @@ app:
     create: Größenklasse anlegen
     show:
       headline:
+        online_solutions: 'Online Dienste für {commune}'
         service_systems: 'OZG-Leistungen für Größenklasse {communeType}'
         services: 'Leika-Leistungen für Größenklasse {communeType}'
     entity:
@@ -1535,6 +1536,7 @@ app:
       is_published: Online-Dienst öffentlich sichtbar?
       model_region_projects: DMR Umsetzungsprojekte
       implementation_projects: OZG Umsetzungsprojekte
+      jurisdictions: Zuständigkeiten
     messages:
       no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   specialized_procedure:

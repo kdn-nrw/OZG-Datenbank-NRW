@@ -15,9 +15,11 @@ file that was distributed with this source code.
             {% for projectService in object.services %}
                 <div class="project-service-status-info">
                     {% set serviceStatusInfo = app_implementation_project_service_status_info(projectService) %}
+                    {% if projectService.service %}
                     <div class="status-type-label">
                         {{ projectService.service.serviceKey }} {{ projectService.service.name }}
                     </div>
+                    {% endif %}
                     <div class="project-status-info">
                         {% for statusDetails in serviceStatusInfo %}
                             <div class="project-status{{ statusDetails.isActive ? ' active' : '' }}{{ statusDetails.isCurrent ? ' current' : '' }}{{ statusDetails.setAutomatically ? '' : ' inactive' }}">

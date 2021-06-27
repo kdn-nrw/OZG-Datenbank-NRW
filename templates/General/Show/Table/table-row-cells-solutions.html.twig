@@ -7,34 +7,56 @@ file that was distributed with this source code.
 
 {# @var child \App\Entity\Solution #}
 {% set createShowLink = refSettings.show.enabled and (app_is_backend() or child.isPublished) %}
+{% for field in fields %}
 <td>
-    {% include 'General/Show/Partials/link-child-name-show.html.twig' with {'displayName': child.displayName} %}
-</td>
-<td>
-    {% if child.url %}
-        {{ child.url }}
-    {% endif %}
-</td>
-<td>
-    {{ child.description|nl2br }}
-</td>
-{% if showContacts %}
-<td>
-    {% set contactCount = child.solutionContacts|length%}
-    {% if contactCount > 0 %}
-        {% for contact in child.solutionContacts %}
-            {# @var contact \App\Entity\Contact #}
+    {% if field == 'name' %}
+        {% include 'General/Show/Partials/link-child-name-show.html.twig' with {'displayName': child.displayName} %}
+    {% elseif field == 'url' %}
+        {% if child.url %}
+            <a href="{{ child.url }}" target="_blank">
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+                <span class="sr-only">{{ child.url }}</span>
+            </a>
+        {% endif %}
+    {% elseif field == 'description' %}
+        {{ child.description|nl2br }}
+    {% elseif field == 'commune_type' %}
+        {% if child.communeType == 'all' %}
+            {{ 'app.solution.entity.commune_type_all'|trans }}
+        {% else %}
+            {{ 'app.solution.entity.commune_type_selected'|trans }}
+        {% endif %}
+    {% elseif field == 'jurisdictions' %}
+        {% for grandChild in child.jurisdictions %}
             {% if loop.index > 1 %}
                 ,
             {% endif %}
-            {{ contact ~ '' }}
+            {{ grandChild.name }}
         {% endfor %}
-    {% endif %}
-    {% if child.contact %}
-        {% if contactCount > 0 %}
-            ,
+    {% elseif field == 'maturity' %}
+        {% if child.maturity %}
+            {{ child.maturity ~ '' }}
         {% endif %}
-        {{ child.contact }}
     {% endif %}
 </td>
+{% endfor %}
+{% if showContacts %}
+    <td>
+        {% set contactCount = child.solutionContacts|length%}
+        {% if contactCount > 0 %}
+            {% for contact in child.solutionContacts %}
+                {# @var contact \App\Entity\Contact #}
+                {% if loop.index > 1 %}
+                    ,
+                {% endif %}
+                {{ contact ~ '' }}
+            {% endfor %}
+        {% endif %}
+        {% if child.contact %}
+            {% if contactCount > 0 %}
+                ,
+            {% endif %}
+            {{ child.contact }}
+        {% endif %}
+    </td>
 {% endif %}
