@@ -1167,6 +1167,10 @@ services:
     decorates: 'api_platform.openapi.factory'
     autoconfigure: false
 
+  App\OpenApi\PaginationExtensionDecorator:
+    decorates: 'api_platform.doctrine.orm.query_extension.pagination'
+    autoconfigure: false
+
   App\Security\Guard\JWTTokenAuthenticator:
     parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
     autowire: false
