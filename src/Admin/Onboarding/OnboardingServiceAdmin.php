@@ -11,16 +11,11 @@
 
 namespace App\Admin\Onboarding;
 
-use App\Admin\AbstractAppAdmin;
+use App\Admin\ServiceSystemAdmin;
 use App\Admin\SolutionAdmin;
 use App\Entity\Solution;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 class OnboardingServiceAdmin extends SolutionAdmin
@@ -85,5 +80,58 @@ class OnboardingServiceAdmin extends SolutionAdmin
             $this->translatorNamingPrefix = SolutionAdmin::class;
         }
         return $this->translatorNamingPrefix;
+    }
+
+    protected function configureListFields(ListMapper $listMapper)
+    {
+        $listMapper
+            ->add('serviceProviders', null, [
+                'template' => 'SolutionAdmin/list-service-providers.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceProviders'],
+                ]
+            ])
+            ->add('serviceSystems', null, [
+                'admin_code' => ServiceSystemAdmin::class,
+                //'associated_property' => 'name',
+                'template' => 'SolutionAdmin/list-service-systems.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSolutions'],
+                    ['fieldName' => 'service'],
+                    ['fieldName' => 'serviceSystem'],
+                ]
+            ])
+            ->add('jurisdictions', 'string', [
+                'label' => 'app.service_system.entity.jurisdictions',
+                //'associated_property' => 'name',
+                'template' => 'SolutionAdmin/list-jurisdiction.html.twig',
+                'enable_filter_add' => true,
+            ])
+            ->add('name')/*
+            ->add('status', 'choice', [
+                'editable' => true,
+                'class' => Status::class,
+                'catalogue' => 'messages',
+            ])*/
+            ->add('maturity', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'maturity'],
+                ],
+                'enable_filter_add' => true,
+            ])
+            ->add('url', 'url');
+        $this->addDefaultListActions($listMapper);
     }
 }

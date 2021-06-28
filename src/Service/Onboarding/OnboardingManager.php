@@ -121,13 +121,13 @@ class OnboardingManager
         $em->flush();
         $em->clear();
         if (!empty($mapReferencesToBeCreated)) {
-            $insert = 'INSERT INTO ozg_onboarding_epayment_service (epayment_id, solution_id) VALUES ';
+            $insert = 'INSERT INTO ozg_onboarding_epayment_service (epayment_id, solution_id, hidden) VALUES ';
             $sqlStatements = [];
             $insertValueList = [];
             $count = 1;
             foreach ($mapReferencesToBeCreated as $ePaymentId => $solutionIdLIst) {
                 foreach ($solutionIdLIst as $solutionId) {
-                    $insertValueList[] = sprintf('(%d, %d)', $ePaymentId, $solutionId);
+                    $insertValueList[] = sprintf('(%d, %d, %d)', $ePaymentId, $solutionId, 0);
                     if ($count > 500) {
                         $sqlStatements[] = $insert . implode(', ', $insertValueList);
                         $insertValueList = [];
