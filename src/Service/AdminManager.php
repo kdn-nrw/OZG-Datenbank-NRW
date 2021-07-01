@@ -57,7 +57,7 @@ class AdminManager
      * Returns the registered admins for the given entity class
      *
      * @param string $entityClass
-     * @return array
+     * @return array<string>|null
      */
     public function getEntityAdminClasses(string $entityClass): ?array
     {
@@ -80,7 +80,7 @@ class AdminManager
     /**
      * Returns the entity classes which have an admin service assigned to
      *
-     * @return array|string
+     * @return array<string>|string[]
      */
     public function getManagedEntityClasses(): array
     {
@@ -92,7 +92,7 @@ class AdminManager
      * The configuration currently contains the admin class and the target entity class of the given property
      * @param BaseEntityInterface|string $entityOrClass
      * @param string $property The name of the entity property (may contain . to get recursive configuration)
-     * @return array The property configuration
+     * @return array<string, string> The property configuration
      */
     public function getConfigurationForEntityProperty($entityOrClass, string $property): array
     {

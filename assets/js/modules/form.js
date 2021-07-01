@@ -44,6 +44,7 @@
             self.initFormMeta(formContainer);
         },
         initFormMeta: function(formContainer) {
+            let self = this;
             // jQuery is loaded globally by Sonata Admin and therefore is not required here!
             let formMeta = formContainer.querySelector('.app-form-meta');
             if (formMeta) {
@@ -53,28 +54,63 @@
                     let keys = Object.keys(metaProperties);
                     keys.forEach(function (key) {
                         const idSuffix = formId + '_' + metaProperties[key].property;
-                        const formGroupElt = document.getElementById('sonata-ba-field-container-' + idSuffix);
-                        let labelElt = null;
-                        if (formGroupElt) {
-                            labelElt = formGroupElt.querySelector('.control-label');
+                        self.addFormElementMeta(idSuffix, key, metaProperties);
+                    });
+                }
+                jQuery('.js-form-label-popover:not(.initialized)').each(function(){
+                    $(this).addClass('initialized');
+                    $(this).popover();
+                });
+            }
+
+        },
+        addFormElementMeta: function(idSuffix, key, metaProperties) {
+            let self = this;
+            const formGroupElt = document.getElementById('sonata-ba-field-container-' + idSuffix);
+            let labelElt = null;
+            if (formGroupElt) {
+                labelElt = formGroupElt.querySelector('.control-label');
+                if (!labelElt) {
+                    labelElt = formGroupElt.querySelector('.control-label__text');
+                }
+                if (labelElt && labelElt.querySelector('.field-help') === null) {
+                    let description = metaProperties[key].description.replace('"', "'").replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br>');
+                    let helpTitle = (labelElt.textContent).replace(/(<([^>]+)>)/gi, "");
+                    let propertyHelpHtml = '\n' +
+                        '<span id="meta-help-'+idSuffix+'" class="has-popover">' +
+                        '<span class="field-help js-form-label-popover" data-toggle="popover" title="'+helpTitle+'" data-content="'+description+'"' +
+                        ' data-html="1" data-trigger="hover" data-placement="top" data-container="#meta-help-'+idSuffix+'">' +
+                        ' <i class="fa fa-question-circle" aria-hidden="true"></i>' +
+                        '</span>' +
+                        '</span>';
+                    labelElt.innerHTML = labelElt.innerHTML + propertyHelpHtml;
+                }
+                if ((typeof metaProperties[key].subMeta) === "object" && metaProperties[key].subMeta !== null) {
+                    let subMetaProperties = metaProperties[key].subMeta;
+                    let subKeys = Object.keys(subMetaProperties);
+                    let maxCollectionOffset = -1;
+                    subKeys.forEach(function (subKey) {
+                        const subPropertyName = subMetaProperties[subKey].property;
+                        if (maxCollectionOffset < 0) {
+                            let checkCollectionElt = null;
+                            do {
+                                ++maxCollectionOffset;
+                                let checkSuffix = idSuffix + '_' + maxCollectionOffset + '_' + subPropertyName;
+                                checkCollectionElt = document.getElementById('sonata-ba-field-container-' + checkSuffix);
+                                if (checkCollectionElt === null) {
+                                    --maxCollectionOffset;
+                                }
+                            } while(checkCollectionElt !== null);
                         }
-                        if (labelElt) {
-                            let description = metaProperties[key].description.replace('"', "'").replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br>');
-                            let helpTitle = (labelElt.textContent).replace(/(<([^>]+)>)/gi, "");
-                            let propertyHelpHtml = '\n' +
-                                '<span id="meta-help-'+idSuffix+'" class="has-popover">' +
-                                '<span class="field-help js-form-label-popover" data-toggle="popover" title="'+helpTitle+'" data-content="'+description+'"' +
-                                ' data-html="1" data-trigger="hover" data-placement="top" data-container="#meta-help-'+idSuffix+'">' +
-                                ' <i class="fa fa-question-circle" aria-hidden="true"></i>' +
-                                '</span>' +
-                                '</span>';
-                            labelElt.innerHTML = labelElt.innerHTML + propertyHelpHtml;
+                        for (let i=0; i<=maxCollectionOffset; i++) {
+                            const subIdSuffix = idSuffix + '_' + i + '_' + subPropertyName;
+                            self.addFormElementMeta(subIdSuffix, subKey, subMetaProperties);
                         }
                     });
                 }
-                jQuery('.js-form-label-popover').popover();
+                return true;
             }
-
+            return false;
         },
         initCopyRowContainer: function(copyRowsContainer) {
             let self = this;

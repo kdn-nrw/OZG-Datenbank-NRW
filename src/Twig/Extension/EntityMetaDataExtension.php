@@ -11,9 +11,11 @@
 
 namespace App\Twig\Extension;
 
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\MetaData\MetaItem;
 use App\Entity\MetaData\MetaItemProperty;
 use App\Service\MetaData\InjectMetaDataManagerTrait;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -45,23 +47,45 @@ class EntityMetaDataExtension extends AbstractExtension
     public function getObjectClassMetaDataAsArray($objectOrClass): ?array
     {
         if (null !== $metaItem = $this->getObjectClassMetaData($objectOrClass)) {
-            $data = [];
-            foreach ($metaItem->getMetaItemProperties() as $metaItemProperty) {
-                $customLabel = $metaItemProperty->getCustomLabel();
-                $description = $metaItemProperty->getDescription();
-                if ($customLabel || $description) {
-                    $propertyName = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $metaItemProperty->getMetaKey()))));
-                    $data[] = [
-                        'key' => $metaItemProperty->getMetaKey(),
-                        'property' => $propertyName,
-                        'customLabel' => $customLabel,
-                        'description' => $description,
-                    ];
-                }
-            }
-            return empty($data) ? null : $data;
+            return $this->buildMetaDataArray($metaItem, $objectOrClass);
         }
         return null;
+    }
+
+    /**
+     * Create array for given meta item
+     *
+     * @param MetaItem $metaItem
+     * @param object|string|null $objectOrClass
+     * @return array|null
+     */
+    protected function buildMetaDataArray(MetaItem $metaItem, $objectOrClass): ?array
+    {
+        $data = [];
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        foreach ($metaItem->getMetaItemProperties() as $metaItemProperty) {
+            $customLabel = $metaItemProperty->getCustomLabel();
+            $description = $metaItemProperty->getDescription();
+            if ($customLabel || $description) {
+                $propertyName = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $metaItemProperty->getMetaKey()))));
+                $rowData = [
+                    'key' => $metaItemProperty->getMetaKey(),
+                    'property' => $propertyName,
+                    'customLabel' => $customLabel,
+                    'description' => $description,
+                ];;
+                if ($objectOrClass instanceof BaseEntityInterface
+                    && $metaItemProperty->getMetaType() === MetaItemProperty::META_TYPE_FIELD
+                    && $propertyAccessor->isReadable($objectOrClass, $propertyName)) {
+                    $subMetaItem = $this->metaDataManager->getObjectPropertyReferenceClassMetaData($objectOrClass, $propertyName);
+                    if ($subMetaItem instanceof MetaItem) {
+                        $rowData['subMeta'] = $this->buildMetaDataArray($subMetaItem, null);
+                    }
+                }
+                $data[] = $rowData;
+            }
+        }
+        return empty($data) ? null : $data;
     }
 
     /**

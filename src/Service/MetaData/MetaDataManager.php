@@ -13,6 +13,7 @@ namespace App\Service\MetaData;
 
 use App\Admin\Onboarding\AbstractOnboardingAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\MetaData\AbstractMetaItem;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\MetaData\MetaItem;
@@ -96,6 +97,22 @@ class MetaDataManager
     }
 
     /**
+     * Returns the meta data for entity classes that are referenced in another entity
+     *
+     * @param string|BaseEntityInterface $objectOrClass
+     * @param string $property
+     * @return MetaItem|null
+     */
+    public function getObjectPropertyReferenceClassMetaData($objectOrClass, string $property): ?MetaItem
+    {
+        $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($objectOrClass, $property);
+        if (array_key_exists('entity_class', $propertyConfiguration) && !empty($propertyConfiguration['entity_class'])) {
+            return $this->getObjectClassMetaData($propertyConfiguration['entity_class']);
+        }
+        return null;
+    }
+
+    /**
      * Adds the meta properties for the given meta item: adds list and show fields of all entity admins for this class
      *
      * @param MetaItem $metaItem
@@ -125,7 +142,14 @@ class MetaDataManager
         }
     }
 
-    protected function addFormGroupsAndTabs(MetaItem $metaItem, AbstractAdmin $admin)
+    /**
+     * Add meta properties for form groups and tabs
+     *
+     * @param MetaItem $metaItem
+     * @param AbstractAdmin $admin
+     * @throws \Doctrine\ORM\ORMException
+     */
+    protected function addFormGroupsAndTabs(MetaItem $metaItem, AbstractAdmin $admin): void
     {
         $em = $this->getEntityManager();
         $admin->getFormBuilder();
