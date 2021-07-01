@@ -191,6 +191,24 @@ class Epayment extends AbstractOnboardingEntity
      */
     private $epaymentServices;
 
+    /**
+     * Toggle XFinance export
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="xfinance_file_required", type="boolean")
+     */
+    protected $xFinanceFileRequired = false;
+
+    /**
+     * Selected days for XFinance
+     * @var array|null
+     *
+     * @ORM\Column(name="xfinance_file_days", type="json", nullable=true)
+     */
+    private $xFinanceFileDays = [];
+
+
     public function __construct(Commune $commune)
     {
         parent::__construct($commune);
@@ -702,6 +720,38 @@ class Epayment extends AbstractOnboardingEntity
         $this->epaymentServices = $epaymentServices;
     }
 
+    /**
+     * @return bool
+     */
+    public function isXFinanceFileRequired(): bool
+    {
+        return (bool) $this->xFinanceFileRequired;
+    }
+
+    /**
+     * @param bool|null $xFinanceFileRequired
+     */
+    public function setXFinanceFileRequired(?bool $xFinanceFileRequired): void
+    {
+        $this->xFinanceFileRequired = (bool) $xFinanceFileRequired;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getXFinanceFileDays(): ?array
+    {
+        return $this->xFinanceFileDays;
+    }
+
+    /**
+     * @param array|null $xFinanceFileDays
+     */
+    public function setXFinanceFileDays(?array $xFinanceFileDays): void
+    {
+        $this->xFinanceFileDays = $xFinanceFileDays;
+    }
+
     protected function getRequiredPropertiesForCompletion(): array
     {
         return [
@@ -716,5 +766,21 @@ class Epayment extends AbstractOnboardingEntity
             'lengthFirstAccountAssignmentInformation', 'lengthSecondAccountAssignmentInformation',
             'contentFirstAccountAssignmentInformation', 'contentSecondAccountAssignmentInformation',
         ];
+    }
+
+    /**
+     * Returns the week day choices used for xFinance
+     * @return array<string, string>
+     */
+    public static function getDayChoices(): array
+    {
+        $dayChoices = [];
+        $f = new \IntlDateFormatter(null, null, null, null, null, 'EEEE');
+        for ($i = 0; $i < 7; $i++) {
+            $timestamp = strtotime("next monday + $i days");
+            $key = strtolower(date('D', $timestamp));
+            $dayChoices[$key] = $f->format($timestamp);//strftime('%A', $timestamp)
+        }
+        return $dayChoices;
     }
 }

@@ -426,6 +426,7 @@ app:
       activation_system_description: 'Für das Produktivsystem ist keine separate Freischaltung in den Netzen des Betreibers notwendig. Das Integrationssystem steht dem Kunden als Testsystem zur Verfügung. Es kann über die URLs <a href="https://epay2.stadt-koeln.de/portal" target="_blank">https://epay2.stadt-koeln.de/portal</a> erreicht werden. Hierfür müssen entsprechende Freischaltungen eingerichtet werden.<br><br>Der Kunde teilt hierzu der Kundenbetreuung seine Ausgangs-IP mit. Diese kann vom Kunden bspw. über <a href="http://www.wieistmeineip.de" target="_blank">http://www.wieistmeineip.de</a> ermittelt werden.'
       admin_account: Einrichtung dezentraler Admin
       epayment_services: Dienste
+      services_epayment_services: Dienste
     entity:
       description: Beschreibung
       commune: Name des Mandanten
@@ -452,20 +453,6 @@ app:
       mandator_email: E-Mail
       test_ip_address: IP-Adresse die Zugreifen muss
       projects: Projekte
-      project_properties:
-        project:
-          id: Projekt-ID
-          password: Projekt-Password
-        provider_type: Zahlungsdienstleister
-        provider_choices:
-          giropay: Giropay
-          credit: Kreditkarte
-          paypal: PayPal
-          paydirekt: PayDirekt
-        project_environment: Projekt-Umgebung
-        project_environment_choices:
-          sandbox: Integration
-          production: Produktion
       client_number_integration: Mandanten-Nummer (Integration)
       client_number_production: Mandanten-Nummer (Produktion)
       manager_number: Bewirtschafter-Nummer
@@ -484,6 +471,12 @@ app:
       length_second_account_assignment_information: Länge zweite Kontierungsangabe
       content_second_account_assignment_information: Inhalt/Bedeutung der zweiten Kontierungsangabe
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
+      epayment_services: Dienste
+      x_finance_file_required: 'Xfinanzdatei-Erzeugung gewünscht?'
+      x_finance_file_days: 'Bitte geben Sie mindestens einen Wochentag an, an dem die Erzeugung erfolgen soll:'
+      x_finance_file_required_choices:
+        yes: Ja, die Xfinanzdatei-Erzeugung ist gewünscht
+        no: Nein, die Xfinanzdatei-Erzeugung ist nicht gewünscht
   form_solution:
     object_name: Formsolution
     list: Onboarding Formsolutions
@@ -538,6 +531,24 @@ app:
     entity:
       name: Name
       url: URL
+  epayment_project:
+    object_name: Onboarding ePayBL Projekt
+    list: Onboarding ePayBL Projekte
+    list_services: Projekte
+    create: Onboarding ePayBL Projekt anlegen
+    entity:
+      project_id: Projekt-ID
+      project_password: Projekt-Password
+      provider_type: Zahlverfahren
+      provider_choices:
+        giropay: Giropay
+        credit: Kreditkarte
+        paypal: PayPal
+        paydirekt: PayDirekt
+      project_environment: Projekt-Umgebung
+      project_environment_choices:
+        sandbox: Integration
+        production: Produktion
   epayment_service:
     object_name: Onboarding ePayBL Dienst
     list: Onboarding ePayBL Dienste

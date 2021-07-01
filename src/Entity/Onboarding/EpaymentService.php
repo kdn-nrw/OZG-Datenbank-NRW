@@ -16,18 +16,22 @@ use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\SortableEntityInterface;
 use App\Entity\Base\SortableEntityTrait;
+use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\Solution;
 use Doctrine\ORM\Mapping as ORM;
 
 
 /**
- * Class epayment service
+ * Class ePayment service
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_onboarding_epayment_service")
  * @ORM\HasLifecycleCallbacks
  */
-class EpaymentService extends BaseEntity implements HideableEntityInterface, SortableEntityInterface
+class EpaymentService extends BaseEntity implements
+    HideableEntityInterface,
+    SortableEntityInterface,
+    HasMetaDateEntityInterface
 {
     use HideableEntityTrait;
     use SortableEntityTrait;

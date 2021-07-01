@@ -18,6 +18,7 @@ use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\PersonInterface;
 use App\Entity\Base\PersonPropertiesTrait;
+use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Commune;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table(name="ozg_onboarding_contact")
  */
-class Contact extends BaseEntity implements HideableEntityInterface, PersonInterface
+class Contact extends BaseEntity implements HideableEntityInterface, PersonInterface, HasMetaDateEntityInterface
 {
     public const CONTACT_TYPE_BIS = 'bis';
     public const CONTACT_TYPE_FS = 'fs';

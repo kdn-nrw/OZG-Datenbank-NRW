@@ -20,9 +20,12 @@ use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -261,6 +264,24 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('applicationName', TextType::class, [
                 'required' => false,
                 'disabled' => true
+            ])
+            ->add('xFinanceFileRequired', ChoiceFieldMaskType::class, [
+                'choices' => [
+                    'app.epayment.entity.x_finance_file_required_choices.no' => false,
+                    'app.epayment.entity.x_finance_file_required_choices.yes' => true,
+                ],
+                'map' => [
+                    false => [],
+                    true => ['xFinanceFileDays'],
+                ],
+                'required' => false,
+            ])
+            ->add('xFinanceFileDays', ChoiceType::class, [
+                'choices' => array_flip(Epayment::getDayChoices()),
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
+                'choice_translation_domain' => false,
             ]);
         /*
         ->add('testIpAddress', TextType::class, [
@@ -381,6 +402,12 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('clientNumberProduction')
             ->add('managerNumber')
             ->add('cashRegisterPersonalAccountNumber')
+            ->add('lengthReceiptNumber')
+            ->add('cashRegisterCheckProcedureStatus')
+            ->add('lengthFirstAccountAssignmentInformation')
+            ->add('contentFirstAccountAssignmentInformation')
+            ->add('lengthSecondAccountAssignmentInformation')
+            ->add('contentSecondAccountAssignmentInformation')
             /*->add('budgetOffice')
             ->add('objectNumber')
             ->add('indicatorDunningProcedure')
@@ -388,9 +415,12 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->add('descriptionOfTheBookingList')*/
             ->add('managerNo')
             ->add('applicationName')
-            ->add('lengthReceiptNumber')
-            ->add('cashRegisterCheckProcedureStatus')
-            ->add('lengthFirstAccountAssignmentInformation')
-            ->add('lengthSecondAccountAssignmentInformation');
+            ->add('xFinanceFileRequired')
+            ->add('xFinanceFileDays', TemplateRegistry::TYPE_CHOICE, [
+                'editable' => false,
+                'choices' => Epayment::getDayChoices(),
+                'catalogue' => 'messages',
+            ])
+            ->add('epaymentServices');
     }
 }

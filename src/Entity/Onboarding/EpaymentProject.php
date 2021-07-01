@@ -14,6 +14,7 @@ namespace App\Entity\Onboarding;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
+use App\Entity\MetaData\HasMetaDateEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -23,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table(name="ozg_onboarding_epayment_project")
  */
-class EpaymentProject extends BaseEntity implements HideableEntityInterface
+class EpaymentProject extends BaseEntity implements HideableEntityInterface, HasMetaDateEntityInterface
 {
     public const PROVIDER_TYPE_GIROPAY = 'giropay';
     public const PROVIDER_TYPE_CREDIT_CARD = 'credit';
@@ -37,18 +38,18 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface
      * @var array Supported payment provider types
      */
     public static $providerTypeChoices = [
-        'app.epayment.entity.project_properties.provider_choices.giropay' => self::PROVIDER_TYPE_GIROPAY,
-        'app.epayment.entity.project_properties.provider_choices.credit' => self::PROVIDER_TYPE_CREDIT_CARD,
-        'app.epayment.entity.project_properties.provider_choices.paypal' => self::PROVIDER_TYPE_PAYPAL,
-        'app.epayment.entity.project_properties.provider_choices.paydirekt' => self::PROVIDER_TYPE_PAYDIREKT,
+        'app.epayment_project.entity.provider_choices.giropay' => self::PROVIDER_TYPE_GIROPAY,
+        'app.epayment_project.entity.provider_choices.credit' => self::PROVIDER_TYPE_CREDIT_CARD,
+        'app.epayment_project.entity.provider_choices.paypal' => self::PROVIDER_TYPE_PAYPAL,
+        'app.epayment_project.entity.provider_choices.paydirekt' => self::PROVIDER_TYPE_PAYDIREKT,
     ];
 
     /**
      * @var array Supported project environments
      */
     public static $projectEnvironmentChoices = [
-        'app.epayment.entity.project_properties.project_environment_choices.sandbox' => self::PROJECT_ENIRONMENT_SANDBOX,
-        'app.epayment.entity.project_properties.project_environment_choices.production' => self::PROJECT_ENIRONMENT_PRODUCTION,
+        'app.epayment_project.entity.project_environment_choices.sandbox' => self::PROJECT_ENIRONMENT_SANDBOX,
+        'app.epayment_project.entity.project_environment_choices.production' => self::PROJECT_ENIRONMENT_PRODUCTION,
     ];
 
     use HideableEntityTrait;
@@ -203,7 +204,7 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface
     {
         $labelKey = array_search($this->getProviderType(), self::$providerTypeChoices, false);
         if (!$labelKey) {
-            $labelKey = 'app.epayment.entity.project_properties.provider_choices.giropay';
+            $labelKey = 'app.epayment_project.entity.provider_choices.giropay';
         }
         return $labelKey;
     }
