@@ -30,6 +30,7 @@ final class PaginationExtensionDecorator implements ContextAwareQueryResultColle
     /**
      * PaginationExtensionDecorator constructor.
      * @param RequestStack $requestStack
+     * @param ContextAwareQueryResultCollectionExtensionInterface $decorated
      */
     public function __construct(
         RequestStack $requestStack,
@@ -52,21 +53,21 @@ final class PaginationExtensionDecorator implements ContextAwareQueryResultColle
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null, array $context = [])
     {
-        if (!empty($context['filters']) && array_key_exists('page', $context['filters'])) {
-            $requestedValue = (int) $context['filters']['page'];
-            $processedValue = $this->forceIntegerInRange($requestedValue, 1, 99999);
-            if ($processedValue !== $requestedValue) {
-                $context['filters']['page'] = $processedValue;
-            }
-        }
-        // Prevent InvalidArgumentException for pagination query parameters
-        if (null !== $this->requestStack && null !== $request = $this->requestStack->getCurrentRequest()) {
-            // ['arg_name' => 'pageParameterName', 'type' => 'string', 'default' => 'page'],
-            // ['arg_name' => 'enabledParameterName', 'type' => 'string', 'default' => 'pagination'],
-            // ['arg_name' => 'itemsPerPageParameterName', 'type' => 'string', 'default' => 'itemsPerPage'],
-            $this->fixPaginationParameter($request, 'page', 1, 99999);
-            $this->fixPaginationParameter($request, 'itemsPerPage', 1, 50);
-        }
+//        if (!empty($context['filters']) && array_key_exists('page', $context['filters'])) {
+//            $requestedValue = (int) $context['filters']['page'];
+//            $processedValue = $this->forceIntegerInRange($requestedValue, 1, 99999);
+//            if ($processedValue !== $requestedValue) {
+//                $context['filters']['page'] = $processedValue;
+//            }
+//        }
+//        // Prevent InvalidArgumentException for pagination query parameters
+//        if (null !== $this->requestStack && null !== $request = $this->requestStack->getCurrentRequest()) {
+//            // ['arg_name' => 'pageParameterName', 'type' => 'string', 'default' => 'page'],
+//            // ['arg_name' => 'enabledParameterName', 'type' => 'string', 'default' => 'pagination'],
+//            // ['arg_name' => 'itemsPerPageParameterName', 'type' => 'string', 'default' => 'itemsPerPage'],
+//            $this->fixPaginationParameter($request, 'page', 1, 99999);
+//            $this->fixPaginationParameter($request, 'itemsPerPage', 1, 50);
+//        }
         $this->decorated->applyToCollection($queryBuilder, $queryNameGenerator, $resourceClass, $operationName, $context);
     }
 
