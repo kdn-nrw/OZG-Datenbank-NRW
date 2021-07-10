@@ -89,6 +89,13 @@ class ImplementationProject extends BaseNamedEntity
     /**
      * @var null|DateTime
      *
+     * @ORM\Column(nullable=true, type="datetime", name="piloting_status_at")
+     */
+    protected $pilotingStatusAt;
+
+    /**
+     * @var null|DateTime
+     *
      * @ORM\Column(nullable=true, type="datetime", name="nationwide_rollout_at")
      */
     protected $nationwideRolloutAt;
@@ -342,6 +349,22 @@ class ImplementationProject extends BaseNamedEntity
     public function setCommissioningStatusAt(?DateTime $commissioningStatusAt): void
     {
         $this->commissioningStatusAt = $commissioningStatusAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getPilotingStatusAt(): ?DateTime
+    {
+        return $this->pilotingStatusAt;
+    }
+
+    /**
+     * @param DateTime|null $pilotingStatusAt
+     */
+    public function setPilotingStatusAt(?DateTime $pilotingStatusAt): void
+    {
+        $this->pilotingStatusAt = $pilotingStatusAt;
     }
 
     /**

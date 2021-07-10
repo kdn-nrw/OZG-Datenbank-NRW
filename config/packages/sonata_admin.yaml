@@ -223,6 +223,7 @@ sonata_admin:
                     - App\Admin\MailingAdmin
                     - App\Admin\OrganisationAdmin
                     - App\Admin\FundingAdmin
+                    - App\Admin\ConfidenceLevelAdmin
                     #- App\Admin\JurisdictionAdmin
             app.digital_model_reqion_group:
                 label: app.menu.digital_model_reqion_group

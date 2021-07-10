@@ -67,6 +67,11 @@ class ServiceImplementationStatus implements ImplementationStatusInfoInterface
     /**
      * @var null|DateTime
      */
+    protected $pilotingStatusAt;
+
+    /**
+     * @var null|DateTime
+     */
     protected $nationwideRolloutAt;
 
 
@@ -153,6 +158,22 @@ class ServiceImplementationStatus implements ImplementationStatusInfoInterface
     /**
      * @return DateTime|null
      */
+    public function getPilotingStatusAt(): ?DateTime
+    {
+        return $this->pilotingStatusAt;
+    }
+
+    /**
+     * @param DateTime|null $pilotingStatusAt
+     */
+    public function setPilotingStatusAt(?DateTime $pilotingStatusAt): void
+    {
+        $this->pilotingStatusAt = $pilotingStatusAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
     public function getNationwideRolloutAt(): ?DateTime
     {
         return $this->nationwideRolloutAt;
@@ -205,6 +226,11 @@ class ServiceImplementationStatus implements ImplementationStatusInfoInterface
         if (null !== $implementationStatusAt
             && (null === $this->getImplementationStatusAt() || $implementationStatusAt < $this->getImplementationStatusAt())) {
             $this->setImplementationStatusAt($implementationStatusAt);
+        }
+        $pilotingStatusAt = $project->getPilotingStatusAt();
+        if (null !== $pilotingStatusAt
+            && (null === $this->getPilotingStatusAt() || $pilotingStatusAt < $this->getPilotingStatusAt())) {
+            $this->setPilotingStatusAt($pilotingStatusAt);
         }
         $commissioningStatusAt = $project->getCommissioningStatusAt();
         if (null !== $commissioningStatusAt

@@ -207,6 +207,14 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      */
     private $serviceBaseResults;
 
+    /**
+     * Transparency portal url
+     * @var string|null
+     *
+     * @ORM\Column(type="string", name="transparency_portal_url", length=2048, nullable=true)
+     */
+    protected $transparencyPortalUrl;
+
     public function __construct()
     {
         $this->centralAssociations = new ArrayCollection();
@@ -717,6 +725,22 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     public function setServiceBaseResults($serviceBaseResults): void
     {
         $this->serviceBaseResults = $serviceBaseResults;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTransparencyPortalUrl(): ?string
+    {
+        return $this->transparencyPortalUrl;
+    }
+
+    /**
+     * @param string|null $transparencyPortalUrl
+     */
+    public function setTransparencyPortalUrl(?string $transparencyPortalUrl): void
+    {
+        $this->transparencyPortalUrl = $transparencyPortalUrl;
     }
 
 }

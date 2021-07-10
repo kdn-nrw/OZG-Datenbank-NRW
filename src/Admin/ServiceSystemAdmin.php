@@ -11,6 +11,7 @@
 
 namespace App\Admin;
 
+use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\ServiceTrait;
 use App\Admin\Traits\SolutionTrait;
@@ -31,6 +32,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
+    use LaboratoryTrait;
     use MinistryStateTrait;
     use ServiceTrait;
     use SolutionTrait;
@@ -73,7 +75,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        //$this->addLaboratoriesFormFields($formMapper);
+        $this->addLaboratoriesFormFields($formMapper);
         $formMapper->add('jurisdictions', ChoiceFieldMaskType::class, [
             'label' => 'app.service_system.entity.jurisdictions_form',
             'choices' => [
@@ -226,7 +228,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
     {
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
-        // $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
+        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
         $this->addDefaultDatagridFilter($datagridMapper, 'jurisdictions');
         $this->addDefaultDatagridFilter($datagridMapper, 'situation');
         $this->addDefaultDatagridFilter($datagridMapper, 'situation.subject');
@@ -279,7 +281,17 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
                 ],
                 'enable_filter_add' => true,
             ])
-            ->add('priority')/*
+            ->add('priority', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'level'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'priority'],
+                ],
+                'enable_filter_add' => true,
+            ])/*
             ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
@@ -319,7 +331,6 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
         $showMapper->add('communeTypes');
         $this->addServicesShowFields($showMapper);
         $this->addSolutionsShowFields($showMapper);
-        //$this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('situation.subject', null, [
             'template' => 'ServiceAdmin/show_many_to_one.html.twig',
         ])
@@ -350,6 +361,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
                     'name' => 'edit',
                 ],
             ]);
+        $this->addLaboratoriesShowFields($showMapper);
     }
 
     /**

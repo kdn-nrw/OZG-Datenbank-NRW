@@ -75,6 +75,9 @@ file that was distributed with this source code.
                                                             {% if tabKey == 'commissioningStatusAt' and item.commissioningStatusAt is not null %}
                                                             <div class="project-date">{{ 'app.implementation_project.entity.commissioning_status_at'|trans }}: {{ item.commissioningStatusAt|format_date }}</div>
 
+                                                            {% elseif tabKey == 'pilotingStatusAt' and item.pilotingStatusAt is not null %}
+                                                                <div class="project-date">{{ 'app.implementation_project.entity.piloting_status_at'|trans }}: {{ item.pilotingStatusAt|format_date }}</div>
+                                                            {% endif %}
                                                             {% elseif tabKey == 'nationwideRolloutAt' and item.nationwideRolloutAt is not null %}
                                                                 <div class="project-date">{{ 'app.implementation_project.entity.nationwide_rollout_at'|trans }}: {{ item.nationwideRolloutAt|format_date }}</div>
                                                             {% endif %}

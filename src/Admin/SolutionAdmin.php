@@ -21,6 +21,7 @@ use App\Admin\Traits\ServiceSystemTrait;
 use App\Admin\Traits\SluggableTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\DependencyInjection\InjectionTraits\InjectAuthorizationCheckerTrait;
+use App\Entity\ConfidenceLevel;
 use App\Entity\Status;
 use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Model\ExportSettings;
@@ -131,6 +132,11 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             'required' => false,
         ]);
         $this->addSlugFormField($formMapper, $this->getSubject());
+        $formMapper->add('confidenceLevel', ModelType::class, [
+            'btn_add' => false,
+            'required' => true,
+            'choice_translation_domain' => false,
+        ]);
         $formMapper
             /*
             ->add('serviceSolutions', ModelType::class, [
@@ -284,6 +290,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $datagridMapper->add('description');
         $datagridMapper->add('isPublished');
         $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
+        $datagridMapper->add('confidenceLevel');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -404,6 +411,12 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
+                'catalogue' => 'messages',
+                //'template' => 'ServiceAdmin/show_choice.html.twig',
+            ])
+            ->add('confidenceLevel', TemplateRegistry::TYPE_CHOICE, [
+                //'editable' => true,
+                'class' => ConfidenceLevel::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ]);

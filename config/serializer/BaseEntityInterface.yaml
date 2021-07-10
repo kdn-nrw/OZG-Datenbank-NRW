@@ -1,0 +1,4 @@
+App\Entity\Base\BaseEntityInterface:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']

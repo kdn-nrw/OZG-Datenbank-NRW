@@ -17,6 +17,8 @@ App\Entity\ImplementationProject:
       groups: ['implementation_project:collection:read', 'implementation_project:read']
     implementationStatusAt:
       groups: ['implementation_project:collection:read', 'implementation_project:read']
+    pilotingStatusAt:
+      groups: ['implementation_project:collection:read', 'implementation_project:read']
     commissioningStatusAt:
       groups: ['implementation_project:collection:read', 'implementation_project:read']
     nationwideRolloutAt:

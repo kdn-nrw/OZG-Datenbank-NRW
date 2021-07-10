@@ -15,6 +15,7 @@ use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\ModelRegionProjectTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Datagrid\CustomDatagrid;
+use App\Entity\ConfidenceLevel;
 use App\Entity\Solution;
 use App\Entity\Status;
 use App\Entity\Subject;
@@ -69,6 +70,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         $datagridMapper->add('name');
         $datagridMapper->add('description');
         $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
+        $datagridMapper->add('confidenceLevel');
     }
 
     /**
@@ -216,6 +218,12 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
+                'catalogue' => 'messages',
+                //'template' => 'ServiceAdmin/show_choice.html.twig',
+            ])
+            ->add('confidenceLevel', TemplateRegistry::TYPE_CHOICE, [
+                //'editable' => true,
+                'class' => ConfidenceLevel::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ]);

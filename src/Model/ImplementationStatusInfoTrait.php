@@ -49,6 +49,9 @@ trait ImplementationStatusInfoTrait
                 case ImplementationStatus::STATUS_ID_IMPLEMENTATION:
                     $statusDate = $this->getImplementationStatusAt();
                     break;
+                case ImplementationStatus::STATUS_ID_PILOTING:
+                    $statusDate = $this->getPilotingStatusAt();
+                    break;
                 case ImplementationStatus::STATUS_ID_COMMISSIONING:
                     $statusDate = $this->getCommissioningStatusAt();
                     break;

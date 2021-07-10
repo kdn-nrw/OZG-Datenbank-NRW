@@ -241,6 +241,15 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
      */
     private $solutionContacts;
 
+    /**
+     * Confidence level
+     * @var ConfidenceLevel|null
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\ConfidenceLevel")
+     * @ORM\JoinColumn(name="confidence_level_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $confidenceLevel;
+
     public function __construct()
     {
         $this->analogServices = new ArrayCollection();
@@ -1043,6 +1052,22 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     public function setSolutionContacts($solutionContacts): void
     {
         $this->solutionContacts = $solutionContacts;
+    }
+
+    /**
+     * @return ConfidenceLevel|null
+     */
+    public function getConfidenceLevel(): ?ConfidenceLevel
+    {
+        return $this->confidenceLevel;
+    }
+
+    /**
+     * @param ConfidenceLevel|null $confidenceLevel
+     */
+    public function setConfidenceLevel(?ConfidenceLevel $confidenceLevel): void
+    {
+        $this->confidenceLevel = $confidenceLevel;
     }
 
     /**

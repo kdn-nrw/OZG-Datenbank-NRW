@@ -161,7 +161,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         ]);
         $dateFields = [
             'projectStartAt', 'conceptStatusAt',
-            'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
+            'implementationStatusAt', 'pilotingStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
         ];
         foreach ($dateFields as $dateField) {
             $labelKey = SnakeCaseConverter::camelCaseToSnakeCase($dateField);
@@ -195,7 +195,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         ];
         $dateFields = [
             'projectStartAt', 'conceptStatusAt',
-            'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
+            'implementationStatusAt', 'pilotingStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
         ];
         $labelKey = 'app.service.entity.implementation_project_status_info.status';
         $settings->addCustomLabel('implementationProjectStatusInfo.status', $this->trans($labelKey));

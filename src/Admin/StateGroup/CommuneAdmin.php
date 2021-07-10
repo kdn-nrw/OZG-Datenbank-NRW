@@ -114,6 +114,9 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])
             ->add('regionalKey', TextType::class, [
                 'required' => false,
+            ])
+            ->add('transparencyPortalUrl', UrlType::class, [
+                'required' => false,
             ]);
         $formMapper->end();
         $formMapper->with('administration_contact', [
@@ -301,6 +304,8 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'reference_field_list' => ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2',],// 'status'
             'show_export' => true,
         ]);
+        $showMapper
+            ->add('transparencyPortalUrl', 'url');
     }
 
     /**

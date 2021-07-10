@@ -12,5 +12,7 @@ App\Model\ServiceImplementationStatus:
       groups: ['service:collection:read', 'service:read']
     commissioningStatusAt:
       groups: ['service:collection:read', 'service:read']
+    pilotingStatusAt:
+      groups: ['service:collection:read', 'service:read']
     nationwideRolloutAt:
       groups: ['service:collection:read', 'service:read']

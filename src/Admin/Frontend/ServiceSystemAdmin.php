@@ -12,6 +12,7 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\Traits\LaboratoryTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Subject;
 use App\Model\ExportSettings;
@@ -22,6 +23,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
+    use LaboratoryTrait;
 
     /**
      * @var string[]
@@ -34,7 +36,6 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
     {
         $datagridMapper->add('name');
         $datagridMapper->add('serviceKey');
-        //$this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
         $this->addDefaultDatagridFilter($datagridMapper, 'jurisdictions');
         $this->addDefaultDatagridFilter($datagridMapper, 'situation');
         $this->addDefaultDatagridFilter($datagridMapper, 'situation.subject');
@@ -46,6 +47,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
         $this->addDefaultDatagridFilter($datagridMapper, 'services.portals');
         $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
         $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects');
+        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -87,7 +89,17 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
                 ],
                 'enable_filter_add' => true,
             ])
-            ->add('priority')
+            ->add('priority', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'level'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'priority'],
+                ],
+                'enable_filter_add' => true,
+            ])
             /*
             ->add('status', 'choice', [
                 'editable' => false,
@@ -146,7 +158,6 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
             ]);
-        //$this->addLaboratoriesShowFields($showMapper);
         $showMapper->add('situation.subject', null, [
             'template' => 'ServiceAdmin/show_many_to_one.html.twig',
         ])
@@ -177,6 +188,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
                     'name' => 'show',
                 ],
             ]);
+        $this->addLaboratoriesShowFields($showMapper);
     }
 
     public function isGranted($name, $object = null)

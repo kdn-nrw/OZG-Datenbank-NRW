@@ -12,7 +12,7 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
-use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Base\ColorCodedEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -21,57 +21,37 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="ozg_confidence_level")
- * @ORM\HasLifecycleCallbacks
  */
 class ConfidenceLevel extends BaseNamedEntity
 {
 
-    /**
-     * vtniveaustufe
-     * @var int
-     *
-     * @ORM\Column(name="availability", type="integer")
-     */
-    private $availability = 0;
+    public const DEFAULT_ID = 1;
+
+    use ColorCodedEntityTrait;
 
     /**
-     * vtniveauerkl
+     * Maturity description
+     *
      * @var string|null
      *
-     * @ORM\Column(name="availability_comment", type="text", nullable=true)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $availabilityComment = '';
-
-    /**
-     * @return int
-     */
-    public function getAvailability(): int
-    {
-        return $this->availability;
-    }
-
-    /**
-     * @param int $availability
-     */
-    public function setAvailability(int $availability): void
-    {
-        $this->availability = $availability;
-    }
+    private $description = '';
 
     /**
      * @return string|null
      */
-    public function getAvailabilityComment(): ?string
+    public function getDescription(): ?string
     {
-        return $this->availabilityComment;
+        return $this->description;
     }
 
     /**
-     * @param string|null $availabilityComment
+     * @param string|null $description
      */
-    public function setAvailabilityComment(?string $availabilityComment): void
+    public function setDescription(?string $description): void
     {
-        $this->availabilityComment = $availabilityComment;
+        $this->description = $description;
     }
 
 }

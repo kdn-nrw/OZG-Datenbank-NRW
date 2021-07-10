@@ -102,6 +102,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDatePickerFormField($formMapper, 'projectStartAt');
         $this->addDatePickerFormField($formMapper, 'conceptStatusAt');
         $this->addDatePickerFormField($formMapper, 'implementationStatusAt');
+        $this->addDatePickerFormField($formMapper, 'pilotingStatusAt');
         $this->addDatePickerFormField($formMapper, 'commissioningStatusAt');
         $this->addDatePickerFormField($formMapper, 'nationwideRolloutAt');
         $formMapper
@@ -258,6 +259,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'conceptStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'implementationStatusAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'pilotingStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'commissioningStatusAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'nationwideRolloutAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'contacts');
@@ -292,6 +294,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDatePickersListFields($listMapper, 'projectStartAt', true);
         $this->addDatePickersListFields($listMapper, 'conceptStatusAt', true);
         $this->addDatePickersListFields($listMapper, 'implementationStatusAt', true);
+        $this->addDatePickersListFields($listMapper, 'pilotingStatusAt', true);
         $this->addDatePickersListFields($listMapper, 'commissioningStatusAt', true);
         $this->addDatePickersListFields($listMapper, 'nationwideRolloutAt', true);
         $this->addServiceSystemsListFields($listMapper);
@@ -308,7 +311,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $settings->addExcludeFields(['statusInfo']);
         $settings->setAdditionFields([
             'status', 'projectStartAt', 'conceptStatusAt',
-            'implementationStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
+            'implementationStatusAt', 'pilotingStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
         ]);
         return $settings;
     }

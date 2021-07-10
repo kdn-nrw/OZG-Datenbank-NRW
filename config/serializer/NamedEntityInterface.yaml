@@ -1,0 +1,5 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\Base\NamedEntityInterface:
+  attributes:
+    name:
+      groups: ['collection:read', 'item:read']

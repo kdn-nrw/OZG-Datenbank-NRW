@@ -198,7 +198,7 @@ class Epayment extends AbstractOnboardingEntity
      *
      * @ORM\Column(name="xfinance_file_required", type="boolean")
      */
-    protected $xFinanceFileRequired = false;
+    protected $xFinanceFileRequired = true;
 
     /**
      * Selected days for XFinance

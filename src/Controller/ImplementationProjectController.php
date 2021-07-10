@@ -51,23 +51,27 @@ class ImplementationProjectController extends AbstractFrontendCRUDController
         $em = $modelManager->getEntityManager(ImplementationProject::class);
         $repository = $em->getRepository(ImplementationProject::class);
         $queryBuilder = $repository->createQueryBuilder('p');
-        $queryBuilder->where('p.commissioningStatusAt > :minTime OR p.nationwideRolloutAt > :minTimeNationwide');
+        $queryBuilder->where('p.pilotingStatusAt > :minTimePiloting OR p.pilotingStatusAt > :minTime OR p.nationwideRolloutAt > :minTimeNationwide');
+        $queryBuilder->setParameter('minTimePiloting', $now);
         $queryBuilder->setParameter('minTime', $now);
         $queryBuilder->setParameter('minTimeNationwide', $now);
         $entities = $queryBuilder->getQuery()->getResult();
         $groupedSubjectsByMonths = [
+            'pilotingStatusAt' => [],
             'commissioningStatusAt' => [],
             'nationwideRolloutAt' => [],
         ];
         $min = (int)date('Ym');
         $max = [
+            'pilotingStatusAt' => $min,
             'commissioningStatusAt' => $min,
             'nationwideRolloutAt' => $min,
         ];
         foreach ($entities as $entity) {
             /** @var ImplementationProject $entity */
             $dates = [
-                'commissioningStatusAt' => $entity->getCommissioningStatusAt(),
+                'pilotingStatusAt' => $entity->getPilotingStatusAt(),
+                'commissioningStatusAt' => $entity->getPilotingStatusAt(),
                 'nationwideRolloutAt' => $entity->getNationwideRolloutAt(),
             ];
             foreach ($dates as $property => $propertyDate) {
@@ -79,6 +83,7 @@ class ImplementationProjectController extends AbstractFrontendCRUDController
             }
         }
         $tabs = [
+            'pilotingStatusAt' => 'app.implementation_project.frontend.tab_piloting_status_at',
             'commissioningStatusAt' => 'app.implementation_project.frontend.tab_commissioning_status_at',
             'nationwideRolloutAt' => 'app.implementation_project.frontend.tab_nationwide_rollout_at',
         ];

@@ -309,6 +309,7 @@ app:
       administration_fax_number: Fax
       administration_email: E-Mail
       administration_url: Web
+      transparency_portal_url: Transparenzportal
   abstract_onboarding_entity:
     object_name: Onboarding
     list: Onboarding Allgemein
@@ -531,6 +532,13 @@ app:
     entity:
       name: Name
       url: URL
+  confidence_level:
+    object_name: Vertrauensniveau
+    list: Vertrauensniveaus
+    create: Vertrauensniveau anlegen
+    entity:
+      name: Name
+      description: Beschreibung
   epayment_project:
     object_name: Onboarding ePayBL Projekt
     list: Onboarding ePayBL Projekte
@@ -916,6 +924,7 @@ app:
     frontend:
       tab_commissioning_schedule: Zeitplan Inbetriebnahme
       tab_commissioning_status_at: Zeitplan Inbetriebnahme NRW
+      tab_piloting_status_at: Zeitplan Pilotierung NRW
       tab_nationwide_rollout_at: Zeitplan bundesweiter Roll-out
     entity:
       name: Umsetzungsprojektname
@@ -924,6 +933,7 @@ app:
       concept_status_at: Konzeption
       implementation_status_at: Umsetzung
       commissioning_status_at: Inbetriebnahme NRW
+      piloting_status_at: Pilotierung NRW
       nationwide_rollout_at: Start bundesweiter Roll-out
       status: Umsetzungsstatus
       status_form: Umsetzungsstatus (sonstige)
@@ -967,6 +977,7 @@ app:
         concept_status_at: Datum Konzeption wird erreicht
         implementation_status_at: Datum Umsetzung wird erreicht
         commissioning_status_at: Datum Inbetriebnahme NRW wird erreicht
+        piloting_status_at: Datum Pilotierung NRW wird erreicht
         nationwide_rollout_at: Datum Start bundesweiter Roll-out wird erreicht
     common:
       status_from: Ab
@@ -1407,6 +1418,7 @@ app:
         concept_status_at: Konzeption
         implementation_status_at: Umsetzung
         commissioning_status_at: Inbetriebnahme NRW
+        piloting_status_at: Pilotierung NRW
         nationwide_rollout_at: Start bundesweiter Roll-out
         status: Umsetzungsstatus
   service_base_result:
@@ -1548,6 +1560,7 @@ app:
       model_region_projects: DMR Umsetzungsprojekte
       implementation_projects: OZG Umsetzungsprojekte
       jurisdictions: Zuständigkeiten
+      confidence_level: Mindest-Vertrauensniveau
     messages:
       no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   specialized_procedure:

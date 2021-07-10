@@ -11,10 +11,7 @@
 
 namespace App\Model;
 
-use App\Entity\ImplementationProject;
-use App\Entity\ImplementationProjectService;
 use App\Entity\ImplementationStatus;
-use App\Entity\Service;
 use DateTime;
 
 /**
@@ -45,6 +42,11 @@ interface ImplementationStatusInfoInterface
      * @return DateTime|null
      */
     public function getImplementationStatusAt(): ?DateTime;
+
+    /**
+     * @return DateTime|null
+     */
+    public function getPilotingStatusAt(): ?DateTime;
 
     /**
      * @return DateTime|null
