@@ -150,6 +150,14 @@ class DataCenter extends BaseNamedEntity
     }
 
     /**
+     * @return bool
+     */
+    public function isOperating(): bool
+    {
+        return $this->getOperationType() !== self::OPERATION_TYPE_NONE;
+    }
+
+    /**
      * Returns the label key for the current data type
      *
      * @return string
@@ -212,6 +220,9 @@ class DataCenter extends BaseNamedEntity
      */
     public function isDataCenterWasteHeat(): bool
     {
+        if ($this->dataCenterWasteHeat && !$this->isOperating()) {
+            $this->dataCenterWasteHeat = false;
+        }
         return $this->dataCenterWasteHeat;
     }
 
@@ -220,7 +231,7 @@ class DataCenter extends BaseNamedEntity
      */
     public function setDataCenterWasteHeat(bool $dataCenterWasteHeat): void
     {
-        $this->dataCenterWasteHeat = $dataCenterWasteHeat;
+        $this->dataCenterWasteHeat = $this->isOperating() && $dataCenterWasteHeat;
     }
 
     /**
@@ -244,6 +255,9 @@ class DataCenter extends BaseNamedEntity
      */
     public function isDataCenterWaterCooling(): bool
     {
+        if ($this->dataCenterWaterCooling && !$this->isOperating()) {
+            $this->dataCenterWaterCooling = false;
+        }
         return $this->dataCenterWaterCooling;
     }
 
@@ -252,7 +266,7 @@ class DataCenter extends BaseNamedEntity
      */
     public function setDataCenterWaterCooling(bool $dataCenterWaterCooling): void
     {
-        $this->dataCenterWaterCooling = $dataCenterWaterCooling;
+        $this->dataCenterWaterCooling = $this->isOperating() && $dataCenterWaterCooling;
     }
 
     /**

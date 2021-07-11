@@ -63,39 +63,45 @@
                 </dd>
             </dl>
             {% if dataCenter.consumptions|length > 0 %}
-            <div class="data-center-consumption-container table-responsive">
-            <table class="table table-bordered table-striped table-condensed">
-                <thead>
-                    <tr>
-                        <th>{{ 'app.data_center_consumption.entity.year'|trans }}</th>
-                        <th>{{ 'app.data_center_consumption.entity.power_consumption'|trans }}</th>
-                        <th>{{ 'app.data_center_consumption.entity.comment'|trans }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for consumptionEntity in  dataCenter.consumptions %}
-                    {# @var consumptionEntity \App\Entity\StateGroup\DataCenterConsumption #}
-                    <tr>
-                        <td>{{ consumptionEntity.year }}</td>
-                        <td>{{ consumptionEntity.powerConsumption }}</td>
-                        <td>{{ consumptionEntity.comment|nl2br }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            </div>
-                {% if dataCenter.consumptions|length > 1 %}
-                    <div class="m-2">
-                        {% set filters = {'dataCenter': dataCenter.id } %}
-                        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
-                            'title': 'app.data_center_consumption.statistics.power_consumption',
-                            'translation_domain': 'messages',
-                            'mode': 'admin',
-                            'filters': filters|json_encode,
-                            'provider':  'App\\Statistics\\Provider\\DataCenterConsumptionChartProvider'
-                        }) }}
+                <div class="row">
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="data-center-consumption-container table-responsive">
+                            <table class="table table-bordered table-striped table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'app.data_center_consumption.entity.year'|trans }}</th>
+                                    <th>{{ 'app.data_center_consumption.entity.power_consumption'|trans }}</th>
+                                    <th>{{ 'app.data_center_consumption.entity.comment'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for consumptionEntity in  dataCenter.consumptions %}
+                                    {# @var consumptionEntity \App\Entity\StateGroup\DataCenterConsumption #}
+                                    <tr>
+                                        <td>{{ consumptionEntity.year }}</td>
+                                        <td>{{ consumptionEntity.powerConsumption }}</td>
+                                        <td>{{ consumptionEntity.comment|nl2br }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                {% endif %}
+                    <div class="col-xs-12 col-lg-6">
+                        {% if dataCenter.consumptions|length > 1 %}
+                            <div class="m-2">
+                                {% set filters = {'dataCenter': dataCenter.id } %}
+                                {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+                                    'title': 'app.data_center_consumption.statistics.power_consumption',
+                                    'translation_domain': 'messages',
+                                    'mode': 'admin',
+                                    'filters': filters|json_encode,
+                                    'provider':  'App\\Statistics\\Provider\\DataCenterConsumptionChartProvider'
+                                }) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>
