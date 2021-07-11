@@ -15,6 +15,7 @@ use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
+use App\Entity\FederalInformationManagementType;
 use App\Entity\Jurisdiction;
 use App\Entity\Priority;
 use App\Entity\Status;
@@ -57,7 +58,6 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $hideFields = $this->getFormHideFields();
         $formMapper
             ->with('app.service.tabs.general', [
                 'label' => 'app.service.tabs.general',
@@ -79,7 +79,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'required' => true,
             ]);
 
-        if (!in_array('serviceSystem', $hideFields, false)) {
+        if (!$this->isExcludedFormField('serviceSystem')) {
             $formMapper->add('serviceSystem', ModelAutocompleteType::class, [
                 'property' => 'name',
                 'required' => true,
@@ -279,7 +279,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addPortalsFormFields($formMapper);
         $formMapper->end()
             ->end();
-        if (!in_array('serviceSolutions', $hideFields, false)) {
+        if (!$this->isExcludedFormField('serviceSolutions')) {
             $formMapper->tab('app.service.tabs.service_solutions', [
                 'label' => 'app.service.tabs.service_solutions',
                 'box_class' => 'box-tab',
@@ -298,7 +298,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                     'edit' => 'inline',
                     'inline' => 'table',
                     //'sortable' => 'position',
-                    'ba_custom_hide_fields' => ['service'],
+                    'ba_custom_exclude_fields' => ['service'],
                 ])
                 ->end()
                 ->end();
@@ -323,7 +323,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'admin_code' => FederalInformationManagementTypeAdmin::class,
                 'edit' => 'inline',
                 'inline' => 'natural',
-                'ba_custom_hide_fields' => ['service'],
+                'ba_custom_exclude_fields' => ['service'],
             ])
             /*->add('fimTypes', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
                 'entry_type' => FederalInformationManagementType::class,
@@ -384,7 +384,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ],
             ChoiceType::class,
             [
-                'choices' => array_flip(\App\Entity\FederalInformationManagementType::$mapTypes)
+                'choices' => array_flip(FederalInformationManagementType::$mapTypes)
             ]
         );
         $datagridMapper->add('fimTypes.status',
@@ -392,7 +392,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ],
             ChoiceType::class,
             [
-                'choices' => array_flip(\App\Entity\FederalInformationManagementType::$statusChoices)
+                'choices' => array_flip(FederalInformationManagementType::$statusChoices)
             ]
         );
         $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
@@ -458,13 +458,13 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'name', 'serviceKey', 'serviceType', 'lawShortcuts', 'relevance1', 'relevance2', 'status'
         ];
         $customServiceFormatter = new ServiceFimValueFormatter();
-        $fimStatusTypes = \App\Entity\FederalInformationManagementType::$statusChoices;
+        $fimStatusTypes = FederalInformationManagementType::$statusChoices;
         $statusTranslations = [];
         foreach ($fimStatusTypes as $status => $labelKey) {
             $statusTranslations[$status] = $this->trans($labelKey);
         }
         $customServiceFormatter->setFimStatusTranslations($statusTranslations);
-        $fimTypes = \App\Entity\FederalInformationManagementType::$mapTypes;
+        $fimTypes = FederalInformationManagementType::$mapTypes;
         foreach ($fimTypes as $type => $labelKey) {
             $typeField = ServiceFimValueFormatter::FIM_DATA_TYPE_PREFIX . $type;
             $statusField = ServiceFimValueFormatter::FIM_STATUS_PREFIX . $type;

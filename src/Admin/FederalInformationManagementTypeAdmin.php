@@ -25,8 +25,7 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $hideFields = $this->getFormHideFields();
-        if (!in_array('service', $hideFields, false)) {
+        if (!$this->isExcludedFormField('service')) {
             $formMapper
                 ->add('service', ModelType::class, [
                     'property' => 'name',

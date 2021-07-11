@@ -23,9 +23,8 @@ class SituationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdm
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $hideFields = $this->getFormHideFields();
         $formMapper->add('name', TextType::class);
-        if (!in_array('subject', $hideFields, false)) {
+        if (!$this->isExcludedFormField('subject')) {
             $formMapper->add('subject', ModelListType::class, [
                 'btn_add'       => 'app.common.model_list_type.add',       //Specify a custom label
                 'btn_list'      => 'app.common.model_list_type.list',      //which will be translated

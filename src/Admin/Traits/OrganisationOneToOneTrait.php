@@ -28,7 +28,7 @@ trait OrganisationOneToOneTrait
             'btn_add' => false,
             'btn_list' => false,
         ], [
-            'ba_custom_hide_fields' => ['organizationType'],
+            'ba_custom_exclude_fields' => ['organizationType'],
         ]);
     }
 

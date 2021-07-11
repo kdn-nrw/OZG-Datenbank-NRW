@@ -12,7 +12,6 @@
 namespace App\Admin\Onboarding;
 
 use App\Admin\AbstractAppAdmin;
-use App\Admin\SolutionAdmin;
 use App\Entity\Onboarding\EpaymentService;
 use App\Entity\Solution;
 use Doctrine\ORM\EntityManager;
@@ -43,17 +42,16 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                 'label' => 'app.epayment_service.groups.general',
                 'class' => 'col-md-12',
             ]);
-        $hideFields = $this->getFormHideFields();
-        if (!in_array('epayment', $hideFields, false)) {
+        if (!$this->isExcludedFormField('epayment')) {
             $formMapper
                 ->add('epayment', ModelAutocompleteType::class, [
                     'property' => ['communeName',],
                     'required' => $enableRequiredFields,
                 ], [
-                    'admin_code' => \App\Admin\Onboarding\EpaymentAdmin::class
+                    'admin_code' => EpaymentAdmin::class
                 ]);
         }
-        if (!in_array('solution', $hideFields, false)) {
+        if (!$this->isExcludedFormField('solution')) {
             $formMapper
                 ->add('solution', ModelType::class, [
                         'btn_add' => false,
@@ -62,7 +60,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                         'placeholder' => '',
                         'query' => $this->getSolutionQueryBuilder(),
                     ], [
-                        'admin_code' => \App\Admin\Onboarding\OnboardingServiceAdmin::class,
+                        'admin_code' => OnboardingServiceAdmin::class,
                     ]
                 );
         }
@@ -142,7 +140,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
     {
         $listMapper
             ->add('epayment', null, [
-                'admin_code' => \App\Admin\Onboarding\EpaymentAdmin::class,
+                'admin_code' => EpaymentAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'communeName'
@@ -152,7 +150,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                 ]
             ])
             ->add('solution', null, [
-                'admin_code' => \App\Admin\Onboarding\OnboardingServiceAdmin::class,
+                'admin_code' => OnboardingServiceAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -171,10 +169,10 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
     {
         $showMapper
             ->add('epayment', null, [
-                'admin_code' => \App\Admin\Onboarding\EpaymentAdmin::class
+                'admin_code' => EpaymentAdmin::class
             ])
             ->add('solution', null, [
-                'admin_code' => \App\Admin\Onboarding\OnboardingServiceAdmin::class
+                'admin_code' => OnboardingServiceAdmin::class
             ])
             ->add('description')
             ->add('bookingText')

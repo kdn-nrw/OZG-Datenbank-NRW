@@ -30,7 +30,7 @@ trait IsExcludedFormField
      * @param string $fieldName
      * @return bool
      */
-    protected function isExcludedFormField(string $fieldName): bool
+    final protected function isExcludedFormField(string $fieldName): bool
     {
         if (null === $this->excludeChildFormFields) {
             $this->excludeChildFormFields = [];

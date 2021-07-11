@@ -61,7 +61,7 @@ class MetaItemAdmin extends AbstractAppAdmin
             'admin_code' => MetaItemPropertyAdmin::class,
             'edit' => 'inline',
             'inline' => 'natural',
-            'ba_custom_hide_fields' => ['parent'],
+            'ba_custom_exclude_fields' => ['parent'],
         ]);
         $formMapper->end();
     }

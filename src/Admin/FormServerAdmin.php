@@ -103,7 +103,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
                     'edit' => 'inline',
                     'inline' => 'table',
                     'sortable' => 'position',
-                    'ba_custom_hide_fields' => ['formServer'],
+                    'ba_custom_exclude_fields' => ['formServer'],
                 ]);
         }
         $formMapper

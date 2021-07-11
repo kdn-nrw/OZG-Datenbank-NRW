@@ -30,8 +30,7 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $hideFields = $this->getFormHideFields();
-        if (!in_array('serviceProvider', $hideFields, false)) {
+        if (!$this->isExcludedFormField('serviceProvider')) {
             $formMapper
                 ->add('serviceProvider', ModelType::class, [
                     'property' => 'name',

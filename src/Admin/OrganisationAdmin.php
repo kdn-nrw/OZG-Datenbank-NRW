@@ -32,7 +32,6 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $hideFields = $this->getFormHideFields();
         $formMapper
             ->with('app.organisation.groups.basic_data', ['class' => 'col-md-6'])
             ->add('name', TextType::class, [
@@ -45,7 +44,7 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
             ->with('app.organisation.groups.address_data', ['class' => 'col-md-6']);
         $this->addAddressFormFields($formMapper);
         $formMapper->end();
-        if (!in_array('organizationType', $hideFields, false)) {
+        if (!$this->isExcludedFormField('organizationType')) {
             $mapFieldMasks = [
                 Organisation::TYPE_DEFAULT => [],
             ];

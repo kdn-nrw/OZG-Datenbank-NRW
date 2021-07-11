@@ -51,7 +51,7 @@ trait ContactTrait
                     'edit' => 'inline',
                     'inline' => 'natural',
                     //'sortable' => 'position',
-                    'ba_custom_hide_fields' => ['organisationEntity', 'organisation', 'contactType',],
+                    'ba_custom_exclude_fields' => ['organisationEntity', 'organisation', 'contactType',],
                 ]);
 
             if ($addOldField) {

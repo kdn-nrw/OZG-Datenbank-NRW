@@ -358,7 +358,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'edit' => 'inline',
                 'inline' => 'natural',
                 'sortable' => 'position',
-                'ba_custom_hide_fields' => ['epayment'],
+                'ba_custom_exclude_fields' => ['epayment'],
                 'ba_disable_required_fields' => null !== $subject && null !== $subject->getId(),
             ])
             ->end()

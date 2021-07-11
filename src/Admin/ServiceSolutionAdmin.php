@@ -25,8 +25,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $hideFields = $this->getFormHideFields();
-        if (!in_array('service', $hideFields, false)) {
+        if (!$this->isExcludedFormField('service')) {
             $formMapper
                 ->add('service', ModelAutocompleteType::class, [
                     'property' => 'name',
@@ -35,7 +34,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                     'admin_code' => \App\Admin\ServiceAdmin::class
                 ]);
         }
-        if (!in_array('solution', $hideFields, false)) {
+        if (!$this->isExcludedFormField('solution')) {
             $formMapper
                 ->add('solution', ModelAutocompleteType::class, [
                     'property' => ['name', 'description'],

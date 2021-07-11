@@ -233,7 +233,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'edit' => 'inline',
                 'inline' => 'table',
                 'sortable' => 'position',
-                'ba_custom_hide_fields' => ['solution'],
+                'ba_custom_exclude_fields' => ['solution'],
             ])
             ->end()
             ->end()
@@ -251,7 +251,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'edit' => 'inline',
                 'inline' => 'table',
                 'sortable' => 'position',
-                'ba_custom_hide_fields' => ['solution'],
+                'ba_custom_exclude_fields' => ['solution'],
             ])
             ->end()
             ->end();

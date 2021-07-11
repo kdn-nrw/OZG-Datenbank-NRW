@@ -35,7 +35,7 @@ class SubjectAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
                 'edit' => 'inline',
                 'inline' => 'table',
                 'sortable' => 'position',
-                'ba_custom_hide_fields' => ['subject'],
+                'ba_custom_exclude_fields' => ['subject'],
             ])
             ->add('contact', ModelType::class, [
                 'btn_add' => false,

@@ -28,8 +28,7 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $hideFields = $this->getFormHideFields();
-        if (!in_array('parent', $hideFields, false)) {
+        if (!$this->isExcludedFormField('parent')) {
             $formMapper
                 ->add('parent', ModelType::class, [
                     'property' => 'internalLabel',

@@ -126,7 +126,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         ], [
             'edit' => 'inline',
             'inline' => 'natural',
-            'ba_custom_hide_fields' => ['serviceProvider'],
+            'ba_custom_exclude_fields' => ['serviceProvider'],
         ]);
         $formMapper->end();
         $formMapper->end();

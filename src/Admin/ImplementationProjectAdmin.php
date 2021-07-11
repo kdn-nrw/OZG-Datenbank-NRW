@@ -207,7 +207,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'edit' => 'inline',
                 'inline' => 'table',
                 'sortable' => 'position',
-                'ba_custom_hide_fields' => ['implementationProject'],
+                'ba_custom_exclude_fields' => ['implementationProject'],
             ])/*
             ->add('services', ModelType::class, [
                 'property' => 'name',

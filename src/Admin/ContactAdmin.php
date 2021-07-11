@@ -33,7 +33,6 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $hideFields = $this->getFormHideFields();
         $formMapper
             ->with('app.contact.groups.person_data', ['class' => 'col-md-6'])
             ->add('gender', ChoiceType::class, [
@@ -67,7 +66,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $formMapper
             ->end()
             ->with('app.contact.groups.organisation', ['class' => 'clear-left-md col-md-6']);
-        if (!in_array('organisationEntity', $hideFields, false)) {
+        if (!$this->isExcludedFormField('organisationEntity')) {
             $formMapper->add('organisationEntity', ModelType::class, [
                 'label' => 'app.contact.entity.organisation_entity_form',
                 'btn_add' => false,
@@ -76,7 +75,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
                 'choice_translation_domain' => false,
             ]);
         }
-        if (!in_array('organisationEntity', $hideFields, false)) {
+        if (!$this->isExcludedFormField('organisationEntity')) {
             $formMapper->add('organisation', TextType::class, [
                 'label' => 'app.contact.entity.organisation_form',
                 'required' => false,
@@ -104,7 +103,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->add('mobileNumber', TextType::class, [
                 'required' => false,
             ]);
-        if (!in_array('contactType', $hideFields, false)) {
+        if (!$this->isExcludedFormField('contactType')) {
             $formMapper->add('contactType', ChoiceType::class, [
                 'choices' => [
                     'app.contact.entity.contact_type_choices.default' => Contact::CONTACT_TYPE_DEFAULT,

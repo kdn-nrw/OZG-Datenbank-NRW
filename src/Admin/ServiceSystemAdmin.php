@@ -172,7 +172,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
                 'edit' => 'inline',
                 'inline' => 'natural',
                 'sortable' => 'position',
-                'ba_custom_hide_fields' => ['serviceSystem',],// 'serviceSolutions'
+                'ba_custom_exclude_fields' => ['serviceSystem',],// 'serviceSolutions'
             ])*/
             ->add('services', ModelAutocompleteType::class, [
                 'btn_add' => 'app.common.model_list_type.add',

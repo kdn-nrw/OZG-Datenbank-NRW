@@ -199,24 +199,6 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
         }
     }
 
-    /**
-     * Get list of fields to be hidden in the form
-     * @return array
-     * @deprecated use isExcludedFormField (function defined in trait)
-     */
-    final protected function getFormHideFields(): array
-    {
-        $hideFields = [];
-        $parentFieldDescription = $this->getParentFieldDescription();
-        if (null !== $parentFieldDescription) {
-            $parentOptions = $parentFieldDescription->getOptions();
-            if (!empty($parentOptions['ba_custom_hide_fields'])) {
-                $hideFields = $parentOptions['ba_custom_hide_fields'];
-            }
-        }
-        return $hideFields;
-    }
-
     public function toString($object)
     {
         if ($object instanceof CustomEntityLabelInterface) {
