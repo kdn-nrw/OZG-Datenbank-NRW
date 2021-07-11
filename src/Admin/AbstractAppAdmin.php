@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 
+use App\Admin\Traits\IsExcludedFormField;
 use App\DependencyInjection\InjectionTraits\InjectEventDispatcherTrait;
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\CustomEntityLabelInterface;
@@ -36,6 +37,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
 {
     use AdminTranslatorStrategyTrait;
+    use IsExcludedFormField;
     use InjectEventDispatcherTrait;
 
     /**
@@ -200,6 +202,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
     /**
      * Get list of fields to be hidden in the form
      * @return array
+     * @deprecated use isExcludedFormField (function defined in trait)
      */
     final protected function getFormHideFields(): array
     {

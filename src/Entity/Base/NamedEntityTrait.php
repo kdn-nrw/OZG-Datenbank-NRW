@@ -61,10 +61,9 @@ trait NamedEntityTrait
      */
     public function __toString(): string
     {
-        $name = (string) $this->getName();
-        if (null === $name) {
+        if (null === $this->name) {
             return 'NULL';
         }
-        return $name;
+        return (string) $this->getName();
     }
 }

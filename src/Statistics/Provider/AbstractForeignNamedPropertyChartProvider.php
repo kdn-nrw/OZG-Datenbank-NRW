@@ -32,6 +32,12 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
     protected $foreignProperty = 'status';
 
     /**
+     * The field used for the name
+     * @var string
+     */
+    protected $nameField = 'name';
+
+    /**
      * Optional foreign property for color value
      * @var string|null
      */
@@ -81,7 +87,7 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
         /** @var EntityRepository $repository */
         $repository = $this->getEntityManager()->getRepository($this->getEntityClass());
         $queryBuilder = $repository->createQueryBuilder($alias);
-        $selects = ['COUNT(DISTINCT s.id) AS itemCount', 'IDENTITY(' . $property . ') AS refId', 'fnp.name'];
+        $selects = ['COUNT(DISTINCT s.id) AS itemCount', 'IDENTITY(' . $property . ') AS refId', 'fnp.' . $this->nameField];
         if ($this->foreignColorProperty) {
             $selects[] = 'fnp.' . $this->foreignColorProperty;
         }
@@ -100,8 +106,8 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
         $disabledColorOffset = 0;
         $colorCount = count(self::$defaultColors);
         foreach ($result as $row) {
-            $isNamed = (string)$row['name'] !== '';
-            $key = $isNamed ? $row['name'] : 'n.a';
+            $isNamed = (string)$row[$this->nameField] !== '';
+            $key = $isNamed ? $row[$this->nameField] : 'n.a';
             $data[$key] = $row['itemCount'];
             if ($this->foreignColorProperty && !empty($row[$this->foreignColorProperty])) {
                 $rowColor = $row[$this->foreignColorProperty];

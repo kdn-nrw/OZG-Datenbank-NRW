@@ -46,7 +46,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="serviceProvider", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $organisation;
+    protected $organisation;
 
     /**
      * Short name
@@ -99,6 +99,13 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      */
     protected $enablePaymentProvider = false;
 
+    /**
+     * @var DataCenter|null
+     * @ORM\OneToOne(targetEntity="App\Entity\StateGroup\DataCenter", inversedBy="serviceProvider", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="data_center_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $dataCenter;
+
     public function __construct()
     {
         $this->communes = new ArrayCollection();
@@ -136,7 +143,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     /**
      * @param Solution $solution
      */
-    public function addSolution($solution): void
+    public function addSolution(Solution $solution): void
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -147,7 +154,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     /**
      * @param Solution $solution
      */
-    public function removeSolution($solution): void
+    public function removeSolution(Solution $solution): void
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
@@ -175,7 +182,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @param Commune $commune
      * @return ServiceProvider
      */
-    public function addCommune($commune): ServiceProvider
+    public function addCommune(Commune $commune): ServiceProvider
     {
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
@@ -189,7 +196,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @param Commune $commune
      * @return ServiceProvider
      */
-    public function removeCommune($commune): ServiceProvider
+    public function removeCommune(Commune $commune): ServiceProvider
     {
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);
@@ -219,7 +226,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @param Laboratory $laboratory
      * @return ServiceProvider
      */
-    public function addLaboratory($laboratory): ServiceProvider
+    public function addLaboratory(Laboratory $laboratory): ServiceProvider
     {
         if (!$this->laboratories->contains($laboratory)) {
             $this->laboratories->add($laboratory);
@@ -233,7 +240,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @param Laboratory $laboratory
      * @return ServiceProvider
      */
-    public function removeLaboratory($laboratory): ServiceProvider
+    public function removeLaboratory(Laboratory $laboratory): ServiceProvider
     {
         if ($this->laboratories->contains($laboratory)) {
             $this->laboratories->removeElement($laboratory);
@@ -263,7 +270,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function addSpecializedProcedure($specializedProcedure): self
+    public function addSpecializedProcedure(SpecializedProcedure $specializedProcedure): self
     {
         if (!$this->specializedProcedures->contains($specializedProcedure)) {
             $this->specializedProcedures->add($specializedProcedure);
@@ -277,7 +284,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function removeSpecializedProcedure($specializedProcedure): self
+    public function removeSpecializedProcedure(SpecializedProcedure $specializedProcedure): self
     {
         if ($this->specializedProcedures->contains($specializedProcedure)) {
             $this->specializedProcedures->removeElement($specializedProcedure);
@@ -321,7 +328,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
      * @param SecurityIncident $securityIncident
      * @return self
      */
-    public function removeSecurityIncident($securityIncident): self
+    public function removeSecurityIncident(SecurityIncident $securityIncident): self
     {
         if ($this->securityIncidents->contains($securityIncident)) {
             $this->securityIncidents->removeElement($securityIncident);
@@ -379,6 +386,22 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
     public function setEnablePaymentProvider(?bool $enablePaymentProvider): void
     {
         $this->enablePaymentProvider = (bool) $enablePaymentProvider;
+    }
+
+    /**
+     * @return DataCenter|null
+     */
+    public function getDataCenter(): ?DataCenter
+    {
+        return $this->dataCenter;
+    }
+
+    /**
+     * @param DataCenter|null $dataCenter
+     */
+    public function setDataCenter(?DataCenter $dataCenter): void
+    {
+        $this->dataCenter = $dataCenter;
     }
 
 }

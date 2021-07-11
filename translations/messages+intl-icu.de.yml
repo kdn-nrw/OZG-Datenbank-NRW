@@ -1436,6 +1436,8 @@ app:
     actions:
       show: IT Dienstleister anzeigen
       edit: IT Dienstleister bearbeiten
+    tabs:
+      infrastructure: Infrastruktur
     group:
       general_data: Basisdaten
       reference_data: Referenzen
@@ -1456,6 +1458,52 @@ app:
       laboratories: Stichwörter
       security_incidents: Sicherheitsvorfälle
       enable_payment_provider: 'Dieser IT Dienstleister ist ein ePayBl-Betreiber'
+      data_center: Rechenzentrum
+  data_center:
+    object_name: Rechenzentrum
+    list: Rechenzentren
+    create: Rechenzentrum anlegen
+    entity:
+      operation_type: Betrieb Rechenzentrum
+      operation_type_choices:
+        own: Eigener RZ Betrieb
+        joint: Gemeinsamer RZ Betrieb mit
+        none: Kein eigener RZ Betrieb
+      data_center_waste_heat: Abwärmenutzung
+      data_center_waste_heat_choices:
+        yes: Ja, die Abwärme wird genutzt
+        no: Nein, die Abwärme wird nicht genutzt
+      data_center_waste_heat_info: Abwärmenutzung Info
+      data_center_water_cooling: Wasserkühlung
+      data_center_water_cooling_choices:
+        yes: Ja, das Rechenzentrum verwendet Wasserkühlung
+        no: Nein, das Rechenzentrum verwendet keine Wasserkühlung
+      data_center_water_cooling_info: Wasserkühlung Info
+      data_center_consumption: Leistung und Energieverbrauch
+      service_provider: Dienstleister
+      joint_data_center_show: Gemeinsamer RZ Betrieb mit
+      other_service_providers: Gemeinsamer RZ Betrieb mit (IT-Dienstleister)
+      joint_data_center_info: oder gemeinsamer RZ Betrieb mit (Sonstige)
+      consumptions: Leistung und Energieverbrauch
+      show:
+        data_center_waste_heat_choices:
+          yes: Die Abwärme wird genutzt
+          no: Die Abwärme wird nicht genutzt
+        data_center_water_cooling_choices:
+          yes: Das Rechenzentrum verwendet Wasserkühlung
+          no: Das Rechenzentrum verwendet keine Wasserkühlung
+        joint_data_center: Gemeinsamer RZ Betrieb mit
+  data_center_consumption:
+    object_name: Leistung und Energieverbrauch
+    list: Leistungen und Energieverbräuche
+    create: Leistung und Energieverbrauch anlegen
+    statistics:
+      power_consumption: Leistung und Energieverbrauch
+    entity:
+      year: Jahr
+      power_consumption: Jahresverbrauch [kWh]
+      comment: Kommentar
+      data_center: Rechenzentrum
   service_solution:
     object_name: Online-Dienst für Leistung
     list: Online-Dienst für Leistung

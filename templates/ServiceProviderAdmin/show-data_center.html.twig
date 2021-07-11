@@ -1,0 +1,102 @@
+{# @var object \App\Entity\StateGroup\ServiceProvider #}
+{% if object.dataCenter and object.dataCenter.operationType > 0 %}
+    {% set dataCenter = object.dataCenter %}
+    {# @var dataCenter \App\Entity\StateGroup\DataCenter #}
+    {% set refSettings = app_get_reference_settings(dataCenter, field_description) %}
+    {# @var refSettings \App\Model\ReferenceSettings #}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="field-label box-title">
+                {{ 'app.service_provider.entity.data_center'|trans }}
+            </h4>
+        </div>
+        <div class="box-body">
+            <dl class="dl-horizontal">
+                <dt class="field-label">{{ 'app.data_center.entity.operation_type'|trans }}
+                    {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': dataCenter, 'propertyKey': 'operation_type'} %}</dt>
+                <dd>{{ dataCenter.operationTypeLabel|trans }}</dd>
+                {% if dataCenter.operationType == constant('App\\Entity\\StateGroup\\DataCenter::OPERATION_TYPE_JOINT') %}
+                    <dt class="field-label">{{ 'app.data_center.entity.show.joint_data_center'|trans }}
+                        {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': dataCenter, 'propertyKey': 'other_service_providers'} %}</dt>
+                    <dd>
+                        {% if dataCenter.otherServiceProviders|length > 0 %}
+                            {% for otherServiceProvider in dataCenter.otherServiceProviders %}
+                                {# @var otherServiceProvider \App\Entity\StateGroup\ServiceProvider #}
+                                {% if not loop.first %}
+                                    ,
+                                {% endif %}
+                                {{ otherServiceProvider ~ '' }}
+                            {% endfor %}
+                        {% endif %}
+                        {% if dataCenter.jointDataCenterInfo %}<br>
+                             {{ dataCenter.jointDataCenterInfo }}
+                        {% endif %}
+                    </dd>
+                {% endif %}
+                <dt class="field-label">{{ 'app.data_center.entity.data_center_waste_heat'|trans }}
+                    {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': dataCenter, 'propertyKey': 'data_center_waste_heat'} %}</dt>
+                <dd>
+                    {% if dataCenter.dataCenterWasteHeat %}
+                        {{ 'app.data_center.entity.show.data_center_waste_heat_choices.yes'|trans }}
+                        {% if dataCenter.dataCenterWasteHeatInfo %}<br>
+                            <div title="{{ 'app.data_center.entity.data_center_waste_heat_info'|trans }}">
+                                {{ dataCenter.dataCenterWasteHeatInfo|nl2br }}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {{ 'app.data_center.entity.show.data_center_waste_heat_choices.no'|trans }}
+                    {% endif %}
+                </dd>
+                <dt class="field-label">{{ 'app.data_center.entity.data_center_water_cooling'|trans }}
+                    {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': dataCenter, 'propertyKey': 'data_center_water_cooling'} %}</dt>
+                <dd>
+                    {% if dataCenter.dataCenterWaterCooling %}
+                        {{ 'app.data_center.entity.show.data_center_water_cooling_choices.yes'|trans }}
+                        {% if dataCenter.dataCenterWaterCoolingInfo %}<br>
+                            <div title="{{ 'app.data_center.entity.data_center_water_cooling_info'|trans }}">
+                            {{ dataCenter.dataCenterWaterCoolingInfo|nl2br }}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {{ 'app.data_center.entity.show.data_center_water_cooling_choices.no'|trans }}
+                    {% endif %}
+                </dd>
+            </dl>
+            {% if dataCenter.consumptions|length > 0 %}
+            <div class="data-center-consumption-container table-responsive">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>{{ 'app.data_center_consumption.entity.year'|trans }}</th>
+                        <th>{{ 'app.data_center_consumption.entity.power_consumption'|trans }}</th>
+                        <th>{{ 'app.data_center_consumption.entity.comment'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for consumptionEntity in  dataCenter.consumptions %}
+                    {# @var consumptionEntity \App\Entity\StateGroup\DataCenterConsumption #}
+                    <tr>
+                        <td>{{ consumptionEntity.year }}</td>
+                        <td>{{ consumptionEntity.powerConsumption }}</td>
+                        <td>{{ consumptionEntity.comment|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+                {% if dataCenter.consumptions|length > 1 %}
+                    <div class="m-2">
+                        {% set filters = {'dataCenter': dataCenter.id } %}
+                        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+                            'title': 'app.data_center_consumption.statistics.power_consumption',
+                            'translation_domain': 'messages',
+                            'mode': 'admin',
+                            'filters': filters|json_encode,
+                            'provider':  'App\\Statistics\\Provider\\DataCenterConsumptionChartProvider'
+                        }) }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

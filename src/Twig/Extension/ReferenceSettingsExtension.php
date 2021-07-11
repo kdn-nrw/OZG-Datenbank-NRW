@@ -78,15 +78,16 @@ class ReferenceSettingsExtension extends AbstractExtension
     }
 
     /**
-     * @param string $entityClass The entity class name for which the settings are loaded
+     * @param object|string $objectOrClass The entity or entity class name for which the settings are loaded
      * @param FieldDescriptionInterface|null $fieldDescription The optional field description (not set for custom fields)
      * @return ReferenceSettings
      */
     public function getReferenceSettings(
-        string $entityClass,
+        $objectOrClass,
         ?FieldDescriptionInterface $fieldDescription = null
     ): ReferenceSettings
     {
+        $entityClass = is_object($objectOrClass) ? get_class($objectOrClass) : $objectOrClass;
         $refAdmin = null;
         $isBackendMode = $this->applicationContextHandler->isBackend();
         $editRouteName = 'edit';

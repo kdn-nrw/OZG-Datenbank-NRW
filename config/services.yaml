@@ -225,6 +225,34 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Admin\StateGroup\DataCenterAdmin:
+    arguments:
+      - ~
+      - App\Entity\StateGroup\DataCenter
+      - ~
+    calls:
+      - [addChild, ['@App\Admin\StateGroup\DataCenterConsumptionAdmin', 'dataCenter']]
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.data_center.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\StateGroup\DataCenterConsumptionAdmin:
+    arguments:
+      - ~
+      - App\Entity\StateGroup\DataCenterConsumption
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.data_center_consumption.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Admin\EFileAdmin:
     arguments:
       - ~
@@ -738,10 +766,11 @@ services:
     arguments:
       - ~
       - App\Entity\StateGroup\ServiceProvider
-      - ~
+      - App\Controller\StateGroup\ServiceProviderAdminController
     calls:
       - [setTemplate, ['show', 'ServiceProviderAdmin/show.html.twig']]
       - [addChild, ['@App\Admin\StateGroup\SecurityIncidentAdmin', 'serviceProvider']]
+      - [addChild, ['@App\Admin\StateGroup\DataCenterAdmin', 'serviceProvider']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -928,6 +957,10 @@ services:
       - { name: custom_statistics.provider }
 
   App\Statistics\Provider\ImplementationProjectStatusChartProvider:
+    tags:
+      - { name: custom_statistics.provider }
+
+  App\Statistics\Provider\DataCenterConsumptionChartProvider:
     tags:
       - { name: custom_statistics.provider }
 

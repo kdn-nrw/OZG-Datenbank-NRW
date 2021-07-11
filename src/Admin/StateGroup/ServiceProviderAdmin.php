@@ -22,12 +22,15 @@ use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Contact;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
+use App\Entity\StateGroup\DataCenter;
+use App\Entity\StateGroup\ServiceProvider;
 use App\Model\ExportSettings;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\AdminType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Type\CollectionType;
@@ -127,6 +130,22 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         ]);
         $formMapper->end();
         $formMapper->end();
+
+        $formMapper->tab('app.service_provider.tabs.infrastructure');
+        $formMapper->with('infrastructure', [
+            'label' => false,
+        ]);
+        $formMapper->add('dataCenter', AdminType::class, [
+            'label' => false,
+            'delete' => false,
+            'btn_add' => false,
+            'btn_list' => false,
+        ], [
+            'ba_custom_exclude_fields' => ['serviceProvider'],
+            'admin_code' => DataCenterAdmin::class
+        ]);
+        $formMapper->end();
+        $formMapper->end();
     }
 
     public function preUpdate($object)
@@ -198,6 +217,11 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
             'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
         ]);
         $showMapper->add('securityIncidents');
+        $showMapper->add('dataCenter', null, [
+            'admin_code' => DataCenterAdmin::class,
+            'template' => 'ServiceProviderAdmin/show-data_center.html.twig',
+            'is_custom_field' => true,
+        ]);
     }
 
     /**
@@ -209,5 +233,29 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $settings->addExcludeFields(['specializedProcedures.manufacturers']);
         $settings->setAdditionFields(['manufacturers']);
         return $settings;
+    }
+
+    public function getNewInstance()
+    {
+        $object = parent::getNewInstance();
+        $this->initializeServiceProviderDataCenter($object);
+
+        return $object;
+    }
+
+    /**
+     * Create data center instance for service provider if not set
+     *
+     * @param object|null $object
+     * @noinspection PhpMissingParamTypeInspection
+     */
+    public function initializeServiceProviderDataCenter($object): void
+    {
+        if ($object instanceof ServiceProvider && null === $object->getDataCenter()) {
+            $childAdmin = $this->getChild(DataCenterAdmin::class);
+            /** @var DataCenter $dataCenter */
+            $dataCenter = $childAdmin->getNewInstance();
+            $object->setDataCenter($dataCenter);
+        }
     }
 }
