@@ -22,6 +22,8 @@ use App\Admin\Traits\SluggableTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\DependencyInjection\InjectionTraits\InjectAuthorizationCheckerTrait;
 use App\Entity\ConfidenceLevel;
+use App\Entity\Solution;
+use App\Entity\StateGroup\CommuneSolution;
 use App\Entity\Status;
 use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Model\ExportSettings;
@@ -34,6 +36,7 @@ use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Templating\TemplateRegistry;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -257,6 +260,54 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->end();
     }
 
+    public function preUpdate($object)
+    {
+        /** @var Solution $object */
+        $this->updateCommuneSolutions($object);
+    }
+
+    public function prePersist($object)
+    {
+        /** @var Solution $object */
+        $this->updateCommuneSolutions($object);
+    }
+
+    /**
+     * Persist manually added commune solutions
+     * @param Solution $object
+     * @throws \Doctrine\ORM\ORMException
+     */
+    private function updateCommuneSolutions(Solution $object): void
+    {
+        /** @var ModelManager $modelManager */
+        $modelManager = $this->getModelManager();
+        $csEm = $modelManager->getEntityManager(CommuneSolution::class);
+        $communeSolutions = $object->getCommuneSolutions();
+        $mappedCommunes = [];
+        foreach ($communeSolutions as $communeSolution) {
+            if (null !== $commune = $communeSolution->getCommune()) {
+                $mappedCommunes[$commune->getId()] = $communeSolution;
+            }
+        }
+        $communes = $object->getCommunes();
+        foreach ($communes as $commune) {
+            $status = $object->getStatus();
+            $solutionReady = null !== $status && stripos($status->getName(), 'offline') === false;
+            if (!array_key_exists($commune->getId(), $mappedCommunes)) {
+                $communeSolution = new CommuneSolution();
+                $communeSolution->setSolution($object);
+                $communeSolution->setCommune($commune);
+                $csEm->persist($communeSolution);
+            } else {
+                $communeSolution = $mappedCommunes[$commune->getId()];
+            }
+            if (!$communeSolution->isSelectedType()) {
+                $communeSolution->setCommuneType(Solution::COMMUNE_TYPE_SELECTED);
+            }
+            $communeSolution->setSolutionReady($solutionReady);
+        }
+    }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
@@ -279,7 +330,9 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'expanded' => false,
                 'multiple' => false,
             ]);
-        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'communeSolutions.commune', [
+            'label' => 'app.solution.entity.communes',
+        ]);
         $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
         $this->addDefaultDatagridFilter($datagridMapper, 'formServerSolutions.formServer');
         $this->addDefaultDatagridFilter($datagridMapper, 'paymentTypes');
@@ -296,7 +349,8 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('communes', null, [
+            ->add('selectedCommuneSolutions', null, [
+                'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,
                 'template' => 'SolutionAdmin/list_communes.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -304,7 +358,8 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                     'fieldName' => 'name'
                 ],
                 'sort_parent_association_mappings' => [
-                    ['fieldName' => 'communes'],
+                    ['fieldName' => 'communeSolutions'],
+                    ['fieldName' => 'commune'],
                 ]
             ])
             ->add('serviceProviders', null, [
@@ -380,6 +435,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     {
         $showMapper
             ->add('communes', TemplateRegistry::TYPE_CHOICE, [
+                'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,
                 'associated_property' => 'name',
                 'check_has_all_modifier' => true,

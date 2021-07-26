@@ -30,6 +30,7 @@ use App\Entity\Contact;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
 use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\CommuneSolution;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -39,6 +40,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -148,18 +150,59 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addLaboratoriesFormFields($formMapper);
         $formMapper->end();
         $formMapper->end();
+        $formMapper
+            ->with('app.commune.tabs.commune_solutions', ['tab' => true])
+            ->with('commune_solutions', [
+                'label' => false,
+            ]);
+        $formMapper
+            ->add('communeSolutions', CollectionType::class, [
+                'label' => false,
+                'type_options' => [
+                    'delete' => true,
+                ],
+                'by_reference' => false,
+            ], [
+                'admin_code' => CommuneSolutionAdmin::class,
+                'edit' => 'inline',
+                'inline' => 'natural',
+                //'sortable' => 'position',
+                'ba_custom_exclude_fields' => ['commune'],
+            ]);
+        $formMapper->end();
+        $formMapper->end();
     }
 
     public function preUpdate($object)
     {
-        /** @var OrganisationEntityInterface $object */
+        /** @var Commune $object */
         $this->updateOrganisation($object);
+        $this->updateCommuneSolutions($object);
     }
 
     public function prePersist($object)
     {
-        /** @var OrganisationEntityInterface $object */
+        /** @var Commune $object */
         $this->updateOrganisation($object);
+        $this->updateCommuneSolutions($object);
+    }
+
+    /**
+     * Persist manually added commune solutions
+     * @param Commune $object
+     * @throws \Doctrine\ORM\ORMException
+     */
+    private function updateCommuneSolutions(Commune $object): void
+    {
+        /** @var ModelManager $modelManager */
+        $modelManager = $this->getModelManager();
+        $csEm = $modelManager->getEntityManager(CommuneSolution::class);
+        $communeSolutions = $object->getCommuneSolutions();
+        foreach ($communeSolutions as $communeSolution) {
+            if (!$csEm->contains($communeSolution)) {
+                $csEm->persist($communeSolution);
+            }
+        }
     }
 
     private function updateOrganisation(OrganisationEntityInterface $object)
@@ -278,13 +321,24 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
         ]);
         $showMapper->add('solutions', null, [
-            'label' => 'app.commune_type.entity.online_solutions',
+            'label' => 'app.commune.entity.solutions',
             'admin_code' => SolutionAdmin::class,
             'is_custom_field' => true,
             'is_tab_field' => true,
             'is_custom_rendered' => true,
             'reference_field_list' => ['name', 'url', 'description', 'jurisdictions', 'maturity',],// 'status'
             'show_export' => true,
+            'showSolutions' => true,
+        ]);
+        $showMapper->add('communeSolutions', null, [
+            'label' => 'app.commune.entity.commune_solutions',
+            'admin_code' => CommuneSolutionAdmin::class,
+            'is_custom_field' => true,
+            'is_tab_field' => true,
+            'is_custom_rendered' => true,
+            'reference_field_list' => ['solution', 'solution_ready', 'connection_planned', 'specialized_procedure', 'comment',],
+            //'show_export' => true,
+            'showSolutions' => true,
         ]);
         $showMapper->add('communeType.serviceSystems', null, [
             'label' => 'app.commune_type.entity.service_systems',

@@ -1,0 +1,92 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if entities|length > 0 %}
+    {% if field_description.option('reference_field_list') %}
+        {% set referenceFieldNameList = field_description.option('reference_field_list') %}
+    {% else %}
+        {% set referenceFieldNameList = ['commune', 'solution', 'solution_ready', 'connection_planned', 'specialized_procedure', 'comment',] %}
+    {% endif %}
+    {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+    {% set showSolutions = field_description.options.showSolutions is defined and field_description.options.showSolutions %}
+    {% set refSettings = app_object_field_description_meta(object, field_description) %}
+    {% set entityClass = showSolutions ? 'App\\Entity\\Solution' : 'App\\Entity\\StateGroup\\Commune' %}
+    {% set solutionRefSettings = app_get_reference_settings(entityClass, field_description) %}
+    {# @var refSettings \App\Model\ReferenceSettings #}
+    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
+    <table class="table table-bordered table-striped table-condensed">
+        <tr>
+            {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': refSettings.labelPrefix} %}
+            {% if solutionRefSettings.edit.enabled %}
+                <th>
+                </th>
+            {% endif %}
+        </tr>
+        {% for child in entities %}
+            {# @var child \App\Entity\StateGroup\CommuneSolution #}
+            <tr>
+                {% for field in referenceFieldNameList %}
+                    {% set property = field|app_format_property_name %}
+                    <td>
+                        {% if property == 'name' %}
+                            {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
+                        {% elseif property == 'solution' %}
+                            {% set value = attribute(child, 'description') %}
+                            {% if value %}
+                                <div id="cs-help-{{ child.id }}" class="has-popover">
+                                    {% include 'General/Show/Partials/link-child-name-show.html.twig' with {'child': child.solution, 'refSettings': solutionRefSettings} %}
+                                    <span class="field-help" data-toggle="popover" title="{{ child ~ '' }}" data-content="{{ value|raw|replace({'"': "'"})|nl2br }}"
+                                          data-html="1" data-trigger="hover" data-placement="right" data-container="#cs-help-{{ child.id }}">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            {% else %}
+                                {% include 'General/Show/Partials/link-child-name-show.html.twig' with {'child': child.solution, 'refSettings': solutionRefSettings} %}
+                            {% endif %}
+                        {% elseif property == 'solutionReady' %}
+                            {% set value = attribute(child, property) %}
+                            {{ ('app.commune_solution.entity.solution_ready_choices.' ~ (value ? 'yes' : 'no'))|trans }}
+                            {% if value %}
+                                {% set subValue = attribute(child, 'solutionReadyAt') %}
+                                {% if subValue %}
+                                    ({{ subValue|app_format_custom_value }})
+                                {% endif %}
+                            {% endif %}
+                        {% elseif property == 'connectionPlanned' %}
+                            {% set value = attribute(child, property) %}
+                            {{ ('app.commune_solution.entity.connection_planned_choices.' ~ (value ? 'yes' : 'no'))|trans }}
+                            {% if value %}
+                                {% set subValue = attribute(child, 'connectionPlannedAt') %}
+                                {% if subValue %}
+                                    ({{ subValue|app_format_custom_value }})
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            {% set value = attribute(child, property) %}
+                            {{ value|app_format_custom_value }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                {% if solutionRefSettings.edit.enabled %}
+                    <td>
+                        {% if child.solution and solutionRefSettings.admin.hasAccess(solutionRefSettings.edit.route, child) %}
+                            <a href="{{ solutionRefSettings.admin.generateObjectUrl(solutionRefSettings.edit.route, child.solution) }}">
+                                {% if solutionRefSettings.edit.route == 'show' %}
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+    {% if field_description.option('show_export') %}
+        {% include 'General/Show/Partials/link-child-list-export.html.twig' %}
+    {% endif %}
+{% endif %}

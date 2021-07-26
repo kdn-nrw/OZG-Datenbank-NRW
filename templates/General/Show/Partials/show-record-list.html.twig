@@ -15,6 +15,8 @@ file that was distributed with this source code.
     {% include 'General/Show/Partials/model-region-projects-list.html.twig' %}
 {% elseif field_description.name ends with 'serviceProviders' %}
     {% include 'General/Show/Partials/service-providers-list.html.twig' %}
+{% elseif field_description.name ends with 'communeSolutions' %}
+    {% include 'CommuneAdmin/show-commune-solution-integration.html.twig' %}
 {% elseif field_description.name ends with 'publishedSolutions' or field_description.name ends with 'solutions' %}
     {% include 'General/Show/Partials/solutions-list.html.twig' %}
 {% elseif field_description.name ends with 'implementationProjects' %}

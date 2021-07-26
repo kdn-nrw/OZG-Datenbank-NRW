@@ -8,7 +8,13 @@ file that was distributed with this source code.
 <table class="table table-bordered table-striped table-condensed">
     <tr>
         {% set tableHeaders = ['name', 'street', 'zip_code', 'url', 'commune_type', 'constituency', 'main_email', 'official_community_key', 'administrative_district'] %}
-        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
+
+        {% if field_description is defined and field_description.option('custom_label_prefix') is not empty %}
+            {% set labelPrefix = field_description.option('custom_label_prefix') %}
+        {% else %}
+            {% set labelPrefix = refSettings.labelPrefix %}
+        {% endif %}
+        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
         {% if refSettings.edit.enabled %}
             <th></th>
         {% endif %}

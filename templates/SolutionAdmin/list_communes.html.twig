@@ -13,8 +13,11 @@ file that was distributed with this source code.
         <em>{{ 'app.solution.entity.commune_type_all'|trans }}</em>
     {% else %}
         {% for element in value %}
-            {{ block('relation_value') }}
-            {% if not loop.last %}, {% endif %}
+            {# @var element \App\Entity\StateGroup\CommuneSolution #}
+            {% if element.selectedType %}
+                {{ block('relation_value') }}
+                {% if not loop.last %}, {% endif %}
+            {% endif %}
         {% endfor %}
     {% endif %}
 {% endblock %}

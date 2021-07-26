@@ -161,10 +161,24 @@ services:
       - ~
     calls:
       - [setTemplate, ['show', 'CommuneAdmin/show.html.twig']]
+      - [addChild, ['@App\Admin\StateGroup\CommuneSolutionAdmin', 'commune']]
     tags:
       - name:         sonata.admin
         manager_type: orm
         label:        app.commune.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\StateGroup\CommuneSolutionAdmin:
+    arguments:
+      - ~
+      - App\Entity\StateGroup\CommuneSolution
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.commune_solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true

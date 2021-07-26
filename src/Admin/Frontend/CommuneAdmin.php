@@ -13,6 +13,7 @@ namespace App\Admin\Frontend;
 
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\SolutionAdmin;
+use App\Admin\StateGroup\CommuneSolutionAdmin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\CentralAssociationTrait;
 use App\Admin\Traits\LaboratoryTrait;
@@ -134,6 +135,16 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'is_custom_rendered' => true,
             'reference_field_list' => ['name', 'url', 'description', 'jurisdictions', 'maturity',],// 'status'
             'show_export' => true,
+        ]);
+        $showMapper->add('communeSolutions', null, [
+            'label' => 'app.commune.entity.commune_solutions',
+            'admin_code' => CommuneSolutionAdmin::class,
+            'is_custom_field' => true,
+            'is_tab_field' => true,
+            'is_custom_rendered' => true,
+            'reference_field_list' => ['solution', 'solution_ready', 'connection_planned', 'specialized_procedure', 'comment',],
+            //'show_export' => true,
+            'showSolutions' => true,
         ]);
         $showMapper->add('communeType.serviceSystems', null, [
             'label' => 'app.commune_type.entity.service_systems',

@@ -62,7 +62,9 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'expanded' => false,
                 'multiple' => false,
             ]);
-        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addDefaultDatagridFilter($datagridMapper, 'communeSolutions.commune', [
+            'label' => 'app.solution.entity.communes',
+        ]);
         $this->addDefaultDatagridFilter($datagridMapper, 'formServerSolutions.formServer');
         $this->addDefaultDatagridFilter($datagridMapper, 'paymentTypes');
         $this->addDefaultDatagridFilter($datagridMapper, 'authentications');
@@ -93,7 +95,8 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('communes', null, [
+            ->add('selectedCommuneSolutions', null, [
+                'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,
                 'template' => 'SolutionAdmin/list_communes.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -101,7 +104,8 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                     'fieldName' => 'name'
                 ],
                 'sort_parent_association_mappings' => [
-                    ['fieldName' => 'communes'],
+                    ['fieldName' => 'communeSolutions'],
+                    ['fieldName' => 'commune'],
                 ]
             ])/*
             ->add('portals', null, [
@@ -159,9 +163,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 ],
                 'enable_filter_add' => true,
             ])
-            ->add('url', 'url', [
-                'required' => false
-            ]);
+            ->add('url', 'url');
         $this->addDefaultListActions($listMapper);
     }
 
@@ -191,6 +193,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     {
         $showMapper
             ->add('communes', TemplateRegistry::TYPE_CHOICE, [
+                'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,
                 'associated_property' => 'name',
                 'check_has_all_modifier' => true,

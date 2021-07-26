@@ -16,6 +16,8 @@ use App\Model\ReferenceSettings;
 use App\Service\InjectAdminManagerTrait;
 use App\Service\InjectApplicationContextHandlerTrait;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Util\ClassUtils;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Twig\Extension\AbstractExtension;
@@ -87,7 +89,17 @@ class ReferenceSettingsExtension extends AbstractExtension
         ?FieldDescriptionInterface $fieldDescription = null
     ): ReferenceSettings
     {
-        $entityClass = is_object($objectOrClass) ? get_class($objectOrClass) : $objectOrClass;
+        if (is_object($objectOrClass)) {
+            if ($objectOrClass instanceof Collection) {
+                $firstItem = $objectOrClass->first();
+                $entityClass = get_class($firstItem);
+            } else {
+                $entityClass = get_class($objectOrClass);
+            }
+            $entityClass = ClassUtils::getRealClass($entityClass);
+        } else {
+            $entityClass = is_object($objectOrClass) ? get_class($objectOrClass) : $objectOrClass;
+        }
         $refAdmin = null;
         $isBackendMode = $this->applicationContextHandler->isBackend();
         $editRouteName = 'edit';

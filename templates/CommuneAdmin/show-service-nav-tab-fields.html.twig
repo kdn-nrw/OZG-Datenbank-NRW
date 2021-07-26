@@ -9,8 +9,12 @@ file that was distributed with this source code.
 
 {% set navTabFields = [{
     key: 'solutions',
-    customListTitle: 'app.commune_type.show.headline.online_solutions'|trans({'commune': object.name}),
+    customListTitle: 'app.commune.show.headline.online_solutions'|trans({'commune': object.name}),
     entities: commune_solutions(object, app_is_backend())
+},{
+    key: 'communeSolutions',
+    customListTitle: 'app.commune.show.headline.online_integrations'|trans({'commune': object.name}),
+    entities: commune_integrations(object, app_is_backend())
 }] %}
 {% if communeType is not null %}
     {% set navTabFields = navTabFields|merge([{

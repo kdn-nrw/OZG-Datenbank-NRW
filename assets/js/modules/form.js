@@ -74,7 +74,10 @@
                     labelElt = formGroupElt.querySelector('.control-label__text');
                 }
                 if (labelElt && labelElt.querySelector('.field-help') === null) {
-                    let description = metaProperties[key].description.replace('"', "'").replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br>');
+                    let description = '';
+                    if (metaProperties[key].description) {
+                        description = metaProperties[key].description.replace('"', "'").replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br>');
+                    }
                     let helpTitle = (labelElt.textContent).replace(/(<([^>]+)>)/gi, "");
                     let propertyHelpHtml = '\n' +
                         '<span id="meta-help-'+idSuffix+'" class="has-popover">' +

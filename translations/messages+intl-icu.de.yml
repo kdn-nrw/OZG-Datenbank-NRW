@@ -280,6 +280,13 @@ app:
       administration_contact: Kontaktdaten der Verwaltung
       meta_data: Metadaten
       reference_data: Referenzen
+    tabs:
+      general: Allgemein
+      commune_solutions: OZG-Integration
+    show:
+      headline:
+        online_solutions: 'Online Dienste für {commune}'
+        online_integrations: 'OZG-Integration für {commune}'
     entity:
       organisation: Organisation
       name: Name
@@ -296,6 +303,7 @@ app:
       manufacturers: Hersteller
       offices: Ämter
       solutions: Online-Dienste
+      commune_solutions: OZG-Integration
       laboratories: Stichwörter
       commune_type: Größenklasse
       constituency: Kreis
@@ -310,6 +318,27 @@ app:
       administration_email: E-Mail
       administration_url: Web
       transparency_portal_url: Transparenzportal
+  commune_solution:
+    object_name: Online-Dienst für Kommune
+    list: Online-Dienst für Kommune
+    create: Online-Dienst für Kommune anlegen
+    entity:
+      solution: Online-Dienst
+      commune: Kommune
+      name: Name des Dienstes
+      description: Beschreibung des Dienstes
+      solution_ready: Lösung steht bereit
+      solution_ready_choices:
+        no: Nein
+        yes: Ja
+      solution_ready_at: Bereit ab
+      connection_planned: Anschluss geplant
+      connection_planned_choices:
+        no: kein Anschluss geplant
+        yes: Anschluss geplant
+      connection_planned_at: Geplant ab
+      comment: Anmerkungen
+      specialized_procedure: Weiterverarbeitendes System
   abstract_onboarding_entity:
     object_name: Onboarding
     list: Onboarding Allgemein
@@ -710,7 +739,6 @@ app:
     create: Größenklasse anlegen
     show:
       headline:
-        online_solutions: 'Online Dienste für {commune}'
         service_systems: 'OZG-Leistungen für Größenklasse {communeType}'
         services: 'Leika-Leistungen für Größenklasse {communeType}'
     entity:
@@ -1576,6 +1604,7 @@ app:
       relations: Relationen
       form_servers: Formularserver
       services: Leika-Leistungen
+      communes: Kommunen
     entity:
       created_by: Erstellt von
       modified_by: Geändert von

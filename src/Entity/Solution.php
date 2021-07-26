@@ -19,6 +19,7 @@ use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\CommuneSolution;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -131,18 +132,16 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     private $communeType = self::COMMUNE_TYPE_SELECTED;
 
     /**
+     * Used internally for solution admin form
      * @var Commune[]|Collection
-     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune", inversedBy="solutions")
-     * @ORM\JoinTable(name="ozg_solutions_communes",
-     *     joinColumns={
-     *     @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
-     *   }
-     * )
      */
     private $communes;
+
+    /**
+     * @var CommuneSolution[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\StateGroup\CommuneSolution", mappedBy="solution", cascade={"all"}, orphanRemoval=true)
+     */
+    private $communeSolutions;
 
     /**
      * @var Authentication[]|Collection
@@ -255,6 +254,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
         $this->analogServices = new ArrayCollection();
         $this->authentications = new ArrayCollection();
         $this->communes = new ArrayCollection();
+        $this->communeSolutions = new ArrayCollection();
         $this->formServerSolutions = new ArrayCollection();
         $this->implementationProjects = new ArrayCollection();
         $this->modelRegionProjects = new ArrayCollection();
@@ -591,14 +591,46 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     }
 
     /**
+     * Returns the referenced communes
+     *
+     * @return Commune[]|Collection
+     */
+    public function getCommunes()
+    {
+        if (null === $this->communes) {
+            $this->communes = new ArrayCollection();
+        }
+        foreach ($this->getCommuneSolutions() as $communeSolution) {
+            if ($communeSolution->isSelectedType()
+                && (null !== $commune = $communeSolution->getCommune())
+                && !$this->communes->contains($commune)
+            ) {
+                $this->communes->add($commune);
+            }
+        }
+        return $this->communes;
+    }
+
+    /**
+     * @param Commune[]|Collection $communes
+     */
+    public function setCommunes($communes): void
+    {
+        $this->communes = $communes;
+    }
+
+    /**
      * @param Commune $commune
      * @return self
      */
     public function addCommune($commune): self
     {
+        if (null === $this->communes) {
+            $this->communes = new ArrayCollection();
+        }
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
-            $commune->addSolution($this);
+            //$commune->addSolution($this);
         }
 
         return $this;
@@ -610,9 +642,12 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
      */
     public function removeCommune($commune): self
     {
+        if (null === $this->communes) {
+            $this->communes = new ArrayCollection();
+        }
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);
-            $commune->removeSolution($this);
+            //$commune->removeSolution($this);
         }
 
         return $this;
@@ -635,19 +670,60 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     }
 
     /**
-     * @return Commune[]|Collection
+     * @param CommuneSolution $communeSolution
+     * @return self
      */
-    public function getCommunes()
+    public function addCommuneSolution($communeSolution): self
     {
-        return $this->communes;
+        if (!$this->communeSolutions->contains($communeSolution)) {
+            $this->communeSolutions->add($communeSolution);
+            $communeSolution->setSolution($this);
+        }
+
+        return $this;
     }
 
     /**
-     * @param Commune[]|Collection $communes
+     * @param CommuneSolution $communeSolution
+     * @return self
      */
-    public function setCommunes($communes): void
+    public function removeCommuneSolution($communeSolution): self
     {
-        $this->communes = $communes;
+        if ($this->communeSolutions->contains($communeSolution)) {
+            $this->communeSolutions->removeElement($communeSolution);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return CommuneSolution[]|Collection
+     */
+    public function getCommuneSolutions()
+    {
+        return $this->communeSolutions;
+    }
+
+    /**
+     * @return CommuneSolution[]|Collection
+     */
+    public function getSelectedCommuneSolutions()
+    {
+        $selectedCommunes = new ArrayCollection();
+        foreach ($this->getCommuneSolutions() as $communeSolution) {
+            if (null !== $communeSolution->getCommune() && $communeSolution->isSelectedType()) {
+                $selectedCommunes->add($communeSolution);
+            }
+        }
+        return $selectedCommunes;
+    }
+
+    /**
+     * @param CommuneSolution[]|Collection $communeSolutions
+     */
+    public function setCommuneSolutions($communeSolutions): void
+    {
+        $this->communeSolutions = $communeSolutions;
     }
 
     /**

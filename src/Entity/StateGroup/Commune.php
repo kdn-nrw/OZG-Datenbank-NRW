@@ -96,10 +96,10 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     private $serviceProviders;
 
     /**
-     * @var Solution[]|Collection
-     * @ORM\ManyToMany(targetEntity="App\Entity\Solution", mappedBy="communes")
+     * @var CommuneSolution[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\StateGroup\CommuneSolution", mappedBy="commune", cascade={"all"}, orphanRemoval=true)
      */
-    private $solutions;
+    private $communeSolutions;
 
     /**
      * @var SpecializedProcedure[]|Collection
@@ -222,7 +222,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
         $this->offices = new ArrayCollection();
         $this->portals = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
-        $this->solutions = new ArrayCollection();
+        $this->communeSolutions = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
         $this->serviceBaseResults = new ArrayCollection();
     }
@@ -337,8 +337,10 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      */
     public function addSolution($solution): self
     {
-        if (!$this->solutions->contains($solution)) {
-            $this->solutions->add($solution);
+        if (null === $this->findCommuneSolutionBySolution($solution)) {
+            $communeSolution = new CommuneSolution();
+            $communeSolution->setSolution($solution);
+            $communeSolution->setCommune($this);
             $solution->addCommune($this);
         }
 
@@ -351,12 +353,22 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      */
     public function removeSolution($solution): self
     {
-        if ($this->solutions->contains($solution)) {
-            $this->solutions->removeElement($solution);
+        if (null === $communeSolution = $this->findCommuneSolutionBySolution($solution)) {
+            $this->communeSolutions->removeElement($communeSolution);
             $solution->removeCommune($this);
         }
 
         return $this;
+    }
+
+    private function findCommuneSolutionBySolution(Solution $solution): ? CommuneSolution
+    {
+        foreach ($this->getCommuneSolutions() as $communeSolution) {
+            if ($solution === $communeSolution->getSolution()) {
+                return $communeSolution;
+            }
+        }
+        return null;
     }
 
     /**
@@ -364,7 +376,13 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      */
     public function getSolutions(): Collection
     {
-        return $this->solutions;
+        $solutions = new ArrayCollection();
+        foreach ($this->getCommuneSolutions() as $communeSolution) {
+            if (null !== $solution = $communeSolution->getSolution()) {
+                $solutions->add($solution);
+            }
+        }
+        return $solutions;
     }
 
     /**
@@ -372,7 +390,52 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      */
     public function setSolutions($solutions): void
     {
-        $this->solutions = $solutions;
+        foreach ($solutions as $solution) {
+            $this->addSolution($solution);
+        }
+    }
+
+    /**
+     * @param CommuneSolution $communeSolution
+     * @return self
+     */
+    public function addCommuneSolution($communeSolution): self
+    {
+        if (!$this->communeSolutions->contains($communeSolution)) {
+            $this->communeSolutions->add($communeSolution);
+            $communeSolution->setCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CommuneSolution $communeSolution
+     * @return self
+     */
+    public function removeCommuneSolution($communeSolution): self
+    {
+        if ($this->communeSolutions->contains($communeSolution)) {
+            $this->communeSolutions->removeElement($communeSolution);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return CommuneSolution[]|Collection
+     */
+    public function getCommuneSolutions()
+    {
+        return $this->communeSolutions;
+    }
+
+    /**
+     * @param CommuneSolution[]|Collection $communeSolutions
+     */
+    public function setCommuneSolutions($communeSolutions): void
+    {
+        $this->communeSolutions = $communeSolutions;
     }
 
     /**

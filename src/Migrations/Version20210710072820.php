@@ -22,8 +22,8 @@ final class Version20210710072820 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         if (!$schema->getTable('ozg_implementation_project')->hasColumn('piloting_status_at')) {
             $this->addSql('ALTER TABLE ozg_implementation_project ADD piloting_status_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\'');
-            $this->addSql('UPDATE ozg_implementation_project SET piloting_status_at = implementation_status_at WHERE implementation_status_at IS NOT NULL');
-            $this->addSql('UPDATE ozg_implementation_project SET implementation_status_at = NULL WHERE implementation_status_at IS NOT NULL;');
+            $this->addSql('UPDATE ozg_implementation_project SET piloting_status_at = commissioning_status_at WHERE commissioning_status_at IS NOT NULL');
+            $this->addSql('UPDATE ozg_implementation_project SET commissioning_status_at = NULL WHERE commissioning_status_at IS NOT NULL');
             $this->addSql('INSERT INTO ozg_implementation_status (level, description, modified_at, created_at, name, hidden, next_status_id, set_automatically, prev_status_id, status_switch, color, css_class) VALUES (6, \'Pilotierung NRW\', NOW(), NOW(), \'Pilotierung NRW\', 0, 6, 1, 4, null, \'#04b701\', null)');
             $this->addSql('UPDATE ozg_implementation_status SET prev_status_id = 9 WHERE id = 6');
             $this->addSql('UPDATE ozg_implementation_status SET level = level + 1 WHERE level > 3');

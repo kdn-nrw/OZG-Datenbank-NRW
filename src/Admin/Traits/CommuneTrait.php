@@ -12,7 +12,11 @@
 namespace App\Admin\Traits;
 
 use App\Admin\StateGroup\CommuneAdmin;
+use App\Entity\ImplementationProject;
+use App\Entity\ImplementationStatus;
 use App\Entity\StateGroup\Commune;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -46,6 +50,7 @@ trait CommuneTrait
                 'multiple' => true,
                 'by_reference' => false,
                 'choice_translation_domain' => false,
+                'class' => Commune::class,
             ];
             if (!empty($overrideOptions)) {
                 $options = array_merge($options, $overrideOptions);

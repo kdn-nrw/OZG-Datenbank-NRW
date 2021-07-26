@@ -28,28 +28,28 @@ file that was distributed with this source code.
             });
 
             function choice_field_mask_show(val) {
-                var controlGroupIdFunc = function (field) {
+                var controlGroupIdFunc = function (field, formName) {
                     // Most of fields are named with an underscore
-                    var defaultFieldId = '#sonata-ba-field-container-{{ main_form_name }}_' + field;
+                    var defaultFieldId = '#sonata-ba-field-container-'+formName+'_' + field;
 
                     // Some fields may be named with a dash (like keys of immutable array form type)
                     if (jQuery(defaultFieldId).length === 0) {
-                        return '#sonata-ba-field-container-{{ main_form_name }}-' + field;
+                        return '#sonata-ba-field-container-'+formName+'-' + field;
                     }
 
                     return defaultFieldId;
                 };
                 var cfmHideField = function (field) {
-                    var $fieldContainer = jQuery(controlGroupIdFunc(field));
+                    var $fieldContainer = jQuery(controlGroupIdFunc(field, '{{ main_form_name }}'));
                     $fieldContainer.hide();
                     $fieldContainer.find('[required="required"]').attr('data-required', 'required').removeAttr("required");
                     var $box = $fieldContainer.parents('.box').first();
-                    if ($box.length > 0 && $box.find('.form-group:visible').length === 0) {
+                    if ($box.length > 0 && $box.find('.form-group:visible').length === 0 && $box.find('> [data-widget="collapse"]').length === 0) {
                         $box.attr('data-cfm-hidden', 1).hide();
                     }
                 };
                 var cfmShowField = function (field) {
-                    var $fieldContainer = jQuery(controlGroupIdFunc(field));
+                    var $fieldContainer = jQuery(controlGroupIdFunc(field, '{{ main_form_name }}'));
                     $fieldContainer.show();
                     $fieldContainer.find('[data-required="required"]').attr("required", "required");
                     $fieldContainer.parents('[data-cfm-hidden="1"]').each(function(){
