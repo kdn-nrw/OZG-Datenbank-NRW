@@ -621,11 +621,11 @@ app:
     groups:
       general: Kontakt
       general_general: Kontakt
-      mandator_email: Kontakt E-Mail des Mandanten
+      mandator_email: Benachrichtigungen zum Servicekonto
       mandator_email_description: 'Über die Mailadresse werden wichtige Informationen u.a. bzgl. Wartungsarbeiten oder ggf. Informationen zu Verträgen mit Zahlungsverkehrsdienstleistern kommuniziert.'
       activation_system: Testsystem
       activation_system_description: 'Für das Produktivsystem ist keine separate Freischaltung in den Netzen des Betreibers notwendig. Das Integrationssystem steht dem Kunden als Testsystem zur Verfügung. Es kann über die URLs <a href="https://epay2.stadt-koeln.de/portal" target="_blank">https://epay2.stadt-koeln.de/portal</a> erreicht werden. Hierfür müssen entsprechende Freischaltungen eingerichtet werden.<br><br>Der Kunde teilt hierzu der Kundenbetreuung seine Ausgangs-IP mit. Diese kann vom Kunden bspw. über <a href="http://www.wieistmeineip.de" target="_blank">http://www.wieistmeineip.de</a> ermittelt werden.'
-      admin_account: Einrichtung dezentraler Admin
+      admin_account: Ansprechperson Servicekonto
       mandator_account: Kontakt
     entity:
       description: Beschreibung
@@ -651,17 +651,17 @@ app:
       payment_user_username: Benutzerkennung
       payment_user_username_placeholder: max. 20 Zeichen
       mandator_email: E-Mail
+      group_email: '[Optional] Weitere E-Mail Adresse'
       answer_url1: Antwort URL 1
-      answer_url2: Antwort URL 2
       client_id: Client ID
       client_id_placeholder: wird von Servicekonto Betreiber ausgefüllt
       client_password: Client Passwort
       client_password_placeholder: wird von Servicekonto Betreiber ausgefüllt
-      account_mandator_state: 'Hat die Kommune bereits einen Servicekonto.NRW Mandanten?'
-      account_mandator_state_choices:
-        choose: Bitte wählen
-        yes: Ja, die Kommune hat bereits einen Servicekonto.NRW Mandanten
-        no: Nein, die Kommune hat noch keinen Servicekonto.NRW Mandanten
+      answer_url2: Antwort URL 2
+      client_id2: Client ID 2
+      client_id2_placeholder: wird von Servicekonto Betreiber ausgefüllt
+      client_password2: Client Passwort 2
+      client_password2_placeholder: wird von Servicekonto Betreiber ausgefüllt
   release:
     object_name: Go-Live
     list: Go-Live

@@ -19,8 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -32,7 +30,7 @@ class OnboardingContactType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $parentAdmin = $options['parent_admin'];
+        //$parentAdmin = $options['parent_admin'];
 
         if ($options['enable_external_user']) {
             $builder->add('externalUserName', TextType::class, [
@@ -74,10 +72,12 @@ class OnboardingContactType extends AbstractType
             'constraints' => [new Assert\Email()],
             'required'    => false,
         ]);
-        $builder->add('phoneNumber', TextType::class, [
-            'label' => 'app.contact.entity.phone_number',
-            'required' => false,
-        ]);
+        if ($options['enable_phone_number']) {
+            $builder->add('phoneNumber', TextType::class, [
+                'label' => 'app.contact.entity.phone_number',
+                'required' => false,
+            ]);
+        }
         if ($options['enable_mobile_number']) {
             $builder->add('mobileNumber', TextType::class, [
                 'label' => 'app.contact.entity.mobile_number',
@@ -105,6 +105,7 @@ class OnboardingContactType extends AbstractType
             'show_contact_type' => true,
             'enable_external_user' => false,
             'enable_mobile_number' => false,
+            'enable_phone_number' => true,
         ]);
     }
 

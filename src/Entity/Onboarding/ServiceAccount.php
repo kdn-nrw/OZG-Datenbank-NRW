@@ -32,15 +32,6 @@ class ServiceAccount extends AbstractOnboardingEntity
     use ContactPropertiesTrait;
 
     /**
-     * @var array Supported positions
-     */
-    public static $accountMandatorChoices = [
-        'app.service_account.entity.account_mandator_state_choices.choose' => null,
-        'app.service_account.entity.account_mandator_state_choices.yes' => 1,
-        'app.service_account.entity.account_mandator_state_choices.no' => 2,
-    ];
-
-    /**
      * @ORM\Column(type="string", name="payment_provider_account_id", length=255, nullable=true)
      * @var string|null
      */
@@ -79,6 +70,7 @@ class ServiceAccount extends AbstractOnboardingEntity
      * @var int|null
      *
      * @ORM\Column(name="account_mandator_state", type="integer", nullable=true)
+     * @deprecated
      */
     protected $accountMandatorState;
 
@@ -87,12 +79,6 @@ class ServiceAccount extends AbstractOnboardingEntity
      * @var string|null
      */
     protected $answerUrl1;
-
-    /**
-     * @ORM\Column(type="string", name="answer_url_2", length=1024, nullable=true)
-     * @var string|null
-     */
-    protected $answerUrl2;
 
     /**
      * @ORM\Column(type="string", name="client_id", length=255, nullable=true)
@@ -105,6 +91,24 @@ class ServiceAccount extends AbstractOnboardingEntity
      * @var string|null
      */
     protected $clientPassword;
+
+    /**
+     * @ORM\Column(type="string", name="answer_url_2", length=1024, nullable=true)
+     * @var string|null
+     */
+    protected $answerUrl2;
+
+    /**
+     * @ORM\Column(type="string", name="client_id_2", length=255, nullable=true)
+     * @var string|null
+     */
+    protected $clientId2;
+
+    /**
+     * @ORM\Column(type="string", name="client_password_2", length=255, nullable=true)
+     * @var string|null
+     */
+    protected $clientPassword2;
 
     /**
      * @return string|null
@@ -190,22 +194,6 @@ class ServiceAccount extends AbstractOnboardingEntity
     }
 
     /**
-     * @return int
-     */
-    public function getAccountMandatorState(): int
-    {
-        return (int) $this->accountMandatorState;
-    }
-
-    /**
-     * @param int|null $accountMandatorState
-     */
-    public function setAccountMandatorState(?int $accountMandatorState): void
-    {
-        $this->accountMandatorState = $accountMandatorState;
-    }
-
-    /**
      * @return string|null
      */
     public function getAnswerUrl1(): ?string
@@ -223,26 +211,6 @@ class ServiceAccount extends AbstractOnboardingEntity
     public function setAnswerUrl1(?string $answerUrl1): void
     {
         $this->answerUrl1 = $answerUrl1;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAnswerUrl2(): ?string
-    {
-        if (null === $this->answerUrl2 && null !== $this->commune) {
-            $name = str_replace(' ', '-', strtolower(DataParser::cleanStringValue($this->getCommuneName())));
-            $this->answerUrl2 = 'https://' . $name . '.test1.kommunalportal.nrw/c/portal/login/npa';
-        }
-        return $this->answerUrl2;
-    }
-
-    /**
-     * @param string|null $answerUrl2
-     */
-    public function setAnswerUrl2(?string $answerUrl2): void
-    {
-        $this->answerUrl2 = $answerUrl2;
     }
 
     /**
@@ -275,6 +243,58 @@ class ServiceAccount extends AbstractOnboardingEntity
     public function setClientPassword(?string $clientPassword): void
     {
         $this->clientPassword = $clientPassword;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAnswerUrl2(): ?string
+    {
+        if (null === $this->answerUrl2 && null !== $this->commune) {
+            $name = str_replace(' ', '-', strtolower(DataParser::cleanStringValue($this->getCommuneName())));
+            $this->answerUrl2 = 'https://' . $name . '.test1.kommunalportal.nrw/c/portal/login/npa';
+        }
+        return $this->answerUrl2;
+    }
+
+    /**
+     * @param string|null $answerUrl2
+     */
+    public function setAnswerUrl2(?string $answerUrl2): void
+    {
+        $this->answerUrl2 = $answerUrl2;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClientId2(): ?string
+    {
+        return $this->clientId2;
+    }
+
+    /**
+     * @param string|null $clientId2
+     */
+    public function setClientId2(?string $clientId2): void
+    {
+        $this->clientId2 = $clientId2;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClientPassword2(): ?string
+    {
+        return $this->clientPassword2;
+    }
+
+    /**
+     * @param string|null $clientPassword2
+     */
+    public function setClientPassword2(?string $clientPassword2): void
+    {
+        $this->clientPassword2 = $clientPassword2;
     }
 
     protected function getRequiredPropertiesForCompletion(): array
