@@ -166,7 +166,7 @@ abstract class AbstractBackendAdminControllerTestCase extends AbstractBackendTes
             shuffle($testIds);
         }
         if (empty($testIds)) {
-            self::markTestSkipped(sprintf('The test data containn no link to the %s view', $view));
+            self::markTestSkipped(sprintf('The test data contain no link to the %s view', $view));
         } else {
             $maxCount = min(3, count($testIds));
             $count = 0;
