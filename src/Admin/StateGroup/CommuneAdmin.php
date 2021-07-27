@@ -159,8 +159,9 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('communeSolutions', CollectionType::class, [
                 'label' => false,
                 'type_options' => [
-                    'delete' => true,
+                    'delete' => false,
                 ],
+                'btn_add' => false,
                 'by_reference' => false,
             ], [
                 'admin_code' => CommuneSolutionAdmin::class,

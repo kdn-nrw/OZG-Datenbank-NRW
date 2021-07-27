@@ -2,5 +2,7 @@
 body {
     background-color: lightgray;
 }
+@import "../frontend/scss/general/keyframes";
+@import "../frontend/scss/general/mixins";
 @import "admin-include";
 @import "../frontend/scss/content/project-month-data";

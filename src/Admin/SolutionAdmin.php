@@ -23,10 +23,10 @@ use App\Admin\Traits\SpecializedProcedureTrait;
 use App\DependencyInjection\InjectionTraits\InjectAuthorizationCheckerTrait;
 use App\Entity\ConfidenceLevel;
 use App\Entity\Solution;
-use App\Entity\StateGroup\CommuneSolution;
 use App\Entity\Status;
 use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Model\ExportSettings;
+use App\Service\SolutionHelper;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -36,7 +36,6 @@ use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Templating\TemplateRegistry;
-use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -56,6 +55,20 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     use SpecializedProcedureTrait;
     use SluggableTrait;
     use InjectAuthorizationCheckerTrait;
+
+    /**
+     * @var SolutionHelper
+     */
+    private $solutionHelper;
+
+    /**
+     * @required
+     * @param SolutionHelper $solutionHelper
+     */
+    public function injectSolutionHelper(SolutionHelper $solutionHelper): void
+    {
+        $this->solutionHelper = $solutionHelper;
+    }
 
     protected $datagridValues = [
 
@@ -260,52 +273,16 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->end();
     }
 
-    public function preUpdate($object)
+    public function postUpdate($object)
     {
         /** @var Solution $object */
-        $this->updateCommuneSolutions($object);
+        $this->solutionHelper->updateCommuneReferences($object);
     }
 
-    public function prePersist($object)
+    public function postPersist($object)
     {
         /** @var Solution $object */
-        $this->updateCommuneSolutions($object);
-    }
-
-    /**
-     * Persist manually added commune solutions
-     * @param Solution $object
-     * @throws \Doctrine\ORM\ORMException
-     */
-    private function updateCommuneSolutions(Solution $object): void
-    {
-        /** @var ModelManager $modelManager */
-        $modelManager = $this->getModelManager();
-        $csEm = $modelManager->getEntityManager(CommuneSolution::class);
-        $communeSolutions = $object->getCommuneSolutions();
-        $mappedCommunes = [];
-        foreach ($communeSolutions as $communeSolution) {
-            if (null !== $commune = $communeSolution->getCommune()) {
-                $mappedCommunes[$commune->getId()] = $communeSolution;
-            }
-        }
-        $communes = $object->getCommunes();
-        foreach ($communes as $commune) {
-            $status = $object->getStatus();
-            $solutionReady = null !== $status && stripos($status->getName(), 'offline') === false;
-            if (!array_key_exists($commune->getId(), $mappedCommunes)) {
-                $communeSolution = new CommuneSolution();
-                $communeSolution->setSolution($object);
-                $communeSolution->setCommune($commune);
-                $csEm->persist($communeSolution);
-            } else {
-                $communeSolution = $mappedCommunes[$commune->getId()];
-            }
-            if (!$communeSolution->isSelectedType()) {
-                $communeSolution->setCommuneType(Solution::COMMUNE_TYPE_SELECTED);
-            }
-            $communeSolution->setSolutionReady($solutionReady);
-        }
+        $this->solutionHelper->updateCommuneReferences($object);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

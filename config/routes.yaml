@@ -3,32 +3,6 @@ index:
     #controller: App\Controller\DefaultController::indexAction
     controller: App\Controller\DashboardController::indexAction
 
-app_onboarding_dvdv:
-    path: /admin/onboarding/dvdv
-    controller: App\Controller\PageController::onboardingDvdvAction
-
-app_search_list:
-    path: /admin/saved-search
-    controller: App\Controller\SearchController::indexAction
-
-app_search_edit:
-    path: /admin/saved-search/edit/{id}
-    controller: App\Controller\SearchController::editAction
-
-app_search_save:
-    path: /admin/saved-search/save/{id}
-    controller: App\Controller\SearchController::saveAction
-    defaults:
-        id: null
-
-app_frontend_global_search:
-    path: /search
-    controller: App\Action\SearchAction
-
-app_search_delete:
-    path: /admin/saved-search/delete/{id}
-    controller: App\Controller\SearchController::deleteAction
-
 app_statistics_chart:
     path: /statistics/chart/{key}
     controller: App\Controller\StatisticsController::chartAction

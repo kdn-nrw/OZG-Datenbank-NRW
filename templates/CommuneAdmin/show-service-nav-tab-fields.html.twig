@@ -10,11 +10,13 @@ file that was distributed with this source code.
 {% set navTabFields = [{
     key: 'solutions',
     customListTitle: 'app.commune.show.headline.online_solutions'|trans({'commune': object.name}),
-    entities: commune_solutions(object, app_is_backend())
+    entities: commune_solutions(object, app_is_backend()),
+    loadUrl: path('app_commune_solutions', {'id': object.id}),
 },{
     key: 'communeSolutions',
     customListTitle: 'app.commune.show.headline.online_integrations'|trans({'commune': object.name}),
-    entities: commune_integrations(object, app_is_backend())
+    entities: commune_integrations(object, app_is_backend()),
+    loadUrl: path('app_commune_integrations', {'id': object.id})
 }] %}
 {% if communeType is not null %}
     {% set navTabFields = navTabFields|merge([{
@@ -39,7 +41,19 @@ file that was distributed with this source code.
                     {% set field_description = elements[field_name] %}
                     {% set refSettings = app_object_field_description_meta(object, field_description) %}
                     {# @var refSettings \App\Model\ReferenceSettings #}
-                    <li{% if isActive %} class="active"{% endif %}>
+                    {% set tabClass = 'tab-item' %}
+                    {% if isActive %}
+                        {% set tabClass = tabClass ~ ' active' %}
+                    {% endif %}
+                    {% if navFieldInfo.loadUrl is defined and navFieldInfo.loadUrl %}
+                        {% if isActive %}
+                            {% set tabClass = tabClass ~ ' js-init-load' %}
+                        {% else %}
+                            {% set tabClass = tabClass ~ ' js-click-load' %}
+                        {% endif %}
+                    {% endif %}
+                    {% set tabId = field_description.name|app_format_identifier %}
+                    <li class="{{ tabClass }}"{% if navFieldInfo.loadUrl is defined and navFieldInfo.loadUrl %} data-url="{{ navFieldInfo.loadUrl }}"{% endif %} data-target="show-service-tab-{{ tabId }}">
                         {% set tabId = field_description.name|app_format_identifier %}
                         <a href="#show-service-tab-{{ tabId }}" data-toggle="tab">
                             {% include 'General/Show/Partials/show-field-title.html.twig' %}
@@ -55,17 +69,24 @@ file that was distributed with this source code.
                     {% set isActive = loop.first %}
                     {% set tabId = field_description.name|app_format_identifier %}
                     <div class="{% if isActive %}active {% endif %}tab-pane" id="show-service-tab-{{ tabId }}">
-                        {% set refSettings = app_object_field_description_meta(object, field_description) %}
-                        {# @var refSettings \App\Model\ReferenceSettings #}
-                        {% if navFieldInfo.entities is defined %}
-                            {% set entities = navFieldInfo.entities %}
-                        {% else %}
-                            {% set entities = field_description.value(object) %}
-                        {% endif %}
-                        {% if entities|length > 0 %}
-                            <div class="table-responsive">
-                                {% include 'General/Show/Partials/show-record-list.html.twig' %}
+                        {% if navFieldInfo.loadUrl is defined and navFieldInfo.loadUrl %}
+                            <div class="loader-container">
+                                <div class="loader center"></div>
+                                &nbsp;
                             </div>
+                        {% else %}
+                            {% set refSettings = app_object_field_description_meta(object, field_description) %}
+                            {# @var refSettings \App\Model\ReferenceSettings #}
+                            {% if navFieldInfo.entities is defined %}
+                                {% set entities = navFieldInfo.entities %}
+                            {% else %}
+                                {% set entities = field_description.value(object) %}
+                            {% endif %}
+                            {% if entities|length > 0 %}
+                                <div class="table-responsive">
+                                    {% include 'General/Show/Partials/show-record-list.html.twig' %}
+                                </div>
+                            {% endif %}
                         {% endif %}
                     </div>
                 {% endfor %}

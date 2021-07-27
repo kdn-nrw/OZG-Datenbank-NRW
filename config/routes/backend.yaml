@@ -1,0 +1,29 @@
+app_onboarding_dvdv:
+  path: /admin/onboarding/dvdv
+  controller: App\Controller\PageController::onboardingDvdvAction
+
+app_search_list:
+  path: /admin/saved-search
+  controller: App\Controller\SearchController::indexAction
+
+app_search_edit:
+  path: /admin/saved-search/edit/{id}
+  controller: App\Controller\SearchController::editAction
+
+app_search_save:
+  path: /admin/saved-search/save/{id}
+  controller: App\Controller\SearchController::saveAction
+  defaults:
+    id: null
+
+app_search_delete:
+  path: /admin/saved-search/delete/{id}
+  controller: App\Controller\SearchController::deleteAction
+
+app_commune_integrations:
+  path: /admin/commune/{id}/integrations
+  controller: App\Controller\CommuneAdminController::integrationsAction
+
+app_commune_solutions:
+  path: /admin/commune/{id}/solutions
+  controller: App\Controller\CommuneAdminController::solutionsAction

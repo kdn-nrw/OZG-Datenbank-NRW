@@ -1,3 +1,7 @@
+app_frontend_global_search:
+  path: /search
+  controller: App\Action\SearchAction
+
 frontend_app_service_list:
   path: /leistungen
   controller: App\Controller\ServiceController::listAction

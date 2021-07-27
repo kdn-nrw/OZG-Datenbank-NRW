@@ -45,44 +45,15 @@ const appOnReady = function() {
             console.log('An error occurred while loading the advanced-select component', error);
         });
     }
-    jQuery('[data-toggle="popover"]').popover();
     let filterAddLinks = document.querySelectorAll('.js-filter-add');
-    if (filterAddLinks.length > 0 && typeof Admin !== "undefined") {
+    let filterSelection = document.getElementById("navbar-filter-selection");
+    if (filterAddLinks.length > 0 || filterSelection) {
         import('./modules/filter').then(({ default: appFilter }) => {
-            appFilter.setUpList(filterAddLinks);
-
+            appFilter.setUpAddLinksList(filterAddLinks);
+            appFilter.setUpFilterSelectionList(filterSelection);
         }).catch(error => {
             console.log('An error occurred while loading the filter component', error);
         });
-    }
-    let filterSelection = document.getElementById("navbar-filter-selection");
-    if (filterSelection) {
-        let navbarElement = filterSelection.parentNode;
-        let filterBox = document.querySelector(".sonata-filters-box");
-        let filterForm = filterBox ? filterBox.querySelector(".sonata-filter-form") : null;
-        if (filterBox && filterForm) {
-            let checkEmptyState = function(element) {
-                let checkHasAtLeastOneChildElement = function(parent) {
-                    let children = parent.childNodes;
-                    for (let i = 0, n = children.length; i < n; i++) {
-                        if (children[i].nodeName !== '#text' && !children[i].classList.contains('hide-empty-block')) {
-                            return true;
-                        }
-                    }
-                    return false;
-                };
-                if (!checkHasAtLeastOneChildElement(element)) {
-                    element.classList.add('hide-empty-block');
-                    if (element.parentNode) {
-                        checkEmptyState(element.parentNode);
-                    }
-                }
-            };
-            filterSelection.setAttribute('class', 'app-filter-selection');
-            filterBox.parentNode.classList.add('app-container-filter');
-            filterBox.parentNode.prepend(filterSelection);
-            checkEmptyState(navbarElement);
-        }
     }
     let modalForms = document.querySelectorAll('.js-modal-form');
     if (modalForms.length > 0) {
@@ -104,44 +75,12 @@ const appOnReady = function() {
             console.log('An error occurred while loading the form component', error);
         });
     }
-    document.addEventListener('click', function (evt) {
-        let link;
-        if (evt.target.matches('.js-click-toggle')) {
-            link = evt.target;
-        } else {
-            link = evt.target.closest('.js-click-toggle')
-        }
-        if (link) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            let toggleElt = document.getElementById(link.dataset.toggle);
-            if (toggleElt) {
-                toggleElt.classList.remove('updating');
-                if (toggleElt.classList.contains('open')) {
-                    toggleElt.classList.remove('open');
-                    toggleElt.style.display = 'none';
-                    link.classList.remove('active');
-                } else {
-                    let targets = document.querySelectorAll('.js-toggle-target');
-                    for (let i = 0, n = targets.length; i < n; i++) {
-                        if (targets[i] !== toggleElt) {
-                            targets[i].classList.remove('open');
-                            targets[i].style.display = 'none';
-                        }
-                    }
-                    toggleElt.classList.add('open');
-                    toggleElt.removeAttribute('style');
-                    let toggles = document.querySelectorAll('.js-click-toggle');
-                    for (let i = 0, n = toggles.length; i < n; i++) {
-                        if (toggles[i] !== link) {
-                            toggles[i].classList.remove('active');
-                        }
-                    }
-                    link.classList.add('active');
-                }
-            }
-        }
-    }, false);
+    import('./modules/common').then(({ default: appCommon }) => {
+        appCommon.init();
+
+    }).catch(error => {
+        console.log('An error occurred while loading the common component', error);
+    });
 };
 
 if (

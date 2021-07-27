@@ -154,11 +154,14 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Controller\CommuneAdminController:
+    tags: ['controller.service_arguments']
+
   App\Admin\StateGroup\CommuneAdmin:
     arguments:
       - ~
       - App\Entity\StateGroup\Commune
-      - ~
+      - App\Controller\CommuneAdminController
     calls:
       - [setTemplate, ['show', 'CommuneAdmin/show.html.twig']]
       - [addChild, ['@App\Admin\StateGroup\CommuneSolutionAdmin', 'commune']]
@@ -832,11 +835,14 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Controller\SolutionAdminController:
+    tags: ['controller.service_arguments']
+
   App\Admin\SolutionAdmin:
     arguments:
       - ~
       - App\Entity\Solution
-      - ~
+      - App\Controller\SolutionAdminController
     calls:
       - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
       - [addChild, ['@App\Admin\ServiceSolutionAdmin', 'solution']]

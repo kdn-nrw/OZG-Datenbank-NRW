@@ -101,9 +101,8 @@ class AdminManager
         $key = SnakeCaseConverter::classNameToSnakeCase($entityClass);
         $context = $this->applicationContextHandler->getApplicationContext();
         $cacheKey = $context . '-' . $key . '-' . $property;
-        /*return $this->cache->get($cacheKey, function (ItemInterface $item) use ($entityOrClass, $entityClass, $property) {
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($entityOrClass, $entityClass, $property) {
             $item->expiresAfter(604800);
-        });*/
             $propertyParts = explode('.', $property);
             $isPath = count($propertyParts) > 1;
             $entityProperty = $propertyParts[0];
@@ -144,6 +143,7 @@ class AdminManager
                 'admin_class' => $targetAdminClass,
                 'default_label' => $defaultLabel,
             ];
+        });
     }
 
     /**

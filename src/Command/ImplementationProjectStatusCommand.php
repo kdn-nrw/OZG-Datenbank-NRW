@@ -36,7 +36,7 @@ class ImplementationProjectStatusCommand extends Command
      * @required
      * @param ImplementationProjectHelper $implementationProjectHelper
      */
-    public function injectImporter(ImplementationProjectHelper $implementationProjectHelper): void
+    public function injectImplementationProjectHelper(ImplementationProjectHelper $implementationProjectHelper): void
     {
         $this->implementationProjectHelper = $implementationProjectHelper;
     }

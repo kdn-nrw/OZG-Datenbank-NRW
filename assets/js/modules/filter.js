@@ -27,14 +27,16 @@
      * jQuery is loaded globally by Sonata Admin and therefore is not required here!
      */
     return {
-        setUpList: function (filterAddLinks) {
+        setUpAddLinksList: function (filterAddLinks) {
             let self = this;
-            for (let i = 0, n = filterAddLinks.length; i < n; i++) {
-                self.initAddLink(filterAddLinks[i]);
+            if (filterAddLinks.length > 0) {
+                for (let i = 0, n = filterAddLinks.length; i < n; i++) {
+                    self.initAddLink(filterAddLinks[i]);
+                }
+                self.initAddLinkOnClick();
             }
-            self.init();
         },
-        init: function () {
+        initAddLinkOnClick: function () {
             let self = this;
             document.addEventListener('click', function (evt) {
                 let link;
@@ -115,6 +117,37 @@
                 }
             }
             return selectedValues;
+        },
+        setUpFilterSelectionList: function (filterSelection) {
+            let self = this;
+            if (filterSelection.length > 0) {
+                let navbarElement = filterSelection.parentNode;
+                let filterBox = document.querySelector(".sonata-filters-box");
+                let filterForm = filterBox ? filterBox.querySelector(".sonata-filter-form") : null;
+                if (filterBox && filterForm) {
+                    let checkEmptyState = function(element) {
+                        let checkHasAtLeastOneChildElement = function(parent) {
+                            let children = parent.childNodes;
+                            for (let i = 0, n = children.length; i < n; i++) {
+                                if (children[i].nodeName !== '#text' && !children[i].classList.contains('hide-empty-block')) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        };
+                        if (!checkHasAtLeastOneChildElement(element)) {
+                            element.classList.add('hide-empty-block');
+                            if (element.parentNode) {
+                                checkEmptyState(element.parentNode);
+                            }
+                        }
+                    };
+                    filterSelection.setAttribute('class', 'app-filter-selection');
+                    filterBox.parentNode.classList.add('app-container-filter');
+                    filterBox.parentNode.prepend(filterSelection);
+                    checkEmptyState(navbarElement);
+                }
+            }
         },
     };
 }));

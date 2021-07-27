@@ -10,13 +10,13 @@ file that was distributed with this source code.
     {% else %}
         {% set referenceFieldNameList = ['commune', 'solution', 'solution_ready', 'connection_planned', 'specialized_procedure', 'comment',] %}
     {% endif %}
+    {% set exportEnabled = field_description.option('show_export') %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
     {% set showSolutions = field_description.options.showSolutions is defined and field_description.options.showSolutions %}
     {% set refSettings = app_object_field_description_meta(object, field_description) %}
     {% set entityClass = showSolutions ? 'App\\Entity\\Solution' : 'App\\Entity\\StateGroup\\Commune' %}
     {% set solutionRefSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
-    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
     <table class="table table-bordered table-striped table-condensed">
         <tr>
             {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': refSettings.labelPrefix} %}
@@ -86,7 +86,7 @@ file that was distributed with this source code.
             </tr>
         {% endfor %}
     </table>
-    {% if field_description.option('show_export') %}
+    {% if exportEnabled %}
         {% include 'General/Show/Partials/link-child-list-export.html.twig' %}
     {% endif %}
 {% endif %}
