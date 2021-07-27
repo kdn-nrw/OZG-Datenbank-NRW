@@ -1035,6 +1035,8 @@ services:
         label:        app.commune_info.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   App\Admin\Onboarding\DataclearingAdmin:
@@ -1048,6 +1050,8 @@ services:
         label: app.dataclearing.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   App\Admin\Onboarding\EpaymentAdmin:
@@ -1061,6 +1065,8 @@ services:
         label: app.epayment.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   App\Admin\Onboarding\ServiceAccountAdmin:
@@ -1074,6 +1080,8 @@ services:
         label: app.service_account.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   App\Admin\Onboarding\ReleaseAdmin:
@@ -1087,6 +1095,8 @@ services:
         label: app.release.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   App\Admin\Onboarding\InquiryAdmin:
@@ -1156,6 +1166,8 @@ services:
         label:        app.epayment_service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   App\Admin\Frontend\ServiceAccountAdmin:
@@ -1170,6 +1182,7 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
         persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   App\Admin\Onboarding\OnboardingServiceAdmin:
@@ -1184,6 +1197,7 @@ services:
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
         persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   App\Admin\Configuration\CustomFieldAdmin:
@@ -1225,6 +1239,8 @@ services:
         label:        app.form_solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
   Sonata\AdminBundle\Bridge\Exporter\AdminExporter: '@sonata.admin.admin_exporter'

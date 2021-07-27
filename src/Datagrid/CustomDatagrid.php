@@ -106,4 +106,23 @@ class CustomDatagrid extends Datagrid implements FulltextSearchDatagridInterface
 
         return $this->results;
     }
+
+    /**
+     * Update existing values based on defined filters;
+     * This is needed in combination with \App\Form\Filter\GroupedSessionFilterPersister to remove values
+     * for filters that are not defined in the datagrid
+     */
+    public function cleanValues()
+    {
+        if (!empty($this->values)) {
+            $filters = $this->getFilters();
+            $filterNames = array_keys($filters);
+            $valueNames = array_keys($this->values);
+            foreach ($valueNames as $name) {
+                if (strpos($name, '_') !== 0 && !in_array($name, $filterNames, false)) {
+                    unset($this->values[$name]);
+                }
+            }
+        }
+    }
 }

@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 
+use App\Datagrid\CustomDatagrid;
 use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
 use App\Model\Annotation\BaseModelAnnotation;
@@ -217,5 +218,19 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     public function getSearchIndexingTemplate(): string
     {
         return $this->getTemplateRegistry()->getTemplate('show');
+    }
+
+    /**
+     * NEXT_MAJOR: Change the visibility to protected (similar to buildShow, buildForm, ...).
+     */
+    public function buildDatagrid()
+    {
+        if ($this->datagrid) {
+            return;
+        }
+        parent::buildDatagrid();
+        if ($this->datagrid instanceof CustomDatagrid) {
+            $this->datagrid->cleanValues();
+        }
     }
 }
