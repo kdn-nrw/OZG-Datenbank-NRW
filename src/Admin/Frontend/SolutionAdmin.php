@@ -180,7 +180,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             'publishedServiceSolutions',
             'customProvider', 'name', 'maturity', 'url', 'status',
         ]);
-        $settings->addExcludeFields(['serviceSolutions']);
+        $settings->addExcludeFields(['serviceSolutions', 'contact']);
         $settings->addCustomLabel('publishedServiceSolutions', $this->trans('app.solution.entity.service_solutions'));
         $settings->addCustomPropertyValueFormatter('publishedServiceSolutions', $customServiceFormatter);
         return $settings;
