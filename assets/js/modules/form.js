@@ -46,21 +46,23 @@
         initFormMeta: function(formContainer) {
             let self = this;
             // jQuery is loaded globally by Sonata Admin and therefore is not required here!
-            let formMeta = formContainer.querySelector('.app-form-meta');
-            if (formMeta) {
-                let metaProperties = JSON.parse(formMeta.dataset.meta);
-                if (typeof metaProperties === 'object') {
-                    let formId = formMeta.dataset.formId;
-                    let keys = Object.keys(metaProperties);
-                    keys.forEach(function (key) {
-                        const idSuffix = formId + '_' + metaProperties[key].property;
-                        self.addFormElementMeta(idSuffix, key, metaProperties);
+            let formMeta = formContainer.querySelectorAll('.app-form-meta');
+            if (formMeta.length > 0) {
+                for (let i = 0, n = formMeta.length; i < n; i++) {
+                    let metaProperties = JSON.parse(formMeta[i].dataset.meta);
+                    if (typeof metaProperties === 'object') {
+                        let formId = formMeta[i].dataset.formId;
+                        let keys = Object.keys(metaProperties);
+                        keys.forEach(function (key) {
+                            const idSuffix = formId + '_' + metaProperties[key].property;
+                            self.addFormElementMeta(idSuffix, key, metaProperties);
+                        });
+                    }
+                    jQuery('.js-form-label-popover:not(.initialized)').each(function(){
+                        $(this).addClass('initialized');
+                        $(this).popover();
                     });
                 }
-                jQuery('.js-form-label-popover:not(.initialized)').each(function(){
-                    $(this).addClass('initialized');
-                    $(this).popover();
-                });
             }
 
         },

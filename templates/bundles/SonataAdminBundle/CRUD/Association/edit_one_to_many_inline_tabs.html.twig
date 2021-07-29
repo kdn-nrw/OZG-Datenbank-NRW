@@ -85,6 +85,12 @@ file that was distributed with this source code.
                             {{ form_row(nested_group_field['_delete'], {'label': 'action_delete', 'translation_domain': 'SonataAdminBundle'}) }}
                         </div>
                     {% endif %}
+                    {% if nested_group_field.vars.data is not empty %}
+                        {% set editObjectMetaData = app_entity_class_meta_data_array(nested_group_field.vars.data) %}
+                        {% if editObjectMetaData %}
+                            <div class="app-form-meta" data-form-id="{{ nested_group_field.vars.id }}" data-meta="{{ editObjectMetaData|json_encode }}"></div>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>
