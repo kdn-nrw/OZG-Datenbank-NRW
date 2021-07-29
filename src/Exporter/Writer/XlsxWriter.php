@@ -18,7 +18,14 @@ use Sonata\Exporter\Writer\TypedWriterInterface;
 
 class XlsxWriter implements TypedWriterInterface
 {
-    public const LABEL_COLUMN = 1;
+    protected const LABEL_ROW = 1;
+
+    /**
+     * Maximum length of labels and values per column
+     * @var array
+     */
+    protected $columnMaxTextLengths = [];
+
     /** @var  Spreadsheet */
     private $phpExcelObject;
     /** @var array */
@@ -84,11 +91,12 @@ class XlsxWriter implements TypedWriterInterface
         $this->init($data);
 
         foreach ($data as $header => $value) {
-            $this->setCellValue($this->getColumn($header), $value);
+            $this->setCellValue($this->getColumn($header), $this->rowNumber, $value);
         }
 
         ++$this->rowNumber;
         $this->currentColumnOffset = 0;
+        $this->setColumnWidths();
     }
 
     /**
@@ -158,12 +166,19 @@ class XlsxWriter implements TypedWriterInterface
 
     /**
      * Sets cell value
+     *
      * @param string $column
+     * @param int $row The row number
      * @param string $value
      */
-    private function setCellValue($column, $value): void
+    private function setCellValue(string $column, int $row, $value): void
     {
-        $this->getActiveSheet()->setCellValue($column, $value);
+        $this->getActiveSheet()->setCellValue($column . $row, $value);
+        $textLength = strlen($value);
+        if (!array_key_exists($column, $this->columnMaxTextLengths)
+            || $this->columnMaxTextLengths[$column] < $textLength) {
+            $this->columnMaxTextLengths[$column] = $textLength;
+        }
     }
 
     /**
@@ -174,10 +189,26 @@ class XlsxWriter implements TypedWriterInterface
     private function setHeader($column, $value): void
     {
         if ($this->showHeaders) {
-            $this->setCellValue($column . self::LABEL_COLUMN, $value);
-            $this->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
+            $this->setCellValue($column, self::LABEL_ROW, $value);
         }
         $this->headerColumns[$value] = $column;
+    }
+
+    /**
+     * Set column widths based on content
+     */
+    private function setColumnWidths(): void
+    {
+        foreach ($this->columnMaxTextLengths as $column => $maxTexLength) {
+            $columnDimensions = $this->getActiveSheet()->getColumnDimension($column);
+            if ($maxTexLength < 40) {
+                $columnDimensions->setAutoSize(true);
+            } else {
+                $columnDimensions->setAutoSize(false);
+                $columnWidth = 30 + min(10, (int) floor($maxTexLength / 100));
+                $columnDimensions->setWidth($columnWidth);
+            }
+        }
     }
 
     /**
@@ -195,6 +226,6 @@ class XlsxWriter implements TypedWriterInterface
             $currentColumn = self::formatColumnName($this->currentColumnOffset);
             $this->headerColumns[$name] = $currentColumn;
         }
-        return $currentColumn . $this->rowNumber;
+        return $currentColumn;
     }
 }

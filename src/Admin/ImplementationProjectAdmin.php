@@ -23,6 +23,7 @@ use App\Admin\Traits\SolutionTrait;
 use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
 use App\Entity\Service;
+use App\Exporter\Source\ServiceListValueFormatter;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -309,9 +310,16 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     {
         $settings = parent::getExportSettings();
         $settings->addExcludeFields(['statusInfo']);
+        $customServiceFormatter = new ServiceListValueFormatter();
+        $customServiceFormatter->setDisplayType(ServiceListValueFormatter::DISPLAY_SERVICE_KEY);
+        $settings->addCustomPropertyValueFormatter('serviceKeys', $customServiceFormatter);
+        $customServiceSystemFormatter = new ServiceListValueFormatter();
+        $customServiceSystemFormatter->setDisplayType(ServiceListValueFormatter::DISPLAY_SERVICE_KEY);
+        $settings->addCustomPropertyValueFormatter('serviceSystemKeys', $customServiceSystemFormatter);
         $settings->setAdditionFields([
             'status', 'projectStartAt', 'conceptStatusAt',
             'implementationStatusAt', 'pilotingStatusAt', 'commissioningStatusAt', 'nationwideRolloutAt',
+            'serviceKeys', 'serviceSystemKeys',
         ]);
         return $settings;
     }

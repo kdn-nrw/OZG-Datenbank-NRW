@@ -978,6 +978,9 @@ app:
       portals: voraussichtliches Zielportal
       fundings: Finanzierung
       fim_experts: FIM Methodenexperte
+      service_system_keys: OZG-IDs
+      service_keys: Leika-IDs
+      published_solutions: Lösungen
   implementation_project_service:
     object_name: OZG Umsetzungsprojekt - Leika Leistung
     list: OZG Umsetzungsprojekt - Leika Leistungen
