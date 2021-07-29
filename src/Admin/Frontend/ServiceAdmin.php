@@ -50,6 +50,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         $datagridMapper->add('serviceKey');
         $datagridMapper->add('serviceType');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem');
+        $this->addDefaultDatagridFilter($datagridMapper, 'priority');
         $datagridMapper->add('serviceSystem.serviceKey');
         $datagridMapper->add('status');
         $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
@@ -267,7 +268,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('serviceSystem.priority', 'choice', [
+            ->add('priority', 'choice', [
                 'editable' => false,
                 'class' => Priority::class,
                 'catalogue' => 'messages',

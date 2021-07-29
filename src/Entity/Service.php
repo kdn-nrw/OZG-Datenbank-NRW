@@ -107,6 +107,13 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     private $serviceSystem;
 
     /**
+     * @var Priority|null
+     * @ORM\ManyToOne(targetEntity="Priority")
+     * @ORM\JoinColumn(name="priority_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $priority;
+
+    /**
      * @var ServiceSolution[]|Collection
      * @ORM\OneToMany(targetEntity="App\Entity\ServiceSolution", mappedBy="service", cascade={"all"}, orphanRemoval=true)
      */
@@ -634,6 +641,25 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     public function setServiceSystem(?ServiceSystem $serviceSystem): void
     {
         $this->serviceSystem = $serviceSystem;
+    }
+
+    /**
+     * @return Priority|null
+     */
+    public function getPriority(): ?Priority
+    {
+        if (null === $this->priority && null !== $this->serviceSystem) {
+            $this->priority = $this->serviceSystem->getPriority();
+        }
+        return $this->priority;
+    }
+
+    /**
+     * @param Priority|null $priority
+     */
+    public function setPriority(?Priority $priority): void
+    {
+        $this->priority = $priority;
     }
 
     /**

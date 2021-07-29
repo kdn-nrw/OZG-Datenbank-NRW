@@ -40,7 +40,7 @@ file that was distributed with this source code.
                         {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'child': object} %}
                     </div>
                     <div class="col-xs-12 col-md-6 col-lg-4 text-md-right">
-                        {{ elements['serviceSystem.priority']|render_view_element(object)}}
+                        {{ elements['priority']|render_view_element(object)}}
                     </div>
                 </div>
                 {% if object.description %}

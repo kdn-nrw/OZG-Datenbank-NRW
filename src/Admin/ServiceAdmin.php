@@ -95,6 +95,12 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])
             ->add('serviceType', TextType::class, [
                 'required' => true,
+            ])
+            ->add('priority', ModelType::class, [
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'choice_translation_domain' => false,
             ]);
         $formMapper->end();
         $formMapper->with('laws', [
@@ -364,6 +370,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $datagridMapper->add('serviceKey');
         $datagridMapper->add('serviceType');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem');
+        $this->addDefaultDatagridFilter($datagridMapper, 'priority');
         $datagridMapper->add('serviceSystem.serviceKey',
             null,
             ['label' => 'app.service_system.entity.service_key']
@@ -519,8 +526,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('serviceSystem.priority', TemplateRegistry::TYPE_CHOICE, [
-                'label' => 'app.service_system.entity.priority',
+            ->add('priority', TemplateRegistry::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Priority::class,
                 'catalogue' => 'messages',
