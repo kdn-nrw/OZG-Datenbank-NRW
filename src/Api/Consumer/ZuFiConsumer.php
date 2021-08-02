@@ -22,6 +22,7 @@ use App\Entity\FederalInformationManagementType;
 use App\Entity\Repository\CommuneRepository;
 use App\Entity\Service;
 use App\Entity\StateGroup\Commune;
+use App\Import\Model\ResultCollection;
 
 class ZuFiConsumer extends AbstractApiConsumer
 {
@@ -210,5 +211,31 @@ class ZuFiConsumer extends AbstractApiConsumer
         }
         $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
         return $totalImportRowCount;
+    }
+
+    /**
+     * Searches for the submitted demand values and returns the search result
+     *
+     * @return ResultCollection The result content
+     */
+    public function search(): ResultCollection
+    {
+        $demand = $this->getDemand();
+        /** @var ZuFiDemand $demand */
+        // Set either the zip code or the regional key from the commune entity, if one of the values is empty
+        if (!$demand->getRegionalKey() && $demand->getZipCode()) {
+            $communeRepository = $this->getEntityManager()->getRepository(Commune::class);
+            $commune = $communeRepository->findOneBy(['zipCode' => $demand->getZipCode()]);
+            if (null !== $commune && $regionalKey = $commune->getRegionalKey()) {
+                $demand->setRegionalKey($regionalKey);
+            }
+        } elseif ($demand->getRegionalKey() && !$demand->getZipCode()) {
+            $communeRepository = $this->getEntityManager()->getRepository(Commune::class);
+            $commune = $communeRepository->findOneBy(['regionalKey' => $demand->getRegionalKey()]);
+            if (null !== $commune && $zipCode = $commune->getZipCode()) {
+                $demand->setZipCode($zipCode);
+            }
+        }
+        return parent::search();
     }
 }
