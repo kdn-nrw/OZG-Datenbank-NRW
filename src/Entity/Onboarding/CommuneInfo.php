@@ -52,6 +52,7 @@ class CommuneInfo extends AbstractOnboardingEntity
      * @var string|null
      *
      * @ORM\Column(type="string", length=2048, nullable=true)
+     * @deprecated
      */
     protected $privacyUrl;
 
@@ -66,10 +67,11 @@ class CommuneInfo extends AbstractOnboardingEntity
     protected $imprintText;
 
     /**
-     * Privacy url
+     * Imprint url
      * @var string|null
      *
      * @ORM\Column(type="string", length=2048, nullable=true)
+     * @deprecated
      */
     protected $imprintUrl;
 
@@ -276,6 +278,7 @@ class CommuneInfo extends AbstractOnboardingEntity
 
     /**
      * @return string|null
+     * @deprecated
      */
     public function getPrivacyUrl(): ?string
     {
@@ -284,6 +287,7 @@ class CommuneInfo extends AbstractOnboardingEntity
 
     /**
      * @param string|null $privacyUrl
+     * @deprecated
      */
     public function setPrivacyUrl(?string $privacyUrl): void
     {
@@ -308,6 +312,7 @@ class CommuneInfo extends AbstractOnboardingEntity
 
     /**
      * @return string|null
+     * @deprecated
      */
     public function getImprintUrl(): ?string
     {
@@ -316,6 +321,7 @@ class CommuneInfo extends AbstractOnboardingEntity
 
     /**
      * @param string|null $imprintUrl
+     * @deprecated
      */
     public function setImprintUrl(?string $imprintUrl): void
     {
@@ -356,6 +362,6 @@ class CommuneInfo extends AbstractOnboardingEntity
 
     protected function getRequiredPropertiesForCompletion(): array
     {
-        return ['contacts', ['privacyText', 'privacyUrl'], ['imprintText', 'imprintUrl'], 'accessibility', 'openingHours', 'imageName'];
+        return ['contacts', 'privacyText', 'imprintText', 'accessibility', 'openingHours', 'imageName'];
     }
 }
