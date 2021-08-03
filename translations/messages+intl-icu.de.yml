@@ -382,10 +382,8 @@ app:
         super: Supersachbearbeiter
         clerk: Sachbearbeiter
         web: Webcontent-Admin
-      privacy_text: Datenschutzerklärung (TEXT)
-      privacy_url: Datenschutzerklärung (URL)
-      imprint_text: Impressum (TEXT)
-      imprint_url: Impressum (URL)
+      privacy_text: Datenschutzerklärung
+      imprint_text: Impressum
       accessibility: Barrierefreiheitserklärung
       image_file: Logo
       opening_hours: Öffnungszeiten
