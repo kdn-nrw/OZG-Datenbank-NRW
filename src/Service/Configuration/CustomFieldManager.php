@@ -13,33 +13,10 @@ namespace App\Service\Configuration;
 
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Configuration\CustomField;
-use App\Entity\MetaData\AbstractMetaItem;
-use App\Entity\MetaData\HasMetaDateEntityInterface;
-use App\Entity\MetaData\MetaItem;
-use App\Entity\MetaData\MetaItemProperty;
-use App\Service\InjectAdminManagerTrait;
-use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
-use App\Translator\TranslatorAwareTrait;
-use App\Util\SnakeCaseConverter;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CustomFieldManager
 {
-    use InjectAdminManagerTrait;
     use InjectManagerRegistryTrait;
-    use TranslatorAwareTrait;
-
-    /**
-     * MetaItemAdminController constructor.
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->setTranslator($translator);
-    }
 
     /**
      * @param string $entityClass
@@ -53,121 +30,5 @@ class CustomFieldManager
             ['position' => 'ASC', 'id' => 'ASC']
         );
         return $customFields;
-    }
-
-    /**
-     * Create meta data for all entities that implement HasMetaDateEntityInterface; add all properties defined in the
-     * admin (if an admin class exists)
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \ReflectionException
-     */
-    public function createMetaItems(): void
-    {
-        $em = $this->getEntityManager();
-        $repository = $em->getRepository(MetaItem::class);
-        $metaItems = $repository->findAll();
-        $groupedItems = [
-            AbstractMetaItem::META_TYPE_ENTITY => [],
-        ];
-        /** @var MetaItem $metaItem */
-        foreach ($metaItems as $metaItem) {
-            $groupedItems[$metaItem->getMetaType()][$metaItem->getMetaKey()] = $metaItem;
-        }
-        $metaType = AbstractMetaItem::META_TYPE_ENTITY;
-        $allMetaData = $em->getMetadataFactory()->getAllMetadata();
-        foreach ($allMetaData as $metaData) {
-            $entityClass = $metaData->getName();
-            if (is_a($entityClass, HasMetaDateEntityInterface::class, true)) {
-                $metaKey = SnakeCaseConverter::classNameToSnakeCase($entityClass);
-                if ((empty($groupedItems[$metaType]) || !array_key_exists($metaKey, $groupedItems[$metaType]))) {
-                    $metaItem = new MetaItem();
-                    $metaItem->setMetaType($metaType);
-                    $metaItem->setMetaKey($metaKey);
-                    $metaItem->setInternalLabel($metaKey);
-                    $em->persist($metaItem);
-                    $groupedItems[$metaType][$metaKey] = $metaItem;
-                } else {
-                    $metaItem = $groupedItems[$metaType][$metaKey];
-                    /** @var MetaItem $metaItem */
-                }
-                $label = PrefixedUnderscoreLabelTranslatorStrategy::getClassPropertyLabel($entityClass);
-                if ($label !== $metaItem->getInternalLabel()) {
-                    $metaItem->setInternalLabel($label);
-                }
-                $this->addMetaProperties($metaItem, $entityClass);
-            }
-        }
-        $em->flush();
-
-    }
-
-    /**
-     * Adds the meta properties for the given meta item: adds list and show fields of all entity admins for this class
-     *
-     * @param MetaItem $metaItem
-     * @param string $entityClass
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \ReflectionException
-     */
-    private function addMetaProperties(MetaItem $metaItem, string $entityClass): void
-    {
-        $reflectionClass = new \ReflectionClass($entityClass);
-        $properties = $reflectionClass->getProperties();
-        $entityPropertyNames = [];
-        foreach ($properties as $property) {
-            $entityPropertyNames[] = $property->getName();
-        }
-        $objectAdminClasses = $this->adminManager->getEntityAdminClasses($entityClass);
-        if (!empty($objectAdminClasses)) {
-            foreach ($objectAdminClasses as $adminClass) {
-                $admin = $this->adminManager->getAdminInstance($adminClass);
-                /** @var AbstractAdmin $admin */
-                $this->addFieldDescriptions($metaItem, $admin->getList(), $entityPropertyNames);
-                $this->addFieldDescriptions($metaItem, $admin->getShow(), $entityPropertyNames);
-            }
-        }
-    }
-
-    /**
-     * Add field description meta properties
-     *
-     * @param MetaItem $metaItem
-     * @param FieldDescriptionCollection|null $fieldDescriptions
-     * @param array $entityPropertyNames
-     * @throws \Doctrine\ORM\ORMException
-     */
-    private function addFieldDescriptions(
-        MetaItem $metaItem,
-        ?FieldDescriptionCollection $fieldDescriptions,
-        array $entityPropertyNames): void
-    {
-        $em = $this->getEntityManager();
-        if (null !== $fieldDescriptions) {
-            foreach ($fieldDescriptions->getElements() as $fieldDescription) {
-                /** @var FieldDescriptionInterface $fieldDescription */
-                $name = $fieldDescription->getName();
-                if ($name === '_action') {
-                    continue;
-                }
-                $label = $fieldDescription->getOption('label');
-                $property = $metaItem->getMetaItemProperty($name);
-                if (null === $property) {
-                    $property = new MetaItemProperty();
-                    $metaKey = SnakeCaseConverter::camelCaseToSnakeCase($name);
-                    $property->setMetaKey($metaKey);
-                    $metaType = in_array($name, $entityPropertyNames, false)
-                        ? AbstractMetaItem::META_TYPE_FIELD
-                        : AbstractMetaItem::META_TYPE_ADMIN_FIELD;
-                    $property->setMetaType($metaType);
-                    $em->persist($property);
-                    $metaItem->addMetaItemProperty($property);
-                }
-                if ($label !== $property->getInternalLabel()) {
-                    $property->setInternalLabel($label);
-                }
-            }
-        }
     }
 }
