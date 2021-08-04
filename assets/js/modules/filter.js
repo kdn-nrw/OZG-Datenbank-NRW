@@ -120,7 +120,7 @@
         },
         setUpFilterSelectionList: function (filterSelection) {
             let self = this;
-            if (filterSelection.length > 0) {
+            if (filterSelection !== null) {
                 let navbarElement = filterSelection.parentNode;
                 let filterBox = document.querySelector(".sonata-filters-box");
                 let filterForm = filterBox ? filterBox.querySelector(".sonata-filter-form") : null;
