@@ -59,13 +59,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ->add('privacyText', TextareaType::class, [
                 'required' => false,
             ])
-            ->add('privacyUrl', UrlType::class, [
-                'required' => false,
-            ])
             ->add('imprintText', TextareaType::class, [
-                'required' => false,
-            ])
-            ->add('imprintUrl', UrlType::class, [
                 'required' => false,
             ])
             ->add('accessibility', TextareaType::class, [
