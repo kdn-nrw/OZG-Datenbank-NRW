@@ -263,7 +263,7 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      contacts: Ansprechpartner
+      contacts: Ansprechpersonen
       communes: Kommunen
   commune:
     object_name: Kommune
@@ -294,8 +294,8 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      contacts: Ansprechpartner der Kommune
-      contact: Ansprechpartner der Kommune (alt)
+      contacts: Ansprechpersonen der Kommune
+      contact: Ansprechpersonen der Kommune (alt)
       service_providers: IT Dienstleister
       specialized_procedures: Fachverfahren
       central_associations: Spitzenverbände
@@ -966,7 +966,7 @@ app:
       service_systems: OZG-Leistungen
       services: Leika-Leistungen
       solutions: Online-Dienste
-      contacts: Ansprechpartner
+      contacts: Ansprechpersonen
       notes: Notizen
       project_leaders: Projektleitung
       participation_organisations: Mitarbeit zugesichert (Projekt-Kernteam Fach + IT)
@@ -1157,7 +1157,7 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      contacts: Ansprechpartner
+      contacts: Ansprechpersonen
       service_systems: OZG-Leistungen
       service_authorities: Regelungskompetenzen
   model_region:
@@ -1188,7 +1188,7 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      contacts: Ansprechpartner
+      contacts: Ansprechpersonen
       model_region_projects: DMR Umsetzungsprojekte
   model_region_project:
     object_name: DMR Umsetzungsprojekt
@@ -1236,14 +1236,14 @@ app:
       basic_data: Basisdaten
       address_data: Adressdaten
       type_data: Organisationstyp
-      contacts: Ansprechpartner
+      contacts: Ansprechpersonen
     entity:
       name: Name
       street: Straße, Hausnummer
       zip_code: PLZ
       town: Ort
       url: Url
-      contacts: OZG-Ansprechpartner
+      contacts: OZG-Ansprechpersonen
       organization_type: Typ
       organization_type_choices:
         default: Standard
@@ -1479,7 +1479,7 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      contact: OZG-Ansprechpartner (alt)
+      contact: OZG-Ansprechpersonen (alt)
       solutions: Online-Dienste
       communes: Kommunen
       specialized_procedures: Fachverfahren
@@ -1625,8 +1625,8 @@ app:
       service_solutions: Enthaltene Leika-Leistungen
       status: Status
       url: Url
-      solution_contacts: Ansprechpartner
-      contact: Ansprechpartner (alt)
+      solution_contacts: Ansprechpersonen
+      contact: Ansprechpersonen (alt)
       service_systems: OZG-Leistungen
       authentications: Authentifizierung
       analog_services: Analoge Dienste
@@ -1704,9 +1704,9 @@ app:
     entity:
       name: Name
       situations: Lage
-      contact: Ansprechpartner
+      contact: Ansprechperson
     frontend:
-      contact_for: Ansprechpartner für das Themenfeld
+      contact_for: Ansprechperson für das Themenfeld
   vsm:
     object_name: Verwaltungssuchmaschine
     list: Verwaltungssuchmaschine

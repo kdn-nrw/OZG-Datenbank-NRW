@@ -6293,7 +6293,7 @@ INSERT INTO `ozg_service_system` (`id`, `situation_id`, `priority_id`, `service_
  (137,19,1,'10258',NULL,NULL,'2019-10-05 14:38:11','2019-10-05 14:38:11','Einbürgerungstest',0,1),
  (138,34,1,'10383',NULL,NULL,'2019-10-05 14:38:11','2019-10-05 14:38:11','Einfuhr von Gewebe',0,1),
  (139,15,1,'10206',NULL,NULL,'2019-10-05 14:38:11','2019-10-05 14:38:11','Eingliederungshilfe',0,1),
- (140,50,1,'10283',NULL,NULL,'2019-10-05 14:38:11','2019-10-05 14:38:11','Einheitlicher Ansprechpartner',0,1),
+ (140,50,1,'10283',NULL,NULL,'2019-10-05 14:38:11','2019-10-05 14:38:11','Einheitliche Ansprechperson',0,1),
  (141,44,1,'10077',NULL,NULL,'2019-10-05 14:38:11','2019-10-05 14:38:11','Einkommensteuer',0,1),
  (142,2,1,'10491',NULL,NULL,'2019-10-05 14:38:11','2019-10-05 14:38:11','Einleiten von Abwasser',0,1),
  (143,5,1,'10465',NULL,NULL,'2019-10-05 14:38:11','2019-10-05 14:38:11','Einsatz von radioaktiven Stoffen',0,1),
