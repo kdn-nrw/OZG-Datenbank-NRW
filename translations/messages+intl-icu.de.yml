@@ -979,6 +979,15 @@ app:
       service_system_keys: OZG-IDs
       service_keys: Leika-IDs
       published_solutions: Lösungen
+      efa_type: EfA
+      efa_type_choices:
+        empty: keine Angabe
+        1: EfA-Nachnutzung aus anderem Bundesland in Klärung
+        2: EfA-Nachnutzung aus anderem Bundesland sicher
+        3: EfA-Entwicklung Land NRW
+        4: EfA-Entwicklung KDN
+        5: EfA-Entwicklung in Klärung
+        6: Kein EfA
   implementation_project_service:
     object_name: OZG Umsetzungsprojekt - Leika Leistung
     list: OZG Umsetzungsprojekt - Leika Leistungen

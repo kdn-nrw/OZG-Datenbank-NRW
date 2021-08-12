@@ -27,13 +27,17 @@ use App\Exporter\Source\ServiceListValueFormatter;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Type\CollectionType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormEvent;
@@ -94,6 +98,16 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'required' => false,
             ]);
         $this->addLaboratoriesFormFields($formMapper);
+        $formMapper
+            ->add('efaType', ChoiceType::class, [
+                'choices' => array_flip(ImplementationProject::EFA_TYPES),
+                'attr' => [
+                    'class' => 'form-control',
+                    'data-sonata-select2' => 'false'
+                ],
+                'required' => false,
+                'disabled' => false,
+            ]);
         $formMapper->end();
         $formMapper
             ->with('dates', [
@@ -273,12 +287,46 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDefaultDatagridFilter($datagridMapper, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
         $this->addDefaultDatagridFilter($datagridMapper, 'fimExperts');
         $this->addDefaultDatagridFilter($datagridMapper, 'solutions.openDataItems');
+        $datagridMapper
+            ->add('efaType', ChoiceFilter::class, [
+                'label' => 'app.implementation_project.entity.efa_type',
+                'field_options' => [
+                    'choices' => array_flip(ImplementationProject::EFA_TYPES),
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => false,
+                    'choice_translation_domain' => 'messages',
+                ],
+                'field_type' => ChoiceType::class,
+            ]);
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
             ->addIdentifier('name')
+            ->add('serviceSystems.situation.subject', 'string', [
+                'label' => 'app.situation.entity.subject',
+                //'associated_property' => 'name',
+                'template' => 'ImplementationProjectAdmin/list-service-system-subjects.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'serviceSystems'],
+                    ['fieldName' => 'situation'],
+                    ['fieldName' => 'subject'],
+                ],
+                'enable_filter_add' => true,
+            ])
+            ->add('efaType', TemplateRegistryInterface::TYPE_CHOICE, [
+                'label' => 'app.implementation_project.entity.efa_type',
+                'editable' => false,
+                'choices' => ImplementationProject::EFA_TYPES,
+                'catalogue' => 'messages',
+            ])
             ->add('status', 'choice', [
                 'editable' => false,
                 'class' => ImplementationStatus::class,

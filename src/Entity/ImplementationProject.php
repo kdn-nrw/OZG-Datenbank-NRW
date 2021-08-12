@@ -36,6 +36,22 @@ class ImplementationProject extends BaseNamedEntity
     HasMetaDateEntityInterface,
     HasSolutionsEntityInterface
 {
+    public const EFA_TYPE_1 = 1;
+    public const EFA_TYPE_2 = 2;
+    public const EFA_TYPE_3 = 3;
+    public const EFA_TYPE_4 = 4;
+    public const EFA_TYPE_5 = 5;
+    public const EFA_TYPE_6 = 6;
+
+    public const EFA_TYPES = [
+        0 => 'app.implementation_project.entity.efa_type_choices.empty',
+        self::EFA_TYPE_1 => 'app.implementation_project.entity.efa_type_choices.1',
+        self::EFA_TYPE_2 => 'app.implementation_project.entity.efa_type_choices.2',
+        self::EFA_TYPE_3 => 'app.implementation_project.entity.efa_type_choices.3',
+        self::EFA_TYPE_4 => 'app.implementation_project.entity.efa_type_choices.4',
+        self::EFA_TYPE_5 => 'app.implementation_project.entity.efa_type_choices.5',
+        self::EFA_TYPE_6 => 'app.implementation_project.entity.efa_type_choices.6',
+    ];
 
     use ImplementationStatusInfoTrait;
     use SluggableEntityTrait;
@@ -240,6 +256,14 @@ class ImplementationProject extends BaseNamedEntity
      * )
      */
     private $fimExperts;
+
+    /**
+     * The EfA type
+     *
+     * @ORM\Column(type="integer", name="efa_type")
+     * @var int|null
+     */
+    protected $efaType;
 
     public function __construct()
     {
@@ -918,6 +942,24 @@ class ImplementationProject extends BaseNamedEntity
     public function setFimExperts($fimExperts): void
     {
         $this->fimExperts = $fimExperts;
+    }
+
+    /**
+     * Returns the EfA type
+     * @return int|null
+     */
+    public function getEfaType(): ?int
+    {
+        return $this->efaType;
+    }
+
+    /**
+     * Sets the EfA type
+     * @param int|null $efaType
+     */
+    public function setEfaType(?int $efaType): void
+    {
+        $this->efaType = $efaType;
     }
 
     /**

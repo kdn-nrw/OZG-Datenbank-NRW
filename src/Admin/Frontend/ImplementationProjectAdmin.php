@@ -18,6 +18,7 @@ use App\Admin\PortalAdmin;
 use App\Admin\StateGroup\BureauAdmin;
 use App\Admin\Traits\DatePickerTrait;
 use App\Datagrid\CustomDatagrid;
+use App\Entity\ImplementationProject;
 use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
 use App\Exporter\Source\ServiceListValueFormatter;
@@ -25,6 +26,9 @@ use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 class ImplementationProjectAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
@@ -54,6 +58,18 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
         $this->addDefaultDatagridFilter($datagridMapper, 'interestedOrganisations');
         $this->addDefaultDatagridFilter($datagridMapper, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
         $this->addDefaultDatagridFilter($datagridMapper, 'solutions.openDataItems');
+        $datagridMapper
+            ->add('efaType', ChoiceFilter::class, [
+                'label' => 'app.implementation_project.entity.efa_type',
+                'field_options' => [
+                    'choices' => array_flip(ImplementationProject::EFA_TYPES),
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => false,
+                    //'choice_translation_domain' => 'SonataAdminBundle',
+                ],
+                'field_type' => ChoiceType::class,
+            ]);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -75,6 +91,12 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                     ['fieldName' => 'subject'],
                 ],
                 'enable_filter_add' => true,
+            ])
+            ->add('efaType', TemplateRegistryInterface::TYPE_CHOICE, [
+                'label' => 'app.implementation_project.entity.efa_type',
+                'editable' => false,
+                'choices' => ImplementationProject::EFA_TYPES,
+                'catalogue' => 'messages',
             ])
             ->add('status', 'choice', [
                 'editable' => false,
