@@ -949,7 +949,7 @@ app:
       dates: Daten Umsetzungsstatus
     frontend:
       tab_commissioning_schedule: Zeitplan Inbetriebnahme
-      tab_commissioning_status_at: Zeitplan Inbetriebnahme NRW
+      tab_commissioning_status_at: Zeitplan Start Roll-out NRW
       tab_piloting_status_at: Zeitplan Pilotierung NRW
       tab_nationwide_rollout_at: Zeitplan bundesweiter Roll-out
     entity:
@@ -958,7 +958,7 @@ app:
       project_start_at: Vorbereitung
       concept_status_at: Konzeption
       implementation_status_at: Umsetzung
-      commissioning_status_at: Inbetriebnahme NRW
+      commissioning_status_at: Start Roll-out NRW
       piloting_status_at: Pilotierung NRW
       nationwide_rollout_at: Start bundesweiter Roll-out
       status: Umsetzungsstatus
@@ -1005,7 +1005,7 @@ app:
         project_start_at: Datum Vorbereitung wird erreicht
         concept_status_at: Datum Konzeption wird erreicht
         implementation_status_at: Datum Umsetzung wird erreicht
-        commissioning_status_at: Datum Inbetriebnahme NRW wird erreicht
+        commissioning_status_at: Datum Start Roll-out NRW wird erreicht
         piloting_status_at: Datum Pilotierung NRW wird erreicht
         nationwide_rollout_at: Datum Start bundesweiter Roll-out wird erreicht
     common:
@@ -1446,7 +1446,7 @@ app:
         project_start_at: Vorbereitung
         concept_status_at: Konzeption
         implementation_status_at: Umsetzung
-        commissioning_status_at: Inbetriebnahme NRW
+        commissioning_status_at: Start Roll-out NRW
         piloting_status_at: Pilotierung NRW
         nationwide_rollout_at: Start bundesweiter Roll-out
         status: Umsetzungsstatus
