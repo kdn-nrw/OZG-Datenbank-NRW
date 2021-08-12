@@ -13,6 +13,7 @@ namespace App\Admin\Frontend;
 
 use App\Admin\AbstractContextAwareAdmin;
 use App\Entity\Base\BaseEntityInterface;
+use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableInterface;
 use App\Model\ExportSettings;
 use RuntimeException;
@@ -203,4 +204,19 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
     }
 
     abstract protected function getRoutePrefix(): string;
+
+    /**
+     * Configures a list of default sort values.
+     *
+     * @phpstan-param array{_page?: int, _per_page?: int, _sort_by?: string, _sort_order?: string} $sortValues
+     * @param array $sortValues
+     */
+    protected function configureDefaultSortValues(array &$sortValues)
+    {
+        parent::configureDefaultSortValues($sortValues);
+        if (is_subclass_of($this->getClass(), NamedEntityInterface::class)) {
+            $sortValues['_sort_order'] = $sortValues['_sort_order'] ?? 'ASC';
+            $sortValues['_sort_by'] = $sortValues['_sort_by'] ?? 'name';
+        }
+    }
 }
