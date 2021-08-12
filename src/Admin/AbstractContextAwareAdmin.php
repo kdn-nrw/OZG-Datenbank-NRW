@@ -15,6 +15,7 @@ namespace App\Admin;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
+use App\Form\Filter\GroupedSessionFilterPersister;
 use App\Model\Annotation\BaseModelAnnotation;
 use App\Model\ExportSettings;
 use App\Model\ReferenceSettings;
@@ -26,6 +27,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Filter\Persister\FilterPersisterInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
@@ -38,6 +40,23 @@ use Sonata\Form\Type\DateTimeRangePickerType;
 abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface, CustomExportAdminInterface
 {
     use InjectAdminManagerTrait;
+
+    /**
+     * Component responsible for persisting filters.
+     *
+     * @var FilterPersisterInterface|null
+     */
+    private $filterPersister;
+
+    /**
+     * Keep local reference to filter persister (parent property is private)
+     * @param FilterPersisterInterface|null $filterPersister
+     */
+    public function setFilterPersister(?FilterPersisterInterface $filterPersister = null)
+    {
+        $this->filterPersister = $filterPersister;
+        parent::setFilterPersister($filterPersister);
+    }
 
     public function getDataSourceIterator()
     {
@@ -221,7 +240,8 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     }
 
     /**
-     * NEXT_MAJOR: Change the visibility to protected (similar to buildShow, buildForm, ...).
+     * Initialize data grid
+     * Clean persistent group filter values
      */
     public function buildDatagrid()
     {
@@ -229,7 +249,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
             return;
         }
         parent::buildDatagrid();
-        if ($this->datagrid instanceof CustomDatagrid) {
+        if ($this->datagrid instanceof CustomDatagrid && $this->filterPersister instanceof GroupedSessionFilterPersister) {
             $this->datagrid->cleanValues();
         }
     }
