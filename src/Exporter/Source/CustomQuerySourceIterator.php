@@ -11,12 +11,17 @@
 
 namespace App\Exporter\Source;
 
+use App\Admin\AbstractContextAwareAdmin;
+use App\Entity\Base\BaseEntity;
+use App\Entity\Base\NamedEntityInterface;
+use App\Model\ExportCellValue;
 use App\Model\ExportSettings;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\ORM\Query;
 use Psr\Cache\CacheItemPoolInterface;
 use Sonata\Exporter\Exception\InvalidMethodCallException;
 use Sonata\Exporter\Source\SourceIteratorInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface as RoutingUrlGeneratorInterface;
 
 /**
  * Class CustomQuerySourceIterator
@@ -41,13 +46,21 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
      * @var ExportSettings
      */
     private $exportSettings;
+    /**
+     * @var AbstractContextAwareAdmin
+     */
+    private $admin;
+
+    protected $mapUrlProperties = [];
 
     /**
+     * @param AbstractContextAwareAdmin $admin
      * @param Query $query The Doctrine Query
      * @param CacheItemPoolInterface $cache
      * @param ExportSettings $exportSettings
      */
     public function __construct(
+        AbstractContextAwareAdmin $admin,
         Query $query,
         CacheItemPoolInterface $cache,
         ExportSettings $exportSettings
@@ -65,6 +78,37 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
             $this->query->setHint($name, $value);
         }
         $this->exportSettings = $exportSettings;
+        $this->admin = $admin;
+        if (is_a($admin->getClass(), NamedEntityInterface::class, true)) {
+            $this->mapUrlProperties['name'] = 'show';
+        }
+    }
+
+    /**
+     * @param BaseEntity $entity
+     * @return ExportCellValue[]
+     */
+    protected function getPropertyValueModelList($entity): array
+    {
+        $data = [];
+        foreach ($this->propertyPaths as $name => $propertyPath) {
+            $value = $this->getPropertyValue($propertyPath, $entity);
+            $propertyName = $propertyPath . '';
+            if (!empty($this->mapUrlProperties[$propertyName])) {
+                $valueModel = new ExportCellValue($name, $value);
+                $url = $this->admin->generateObjectUrl(
+                    $this->mapUrlProperties[$propertyName],
+                    $entity,
+                    [],
+                    RoutingUrlGeneratorInterface::ABSOLUTE_URL
+                );
+                $valueModel->setUrl($url);
+                $data[$name] = $valueModel;
+            } else {
+                $data[$name] = $value;
+            }
+        }
+        return $data;
     }
 
     /**

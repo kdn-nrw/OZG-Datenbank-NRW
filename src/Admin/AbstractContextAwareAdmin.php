@@ -99,8 +99,10 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
                 $query = $query->getQuery();
             }
         }
+        /** @var \Doctrine\ORM\Query $query */
         $exportSettings->setContext(ApplicationContextHandler::getDefaultAdminApplicationContext($this));
         return new CustomQuerySourceIterator(
+            $this,
             $query,
             $this->adminManager->getCache(),
             $exportSettings

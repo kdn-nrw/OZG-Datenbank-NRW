@@ -42,7 +42,7 @@ class UpdatePropertyAccessorCache implements EventSubscriberInterface
         $admin = $event->getAdmin();
         $dataSourceIterator = $admin->getDataSourceIterator();
         if ($dataSourceIterator instanceof CustomEntityValueProvider) {
-            $dataSourceIterator->getCacheItemData($entity, true);
+            $dataSourceIterator->updateCacheItemData($entity);
         }
     }
 }

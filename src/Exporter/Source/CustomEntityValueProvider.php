@@ -12,6 +12,7 @@
 namespace App\Exporter\Source;
 
 use App\Entity\Base\BaseEntity;
+use App\Model\ExportCellValue;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
@@ -20,7 +21,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 /**
- * Class CustomQuerySourceIterator
+ * Class CustomEntityValueProvider
  * Support export of collection fields and use caching for collection fields
  *
  * the current function in Sonata\Exporter\Source\DoctrineORMQuerySourceIterator is marked as final and can therefore
@@ -35,19 +36,9 @@ class CustomEntityValueProvider
      * @var CacheItemPoolInterface
      */
     private $cache;
-    private const DATE_PARTS = [
-        'y' => 'Y',
-        'm' => 'M',
-        'd' => 'D',
-    ];
-    private const TIME_PARTS = [
-        'h' => 'H',
-        'i' => 'M',
-        's' => 'S',
-    ];
 
     /**
-     * @var array
+     * @var array|PropertyPath[]
      */
     protected $propertyPaths = [];
 
@@ -107,23 +98,32 @@ class CustomEntityValueProvider
         if ($objectOrArray instanceof BaseEntity) {
             $data = $this->getCacheItemData($objectOrArray);
             unset($data['_tstamp']);
-        } else {
-            $data = $this->processData($objectOrArray);
+            return $data;
         }
-        return $data;
+        return $this->processData($objectOrArray);
+    }
+
+    /**
+     * Update the cache items for the given entity
+     *
+     * @param BaseEntity $objectOrArray
+     */
+    public function updateCacheItemData(BaseEntity $objectOrArray): void
+    {
+        $this->getCacheItemData($objectOrArray, true);
     }
 
     /**
      * Returns the property values of the given entity from the cache; sets/updates the cache entry if necessary
      *
-     * @param BaseEntity $objectOrArray
+     * @param BaseEntity $entity
      * @param bool $forceUpdate Force update of cache item
      * @return array|mixed
      */
-    public function getCacheItemData(BaseEntity $objectOrArray, $forceUpdate = false)
+    protected function getCacheItemData(BaseEntity $entity, $forceUpdate = false)
     {
-        $itemId = $objectOrArray->getId();
-        if (null !== $modifiedAt = $objectOrArray->getModifiedAt()) {
+        $itemId = $entity->getId();
+        if (null !== $modifiedAt = $entity->getModifiedAt()) {
             $tstamp = $modifiedAt->getTimestamp();
             $lastChanged = $tstamp;
         } else {
@@ -137,7 +137,7 @@ class CustomEntityValueProvider
             return $this->dataGroupCache[$itemId];
         }
         $itemGroup = intdiv($itemId, 200);
-        $key = str_replace('\\', '.', get_class($objectOrArray)) . '.' . $itemGroup;
+        $key = str_replace('\\', '.', get_class($entity)) . '.' . $itemGroup;
         try {
             $item = $this->cache->getItem(self::CACHE_PREFIX . $this->context . rawurlencode($key));
             if (!$forceUpdate && $item->isHit()) {
@@ -152,13 +152,23 @@ class CustomEntityValueProvider
             $item = null;
             unset($e);
         }
-        $data[$itemId] = $this->processData($objectOrArray);
+        $data[$itemId] = $this->getPropertyValueModelList($entity);
         $data[$itemId]['_tstamp'] = $tstamp;
+
         if ($item) {
             $this->cache->save($item->set($data));
             $this->dataGroupCache = $data;
         }
         return $data[$itemId];
+    }
+
+    /**
+     * @param BaseEntity $entity
+     * @return ExportCellValue[]
+     */
+    protected function getPropertyValueModelList($entity): array
+    {
+        return $this->processData($entity);
     }
 
     /**
@@ -183,75 +193,11 @@ class CustomEntityValueProvider
     protected function getPropertyValue(string $propertyPath, $objectOrArray): ?string
     {
         try {
-            return $this->getValue($this->propertyAccessor->getValue($objectOrArray, $propertyPath));
+            $rawValue = $this->propertyAccessor->getValue($objectOrArray, $propertyPath);
+            return ExportCellValue::formatValue($rawValue, $this->dateTimeFormat);
         } catch (UnexpectedTypeException $e) {
             //non existent object in path will be ignored
             return null;
         }
-    }
-
-    final public function setDateTimeFormat(string $dateTimeFormat): void
-    {
-        $this->dateTimeFormat = $dateTimeFormat;
-    }
-
-    final public function getDateTimeFormat(): string
-    {
-        return $this->dateTimeFormat;
-    }
-
-    /**
-     * @param \DateInterval $interval
-     * @return string An ISO8601 duration
-     */
-    public function getDuration(\DateInterval $interval): string
-    {
-        $datePart = '';
-        foreach (self::DATE_PARTS as $datePartAttribute => $datePartAttributeString) {
-            if ($interval->$datePartAttribute !== 0) {
-                $datePart .= $interval->$datePartAttribute . $datePartAttributeString;
-            }
-        }
-
-        $timePart = '';
-        foreach (self::TIME_PARTS as $timePartAttribute => $timePartAttributeString) {
-            if ($interval->$timePartAttribute !== 0) {
-                $timePart .= $interval->$timePartAttribute . $timePartAttributeString;
-            }
-        }
-
-        if ('' === $datePart && '' === $timePart) {
-            return 'P0Y';
-        }
-
-        return 'P' . $datePart . ('' !== $timePart ? 'T' . $timePart : '');
-    }
-
-    /**
-     * Extend parent getValue function to support Collection objects
-     *
-     * @param mixed $value
-     * @return string|null
-     */
-    protected function getValue($value): ?string
-    {
-        //if value is array or collection, creates string
-        if (\is_iterable($value)) {
-            $result = array();
-            foreach ($value as $item) {
-                $result[] = $this->getValue($item);
-            }
-            $value = implode(', ', $result);
-        } elseif ($value instanceof \DateTimeInterface) {
-            $value = $value->format($this->dateTimeFormat);
-        } elseif ($value instanceof \DateInterval) {
-            $value = $this->getDuration($value);
-        } elseif (\is_object($value)) {
-            $value = (string)$value;
-        } elseif (is_string($value)) {
-            $value = trim(strip_tags($value));
-        }
-
-        return (string)$value;
     }
 }

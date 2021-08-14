@@ -11,6 +11,8 @@
 
 namespace App\Exporter\Writer;
 
+use App\Model\ExportCellValue;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -169,11 +171,31 @@ class XlsxWriter implements TypedWriterInterface
      *
      * @param string $column
      * @param int $row The row number
-     * @param string $value
+     * @param ExportCellValue|string $value
      */
     private function setCellValue(string $column, int $row, $value): void
     {
-        $this->getActiveSheet()->setCellValue($column . $row, $value);
+        $activeSheet = $this->getActiveSheet();
+        if ($value instanceof ExportCellValue) {
+            $pCoordinate = $column . $row;
+            if ($url = $value->getUrl()) {
+                if ($formattedValue = $value . '') {
+                    $activeSheet->setCellValue($pCoordinate, $formattedValue);
+                } else {
+                    $activeSheet->setCellValue($pCoordinate, $url);
+                }
+                $cell = $activeSheet->getCell($pCoordinate);
+                try {
+                    $cell->getHyperlink()->setUrl($url);
+                } catch (Exception $e) {
+                    // Skip setting url
+                }
+            } elseif ($value) {
+                $activeSheet->setCellValue($pCoordinate, $value . '');
+            }
+        } else {
+            $activeSheet->setCellValue($column . $row, $value);
+        }
         $textLength = strlen($value);
         if (!array_key_exists($column, $this->columnMaxTextLengths)
             || $this->columnMaxTextLengths[$column] < $textLength) {
@@ -227,5 +249,46 @@ class XlsxWriter implements TypedWriterInterface
             $this->headerColumns[$name] = $currentColumn;
         }
         return $currentColumn;
+    }
+
+    /**
+     * Adds an image to the active work sheet
+     *
+     * @param string $imagePath Absolute path to image
+     * @param string $cellId e.g. A1
+     * @param int $offsetX X offset of image in cell
+     * @param int $offsetY Y offset of image in cell
+     * @param float $scaleX Width scale based on image width
+     * @param float $scaleY Height scale based on image height
+     * @param string $name Optional image name
+     */
+    final protected function addImage(
+        $imagePath,
+        $cellId,
+        $offsetX,
+        $offsetY,
+        $scaleX = 1.0,
+        $scaleY = 1.0,
+        $name = null
+    ): void
+    {
+        $imageSize = file_exists($imagePath) ? getimagesize($imagePath) : false;
+        if (!empty($imageSize)) {
+            $width = (int) $imageSize[0] * $scaleX;
+            $height = (int) $imageSize[1] * $scaleY;
+            $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();    //create object for Worksheet drawing
+            if (!empty($name)) {
+                $objDrawing->setName($name);        //set name to image
+            }
+            //$objDrawing->setDescription('Customer Signature'); //set description to image
+            $objDrawing->setPath($imagePath);
+            $objDrawing->setOffsetX($offsetX);                       //setOffsetX works properly
+            $objDrawing->setOffsetY($offsetY);                       //setOffsetY works properly
+            $objDrawing->setCoordinates($cellId);        //set image to cell
+            $objDrawing->setWidth($width);                 //set width, height
+            $objDrawing->setHeight($height);
+
+            $objDrawing->setWorksheet($this->getActiveSheet());
+        }
     }
 }

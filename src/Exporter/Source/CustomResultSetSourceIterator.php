@@ -17,7 +17,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Sonata\Exporter\Source\SourceIteratorInterface;
 
 /**
- * Class CustomQuerySourceIterator
+ * Class CustomResultSetSourceIterator
  * Support export of collection fields and use caching for collection fields
  *
  * the current function in Sonata\Exporter\Source\DoctrineORMQuerySourceIterator is marked as final and can therefore
