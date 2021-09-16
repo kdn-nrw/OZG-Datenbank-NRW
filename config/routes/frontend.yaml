@@ -118,6 +118,14 @@ frontend_app_commune_export:
   path: /kommunen/export
   controller: App\Controller\CommuneController::exportAction
 
+frontend_app_commune_integrations:
+  path: /commune/{id}/integrations
+  controller: App\Controller\CommuneController::integrationsAction
+
+frontend_app_commune_solutions:
+  path: /commune/{id}/solutions
+  controller: App\Controller\CommuneController::solutionsAction
+
 frontend_app_vsm_api_index:
   path: /verwaltungssuchmaschine/{consumerKey}/{query}/{page}
   controller: App\Controller\VSMController::feApiIndexAction

@@ -7,16 +7,17 @@ file that was distributed with this source code.
 {# @var object \App\Entity\StateGroup\Commune #}
 {% set communeType = object.communeType %}
 
+{% set navRoutePrefix = app_is_backend() ? '' : 'frontend_' %}
 {% set navTabFields = [{
     key: 'solutions',
     customListTitle: 'app.commune.show.headline.online_solutions'|trans({'commune': object.name}),
     entities: commune_solutions(object, app_is_backend()),
-    loadUrl: path('app_commune_solutions', {'id': object.id}),
+    loadUrl: path(navRoutePrefix ~ 'app_commune_solutions', {'id': object.id}),
 },{
     key: 'communeSolutions',
     customListTitle: 'app.commune.show.headline.online_integrations'|trans({'commune': object.name}),
     entities: commune_integrations(object, app_is_backend()),
-    loadUrl: path('app_commune_integrations', {'id': object.id})
+    loadUrl: path(navRoutePrefix ~ 'app_commune_integrations', {'id': object.id})
 }] %}
 {% if communeType is not null %}
     {% set navTabFields = navTabFields|merge([{
