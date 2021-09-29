@@ -169,6 +169,9 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'label' => false,
             ]);
         $this->addPortalsFormFields($formMapper);
+        $formMapper->add('enabledMunicipalPortal', CheckboxType::class, [
+            'required' => false,
+        ]);
         $overrideOptions = [];
         if (!$this->authorizationChecker->isGranted('ROLE_APP_SOLUTION_COMMUNE_EDIT', $this->getSubject())) {
             $overrideOptions = [
@@ -321,6 +324,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $datagridMapper->add('isPublished');
         $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
         $datagridMapper->add('confidenceLevel');
+        $datagridMapper->add('enabledMunicipalPortal');
     }
 
     protected function configureListFields(ListMapper $listMapper)

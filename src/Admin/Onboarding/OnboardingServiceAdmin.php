@@ -37,6 +37,7 @@ class OnboardingServiceAdmin extends SolutionAdmin
         } elseif (isset($_REQUEST['q'])) {
             $reqSearchTerm = $_REQUEST['q'];
         }
+        /** @var \Doctrine\ORM\QueryBuilder $query */
         if ($reqSearchTerm) {
             $searchTerm = strtolower(trim(strip_tags($reqSearchTerm)));
             /** @var \Doctrine\ORM\QueryBuilder $subQueryBuilder */
@@ -44,11 +45,13 @@ class OnboardingServiceAdmin extends SolutionAdmin
             $subQueryBuilder->select('s.id')
                 ->where(
                     $subQueryBuilder->expr()->andX(
-                        's.communeType = :communeType',
+                        's.enabledMunicipalPortal = :enabledMunicipalPortal',
+                        //'s.communeType = :communeType',
                         's.name LIKE :term'
                     )
                 );
-            $subQueryBuilder->setParameter('communeType', Solution::COMMUNE_TYPE_ALL);
+            $subQueryBuilder->setParameter('enabledMunicipalPortal', 1);
+            //$subQueryBuilder->setParameter('communeType', Solution::COMMUNE_TYPE_ALL);
             $subQueryBuilder->setParameter('term', '%' . $searchTerm . '%');
             $result = $subQueryBuilder->getQuery()->getArrayResult();
             if (!empty($result)) {
@@ -56,17 +59,20 @@ class OnboardingServiceAdmin extends SolutionAdmin
             } else {
                 $idList = [0];
             }
-            /** @var \Doctrine\ORM\QueryBuilder $query */
             $query->andWhere(
                 $query->getRootAliases()[0] . ' IN (:idList)'
             );
             $query->setParameter('idList', $idList);
         } else {
-            /** @var \Doctrine\ORM\QueryBuilder $query */
+            $rootAlias = $query->getRootAliases()[0];
             $query->andWhere(
-                $query->expr()->eq($query->getRootAliases()[0] . '.communeType', ':communeType')
+                $query->expr()->andX(
+                    $rootAlias . '.enabledMunicipalPortal = :enabledMunicipalPortal'
+                //$rootAlias . '.communeType = :communeType'
+                )
             );
-            $query->setParameter('communeType', Solution::COMMUNE_TYPE_ALL);
+            //$query->setParameter('communeType', Solution::COMMUNE_TYPE_ALL);
+            $query->setParameter('enabledMunicipalPortal', 1);
         }
         return $query;
     }

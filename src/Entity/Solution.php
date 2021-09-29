@@ -249,6 +249,15 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
      */
     private $confidenceLevel;
 
+    /**
+     * Solution is enabled in municipal portal
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="enabled_municipal_portal", type="boolean")
+     */
+    protected $enabledMunicipalPortal = false;
+
     public function __construct()
     {
         $this->analogServices = new ArrayCollection();
@@ -1144,6 +1153,22 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     public function setConfidenceLevel(?ConfidenceLevel $confidenceLevel): void
     {
         $this->confidenceLevel = $confidenceLevel;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabledMunicipalPortal(): bool
+    {
+        return $this->enabledMunicipalPortal ?? false;
+    }
+
+    /**
+     * @param bool $enabledMunicipalPortal
+     */
+    public function setEnabledMunicipalPortal(bool $enabledMunicipalPortal): void
+    {
+        $this->enabledMunicipalPortal = $enabledMunicipalPortal;
     }
 
     /**

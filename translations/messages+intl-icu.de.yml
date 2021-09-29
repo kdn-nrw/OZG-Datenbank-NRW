@@ -1648,6 +1648,7 @@ app:
       implementation_projects: OZG Umsetzungsprojekte
       jurisdictions: Zuständigkeiten
       confidence_level: Mindest-Vertrauensniveau
+      enabled_municipal_portal: Im Kommunalportal verfügbar
     messages:
       no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   specialized_procedure:
