@@ -9,6 +9,13 @@ app:
       welcome_short: 'Willkommen {username}!'
       logout: 'Abmelden'
       login: 'Anmelden'
+      title_user_authentication: Zur Anmeldung
+      check_email: |
+        Eine E-Mail wurde verschickt, sofern sie einem Benutzernamen zugeordnet ist.
+        Sie beinhaltet einen Link zum Zurücksetzen des Passwortes.
+        Hinweis: Ein neues Passwort kann nur alle {tokenLifetime} Stunden beantragt werden.
+
+        Eventuell wurde diese E-Mail als Spam markiert, wenn sie nicht angekommen ist.
 
   menu:
     settings_group: OZG Basisdaten
@@ -198,17 +205,57 @@ app:
     object_name: Anwendung
     list: Anwendungen
     create: Anwendung anlegen
+    tabs:
+      general: Anwendung
+      privacy: Datenschutz
+      security: IT-Sicherheit
+      accessibility: Barrierefreiheit
+      archive: Archiv
+      context: OZG Kontext
+      license: Lizenz
+    actions:
+      list: Anwendungen Übersicht
+      show: Anwendung anzeigen
+      edit: Anwendung bearbeiten
     entity:
       name: Name
       description: Beschreibung
       categories: Softwarekategorien
       manufacturers: Hersteller
-      service_providers: KDN Mitglieder
-      communes: Anwenderkommunen
+      service_providers: Anwendende KDN Mitglieder
+      communes: Anwendende Kommunen
       accessibility: Barrierefreiheit
       privacy: Datenschutz
       archive: Archiv
       in_house_development: Eigenentwicklung
+      in_house_development_choices:
+        no: Nein
+        yes: Ja
+      application_modules: Module
+      application_interfaces: Schnittstellen
+  application_module:
+    object_name: Modul
+    list: Module
+    create: Modul anlegen
+    breadcrumb:
+      link_application_module_list:   'Module'
+      link_application_module_create: 'Modul hinzufügen'
+    entity:
+      application: Anwendung
+      name: Name
+      description: Beschreibung
+  application_interface:
+    object_name: Schnittstelle
+    list: Schnittstellen
+    create: Schnittstelle anlegen
+    breadcrumb:
+      link_application_interface_list:   'Schnittstellen'
+      link_application_interface_create: 'Schnittstelle hinzufügen'
+    entity:
+      application: Anwendung
+      name: Name
+      description: Beschreibung
+      specialized_procedures: Fachverfahren
   application_category:
     object_name: Kategorie
     list: Kategorien
