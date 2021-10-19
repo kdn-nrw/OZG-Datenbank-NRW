@@ -15,17 +15,11 @@ use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Onboarding\CommuneInfo;
 use App\Entity\Onboarding\Epayment;
 use App\Entity\Onboarding\FormSolution;
-use App\Entity\Solution;
 use App\Entity\StateGroup\Commune;
 
 class OnboardingManager
 {
     use InjectManagerRegistryTrait;
-
-    /**
-     * @var Solution
-     */
-    protected $solutionList;
 
     /**
      * Create onboarding entity items for all communes
@@ -130,26 +124,21 @@ class OnboardingManager
         $sql = "DELETE FROM ozg_onboarding_commune_solution WHERE solution_id NOT IN (SELECT id FROM ozg_solution WHERE enabled_municipal_portal = 1)";
         $this->executeStatement($sql);
         $em = $this->getEntityManager();
-        if (null !== $configuration = $em->getConnection()->getConfiguration()) {
+        $connection = $em->getConnection();
+        if (null !== $configuration = $connection->getConfiguration()) {
             $configuration->setSQLLogger(null);
         }
-        $communeInfoRepository = $em->getRepository(CommuneInfo::class);
-        $communeInfoResults = $communeInfoRepository->findAll();
-        $connection = $this->getEntityManager()->getConnection();
-        $query = 'SELECT id FROM ozg_solution WHERE enabled_municipal_portal = 1';
-        $enabledSolutionIdList = $connection->fetchAllAssociative($query);
-        if (!empty($enabledSolutionIdList)) {
-            $enabledSolutionIdList = array_column($enabledSolutionIdList, 'id');
-        }
+        $query = 'SELECT id, commune_id FROM ozg_onboarding WHERE record_type = \'communeinfo\' ORDER BY commune_id ASC';
+        $rows = $this->fetchAllAssociative($query);
         $mapReferencesToBeCreated = [];
         $now = date_create();
         $now->setTimezone(new \DateTimeZone('UTC'));
         $dateString = $now->format('Y-m-d H:i:s');
-        foreach ($communeInfoResults as $offset => $communeInfo) {
-            $referencesToBeCreated = $this->updateSingleCommuneSolution($communeInfo, $enabledSolutionIdList);
+        foreach ($rows as $row) {
+            $entityId = (int) $row['id'];
+            $communeId = (int) $row['commune_id'];
+            $referencesToBeCreated = $this->updateSingleCommuneSolution($communeId);
             if (!empty($referencesToBeCreated)) {
-                $entityId = (int) $communeInfo->getId();
-                $communeId = (int) $communeInfo->getCommune()->getId();
                 foreach ($referencesToBeCreated as $solutionId) {
                     $mapReferencesToBeCreated[$entityId][$solutionId] = [
                         'commune_info_id' => $entityId,
@@ -211,6 +200,9 @@ class OnboardingManager
                         ];
                     }
                 }
+            } else {
+                $sql = sprintf("DELETE FROM ozg_onboarding_epayment_service WHERE epayment_id = %d", $ePayment->getId());
+                $this->executeStatement($sql);
             }
         }
         $em->flush();
@@ -304,43 +296,35 @@ class OnboardingManager
     }
 
     /**
-     * Update the service references for a single e-payment entity
+     * Update the service references for a single commune info entity
      *
-     * @param CommuneInfo $communeInfo
-     * @param array<int, int> $enabledSolutionIdList
+     * @param int $communeId
      * @return array
-     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\DBAL\Exception
      */
-    private function updateSingleCommuneSolution(CommuneInfo $communeInfo, array $enabledSolutionIdList): array
+    private function updateSingleCommuneSolution(int $communeId): array
     {
-        $em = $this->getEntityManager();
-        $serviceSolutionMap = [];
-        $removeServices = [];
-        foreach ($communeInfo->getCommuneSolutions() as $communeSolution) {
-            if (null !== $mappedSolution = $communeSolution->getSolution()) {
-                // Solution does not exist (any more)
-                if (!in_array($mappedSolution->getId(), $enabledSolutionIdList, false)) {
-                    $removeServices[] = $communeSolution;
-                } else {
-                    $serviceSolutionMap[$mappedSolution->getId()] = $communeSolution;
-                }
-            }
-        }
-        foreach ($removeServices as $removeService) {
-            $communeInfo->removeCommuneSolution($removeService);
-            $em->remove($removeService);
-        }
-        $mappedSolutionIds = array_keys($serviceSolutionMap);
         $referencesToBeCreated = [];
-        foreach ($enabledSolutionIdList as $entityId) {
-            if (!in_array($entityId, $mappedSolutionIds, false)) {
-                $referencesToBeCreated[] = $entityId;
-                /* Will cause out of memory
-                $ePaymentService = new EpaymentService();
-                $ePaymentService->setEpayment($ePayment);
-                $ePaymentService->setSolution($entity);
-                $em->persist($ePaymentService);*/
+        $connection = $this->getEntityManager()->getConnection();
+        $query = sprintf('SELECT s.id FROM ozg_solutions_communes sc, ozg_solution s WHERE s.id = sc.solution_id AND s.enabled_municipal_portal = 1 AND sc.commune_id = %d', $communeId);
+        $enabledCommuneSolutionIdList = $connection->fetchAllAssociative($query);
+        if (!empty($enabledCommuneSolutionIdList)) {
+            $enabledCommuneSolutionIdList = array_column($enabledCommuneSolutionIdList, 'id');
+            $sql = sprintf("DELETE FROM ozg_onboarding_commune_solution WHERE commune_id = %d AND solution_id NOT IN (%s)",
+                $communeId,
+                implode(', ', $enabledCommuneSolutionIdList)
+            );
+            $this->executeStatement($sql);
+            $query = sprintf('SELECT solution_id FROM ozg_onboarding_commune_solution WHERE commune_id = %d ORDER BY solution_id ASC', $communeId);
+            $communeSolutionRows = $this->fetchAllAssociative($query);
+            $mappedSolutionIds = [];
+            if (!empty($communeSolutionRows)) {
+                $mappedSolutionIds = array_column($communeSolutionRows, 'solution_id');
             }
+            $referencesToBeCreated = array_diff($enabledCommuneSolutionIdList, $mappedSolutionIds);
+        } else {
+            $sql = sprintf("DELETE FROM ozg_onboarding_commune_solution WHERE commune_id = %d", $communeId);
+            $this->executeStatement($sql);
         }
         return $referencesToBeCreated;
     }
