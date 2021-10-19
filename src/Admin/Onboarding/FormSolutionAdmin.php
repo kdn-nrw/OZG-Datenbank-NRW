@@ -127,9 +127,6 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
                 'entry_options' => [
                     'parent_admin' => $this,
                 ],
-                'row_attr' => [
-                    'class' => 'form-group form-group-head',
-                ],
             ]);
         $formMapper
             ->end()

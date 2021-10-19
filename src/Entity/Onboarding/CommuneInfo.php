@@ -116,10 +116,20 @@ class CommuneInfo extends AbstractOnboardingEntity
      */
     protected $imageSize;
 
+    /**
+     * Commune solutions for this entity
+     *
+     * @var ArrayCollection|OnboardingCommuneSolution[]
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Onboarding\OnboardingCommuneSolution", mappedBy="communeInfo", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $communeSolutions;
+
     public function __construct(Commune $commune)
     {
         parent::__construct($commune);
         $this->contacts = new ArrayCollection();
+        $this->communeSolutions = new ArrayCollection();
     }
 
     /**
@@ -197,6 +207,49 @@ class CommuneInfo extends AbstractOnboardingEntity
     public function setContacts($contacts): void
     {
         $this->contacts = $contacts;
+    }
+
+    /**
+     * @return OnboardingCommuneSolution[]|Collection
+     */
+    public function getCommuneSolutions()
+    {
+        return $this->communeSolutions;
+    }
+
+    /**
+     * @param OnboardingCommuneSolution[]|Collection $communeSolutions
+     */
+    public function setCommuneSolutions($communeSolutions): void
+    {
+        $this->communeSolutions = $communeSolutions;
+    }
+
+    /**
+     * @param OnboardingCommuneSolution $communeSolution
+     * @return self
+     */
+    public function addCommuneSolution(EpaymentService $communeSolution): self
+    {
+        if (!$this->communeSolutions->contains($communeSolution)) {
+            $this->communeSolutions->add($communeSolution);
+            $communeSolution->setCommuneInfo($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param OnboardingCommuneSolution $communeSolution
+     * @return self
+     */
+    public function removeCommuneSolution($communeSolution): self
+    {
+        if ($this->communeSolutions->contains($communeSolution)) {
+            $this->communeSolutions->removeElement($communeSolution);
+        }
+
+        return $this;
     }
 
     /**

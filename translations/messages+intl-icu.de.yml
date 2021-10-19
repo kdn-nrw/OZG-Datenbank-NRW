@@ -356,6 +356,7 @@ app:
     tabs:
       general: Basisdaten
       contact_data: Kontakte
+      commune_solutions: Dienste
     groups:
       general: Basisdaten
       contact_data: Kontakte
@@ -388,6 +389,7 @@ app:
       image_file: Logo
       opening_hours: Öffnungszeiten
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
+      commune_solutions: Dienste
   dataclearing:
     object_name: Dataclearing
     list: Onboarding Dataclearing
@@ -552,6 +554,16 @@ app:
       opening_hours: Öffnungszeiten
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
       letterhead_address: Darstellung der Kommune im Kopfbogen
+  onboarding_commune_solution:
+    object_name: Onboarding Dienst
+    list: Onboarding Dienste
+    create: Onboarding Dienst erfassen
+    entity:
+      solution: Dienst
+      commune_info: Onboarding Basisdaten
+      commune: Kommune
+      enabled_epayment: Dienst nutzen
+      enabled_municipal_portal: Im Kommunalportal verfügbar
   onboarding_service:
     object_name: Onboarding Dienst
     list: Onboarding Dienste

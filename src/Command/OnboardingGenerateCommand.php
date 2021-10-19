@@ -52,7 +52,7 @@ class OnboardingGenerateCommand extends Command
         $importedRowCount = 0;
         $importedRowCount += $this->onboardingManager->createItems(CommuneInfo::class);
         $importedRowCount += $this->onboardingManager->createItems(Epayment::class);
-        $this->onboardingManager->updateAllEpaymenServices();
+        $this->onboardingManager->updateAllOnboardingSolutions();
         $importedRowCount += $this->onboardingManager->createItems(FormSolution::class);
         $importedRowCount += $this->onboardingManager->createItems(Release::class);
         $importedRowCount += $this->onboardingManager->createItems(ServiceAccount::class);

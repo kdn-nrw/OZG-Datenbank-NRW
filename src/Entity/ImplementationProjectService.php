@@ -111,6 +111,9 @@ class ImplementationProjectService extends BaseEntity implements HideableEntityI
      */
     public function getStatus(): ?ImplementationStatus
     {
+        if (null === $this->status && null !== $this->implementationProject) {
+            return $this->implementationProject->getStatus();
+        }
         return $this->status;
     }
 

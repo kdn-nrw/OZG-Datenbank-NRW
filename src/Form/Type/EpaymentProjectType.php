@@ -29,31 +29,19 @@ class EpaymentProjectType extends AbstractType
             'label' => 'app.epayment_project.entity.provider_type',
             'choices' => EpaymentProject::$providerTypeChoices,
             'disabled' => true,
-            'row_attr' => [
-                'class' => 'form-group-col form-group-head',
-            ],
         ]);
         $builder->add('projectEnvironment', ChoiceType::class, [
             'label' => 'app.epayment_project.entity.project_environment',
             'choices' => EpaymentProject::$projectEnvironmentChoices,
             'disabled' => true,
-            'row_attr' => [
-                'class' => 'form-group-col form-group-head',
-            ],
         ]);
         $builder->add('projectId', TextType::class, [
             'label' => 'app.epayment_project.entity.project_id',
             'required' => false,
-            'row_attr' => [
-                'class' => 'form-group-col',
-            ],
         ]);
         $builder->add('projectPassword', TextType::class, [
             'label' => 'app.epayment_project.entity.project_password',
             'required' => false,
-            'row_attr' => [
-                'class' => 'form-group-col',
-            ],
         ]);
     }
 
