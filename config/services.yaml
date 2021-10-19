@@ -81,6 +81,9 @@ services:
       - ~
       - App\Entity\Application
       - ~
+    calls:
+      - [addChild, ['@App\Admin\Application\ApplicationModuleAdmin', 'application']]
+      - [addChild, ['@App\Admin\Application\ApplicationInterfaceAdmin', 'application']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -98,6 +101,32 @@ services:
       - name:         sonata.admin
         manager_type: orm
         label:        app.application_category.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Application\ApplicationModuleAdmin:
+    arguments:
+      - ~
+      - App\Entity\Application\ApplicationModule
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.application_module.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\Application\ApplicationInterfaceAdmin:
+    arguments:
+      - ~
+      - App\Entity\Application\ApplicationInterface
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.application_interface.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true

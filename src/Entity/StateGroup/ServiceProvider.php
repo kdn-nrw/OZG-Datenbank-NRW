@@ -101,7 +101,7 @@ class ServiceProvider extends BaseNamedEntity implements OrganisationEntityInter
 
     /**
      * @var DataCenter|null
-     * @ORM\OneToOne(targetEntity="App\Entity\StateGroup\DataCenter", inversedBy="serviceProvider", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\StateGroup\DataCenter", mappedBy="serviceProvider", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="data_center_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $dataCenter;

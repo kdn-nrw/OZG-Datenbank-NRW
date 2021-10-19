@@ -45,7 +45,7 @@ class EpaymentService extends BaseEntity implements
 
     /**
      * @var Epayment|null
-     * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\Epayment", inversedBy="services", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\Epayment", inversedBy="epaymentServices", cascade={"persist"})
      * @ORM\JoinColumn(name="epayment_id", referencedColumnName="id")
      */
     private $epayment;

@@ -11,12 +11,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Application\ApplicationInterface;
+use App\Entity\Application\ApplicationModule;
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -125,8 +126,26 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
      */
     protected $inHouseDevelopment = false;
 
+    /**
+     * Application modules
+     * @var ApplicationModule[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Application\ApplicationModule", mappedBy="application", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $applicationModules;
+
+    /**
+     * Application interfaces
+     * @var ApplicationInterface[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Application\ApplicationInterface", mappedBy="application", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $applicationInterfaces;
+
     public function __construct()
     {
+        $this->applicationModules = new ArrayCollection();
+        $this->applicationInterfaces = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->communes = new ArrayCollection();
         $this->manufacturers = new ArrayCollection();
@@ -337,6 +356,92 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
     public function setInHouseDevelopment(bool $inHouseDevelopment): void
     {
         $this->inHouseDevelopment = $inHouseDevelopment;
+    }
+
+    /**
+     * @param ApplicationModule $applicationModule
+     * @return self
+     */
+    public function addApplicationModule(ApplicationModule $applicationModule): self
+    {
+        if (!$this->applicationModules->contains($applicationModule)) {
+            $this->applicationModules->add($applicationModule);
+            $applicationModule->setApplication($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ApplicationModule $applicationModule
+     * @return self
+     */
+    public function removeApplicationModule(ApplicationModule $applicationModule): self
+    {
+        if ($this->applicationModules->contains($applicationModule)) {
+            $this->applicationModules->removeElement($applicationModule);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ApplicationModule[]|Collection
+     */
+    public function getApplicationModules()
+    {
+        return $this->applicationModules;
+    }
+
+    /**
+     * @param ApplicationModule[]|Collection $applicationModules
+     */
+    public function setApplicationModules($applicationModules): void
+    {
+        $this->applicationModules = $applicationModules;
+    }
+
+    /**
+     * @param ApplicationInterface $applicationInterface
+     * @return self
+     */
+    public function addApplicationInterface(ApplicationInterface $applicationInterface): self
+    {
+        if (!$this->applicationInterfaces->contains($applicationInterface)) {
+            $this->applicationInterfaces->add($applicationInterface);
+            $applicationInterface->setApplication($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ApplicationInterface $applicationInterface
+     * @return self
+     */
+    public function removeApplicationInterface(ApplicationInterface $applicationInterface): self
+    {
+        if ($this->applicationInterfaces->contains($applicationInterface)) {
+            $this->applicationInterfaces->removeElement($applicationInterface);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ApplicationInterface[]|Collection
+     */
+    public function getApplicationInterfaces()
+    {
+        return $this->applicationInterfaces;
+    }
+
+    /**
+     * @param ApplicationInterface[]|Collection $applicationInterfaces
+     */
+    public function setApplicationInterfaces($applicationInterfaces): void
+    {
+        $this->applicationInterfaces = $applicationInterfaces;
     }
 
 }
