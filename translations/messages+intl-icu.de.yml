@@ -231,6 +231,7 @@ app:
       in_house_development_choices:
         no: Nein
         yes: Ja
+        yes_reuse: Ja und wir stellen die Anwendung zur Nachnutzung zur Verfügung
       application_modules: Module
       application_interfaces: Schnittstellen
   application_module:

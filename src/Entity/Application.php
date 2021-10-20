@@ -33,6 +33,16 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
     use CategoryTrait;
     use UrlTrait;
 
+    public const IN_HOUSE_DEVELOPMENT_NO = 0;
+    public const IN_HOUSE_DEVELOPMENT_YES = 1;
+    public const IN_HOUSE_DEVELOPMENT_YES_REUSE = 2;
+
+    public static $inHouseDevelopmentChoices = [
+        self::IN_HOUSE_DEVELOPMENT_NO => 'app.application.entity.in_house_development_choices.no',
+        self::IN_HOUSE_DEVELOPMENT_YES => 'app.application.entity.in_house_development_choices.yes',
+        self::IN_HOUSE_DEVELOPMENT_YES_REUSE => 'app.application.entity.in_house_development_choices.yes_reuse',
+    ];
+
     /**
      * @var string|null
      *
@@ -118,13 +128,13 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
     private $archive = '';
 
     /**
-     * In house development flag
+     * In house development type
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="in_house_development", type="boolean", nullable=true)
+     * @ORM\Column(name="in_house_development", type="integer", nullable=true)
      */
-    protected $inHouseDevelopment = false;
+    protected $inHouseDevelopment = self::IN_HOUSE_DEVELOPMENT_NO;
 
     /**
      * Application modules
@@ -343,20 +353,21 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isInHouseDevelopment(): bool
+    public function getInHouseDevelopment(): int
     {
-        return $this->inHouseDevelopment;
+        return $this->inHouseDevelopment ?? self::IN_HOUSE_DEVELOPMENT_NO;
     }
 
     /**
-     * @param bool $inHouseDevelopment
+     * @param int $inHouseDevelopment
      */
-    public function setInHouseDevelopment(bool $inHouseDevelopment): void
+    public function setInHouseDevelopment(int $inHouseDevelopment): void
     {
         $this->inHouseDevelopment = $inHouseDevelopment;
     }
+
 
     /**
      * @param ApplicationModule $applicationModule

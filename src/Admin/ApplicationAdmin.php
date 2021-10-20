@@ -18,6 +18,8 @@ use App\Admin\Traits\ApplicationCategoryTrait;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ManufaturerTrait;
 use App\Admin\Traits\ServiceProviderTrait;
+use App\Entity\Application;
+use App\Entity\Onboarding\AbstractOnboardingEntity;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -25,8 +27,10 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Type\CollectionType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -156,20 +160,12 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
         $formMapper
             ->add('name', TextType::class);
         $formMapper
-            /*->add('inHouseDevelopment', BooleanType::class, [
-                'required' => false,
-                // the transform option enable compatibility with the boolean field (default 1=true, 2=false)
-                // with transform set to true 0=false, 1=true
-                'transform' => true,
-            ])*/
             ->add('inHouseDevelopment', ChoiceFieldMaskType::class, [
-                'choices' => [
-                    'app.application.entity.in_house_development_choices.no' => false,
-                    'app.application.entity.in_house_development_choices.yes' => true,
-                ],
+                'choices' => array_flip(Application::$inHouseDevelopmentChoices),
                 'map' => [
-                    false => ['manufacturers'],
-                    true => [],
+                    Application::IN_HOUSE_DEVELOPMENT_NO => ['manufacturers'],
+                    Application::IN_HOUSE_DEVELOPMENT_YES => [],
+                    Application::IN_HOUSE_DEVELOPMENT_YES_REUSE => [],
                 ],
                 'required' => false,
             ]);
@@ -261,7 +257,18 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
         $this->addDefaultDatagridFilter($datagridMapper, 'categories');
         $this->addDefaultDatagridFilter($datagridMapper, 'communes');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
-        $datagridMapper->add('inHouseDevelopment');
+        $datagridMapper
+            ->add('inHouseDevelopment', ChoiceFilter::class, [
+                'label' => 'app.application.entity.in_house_development',
+                'field_options' => [
+                    'choices' => array_flip(Application::$inHouseDevelopmentChoices),
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => false,
+                    //'choice_translation_domain' => 'SonataAdminBundle',
+                ],
+                'field_type' => ChoiceType::class,
+            ]);
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -294,8 +301,11 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
                 'enable_filter_add' => true,
             ]);
         //$this->addCommunesListFields($listMapper);
-        $listMapper->add('inHouseDevelopment', null, [
-            'editable' => true
+        $listMapper->add('inHouseDevelopment', 'choice', [
+            'label' => 'app.application.entity.in_house_development',
+            'editable' => true,
+            'choices' => Application::$inHouseDevelopmentChoices,
+            'catalogue' => 'messages',
         ]);
         $listMapper
             ->add('serviceProviders', null, [
@@ -329,6 +339,11 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
             ->add('accessibility', 'html')
             ->add('privacy', 'html')
             ->add('archive', 'html')
-            ->add('inHouseDevelopment');
+            ->add('inHouseDevelopment', 'choice', [
+                'label' => 'app.application.entity.in_house_development',
+                'editable' => true,
+                'choices' => Application::$inHouseDevelopmentChoices,
+                'catalogue' => 'messages',
+            ]);
     }
 }
