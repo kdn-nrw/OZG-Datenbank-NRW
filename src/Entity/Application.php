@@ -11,9 +11,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Application\ApplicationAccessibilityDocument;
 use App\Entity\Application\ApplicationInterface;
 use App\Entity\Application\ApplicationModule;
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Base\HasDocumentsEntityInterface;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ozg_application")
  * @ORM\HasLifecycleCallbacks
  */
-class Application extends BaseNamedEntity implements HasManufacturerEntityInterface
+class Application extends BaseNamedEntity implements HasDocumentsEntityInterface, HasManufacturerEntityInterface
 {
     use AddressTrait;
     use CategoryTrait;
@@ -41,6 +43,21 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
         self::IN_HOUSE_DEVELOPMENT_NO => 'app.application.entity.in_house_development_choices.no',
         self::IN_HOUSE_DEVELOPMENT_YES => 'app.application.entity.in_house_development_choices.yes',
         self::IN_HOUSE_DEVELOPMENT_YES_REUSE => 'app.application.entity.in_house_development_choices.yes_reuse',
+    ];
+
+    public const ACCESSIBILITY_TEST_RESULT_TYPE_1 = 1;
+    public const ACCESSIBILITY_TEST_RESULT_TYPE_2 = 2;
+    public const ACCESSIBILITY_TEST_RESULT_TYPE_3 = 3;
+    public const ACCESSIBILITY_TEST_RESULT_TYPE_4 = 4;
+    public const ACCESSIBILITY_TEST_RESULT_TYPE_5 = 5;
+
+    public const ACCESSIBILITY_TEST_RESULT_TYPES = [
+        0 => 'app.application.entity.accessibility_test_result_type_choices.empty',
+        self::ACCESSIBILITY_TEST_RESULT_TYPE_1 => 'app.application.entity.accessibility_test_result_type_choices.1',
+        self::ACCESSIBILITY_TEST_RESULT_TYPE_2 => 'app.application.entity.accessibility_test_result_type_choices.2',
+        self::ACCESSIBILITY_TEST_RESULT_TYPE_3 => 'app.application.entity.accessibility_test_result_type_choices.3',
+        self::ACCESSIBILITY_TEST_RESULT_TYPE_4 => 'app.application.entity.accessibility_test_result_type_choices.4',
+        self::ACCESSIBILITY_TEST_RESULT_TYPE_5 => 'app.application.entity.accessibility_test_result_type_choices.5',
     ];
 
     /**
@@ -107,11 +124,25 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
     private $serviceProviders;
 
     /**
+     * @var Organisation[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\Organisation")
+     * @ORM\JoinTable(name="ozg_application_business_premises",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $businessPremises;
+
+    /**
      * @var string|null
      *
-     * @ORM\Column(name="accessibility", type="text", nullable=true)
+     * @ORM\Column(name="accessibility_test_conducted", type="text", nullable=true)
      */
-    private $accessibility = '';
+    private $accessibilityTestConducted = '';
 
     /**
      * @var string|null
@@ -152,12 +183,62 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
      */
     private $applicationInterfaces;
 
+    /**
+     * @var Organisation[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\Organisation")
+     * @ORM\JoinTable(name="ozg_application_accessibility_test_organisations",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $accessibilityTestOrganisations;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="accessibility_test_organisation_others", type="text", nullable=true)
+     */
+    private $accessibilityTestOrganisationOthers = '';
+
+    /**
+     * Accessibility self testing
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="accessibility_self_testing", type="boolean", nullable=true)
+     */
+    protected $accessibilitySelfTesting = false;
+
+    /**
+     * The accessibility test result type
+     *
+     * @ORM\Column(type="integer", name="accessibility_test_result_type")
+     * @var int|null
+     */
+    protected $accessibilityTestResultType;
+
+    /**
+     * @var ApplicationAccessibilityDocument[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Application\ApplicationAccessibilityDocument", mappedBy="application", cascade={"persist", "remove"})
+     */
+    private $accessibilityDocuments;
+
+    /**
+     * Initialize the entity instance
+     */
     public function __construct()
     {
+        $this->accessibilityTestOrganisations = new ArrayCollection();
         $this->applicationModules = new ArrayCollection();
         $this->applicationInterfaces = new ArrayCollection();
+        $this->businessPremises = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->communes = new ArrayCollection();
+        $this->accessibilityDocuments = new ArrayCollection();
         $this->manufacturers = new ArrayCollection();
         $this->serviceProviders = new ArrayCollection();
     }
@@ -182,7 +263,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
      * @param Commune $commune
      * @return self
      */
-    public function addCommune($commune): self
+    public function addCommune(Commune $commune): self
     {
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
@@ -195,7 +276,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
      * @param Commune $commune
      * @return self
      */
-    public function removeCommune($commune): self
+    public function removeCommune(Commune $commune): self
     {
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);
@@ -224,7 +305,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
      * @param Manufacturer $manufacturer
      * @return self
      */
-    public function addManufacturer($manufacturer): self
+    public function addManufacturer(Manufacturer $manufacturer): self
     {
         if (!$this->manufacturers->contains($manufacturer)) {
             $this->manufacturers->add($manufacturer);
@@ -237,7 +318,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
      * @param Manufacturer $manufacturer
      * @return self
      */
-    public function removeManufacturer($manufacturer): self
+    public function removeManufacturer(Manufacturer $manufacturer): self
     {
         if ($this->manufacturers->contains($manufacturer)) {
             $this->manufacturers->removeElement($manufacturer);
@@ -266,7 +347,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function addServiceProvider($serviceProvider): self
+    public function addServiceProvider(ServiceProvider $serviceProvider): self
     {
         if (!$this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->add($serviceProvider);
@@ -279,7 +360,7 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function removeServiceProvider($serviceProvider): self
+    public function removeServiceProvider(ServiceProvider $serviceProvider): self
     {
         if ($this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->removeElement($serviceProvider);
@@ -305,20 +386,112 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
     }
 
     /**
-     * @return string|null
+     * Adds a business premise
+     *
+     * @param Organisation $businessPremise
+     * @return self
      */
-    public function getAccessibility(): ?string
+    public function addBusinessPremise(Organisation $businessPremise): self
     {
-        return $this->accessibility;
+        if (!$this->businessPremises->contains($businessPremise)) {
+            $this->businessPremises->add($businessPremise);
+        }
+
+        return $this;
     }
 
     /**
-     * @param string|null $accessibility
+     * Removes a business premise
+     * @param Organisation $businessPremise
+     * @return self
      */
-    public function setAccessibility(?string $accessibility): void
+    public function removeBusinessPremise(Organisation $businessPremise): self
     {
-        $this->accessibility = $accessibility;
+        if ($this->businessPremises->contains($businessPremise)) {
+            $this->businessPremises->removeElement($businessPremise);
+        }
+
+        return $this;
     }
+
+    /**
+     * Returns the business premises
+     *
+     * @return Organisation[]|Collection
+     */
+    public function getBusinessPremises()
+    {
+        return $this->businessPremises;
+    }
+
+    /**
+     * Sets the business premises
+     *
+     * @param Organisation[]|Collection $businessPremises
+     */
+    public function setBusinessPremises($businessPremises): void
+    {
+        $this->businessPremises = $businessPremises;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAccessibilityTestConducted(): ?string
+    {
+        return $this->accessibilityTestConducted;
+    }
+
+    /**
+     * @param string|null $accessibilityTestConducted
+     */
+    public function setAccessibilityTestConducted(?string $accessibilityTestConducted): void
+    {
+        $this->accessibilityTestConducted = $accessibilityTestConducted;
+    }
+
+    /**
+     * @param Organisation $accessibilityTestOrganisation
+     * @return self
+     */
+    public function addAccessibilityTestOrganisation(Organisation $accessibilityTestOrganisation): self
+    {
+        if (!$this->accessibilityTestOrganisations->contains($accessibilityTestOrganisation)) {
+            $this->accessibilityTestOrganisations->add($accessibilityTestOrganisation);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Organisation $accessibilityTestOrganisation
+     * @return self
+     */
+    public function removeAccessibilityTestOrganisation(Organisation $accessibilityTestOrganisation): self
+    {
+        if ($this->accessibilityTestOrganisations->contains($accessibilityTestOrganisation)) {
+            $this->accessibilityTestOrganisations->removeElement($accessibilityTestOrganisation);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Organisation[]|Collection
+     */
+    public function getAccessibilityTestOrganisations(): Collection
+    {
+        return $this->accessibilityTestOrganisations;
+    }
+
+    /**
+     * @param Organisation[]|Collection $accessibilityTestOrganisations
+     */
+    public function setAccessibilityTestOrganisations($accessibilityTestOrganisations): void
+    {
+        $this->accessibilityTestOrganisations = $accessibilityTestOrganisations;
+    }
+
 
     /**
      * @return string|null
@@ -453,6 +626,132 @@ class Application extends BaseNamedEntity implements HasManufacturerEntityInterf
     public function setApplicationInterfaces($applicationInterfaces): void
     {
         $this->applicationInterfaces = $applicationInterfaces;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAccessibilityTestOrganisationOthers(): ?string
+    {
+        return $this->accessibilityTestOrganisationOthers;
+    }
+
+    /**
+     * @param string|null $accessibilityTestOrganisationOthers
+     */
+    public function setAccessibilityTestOrganisationOthers(?string $accessibilityTestOrganisationOthers): void
+    {
+        $this->accessibilityTestOrganisationOthers = $accessibilityTestOrganisationOthers;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAccessibilitySelfTesting(): bool
+    {
+        return (bool) $this->accessibilitySelfTesting;
+    }
+
+    /**
+     * @param bool $accessibilitySelfTesting
+     */
+    public function setAccessibilitySelfTesting(bool $accessibilitySelfTesting): void
+    {
+        $this->accessibilitySelfTesting = $accessibilitySelfTesting;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getAccessibilityTestResultType(): ?int
+    {
+        return $this->accessibilityTestResultType;
+    }
+
+    /**
+     * @param int|null $accessibilityTestResultType
+     */
+    public function setAccessibilityTestResultType(?int $accessibilityTestResultType): void
+    {
+        $this->accessibilityTestResultType = $accessibilityTestResultType;
+    }
+
+    /**
+     * Add accessibility document
+     *
+     * @param ApplicationAccessibilityDocument $accessibilityDocument
+     *
+     * @return self
+     */
+    public function addAccessibilityDocument(ApplicationAccessibilityDocument $accessibilityDocument): self
+    {
+        if (!$this->accessibilityDocuments->contains($accessibilityDocument)) {
+            $this->accessibilityDocuments->add($accessibilityDocument);
+            $accessibilityDocument->setApplication($this);
+        }
+        return $this;
+    }
+
+    /**
+     * Remove accessibility document
+     *
+     * @param ApplicationAccessibilityDocument $accessibilityDocument
+     */
+    public function removeAccessibilityDocument(ApplicationAccessibilityDocument $accessibilityDocument): void
+    {
+        if ($this->accessibilityDocuments->contains($accessibilityDocument)) {
+            $this->accessibilityDocuments->removeElement($accessibilityDocument);
+            $accessibilityDocument->setApplication(null);
+        }
+    }
+
+    /**
+     * Get accessibility documents
+     *
+     * @return Collection
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->accessibilityDocuments;
+    }
+
+    /**
+     * @param ApplicationAccessibilityDocument[]|Collection $accessibilityDocuments
+     */
+    public function setAccessibilityDocuments($accessibilityDocuments): void
+    {
+        $this->accessibilityDocuments = $accessibilityDocuments;
+    }
+
+    /**
+     * Get application documents
+     *
+     * @return Collection
+     */
+    public function getAccessibilityDocuments(): Collection
+    {
+        return $this->accessibilityDocuments;
+    }
+
+    /**
+     * Hook on persist and update operations.
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * @return ApplicationAccessibilityDocument[]|array Invalid accessibilityDocuments (without file reference)
+     */
+    public function cleanAccessibilityDocuments(): array
+    {
+        $removeDocuments = [];
+        foreach ($this->accessibilityDocuments as $accessibilityDocument) {
+            /** @var ApplicationAccessibilityDocument $accessibilityDocument */
+            if (0 < (int)$accessibilityDocument->getId() && null === $accessibilityDocument->getLocalName()) {
+                $removeDocuments[] = $accessibilityDocument;
+            }
+        }
+        foreach ($removeDocuments as $accessibilityDocument) {
+            $this->removeAccessibilityDocument($accessibilityDocument);
+        }
+        return $removeDocuments;
     }
 
 }

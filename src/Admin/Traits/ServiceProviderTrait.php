@@ -49,7 +49,7 @@ trait ServiceProviderTrait
         ];
         $queryBuilder = $this->getServiceProviderQueryBuilder($filterChoices);
         if (null !== $queryBuilder) {
-            $options['query'] = $this->getServiceProviderQueryBuilder($filterChoices);
+            $options['query'] = $queryBuilder;
         }
         $formMapper->add($fieldName, ModelType::class, $options);
     }

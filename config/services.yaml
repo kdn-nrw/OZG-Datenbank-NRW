@@ -80,7 +80,7 @@ services:
     arguments:
       - ~
       - App\Entity\Application
-      - ~
+      - App\Controller\ApplicationAdminController
     calls:
       - [addChild, ['@App\Admin\Application\ApplicationModuleAdmin', 'application']]
       - [addChild, ['@App\Admin\Application\ApplicationInterfaceAdmin', 'application']]

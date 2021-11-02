@@ -17,17 +17,26 @@ use App\Admin\StateGroup\ServiceProviderAdmin;
 use App\Admin\Traits\ApplicationCategoryTrait;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ManufaturerTrait;
+use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Entity\Application;
-use App\Entity\Onboarding\AbstractOnboardingEntity;
+use App\Entity\Manufacturer;
+use App\Entity\ModelRegionProject;
+use App\Entity\ModelRegionProjectDocument;
+use App\Entity\StateGroup\Commune;
+use App\Entity\StateGroup\ServiceProvider;
+use App\Form\Type\ApplicationAccessibilityDocumentType;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Type\CollectionType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -40,6 +49,7 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
     use ApplicationCategoryTrait;
     use CommuneTrait;
     use ManufaturerTrait;
+    use OrganisationTrait;
     use ServiceProviderTrait;
 
     protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
@@ -113,9 +123,19 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
             ->tab('tabs.accessibility', [
                 'label' => 'app.application.tabs.accessibility',
             ])
-            ->with('accessibility', [
+            ->with('accessibility_general', [
                 'label' => false,
-                'class' => 'col-md-12',
+                'class' => 'col-xs-12 col-lg-6',
+            ])
+            ->end()
+            ->with('accessibility_meta', [
+                'label' => false,
+                'class' => 'col-xs-12 col-lg-6',
+            ])
+            ->end()
+            ->with('accessibility_documents', [
+                'label' => 'app.application.groups.accessibility_documents',
+                'class' => 'clear-left-md col-xs-12 col-lg-6',
             ])
             ->end()
             ->end();
@@ -200,6 +220,13 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
         ]);
         $this->addCommunesFormFields($formMapper);
         $this->addServiceProvidersFormFields($formMapper);
+        $filterChoices = [
+            'entityTypes' => [
+                ServiceProvider::class,
+                Manufacturer::class,
+            ],
+        ];
+        $this->addOrganisationsFormFields($formMapper, 'businessPremises', $filterChoices);
         $formMapper->end()
             ->end();// end tabs.general
         $formMapper
@@ -219,12 +246,50 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
             ->end();// end tabs.security
         $formMapper
             ->tab('tabs.accessibility')
-            ->with('accessibility');
+            ->with('accessibility_general');
         $formMapper
-            ->add('accessibility', SimpleFormatterType::class, [
+            ->add('accessibilityTestConducted', SimpleFormatterType::class, [
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
             ]);
+        $formMapper->end();
+        $formMapper->with('accessibility_meta');
+        $filterChoices = [
+            'entityTypes' => [
+                ServiceProvider::class,
+            ],
+        ];
+        $this->addOrganisationsFormFields($formMapper, 'accessibilityTestOrganisations', $filterChoices);
+        $formMapper
+            ->add('accessibilityTestOrganisationOthers', TextareaType::class, [
+                'label' => 'app.application.entity.accessibility_test_organisation_others_form',
+                'required' => false,
+            ])
+            ->add('accessibilitySelfTesting', ChoiceType::class, [
+                'choices' => [
+                    'app.application.entity.accessibility_self_testing_choices.no' => false,
+                    'app.application.entity.accessibility_self_testing_choices.yes' => true,
+                ],
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('accessibilityTestResultType', ChoiceType::class, [
+                'choices' => array_flip(Application::ACCESSIBILITY_TEST_RESULT_TYPES),
+                'multiple' => false,
+                'required' => true,
+            ]);
+        $formMapper->end();
+        $formMapper->with('accessibility_documents');
+        $formMapper->add('accessibilityDocuments', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+            'label' => false,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'by_reference' => false,
+            'entry_type' => ApplicationAccessibilityDocumentType::class,
+            'entry_options' => [
+                'parent_admin' => $this,
+            ],
+        ]);
         $formMapper->end()
             ->end();// end tabs.accessibility
         $formMapper
@@ -250,6 +315,33 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
             ->end();
     }
 
+    public function preUpdate($object)
+    {
+        $this->cleanDocuments($object);
+    }
+
+    public function prePersist($object)
+    {
+        $this->cleanDocuments($object);
+    }
+
+    public function cleanDocuments($object)
+    {
+        /** @var Application $object */
+        $removeDocuments = $object->cleanAccessibilityDocuments();
+
+        if (!empty($removeDocuments)) {
+            /** @var ModelManager $modelManager */
+            $modelManager = $this->getModelManager();
+            $docEm = $modelManager->getEntityManager(Application\ApplicationAccessibilityDocument::class);
+            foreach ($removeDocuments as $document) {
+                if ($docEm->contains($document)) {
+                    $docEm->remove($document);
+                }
+            }
+        }
+    }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
@@ -257,11 +349,25 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
         $this->addDefaultDatagridFilter($datagridMapper, 'categories');
         $this->addDefaultDatagridFilter($datagridMapper, 'communes');
         $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
+        $this->addDefaultDatagridFilter($datagridMapper, 'businessPremises');
+        $this->addDefaultDatagridFilter($datagridMapper, 'accessibilityTestOrganisations');
+        $this->addDefaultDatagridFilter($datagridMapper, 'accessibilitySelfTesting');
         $datagridMapper
             ->add('inHouseDevelopment', ChoiceFilter::class, [
                 'label' => 'app.application.entity.in_house_development',
                 'field_options' => [
                     'choices' => array_flip(Application::$inHouseDevelopmentChoices),
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => false,
+                    //'choice_translation_domain' => 'SonataAdminBundle',
+                ],
+                'field_type' => ChoiceType::class,
+            ])
+            ->add('accessibilityTestResultType', ChoiceFilter::class, [
+                'label' => 'app.application.entity.accessibility_test_result_type',
+                'field_options' => [
+                    'choices' => Application::ACCESSIBILITY_TEST_RESULT_TYPES,
                     'required' => false,
                     'multiple' => true,
                     'expanded' => false,
@@ -331,19 +437,49 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
         $showMapper
             ->add('name')
             ->add('description');
-        $this->addApplicationCategoriesShowFields($showMapper);
         $this->addManufaturersShowFields($showMapper);
+        $this->addApplicationCategoriesShowFields($showMapper);
+        // applicationModules
+        // applicationInterfaces
         $this->addCommunesShowFields($showMapper);
         $this->addServiceProvidersShowFields($showMapper);
+        $this->addOrganisationsShowFields($showMapper, 'businessPremises');
         $showMapper
-            ->add('accessibility', 'html')
-            ->add('privacy', 'html')
-            ->add('archive', 'html')
-            ->add('inHouseDevelopment', 'choice', [
+            ->add('privacy', TemplateRegistryInterface::TYPE_HTML);
+        $showMapper
+            ->add('accessibilityTestConducted', TemplateRegistryInterface::TYPE_HTML);
+        $this->addOrganisationsShowFields($showMapper, 'accessibilityTestOrganisations');
+        $showMapper
+            ->add('accessibilityTestOrganisationOthers', null, [
+                'label' => 'app.application.entity.accessibility_test_organisation_others_form',
+            ])
+            ->add('accessibilitySelfTesting', TemplateRegistryInterface::TYPE_CHOICE, [
+                'choices' => [
+                    false => 'app.application.entity.accessibility_self_testing_choices.no',
+                    true => 'app.application.entity.accessibility_self_testing_choices.yes',
+                ],
+                'catalogue' => 'messages',
+            ])
+            ->add('accessibilityTestResultType', TemplateRegistryInterface::TYPE_CHOICE, [
+                'choices' => Application::ACCESSIBILITY_TEST_RESULT_TYPES,
+                'catalogue' => 'messages',
+            ]);
+        $showMapper->add('accessibilityDocuments', null, [
+            'template' => 'General/Show/show-attachments.html.twig',
+        ]);
+        $showMapper
+            ->add('archive', TemplateRegistryInterface::TYPE_HTML)
+            ->add('inHouseDevelopment', TemplateRegistryInterface::TYPE_CHOICE, [
                 'label' => 'app.application.entity.in_house_development',
                 'editable' => true,
                 'choices' => Application::$inHouseDevelopmentChoices,
                 'catalogue' => 'messages',
             ]);
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection
+            ->add('download', $this->getRouterIdParameter() . '/download');
     }
 }

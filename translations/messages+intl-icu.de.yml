@@ -213,6 +213,10 @@ app:
       archive: Archiv
       context: OZG Kontext
       license: Lizenz
+    groups:
+      accessibility_general: Barrierefreiheit
+      accessibility_meta: Barrierefreiheit Test
+      accessibility_documents: Zertifikate / Testberichte
     actions:
       list: Anwendungen Übersicht
       show: Anwendung anzeigen
@@ -224,7 +228,23 @@ app:
       manufacturers: Hersteller
       service_providers: Anwendende KDN Mitglieder
       communes: Anwendende Kommunen
-      accessibility: Barrierefreiheit
+      accessibility_test_conducted: Test zur Barrierefreiheit durchgeführt
+      accessibility_test_organisations: Test durchgeführt durch
+      accessibility_test_organisation_others: Test durchgeführt durch
+      accessibility_test_organisation_others_form: Test durchgeführt durch (Sonstige)
+      accessibility_self_testing: Eigentestung
+      accessibility_self_testing_choices:
+        yes: Ja
+        no: Nein
+      accessibility_test_result_type: Testergebnis Barrierefreiheit
+      accessibility_test_result_type_choices:
+        empty: keine Angabe
+        1: Nicht relevant
+        2: Ausnahmegenehmigung liegt vor
+        3: Hersteller arbeitet an der Umsetzung
+        4: Prüfung erfolgt im Rahmen der IBN-Testphase
+        5: Erfüllt
+      accessibility_documents: Zertifikate / Testberichte
       privacy: Datenschutz
       archive: Archiv
       in_house_development: Eigenentwicklung
@@ -234,6 +254,7 @@ app:
         yes_reuse: Ja und wir stellen die Anwendung zur Nachnutzung zur Verfügung
       application_modules: Module
       application_interfaces: Schnittstellen
+      business_premises: Betriebsstätten
   application_module:
     object_name: Modul
     list: Module

@@ -30,3 +30,10 @@ vich_uploader:
             inject_on_load:     true
             delete_on_update:   true
             delete_on_remove:   true
+        application_accessibility_document:
+            uri_prefix: /uploads/application/accessibility
+            upload_destination: '%kernel.project_dir%/secured-data/uploads/application/accessibility'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load:     true
+            delete_on_update:   true
+            delete_on_remove:   true
