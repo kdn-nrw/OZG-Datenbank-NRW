@@ -36,32 +36,35 @@
         },
         initTabs: function() {
             let self = this;
-            let lastScrollHash = null;
-            if (window.location.hash) {
-                lastScrollHash = window.location.hash;
-                self.scrollTo(window.location.hash);
-            }
-            window.addEventListener('scroll', function(event) {
-                if (window.location.hash && lastScrollHash !== window.location.hash) {
+            // only enable in frontend
+            if (document.getElementById('header-top')) {
+                let lastScrollHash = null;
+                if (window.location.hash) {
                     lastScrollHash = window.location.hash;
                     self.scrollTo(window.location.hash);
                 }
-            });
-            const hash = location.hash.replace(/^#/, '');  // ^ means starting, meaning only match the first hash
-            if (hash) {
-                const $activeTab = $('.nav-tabs a[href="#' + hash + '"]');
-                if ($activeTab.length > 0) {
-                    $activeTab.parents('.nav-tabs').find('.tab-item.js-init-load').removeClass('js-init-load').addClass('js-click-load');
-                    if ($activeTab.parent().hasClass('js-click-load')) {
-                        $activeTab.parent().removeClass('js-click-load').addClass('js-init-load');
+                window.addEventListener('scroll', function(event) {
+                    if (window.location.hash && lastScrollHash !== window.location.hash) {
+                        lastScrollHash = window.location.hash;
+                        self.scrollTo(window.location.hash);
                     }
-                    $activeTab.tab('show');
+                });
+                const hash = location.hash.replace(/^#/, '');  // ^ means starting, meaning only match the first hash
+                if (hash) {
+                    const $activeTab = $('.nav-tabs a[href="#' + hash + '"]');
+                    if ($activeTab.length > 0) {
+                        $activeTab.parents('.nav-tabs').find('.tab-item.js-init-load').removeClass('js-init-load').addClass('js-click-load');
+                        if ($activeTab.parent().hasClass('js-click-load')) {
+                            $activeTab.parent().removeClass('js-click-load').addClass('js-init-load');
+                        }
+                        $activeTab.tab('show');
+                    }
                 }
+                // Change hash for page-reload
+                $('.nav-tabs a').on('shown.bs.tab', function (e) {
+                    window.location.hash = e.target.hash;
+                })
             }
-            // Change hash for page-reload
-            $('.nav-tabs a').on('shown.bs.tab', function (e) {
-                window.location.hash = e.target.hash;
-            })
         },
         initContent: function (parentNode) {
             let self = this;
@@ -260,10 +263,6 @@
                     }, duration, 'swing', function () {
                         target.dataset.scrolling = "0";
                         let newTargetY = $(target).offset().top;
-                        // Fix position on layout changes during scroll
-                        if (newTargetY - 10 > targetY || newTargetY + 10 < targetY) {
-                            self.scrollTo(selector, duration / 2);
-                        }
                         if (selector.indexOf('#') === 0) {
                             window.location.hash = selector;
                         }
