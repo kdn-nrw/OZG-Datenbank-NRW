@@ -7,7 +7,7 @@ file that was distributed with this source code.
 {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
 {% if showContacts %}
 <th>
-    {{ 'app.solution.entity.solution_contacts'|trans }}
+    <span class="sort-wrap">{{ 'app.solution.entity.solution_contacts'|trans }}</span>
     {% if refSettings.entityClass %}
         {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': refSettings.entityClass, 'propertyKey': 'solution_contacts'} %}
     {% endif %}

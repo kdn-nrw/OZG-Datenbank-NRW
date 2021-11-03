@@ -6,19 +6,23 @@ file that was distributed with this source code.
 #}
 {# @var refSettings \App\Model\ReferenceSettings #}
 {% set showProjectStatus = true %}
-<table class="table table-bordered table-striped table-condensed">
-    <tr>
-        {% include 'General/Show/Table/table-head-implementation-projects.html.twig' %}
-    </tr>
-    {% for child in entities %}
-        {# @var child \App\Entity\ImplementationProject #}
+<table class="table table-bordered table-striped table-condensed" data-sortable="true">
+    <thead>
         <tr>
-            {% include 'General/Show/Table/table-row-cells-implementation-projects.html.twig' %}
-            {% if refSettings.edit.enabled %}
-                <td>
-                    {% include 'General/Show/Partials/link-to-child.html.twig' %}
-                </td>
-            {% endif %}
+            {% include 'General/Show/Table/table-head-implementation-projects.html.twig' %}
         </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+        {% for child in entities %}
+            {# @var child \App\Entity\ImplementationProject #}
+            <tr>
+                {% include 'General/Show/Table/table-row-cells-implementation-projects.html.twig' %}
+                {% if refSettings.edit.enabled %}
+                    <td>
+                        {% include 'General/Show/Partials/link-to-child.html.twig' %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>

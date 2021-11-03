@@ -17,19 +17,22 @@ file that was distributed with this source code.
         {% set labelPrefix = 'app.form_server.entity.' %}
     {% endif %}
     {% set showContacts = app_is_backend() %}
-    <table class="table table-bordered table-striped table-condensed">
-        <tr>
-            {% if showSolution %}
-                {% include 'General/Show/Table/table-head-solutions.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
-            {% else %}
-                {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
-            {% endif %}
-            {% include 'General/Show/Table/table-head-form-server-solutions.html.twig' %}
-            {% if refSettings.edit.enabled %}
-                <th>
-                </th>
-            {% endif %}
-        </tr>
+    <table class="table table-bordered table-striped table-condensed" data-sortable="true">
+        <thead>
+            <tr>
+                {% if showSolution %}
+                    {% include 'General/Show/Table/table-head-solutions.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+                {% else %}
+                    {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+                {% endif %}
+                {% include 'General/Show/Table/table-head-form-server-solutions.html.twig' %}
+                {% if refSettings.edit.enabled %}
+                    <th>
+                    </th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
         {% for child in entities %}
             {# @var child \App\Entity\FormServerSolution #}
             <tr>
@@ -74,5 +77,6 @@ file that was distributed with this source code.
                 {% endif %}
             </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endif %}

@@ -18,7 +18,7 @@ file that was distributed with this source code.
 {% set labelPrefix = 'app.form_server_solution.entity.' %}
 {% for field in tableHeaders %}
     <th>
-        {{ (labelPrefix~field)|trans }}
+        <span class="sort-wrap">{{ (labelPrefix~field)|trans }}</span>
         {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': '\\App\\Entity\\FormServerSolution', 'propertyKey': field, 'placement': 'top'} %}
     </th>
 {% endfor %}

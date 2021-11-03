@@ -10,33 +10,36 @@ file that was distributed with this source code.
 {% else %}
     {% set referenceFieldNameList = ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority', 'status'] %}
 {% endif %}
-<table class="table table-bordered table-striped table-condensed">
-    <tr>
-        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': refSettings.labelPrefix} %}
-        {% if refSettings.edit.enabled %}
-            <th></th>
-        {% endif %}
-    </tr>
+<table class="table table-bordered table-striped table-condensed" data-sortable="true">
+    <thead>
+        <tr>
+            {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': refSettings.labelPrefix} %}
+            {% if refSettings.edit.enabled %}
+                <th></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
     {% for child in entities %}
         {# @var child \App\Entity\ServiceSystem #}
         <tr>
             {% for field in referenceFieldNameList %}
                 {% set property = field|app_format_property_name %}
                 <td>
-                {% if property == 'name' %}
-                    {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
-                {% elseif property == 'jurisdictions' %}
-                    {% for grandChild in child.jurisdictions %}
-                        <span class="badge">{{ grandChild.name }}</span>
-                    {% endfor %}
-                {% elseif property == 'subject' %}
-                    {% if child.situation.subject %}
-                        {{ child.situation.subject.name }}
+                    {% if property == 'name' %}
+                        {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
+                    {% elseif property == 'jurisdictions' %}
+                        {% for grandChild in child.jurisdictions %}
+                            <span class="badge">{{ grandChild.name }}</span>
+                        {% endfor %}
+                    {% elseif property == 'subject' %}
+                        {% if child.situation.subject %}
+                            {{ child.situation.subject.name }}
+                        {% endif %}
+                    {% else %}
+                        {% set value = attribute(child, property) %}
+                        {{ value|app_format_custom_value }}
                     {% endif %}
-                {% else %}
-                    {% set value = attribute(child, property) %}
-                    {{ value|app_format_custom_value }}
-                {% endif %}
                 </td>
             {% endfor %}
             {% if refSettings.edit.enabled %}
@@ -59,6 +62,7 @@ file that was distributed with this source code.
             {% endif %}
         </tr>
     {% endfor %}
+    </tbody>
 </table>
 {% if field_description.option('show_export') %}
     {% include 'General/Show/Partials/link-child-list-export.html.twig' %}

@@ -29,12 +29,101 @@
     return {
         init: function () {
             let self = this;
+            self.initTabs();
             self.initClickToggle();
             self.initClickLoad();
             self.initContent(document);
         },
+        initTabs: function() {
+            let self = this;
+            let lastScrollHash = null;
+            if (window.location.hash) {
+                lastScrollHash = window.location.hash;
+                self.scrollTo(window.location.hash);
+            }
+            window.addEventListener('scroll', function(event) {
+                if (window.location.hash && lastScrollHash !== window.location.hash) {
+                    lastScrollHash = window.location.hash;
+                    self.scrollTo(window.location.hash);
+                }
+            });
+            const hash = location.hash.replace(/^#/, '');  // ^ means starting, meaning only match the first hash
+            if (hash) {
+                const $activeTab = $('.nav-tabs a[href="#' + hash + '"]');
+                if ($activeTab.length > 0) {
+                    $activeTab.parents('.nav-tabs').find('.tab-item.js-init-load').removeClass('js-init-load').addClass('js-click-load');
+                    if ($activeTab.parent().hasClass('js-click-load')) {
+                        $activeTab.parent().removeClass('js-click-load').addClass('js-init-load');
+                    }
+                    $activeTab.tab('show');
+                }
+            }
+            // Change hash for page-reload
+            $('.nav-tabs a').on('shown.bs.tab', function (e) {
+                window.location.hash = e.target.hash;
+            })
+        },
         initContent: function (parentNode) {
+            let self = this;
             $(parentNode).find('[data-toggle="popover"]').popover();
+            self.initSortableTables(parentNode);
+        },
+        initSortableTables: function(parentNode) {
+            let sortableTableNodes = parentNode.querySelectorAll('[data-sortable="true"]');
+            if (sortableTableNodes.length > 0) {
+                // https://stackoverflow.com/questions/14267781/sorting-html-table-with-javascript
+                const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+                const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+                        v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+                )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+                const sortByHeader = function(tableNode, tableColNodes, th) {
+                    const tbody = tableNode.tBodies[0];
+                    const newSortAsc = typeof th.asc === "undefined" || !th.asc;
+                    tableColNodes.forEach(function(resetTh) {
+                        if (resetTh.classList.contains('sort-by-active')) {
+                            resetTh.classList.remove('sort-by-active');
+                            resetTh.classList.remove('sort-asc');
+                            resetTh.classList.remove('sort-desc');
+                        }
+                    });
+                    th.classList.add('sort-by-active');
+                    th.classList.add((newSortAsc ? 'sort-asc' : 'sort-desc'));
+                    th.asc = newSortAsc;
+                    Array.from(tbody.querySelectorAll('tr'))
+                        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), newSortAsc))
+                        .forEach(tr => tbody.appendChild(tr) );
+                };
+                for (let i = 0, n = sortableTableNodes.length; i < n; i++) {
+                    const tableNode = sortableTableNodes[i];
+                    if (!tableNode.classList.contains('table-sortable') && tableNode.tBodies.length === 1) {
+                        tableNode.classList.add('table-sortable');
+                        const tableColNodes = tableNode.querySelectorAll('th');
+                        tableColNodes.forEach(function(sortableTh) {
+                            const thHtml = sortableTh.innerHTML.trim();
+                            if (thHtml.length > 0) {
+                                sortableTh.sortable = true;
+                                if (!sortableTh.querySelector('.sort-wrap')) {
+                                    sortableTh.innerHTML = '<span class="sort-wrap">' + thHtml + '</span>';
+                                }
+                            } else {
+                                sortableTh.sortable = false;
+                            }
+                        });
+                        tableColNodes.forEach(function(th, index){
+                            if (th.sortable) {
+                                th.addEventListener('click', (() => {
+                                    sortByHeader(tableNode, tableColNodes, th);
+                                }));
+                                if (index === 0) {
+                                    sortByHeader(tableNode, tableColNodes, th);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
         },
         initClickLoad: function () {
             let self = this;
@@ -148,6 +237,41 @@
 
             xhr.open(method, url);
             xhr.send();
+        },
+        scrollTo: function(selector, duration) {
+            let self = this;
+            let target = selector ? document.querySelector(selector) : null;
+            if (target !== null && (typeof target.dataset.scrolling === "undefined" || target.dataset.scrolling !== "1")) {
+                target.dataset.scrolling = "1";
+                // Wait for swiper initialization
+                setTimeout(function() {
+                    let targetY = $(target).offset().top;
+                    if ($(target).hasClass('tab-pane')) {
+                        targetY = $(target).parent().parent().offset().top - 10;
+                    }
+                    let $offsetParent = $('#header-top');
+                    let yOffset = $offsetParent.height();
+                    if (typeof duration === "undefined" || !duration) {
+                        duration = 200;
+                    }
+
+                    $('html, body').stop().animate({
+                        'scrollTop': targetY - yOffset
+                    }, duration, 'swing', function () {
+                        target.dataset.scrolling = "0";
+                        let newTargetY = $(target).offset().top;
+                        // Fix position on layout changes during scroll
+                        if (newTargetY - 10 > targetY || newTargetY + 10 < targetY) {
+                            self.scrollTo(selector, duration / 2);
+                        }
+                        if (selector.indexOf('#') === 0) {
+                            window.location.hash = selector;
+                        }
+                    });
+                }, 10);
+                return true;
+            }
+            return false;
         },
     };
 }));

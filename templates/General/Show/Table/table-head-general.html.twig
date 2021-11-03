@@ -10,7 +10,7 @@ file that was distributed with this source code.
         {% if fieldMeta is not null %}
             {# @var fieldMeta \App\Entity\MetaData\MetaItemProperty #}
             <th{% if fieldMeta.customLabel is not empty %} title="{{ fieldMeta.customLabel|raw|replace({'"': "'"}) }}"{% endif %}>
-                {{ (labelPrefix~field)|trans }}
+                <span class="sort-wrap">{{ (labelPrefix~field)|trans }}</span>
                 {% include 'MetaData/help-popover.html.twig' with {'fieldMeta': fieldMeta, 'propertyKey': field} %}
             </th>
         {% else %}

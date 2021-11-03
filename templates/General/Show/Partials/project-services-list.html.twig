@@ -10,68 +10,72 @@ file that was distributed with this source code.
     {% set refSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
     {% set showProjectStatus = false %}
-    <table class="table table-bordered table-striped table-condensed">
-        <tr>
-            {% if showProject %}
-                {% include 'General/Show/Table/table-head-implementation-projects.html.twig' %}
-            {% else %}
-                {% if field_description.option('reference_field_list') %}
-                    {% set referenceFieldNameList = field_description.option('reference_field_list') %}
-                {% else %}
-                    {% set referenceFieldNameList = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'status'] %}
-                {% endif %}
-                {% set labelPrefix = 'app.service.entity.' %}
-                {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': labelPrefix} %}
-            {% endif %}
-            <th>
-                {{ 'app.implementation_project_service.entity.status'|trans }}
-            </th>
-            {% if refSettings.edit.enabled %}
-                <th>
-                </th>
-            {% endif %}
-        </tr>
-        {% for child in entities %}
-            {# @var child \App\Entity\ImplementationProjectService #}
+    <table class="table table-bordered table-striped table-condensed" data-sortable="false">
+        <thead>
             <tr>
                 {% if showProject %}
-                    {% set editObjectId = child.implementationProject.id %}
-                    {% include 'General/Show/Table/table-row-cells-implementation-projects.html.twig' with {'child': child.implementationProject} %}
+                    {% include 'General/Show/Table/table-head-implementation-projects.html.twig' %}
                 {% else %}
-                    {% if child.service %}
-                        {% set editObjectId = child.service.id %}
-                        {% include 'ServiceAdmin/Show/table-row-cells-services.html.twig' with {'child': child.service} %}
+                    {% if field_description.option('reference_field_list') %}
+                        {% set referenceFieldNameList = field_description.option('reference_field_list') %}
                     {% else %}
-                        <td colspan="7" class="service-is-missing">
-                            <span class="text-warning">{{ 'app.implementation_project_service.messages.no_service_selected'|trans }}</span>
-                        </td>
-                        {% set editObjectId = null %}
+                        {% set referenceFieldNameList = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'status'] %}
                     {% endif %}
+                    {% set labelPrefix = 'app.service.entity.' %}
+                    {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': labelPrefix} %}
                 {% endif %}
-                <td>
-                    {% if child.status %}
-                        {{ child.status.name }}
-                    {% elseif child.implementationProject and child.implementationProject %}
-                        {{ child.implementationProject.status }}
-                    {% endif %}
-                </td>
-                {% if refSettings.edit.enabled and editObjectId %}
-                    <td>
-                        {% if refSettings.admin.hasAccess(refSettings.edit.route, child) %}
-                            <a href="{{ refSettings.admin.generateUrl(refSettings.edit.route, { 'id': editObjectId }) }}">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </a>
-                        {% endif %}
-                    </td>
+                <th>
+                    {{ 'app.implementation_project_service.entity.status'|trans }}
+                </th>
+                {% if refSettings.edit.enabled %}
+                    <th>
+                    </th>
                 {% endif %}
             </tr>
-            {% if not showProject and child.service and field_description.option('showFimTypes') %}
+        </thead>
+        <tbody>
+            {% for child in entities %}
+                {# @var child \App\Entity\ImplementationProjectService #}
                 <tr>
-                    <td colspan="{{ refSettings.edit.enabled ? 10 : 9 }}" class="child-table-container">
-                        {% include 'General/Show/show-fim.html.twig' with {'entities': child.service.fimTypes} %}
+                    {% if showProject %}
+                        {% set editObjectId = child.implementationProject.id %}
+                        {% include 'General/Show/Table/table-row-cells-implementation-projects.html.twig' with {'child': child.implementationProject} %}
+                    {% else %}
+                        {% if child.service %}
+                            {% set editObjectId = child.service.id %}
+                            {% include 'ServiceAdmin/Show/table-row-cells-services.html.twig' with {'child': child.service} %}
+                        {% else %}
+                            <td colspan="7" class="service-is-missing">
+                                <span class="text-warning">{{ 'app.implementation_project_service.messages.no_service_selected'|trans }}</span>
+                            </td>
+                            {% set editObjectId = null %}
+                        {% endif %}
+                    {% endif %}
+                    <td>
+                        {% if child.status %}
+                            {{ child.status.name }}
+                        {% elseif child.implementationProject and child.implementationProject %}
+                            {{ child.implementationProject.status }}
+                        {% endif %}
                     </td>
+                    {% if refSettings.edit.enabled and editObjectId %}
+                        <td>
+                            {% if refSettings.admin.hasAccess(refSettings.edit.route, child) %}
+                                <a href="{{ refSettings.admin.generateUrl(refSettings.edit.route, { 'id': editObjectId }) }}">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
-            {% endif %}
-        {% endfor %}
+                {% if not showProject and child.service and field_description.option('showFimTypes') %}
+                    <tr>
+                        <td colspan="{{ refSettings.edit.enabled ? 10 : 9 }}" class="child-table-container">
+                            {% include 'General/Show/show-fim.html.twig' with {'entities': child.service.fimTypes} %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
     </table>
 {% endif %}

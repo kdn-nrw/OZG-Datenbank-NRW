@@ -66,13 +66,13 @@
                 <div class="row">
                     <div class="col-xs-12 col-lg-6">
                         <div class="data-center-consumption-container table-responsive">
-                            <table class="table table-bordered table-striped table-condensed">
+                            <table class="table table-bordered table-striped table-condensed" data-sortable="true">
                                 <thead>
-                                <tr>
-                                    <th>{{ 'app.data_center_consumption.entity.year'|trans }}</th>
-                                    <th>{{ 'app.data_center_consumption.entity.power_consumption'|trans }}</th>
-                                    <th>{{ 'app.data_center_consumption.entity.comment'|trans }}</th>
-                                </tr>
+                                    <tr>
+                                        <th>{{ 'app.data_center_consumption.entity.year'|trans }}</th>
+                                        <th>{{ 'app.data_center_consumption.entity.power_consumption'|trans }}</th>
+                                        <th>{{ 'app.data_center_consumption.entity.comment'|trans }}</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 {% for consumptionEntity in  dataCenter.consumptions %}

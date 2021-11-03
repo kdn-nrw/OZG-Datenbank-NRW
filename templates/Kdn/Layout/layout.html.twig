@@ -159,7 +159,7 @@ file that was distributed with this source code.
     <!--Main Content-->
     <div id="content">
         {% set sidebarContent = '' %}
-        <div class="container-fluid content-wrapper-content{% if sidebarContent|length > 0 %} has-sidebar{% else %}full-width{% endif %}">
+        <div class="container-fluid content-wrapper-content{% if sidebarContent|length > 0 %} has-sidebar{% else %} full-width{% endif %}">
             {% block sonata_left_side %}
                 {% block sonata_side_nav %}
                     {% block side_bar_before_nav %} {% endblock %}

@@ -5,22 +5,26 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {# @var refSettings \App\Model\ReferenceSettings #}
-<table class="table table-bordered table-striped table-condensed">
-    <tr>
-        {% set tableHeaders = ['name', 'street', 'zip_code', 'url', 'commune_type', 'constituency', 'main_email', 'official_community_key', 'administrative_district'] %}
+<table class="table table-bordered table-striped table-condensed" data-sortable="true">
+    <thead>
+        <tr>
+            {% set tableHeaders = ['name', 'street', 'zip_code', 'url', 'commune_type', 'constituency', 'main_email', 'official_community_key', 'administrative_district'] %}
 
-        {% if field_description is defined and field_description.option('custom_label_prefix') is not empty %}
-            {% set labelPrefix = field_description.option('custom_label_prefix') %}
-        {% else %}
-            {% set labelPrefix = refSettings.labelPrefix %}
-        {% endif %}
-        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
-        {% if refSettings.edit.enabled %}
-            <th></th>
-        {% endif %}
-    </tr>
+            {% if field_description is defined and field_description.option('custom_label_prefix') is not empty %}
+                {% set labelPrefix = field_description.option('custom_label_prefix') %}
+            {% else %}
+                {% set labelPrefix = refSettings.labelPrefix %}
+            {% endif %}
+            {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+            {% if refSettings.edit.enabled %}
+                <th></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
     {% for child in entities %}
         {# @var child \App\Entity\StateGroup\Commune #}
         {% include 'General/Show/Table/table-row-cells-communes.html.twig' with {'child': child} %}
     {% endfor %}
+    </tbody>
 </table>

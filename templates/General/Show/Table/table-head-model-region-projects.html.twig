@@ -6,7 +6,7 @@ file that was distributed with this source code.
 #}
 
 <th>
-    {{ 'app.model_region_project.list'|trans }}
+    <span class="sort-wrap">{{ 'app.model_region_project.list'|trans }}</span>
     {% if refSettings.entityClass %}
         {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': refSettings.entityClass, 'propertyKey': 'name', 'placement': 'top'} %}
     {% endif %}

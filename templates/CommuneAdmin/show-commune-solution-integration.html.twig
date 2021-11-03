@@ -17,14 +17,17 @@ file that was distributed with this source code.
     {% set entityClass = showSolutions ? 'App\\Entity\\Solution' : 'App\\Entity\\StateGroup\\Commune' %}
     {% set solutionRefSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
-    <table class="table table-bordered table-striped table-condensed">
-        <tr>
-            {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': refSettings.labelPrefix} %}
-            {% if solutionRefSettings.edit.enabled %}
-                <th>
-                </th>
-            {% endif %}
-        </tr>
+    <table class="table table-bordered table-striped table-condensed" data-sortable="true">
+        <thead>
+            <tr>
+                {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': referenceFieldNameList, 'labelPrefix': refSettings.labelPrefix} %}
+                {% if solutionRefSettings.edit.enabled %}
+                    <th>
+                    </th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
         {% for child in entities %}
             {# @var child \App\Entity\StateGroup\CommuneSolution #}
             <tr>
@@ -85,6 +88,7 @@ file that was distributed with this source code.
                 {% endif %}
             </tr>
         {% endfor %}
+        </tbody>
     </table>
     {% if exportEnabled %}
         {% include 'General/Show/Partials/link-child-list-export.html.twig' %}

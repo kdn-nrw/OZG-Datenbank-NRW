@@ -24,51 +24,55 @@ file that was distributed with this source code.
             </p>
         {% endif %}
     <div class="table-responsive">
-        <table class="table table-bordered table-striped table-condensed">
-            <tr>
-                <th></th>
-                <th>{{ 'app.mailing_contact.entity.contact'|trans }}</th>
-                <th>{{ 'app.mailing_contact.entity.send_status'|trans }}</th>
-                <th>{{ 'app.mailing_contact.entity.sent_at'|trans }}</th>
-                <th>{{ 'app.mailing_contact.entity.send_attempts'|trans }}</th>
-                <th></th>
-            </tr>
-        {% set route_name = field_description.options.route.name %}
-        {% for child in value %}
-            {# @var child \App\Entity\MailingContact #}
-            <tr>
-                <td>
-                    {{ loop.index }}
-                </td>
-                <td>
-                    {% if child.contact %}
-                        <a href="mailto:{{ child.contact.email }}">{{ child.contact ~ '' }}</a>
-                    {% endif %}
-                </td>
-                <td>
-                    {{ child.sendStatusLabel|trans }}
-                </td>
-                <td>
-                    {% if child.sentAt %}
-                        {{ child.sentAt|date("d.m.Y H:i:s", "Europe/Berlin") }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if not child.sentAt %}
-                        {{ child.sendAttempts }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if childAdmin
-                        and childAdmin.hasRoute(route_name)
-                        and childAdmin.hasAccess(route_name, child) %}
-                        <a href="{{ childAdmin.generateObjectUrl(route_name, child, field_description.options.route.parameters) }}">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
+        <table class="table table-bordered table-striped table-condensed" data-sortable="true">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'app.mailing_contact.entity.contact'|trans }}</th>
+                    <th>{{ 'app.mailing_contact.entity.send_status'|trans }}</th>
+                    <th>{{ 'app.mailing_contact.entity.sent_at'|trans }}</th>
+                    <th>{{ 'app.mailing_contact.entity.send_attempts'|trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set route_name = field_description.options.route.name %}
+            {% for child in value %}
+                {# @var child \App\Entity\MailingContact #}
+                <tr>
+                    <td>
+                        {{ loop.index }}
+                    </td>
+                    <td>
+                        {% if child.contact %}
+                            <a href="mailto:{{ child.contact.email }}">{{ child.contact ~ '' }}</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ child.sendStatusLabel|trans }}
+                    </td>
+                    <td>
+                        {% if child.sentAt %}
+                            {{ child.sentAt|date("d.m.Y H:i:s", "Europe/Berlin") }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not child.sentAt %}
+                            {{ child.sendAttempts }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if childAdmin
+                            and childAdmin.hasRoute(route_name)
+                            and childAdmin.hasAccess(route_name, child) %}
+                            <a href="{{ childAdmin.generateObjectUrl(route_name, child, field_description.options.route.parameters) }}">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
         </table>
     </div>
     {% endif %}

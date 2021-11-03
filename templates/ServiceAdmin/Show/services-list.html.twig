@@ -10,13 +10,16 @@ file that was distributed with this source code.
 {% else %}
     {% set referenceFieldNameList = ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority', 'status'] %}
 {% endif %}
-<table class="table table-bordered table-condensed">
-    <tr>
-        {% include 'ServiceAdmin/Show/table-head-services.html.twig' %}
-        {% if refSettings.edit.enabled %}
-            <th></th>
-        {% endif %}
-    </tr>
+<table class="table table-bordered table-condensed" data-sortable="true">
+    <thead>
+        <tr>
+            {% include 'ServiceAdmin/Show/table-head-services.html.twig' %}
+            {% if refSettings.edit.enabled %}
+                <th></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
     {% for child in entities %}
         {# @var child \App\Entity\Service #}
         <tr>
@@ -36,6 +39,7 @@ file that was distributed with this source code.
             </tr>
         {% endif %}
     {% endfor %}
+    </tbody>
 </table>
 {% if field_description.option('show_export') %}
     {% include 'General/Show/Partials/link-child-list-export.html.twig' %}

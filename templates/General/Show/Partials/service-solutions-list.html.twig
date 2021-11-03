@@ -22,22 +22,25 @@ file that was distributed with this source code.
     {% endif %}
     {% set refSettings = app_get_reference_settings(entityClass, field_description) %}
     {# @var refSettings \App\Model\ReferenceSettings #}
-    <table class="table table-bordered table-striped table-condensed">
-        <tr>
-            {% if showSolution %}
-                {% include 'General/Show/Table/table-head-solutions.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
-            {% else %}
-                {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
-            {% endif %}
-            <th>
-                {{ 'app.solution.entity.maturity'|trans }}
-                {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': '\App\Entity\ServiceSolution', 'propertyKey': 'maturity'} %}
-            </th>
-            {% if refSettings.edit.enabled %}
+    <table class="table table-bordered table-striped table-condensed" data-sortable="true">
+        <thead>
+            <tr>
+                {% if showSolution %}
+                    {% include 'General/Show/Table/table-head-solutions.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+                {% else %}
+                    {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+                {% endif %}
                 <th>
+                    {{ 'app.solution.entity.maturity'|trans }}
+                    {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': '\App\Entity\ServiceSolution', 'propertyKey': 'maturity'} %}
                 </th>
-            {% endif %}
-        </tr>
+                {% if refSettings.edit.enabled %}
+                    <th>
+                    </th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
         {% for child in entities %}
             {# @var child \App\Entity\ServiceSolution #}
             <tr>
@@ -71,5 +74,6 @@ file that was distributed with this source code.
                 {% endif %}
             </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endif %}

@@ -5,16 +5,19 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {# @var refSettings \App\Model\ReferenceSettings #}
-<table class="table table-bordered table-striped table-condensed">
     {% set tableHeaders = ['created_by', 'created_at', 'occurred_on', 'solved_on', 'subject_type', 'extent', 'method'] %}
     {% set colCount = tableHeaders|length %}
-    <tr>
-        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
-        {% if refSettings.edit.enabled %}
-            <th></th>
-            {% set colCount = colCount + 1 %}
-        {% endif %}
-    </tr>
+<table class="table table-bordered table-striped table-condensed" data-sortable="true">
+    <thead>
+        <tr>
+            {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
+            {% if refSettings.edit.enabled %}
+                <th></th>
+                {% set colCount = colCount + 1 %}
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
     {% for child in entities %}
         {# @var child \App\Entity\StateGroup\SecurityIncident #}
         <tr>
@@ -66,10 +69,10 @@ file that was distributed with this source code.
                 <td colspan="{{ colCount }}" class="child-table-container">
                     <dl class="dl-horizontal">
                         {% if child.description %}
-                        <dt>{{ 'app.security_incident.entity.description'|trans }}</dt>
-                        <dd>
-                            {{ child.description|nl2br }}
-                        </dd>
+                            <dt>{{ 'app.security_incident.entity.description'|trans }}</dt>
+                            <dd>
+                                {{ child.description|nl2br }}
+                            </dd>
                         {% endif %}
                         {% if child.affected %}
                             <dt>{{ 'app.security_incident.entity.affected'|trans }}</dt>
@@ -100,4 +103,5 @@ file that was distributed with this source code.
             </tr>
         {% endif %}
     {% endfor %}
+    </tbody>
 </table>

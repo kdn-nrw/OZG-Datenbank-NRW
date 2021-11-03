@@ -5,14 +5,17 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {# @var refSettings \App\Model\ReferenceSettings #}
-<table class="table table-bordered table-striped table-condensed">
-    <tr>
-        {% set tableHeaders = ['name', 'street', 'zip_code', 'url'] %}
-        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
-        {% if refSettings.edit.enabled %}
-            <th></th>
-        {% endif %}
-    </tr>
+<table class="table table-bordered table-striped table-condensed" data-sortable="true">
+    <thead>
+        <tr>
+            {% set tableHeaders = ['name', 'street', 'zip_code', 'url'] %}
+            {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}
+            {% if refSettings.edit.enabled %}
+                <th></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
     {% for child in entities %}
         {# @var child \App\Entity\StateGroup\ServiceProvider #}
         <tr>
@@ -44,4 +47,5 @@ file that was distributed with this source code.
             {% endif %}
         </tr>
     {% endfor %}
+    </tbody>
 </table>
