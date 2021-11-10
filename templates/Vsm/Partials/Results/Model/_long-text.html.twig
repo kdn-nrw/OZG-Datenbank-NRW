@@ -8,14 +8,16 @@ file that was distributed with this source code.
     {% set textPlain = text|striptags|trim %}
     {% if textPlain|length > 150 %}
         {% if teaser is not defined or teaser|length == 0 %}
-            {% set teaser = textPlain|u.truncate(100, '...') %}
+            {% set teaserPlain = textPlain|u.truncate(100, '...') %}
+        {% else %}
+            {% set teaserPlain = teaser|u.truncate(100, '...') %}
         {% endif %}
         <div class="item-collapse-wrap">
             <a class="toggle-link-text" role="button" data-toggle="collapse" href="#collapse-{{ property }}-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ property }}-{{ loop.index }}">
                 {{ 'app.api.common.read_more'|trans }} <i class="fa fa-plus-square-o" aria-hidden="true"></i>
             </a>
             <div class="item-teaser">
-                {{ teaser|raw }}
+                {{ teaserPlain|raw }}
             </div>
         </div>
         <div class="collapse" id="collapse-{{ property }}-{{ loop.index }}">
