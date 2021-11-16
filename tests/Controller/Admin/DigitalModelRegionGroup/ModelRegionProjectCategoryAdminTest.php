@@ -14,13 +14,13 @@ namespace App\Tests\Controller\Admin\DigitalModelRegionGroup;
 use App\Tests\Controller\Admin\AbstractBackendAdminControllerTestCase;
 
 /**
- * Functional test for the controllers defined inside ModelRegionBeneficiaryAdmin
+ * Functional test for the controllers defined inside ModelRegionProjectCategoryAdminTest
  */
-class ModelRegionBeneficiaryAdminTest extends AbstractBackendAdminControllerTestCase
+class ModelRegionProjectCategoryAdminTest extends AbstractBackendAdminControllerTestCase
 {
 
     protected function getRoutePrefix(): string
     {
-        return 'model-region/beneficiary';
+        return 'model-region/project-category';
     }
 }

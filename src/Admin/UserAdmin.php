@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 
+use App\Admin\ModelRegion\ModelRegionAdmin;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\StateGroup\ServiceProviderAdmin;
 use App\Admin\Traits\CommuneTrait;

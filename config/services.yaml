@@ -610,6 +610,19 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
+  App\Admin\ModelRegion\ModelRegionProjectCategoryAdmin:
+    arguments:
+      - ~
+      - App\Entity\ModelRegion\ModelRegionProjectCategory
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.model_region_project_category.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Controller\ModelRegionProjectAdminController:
     tags: ['controller.service_arguments']
 

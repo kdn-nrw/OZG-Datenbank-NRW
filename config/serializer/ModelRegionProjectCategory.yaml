@@ -1,0 +1,11 @@
+# https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
+App\Entity\ModelRegion\ModelRegionProjectCategory:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    name:
+      groups: ['collection:read', 'item:read']
+    description:
+      groups: ['item:read']
+    modelRegionProjects:
+      groups: ['model_region_project_category:read']

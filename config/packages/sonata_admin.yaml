@@ -233,6 +233,7 @@ sonata_admin:
                     - App\Admin\ModelRegion\ModelRegionAdmin
                     - App\Admin\ModelRegion\ModelRegionProjectAdmin
                     - App\Admin\ModelRegion\ModelRegionBeneficiaryAdmin
+                    - App\Admin\ModelRegion\ModelRegionProjectCategoryAdmin
             app.application_group:
                 label: app.menu.application_group
                 label_catalogue: messages

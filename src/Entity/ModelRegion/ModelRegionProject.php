@@ -132,8 +132,23 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      */
     private $documents;
 
+    /**
+     * @var ModelRegionProjectCategory[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion\ModelRegionProjectCategory")
+     * @ORM\JoinTable(name="ozg_model_region_project_category_mm",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $categories;
+
     public function __construct()
     {
+        $this->categories = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->modelRegions = new ArrayCollection();
         $this->organisations = new ArrayCollection();
@@ -380,6 +395,47 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     public function setSolutions($solutions): void
     {
         $this->solutions = $solutions;
+    }
+    /**
+     * @param ModelRegionProjectCategory $category
+     * @return self
+     */
+    public function addCategory(ModelRegionProjectCategory $category)
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ModelRegionProjectCategory $category
+     * @return self
+     */
+    public function removeCategory(ModelRegionProjectCategory $category)
+    {
+        if ($this->categories->contains($category)) {
+            $this->categories->removeElement($category);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ModelRegionProjectCategory[]|Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param ModelRegionProjectCategory[]|Collection $categories
+     */
+    public function setCategories($categories): void
+    {
+        $this->categories = $categories;
     }
 
     /**

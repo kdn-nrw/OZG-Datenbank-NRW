@@ -1305,12 +1305,21 @@ app:
       solutions: Online-Dienste
       service_solutions: Enthaltene Leika-Leistungen
       documents: Dokumente
+      categories: Kategorien
   model_region_project_document:
     object_name: DMR Umsetzungsprojekt Dokument
     list: DMR Umsetzungsprojekt Dokumente
     create: DMR Umsetzungsprojekt Dokument anlegen
     entity:
       model_region_project: DMR Umsetzungsprojekt
+  model_region_project_category:
+    object_name: Kategorie
+    list: Kategorien
+    create: Kategorie anlegen
+    entity:
+      name: Name
+      description: Beschreibung
+      model_region_projects: DMR Umsetzungsprojekte
   open_data:
     object_name: Open Data
     list: Open Data

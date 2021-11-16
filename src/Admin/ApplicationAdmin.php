@@ -14,16 +14,12 @@ namespace App\Admin;
 use App\Admin\Application\ApplicationInterfaceAdmin;
 use App\Admin\Application\ApplicationModuleAdmin;
 use App\Admin\StateGroup\ServiceProviderAdmin;
-use App\Admin\Traits\ApplicationCategoryTrait;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ManufaturerTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Entity\Application;
 use App\Entity\Manufacturer;
-use App\Entity\ModelRegion\ModelRegionProject;
-use App\Entity\ModelRegion\ModelRegionProjectDocument;
-use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use App\Form\Type\ApplicationAccessibilityDocumentType;
 use Knp\Menu\ItemInterface;
@@ -32,6 +28,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
@@ -46,7 +43,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    use ApplicationCategoryTrait;
     use CommuneTrait;
     use ManufaturerTrait;
     use OrganisationTrait;
@@ -191,7 +187,17 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
             ]);
         $this->addManufaturersFormFields($formMapper);
 
-        $this->addApplicationCategoriesFormFields($formMapper);
+        $formMapper
+            ->add('categories', ModelAutocompleteType::class,
+                [
+                    'property' => 'name',
+                    'required' => false,
+                    'multiple' => true,
+                ],
+                [
+                    'admin_code' => ApplicationCategoryAdmin::class,
+                ]
+            );
         $formMapper
             ->add('description', TextareaType::class, [
                 'required' => false,
@@ -438,7 +444,11 @@ class ApplicationAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
             ->add('name')
             ->add('description');
         $this->addManufaturersShowFields($showMapper);
-        $this->addApplicationCategoriesShowFields($showMapper);
+        $showMapper
+            ->add('categories', null, [
+                'admin_code' => ApplicationCategoryAdmin::class,
+                //'template' => 'General/Show/show-categories.twig',
+            ]);
         // applicationModules
         // applicationInterfaces
         $this->addCommunesShowFields($showMapper);

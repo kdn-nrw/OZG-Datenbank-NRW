@@ -11,6 +11,7 @@
 
 namespace App\Admin;
 
+use App\Admin\ModelRegion\ModelRegionProjectAdmin;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\MinistryStateTrait;
 use App\Admin\Traits\ServiceTrait;

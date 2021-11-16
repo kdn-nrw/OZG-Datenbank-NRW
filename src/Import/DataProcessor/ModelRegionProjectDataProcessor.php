@@ -15,7 +15,6 @@ use App\Entity\Base\BaseEntity;
 use App\Entity\ModelRegion\ModelRegionBeneficiary;
 use App\Entity\ModelRegion\ModelRegionProject;
 use App\Entity\Organisation;
-use App\Import\Annotation\ImportModelAnnotation;
 use App\Import\Model\AbstractImportModel;
 
 class ModelRegionProjectDataProcessor extends AbstractDataProcessor

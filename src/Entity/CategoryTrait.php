@@ -22,10 +22,10 @@ use Doctrine\Common\Collections\Collection;
 trait CategoryTrait
 {
     /**
-     * @param Category $category
+     * @param CategoryEntityInterface $category
      * @return self
      */
-    public function addCategory($category)
+    public function addCategory(CategoryEntityInterface $category)
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
@@ -35,10 +35,10 @@ trait CategoryTrait
     }
 
     /**
-     * @param Category $category
+     * @param CategoryEntityInterface $category
      * @return self
      */
-    public function removeCategory($category)
+    public function removeCategory(CategoryEntityInterface $category)
     {
         if ($this->categories->contains($category)) {
             $this->categories->removeElement($category);
@@ -48,7 +48,7 @@ trait CategoryTrait
     }
 
     /**
-     * @return Category[]|Collection
+     * @return CategoryEntityInterface[]|Collection
      */
     public function getCategories()
     {
@@ -56,7 +56,7 @@ trait CategoryTrait
     }
 
     /**
-     * @param Category[]|Collection $categories
+     * @param CategoryEntityInterface[]|Collection $categories
      */
     public function setCategories($categories): void
     {

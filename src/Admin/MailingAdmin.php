@@ -13,6 +13,7 @@ namespace App\Admin;
 
 use App\Admin\Traits\CategoryTrait;
 use App\Admin\Traits\OrganisationTrait;
+use App\Entity\Category;
 use App\Entity\Contact;
 use App\Entity\Mailing;
 use App\Entity\MailingContact;
@@ -63,9 +64,12 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             }
 
             if ($this->isGranted('LIST')) {
-                $menu->addChild('app.mailing.actions.contact_list', [
-                    'uri' => $admin->getChild(MailingContactAdmin::class)->generateUrl('list')
-                ]);
+                $childAdmin = $admin->getChild(MailingContactAdmin::class);
+                if (null !== $childAdmin) {
+                    $menu->addChild('app.mailing.actions.contact_list', [
+                        'uri' => $childAdmin->generateUrl('list')
+                    ]);
+                }
             }
         }
     }
@@ -239,6 +243,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
      */
     public function updateMailingContacts(Mailing $object): void
     {
+        /** @var Category[] $categories */
         $categories = $object->getCategories();
         foreach ($categories as $child) {
             $contacts = $child->getContacts();

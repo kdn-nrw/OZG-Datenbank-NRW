@@ -13,7 +13,6 @@ namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -87,7 +86,7 @@ class ApplicationCategory extends BaseNamedEntity implements CategoryEntityInter
      * @param ApplicationCategory $category
      * @return self
      */
-    public function addChild($category): self
+    public function addChild(ApplicationCategory $category): self
     {
         if (!$this->children->contains($category) && $category->getId() !== $this->getId()) {
             $this->children->add($category);
@@ -101,7 +100,7 @@ class ApplicationCategory extends BaseNamedEntity implements CategoryEntityInter
      * @param ApplicationCategory $category
      * @return self
      */
-    public function removeChild($category): self
+    public function removeChild(ApplicationCategory $category): self
     {
         if ($this->children->contains($category)) {
             $this->children->removeElement($category);

@@ -13,6 +13,8 @@ namespace App\Admin\ModelRegion;
 
 use App\Admin\AbstractAppAdmin;
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\OrganisationAdmin;
+use App\Admin\SolutionAdmin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\ModelRegionTrait;
@@ -28,6 +30,7 @@ use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -62,6 +65,21 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             ]);
         $this->addDatePickerFormField($formMapper, 'projectStartAt');
         $this->addDatePickerFormField($formMapper, 'projectEndAt', 20);
+        $formMapper
+            ->add('categories', ModelType::class,
+                [
+                    'btn_add' => 'app.common.model_list_type.add',
+                    'placeholder' => '',
+                    'required' => false,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false,
+                    'btn_catalogue' => 'messages',
+                ],
+                [
+                    'admin_code' => ModelRegionProjectCategoryAdmin::class,
+                ]
+            );
         $this->addOrganisationsFormFields($formMapper);
         $formMapper->end();
         $formMapper->with('characteristics', [
@@ -138,9 +156,10 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'organisations');
         $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
         $this->addDefaultDatagridFilter($datagridMapper, 'projectEndAt');
+        $this->addDefaultDatagridFilter($datagridMapper, 'categories');
+        $this->addDefaultDatagridFilter($datagridMapper, 'organisations');
         $datagridMapper
             ->add('description')
             ->add('usp')
@@ -156,7 +175,33 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $listMapper->addIdentifier('name');
         $this->addDatePickersListFields($listMapper, 'projectStartAt');
         $this->addDatePickersListFields($listMapper, 'projectEndAt');
-        $this->addOrganisationsListFields($listMapper);
+        $listMapper
+            ->add('categories', null, [
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'categories'],
+                ],
+                'enable_filter_add' => true,
+                'admin_code' => ModelRegionProjectCategoryAdmin::class,
+            ]);
+        $listMapper
+            ->add('organisations', null, [
+                'template' => 'General/Association/list_many_to_many_nolinks.html.twig',
+                'sortable' => true, // IMPORTANT! make the column sortable
+                'sort_field_mapping' => [
+                    'fieldName' => 'name'
+                ],
+                // https://stackoverflow.com/questions/36153381/sort-list-view-in-sonata-admin-by-related-entity-fields
+                'sort_parent_association_mappings' => [
+                    ['fieldName' => 'organisations'],
+                ],
+                'enable_filter_add' => true,
+                'admin_code' => OrganisationAdmin::class,
+            ]);
         $this->addDefaultListActions($listMapper);
     }
 
@@ -191,6 +236,11 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
+        $showMapper
+            ->add('categories', null, [
+                'admin_code' => ModelRegionProjectCategoryAdmin::class,
+                //'template' => 'General/Show/show-categories.twig',
+            ]);
         $this->addOrganisationsShowFields($showMapper);
         $this->addModelRegionsShowFields($showMapper);
         $showMapper->add('documents', null, [
