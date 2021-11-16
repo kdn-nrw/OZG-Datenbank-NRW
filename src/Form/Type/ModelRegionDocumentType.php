@@ -11,7 +11,7 @@
 
 namespace App\Form\Type;
 
-use App\Entity\ModelRegionProjectDocument;
+use App\Entity\ModelRegion\ModelRegionProjectDocument;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

@@ -11,7 +11,7 @@
 
 namespace App\Import;
 
-use App\Entity\ModelRegionProject;
+use App\Entity\ModelRegion\ModelRegionProject;
 use App\Import\DataProcessor\ModelRegionProjectDataProcessor;
 use App\Import\Model\ModelRegionProjectImportModel;
 

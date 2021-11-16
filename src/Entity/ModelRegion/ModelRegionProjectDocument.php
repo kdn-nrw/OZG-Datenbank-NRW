@@ -9,13 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\ModelRegion;
 
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\DocumentUploadEntityInterface;
 use App\Entity\Base\HasUploadsEntityInterface;
 use DateTime;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -55,7 +54,7 @@ class ModelRegionProjectDocument extends BaseNamedEntity implements DocumentUplo
 
     /**
      * @var ModelRegionProject|null
-     * @ORM\ManyToOne(targetEntity="App\Entity\ModelRegionProject", inversedBy="documents")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ModelRegion\ModelRegionProject", inversedBy="documents")
      * @ORM\JoinColumn(nullable=true)
      */
     private $modelRegionProject;

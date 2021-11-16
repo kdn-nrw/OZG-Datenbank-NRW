@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Admin;
+namespace App\Admin\ModelRegion;
 
+use App\Admin\AbstractAppAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\ModelRegionProjectTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -25,6 +27,8 @@ class ModelRegionAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
 {
     use AddressTrait;
     use ModelRegionProjectTrait;
+
+    protected $baseRoutePattern = 'model-region/model-region';
 
     protected function configureFormFields(FormMapper $formMapper)
     {

@@ -11,7 +11,7 @@
 
 namespace App\Admin\Traits;
 
-use App\Admin\ModelRegionProjectAdmin;
+use App\Admin\ModelRegion\ModelRegionProjectAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;

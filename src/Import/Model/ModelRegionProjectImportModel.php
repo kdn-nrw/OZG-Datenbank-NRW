@@ -16,7 +16,7 @@ use App\Import\Annotation\ImportModelAnnotation;
 
 /**
  * Class ModelRegionProjectImportModel
- * @ImportModelAnnotation(targetEntity="\App\Entity\ModelRegionProject")
+ * @ImportModelAnnotation(targetEntity="\App\Entity\ModelRegion\ModelRegionProject")
  */
 class ModelRegionProjectImportModel extends AbstractImportModel
 {

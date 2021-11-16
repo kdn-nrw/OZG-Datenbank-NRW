@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Admin;
+namespace App\Admin\ModelRegion;
 
+use App\Admin\AbstractAppAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
@@ -30,6 +32,8 @@ class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin implements EnableFull
     use ContactTrait;
     use AddressTrait;
     use OrganisationOneToOneTrait;
+
+    protected $baseRoutePattern = 'model-region/beneficiary';
 
     /**
      * @var string[]

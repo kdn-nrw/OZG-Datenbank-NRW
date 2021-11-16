@@ -1,5 +1,5 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
-App\Entity\ModelRegion:
+App\Entity\ModelRegion\ModelRegion:
   #shortName: 'Leika-Leistungen'
   description: 'Modellregionen'
   attributes:

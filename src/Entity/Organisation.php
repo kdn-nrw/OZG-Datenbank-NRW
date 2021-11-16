@@ -13,6 +13,8 @@ namespace App\Entity;
 
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\SoftdeletableEntityInterface;
+use App\Entity\ModelRegion\ModelRegionBeneficiary;
+use App\Entity\ModelRegion\ModelRegionProject;
 use App\Entity\StateGroup\CentralAssociation;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\MinistryState;
@@ -76,14 +78,14 @@ class Organisation extends BaseNamedEntity
     protected $organizationType;
 
     /**
-     * @var \App\Entity\Contact[]|Collection
+     * @var Contact[]|Collection
      * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="organisationEntity", cascade={"persist"})
      */
     private $contacts;
 
     /**
      * @var ModelRegionProject[]|Collection
-     * @ORM\ManyToMany(targetEntity="ModelRegionProject", mappedBy="organisations", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion\ModelRegionProject", mappedBy="organisations", cascade={"persist"})
      */
     private $modelRegionProjects;
 
@@ -124,7 +126,7 @@ class Organisation extends BaseNamedEntity
 
     /**
      * @var ModelRegionBeneficiary|null
-     * @ORM\OneToOne(targetEntity="ModelRegionBeneficiary", mappedBy="organisation", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\ModelRegion\ModelRegionBeneficiary", mappedBy="organisation", cascade={"all"})
      * @ORM\JoinColumn(name="model_region_beneficiary_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $modelRegionBeneficiary;
@@ -153,10 +155,10 @@ class Organisation extends BaseNamedEntity
 
 
     /**
-     * @param \App\Entity\Contact $contact
+     * @param Contact $contact
      * @return self
      */
-    public function addContact($contact): self
+    public function addContact(Contact $contact): self
     {
         if (!$this->contacts->contains($contact)) {
             $this->contacts->add($contact);
@@ -167,10 +169,10 @@ class Organisation extends BaseNamedEntity
     }
 
     /**
-     * @param \App\Entity\Contact $contact
+     * @param Contact $contact
      * @return self
      */
-    public function removeContact($contact): self
+    public function removeContact(Contact $contact): self
     {
         if ($this->contacts->contains($contact)) {
             $this->contacts->removeElement($contact);
@@ -184,7 +186,7 @@ class Organisation extends BaseNamedEntity
     }
 
     /**
-     * @return \App\Entity\Contact[]|Collection
+     * @return Contact[]|Collection
      */
     public function getContacts()
     {
@@ -192,7 +194,7 @@ class Organisation extends BaseNamedEntity
     }
 
     /**
-     * @param \App\Entity\Contact[]|Collection $contacts
+     * @param Contact[]|Collection $contacts
      */
     public function setContacts($contacts): void
     {
@@ -336,7 +338,7 @@ class Organisation extends BaseNamedEntity
      * @param ModelRegionProject $modelRegionProject
      * @return self
      */
-    public function addModelRegionProject($modelRegionProject): self
+    public function addModelRegionProject(ModelRegionProject $modelRegionProject): self
     {
         if (!$this->modelRegionProjects->contains($modelRegionProject)) {
             $this->modelRegionProjects->add($modelRegionProject);
@@ -350,7 +352,7 @@ class Organisation extends BaseNamedEntity
      * @param ModelRegionProject $modelRegionProject
      * @return self
      */
-    public function removeModelRegionProject($modelRegionProject): self
+    public function removeModelRegionProject(ModelRegionProject $modelRegionProject): self
     {
         if ($this->modelRegionProjects->contains($modelRegionProject)) {
             $this->modelRegionProjects->removeElement($modelRegionProject);

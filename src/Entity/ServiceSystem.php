@@ -15,6 +15,7 @@ use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
+use App\Entity\ModelRegion\ModelRegionProject;
 use App\Entity\StateGroup\Bureau;
 use App\Entity\StateGroup\CommuneType;
 use App\Entity\StateGroup\MinistryState;

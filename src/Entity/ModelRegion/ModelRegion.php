@@ -9,15 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\ModelRegion;
 
+use App\Entity\AddressTrait;
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
+use App\Entity\UrlTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,7 +36,7 @@ class ModelRegion extends BaseNamedEntity implements SluggableInterface, HasMeta
 
     /**
      * @var ModelRegionProject[]|Collection
-     * @ORM\ManyToMany(targetEntity="ModelRegionProject", inversedBy="modelRegions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion\ModelRegionProject", inversedBy="modelRegions")
      * @ORM\JoinTable(name="ozg_model_region_project_list",
      *     joinColumns={
      *     @ORM\JoinColumn(name="model_region_id", referencedColumnName="id")
@@ -56,7 +57,7 @@ class ModelRegion extends BaseNamedEntity implements SluggableInterface, HasMeta
      * @param ModelRegionProject $modelRegionProject
      * @return self
      */
-    public function addModelRegionProject($modelRegionProject): self
+    public function addModelRegionProject(ModelRegionProject $modelRegionProject): self
     {
         if (!$this->modelRegionProjects->contains($modelRegionProject)) {
             $this->modelRegionProjects->add($modelRegionProject);
@@ -70,7 +71,7 @@ class ModelRegion extends BaseNamedEntity implements SluggableInterface, HasMeta
      * @param ModelRegionProject $modelRegionProject
      * @return self
      */
-    public function removeModelRegionProject($modelRegionProject): self
+    public function removeModelRegionProject(ModelRegionProject $modelRegionProject): self
     {
         if ($this->modelRegionProjects->contains($modelRegionProject)) {
             $this->modelRegionProjects->removeElement($modelRegionProject);

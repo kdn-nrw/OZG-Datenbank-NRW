@@ -11,6 +11,7 @@
 
 namespace App\Entity;
 
+use App\Entity\ModelRegion\ModelRegion;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -58,7 +59,7 @@ class User extends BaseUser
 
     /**
      * @var ModelRegion[]|Collection
-     * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion\ModelRegion")
      * @ORM\JoinTable(name="ozg_user_model_region_mm",
      *     joinColumns={
      *     @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
@@ -128,7 +129,7 @@ class User extends BaseUser
     }
 
     /**
-     * We only use groups for setting the roles. Therefore the roles array must be cleared
+     * We only use groups for setting the roles. Therefore, the roles array must be cleared
      * before adding the group roles!
      *
      * {@inheritdoc}
@@ -178,7 +179,7 @@ class User extends BaseUser
      * @param Commune $commune
      * @return self
      */
-    public function addCommune($commune): self
+    public function addCommune(Commune $commune): self
     {
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
@@ -191,7 +192,7 @@ class User extends BaseUser
      * @param Commune $commune
      * @return self
      */
-    public function removeCommune($commune): self
+    public function removeCommune(Commune $commune): self
     {
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);
@@ -223,7 +224,7 @@ class User extends BaseUser
      * @param ModelRegion $modelRegion
      * @return self
      */
-    public function addModelRegion($modelRegion): self
+    public function addModelRegion(ModelRegion $modelRegion): self
     {
         if (!$this->modelRegions->contains($modelRegion)) {
             $this->modelRegions->add($modelRegion);
@@ -236,7 +237,7 @@ class User extends BaseUser
      * @param ModelRegion $modelRegion
      * @return self
      */
-    public function removeModelRegion($modelRegion): self
+    public function removeModelRegion(ModelRegion $modelRegion): self
     {
         if ($this->modelRegions->contains($modelRegion)) {
             $this->modelRegions->removeElement($modelRegion);
@@ -265,7 +266,7 @@ class User extends BaseUser
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function addServiceProvider($serviceProvider): self
+    public function addServiceProvider(ServiceProvider $serviceProvider): self
     {
         if (!$this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->add($serviceProvider);
@@ -278,7 +279,7 @@ class User extends BaseUser
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function removeServiceProvider($serviceProvider): self
+    public function removeServiceProvider(ServiceProvider $serviceProvider): self
     {
         if ($this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->removeElement($serviceProvider);

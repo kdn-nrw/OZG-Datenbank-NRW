@@ -1,5 +1,5 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
-App\Entity\ModelRegionProject:
+App\Entity\ModelRegion\ModelRegionProject:
   #shortName: 'Leika-Leistungen'
   description: 'DMR Umsetzungsprojekte'
   attributes:

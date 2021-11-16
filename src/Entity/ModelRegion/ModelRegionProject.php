@@ -9,17 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\ModelRegion;
 
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\HasDocumentsEntityInterface;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
+use App\Entity\HasSolutionsEntityInterface;
+use App\Entity\ImportTrait;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
+use App\Entity\Organisation;
+use App\Entity\Solution;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,7 +39,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
 
     /**
      * @var ModelRegion[]|Collection
-     * @ORM\ManyToMany(targetEntity="ModelRegion", mappedBy="modelRegionProjects")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion\ModelRegion", mappedBy="modelRegionProjects")
      */
     private $modelRegions;
 
@@ -125,7 +128,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
 
     /**
      * @var ModelRegionProjectDocument[]|Collection
-     * @ORM\OneToMany(targetEntity="App\Entity\ModelRegionProjectDocument", mappedBy="modelRegionProject", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\ModelRegion\ModelRegionProjectDocument", mappedBy="modelRegionProject", cascade={"persist", "remove"})
      */
     private $documents;
 
@@ -141,7 +144,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param ModelRegion $modelRegion
      * @return self
      */
-    public function addModelRegion($modelRegion): self
+    public function addModelRegion(ModelRegion $modelRegion): self
     {
         if (!$this->modelRegions->contains($modelRegion)) {
             $this->modelRegions->add($modelRegion);
@@ -155,7 +158,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param ModelRegion $modelRegion
      * @return self
      */
-    public function removeModelRegion($modelRegion): self
+    public function removeModelRegion(ModelRegion $modelRegion): self
     {
         if ($this->modelRegions->contains($modelRegion)) {
             $this->modelRegions->removeElement($modelRegion);
@@ -185,7 +188,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param Organisation $organisation
      * @return self
      */
-    public function addOrganisation($organisation): self
+    public function addOrganisation(Organisation $organisation): self
     {
         if (!$this->organisations->contains($organisation)) {
             $this->organisations->add($organisation);
@@ -198,7 +201,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param Organisation $organisation
      * @return self
      */
-    public function removeOrganisation($organisation): self
+    public function removeOrganisation(Organisation $organisation): self
     {
         if ($this->organisations->contains($organisation)) {
             $this->organisations->removeElement($organisation);
@@ -339,7 +342,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution): self
+    public function addSolution(Solution $solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -353,7 +356,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution): self
+    public function removeSolution(Solution $solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);

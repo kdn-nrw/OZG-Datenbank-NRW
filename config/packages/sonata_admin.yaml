@@ -230,9 +230,9 @@ sonata_admin:
                 label_catalogue: messages
                 icon: '<i class="fa fa-object-group"></i>'
                 items:
-                    - App\Admin\ModelRegionAdmin
-                    - App\Admin\ModelRegionProjectAdmin
-                    - App\Admin\ModelRegionBeneficiaryAdmin
+                    - App\Admin\ModelRegion\ModelRegionAdmin
+                    - App\Admin\ModelRegion\ModelRegionProjectAdmin
+                    - App\Admin\ModelRegion\ModelRegionBeneficiaryAdmin
             app.application_group:
                 label: app.menu.application_group
                 label_catalogue: messages

@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Admin;
+namespace App\Admin\ModelRegion;
 
+use App\Admin\AbstractAppAdmin;
+use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\DatePickerTrait;
 use App\Admin\Traits\ModelRegionTrait;
 use App\Admin\Traits\OrganisationTrait;
 use App\Admin\Traits\SluggableTrait;
 use App\Admin\Traits\SolutionTrait;
-use App\Entity\ModelRegionProject;
-use App\Entity\ModelRegionProjectDocument;
+use App\Entity\ModelRegion\ModelRegionProject;
+use App\Entity\ModelRegion\ModelRegionProjectDocument;
 use App\Exporter\Source\ManySolutionsValueFormatter;
 use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Form\Type\ModelRegionDocumentType;
@@ -42,6 +44,8 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     use OrganisationTrait;
     use SolutionTrait;
     use SluggableTrait;
+
+    protected $baseRoutePattern = 'model-region/project';
 
     protected function configureFormFields(FormMapper $formMapper)
     {

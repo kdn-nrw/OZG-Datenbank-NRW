@@ -15,6 +15,7 @@ use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
+use App\Entity\ModelRegion\ModelRegionProject;
 use App\Entity\StateGroup\Bureau;
 use App\Entity\StateGroup\CommuneType;
 use App\Entity\StateGroup\MinistryState;
@@ -364,7 +365,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param ServiceSolution $serviceSolution
      * @return self
      */
-    public function addServiceSolution($serviceSolution): self
+    public function addServiceSolution(ServiceSolution $serviceSolution): self
     {
         if (!$this->serviceSolutions->contains($serviceSolution)) {
             $this->serviceSolutions->add($serviceSolution);
@@ -378,7 +379,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param ServiceSolution $serviceSolution
      * @return self
      */
-    public function removeServiceSolution($serviceSolution): self
+    public function removeServiceSolution(ServiceSolution $serviceSolution): self
     {
         if ($this->serviceSolutions->contains($serviceSolution)) {
             $this->serviceSolutions->removeElement($serviceSolution);
@@ -407,7 +408,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param FederalInformationManagementType $fimType
      * @return self
      */
-    public function addFimType($fimType): self
+    public function addFimType(FederalInformationManagementType $fimType): self
     {
         if (!$this->fimTypes->contains($fimType)) {
             $this->fimTypes->add($fimType);
@@ -421,7 +422,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param FederalInformationManagementType $fimType
      * @return self
      */
-    public function removeFimType($fimType): self
+    public function removeFimType(FederalInformationManagementType $fimType): self
     {
         if ($this->fimTypes->contains($fimType)) {
             $this->fimTypes->removeElement($fimType);
@@ -666,7 +667,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Laboratory $laboratory
      * @return self
      */
-    public function addLaboratory($laboratory): self
+    public function addLaboratory(Laboratory $laboratory): self
     {
         if (!$this->laboratories->contains($laboratory)) {
             $this->laboratories->add($laboratory);
@@ -680,7 +681,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Laboratory $laboratory
      * @return self
      */
-    public function removeLaboratory($laboratory): self
+    public function removeLaboratory(Laboratory $laboratory): self
     {
         if ($this->laboratories->contains($laboratory)) {
             $this->laboratories->removeElement($laboratory);
@@ -710,7 +711,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Jurisdiction $jurisdiction
      * @return self
      */
-    public function addJurisdiction($jurisdiction): self
+    public function addJurisdiction(Jurisdiction $jurisdiction): self
     {
         if (!$this->jurisdictions->contains($jurisdiction)) {
             $this->jurisdictions->add($jurisdiction);
@@ -724,7 +725,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Jurisdiction $jurisdiction
      * @return self
      */
-    public function removeJurisdiction($jurisdiction): self
+    public function removeJurisdiction(Jurisdiction $jurisdiction): self
     {
         if ($this->jurisdictions->contains($jurisdiction)) {
             $this->jurisdictions->removeElement($jurisdiction);
@@ -776,7 +777,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Bureau $bureau
      * @return self
      */
-    public function addBureau($bureau): self
+    public function addBureau(Bureau $bureau): self
     {
         if (!$this->bureaus->contains($bureau)) {
             $this->bureaus->add($bureau);
@@ -790,7 +791,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Bureau $bureau
      * @return self
      */
-    public function removeBureau($bureau): self
+    public function removeBureau(Bureau $bureau): self
     {
         if ($this->bureaus->contains($bureau)) {
             $this->bureaus->removeElement($bureau);
@@ -842,7 +843,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param MinistryState $stateMinistry
      * @return self
      */
-    public function addStateMinistry($stateMinistry): self
+    public function addStateMinistry(MinistryState $stateMinistry): self
     {
         if (!$this->stateMinistries->contains($stateMinistry)) {
             $this->stateMinistries->add($stateMinistry);
@@ -855,7 +856,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param MinistryState $stateMinistry
      * @return self
      */
-    public function removeStateMinistry($stateMinistry): self
+    public function removeStateMinistry(MinistryState $stateMinistry): self
     {
         if ($this->stateMinistries->contains($stateMinistry)) {
             $this->stateMinistries->removeElement($stateMinistry);

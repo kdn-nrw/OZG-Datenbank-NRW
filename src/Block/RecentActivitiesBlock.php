@@ -16,7 +16,7 @@ namespace App\Block;
 use App\Admin\AbstractContextAwareAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Base\BaseEntityInterface;
-use App\Entity\ModelRegion;
+use App\Entity\ModelRegion\ModelRegion;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use App\Entity\Statistics\LogEntry;

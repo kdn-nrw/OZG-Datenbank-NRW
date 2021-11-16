@@ -570,10 +570,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\ModelRegionAdmin:
+  App\Admin\ModelRegion\ModelRegionAdmin:
     arguments:
       - ~
-      - App\Entity\ModelRegion
+      - App\Entity\ModelRegion\ModelRegion
       - ~
     tags:
       - name:         sonata.admin
@@ -586,7 +586,7 @@ services:
   App\Admin\Frontend\ModelRegionAdmin:
     arguments:
       - ~
-      - App\Entity\ModelRegion
+      - App\Entity\ModelRegion\ModelRegion
       - ~
     tags:
       - name:         sonata.admin
@@ -597,10 +597,10 @@ services:
         persist_filters: true
     public: true
 
-  App\Admin\ModelRegionBeneficiaryAdmin:
+  App\Admin\ModelRegion\ModelRegionBeneficiaryAdmin:
     arguments:
       - ~
-      - App\Entity\ModelRegionBeneficiary
+      - App\Entity\ModelRegion\ModelRegionBeneficiary
       - ~
     tags:
       - name:         sonata.admin
@@ -613,10 +613,10 @@ services:
   App\Controller\ModelRegionProjectAdminController:
     tags: ['controller.service_arguments']
 
-  App\Admin\ModelRegionProjectAdmin:
+  App\Admin\ModelRegion\ModelRegionProjectAdmin:
     arguments:
       - ~
-      - App\Entity\ModelRegionProject
+      - App\Entity\ModelRegion\ModelRegionProject
       - App\Controller\ModelRegionProjectAdminController
     tags:
       - name:         sonata.admin
@@ -629,7 +629,7 @@ services:
   App\Admin\Frontend\ModelRegionProjectAdmin:
     arguments:
       - ~
-      - App\Entity\ModelRegionProject
+      - App\Entity\ModelRegion\ModelRegionProject
       - ~
     tags:
       - name:         sonata.admin

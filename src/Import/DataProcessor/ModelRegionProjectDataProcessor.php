@@ -12,8 +12,8 @@
 namespace App\Import\DataProcessor;
 
 use App\Entity\Base\BaseEntity;
-use App\Entity\ModelRegionBeneficiary;
-use App\Entity\ModelRegionProject;
+use App\Entity\ModelRegion\ModelRegionBeneficiary;
+use App\Entity\ModelRegion\ModelRegionProject;
 use App\Entity\Organisation;
 use App\Import\Annotation\ImportModelAnnotation;
 use App\Import\Model\AbstractImportModel;

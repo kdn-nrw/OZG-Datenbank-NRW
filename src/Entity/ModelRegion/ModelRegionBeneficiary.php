@@ -9,9 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\ModelRegion;
 
+use App\Entity\AddressTrait;
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Organisation;
+use App\Entity\OrganisationEntityInterface;
+use App\Entity\OrganisationTrait;
+use App\Entity\UrlTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;

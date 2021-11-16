@@ -11,9 +11,6 @@
 
 namespace App\Entity\Base;
 
-use App\Entity\ModelRegionProject;
-use Symfony\Component\HttpFoundation\File\File;
-
 /**
  * HasUploadsEntityInterface interface
  */
