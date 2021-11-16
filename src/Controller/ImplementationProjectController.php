@@ -105,6 +105,7 @@ class ImplementationProjectController extends AbstractFrontendCRUDController
     {
         $sortedResults = [];
         $maxItems = 24;
+        $timezone = new \DateTimeZone('Europe/Berlin');
         foreach ($max as $property => $propertyMax) {
             $itemCount = 1;
             if (!empty($groupedSubjectsByMonths[$property])) {
@@ -116,12 +117,12 @@ class ImplementationProjectController extends AbstractFrontendCRUDController
                     if (array_key_exists($monthKey, $propertyGroupedData)) {
                         ksort($propertyGroupedData[$monthKey]);
                         $sortedResults[$property][$monthKey] = [
-                            'date' => date_create($year . '-' . $month . '-01 00:00:00'),
+                            'date' => date_create($year . '-' . $month . '-01 00:00:00', $timezone),
                             'subjects' => $propertyGroupedData[$monthKey],
                         ];
                     } else {
                         $sortedResults[$property][$monthKey] = [
-                            'date' => date_create($year . '-' . $month . '-01 00:00:00'),
+                            'date' => date_create($year . '-' . $month . '-01 00:00:00', $timezone),
                             'subjects' => [],
                         ];
                     }
