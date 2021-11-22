@@ -9,10 +9,12 @@ file that was distributed with this source code.
 {% block title %}{{ 'title_dashboard'|trans({}, 'SonataAdminBundle') }}{% endblock %}
 {% block breadcrumb %}{% endblock %}
 {% block content %}
+    <div style="width: 100%;overflow: hidden">
     <div class="row">
         <div class="{% if app.user %}col-12{% else %} col-md-7 col-lg-8{% endif %}">
             {% include 'PageContent/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_HOME')} %}
         </div>
+        {#
         {% if not app.user %}
         <div class="col-12 col-md-5 col-lg-4">
             <div class="box box-widget box-page-content">
@@ -29,6 +31,7 @@ file that was distributed with this source code.
             </div>
         </div>
         {% endif %}
+        #}
         {#
         <div class="col-xs-12">
             {{ sonata_block_render({ 'type': 'App\\Block\\RecentSolutionsBlock' }, {
@@ -40,6 +43,9 @@ file that was distributed with this source code.
             }) }}
         </div>
         #}
+        <div class="col-12 col-md-5 col-lg-4">
+
+        </div>
         <div class="col-xs-12 col-sm-6 col-lg-4">
             {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
                 'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
@@ -95,6 +101,7 @@ file that was distributed with this source code.
             }) }}
         </div>
         #}
+    </div>
     </div>
 
 {% endblock %}

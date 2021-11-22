@@ -14,6 +14,7 @@ namespace App\Admin\Onboarding;
 
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\DatePickerTrait;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Onboarding\Release;
 use App\Form\Type\CommuneType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -21,6 +22,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\BooleanType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ReleaseAdmin extends AbstractOnboardingAdmin
 {
@@ -77,6 +79,7 @@ class ReleaseAdmin extends AbstractOnboardingAdmin
                 'required' => false,
             ])*/
         ;
+        $this->addDataCompletenessConfirmedField($formMapper);
 
         $formMapper->end();
         $formMapper

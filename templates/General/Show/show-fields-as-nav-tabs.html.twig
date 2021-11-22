@@ -1,0 +1,84 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if navTabFields is defined and navTabFields|length > 0 %}
+    {% set tabContentEntities = [] %}
+    <div class="col-xs-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                {% for navFieldInfo in navTabFields %}
+                    {% set field_name = navFieldInfo.key %}
+                    {% set customListTitle = navFieldInfo.customListTitle %}
+                    {% set isActive = loop.first %}
+                    {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+                    {% set field_description = elements[field_name] %}
+                    {% set refSettings = app_object_field_description_meta(object, field_description) %}
+                    {# @var refSettings \App\Model\ReferenceSettings #}
+                    {% set tabClass = 'tab-item' %}
+                    {% if isActive %}
+                        {% set tabClass = tabClass ~ ' active' %}
+                    {% endif %}
+                    {% if navFieldInfo.loadUrl is defined and navFieldInfo.loadUrl %}
+                        {% if isActive %}
+                            {% set tabClass = tabClass ~ ' js-init-load' %}
+                        {% else %}
+                            {% set tabClass = tabClass ~ ' js-click-load' %}
+                        {% endif %}
+                    {% endif %}
+                    {% set tabId = field_description.name|app_format_identifier %}
+
+
+                    {% set renderTab = false %}
+                    {% if navFieldInfo.loadUrl is defined and navFieldInfo.loadUrl %}
+                        {% set renderTab = true %}
+                    {% else %}
+                        {% if navFieldInfo.entities is defined %}
+                            {% set tabFieldEntities = navFieldInfo.entities %}
+                        {% else %}
+                            {% set tabFieldEntities = field_description.value(object) %}
+                        {% endif %}
+                        {% set tabContentEntities = tabContentEntities|merge({(field_name): tabFieldEntities}) %}
+                        {% if tabFieldEntities|length > 0 or navFieldInfo.renderIfEmpty is defined %}
+                            {% set renderTab = true %}
+                        {% endif %}
+                    {% endif %}
+                    {% if renderTab %}
+                    <li class="{{ tabClass }}"{% if navFieldInfo.loadUrl is defined and navFieldInfo.loadUrl %} data-url="{{ navFieldInfo.loadUrl }}"{% endif %} data-target="show-service-tab-{{ tabId }}">
+                        {% set tabId = field_description.name|app_format_identifier %}
+                        <a href="#show-service-tab-{{ tabId }}" data-toggle="tab">
+                            {% include 'General/Show/Partials/show-field-title.html.twig' %}
+                        </a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="tab-content no-padding">
+                {% for navFieldInfo in navTabFields %}
+                    {% set field_name = navFieldInfo.key %}
+                    {# @var field_description \Sonata\AdminBundle\Admin\BaseFieldDescription #}
+                    {% set field_description = elements[field_name] %}
+                    {% set isActive = loop.first %}
+                    {% set tabId = field_description.name|app_format_identifier %}
+                    <div class="{% if isActive %}active {% endif %}tab-pane" id="show-service-tab-{{ tabId }}">
+                        {% if navFieldInfo.loadUrl is defined and navFieldInfo.loadUrl %}
+                            <div class="loader-container">
+                                <div class="loader center"></div>
+                                &nbsp;
+                            </div>
+                        {% elseif tabContentEntities[field_name]|length > 0 or navFieldInfo.renderIfEmpty is defined %}
+                            {% set refSettings = app_object_field_description_meta(object, field_description) %}
+                            {# @var refSettings \App\Model\ReferenceSettings #}
+                            {% set entities = tabContentEntities[field_name] %}
+                            <div class="table-responsive">
+                                {% include 'General/Show/Partials/show-record-list.html.twig' %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,91 @@
+<div class="app-form-info above completeness-state">
+    {# @var object \App\Entity\Onboarding\AbstractOnboardingEntity #}
+    {% if objectCompletenessInfo.total == 0 %}
+        {% set statusClass = 'danger' %}
+        {% set bgClass = 'red' %}
+    {% elseif objectCompletenessInfo.total < 100 %}
+        {% set statusClass = 'warning' %}
+        {% set bgClass = 'yellow' %}
+    {% else %}
+        {% set statusClass = 'success' %}
+        {% set bgClass = 'green' %}
+    {% endif %}
+    {% set field_name = 'dataCompletenessConfirmed' %}
+    {% set completionLabel = object|app_format_property_labels(objectCompletenessInfo.invalid_properties) %}
+    <div class="info-box bg-{{ bgClass }}">
+        <span class="info-box-icon"><i class="fa fa-file-text" aria-hidden="true"></i></span>
+        <div class="info-box-content">
+            <span class="info-box-text">{{ 'app.abstract_onboarding_entity.entity.status_prefix'|trans }} {{ object.statusLabelKey|trans }}</span>
+            <span class="info-box-number">{{ objectCompletenessInfo.completed_properties_count }}/{{ objectCompletenessInfo.properties_state|length }} {{ 'app.abstract_onboarding_entity.entity.property_count_append'|trans }}</span>
+            <div class="progress">
+                <div class="progress-bar" style="width: {{ objectCompletenessInfo.total }}%"></div>
+            </div>
+            {% set customLabel = 'app.abstract_onboarding_entity.entity.data_completeness_confirmed_specific'|trans({'commune': object.communeName}) %}
+            {% if object.dataCompletenessConfirmed or bgClass != 'green' %}
+                {% if object.dataCompletenessConfirmed %}
+                    <span class="progress-description {% if objectCompletenessInfo.total < 100 %} text-danger{% endif %}">
+                        {% if objectCompletenessInfo.total < 100 %}
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        {% endif %}
+                        {{ 'app.abstract_onboarding_entity.entity.data_completeness_has_been_confirmed'|trans({'commune': object.communeName}) }}
+                    </span>
+                {% endif %}
+                {% if objectCompletenessInfo.total < 100 %}
+                    <span class="missing-progress-description">
+                        <strong>{{ 'app.abstract_onboarding_entity.entity.data_incomplete'|trans({'commune': object.communeName}) }}:</strong>
+                        <br>{{ completionLabel }}
+                    </span>
+                {% endif %}
+                {% if form[field_name] is defined %}
+                    <span style="display: none;">
+                        {{ form_widget(form[field_name], {'label': customLabel}) }}
+                    </span>
+                {% endif %}
+            {% else %}
+                {% if form[field_name] is defined %}
+                    <span class="progress-description">
+                    {{ form_widget(form[field_name], {'label': customLabel}) }}
+                </span>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{#
+
+Dort soll am besten eine Art Ampel (rot, gelb, grün) gerne auch horizontal vlnr erscheinen. Die Farbwahl abhängig von ausgefüllten Feldern
+
+Rot: nichts ausgefüllt
+
+Gelb: teilweise ausgefüllt
+
+Grün: alles ausgefüllt
+
+Bei https://data-warehouse.kdn.de/admin/onboarding/basis/5/edit?_tab=tab_s61925bef21b62_1544022999_3 muss mindestens ein Dienst ausgewählt sein
+
+
+
+Wenn der Status grün erscheint, sollte ein weiteres Radio Button Feld erscheinen, in dem der Ausfüllende bestätigt „die Kommune XY bestätigt, alle notwendigen Felder ausgefüllt zu haben“
+
+Im Nachgang fließt eine E-Mail an kommunalportal@kdn.de mit dem Hinweis. Du kannst das auch so machen, dass wir die Empfänger selbst wählen können
+
+
+
+Bei ePayBL https://data-warehouse.kdn.de/admin/onboarding/epaybl/431/edit kannst du die Datenprüfung für die Ampel wie folgt machen:
+
+Reiter Kundenmandant:
+
+Alle Daten ohne Mobil und Optional E-Mail
+
+Reiter Zahlungsverkehrsprovider:
+
+Daten sind nicht relevant
+
+Reiter Bewirtschafter:
+alle Daten
+
+Reiter Dienste
+
+Mind. 1 Dienst alle daten im Reiter Basisdaten https://data-warehouse.kdn.de/admin/onboarding/epaybl/615/edit?_tab=tab_s61925edd20c14_658710543_5
+optional Daten sind nicht relevant
+ #}

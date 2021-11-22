@@ -21,6 +21,7 @@ use App\Entity\Base\SluggableInterface;
 use App\Entity\Configuration\EmailTemplate;
 use App\Model\EmailTemplate\AbstractTemplateModel;
 use App\Model\EmailTemplate\OnboardingCommuneInfoUpdateModel;
+use App\Model\EmailTemplate\OnboardingDataCompleteUpdateModel;
 use App\Model\EmailTemplate\OnboardingEpaymentUpdateModel;
 use App\Model\EmailTemplate\OnboardingFormSolutionUpdateModel;
 use App\Model\EmailTemplate\OnboardingReleaseUpdateModel;
@@ -30,6 +31,7 @@ use App\Translator\TranslatorAwareTrait;
 use App\Util\SnakeCaseConverter;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Storage\FileSystemStorage;
 
@@ -86,32 +88,22 @@ class EmailTemplateManager
     }
 
     /**
-     * After entity create
+     * Send all matching email based on the object and process type
      *
      * @param BaseEntityInterface $object
+     * @param string $processType
      */
-    public function sendNotificationsAfterCreate(BaseEntityInterface $object): void
+    public function sendNotificationsForObject(BaseEntityInterface $object, string $processType)
     {
-        $key = self::getEntityTemplateKey(get_class($object), 'create');
-        $model = $this->getEmailTemplateModel($key);
-        if (null !== $model) {
-            $model->setVariable('entity', $object);
-            $this->sendMarkerEmail($model);
-        }
-    }
-
-    /**
-     * After entity update
-     *
-     * @param BaseEntityInterface $object
-     */
-    public function sendNotificationsAfterUpdate(BaseEntityInterface $object): void
-    {
-        $key = self::getEntityTemplateKey(get_class($object), 'update');
-        $model = $this->getEmailTemplateModel($key);
-        if (null !== $model) {
-            $model->setVariable('entity', $object);
-            $this->sendMarkerEmail($model);
+        $templates = $this->getEmailTemplates();
+        foreach ($templates as $modelClass) {
+            /** @var AbstractTemplateModel $modelInstance */
+            $modelInstance = new $modelClass();
+            if ($modelInstance->isMatch($object, $processType)) {
+                $this->initializeTemplateModel($modelInstance);
+                $modelInstance->setVariable('entity', $object);
+                $this->sendMarkerEmail($modelInstance);
+            }
         }
     }
 
@@ -195,7 +187,7 @@ class EmailTemplateManager
      * @param string $processType
      * @return string
      */
-    public static function getEntityTemplateKey(string $entityClass, string $processType = ''): string
+    private static function getEntityTemplateKey(string $entityClass, string $processType = ''): string
     {
         $entityKey = trim(str_replace(['\\', 'App_Entity'], ['_', ''], $entityClass), ' _');
         $entityKey = strtoupper(SnakeCaseConverter::camelCaseToSnakeCase($entityKey));
@@ -215,17 +207,25 @@ class EmailTemplateManager
         }
         $model = $this->initializeEmailTemplateModelInstance($templateKey);
         if (null !== $model) {
-            if ($keyOrEntity instanceof EmailTemplate) {
-                $model->setEmailTemplate($keyOrEntity);
-            } elseif (null !== $emailTemplate = $this->getEmailTemplateByKey($templateKey)) {
+            $this->initializeTemplateModel($model);
+            return $model;
+        }
+        return null;
+    }
+
+    /**
+     * @param AbstractTemplateModel $model
+     */
+    public function initializeTemplateModel(AbstractTemplateModel $model): void
+    {
+        if (!$model->isInitialized()) {
+            if (null !== $emailTemplate = $this->getEmailTemplateByKey($model->getTemplateKey())) {
                 $model->setEmailTemplate($emailTemplate);
             } else {
                 $model->setEmailTemplate($model->newEmailTemplateInstance());
             }
-            $model->setUser($this->security->getUser());
-            return $model;
         }
-        return null;
+        $model->setUser($this->security->getUser());
     }
 
     public function getEmailTemplateByKey(string $key): ?EmailTemplate
@@ -241,7 +241,7 @@ class EmailTemplateManager
      * @param string $templateKey
      * @return AbstractTemplateModel|null
      */
-    public function initializeEmailTemplateModelInstance(string $templateKey): ?AbstractTemplateModel
+    private function initializeEmailTemplateModelInstance(string $templateKey): ?AbstractTemplateModel
     {
         $templates = $this->getEmailTemplates();
         if (array_key_exists($templateKey, $templates)) {
@@ -250,7 +250,7 @@ class EmailTemplateManager
         return null;
     }
 
-    public function getEmailTemplates(): array
+    private function getEmailTemplates(): array
     {
         return [
             OnboardingServiceAccountUpdateModel::TEMPLATE_KEY => OnboardingServiceAccountUpdateModel::class,
@@ -258,6 +258,7 @@ class EmailTemplateManager
             OnboardingEpaymentUpdateModel::TEMPLATE_KEY => OnboardingEpaymentUpdateModel::class,
             OnboardingFormSolutionUpdateModel::TEMPLATE_KEY => OnboardingFormSolutionUpdateModel::class,
             OnboardingReleaseUpdateModel::TEMPLATE_KEY => OnboardingReleaseUpdateModel::class,
+            OnboardingDataCompleteUpdateModel::TEMPLATE_KEY => OnboardingDataCompleteUpdateModel::class,
         ];
     }
 

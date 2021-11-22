@@ -752,22 +752,6 @@ class Epayment extends AbstractOnboardingEntity
         $this->xFinanceFileDays = $xFinanceFileDays;
     }
 
-    protected function getRequiredPropertiesForCompletion(): array
-    {
-        return [
-            'paymentProviderAccountId', 'paymentUser', 'mandatorEmail',
-            //'testIpAddress',
-            'street', 'zipCode', 'town',
-            'projects',
-            //'clientNumberIntegration', 'clientNumberProduction', 'managerNumber',
-            'budgetOffice', 'objectNumber',
-            'cashRegisterPersonalAccountNumber', 'indicatorDunningProcedure', 'bookingText', 'descriptionOfTheBookingList',
-            'managerNo', 'applicationName', 'lengthReceiptNumber', 'cashRegisterCheckProcedureStatus',
-            'lengthFirstAccountAssignmentInformation', 'lengthSecondAccountAssignmentInformation',
-            'contentFirstAccountAssignmentInformation', 'contentSecondAccountAssignmentInformation',
-        ];
-    }
-
     /**
      * Returns the week day choices used for xFinance
      * @return array<string, string>

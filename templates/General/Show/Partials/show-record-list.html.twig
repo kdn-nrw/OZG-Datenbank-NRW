@@ -18,10 +18,23 @@ file that was distributed with this source code.
     {% include 'General/Show/Partials/model-region-projects-list.html.twig' %}
 {% elseif field_description.name ends with 'serviceProviders' %}
     {% include 'General/Show/Partials/service-providers-list.html.twig' %}
+{% elseif field_description.name ends with 'serviceSolutions' %}
+    {% include 'General/Show/Partials/service-solutions-list.html.twig' %}
+{% elseif field_description.name ends with 'formServerSolutions' %}
+    {% include 'General/Show/Partials/form-server-solutions-list.html.twig' %}
 {% elseif field_description.name ends with 'publishedSolutions' or field_description.name ends with 'solutions' %}
     {% include 'General/Show/Partials/solutions-list.html.twig' %}
 {% elseif field_description.name ends with 'implementationProjects' %}
     {% include 'General/Show/Partials/implementation-projects-list.html.twig' %}
 {% elseif field_description.name ends with 'securityIncidents' %}
     {% include 'General/Show/Partials/security-incidents-list.html.twig' %}
+{% elseif field_description.name ends with 'communes' %}
+    {% set showHasAll = field_description.option('check_has_all_modifier') and object.communeType == constant('App\\Entity\\Solution::COMMUNE_TYPE_ALL') %}
+    {% if showHasAll %}
+        <p><strong>{{ 'app.solution.entity.commune_type_all'|trans }}</strong></p>
+    {% else %}
+        {% include 'General/Show/Partials/communes-list.html.twig' %}
+    {% endif %}
+{% else %}
+    <h2>Render definition not found for property {{ field_description.name }}</h2>
 {% endif %}

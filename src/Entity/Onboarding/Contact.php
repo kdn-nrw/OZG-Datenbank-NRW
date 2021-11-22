@@ -18,6 +18,7 @@ use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\PersonInterface;
 use App\Entity\Base\PersonPropertiesTrait;
+use App\Entity\MetaData\CalculateCompletenessEntityInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Commune;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,7 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table(name="ozg_onboarding_contact")
  */
-class Contact extends BaseEntity implements HideableEntityInterface, PersonInterface, HasMetaDateEntityInterface
+class Contact extends BaseEntity implements HideableEntityInterface, PersonInterface, HasMetaDateEntityInterface, CalculateCompletenessEntityInterface
 {
     public const CONTACT_TYPE_BIS = 'bis';
     public const CONTACT_TYPE_FS = 'fs';
@@ -219,23 +220,5 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
     public function getServiceAccount(): ?ServiceAccount
     {
         return $this->serviceAccount;
-    }
-
-    public function calculateCompletionRate(): int
-    {
-        $completionRate = 0;
-        $calcProperties = ['firstName', 'email', 'lastName', 'phoneNumber'];
-        if ($this->contactType === self::CONTACT_TYPE_EPAYMENT_USER) {
-            $calcProperties[] = 'externalUserName';
-            $calcProperties[] = 'mobileNumber';
-        }
-        $ratePerProperty = ceil(100 / count($calcProperties));
-        foreach ($calcProperties as $property) {
-            $getter = 'get' . ucfirst($property);
-            if (!empty($this->$getter())) {
-                $completionRate += $ratePerProperty;
-            }
-        }
-        return min(100, $completionRate);
     }
 }

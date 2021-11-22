@@ -15,7 +15,7 @@ file that was distributed with this source code.
         {% if field_description.option('reference_field_list') %}
             {% set tableHeaders = field_description.option('reference_field_list') %}
         {% else %}
-            {% set tableHeaders = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'status'] %}
+            {% set tableHeaders = ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2'] %}
         {% endif %}
         {% set labelPrefix = 'app.service.entity.' %}
         {% set entityClass = 'App\\Entity\\Service' %}
@@ -30,10 +30,12 @@ file that was distributed with this source code.
                 {% else %}
                     {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
                 {% endif %}
+                {#
                 <th>
                     {{ 'app.solution.entity.maturity'|trans }}
                     {% include 'MetaData/help-popover.html.twig' with {'objectOrClass': '\App\Entity\ServiceSolution', 'propertyKey': 'maturity'} %}
                 </th>
+                #}
                 {% if refSettings.edit.enabled %}
                     <th>
                     </th>
@@ -58,11 +60,13 @@ file that was distributed with this source code.
                         {% set editObjectId = null %}
                     {% endif %}
                 {% endif %}
+                {#
                 <td>
                     {% if child.maturity %}
                         {{ child.maturity.name }}
                     {% endif %}
                 </td>
+                #}
                 {% if refSettings.edit.enabled and editObjectId %}
                     <td>
                         {% if refSettings.admin.hasAccess(refSettings.edit.route, child) %}

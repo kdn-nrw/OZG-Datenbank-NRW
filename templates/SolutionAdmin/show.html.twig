@@ -43,3 +43,8 @@ file that was distributed with this source code.
         {{ parent() }}
     {% endif %}
 {% endblock %}
+
+{% block app_show_custom_fields %}
+    {% include 'SolutionAdmin/show-solution-tab-fields.html.twig' %}
+    {{ parent() }}
+{% endblock %}

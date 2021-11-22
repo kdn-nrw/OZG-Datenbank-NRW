@@ -12,6 +12,7 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\StateGroup\ServiceProviderAdmin;
 use App\Admin\Traits\ModelRegionProjectTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Datagrid\CustomDatagrid;
@@ -99,6 +100,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,
                 'template' => 'SolutionAdmin/list_communes.html.twig',
+                'associated_property' => 'commune',
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -192,32 +194,14 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('communes', TemplateRegistry::TYPE_CHOICE, [
-                'label' => 'app.solution.entity.communes',
-                'admin_code' => CommuneAdmin::class,
-                'associated_property' => 'name',
-                'check_has_all_modifier' => true,
-            ]);
-        $this->addServiceProvidersShowFields($showMapper);
-        $showMapper
-            ->add('customProvider')
-            ->add('portals')
-            ->add('formServerSolutions', null, [
-                'associated_property' => 'formServer'
-            ])
-            ->add('paymentTypes')
-            ->add('authentications')
-            ->add('analogServices')
-            ->add('openDataItems')
             ->add('name')
             ->add('description')
             ->add('url', 'url')
-            ->add('serviceSystems', null, [
-                'admin_code' => ServiceSystemAdmin::class,
-            ])
-            ->add('serviceSolutions', null, [
-                'associated_property' => 'service'
-            ])
+            ->add('paymentTypes')
+            ->add('authentications')
+            ->add('analogServices')
+            ->add('openDataItems');
+        $showMapper
             ->add('status', TemplateRegistry::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
@@ -229,8 +213,52 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'class' => ConfidenceLevel::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
+            ])
+            ->add('portals');
+        $showMapper
+            ->add('customProvider');
+        $enableTabs = true;
+        // Tab fields
+        $showMapper
+            ->add('communes', null, [
+                'label' => 'app.solution.entity.communes',
+                'admin_code' => CommuneAdmin::class,
+                'associated_property' => 'name',
+                'check_has_all_modifier' => true,
+                'is_custom_field' => $enableTabs,
+                'is_tab_field' => $enableTabs,
+                'is_custom_rendered' => $enableTabs,
+            ])
+            ->add('serviceProviders', null, [
+                'admin_code' => ServiceProviderAdmin::class,
+                'is_custom_field' => $enableTabs,
+                'is_tab_field' => $enableTabs,
+                'is_custom_rendered' => $enableTabs,
+            ])
+            ->add('formServerSolutions', null, [
+                'associated_property' => 'formServer',
+                'is_custom_field' => $enableTabs,
+                'is_tab_field' => $enableTabs,
+                'is_custom_rendered' => $enableTabs,
+            ])
+            ->add('serviceSystems', null, [
+                'admin_code' => ServiceSystemAdmin::class,
+                'is_custom_field' => $enableTabs,
+                'is_tab_field' => $enableTabs,
+                'is_custom_rendered' => $enableTabs,
+            ])
+            ->add('serviceSolutions', null, [
+                'associated_property' => 'service',
+                'is_custom_field' => $enableTabs,
+                'is_tab_field' => $enableTabs,
+                'is_custom_rendered' => $enableTabs,
+            ])
+            ->add('modelRegionProjects', null,[
+                'admin_code' => ModelRegionProjectAdmin::class,
+                'is_custom_field' => $enableTabs,
+                'is_tab_field' => $enableTabs,
+                'is_custom_rendered' => $enableTabs,
             ]);
-        $this->addModelRegionProjectsShowFields($showMapper);
     }
 
     public function isGranted($name, $object = null)

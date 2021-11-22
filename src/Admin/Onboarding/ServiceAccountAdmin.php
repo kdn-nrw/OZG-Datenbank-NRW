@@ -13,9 +13,11 @@ namespace App\Admin\Onboarding;
 
 
 use App\Admin\StateGroup\CommuneAdmin;
+use App\Entity\Base\BaseEntityInterface;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -108,6 +110,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
                 'label' => 'app.service_account.entity.town',
                 'required' => false,
             ]);
+        $this->addDataCompletenessConfirmedField($formMapper);
 
         $formMapper->end();
         $formMapper

@@ -13,6 +13,7 @@ namespace App\Admin\Onboarding;
 
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\ServiceProviderTrait;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Onboarding\Epayment;
 use App\Form\Type\CommuneType;
 use App\Form\Type\EpaymentProjectType;
@@ -149,6 +150,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'required' => false,
             ]);
 
+        $this->addDataCompletenessConfirmedField($formMapper);
         $this->addServiceProvidersFormFields($formMapper, 'paymentOperator', 'paymentProvider');
         $formMapper->end();
         $formMapper

@@ -40,6 +40,31 @@ class MetaItemProperty extends AbstractMetaItem
     protected $parent;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="placeholder", type="string", length=255, nullable=true)
+     */
+    protected $placeholder;
+
+    /**
+     * Use property to calculate completion ratio of entity
+     *
+     * @var bool|null
+     *
+     * @ORM\Column(name="use_for_completeness_calculation", type="boolean", nullable=true)
+     */
+    protected $useForCompletenessCalculation = false;
+
+    /**
+     * Is required
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="required", type="boolean")
+     */
+    protected $required = false;
+
+    /**
      * @return MetaItem|null
      */
     public function getParent(): ?MetaItem
@@ -53,6 +78,54 @@ class MetaItemProperty extends AbstractMetaItem
     public function setParent(?MetaItem $parent): void
     {
         $this->parent = $parent;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPlaceholder(): ?string
+    {
+        return $this->placeholder;
+    }
+
+    /**
+     * @param string|null $placeholder
+     */
+    public function setPlaceholder(?string $placeholder): void
+    {
+        $this->placeholder = $placeholder;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getUseForCompletenessCalculation(): ?bool
+    {
+        return $this->useForCompletenessCalculation;
+    }
+
+    /**
+     * @param bool|null $useForCompletenessCalculation
+     */
+    public function setUseForCompletenessCalculation(?bool $useForCompletenessCalculation): void
+    {
+        $this->useForCompletenessCalculation = $useForCompletenessCalculation;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequired(): bool
+    {
+        return $this->required;
+    }
+
+    /**
+     * @param bool $required
+     */
+    public function setRequired(bool $required): void
+    {
+        $this->required = $required;
     }
 
     /**
@@ -74,6 +147,10 @@ class MetaItemProperty extends AbstractMetaItem
         if (($overrideIfEmpty || !empty($mergeItem->getCustomLabel()))
             && $mergeItem->getCustomLabel() !== $this->getCustomLabel()) {
             $this->setCustomLabel($mergeItem->getCustomLabel());
+        }
+        if (($overrideIfEmpty || !empty($mergeItem->getPlaceholder()))
+            && $mergeItem->setPlaceholder() !== $this->getPlaceholder()) {
+            $this->setPlaceholder($mergeItem->getPlaceholder());
         }
     }
 

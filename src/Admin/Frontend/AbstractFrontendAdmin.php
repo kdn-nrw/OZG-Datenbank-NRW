@@ -78,11 +78,14 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         $this->baseRoutePattern = '/frontend' . $routePattern;
         $this->adminBaseRouteName = $routeName;
         $this->adminBaseRoutePattern = $routePattern;
-        $listTemplate = $this->getTemplateRegistry()->getTemplate('list');
-        if (strpos($listTemplate, '@SonataAdmin') === 0) {
-            $this->setTemplate('list', 'Frontend/Admin/CRUD/list.html.twig');
+        $templateRegistry = $this->getTemplateRegistry();
+        if (null !== $templateRegistry) {
+            $listTemplate = $templateRegistry->getTemplate('list');
+            if (strpos($listTemplate, '@SonataAdmin') === 0) {
+                $templateRegistry->setTemplate('list', 'Frontend/Admin/CRUD/list.html.twig');
+            }
+            $templateRegistry->setTemplate('layout', 'Frontend/Admin/base.html.twig');
         }
-        $this->setTemplate('layout', 'Frontend/Admin/base.html.twig');
     }
 
     /**

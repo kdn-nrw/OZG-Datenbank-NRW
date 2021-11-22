@@ -11,6 +11,7 @@
 
 namespace App\EventSubscriber;
 
+use App\Model\EmailTemplate\AbstractTemplateModel;
 use App\Service\Mailer\InjectEmailTemplateManagerTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -43,7 +44,7 @@ class SendNotificationsAfterUpdateSubscriber implements EventSubscriberInterface
      */
     public function afterEntityUpdated(EntityPostUpdateEvent $event): void
     {
-        $this->emailTemplateManager->sendNotificationsAfterUpdate($event->getObject());
+        $this->emailTemplateManager->sendNotificationsForObject($event->getObject(), AbstractTemplateModel::PROCESS_TYPE_UPDATE);
     }
 
     /**
@@ -53,6 +54,6 @@ class SendNotificationsAfterUpdateSubscriber implements EventSubscriberInterface
      */
     public function afterEntityCreate(EntityPostCreateEvent $event): void
     {
-        $this->emailTemplateManager->sendNotificationsAfterCreate($event->getObject());
+        $this->emailTemplateManager->sendNotificationsForObject($event->getObject(), AbstractTemplateModel::PROCESS_TYPE_CREATE);
     }
 }

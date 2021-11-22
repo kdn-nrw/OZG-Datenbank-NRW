@@ -208,3 +208,29 @@
     max-width: 600px;
   }
 }
+
+.app-form-info.above {
+  margin-bottom: 20px;
+  .info-box {
+    position: relative;
+    .info-box-content {
+      margin-left: 0;
+    }
+    .info-box-icon {
+      float: none;
+      position: absolute;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+    @media (min-width: 400px) {
+      .info-box-icon {
+        display: flex;
+      }
+      .info-box-content {
+        margin-left: 90px;
+      }
+    }
+  }
+}

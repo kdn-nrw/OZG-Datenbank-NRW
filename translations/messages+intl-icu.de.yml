@@ -415,6 +415,17 @@ app:
     entity:
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
       group_email_custom: '[Optional/falls abweichend] E-Mail-Adresse für Onboarding-Rückfragen'
+      status_prefix: 'Datenerfassung:'
+      property_count_append: 'Felder ausgefüllt'
+      data_completeness_confirmed: 'die Kommune bestätigt, alle notwendigen Felder ausgefüllt zu haben'
+      data_completeness_confirmed_specific: 'die Kommune {commune} bestätigt, alle notwendigen Felder ausgefüllt zu haben'
+      data_completeness_has_been_confirmed: 'Die Kommune {commune} hat bestätigt, dass alle notwendigen Felder ausgefüllt sind'
+      data_incomplete: 'Für die Kommune {commune} sind noch nicht alle notwendigen Felder ausgefüllt'
+      status_choices:
+        new: Noch keine Eingaben
+        incomplete: Unvollständig
+        complete: Vollständig
+        complete_confirmed: Vollständigkeit bestätigt
   commune_info:
     object_name: Basisdaten
     list: Onboarding Basisdaten
@@ -431,15 +442,12 @@ app:
       contact_data: Kontakte
       content_data: Inhalte
       footer_data: Informationen für den Footer
+      technical_data: Technische Informationen
     entity:
       description: Beschreibung
       commune: Kommune
       modified_at: Letzter Eintrag
       status: Status
-      status_choices:
-        new: Noch keine Eingaben
-        incomplete: Unvollständig
-        complete: Vollständig
       commune_name: Kommune
       official_commune_key: AGS
       custom_values: Benutzerdefinierte Werte
@@ -459,6 +467,7 @@ app:
       opening_hours: Öffnungszeiten
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
       commune_solutions: Dienste
+      ip_address: IP-Adresse
   dataclearing:
     object_name: Dataclearing
     list: Onboarding Dataclearing
@@ -471,10 +480,6 @@ app:
       commune: Kommune
       modified_at: Letzter Eintrag
       status: Status
-      status_choices:
-        new: Noch keine Eingaben
-        incomplete: Unvollständig
-        complete: Vollständig
       custom_values: Benutzerdefinierte Werte
   epayment:
     object_name: ePayBL
@@ -538,10 +543,6 @@ app:
       phone_number: Telefon
       modified_at: Letzter Eintrag
       status: Status
-      status_choices:
-        new: Noch keine Eingaben
-        incomplete: Unvollständig
-        complete: Vollständig
       custom_values: Benutzerdefinierte Werte
       payment_provider_account_id: 'Account-ID externer Zahlungsverkehrsprovider'
       payment_provider: 'Zahlungsverkehrsprovider'
@@ -598,10 +599,6 @@ app:
       commune: Kommune
       modified_at: Letzter Eintrag
       status: Status
-      status_choices:
-        new: Noch keine Eingaben
-        incomplete: Unvollständig
-        complete: Vollständig
       commune_name: Kommune
       official_commune_key: AGS
       custom_values: Benutzerdefinierte Werte
@@ -945,6 +942,7 @@ app:
         form_solution_update: 'Onboarding Formsolutions - Update'
         epayment_update: 'Onboarding ePayBL - Update'
         release_update: 'Go-Live - Update'
+        onboarding_data_complete_update: 'Onboarding: Die Kommune XY bestätigt, alle notwendigen Felder ausgefüllt zu haben'
       hidden: E-Mail-Versand deaktiviert?
       reply_to_email: Antwort an
       default_recipient: Empfänger (Standard)
@@ -1227,12 +1225,18 @@ app:
     object_name: Meta-Eigenschaft
     list: Meta-Eigenschaften
     create: Meta-Eigenschaft anlegen
+    groups:
+      general: Allgemein
+      settings: Einstellungen
     entity:
       parent: Metadatentyp
       custom_label: Bezeichnung (alternativ)
       description: Beschreibung/Tooltip
       meta_type: Typ
       meta_key: Eigenschaft
+      placeholder: Platzhalter (wenn abweichend von Bezeichnung)
+      required: Pflichtfeld
+      use_for_completeness_calculation: Für Berechung der Vollständigkeit Datenerfassung verwenden
   ministry_state:
     object_name: Ministerium
     list: Ministerien (Land)
@@ -1633,9 +1637,9 @@ app:
       comment: Kommentar
       data_center: Rechenzentrum
   service_solution:
-    object_name: Online-Dienst für Leistung
-    list: Online-Dienst für Leistung
-    create: Online-Dienst für Leistung anlegen
+    object_name: Online-Dienst für Leika-Leistung
+    list: Online-Dienst für Leika-Leistungen
+    create: Online-Dienst für Leika-Leistung anlegen
     entity:
       solution: Online-Dienst
       service: Leistung

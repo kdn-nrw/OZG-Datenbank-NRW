@@ -17,10 +17,13 @@ use App\Admin\CustomFieldAdminInterface;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\DependencyInjection\InjectionTraits\InjectSecurityTrait;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\MetaData\MetaItemProperty;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\User;
+use App\EventSubscriber\EntityPostUpdateEvent;
 use App\Service\MetaData\InjectMetaDataManagerTrait;
+use App\Service\Onboarding\InjectOnboardingManagerTrait;
 use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -32,6 +35,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -40,6 +44,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
 {
     use InjectMetaDataManagerTrait;
     use InjectManagerRegistryTrait;
+    use InjectOnboardingManagerTrait;
     use InjectSecurityTrait;
 
     /**
@@ -62,6 +67,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
+        $this->addDataCompletenessConfirmedField($formMapper);
         $formMapper
             ->add('status', ChoiceType::class, [
                 'label' => 'app.commune_info.entity.status',
@@ -74,6 +80,19 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
             ]);
         $this->addGroupEmailFormField($formMapper);
         $formMapper->end();
+    }
+
+    /**
+     * @param FormMapper $formMapper
+     */
+    protected function addDataCompletenessConfirmedField(FormMapper $formMapper)
+    {
+        $subject = $this->getSubject();
+        if ($subject instanceof AbstractOnboardingEntity && $subject->getId() && !$subject->isDataCompletenessConfirmed()) {
+            $formMapper->add('dataCompletenessConfirmed', CheckboxType::class, [
+                'required' => false,
+            ]);
+        }
     }
 
     public function getFormBuilder()
@@ -133,14 +152,41 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
 
     public function preUpdate($object)
     {
+        parent::preUpdate($object);
         /** @var AbstractOnboardingEntity $object */
-        $object->calculateCompletionRate();
+        $this->onboardingManager->beforeSave($object);
     }
 
     public function prePersist($object)
     {
+        parent::prePersist($object);
         /** @var AbstractOnboardingEntity $object */
-        $object->calculateCompletionRate();
+        $this->onboardingManager->beforeSave($object);
+    }
+
+    public function postPersist($object)
+    {
+        parent::postPersist($object);
+        /** @var AbstractOnboardingEntity $object */
+        $this->onboardingManager->afterSave($object);
+    }
+
+    /**
+     * @param object $object
+     */
+    public function postUpdate($object)
+    {
+        parent::postUpdate($object);
+        // Notifications are sent in the parent postUpdate function; only change status after notification
+        // for completion has been sent
+        if ($object instanceof AbstractOnboardingEntity
+            && $object->isDataCompletenessConfirmed()
+            && $object->getStatus() < AbstractOnboardingEntity::STATUS_COMPLETE_CONFIRMED) {
+            $object->setStatus(AbstractOnboardingEntity::STATUS_COMPLETE_CONFIRMED);
+            $this->getModelManager()->update($object);
+        }
+        /** @var AbstractOnboardingEntity $object */
+        $this->onboardingManager->afterSave($object);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

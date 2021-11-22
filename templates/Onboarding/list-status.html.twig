@@ -11,6 +11,8 @@ file that was distributed with this source code.
         {% set statusClass = 'danger' %}
     {% elseif object.status == constant('App\\Entity\\Onboarding\\AbstractOnboardingEntity::STATUS_COMPLETE') %}
         {% set statusClass = 'success' %}
+    {% elseif object.status == constant('App\\Entity\\Onboarding\\AbstractOnboardingEntity::STATUS_COMPLETE_CONFIRMED') %}
+        {% set statusClass = 'success' %}
     {% else %}
         {% set statusClass = 'warning' %}
     {% endif %}

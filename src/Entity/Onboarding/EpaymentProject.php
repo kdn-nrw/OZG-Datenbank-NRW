@@ -14,6 +14,7 @@ namespace App\Entity\Onboarding;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
+use App\Entity\MetaData\CalculateCompletenessEntityInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table(name="ozg_onboarding_epayment_project")
  */
-class EpaymentProject extends BaseEntity implements HideableEntityInterface, HasMetaDateEntityInterface
+class EpaymentProject extends BaseEntity implements HideableEntityInterface, HasMetaDateEntityInterface, CalculateCompletenessEntityInterface
 {
     public const PROVIDER_TYPE_GIROPAY = 'giropay';
     public const PROVIDER_TYPE_CREDIT_CARD = 'credit';
@@ -207,20 +208,6 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface, Has
             $labelKey = 'app.epayment_project.entity.provider_choices.giropay';
         }
         return $labelKey;
-    }
-
-    public function calculateCompletionRate(): int
-    {
-        $completionRate = 0;
-        $calcProperties = ['projectId', 'projectPassword'];
-        $ratePerProperty = ceil(100 / count($calcProperties));
-        foreach ($calcProperties as $property) {
-            $getter = 'get' . ucfirst($property);
-            if (!empty($this->$getter())) {
-                $completionRate += $ratePerProperty;
-            }
-        }
-        return min(100, $completionRate);
     }
 
     public static function getTypeEnvironmentChoices()

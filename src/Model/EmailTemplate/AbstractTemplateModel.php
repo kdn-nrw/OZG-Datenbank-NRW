@@ -13,12 +13,17 @@ declare(strict_types=1);
 
 namespace App\Model\EmailTemplate;
 
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Configuration\EmailTemplate;
+use App\Util\SnakeCaseConverter;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AbstractTemplateModel
 {
+    public const PROCESS_TYPE_CREATE = 'create';
+    public const PROCESS_TYPE_UPDATE = 'update';
+
     /**
      * @var string|null
      */
@@ -53,6 +58,12 @@ abstract class AbstractTemplateModel
      * @var Address|null
      */
     protected $recipient;
+
+    /**
+     * Custom marker group name; only needs to be filled, if different from the local entity class name
+     * @var string|null
+     */
+    protected $markerGroup;
 
     /**
      * @return string|null
@@ -156,6 +167,14 @@ abstract class AbstractTemplateModel
     }
 
     /**
+     * @return string|null
+     */
+    public function getMarkerGroup(): ?string
+    {
+        return $this->markerGroup;
+    }
+
+    /**
      * @return Address|null
      */
     public function getRecipient(): ?Address
@@ -169,6 +188,40 @@ abstract class AbstractTemplateModel
     public function setRecipient(?Address $recipient): void
     {
         $this->recipient = $recipient;
+    }
+
+    /**
+     * Returns true, if the email template has been initialized
+     */
+    public function isInitialized(): bool
+    {
+        return null !== $this->emailTemplate;
+    }
+
+    /**
+     * Returns true, if the email template is enabled for the given object and process type
+     * @param BaseEntityInterface $object
+     * @param string $processType
+     * @return bool
+     */
+    public function isMatch(BaseEntityInterface $object, string $processType): bool
+    {
+        $key = self::getEntityTemplateKey(get_class($object), $processType);
+        return $key === $this->templateKey;
+    }
+
+    /**
+     * Returns the internal key for the given entity class
+     *
+     * @param string $entityClass
+     * @param string $processType
+     * @return string
+     */
+    private static function getEntityTemplateKey(string $entityClass, string $processType = ''): string
+    {
+        $entityKey = trim(str_replace(['\\', 'App_Entity'], ['_', ''], $entityClass), ' _');
+        $entityKey = strtoupper(SnakeCaseConverter::camelCaseToSnakeCase($entityKey));
+        return strtolower($entityKey . ($processType ? '_' . $processType : ''));
     }
 
 }

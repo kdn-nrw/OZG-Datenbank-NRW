@@ -434,9 +434,4 @@ class FormSolution extends AbstractOnboardingEntity
     {
         $this->letterheadAddress = $letterheadAddress;
     }
-
-    protected function getRequiredPropertiesForCompletion(): array
-    {
-        return ['contacts', ['privacyText', 'privacyUrl'], ['imprintText', 'imprintUrl'], 'accessibility', 'openingHours', 'imageName', 'letterheadAddress',];
-    }
 }

@@ -18,9 +18,11 @@ use App\Entity\User;
 use App\Model\EmailTemplate\AbstractTemplateModel;
 use App\Service\InjectAdminManagerTrait;
 use App\Translator\InjectTranslatorTrait;
+use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use App\Util\SnakeCaseConverter;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface as RoutingUrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -43,7 +45,7 @@ class MarkerService
         $variables = $model->getVariables();
         foreach ($variables as $key => $variable) {
             if ($variable instanceof BaseEntityInterface) {
-                $this->addEntityMarkers($markers, $variable);
+                $this->addEntityMarkers($markers, $variable, $model->getMarkerGroup());
             } else {
                 $this->addFieldValueMarker($markers, $key, $variable, '');
             }
@@ -76,15 +78,16 @@ class MarkerService
      * @param BaseEntityInterface|UserInterface $entity
      * @param string|null $markerGroup
      */
-    public function addEntityMarkers(array &$markers, $entity, ?string $markerGroup = null): void
+    private function addEntityMarkers(array &$markers, $entity, ?string $markerGroup = null): void
     {
         $ignoreFields = ['id', 'pid', 'hash', 'internalRemarks',];
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $entityClass = ClassUtils::getRealClass(get_class($entity));
         if (!$markerGroup) {
-            $markerGroup = trim(str_replace(['\\', 'App_Entity'], ['_', ''], get_class($entity)), ' _');
+            $markerGroup = trim(str_replace(['\\', 'App_Entity'], ['_', ''], $entityClass), ' _');
             $markerGroup = strtoupper(SnakeCaseConverter::camelCaseToSnakeCase($markerGroup));
         }
-        $admin = $this->adminManager->getAdminByEntityClass(get_class($entity));
+        $admin = $this->adminManager->getAdminByEntityClass($entityClass);
         $urlEdit = '';
         $urlShow = '';
         if (null !== $admin && $admin->hasRoute('edit')) {
@@ -93,6 +96,8 @@ class MarkerService
         if (null !== $admin && $admin->hasRoute('show')) {
             $urlShow = $admin->generateObjectUrl('show', $entity, [], RoutingUrlGeneratorInterface::ABSOLUTE_URL);
         }
+        $classLabel = PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($entityClass, '') . 'object_name';
+        $this->addFieldValueMarker($markers, 'classLabel', $classLabel, $markerGroup);
         $this->addFieldValueMarker($markers, 'adminEditUrl', $urlEdit, $markerGroup);
         $this->addFieldValueMarker($markers, 'adminShowUrl', $urlShow, $markerGroup);
         // ADMIN_EDIT_URL
@@ -106,7 +111,7 @@ class MarkerService
 
     }
 
-    public function addObjectMarkers(array &$markers, $object, $markerGroup, array $allowedFields): void
+    private function addObjectMarkers(array &$markers, $object, $markerGroup, array $allowedFields): void
     {
         $entityProperties = $this->getEntityPropertyList($object, [], $allowedFields);
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
@@ -134,7 +139,7 @@ class MarkerService
      * @param PersonInterface $entity
      * @param string $markerGroup
      */
-    private function addGreetingMarker(&$markers, PersonInterface $entity, string $markerGroup = 'GREETING'): void
+    private function addGreetingMarker(array &$markers, PersonInterface $entity, string $markerGroup = 'GREETING'): void
     {
         $personGender = $entity->getGender();
         $name = $entity->getLastName();
@@ -216,9 +221,9 @@ class MarkerService
      * @param array $markers The marker array
      * @param string $fieldName
      * @param mixed $fieldValue
-     * @param string $markerGroup
+     * @param string|null $markerGroup
      */
-    private function addFieldValueMarker(&$markers, $fieldName, $fieldValue, $markerGroup): void
+    private function addFieldValueMarker(array &$markers, $fieldName, $fieldValue, $markerGroup): void
     {
         if (is_object($fieldValue)) {
             if ($fieldValue instanceof DateTime) {
@@ -229,6 +234,8 @@ class MarkerService
                 $this->addMarker($markers, $markerGroup, $fieldName . '_firstName', $fieldValue->getFirstName());
                 $this->addMarker($markers, $markerGroup, $fieldName . '_lastName', $fieldValue->getLastName());
             }
+        } elseif (stripos($fieldName, 'Label') !== false && strpos($fieldValue, 'app.') === 0) {
+            $fieldValue = $this->translator->trans($fieldValue);
         }
         $convertedValue = $this->convertValueToString($fieldValue);
         $this->addMarker($markers, $markerGroup, $fieldName, $convertedValue);
@@ -274,11 +281,11 @@ class MarkerService
      * Convert the given input in camel case format into underscore format
      *
      * @param array $markers The marker array
-     * @param string $prefix The prefix value for the marker
+     * @param string|null $prefix The optional prefix value for the marker
      * @param string $fieldName
      * @param string $fieldValue
      */
-    private function addMarker(&$markers, $prefix, $fieldName, $fieldValue): void
+    private function addMarker(array &$markers, $prefix, $fieldName, $fieldValue): void
     {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $fieldName, $matches);
         $ret = $matches[0];

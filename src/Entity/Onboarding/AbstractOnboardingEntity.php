@@ -20,6 +20,7 @@ use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Configuration\CustomValue;
 use App\Entity\Configuration\CustomValuesCollectionAggregateTrait;
 use App\Entity\Configuration\HasCustomFieldsEntityInterface;
+use App\Entity\MetaData\CalculateCompletenessEntityInterface;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
@@ -41,8 +42,11 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     HideableEntityInterface,
     HasCustomFieldsEntityInterface,
     HasMetaDateEntityInterface,
-    HasGroupEmailEntityInterface
+    HasGroupEmailEntityInterface,
+    CalculateCompletenessEntityInterface
 {
+    public const DEFAULT_RECIPIENT_DATA_COMPLETE = 'kommunalportal@kdn.de';
+
     use BlameableTrait;
     use HideableEntityTrait;
     use CustomValuesCollectionAggregateTrait;
@@ -80,11 +84,13 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     public const STATUS_NEW = 0;
     public const STATUS_INCOMPLETE = 2;
     public const STATUS_COMPLETE = 9;
+    public const STATUS_COMPLETE_CONFIRMED = 10;
 
     public static $statusChoices = [
-        AbstractOnboardingEntity::STATUS_NEW => 'app.commune_info.entity.status_choices.new',
-        AbstractOnboardingEntity::STATUS_INCOMPLETE => 'app.commune_info.entity.status_choices.incomplete',
-        AbstractOnboardingEntity::STATUS_COMPLETE => 'app.commune_info.entity.status_choices.complete',
+        AbstractOnboardingEntity::STATUS_NEW => 'app.abstract_onboarding_entity.entity.status_choices.new',
+        AbstractOnboardingEntity::STATUS_INCOMPLETE => 'app.abstract_onboarding_entity.entity.status_choices.incomplete',
+        AbstractOnboardingEntity::STATUS_COMPLETE => 'app.abstract_onboarding_entity.entity.status_choices.complete',
+        AbstractOnboardingEntity::STATUS_COMPLETE_CONFIRMED => 'app.abstract_onboarding_entity.entity.status_choices.complete_confirmed',
     ];
 
     /**
@@ -125,6 +131,15 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
      * @var int|null
      */
     protected $messageCount = 0;
+
+    /**
+     * The completeness of the data has been confirmed
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="data_completeness_confirmed", type="boolean", nullable=true)
+     */
+    protected $dataCompletenessConfirmed = false;
 
     public function __construct(Commune $commune)
     {
@@ -266,10 +281,14 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     {
         $this->completionRate = (int) max(0, min($completionRate, 100));
         if ($this->completionRate === 100) {
-            $this->setStatus(self::STATUS_COMPLETE);
+            if ($this->status !== self::STATUS_COMPLETE_CONFIRMED) {
+                $this->setStatus(self::STATUS_COMPLETE);
+            }
         } elseif ($this->completionRate > 0) {
+            $this->setDataCompletenessConfirmed(false);
             $this->setStatus(self::STATUS_INCOMPLETE);
         } else {
+            $this->setDataCompletenessConfirmed(false);
             $this->setStatus(self::STATUS_NEW);
         }
     }
@@ -310,69 +329,6 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     }
 
     /**
-     * Returns true, if the given property is filled
-     * @param string $property
-     * @return bool
-     */
-    protected function isPropertyCompleted(string $property): bool
-    {
-        $getter = 'get' . ucfirst($property);
-        if (!method_exists($this, $getter)) {
-            $getter = 'is' . ucfirst($property);
-        }
-        $value = $this->$getter();
-        if ($value instanceof Collection) {
-            $itemCount = count($value);
-            $hasIncompleteSubItems = false;
-            foreach ($value as $item) {
-                if (method_exists($item, 'calculateCompletionRate')) {
-                    if ($item->calculateCompletionRate() < 100) {
-                        $hasIncompleteSubItems = true;
-                        break;
-                    }
-                }
-            }
-            $isCompleted = $itemCount > 0 && !$hasIncompleteSubItems;
-        } elseif ($value instanceof Contact) {
-            $isCompleted = $value->calculateCompletionRate() === 100;
-        } else {
-            $isCompleted = !empty($value);
-        }
-        return $isCompleted;
-    }
-
-    /**
-     * Calculates the completion rate for this entity
-     *
-     * @return int
-     */
-    public function calculateCompletionRate(): int
-    {
-        $completionRate = 0;
-        $calcProperties = $this->getRequiredPropertiesForCompletion();
-        $ratePerProperty = ceil(100 / count($calcProperties));
-        foreach ($calcProperties as $property) {
-            if (is_array($property)) {
-                $propertyIsFilled = false;
-                foreach ($property as $orProperty) {
-                    $propertyIsFilled = $this->isPropertyCompleted($orProperty);
-                    if ($propertyIsFilled) {
-                        break;
-                    }
-                }
-            } else {
-                $propertyIsFilled = $this->isPropertyCompleted($property);
-            }
-            if ($propertyIsFilled) {
-                $completionRate += $ratePerProperty;
-            }
-        }
-        $newCompletionRate = min(100, $completionRate);
-        $this->setCompletionRate($newCompletionRate);
-        return $newCompletionRate;
-    }
-
-    /**
      * @return int
      */
     public function getMessageCount(): int
@@ -386,6 +342,22 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     public function setMessageCount(?int $messageCount): void
     {
         $this->messageCount = (int) $messageCount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDataCompletenessConfirmed(): bool
+    {
+        return (bool) $this->dataCompletenessConfirmed;
+    }
+
+    /**
+     * @param bool $dataCompletenessConfirmed
+     */
+    public function setDataCompletenessConfirmed(bool $dataCompletenessConfirmed): void
+    {
+        $this->dataCompletenessConfirmed = $dataCompletenessConfirmed;
     }
 
     /**
@@ -408,11 +380,4 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     {
         $this->groupEmail = $groupEmail;
     }
-
-    /**
-     * Returns the properties that are relevant for the completion rate calculation
-     *
-     * @return array
-     */
-    abstract protected function getRequiredPropertiesForCompletion(): array;
 }

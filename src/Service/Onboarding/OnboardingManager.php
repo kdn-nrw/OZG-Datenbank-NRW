@@ -12,6 +12,8 @@
 namespace App\Service\Onboarding;
 
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
+use App\Entity\MetaData\CalculateCompletenessEntityInterface;
+use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\Onboarding\CommuneInfo;
 use App\Entity\Onboarding\Epayment;
 use App\Entity\Onboarding\FormSolution;
@@ -20,6 +22,11 @@ use App\Entity\StateGroup\Commune;
 class OnboardingManager
 {
     use InjectManagerRegistryTrait;
+
+    /**
+     * @var OnboardingProgressCalculator
+     */
+    private $progressCalculator;
 
     /**
      * Create onboarding entity items for all communes
@@ -115,7 +122,7 @@ class OnboardingManager
     public function updateAllOnboardingSolutions()
     {
         $this->updateAllCommuneInfoSolutions();
-        $this->updateAllEpaymenServices();
+        $this->updateEpaymenServices();
     }
 
     private function updateAllCommuneInfoSolutions()
@@ -164,7 +171,7 @@ class OnboardingManager
         $this->createReferences('ozg_onboarding_commune_solution', $mapReferencesToBeCreated, $fieldTypes);
     }
 
-    private function updateAllEpaymenServices()
+    public function updateEpaymenServices(?Commune $commune = null)
     {
         // Use SQL statements to increase performance
         $em = $this->getEntityManager();
@@ -172,8 +179,11 @@ class OnboardingManager
             $configuration->setSQLLogger(null);
         }
         $ePaymentRepository = $em->getRepository(Epayment::class);
-        $ePaymentResults = $ePaymentRepository->findAll();
-
+        if (null === $commune) {
+            $ePaymentResults = $ePaymentRepository->findAll();
+        } else {
+            $ePaymentResults = $ePaymentRepository->findBy(['commune' => $commune]);
+        }
         $now = date_create();
         $now->setTimezone(new \DateTimeZone('UTC'));
         $dateString = $now->format('Y-m-d H:i:s');
@@ -205,8 +215,10 @@ class OnboardingManager
                 $this->executeStatement($sql);
             }
         }
-        $em->flush();
-        $em->clear();
+        if (null === $commune) {
+            $em->flush();
+            $em->clear();
+        }
         $fieldTypes = [
             'epayment_id' => '%d',
             'solution_id' => '%d',
@@ -327,5 +339,52 @@ class OnboardingManager
             $this->executeStatement($sql);
         }
         return $referencesToBeCreated;
+    }
+
+    /**
+     * Returns the information for the completion state
+     *
+     * @param CalculateCompletenessEntityInterface $object
+     * @return array
+     */
+    public function getCompletionInfo(CalculateCompletenessEntityInterface $object): array
+    {
+        if (null === $this->progressCalculator) {
+            $this->progressCalculator = new OnboardingProgressCalculator();
+        }
+        return $this->progressCalculator->getCompletionInfo($object);
+    }
+
+    /**
+     * Common actions before entity is saved
+     * @param AbstractOnboardingEntity $object
+     */
+    public function beforeSave(AbstractOnboardingEntity $object)
+    {
+        $this->calculateCompletionRate($object);
+    }
+
+    /**
+     * Common actions after entity is saved
+     * @param AbstractOnboardingEntity $object
+     */
+    public function afterSave(AbstractOnboardingEntity $object)
+    {
+        if ($object instanceof CommuneInfo && null !== $commune = $object->getCommune()) {
+            $this->updateEpaymenServices($commune);
+        }
+    }
+
+    /**
+     * Calculates the completion rate for this entity
+     *
+     * @return int
+     */
+    public function calculateCompletionRate(CalculateCompletenessEntityInterface $object): int
+    {
+        if (null === $this->progressCalculator) {
+            $this->progressCalculator = new OnboardingProgressCalculator();
+        }
+        return $this->progressCalculator->calculateCompletionRate($object);
     }
 }

@@ -296,12 +296,4 @@ class ServiceAccount extends AbstractOnboardingEntity
     {
         $this->clientPassword2 = $clientPassword2;
     }
-
-    protected function getRequiredPropertiesForCompletion(): array
-    {
-        return [
-            'paymentProviderAccountId', 'paymentUser', 'mandatorEmail',
-            'street', 'zipCode', 'town',
-        ];
-    }
 }

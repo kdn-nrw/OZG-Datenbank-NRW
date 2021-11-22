@@ -19,6 +19,7 @@ use App\Form\Type\OnboardingInfoServiceType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class CommuneInfoAdmin extends AbstractOnboardingAdmin
@@ -32,6 +33,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
                 'label' => 'app.commune_info.groups.general',
             ])
             ->with('app.commune_info.groups.general', ['class' => 'col-md-6']);
+        $this->addDataCompletenessConfirmedField($formMapper);
         $formMapper
             ->add('commune', CommuneType::class, [
                 'label' => false,
@@ -64,9 +66,19 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ])
             ->add('accessibility', TextareaType::class, [
                 'required' => false,
-            ]);
+            ])
+            ->end();
         $formMapper
-            ->end()
+            ->with('group_technical_data', [
+                'label' => 'app.commune_info.groups.technical_data',
+                'class' => 'clear-left-md  col-md-6',
+            ])
+            ->add('ipAddress', TextType::class, [
+                'required' => false,
+                'help' => '<a href="https://www.wieistmeineip.de/" target="_blank">Aktuelle IP-Adresse?</a>',
+            ])
+            ->end();
+        $formMapper
             ->with('app.commune_info.groups.footer_data', ['class' => 'col-md-6']);
         $formMapper
             ->add('openingHours', TextareaType::class, [
@@ -135,6 +147,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ->add('accessibility')
             ->add('openingHours')
             ->add('contacts')
-            ->add('groupEmail');
+            ->add('groupEmail')
+            ->add('ipAddress');
     }
 }

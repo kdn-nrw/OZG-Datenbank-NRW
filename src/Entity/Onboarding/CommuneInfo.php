@@ -125,6 +125,12 @@ class CommuneInfo extends AbstractOnboardingEntity
      */
     protected $communeSolutions;
 
+    /**
+     * @ORM\Column(type="string", name="ip_address", length=255, nullable=true)
+     * @var string|null
+     */
+    protected $ipAddress;
+
     public function __construct(Commune $commune)
     {
         parent::__construct($commune);
@@ -413,8 +419,20 @@ class CommuneInfo extends AbstractOnboardingEntity
         $this->openingHours = $openingHours;
     }
 
-    protected function getRequiredPropertiesForCompletion(): array
+    /**
+     * @return string|null
+     */
+    public function getIpAddress(): ?string
     {
-        return ['contacts', 'privacyText', 'imprintText', 'accessibility', 'openingHours', 'imageName'];
+        return $this->ipAddress;
     }
+
+    /**
+     * @param string|null $ipAddress
+     */
+    public function setIpAddress(?string $ipAddress): void
+    {
+        $this->ipAddress = $ipAddress;
+    }
+
 }

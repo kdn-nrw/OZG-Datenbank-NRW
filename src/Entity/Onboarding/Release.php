@@ -109,7 +109,10 @@ class Release extends AbstractOnboardingEntity
         $this->releaseConfirmed = $releaseConfirmed;
     }
 
-    public function calculateCompletionRate(): int
+    /**
+     * @param int $completionRate
+     */
+    public function setCompletionRate(int $completionRate): void
     {
         if (null !== $this->releaseDate) {
             if (null === $this->releaseStatus) {
@@ -123,7 +126,7 @@ class Release extends AbstractOnboardingEntity
         } else {
             $this->releaseStatus = self::STATUS_NEW;
         }
-        return parent::calculateCompletionRate();
+        parent::setCompletionRate($completionRate);
     }
 
     /**
@@ -136,13 +139,5 @@ class Release extends AbstractOnboardingEntity
             return $key;
         }
         return array_search(self::STATUS_NEW, self::$releaseStatusChoices, true);
-    }
-
-
-    protected function getRequiredPropertiesForCompletion(): array
-    {
-        return [
-            'releaseStatus', 'releaseDate', 'releaseConfirmed',
-        ];
     }
 }

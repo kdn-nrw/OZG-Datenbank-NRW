@@ -13,11 +13,13 @@ namespace App\Admin\Onboarding;
 
 
 use App\Admin\StateGroup\CommuneAdmin;
+use App\Entity\Base\BaseEntityInterface;
 use App\Form\Type\CommuneAdministrativeContactType;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -55,6 +57,7 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
             'imagine_pattern' => 'default_small',
             'asset_helper' => true,
         ]);
+        $this->addDataCompletenessConfirmedField($formMapper);
         $formMapper
             ->end()
             ->with('app.form_solution.groups.content_data', ['class' => 'col-md-6']);

@@ -31,6 +31,20 @@ abstract class AbstractOnboardingAdminController extends CRUDController
     use InquiryControllerTrait;
 
     /**
+     * Contextualize the admin class depends on the current request.
+     *
+     * @throws \RuntimeException
+     */
+    protected function configure()
+    {
+        parent::configure();
+        $templateRegistry = $this->admin->getTemplateRegistry();
+        if (null !== $templateRegistry) {
+            $templateRegistry->setTemplate('edit', 'Onboarding/edit.html.twig');
+        }
+    }
+
+    /**
      * @inheritDoc
      */
     protected function preList(Request $request)
@@ -105,5 +119,21 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         $backUrl = $this->admin->generateUrl('list', $parameters);
         /** @var AbstractOnboardingEntity $object */
         return $this->renderAskQuestion($request, $inquiryManager, $object, $formAction, $backUrl);
+    }
+
+    /**
+     * Renders a view while passing mandatory parameters on to the template.
+     *
+     * @param string               $view       The view name
+     * @param array<string, mixed> $parameters An array of parameters to pass to the view
+     *
+     * @return Response A Response instance
+     */
+    public function renderWithExtraParams($view, array $parameters = [], ?Response $response = null)
+    {
+        if ($parameters['action'] === 'edit' && $parameters['object'] instanceof AbstractOnboardingEntity) {
+            $parameters['objectCompletenessInfo'] = $this->onboardingManager->getCompletionInfo($parameters['object']);
+        }
+        return parent::renderWithExtraParams($view, $parameters, $response);
     }
 }

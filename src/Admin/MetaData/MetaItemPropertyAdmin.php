@@ -19,6 +19,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,6 +29,11 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $formMapper
+            ->with('general', [
+                'label' => 'app.meta_item_property.groups.general',
+                'class' => 'col-xs-12',
+            ]);
         if (!$this->isExcludedFormField('parent')) {
             $formMapper
                 ->add('parent', ModelType::class, [
@@ -62,7 +68,20 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
                 //'format' => 'richhtml',
                 //'ckeditor_context' => 'default', // optional
             ]);
+        //$formMapper->add('placeholder', TextType::class);
         $formMapper->end();
+        $formMapper
+            ->with('settings', [
+                'label' => 'app.meta_item_property.groups.settings',
+                'class' => 'col-xs-12',
+            ])
+            ->add('required', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('useForCompletenessCalculation', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->end();
     }
 
     protected function configureListFields(ListMapper $listMapper)
