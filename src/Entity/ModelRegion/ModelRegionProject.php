@@ -134,7 +134,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
 
     /**
      * @var ModelRegionProjectCategory[]|Collection
-     * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion\ModelRegionProjectCategory")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion\ModelRegionProjectCategory", inversedBy="modelRegionProjects")
      * @ORM\JoinTable(name="ozg_model_region_project_category_mm",
      *     joinColumns={
      *     @ORM\JoinColumn(name="project_id", referencedColumnName="id")
