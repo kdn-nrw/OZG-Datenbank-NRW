@@ -81,6 +81,17 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
                 ]
             );
         $this->addOrganisationsFormFields($formMapper);
+
+        $formMapper->add('websites', \Sonata\Form\Type\CollectionType::class, [
+            'type_options' => [
+                'delete' => true,
+            ],
+            'by_reference' => false,
+        ], [
+            'edit' => 'inline',
+            'inline' => 'table',
+            'ba_custom_exclude_fields' => ['modelRegionProject', 'description'],
+        ]);
         $formMapper->end();
         $formMapper->with('characteristics', [
             'label' => 'app.model_region_project.group.characteristics',
@@ -225,28 +236,32 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('description');
-        $this->addDatePickersShowFields($showMapper, 'projectStartAt');
-        $this->addDatePickersShowFields($showMapper, 'projectEndAt');
-        $showMapper
+        $this->addDatePickersShowFields($show, 'projectStartAt');
+        $this->addDatePickersShowFields($show, 'projectEndAt');
+        $show
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
-        $showMapper
+        $show
             ->add('categories', null, [
                 'admin_code' => ModelRegionProjectCategoryAdmin::class,
                 //'template' => 'General/Show/show-categories.twig',
             ]);
-        $this->addOrganisationsShowFields($showMapper);
-        $this->addModelRegionsShowFields($showMapper);
-        $showMapper->add('documents', null, [
+        $this->addOrganisationsShowFields($show);
+        $this->addModelRegionsShowFields($show);
+        $show
+            ->add('websites', null, [
+                'template' => 'ModelRegion/show-project-websites.html.twig',
+            ]);
+        $show->add('documents', null, [
             'template' => 'General/Show/show-attachments.html.twig',
         ]);
-        $showMapper
+        $show
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
                 'route' => [

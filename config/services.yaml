@@ -653,6 +653,19 @@ services:
         persist_filters: true
     public: true
 
+  App\Admin\ModelRegion\ModelRegionProjectWebsiteAdmin:
+    arguments:
+      - ~
+      - App\Entity\ModelRegion\ModelRegionProjectWebsite
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.model_region_project_website.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
   App\Admin\OpenDataAdmin:
     arguments:
       - ~

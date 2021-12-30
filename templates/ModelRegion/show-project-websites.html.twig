@@ -1,0 +1,38 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+    {# @var object \App\Entity\ModelRegion\ModelRegionProject #}
+    {% set entities = object.websites %}
+    {% if entities|length > 0 %}
+    <ul class="sonata-ba-show-many-to-many">
+        {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
+        {% set refSettings = app_object_field_description_meta(object, field_description) %}
+        {# @var refSettings \App\Model\ReferenceSettings #}
+        {% for child in entities %}
+            <li>
+                {% if refSettings.edit.enabled and refSettings.admin.hasAccess(refSettings.edit.route, child) %}
+                    <a href="{{ refSettings.admin.generateObjectUrl(refSettings.edit.route, child, {'id': child.id}) }}">
+                        {{ child.name }}
+                    </a>
+                    {% if child.url %}
+                        <a href="{{ child.url }}" target="_blank">
+                            <i class="fa fa-external-link" aria-hidden="true"></i>
+                            <span class="sr-only">{{ child.url }}</span>
+                        </a>
+                    {% endif %}
+                {% elseif child.url %}
+                    <a href="{{ child.url }}" target="_blank">{{ child.name }}</a>
+                {% else %}
+                    {{ child.name }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}

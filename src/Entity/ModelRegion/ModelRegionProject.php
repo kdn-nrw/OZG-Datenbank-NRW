@@ -146,6 +146,12 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      */
     private $categories;
 
+    /**
+     * @var ModelRegionProjectWebsite[]|Collection
+     * @ORM\OneToMany(targetEntity="ModelRegionProjectWebsite", mappedBy="modelRegionProject", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $websites;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -153,6 +159,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
         $this->modelRegions = new ArrayCollection();
         $this->organisations = new ArrayCollection();
         $this->solutions = new ArrayCollection();
+        $this->websites = new ArrayCollection();
     }
 
     /**
@@ -500,6 +507,49 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
             $this->removeDocument($document);
         }
         return $removeDocuments;
+    }
+
+    /**
+     * @param ModelRegionProjectWebsite $website
+     * @return self
+     */
+    public function addWebsite(ModelRegionProjectWebsite $website): self
+    {
+        if (!$this->websites->contains($website)) {
+            $this->websites->add($website);
+            $website->setModelRegionProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ModelRegionProjectWebsite $website
+     * @return self
+     */
+    public function removeWebsite(ModelRegionProjectWebsite $website): self
+    {
+        if ($this->websites->contains($website)) {
+            $this->websites->removeElement($website);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ModelRegionProjectWebsite[]|Collection
+     */
+    public function getWebsites()
+    {
+        return $this->websites;
+    }
+
+    /**
+     * @param ModelRegionProjectWebsite[]|Collection $websites
+     */
+    public function setWebsites($websites): void
+    {
+        $this->websites = $websites;
     }
 
 }

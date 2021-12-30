@@ -617,9 +617,14 @@ app:
       imprint_url: Impressum (URL)
       accessibility: Barrierefreiheitserklärung
       image_file: Logo
+      image_name: Logo
       opening_hours: Öffnungszeiten
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
       letterhead_address: Darstellung der Kommune im Kopfbogen
+      administration_phone_number: Telefon
+      administration_fax_number: Fax
+      administration_email: E-Mail
+      administration_url: Web
   onboarding_commune_solution:
     object_name: Onboarding Dienst
     list: Onboarding Dienste
@@ -1267,7 +1272,7 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      model_region_projects: DMR Umsetzungsprojekte
+      model_region_projects: Umsetzungsprojekte
   model_region_beneficiary:
     object_name: Zuwendungsempfänger
     list: Zuwendungsempfänger
@@ -1283,11 +1288,11 @@ app:
       town: Ort
       url: Url
       contacts: Ansprechpersonen
-      model_region_projects: DMR Umsetzungsprojekte
+      model_region_projects: Umsetzungsprojekte
   model_region_project:
-    object_name: DMR Umsetzungsprojekt
-    list: DMR Umsetzungsprojekte
-    create: DMR Umsetzungsprojekt anlegen
+    object_name: Umsetzungsprojekt
+    list: Umsetzungsprojekte
+    create: Umsetzungsprojekt anlegen
     group:
       general_data: Basisdaten
       characteristics: Merkmale/Nutzen/Übertragbarkeit
@@ -1310,12 +1315,13 @@ app:
       service_solutions: Enthaltene Leika-Leistungen
       documents: Dokumente
       categories: Kategorien
+      websites: Projektwebseiten/-ergebnisse
   model_region_project_document:
-    object_name: DMR Umsetzungsprojekt Dokument
-    list: DMR Umsetzungsprojekt Dokumente
-    create: DMR Umsetzungsprojekt Dokument anlegen
+    object_name: Umsetzungsprojekt Dokument
+    list: Umsetzungsprojekt Dokumente
+    create: Umsetzungsprojekt Dokument anlegen
     entity:
-      model_region_project: DMR Umsetzungsprojekt
+      model_region_project: Umsetzungsprojekt
   model_region_project_category:
     object_name: Kategorie
     list: Kategorien
@@ -1323,7 +1329,18 @@ app:
     entity:
       name: Name
       description: Beschreibung
-      model_region_projects: DMR Umsetzungsprojekte
+      model_region_projects: Umsetzungsprojekte
+  model_region_project_website:
+    object_name: Umsetzungsprojekt Webseite
+    list: Umsetzungsprojekte Webseiten
+    create: Webseite anlegen
+    tabs:
+      default: Allgemein
+    entity:
+      model_region_project: Umsetzungsprojekt
+      name: Name
+      description: Beschreibung
+      url: Url
   open_data:
     object_name: Open Data
     list: Open Data
@@ -1362,7 +1379,7 @@ app:
       manufacturer: Hersteller
       central_association: Spitzenverband
       model_region_beneficiary: Zuwendungsempfänger
-      model_region_projects: DMR Umsetzungsprojekte
+      model_region_projects: Umsetzungsprojekte
   page_content:
     object_name: Seiteninhalt
     list: Seiteninhalte
@@ -1533,8 +1550,8 @@ app:
       authority_inherit_state_ministries.yes: Regelungskompetenz Ministerien (Land) der Leika-Leistung mit Regelungskompetenz  Ministerien (Land) der OZG-Leistung erweitern
       authority_inherit_state_ministries.no: Regelungskompetenz Ministerien (Land) der OZG-Leistung nicht übernehmen
       implementation_projects: OZG Umsetzungsprojekte
-      model_region_projects: DMR Umsetzungsprojekte
-      published_model_region_projects: Veröffentlichte DMR Umsetzungsprojekte
+      model_region_projects: Umsetzungsprojekte
+      published_model_region_projects: Veröffentlichte Umsetzungsprojekte
       fim_types: FIM
       fim_types_data_type: FIM Typ
       fim_types_status: FIM Status
@@ -1680,8 +1697,8 @@ app:
       authority_bureaus_form: Regelungskompetenz Fachlichkeiten (werden an Leika-Leistungen vererbt)
       authority_state_ministries_form: Regelungskompetenz Ministerien (Land) (werden an Leika-Leistungen vererbt)
       implementation_projects: OZG Umsetzungsprojekte
-      model_region_projects: DMR Umsetzungsprojekte
-      published_model_region_projects: Veröffentlichte DMR Umsetzungsprojekte
+      model_region_projects: Umsetzungsprojekte
+      published_model_region_projects: Veröffentlichte Umsetzungsprojekte
       services_portals: Zielportale
       commune_types: relevant bei folgenden Größenklassen
       commune_types_form: relevant bei folgenden Größenklassen (werden an Leika-Leistungen vererbt)
@@ -1738,7 +1755,7 @@ app:
       form_server_solutions: Formularserver
       payment_types: Bezahlverfahren
       is_published: Online-Dienst öffentlich sichtbar?
-      model_region_projects: DMR Umsetzungsprojekte
+      model_region_projects: Umsetzungsprojekte
       implementation_projects: OZG Umsetzungsprojekte
       jurisdictions: Zuständigkeiten
       confidence_level: Mindest-Vertrauensniveau

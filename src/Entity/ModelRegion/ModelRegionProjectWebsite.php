@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ModelRegionProjectWebsite
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_model_region_website")
+ * @ORM\Table(name="ozg_model_region_project_website")
  */
 class ModelRegionProjectWebsite extends BaseNamedEntity
 {
@@ -36,26 +36,26 @@ class ModelRegionProjectWebsite extends BaseNamedEntity
     private $description = '';
 
     /**
-     * @var ModelRegion|null
-     * @ORM\ManyToOne(targetEntity="App\Entity\ModelRegion\ModelRegion", inversedBy="websites")
-     * @ORM\JoinColumn(name="model_region_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var ModelRegionProject|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\ModelRegion\ModelRegionProject", inversedBy="websites")
+     * @ORM\JoinColumn(name="model_region_project_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $modelRegion;
+    private $modelRegionProject;
 
     /**
-     * @return ModelRegion|null
+     * @return ModelRegionProject|null
      */
-    public function getModelRegion(): ?ModelRegion
+    public function getModelRegionProject(): ?ModelRegionProject
     {
-        return $this->modelRegion;
+        return $this->modelRegionProject;
     }
 
     /**
-     * @param ModelRegion|null $modelRegion
+     * @param ModelRegionProject|null $modelRegionProject
      */
-    public function setModelRegion(?ModelRegion $modelRegion): void
+    public function setModelRegionProject(?ModelRegionProject $modelRegionProject): void
     {
-        $this->modelRegion = $modelRegion;
+        $this->modelRegionProject = $modelRegionProject;
     }
 
     /**
