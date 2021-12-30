@@ -71,37 +71,49 @@ class OnboardingProgressCalculator
     {
         switch (get_class($object)) {
             case CommuneInfo::class:
-                $properties = ['contacts', 'privacyText', 'imprintText', 'accessibility', 'openingHours', 'imageName'];
+                $properties = ['contacts', 'privacyText', 'imprintText', 'accessibility', 'ipAddress', 'openingHours', 'imageName', 'communeSolutions',];
                 break;
             case Epayment::class:
                 $properties = [
-                    'paymentProviderAccountId', 'paymentUser', 'mandatorEmail',
                     //'testIpAddress',
                     'street', 'zipCode', 'town',
-                    'projects',
-                    //'clientNumberIntegration', 'clientNumberProduction', 'managerNumber',
-                    'budgetOffice', 'objectNumber',
-                    'cashRegisterPersonalAccountNumber', 'indicatorDunningProcedure', 'bookingText', 'descriptionOfTheBookingList',
-                    'managerNo', 'applicationName', 'lengthReceiptNumber', 'cashRegisterCheckProcedureStatus',
-                    'lengthFirstAccountAssignmentInformation', 'lengthSecondAccountAssignmentInformation',
-                    'contentFirstAccountAssignmentInformation', 'contentSecondAccountAssignmentInformation',
+                    //'paymentUser',
+                    'mandatorEmail',
+                    // addManagerFormFields
+                    'cashRegisterPersonalAccountNumber', 'lengthReceiptNumber',
+                    // 'cashRegisterCheckProcedureStatus',
+                    'lengthFirstAccountAssignmentInformation', 'contentFirstAccountAssignmentInformation',
+                    //'lengthSecondAccountAssignmentInformation', 'contentSecondAccountAssignmentInformation',
+                    'managerNo', 'applicationName',
+                    // configureFormFields
+                    // 'paymentProviderAccountId',
+                    //'projects',
+                    'testIpAddress', 'epaymentServices',
                 ];
                 break;
             case FormSolution::class:
                 $properties = [
-                    'contacts', ['privacyText', 'privacyUrl'], ['imprintText', 'imprintUrl'],
-                    'accessibility', 'openingHours', 'imageName', 'letterheadAddress',
-                    ];
+                    ['privacyText', 'privacyUrl'], ['imprintText', 'imprintUrl'],
+                    'accessibility',
+                    'administrationPhoneNumber', 'administrationFaxNumber', 'administrationEmail', 'administrationUrl',
+                    'letterheadAddress', 'openingHours',
+                    'contacts',
+                ];
                 break;
             case Release::class:
                 $properties = [
-                    'releaseStatus', 'releaseDate', 'releaseConfirmed',
+                    'releaseStatus', 'releaseDate',
+                    //'releaseConfirmed',
                 ];
                 break;
             case ServiceAccount::class:
                 $properties = [
-                    'paymentProviderAccountId', 'paymentUser', 'mandatorEmail',
+                    // addMandatorFormFields
                     'street', 'zipCode', 'town',
+                    //'paymentUser',
+                    'mandatorEmail',
+                    // addMandatorAccountFormFields
+                    'answerUrl1', 'clientId', 'clientPassword',
                 ];
                 break;
             case EpaymentProject::class:

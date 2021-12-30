@@ -57,6 +57,6 @@ class OnboardingGenerateCommand extends Command
         $importedRowCount += $this->onboardingManager->createItems(Release::class);
         $importedRowCount += $this->onboardingManager->createItems(ServiceAccount::class);
         $durationSeconds = round(microtime(true) - $startTime, 3);
-        $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
+        $io->note(sprintf('Finished onboarding update process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }
 }

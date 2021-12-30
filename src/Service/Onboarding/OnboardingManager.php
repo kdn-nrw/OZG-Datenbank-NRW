@@ -121,8 +121,9 @@ class OnboardingManager
 
     public function updateAllOnboardingSolutions()
     {
-        $this->updateAllCommuneInfoSolutions();
+        $communeIdList = $this->updateAllCommuneInfoSolutions();
         $this->updateEpaymenServices();
+        return count($communeIdList);
     }
 
     private function updateAllCommuneInfoSolutions()
@@ -141,9 +142,11 @@ class OnboardingManager
         $now = date_create();
         $now->setTimezone(new \DateTimeZone('UTC'));
         $dateString = $now->format('Y-m-d H:i:s');
+        $communeIdList = [];
         foreach ($rows as $row) {
             $entityId = (int) $row['id'];
             $communeId = (int) $row['commune_id'];
+            $communeIdList[$communeId] = $communeId;
             $referencesToBeCreated = $this->updateSingleCommuneSolution($communeId);
             if (!empty($referencesToBeCreated)) {
                 foreach ($referencesToBeCreated as $solutionId) {
@@ -169,9 +172,17 @@ class OnboardingManager
             'created_at' => '\'%s\'',
         ];
         $this->createReferences('ozg_onboarding_commune_solution', $mapReferencesToBeCreated, $fieldTypes);
+        return $communeIdList;
     }
 
-    public function updateEpaymenServices(?Commune $commune = null)
+    /**
+     * @param Commune|int $commune
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\Persistence\Mapping\MappingException
+     */
+    public function updateEpaymenServices($commune = null)
     {
         // Use SQL statements to increase performance
         $em = $this->getEntityManager();
@@ -191,15 +202,17 @@ class OnboardingManager
         $mapReferencesToBeCreated = [];
         foreach ($ePaymentResults as $offset => $ePayment) {
             $communeId = (int) $ePayment->getCommune()->getId();
+            $entityId = (int) $ePayment->getId();
             $query = 'SELECT solution_id FROM ozg_onboarding_commune_solution WHERE enabled_epayment = 1 AND commune_id = ' . $communeId;
             $enabledCommuneSolutionIdList = $connection->fetchAllAssociative($query);
             if (!empty($enabledCommuneSolutionIdList)) {
                 $enabledCommuneSolutionIdList = array_column($enabledCommuneSolutionIdList, 'solution_id');
-                $sql = "DELETE FROM ozg_onboarding_epayment_service WHERE solution_id NOT IN (".implode(', ', $enabledCommuneSolutionIdList).")";
+                //$sql = "SELECT * FROM ozg_onboarding_epayment_service WHERE epayment_id = $ePaymentId AND solution_id NOT IN (".implode(', ', $enabledCommuneSolutionIdList).")";
+                //$existingServices = $connection->fetchAllAssociative($sql);
+                $sql = "DELETE FROM ozg_onboarding_epayment_service WHERE epayment_id = $entityId AND solution_id NOT IN (".implode(', ', $enabledCommuneSolutionIdList).")";
                 $this->executeStatement($sql);
                 $referencesToBeCreated = $this->updateSingleEpaymentServices($ePayment, $enabledCommuneSolutionIdList);
                 if (!empty($referencesToBeCreated)) {
-                    $entityId = (int) $ePayment->getId();
                     foreach ($referencesToBeCreated as $solutionId) {
                         $mapReferencesToBeCreated[$entityId][$solutionId] = [
                             'epayment_id' => $entityId,
