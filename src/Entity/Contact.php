@@ -362,7 +362,7 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
         if (null !== $imageFile) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->modifiedAt = new \DateTimeImmutable();
+            $this->modifiedAt = new \DateTime();
         }
     }
 
