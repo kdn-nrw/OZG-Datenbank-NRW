@@ -1298,6 +1298,7 @@ app:
       characteristics: Merkmale/Nutzen/Übertragbarkeit
       reference_data: Referenzen
       documents: Dokumente
+      concept_queries: Konzeptabfrage
     tabs:
       default: Allgemein
     entity:
@@ -1316,6 +1317,31 @@ app:
       documents: Dokumente
       categories: Kategorien
       websites: Projektwebseiten/-ergebnisse
+      concept_queries: Konzeptabfrage
+  model_region_project_concept_query:
+    object_name: Konzeptabfrage
+    list: Konzeptabfragen
+    create: Konzeptabfrage hinzufügen
+    entity:
+      model_region_project: Umsetzungsprojekt
+      concept_query_type: Abfrage
+      description: Beschreibung
+  concept_query_type:
+    object_name: Konzeptabfrage
+    list: Konzeptabfragen
+    create: Konzeptabfragen hinzufügen
+    entity:
+      name: Name
+      description: Beschreibung
+      query_group: Typ
+      query_group_choices:
+        1: Zielgruppe
+        2: Praktische Übertragbarkeit
+        3: Voraussetzungen bei Übertragung – Worauf baut das Projekt auf?
+        4: Kosten bei Übertragung (ggf. Spannbreite)
+        5: Nutzen bei Übertragung
+      placeholder: Platzhalter
+      position: Sortierung
   model_region_project_document:
     object_name: Umsetzungsprojekt Dokument
     list: Umsetzungsprojekt Dokumente

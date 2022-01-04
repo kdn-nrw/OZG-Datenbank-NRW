@@ -59,6 +59,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                         'choice_translation_domain' => false,
                         'placeholder' => '',
                         'query' => $this->getSolutionQueryBuilder(),
+                        'disabled' => $this->isExcludedFormField('epayment'),
                     ], [
                         'admin_code' => OnboardingServiceAdmin::class,
                     ]

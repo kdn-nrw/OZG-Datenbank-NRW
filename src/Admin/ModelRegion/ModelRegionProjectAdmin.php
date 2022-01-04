@@ -119,6 +119,27 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $this->addSolutionsFormFields($formMapper);
         $this->addSlugFormField($formMapper, $this->getSubject());
         $formMapper->end();
+
+        $formMapper->with('group_concept_queries', [
+            'label' => 'app.model_region_project.group.concept_queries',
+            'class' => 'col-xs-12 col-md-6',
+        ]);
+        $formMapper
+            ->add('conceptQueries', \Sonata\Form\Type\CollectionType::class, [
+                'label' => false,
+                'type_options' => [
+                    'delete' => false,
+                ],
+                'btn_add' => false,
+                'by_reference' => false,
+            ], [
+                'edit' => 'inline',
+                'inline' => 'natural',
+                'sortable' => 'position',
+                'ba_custom_exclude_fields' => ['modelRegionProject'],
+                //'ba_disable_required_fields' => null !== $subject && null !== $subject->getId(),
+            ]);
+        $formMapper->end();
         $formMapper->with('documents', [
             'label' => 'app.model_region_project.group.documents',
             'class' => 'col-xs-12 col-md-6',

@@ -9,10 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Controller;
+namespace App\Controller\ModelRegion;
 
 
 use App\Admin\Frontend\ModelRegionProjectAdmin;
+use App\Controller\AbstractFrontendCRUDController;
 
 /**
  * Class ModelRegionProjectController

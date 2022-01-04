@@ -152,6 +152,13 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      */
     private $websites;
 
+    /**
+     * @var ModelRegionProjectConceptQuery[]|Collection
+     * @ORM\OneToMany(targetEntity="ModelRegionProjectConceptQuery", mappedBy="modelRegionProject", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
+     */
+    private $conceptQueries;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -160,6 +167,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
         $this->organisations = new ArrayCollection();
         $this->solutions = new ArrayCollection();
         $this->websites = new ArrayCollection();
+        $this->conceptQueries = new ArrayCollection();
     }
 
     /**
@@ -550,6 +558,80 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     public function setWebsites($websites): void
     {
         $this->websites = $websites;
+    }
+
+    /**
+     * @param ModelRegionProjectConceptQuery $conceptQuery
+     * @return self
+     */
+    public function addConceptQuery(ModelRegionProjectConceptQuery $conceptQuery)
+    {
+        if (!$this->conceptQueries->contains($conceptQuery)) {
+            $this->conceptQueries->add($conceptQuery);
+            $conceptQuery->setModelRegionProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ModelRegionProjectConceptQuery $conceptQuery
+     * @return self
+     */
+    public function removeConceptQuery(ModelRegionProjectConceptQuery $conceptQuery)
+    {
+        if ($this->conceptQueries->contains($conceptQuery)) {
+            $this->conceptQueries->removeElement($conceptQuery);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ModelRegionProjectConceptQuery[]|Collection
+     */
+    public function getConceptQueries()
+    {
+        return $this->conceptQueries;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getGroupedConceptQueries()
+    {
+        $groupedData = [];
+        $conceptQueries = $this->getConceptQueries();
+        foreach ($conceptQueries as $conceptQuery) {
+            $description = trim($conceptQuery->getDescription());
+            $queryType = $conceptQuery->getConceptQueryType();
+            if (null === $queryType || empty(trim(strip_tags($description)))) {
+                continue;
+            }
+            $queryGroup = $queryType->getQueryGroup();
+            if (!isset($groupedData[$queryGroup])) {
+                $groupedData[$queryGroup] = [
+                    'label' => $queryType->getQueryGroupLabel(),
+                    'queries' => [],
+                ];
+            }
+            $groupedData[$queryGroup]['queries'][] = [
+                'position' => $queryType->getPosition(),
+                'name' => $queryType->getName(),
+                'typeDescription' => $queryType->getDescription(),
+                'description' => $description,
+            ];
+        }
+        return $groupedData;
+    }
+
+    /**
+     * @param ModelRegionProjectConceptQuery[]|Collection $conceptQueries
+     */
+    public function setConceptQueries($conceptQueries): void
+    {
+        $this->conceptQueries = $conceptQueries;
     }
 
 }

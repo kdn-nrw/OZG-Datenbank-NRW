@@ -623,14 +623,16 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Controller\ModelRegionProjectAdminController:
+  App\Controller\ModelRegion\ModelRegionProjectAdminController:
     tags: ['controller.service_arguments']
 
   App\Admin\ModelRegion\ModelRegionProjectAdmin:
     arguments:
       - ~
       - App\Entity\ModelRegion\ModelRegionProject
-      - App\Controller\ModelRegionProjectAdminController
+      - App\Controller\ModelRegion\ModelRegionProjectAdminController
+    calls:
+      - [setTemplate, ['show', 'ModelRegion/show-project.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -643,7 +645,9 @@ services:
     arguments:
       - ~
       - App\Entity\ModelRegion\ModelRegionProject
-      - ~
+      - App\Controller\ModelRegion\ModelRegionProjectController
+    calls:
+      - [setTemplate, ['show', 'ModelRegion/show-project.html.twig']]
     tags:
       - name:         sonata.admin
         manager_type: orm
@@ -662,6 +666,32 @@ services:
       - name:         sonata.admin
         manager_type: orm
         label:        app.model_region_project_website.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\ModelRegion\ModelRegionProjectConceptQueryAdmin:
+    arguments:
+      - ~
+      - App\Entity\ModelRegion\ModelRegionProjectConceptQuery
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.model_region_project_concept_query.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+    public: true
+
+  App\Admin\ModelRegion\ConceptQueryTypeAdmin:
+    arguments:
+      - ~
+      - App\Entity\ModelRegion\ConceptQueryType
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.concept_query_type.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true

@@ -72,19 +72,19 @@ frontend_app_solution_export:
 
 frontend_app_modelregionproject_list:
   path: /dmr-umsetzungsprojekte
-  controller: App\Controller\ModelRegionProjectController::listAction
+  controller: App\Controller\ModelRegion\ModelRegionProjectController::listAction
 
 frontend_app_modelregionproject_show_default:
   path: /dmr-umsetzungsprojekte/{id}/show
-  controller: App\Controller\ModelRegionProjectController::showAction
+  controller: App\Controller\ModelRegion\ModelRegionProjectController::showAction
 
 frontend_app_modelregionproject_show:
   path: /dmr-umsetzungsprojekte/details/{slug}
-  controller: App\Controller\ModelRegionProjectController::showBySlugAction
+  controller: App\Controller\ModelRegion\ModelRegionProjectController::showBySlugAction
 
 frontend_app_modelregionproject_export:
   path: /dmr-umsetzungsprojekte/export
-  controller: App\Controller\ModelRegionProjectController::exportAction
+  controller: App\Controller\ModelRegion\ModelRegionProjectController::exportAction
 
 frontend_app_modelregion_list:
   path: /modellregionen
