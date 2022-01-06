@@ -24,6 +24,8 @@ use App\Controller\AbstractFrontendCRUDController;
  */
 class ModelRegionProjectController extends AbstractFrontendCRUDController
 {
+    use ControllerProjectPdfExportTrait;
+
     /**
      * @inheritDoc
      */

@@ -359,6 +359,9 @@
             "config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "setasign/fpdi": {
+        "version": "v2.3.6"
+    },
     "shapecode/cron-bundle": {
         "version": "3.2.3"
     },
@@ -811,6 +814,9 @@
     },
     "symfony/yaml": {
         "version": "v4.2.4"
+    },
+    "tecnickcom/tcpdf": {
+        "version": "6.4.4"
     },
     "twig/cache-extension": {
         "version": "1.4.0"

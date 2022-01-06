@@ -47,7 +47,7 @@ trait ControllerDownloadTrait
     }
 
     /**
-     * Get the applicant attachment as binary response
+     * Get the entity attachment as binary response
      *
      * @param int|string|null $id
      * @param int|null $documentId

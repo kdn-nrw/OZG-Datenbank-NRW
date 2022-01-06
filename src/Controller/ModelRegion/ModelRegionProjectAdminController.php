@@ -29,6 +29,7 @@ class ModelRegionProjectAdminController extends CRUDController
 {
     use ControllerDownloadTrait;
     use InjectManagerRegistryTrait;
+    use ControllerProjectPdfExportTrait;
 
     /**
      * This method can be overloaded in your custom CRUD controller.

@@ -25,6 +25,7 @@
         "phpdocumentor/reflection-docblock": "^5.2",
         "phpoffice/phpspreadsheet": "^1.16",
         "sensio/framework-extra-bundle": "^5.6",
+        "setasign/fpdi": "^2.3",
         "shapecode/cron-bundle": "^4.0",
         "sonata-project/admin-bundle": "^3.79",
         "sonata-project/doctrine-orm-admin-bundle": "^3.24",
@@ -51,6 +52,7 @@
         "symfony/validator": "4.4.*",
         "symfony/webpack-encore-bundle": "^1.8",
         "symfony/yaml": "^4.4|^5.1",
+        "tecnickcom/tcpdf": "^6.4",
         "twig/intl-extra": "^3.1",
         "vich/uploader-bundle": "^1.15"
     },
