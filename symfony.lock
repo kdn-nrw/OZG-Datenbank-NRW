@@ -199,6 +199,9 @@
     "knplabs/knp-menu-bundle": {
         "version": "v2.3.0"
     },
+    "laminas/laminas-eventmanager": {
+        "version": "3.2.1"
+    },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
     },
@@ -387,9 +390,6 @@
     },
     "sonata-project/doctrine-orm-admin-bundle": {
         "version": "3.10.0"
-    },
-    "sonata-project/easy-extends-bundle": {
-        "version": "2.5.0"
     },
     "sonata-project/exporter": {
         "version": "2.0.1"
