@@ -25,7 +25,7 @@ final class PaginationExtensionDecorator implements ContextAwareQueryResultColle
     /**
      * @var RequestStack
      */
-    private $requestStack;
+    protected $requestStack;
 
     /**
      * PaginationExtensionDecorator constructor.
@@ -71,6 +71,7 @@ final class PaginationExtensionDecorator implements ContextAwareQueryResultColle
         $this->decorated->applyToCollection($queryBuilder, $queryNameGenerator, $resourceClass, $operationName, $context);
     }
 
+    /*
     private function fixPaginationParameter(Request $request, string $parameterName, $min = 1, $max = null)
     {
         if (null !== $paginationAttribute = $request->attributes->get('_api_pagination')) {
@@ -89,7 +90,7 @@ final class PaginationExtensionDecorator implements ContextAwareQueryResultColle
                 $request->query->set($parameterName, $processedValue);
             }
         }
-    }
+    }*/
 
     /**
      * Ensure that the given value is inside the defined number range
@@ -98,9 +99,8 @@ final class PaginationExtensionDecorator implements ContextAwareQueryResultColle
      * @param int|null $max
      * @return int|null
      */
-    private function forceIntegerInRange(int $value, int $min, ?int $max)
+    private function forceIntegerInRange(int $value, int $min, ?int $max): ?int
     {
-
         $processedValue = $value;
         if ($value < $min) {
             $processedValue = $min;

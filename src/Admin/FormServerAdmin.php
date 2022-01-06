@@ -61,9 +61,9 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
         }
     }
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('app.form_server.tabs.general', ['tab' => true])
                 ->with('general', [
                     'label' => false,
@@ -81,7 +81,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
         /** @var FormServer $subject */
         $subject = $this->getSubject();
         if (null !== $subject && $subject->getId() && $subject->getFormServerSolutions()->count() > 50) {
-            $formMapper
+            $form
                 ->add('formServerSolutions', ModelType::class, [
                     'label' => false,
                     'btn_add' => false,
@@ -92,7 +92,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
                     'choice_translation_domain' => false,
                 ]);
         } else {
-            $formMapper
+            $form
                 ->add('formServerSolutions', CollectionType::class, [
                     'label' => false,
                     'type_options' => [
@@ -106,30 +106,30 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
                     'ba_custom_exclude_fields' => ['formServer'],
                 ]);
         }
-        $formMapper
+        $form
                 ->end()
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'formServerSolutions.solution');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'formServerSolutions.solution');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $listMapper->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $list->addIdentifier('name');
+        $list->add('url', 'url');
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('url', 'url')
             ->add('formServerSolutions', null, [

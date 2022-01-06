@@ -29,9 +29,9 @@ class CustomFieldAdmin extends AbstractAppAdmin
 {
     protected $baseRoutePattern = 'configuration/custom-fields';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('general', [
                 'label' => 'app.custom_field.groups.general',
                 'class' => 'col-xs-12',
@@ -60,7 +60,7 @@ class CustomFieldAdmin extends AbstractAppAdmin
                 'required' => false,
             ])
             ->end();
-        $formMapper
+        $form
             ->with('settings', [
                 'label' => 'app.custom_field.groups.settings',
                 'class' => 'col-xs-12',
@@ -71,14 +71,14 @@ class CustomFieldAdmin extends AbstractAppAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
+        $filter->add('name');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('name')
             ->add('fieldLabel')
             ->add('recordType', 'choice', [
@@ -86,7 +86,7 @@ class CustomFieldAdmin extends AbstractAppAdmin
                 'choices' => $this->getRecordTypes(),
                 'catalogue' => 'messages',
             ]);
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [
@@ -101,7 +101,7 @@ class CustomFieldAdmin extends AbstractAppAdmin
         $pool = $this->getConfigurationPool();
         if (null !== $pool) {
             $classNames = $pool->getAdminClasses();
-            foreach ($classNames as $className => $adminServiceIds) {
+            foreach ($classNames as $adminServiceIds) {
                 if (null !== $admin = $pool->getAdminByAdminCode(current($adminServiceIds))) {
                     if (is_a($admin->getClass(), HasCustomFieldsEntityInterface::class, true)) {
                         $entityLabel = PrefixedUnderscoreLabelTranslatorStrategy::getClassPropertyLabel($admin->getClass());

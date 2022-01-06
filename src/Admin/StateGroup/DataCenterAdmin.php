@@ -33,10 +33,10 @@ class DataCenterAdmin extends AbstractAppAdmin
 
     use CommuneTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('serviceProvider')) {
-            $formMapper
+            $form
                 ->add('serviceProvider', ModelType::class, [
                     'btn_add' => false,
                     'placeholder' => '',
@@ -46,7 +46,7 @@ class DataCenterAdmin extends AbstractAppAdmin
                     'admin_code' => ServiceProviderAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('operationType', ChoiceFieldMaskType::class, [
                 'choices' => array_flip(DataCenter::$operationTypeChoices),
                 'map' => [
@@ -57,12 +57,12 @@ class DataCenterAdmin extends AbstractAppAdmin
                 ],
                 'required' => true,
             ]);
-        $this->addServiceProvidersFormFields($formMapper, 'otherServiceProviders');
-        $formMapper
+        $this->addServiceProvidersFormFields($form, 'otherServiceProviders');
+        $form
             ->add('jointDataCenterInfo', TextareaType::class, [
                 'required' => false,
             ]);
-        $formMapper
+        $form
             ->add('dataCenterWasteHeat', ChoiceFieldMaskType::class, [
                 'choices' => [
                     'app.data_center.entity.data_center_waste_heat_choices.no' => false,
@@ -77,7 +77,7 @@ class DataCenterAdmin extends AbstractAppAdmin
             ->add('dataCenterWasteHeatInfo', TextareaType::class, [
                 'required' => false,
             ]);
-        $formMapper
+        $form
             ->add('dataCenterWaterCooling', ChoiceFieldMaskType::class, [
                 'choices' => [
                     'app.data_center.entity.data_center_water_cooling_choices.no' => false,
@@ -93,7 +93,7 @@ class DataCenterAdmin extends AbstractAppAdmin
                 'required' => false,
             ]);
 
-        $formMapper->add('consumptions', CollectionType::class, [
+        $form->add('consumptions', CollectionType::class, [
             'type_options' => [
                 'delete' => true,
             ],
@@ -103,21 +103,21 @@ class DataCenterAdmin extends AbstractAppAdmin
             'inline' => 'table',
             'ba_custom_exclude_fields' => ['dataCenter'],
         ]);
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        //$datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProvider');
-        $datagridMapper->add('dataCenterWasteHeat')
+        //$filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'serviceProvider');
+        $filter->add('dataCenterWasteHeat')
             ->add('dataCenterWaterCooling');
-        $this->addDefaultDatagridFilter($datagridMapper, 'otherServiceProviders');
+        $this->addDefaultDatagridFilter($filter, 'otherServiceProviders');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('serviceProvider')
             ->add('operationType', 'choice', [
                 'editable' => false,
@@ -126,22 +126,22 @@ class DataCenterAdmin extends AbstractAppAdmin
             ])
             ->add('dataCenterWasteHeat')
             ->add('dataCenterWaterCooling');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('serviceProvider')
+        $show->add('serviceProvider')
             ->add('operationType', 'choice', [
                 'editable' => false,
                 'choices' => DataCenter::$operationTypeChoices,
                 'catalogue' => 'messages',
             ]);
-        $this->addServiceProvidersShowFields($showMapper, 'otherServiceProviders');
-        $showMapper
+        $this->addServiceProvidersShowFields($show, 'otherServiceProviders');
+        $show
             ->add('jointDataCenterInfo')
             ->add('dataCenterWasteHeat')
             ->add('dataCenterWasteHeatInfo')

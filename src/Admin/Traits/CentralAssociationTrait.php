@@ -23,9 +23,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 trait CentralAssociationTrait
 {
-    protected function addCentralAssociationsFormFields(FormMapper $formMapper): void
+    protected function addCentralAssociationsFormFields(FormMapper $form): void
     {
-        $formMapper->add('centralAssociations', ModelType::class, [
+        $form->add('centralAssociations', ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
@@ -35,17 +35,17 @@ trait CentralAssociationTrait
         ]);
     }
 
-    protected function addCentralAssociationsListFields(ListMapper $listMapper): void
+    protected function addCentralAssociationsListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->add('centralAssociations', null,[
                 'admin_code' => CentralAssociationAdmin::class,
             ]);
     }
 
-    public function addCentralAssociationsShowFields(ShowMapper $showMapper): void
+    public function addCentralAssociationsShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->add('centralAssociations', null,[
                 'admin_code' => CentralAssociationAdmin::class,
             ]);

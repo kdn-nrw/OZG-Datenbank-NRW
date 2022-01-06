@@ -157,9 +157,9 @@ class UserAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             //->addIdentifier('username')
             ->addIdentifier('email')
             ->add('firstname', null, [
@@ -171,13 +171,13 @@ class UserAdmin extends AbstractAdmin
                 'translation_domain' => 'messages',
             ]);
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $listMapper
+            $list
                 ->add('groups');
         }
-        $listMapper
+        $list
             ->add('enabled', null, ['editable' => true])
             ->add('createdAt');
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [
@@ -188,7 +188,7 @@ class UserAdmin extends AbstractAdmin
         ]);
 
         if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
-            $listMapper
+            $list
                 ->add('impersonating', 'string', ['template' => '@SonataUser/Admin/Field/impersonating.html.twig']);
         }
     }
@@ -197,10 +197,10 @@ class UserAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureDefaultUserFormFields(FormMapper $formMapper): void
+    protected function configureDefaultUserFormFields(FormMapper $form): void
     {
         // define group zoning
-        $formMapper
+        $form
             ->tab('User')
             ->with('Profile', ['class' => 'col-md-6'])->end()
             ->with('General', ['class' => 'col-md-6'])->end()
@@ -209,7 +209,7 @@ class UserAdmin extends AbstractAdmin
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
 
-            $formMapper
+            $form
                 ->tab('Security')
                 ->with('Status', ['class' => 'col-md-4'])->end()
                 ->with('Groups', ['class' => 'col-md-4'])->end()
@@ -217,16 +217,13 @@ class UserAdmin extends AbstractAdmin
                 ->with('Roles', ['class' => 'col-md-12'])->end()
                 ->end();
         }
-
-        $now = new \DateTime();
-
         $genderOptions = [
             'choices' => \call_user_func([$this->getUserManager()->getClass(), 'getGenderList']),
             'required' => true,
             'translation_domain' => $this->getTranslationDomain(),
         ];
 
-        $formMapper
+        $form
             ->tab('User')
             ->with('General')
             ->add('username')
@@ -261,7 +258,7 @@ class UserAdmin extends AbstractAdmin
                 ->end()*/
             ->end();
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $formMapper
+            $form
                 ->tab('Security')
                 ->with('Status')
                 ->add('enabled', null, ['required' => false])
@@ -289,18 +286,17 @@ class UserAdmin extends AbstractAdmin
         }
     }
 
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
-        $this->configureDefaultUserFormFields($formMapper);
+        $this->configureDefaultUserFormFields($form);
 
-//        $formMapper->remove('timezone');
-//        $formMapper->remove('website');
-//        $formMapper->remove('phone');
+//        $form->remove('timezone');
+//        $form->remove('website');
+//        $form->remove('phone');
 
-        //$formMapper->removeGroup('Roles', 'Security');
-        //$formMapper->removeGroup('Keys', 'Security');
-        $now = new DateTime();
-        $formMapper
+        //$form->removeGroup('Roles', 'Security');
+        //$form->removeGroup('Keys', 'Security');
+        $form
             ->tab('User')
             ->with('Profile')
             ->add('website', UrlType::class, ['required' => false])
@@ -312,21 +308,21 @@ class UserAdmin extends AbstractAdmin
                 'required' => false,
             ])*/
         ;
-        $formMapper
+        $form
             ->end()
             ->end();
         if ($this->isGranted('ALL')) {
-            $formMapper
+            $form
                 ->tab('User')
                 ->with('app.user.groups.references', ['class' => 'col-md-6']);
-            $formMapper->add('organisation', ModelType::class, [
+            $form->add('organisation', ModelType::class, [
                 'label' => 'app.user.entity.organisation',
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
                 'choice_translation_domain' => false,
             ]);
-            $formMapper->add('communes', ModelType::class,
+            $form->add('communes', ModelType::class,
                 [
                     'label' => 'app.user.entity.communes',
                     'btn_add' => false,
@@ -340,7 +336,7 @@ class UserAdmin extends AbstractAdmin
                     'admin_code' => CommuneAdmin::class,
                 ]
             );
-            $formMapper->add('modelRegions', ModelType::class, [
+            $form->add('modelRegions', ModelType::class, [
                 'label' => 'app.user.entity.model_regions',
                 'btn_add' => false,
                 'placeholder' => '',
@@ -351,7 +347,7 @@ class UserAdmin extends AbstractAdmin
             ], [
                 'admin_code' => ModelRegionAdmin::class,
             ]);
-            $formMapper->add('serviceProviders', ModelAutocompleteType::class, [
+            $form->add('serviceProviders', ModelAutocompleteType::class, [
                 'label' => 'app.user.entity.service_providers',
                 'property' => ['name', 'shortName'],
                 'required' => false,
@@ -359,7 +355,7 @@ class UserAdmin extends AbstractAdmin
             ], [
                 'admin_code' => ServiceProviderAdmin::class,
             ]);/*
-                $formMapper->add('serviceProviders', ModelType::class, [
+                $form->add('serviceProviders', ModelType::class, [
                     'label' => 'app.user.entity.service_providers',
                     'btn_add' => false,
                     'placeholder' => '',
@@ -370,7 +366,7 @@ class UserAdmin extends AbstractAdmin
                 ], [
                     'admin_code' => ServiceProviderAdmin::class,
                 ]);*/
-            $formMapper
+            $form
                 ->end()
                 ->end();
         }
@@ -384,9 +380,9 @@ class UserAdmin extends AbstractAdmin
         });
     }
 
-    protected function configureShowFields(ShowMapper $showMapper): void
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->with('General')
             ->add('username')
             ->add('email')

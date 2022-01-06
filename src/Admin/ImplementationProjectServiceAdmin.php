@@ -22,7 +22,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('implementationProject')) {
             $formMapper
@@ -104,9 +104,9 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('implementationProject', null, [
                 'admin_code' => \App\Admin\ImplementationProjectAdmin::class
             ])

@@ -84,7 +84,7 @@ trait PersonPropertiesTrait
                 break;
             default:
                 $this->gender = PersonInterface::GENDER_UNKNOWN;
-        };
+        }
     }
 
     /**

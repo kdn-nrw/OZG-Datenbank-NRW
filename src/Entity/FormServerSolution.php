@@ -12,7 +12,6 @@
 namespace App\Entity;
 
 use App\Entity\Base\BaseEntity;
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Base\SortableEntityInterface;
 use App\Entity\Base\SortableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;

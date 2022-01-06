@@ -12,7 +12,6 @@
 namespace App\Entity\StateGroup;
 
 use App\Entity\Base\BaseNamedEntity;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 

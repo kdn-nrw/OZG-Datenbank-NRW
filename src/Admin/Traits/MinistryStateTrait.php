@@ -18,9 +18,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait MinistryStateTrait
 {
-    protected function addStateMinistriesFormFields(FormMapper $formMapper)
+    protected function addStateMinistriesFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('stateMinistries', ModelType::class, [
                     'btn_add' => false,
                     'placeholder' => '',
@@ -32,18 +32,18 @@ trait MinistryStateTrait
             );
     }
 
-    protected function addStateMinistriesListFields(ListMapper $listMapper)
+    protected function addStateMinistriesListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('stateMinistries');
     }
 
     /**
      * @inheritdoc
      */
-    public function addStateMinistriesShowFields(ShowMapper $showMapper)
+    public function addStateMinistriesShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('stateMinistries');
     }
 }

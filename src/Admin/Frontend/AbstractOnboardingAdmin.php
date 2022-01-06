@@ -31,9 +31,9 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
      */
     protected $disabledRoutes = ['edit'];
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('commune', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -45,7 +45,7 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $formMapper
+        $form
             ->add('status', ChoiceType::class, [
                 'label' => 'app.commune_info.entity.status',
                 'choices' => array_flip(AbstractOnboardingEntity::$statusChoices),
@@ -55,13 +55,13 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
                     return ['class' => 'onboarding-status ob-status-' . $value];
                 },
             ]);
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'commune');
-        $datagridMapper
+        $this->addDefaultDatagridFilter($filter, 'commune');
+        $filter
             ->add('status', ChoiceFilter::class, [
                 'label' => 'app.commune_info.entity.status',
                 'field_options' => [
@@ -75,9 +75,9 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
             ]);
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('commune', null, [
                 'admin_code' => CommuneAdmin::class,
             ])
@@ -88,15 +88,15 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
                 'choices' => AbstractOnboardingEntity::$statusChoices,
                 //'catalogue' => 'SonataAdminBundle',
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('commune', null, [
+        $show->add('commune', null, [
             'admin_code' => CommuneAdmin::class,
         ])
             ->add('modifiedAt')

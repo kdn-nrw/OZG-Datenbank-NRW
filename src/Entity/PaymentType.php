@@ -14,7 +14,6 @@ namespace App\Entity;
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -52,7 +51,7 @@ class PaymentType extends BaseNamedEntity implements HasSolutionsEntityInterface
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution): self
+    public function addSolution(Solution $solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -66,7 +65,7 @@ class PaymentType extends BaseNamedEntity implements HasSolutionsEntityInterface
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution): self
+    public function removeSolution(Solution $solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);

@@ -37,10 +37,10 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
         return $years;
     }
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('dataCenter')) {
-            $formMapper
+            $form
                 ->add('dataCenter', ModelType::class, [
                     'label' => 'app.data_center_consumption.entity.data_center',
                     'btn_add' => false,
@@ -52,7 +52,7 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
                 ]);
         }
 
-        $formMapper
+        $form
             ->add('year', ChoiceType::class, [
                 'label' => 'app.data_center_consumption.entity.year',
                 'choices' => $this->getYearChoices(),
@@ -70,13 +70,13 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
                 //'ckeditor_context' => 'default', // optional
             ]);
 
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'dataCenter');
-        $datagridMapper->add('year',
+        $this->addDefaultDatagridFilter($filter, 'dataCenter');
+        $filter->add('year',
             null, [
             ],
             ChoiceType::class,
@@ -86,9 +86,9 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
         );
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('dataCenter', null, [
                 'admin_code' => ServiceProviderAdmin::class
             ])
@@ -97,7 +97,7 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
             ->add('createdBy', null, [
                 'template' => 'General/List/list_user.html.twig',
             ]);
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [
@@ -110,15 +110,15 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('dataCenter')
             ->add('createdBy', null, [
                 'template' => 'General/Show/show-user.html.twig',
             ]);
-        $this->addDatePickersShowFields($showMapper, 'createdAt', false);
-        $showMapper
+        $this->addDatePickersShowFields($show, 'createdAt', false);
+        $show
             ->add('year')
             ->add('powerConsumption')
             ->add('comment');

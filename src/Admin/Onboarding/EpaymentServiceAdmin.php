@@ -29,7 +29,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
 {
     protected $baseRoutePattern = 'onboarding/epayment-service';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         $enableRequiredFields = true;
         $parentFieldDescription = $this->getParentFieldDescription();
@@ -37,13 +37,13 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
             $parentOptions = $parentFieldDescription->getOptions();
             $enableRequiredFields = empty($parentOptions['ba_disable_required_fields']);
         }
-        $formMapper
+        $form
             ->with('general', [
                 'label' => 'app.epayment_service.groups.general',
                 'class' => 'col-md-12',
             ]);
         if (!$this->isExcludedFormField('epayment')) {
-            $formMapper
+            $form
                 ->add('epayment', ModelAutocompleteType::class, [
                     'property' => ['communeName',],
                     'required' => $enableRequiredFields,
@@ -52,7 +52,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                 ]);
         }
         if (!$this->isExcludedFormField('solution')) {
-            $formMapper
+            $form
                 ->add('solution', ModelType::class, [
                         'btn_add' => false,
                         'required' => false,
@@ -65,7 +65,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                     ]
                 );
         }
-        $formMapper
+        $form
             ->add('description', TextareaType::class, [
                 'required' => $enableRequiredFields,
             ])
@@ -79,13 +79,13 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                 'required' => $enableRequiredFields,
             ])
             ->end();
-        $formMapper
+        $form
             ->with('optional', [
                 'label' => 'app.epayment_service.groups.optional',
                 'class' => 'col-md-12',
                 'description' => 'app.epayment_service.groups.optional_description',
             ]);
-        $formMapper
+        $form
             ->add('costUnit', TextareaType::class, [
                 'required' => false,
             ])
@@ -130,16 +130,16 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
         return $queryBuilder;
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'epayment');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solution');
-        /*$datagridMapper->add('description');*/
+        $this->addDefaultDatagridFilter($filter, 'epayment');
+        $this->addDefaultDatagridFilter($filter, 'solution');
+        /*$filter->add('description');*/
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('epayment', null, [
                 'admin_code' => EpaymentAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -160,15 +160,15 @@ class EpaymentServiceAdmin extends AbstractAppAdmin
                     ['fieldName' => 'solution'],
                 ]
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('epayment', null, [
                 'admin_code' => EpaymentAdmin::class
             ])

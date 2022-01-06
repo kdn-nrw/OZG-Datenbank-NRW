@@ -46,24 +46,24 @@ class SearchExtension extends AbstractAdminExtension
     }
 
 
-    public function configureDatagridFilters(DatagridMapper $datagridMapper)
+    public function configureDatagridFilters(DatagridMapper $filter)
     {
-        $admin = $datagridMapper->getAdmin();
+        $admin = $filter->getAdmin();
         if ($admin instanceof EnableFullTextSearchAdminInterface) {
-            $keys = $datagridMapper->keys();
-            $this->addFullTextDatagridFilter($datagridMapper);
-            $datagridMapper->reorder([self::FILTER_KEY] + $keys);
+            $keys = $filter->keys();
+            $this->addFullTextDatagridFilter($filter);
+            $filter->reorder([self::FILTER_KEY] + $keys);
         }
     }
 
     /**
      * Add- custom query condition for full text data grid filter field
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    private function addFullTextDatagridFilter(DatagridMapper $datagridMapper): void
+    private function addFullTextDatagridFilter(DatagridMapper $filter): void
     {
-        $admin = $datagridMapper->getAdmin();
-        $datagridMapper
+        $admin = $filter->getAdmin();
+        $filter
             ->add(self::FILTER_KEY, CallbackFilter::class, [
                 'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) use ($admin) {
                     if (!$value['value']) {

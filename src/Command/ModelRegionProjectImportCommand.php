@@ -65,7 +65,7 @@ class ModelRegionProjectImportCommand extends Command
         $directory = $input->getArgument('directory');
         $this->importer->setOutput($output);
         $startTime = microtime(true);
-        $dataProvider = new CsvDataProvider($directory);
+        //$dataProvider = new CsvDataProvider($directory);
         $importedRowCount = -1;//$this->importer->run($dataProvider);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));

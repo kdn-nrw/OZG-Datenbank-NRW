@@ -31,7 +31,6 @@ class CustomValueType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $customCategoryCount = null;
         $entityClass = $options['entity_class'];
         $this->addCustomFieldsForEntity($builder, $entityClass);
     }

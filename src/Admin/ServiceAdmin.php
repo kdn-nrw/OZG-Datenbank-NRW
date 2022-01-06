@@ -25,12 +25,12 @@ use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
 use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\CollectionType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
@@ -57,23 +57,23 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         'app.service.entity.service_solutions_solution' => 'app.service.entity.service_solutions',
     ];
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('app.service.tabs.general', [
                 'label' => 'app.service.tabs.general',
                 'tab' => true,
             ]);
-        $formMapper->with('general', [
+        $form->with('general', [
             'class' => 'col-xs-12 col-md-6',
             'label' => 'app.service.groups.general',
         ]);
         /*
-        $formMapper->with('app.service.groups.general', [
+        $form->with('app.service.groups.general', [
                 'label' => false,
                 'box_class' => 'box-tab',
             ]);*/
-        $formMapper->add('name', TextareaType::class, [
+        $form->add('name', TextareaType::class, [
             'required' => true,
         ])
             ->add('serviceKey', TextType::class, [
@@ -81,14 +81,14 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ]);
 
         if (!$this->isExcludedFormField('serviceSystem')) {
-            $formMapper->add('serviceSystem', ModelAutocompleteType::class, [
+            $form->add('serviceSystem', ModelAutocompleteType::class, [
                 'property' => 'name',
                 'required' => true,
             ], [
                 'admin_code' => ServiceSystemAdmin::class
             ]);
         }
-        $formMapper
+        $form
             ->add('status', ModelType::class, [
                 'btn_add' => false,
                 'required' => true,
@@ -103,12 +103,12 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'required' => false,
                 'choice_translation_domain' => false,
             ]);
-        $formMapper->end();
-        $formMapper->with('laws', [
+        $form->end();
+        $form->with('laws', [
             'class' => 'col-xs-12 col-md-6',
             'label' => 'app.service.groups.laws',
         ]);
-        $formMapper
+        $form
             ->add('legalBasis', TextareaType::class, [
                 'required' => false,
             ])
@@ -130,13 +130,13 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 // with transform set to true 0=false, 1=true
                 'transform' => true,
             ]);
-        $formMapper->end();
-        $formMapper->with('relations', [
+        $form->end();
+        $form->with('relations', [
             'class' => 'col-xs-12',
             'label' => 'app.service.groups.relations',
         ]);
 
-        $formMapper
+        $form
             ->add('inheritJurisdictions', ChoiceType::class, [
                 'choices' => [
                     'app.service.entity.inherit_jurisdictions.no' => false,
@@ -159,12 +159,12 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 ],
                 'required' => true,
             ]);
-        $formMapper->get('jurisdictions')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
+        $form->get('jurisdictions')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
             $this->getModelManager(),
             Jurisdiction::class
         ));
 
-        $formMapper
+        $form
             ->add('inheritStateMinistries', ChoiceType::class, [
                 'choices' => [
                     'app.service.entity.inherit_state_ministries.no' => false,
@@ -199,7 +199,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                     'choice_translation_domain' => false,
                 ]
             );
-        $formMapper
+        $form
             ->add('inheritRuleAuthorities', ChoiceType::class, [
                 'choices' => [
                     'app.service.entity.inherit_rule_authorities.no' => false,
@@ -222,12 +222,12 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 ],
                 'required' => true,
             ]);
-        $formMapper->get('ruleAuthorities')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
+        $form->get('ruleAuthorities')->addModelTransformer(new EntityCollectionToIdArrayTransformer(
             $this->getModelManager(),
             Jurisdiction::class
         ));
 
-        $formMapper
+        $form
             ->add('authorityInheritStateMinistries', ChoiceType::class, [
                 'choices' => [
                     'app.service.entity.authority_inherit_state_ministries.no' => false,
@@ -246,7 +246,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 ]
             );
 
-        $formMapper
+        $form
             ->add('authorityInheritBureaus', ChoiceType::class, [
                 'choices' => [
                     'app.service.entity.authority_inherit_bureaus.no' => false,
@@ -265,7 +265,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 ]
             );
 
-        $formMapper
+        $form
             ->add('inheritCommuneTypes', ChoiceType::class, [
                 'choices' => [
                     'app.service.entity.inherit_commune_types.no' => false,
@@ -282,12 +282,12 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'by_reference' => false,
                 'choice_translation_domain' => false,
             ]);
-        $this->addSpecializedProceduresFormFields($formMapper);
-        $this->addPortalsFormFields($formMapper);
-        $formMapper->end()
+        $this->addSpecializedProceduresFormFields($form);
+        $this->addPortalsFormFields($form);
+        $form->end()
             ->end();
         if (!$this->isExcludedFormField('serviceSolutions')) {
-            $formMapper->tab('app.service.tabs.service_solutions', [
+            $form->tab('app.service.tabs.service_solutions', [
                 'label' => 'app.service.tabs.service_solutions',
                 'box_class' => 'box-tab',
             ])
@@ -310,7 +310,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 ->end()
                 ->end();
         }
-        $formMapper->tab('app.service.tabs.fim', [
+        $form->tab('app.service.tabs.fim', [
             'label' => 'app.service.tabs.fim',
             'box_class' => 'box-tab',
         ])
@@ -343,7 +343,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])**/
             ->end()
             ->end();
-        $formMapper->tab('app.service.tabs.notes', [
+        $form->tab('app.service.tabs.notes', [
             'label' => 'app.service.tabs.notes',
             'box_class' => 'box-tab',
         ])
@@ -359,35 +359,35 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'required' => false,
                 'ckeditor_context' => 'default', // optional
             ]);
-        $this->addLaboratoriesFormFields($formMapper);
-        $formMapper->end()
+        $this->addLaboratoriesFormFields($form);
+        $form->end()
             ->end();
 
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $datagridMapper->add('serviceKey');
-        $datagridMapper->add('serviceType');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem');
-        $this->addDefaultDatagridFilter($datagridMapper, 'priority');
-        $datagridMapper->add('serviceSystem.serviceKey',
+        $filter->add('name');
+        $filter->add('serviceKey');
+        $filter->add('serviceType');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystem');
+        $this->addDefaultDatagridFilter($filter, 'priority');
+        $filter->add('serviceSystem.serviceKey',
             null,
             ['label' => 'app.service_system.entity.service_key']
         );
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem.situation.subject', ['show_filter' => true]);
-        $datagridMapper->add('status');
-        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
-        $this->addDefaultDatagridFilter($datagridMapper, 'jurisdictions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'bureaus');
-        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
-        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects.implementationProject');
-        $this->addDefaultDatagridFilter($datagridMapper, 'ruleAuthorities');
-        $this->addDefaultDatagridFilter($datagridMapper, 'stateMinistries');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.solution');
-        $datagridMapper->add('fimTypes.dataType',
+        $this->addDefaultDatagridFilter($filter, 'serviceSystem.situation.subject', ['show_filter' => true]);
+        $filter->add('status');
+        $this->addDefaultDatagridFilter($filter, 'laboratories');
+        $this->addDefaultDatagridFilter($filter, 'jurisdictions');
+        $this->addDefaultDatagridFilter($filter, 'bureaus');
+        $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($filter, 'portals');
+        $this->addDefaultDatagridFilter($filter, 'implementationProjects.implementationProject');
+        $this->addDefaultDatagridFilter($filter, 'ruleAuthorities');
+        $this->addDefaultDatagridFilter($filter, 'stateMinistries');
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.solution');
+        $filter->add('fimTypes.dataType',
             null, [
             ],
             ChoiceType::class,
@@ -395,7 +395,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'choices' => array_flip(FederalInformationManagementType::$mapTypes)
             ]
         );
-        $datagridMapper->add('fimTypes.status',
+        $filter->add('fimTypes.status',
             null, [
             ],
             ChoiceType::class,
@@ -403,12 +403,12 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'choices' => array_flip(FederalInformationManagementType::$statusChoices)
             ]
         );
-        $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
+        $this->addDefaultDatagridFilter($filter, 'communeTypes');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('serviceKey')
             ->add('serviceSystem', null, [
@@ -450,7 +450,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                     ['fieldName' => 'status'],
                 ]
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
@@ -490,9 +490,9 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
@@ -521,13 +521,13 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('relevance2', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
-            ->add('status', TemplateRegistry::TYPE_CHOICE, [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('priority', TemplateRegistry::TYPE_CHOICE, [
+            ->add('priority', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Priority::class,
                 'catalogue' => 'messages',
@@ -545,17 +545,17 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('authorityStateMinistries')
             ->add('communeTypes')
             ->add('notes', 'html');
-        $this->addLaboratoriesShowFields($showMapper);
-        $this->addSpecializedProceduresShowFields($showMapper);
-        $this->addPortalsShowFields($showMapper);
-        $this->addStateMinistriesShowFields($showMapper);
-        $showMapper->add('implementationProjects', null, [
+        $this->addLaboratoriesShowFields($show);
+        $this->addSpecializedProceduresShowFields($show);
+        $this->addPortalsShowFields($show);
+        $this->addStateMinistriesShowFields($show);
+        $show->add('implementationProjects', null, [
             'admin_code' => ImplementationProjectAdmin::class,
             'template' => 'ServiceAdmin/Show/show-service-projects.html.twig',
             'is_custom_field' => true,
             'showProject' => true,
         ]);
-        $showMapper
+        $show
             ->add('modelRegionProjects', null, [
                 'admin_code' => ModelRegionProjectAdmin::class,
                 'route' => [

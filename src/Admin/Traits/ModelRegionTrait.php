@@ -23,9 +23,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 trait ModelRegionTrait
 {
-    protected function addModelRegionsFormFields(FormMapper $formMapper): void
+    protected function addModelRegionsFormFields(FormMapper $form): void
     {
-        $formMapper->add('modelRegions', ModelType::class, [
+        $form->add('modelRegions', ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
@@ -37,17 +37,17 @@ trait ModelRegionTrait
         ]);
     }
 
-    protected function addModelRegionsListFields(ListMapper $listMapper): void
+    protected function addModelRegionsListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->add('modelRegions', null,[
                 'admin_code' => ModelRegionAdmin::class,
             ]);
     }
 
-    public function addModelRegionsShowFields(ShowMapper $showMapper): void
+    public function addModelRegionsShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->add('modelRegions', null,[
                 'admin_code' => ModelRegionAdmin::class,
             ]);

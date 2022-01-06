@@ -200,7 +200,7 @@ class EntityReferenceMap
                         $objectKey = get_class($object) . '::' . $object->getId();
                         $this->errorObjectList[$objectKey] = $metaAction;
                     }
-                    if (null !== $entityMap = $meta->getTargetEntityReferenceMap()) {
+                    if (null !== $meta->getTargetEntityReferenceMap()) {
                         $childReferenceProperties = $this->getPropertyReferences();
                         foreach ($childReferenceProperties as $childMeta) {
                             $childAction = $childMeta->getPerformedAction($metaAction);

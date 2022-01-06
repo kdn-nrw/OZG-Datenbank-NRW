@@ -22,7 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 trait ContactTrait
 {
     protected function addContactsFormFields(
-        FormMapper $formMapper,
+        FormMapper $form,
         $addOldField = false,
         $editable = false,
         $fieldName = 'contacts',
@@ -32,14 +32,14 @@ trait ContactTrait
     {
         if ($editable) {
             if ($addTab) {
-                $formMapper
+                $form
                     ->tab('app.contact.list')
                     ->with('app.contact.list', [
                         'label' => false,
                         'box_class' => 'box-tab',
                     ]);
             }
-            $formMapper->add($fieldName, CollectionType::class, [
+            $form->add($fieldName, CollectionType::class, [
                     //'label' => false,
                     'type_options' => [
                         'delete' => true,
@@ -55,16 +55,16 @@ trait ContactTrait
                 ]);
 
             if ($addOldField) {
-                $formMapper->add('contact', TextareaType::class, [
+                $form->add('contact', TextareaType::class, [
                     'required' => $required,
                 ]);
             }
             if ($addTab) {
-                $formMapper->end();
-                $formMapper->end();
+                $form->end();
+                $form->end();
             }
         } else {
-            $formMapper->add($fieldName, ModelType::class, [
+            $form->add($fieldName, ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => $required,
@@ -73,16 +73,16 @@ trait ContactTrait
                 'choice_translation_domain' => false,
             ]);
             if ($addOldField) {
-                $formMapper->add('contact', TextareaType::class, [
+                $form->add('contact', TextareaType::class, [
                     'required' => $required,
                 ]);
             }
         }
     }
 
-    protected function addContactsListFields(ListMapper $listMapper, $fieldName = 'contacts'): void
+    protected function addContactsListFields(ListMapper $list, $fieldName = 'contacts'): void
     {
-        $listMapper
+        $list
             ->add($fieldName, null, [
                 'admin_code' => ContactAdmin::class,
             ]);
@@ -91,14 +91,14 @@ trait ContactTrait
     /**
      * @inheritdoc
      */
-    public function addContactsShowFields(ShowMapper $showMapper, $addOldField = false, $fieldName = 'contacts'): void
+    public function addContactsShowFields(ShowMapper $show, $addOldField = false, $fieldName = 'contacts'): void
     {
-        $showMapper
+        $show
             ->add($fieldName, null, [
                 'admin_code' => ContactAdmin::class,
             ]);
         if ($addOldField) {
-            $showMapper->add('contact');
+            $show->add('contact');
         }
     }
 }

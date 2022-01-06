@@ -68,7 +68,6 @@ class OnboardingManager
 
     private function updateContacts(string $entityClass)
     {
-        $sql = null;
         if ($entityClass === FormSolution::class) {
             $sql = "UPDATE ozg_onboarding_contact c, ozg_onboarding fs, ozg_onboarding bi
             SET c.form_solution_id = fs.id, c.commune_id = bi.commune_id
@@ -200,7 +199,7 @@ class OnboardingManager
         $dateString = $now->format('Y-m-d H:i:s');
         $connection = $this->getEntityManager()->getConnection();
         $mapReferencesToBeCreated = [];
-        foreach ($ePaymentResults as $offset => $ePayment) {
+        foreach ($ePaymentResults as $ePayment) {
             $communeId = (int) $ePayment->getCommune()->getId();
             $entityId = (int) $ePayment->getId();
             $query = 'SELECT solution_id FROM ozg_onboarding_commune_solution WHERE enabled_epayment = 1 AND commune_id = ' . $communeId;

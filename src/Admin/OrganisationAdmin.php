@@ -30,9 +30,9 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
     use AddressTrait;
     use ModelTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('app.organisation.groups.basic_data', ['class' => 'col-md-6'])
             ->add('name', TextType::class, [
                 'required' => true,
@@ -42,8 +42,8 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
             ])
             ->end()
             ->with('app.organisation.groups.address_data', ['class' => 'col-md-6']);
-        $this->addAddressFormFields($formMapper);
-        $formMapper->end();
+        $this->addAddressFormFields($form);
+        $form->end();
         if (!$this->isExcludedFormField('organizationType')) {
             $mapFieldMasks = [
                 Organisation::TYPE_DEFAULT => [],
@@ -51,7 +51,7 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
             foreach (Organisation::$mapFields as $key => $field) {
                 $mapFieldMasks[$key] = [$field];
             }
-            $formMapper
+            $form
                 ->with('app.organisation.groups.type_data', ['class' => 'col-md-6'])
                 ->add('organizationType', ChoiceFieldMaskType::class, [
                     'choices' => Organisation::$organizationTypeChoices,
@@ -64,47 +64,47 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
                 if (!empty($propertyConfiguration['admin_class'])) {
                     $fieldDescriptionOptions['admin_code'] = $propertyConfiguration['admin_class'];
                 }
-                $this->addDefaultModelType($formMapper, $field, $fieldDescriptionOptions);
+                $this->addDefaultModelType($form, $field, $fieldDescriptionOptions);
             }
-            $formMapper->end();
+            $form->end();
         }
-        $formMapper
+        $form
             ->end()
             ->with('app.organisation.groups.contacts', ['class' => 'col-md-6']);
 
-        $this->addContactsFormFields($formMapper, false, true, 'contacts', false, false);
-        $formMapper
+        $this->addContactsFormFields($form, false, true, 'contacts', false, false);
+        $form
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addAddressDatagridFilters($datagridMapper);
+        $filter->add('name');
+        $this->addAddressDatagridFilters($filter);
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addAddressListFields($listMapper);
-        $listMapper
+        $list->addIdentifier('name');
+        $this->addAddressListFields($list);
+        $list
             ->add('url', 'url')
             ->add('organizationType', 'choice', [
                 'editable' => false,
                 'choices' => array_flip(Organisation::$organizationTypeChoices),
                 'catalogue' => 'messages',
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name');
-        $this->addAddressShowFields($showMapper);
-        $showMapper->add('url', 'url');
-        $this->addContactsShowFields($showMapper);
+        $show->add('name');
+        $this->addAddressShowFields($show);
+        $show->add('url', 'url');
+        $this->addContactsShowFields($show);
     }
 }

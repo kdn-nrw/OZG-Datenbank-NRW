@@ -30,39 +30,39 @@ class AdministrativeDistrictAdmin extends AbstractAppAdmin
 
     use CommuneTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper->add('name', TextType::class);
-        $this->addCommunesFormFields($formMapper);
-        $formMapper
+        $form->add('name', TextType::class);
+        $this->addCommunesFormFields($form);
+        $form
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addServiceProvidersFormFields($formMapper, 'paymentOperator', 'paymentProvider');
-        $formMapper->end();
+        $this->addServiceProvidersFormFields($form, 'paymentOperator', 'paymentProvider');
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'communes');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name');
-        $this->addCommunesListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $this->addCommunesListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('description');
-        $this->addCommunesShowFields($showMapper);
+        $this->addCommunesShowFields($show);
     }
 }

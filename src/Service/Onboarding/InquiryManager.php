@@ -19,7 +19,7 @@ use App\Entity\Onboarding\Inquiry;
 use App\Entity\User;
 use App\Form\Type\InquiryType;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Exception\ORMException ;
 use Doctrine\ORM\TransactionRequiredException;
 use Sonata\UserBundle\Model\UserInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -267,8 +267,6 @@ class InquiryManager
                 if (class_exists($referenceSource) && strpos($referenceSource, 'Entity') !== false) {
                     $this->referenceObjectCache[$key] = $em->find($referenceSource, $referenceId);
                 }
-            } catch (OptimisticLockException $e) {
-            } catch (TransactionRequiredException $e) {
             } catch (ORMException $e) {
             }
         }

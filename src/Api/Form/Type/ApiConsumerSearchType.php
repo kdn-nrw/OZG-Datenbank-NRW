@@ -44,16 +44,13 @@ class ApiConsumerSearchType extends AbstractType
         foreach ($propertyConfiguration as $property => $configuration) {
             if (!$configuration->isCustomProperty()) {
                 $labelKey = $labelPrefix . SnakeCaseConverter::classNameToSnakeCase($property);
-                switch ($configuration->getDataType()) {
-                    default:
-                        $builder->add($property, TextType::class, [
-                            'label' => $labelKey,
-                            'required' => $configuration->isRequired(),
-                            'attr' => [
-                                'placeholder' => $labelKey,
-                            ]
-                        ]);
-                }
+                $builder->add($property, TextType::class, [
+                    'label' => $labelKey,
+                    'required' => $configuration->isRequired(),
+                    'attr' => [
+                        'placeholder' => $labelKey,
+                    ]
+                ]);
             }
         }
     }

@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait PortalTrait
 {
-    protected function addPortalsFormFields(FormMapper $formMapper)
+    protected function addPortalsFormFields(FormMapper $form)
     {
-        $formMapper->add('portals', ModelType::class, [
+        $form->add('portals', ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
@@ -31,9 +31,9 @@ trait PortalTrait
         ]);
     }
 
-    protected function addPortalsListFields(ListMapper $listMapper)
+    protected function addPortalsListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('portals', null,[
                 'admin_code' => PortalAdmin::class,
             ]);
@@ -42,9 +42,9 @@ trait PortalTrait
     /**
      * @inheritdoc
      */
-    public function addPortalsShowFields(ShowMapper $showMapper)
+    public function addPortalsShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('portals', null,[
                 'admin_code' => PortalAdmin::class,
             ]);

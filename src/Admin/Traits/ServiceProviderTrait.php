@@ -28,12 +28,12 @@ use Sonata\AdminBundle\Show\ShowMapper;
 trait ServiceProviderTrait
 {
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      * @param string $fieldName Use "serviceProvider" for single item choice type
      * @param string|null $filterChoices Use "paymentProvider" => only show epayment providers
      */
     protected function addServiceProvidersFormFields(
-        FormMapper $formMapper,
+        FormMapper $form,
         string $fieldName = 'serviceProviders',
         ?string $filterChoices = null
     ): void
@@ -51,12 +51,12 @@ trait ServiceProviderTrait
         if (null !== $queryBuilder) {
             $options['query'] = $queryBuilder;
         }
-        $formMapper->add($fieldName, ModelType::class, $options);
+        $form->add($fieldName, ModelType::class, $options);
     }
 
-    protected function addServiceProvidersListFields(ListMapper $listMapper, string $fieldName = 'serviceProviders')
+    protected function addServiceProvidersListFields(ListMapper $list, string $fieldName = 'serviceProviders')
     {
-        $listMapper
+        $list
             ->add($fieldName, null, [
                 'admin_code' => ServiceProviderAdmin::class,
             ]);
@@ -65,9 +65,9 @@ trait ServiceProviderTrait
     /**
      * @inheritdoc
      */
-    public function addServiceProvidersShowFields(ShowMapper $showMapper, string $fieldName = 'serviceProviders')
+    public function addServiceProvidersShowFields(ShowMapper $show, string $fieldName = 'serviceProviders')
     {
-        $showMapper
+        $show
             ->add($fieldName, null, [
                 'admin_code' => ServiceProviderAdmin::class,
             ]);

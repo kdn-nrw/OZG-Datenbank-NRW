@@ -49,7 +49,6 @@ class LastUpdateExtension extends AbstractExtension
             ->where('s.hidden = 0')
             ->setMaxResults(1)
             ->getQuery();
-        $lastUpdate = null;
         try {
             $result = $query->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {

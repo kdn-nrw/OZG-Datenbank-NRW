@@ -17,7 +17,6 @@ use App\Entity\Manager\SolutionManager;
 use Sonata\AdminBundle\Admin\Pool;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
-use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Doctrine\Model\ManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,7 +37,7 @@ class RecentSolutionsBlock extends AbstractBlockService
     /**
      * @param Environment $twig
      * @param ManagerInterface $commentManager
-     * @param Pool $adminPool
+     * @param Pool|null $adminPool
      */
     public function __construct(Environment $twig, ManagerInterface $commentManager, Pool $adminPool = null)
     {
@@ -54,7 +53,7 @@ class RecentSolutionsBlock extends AbstractBlockService
      * @param Response|null $response
      * @return Response
      */
-    public function execute(BlockContextInterface $blockContext, ?Response $response = null)
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $mode = (string) $blockContext->getSetting('mode');
         $isAdminMode = 'admin' === $mode;
@@ -76,7 +75,7 @@ class RecentSolutionsBlock extends AbstractBlockService
         return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
     }
 
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'number' => 5,
@@ -88,13 +87,6 @@ class RecentSolutionsBlock extends AbstractBlockService
             'code' => false,
             'code_public' => false,
             'template' => 'Block/recent-solutions.html.twig',
-        ]);
-    }
-
-    public function getBlockMetadata($code = null)
-    {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
-            'class' => 'fa fa-comments-o',
         ]);
     }
 }

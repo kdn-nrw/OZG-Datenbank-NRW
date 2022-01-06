@@ -23,10 +23,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('service')) {
-            $formMapper
+            $form
                 ->add('service', ModelType::class, [
                     'property' => 'name',
                     'required' => true,
@@ -34,7 +34,7 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
                     'admin_code' => ServiceAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('dataType', ChoiceType::class, [
                 'choices' => array_flip(FederalInformationManagementEntity::$mapTypes),
                 'attr' => [
@@ -65,17 +65,17 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
                 'required' => false,
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
-            ]);;
-        $formMapper->end();
+            ]);
+        $form->end();
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('service')
             ->add('dataType')
             ->add('status');
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [
@@ -88,9 +88,9 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('service')
             ->add('dataType')
             ->add('status')

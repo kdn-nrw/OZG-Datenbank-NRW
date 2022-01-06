@@ -30,48 +30,48 @@ class ModelRegionAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
 
     protected $baseRoutePattern = 'model-region/model-region';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('default', ['label' => 'app.model_region.tabs.default']);
-        $formMapper->with('general', [
+        $form->with('general', [
             'label' => 'app.model_region.tabs.default',
         ]);
-        $formMapper
+        $form
             ->add('name', TextType::class);
-        $this->addAddressFormFields($formMapper);
-        $formMapper
+        $this->addAddressFormFields($form);
+        $form
             ->add('url', UrlType::class, [
                 'required' => false,
             ]);
-        $this->addModelRegionProjectsFormFields($formMapper);
-        $formMapper->end();
-        $formMapper->end();
+        $this->addModelRegionProjectsFormFields($form);
+        $form->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addAddressDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
+        $filter->add('name');
+        $this->addAddressDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'modelRegionProjects');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addAddressListFields($listMapper);
-        $listMapper->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $list->addIdentifier('name');
+        $this->addAddressListFields($list);
+        $list->add('url', 'url');
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name');
-        $this->addAddressShowFields($showMapper);
-        $showMapper->add('url', 'url');
-        $this->addModelRegionProjectsShowFields($showMapper);
+        $show->add('name');
+        $this->addAddressShowFields($show);
+        $show->add('url', 'url');
+        $this->addModelRegionProjectsShowFields($show);
     }
 }

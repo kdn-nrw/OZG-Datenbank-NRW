@@ -22,9 +22,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class SubjectAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('situations', CollectionType::class, [
                 'type_options' => [
@@ -46,28 +46,28 @@ class SubjectAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'situations');
-        $datagridMapper->add('contact');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'situations');
+        $filter->add('contact');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('contact')
             ->addIdentifier('situations');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('contact');
     }

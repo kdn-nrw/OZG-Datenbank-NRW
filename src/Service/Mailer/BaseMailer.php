@@ -53,7 +53,7 @@ class BaseMailer
     /**
      * @var string
      */
-    private $adminEmail;
+    protected $adminEmail;
 
     /**
      * BaseMailer constructor.

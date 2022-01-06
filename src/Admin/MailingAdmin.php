@@ -74,10 +74,10 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         }
     }
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         $now = new DateTime();
-        $formMapper
+        $form
             ->with('app.mailing.groups.default')
             ->add('subject', TextType::class)
             ->add('greetingType', ChoiceFieldMaskType::class, [
@@ -100,9 +100,9 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->add('textPlain', TextareaType::class, [
                 'required' => true,
             ]);
-        $formMapper->end();
-        $formMapper->with('app.mailing.groups.options', ['class' => 'col-md-6']);
-        $formMapper
+        $form->end();
+        $form->with('app.mailing.groups.options', ['class' => 'col-md-6']);
+        $form
             ->add('senderName', TextType::class, [
                 'required' => true,
                 'empty_data' => 'KDN OZG Plattform',
@@ -125,24 +125,24 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
                 'dp_minute_stepping' => 5,
                 'required' => false,
             ]);
-        $formMapper->end();
-        $formMapper->with('app.mailing.groups.recipients', ['class' => 'col-md-6']);
-        $this->addOrganisationsFormFields($formMapper);
-        $this->addCategoriesFormFields($formMapper);
-        $formMapper->add('excludeContacts', ModelAutocompleteType::class, [
+        $form->end();
+        $form->with('app.mailing.groups.recipients', ['class' => 'col-md-6']);
+        $this->addOrganisationsFormFields($form);
+        $this->addCategoriesFormFields($form);
+        $form->add('excludeContacts', ModelAutocompleteType::class, [
             'property' => ['firstName', 'lastName', 'email', 'organisation'],
             'placeholder' => '',
             'required' => false,
             'multiple' => true,
             //'choice_translation_domain' => false,
         ]);
-        $formMapper->add('attachments', CollectionType::class, [
+        $form->add('attachments', CollectionType::class, [
             'entry_type' => MailingAttachmentType::class,
             'allow_add' => true,
             'allow_delete' => true,
             'by_reference' => false,
         ]);
-        $formMapper->end();
+        $form->end();
     }
 
     public function validate(ErrorElement $errorElement, $object)
@@ -153,12 +153,12 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('subject');
-        $this->addDefaultDatagridFilter($datagridMapper, 'categories');
-        $this->addDefaultDatagridFilter($datagridMapper, 'organisations');
-        $datagridMapper->add('status',
+        $filter->add('subject');
+        $this->addDefaultDatagridFilter($filter, 'categories');
+        $this->addDefaultDatagridFilter($filter, 'organisations');
+        $filter->add('status',
             null, [
             ],
             ChoiceType::class,
@@ -168,9 +168,9 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         );
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('createdAt')
             ->add('status', 'choice', [
                 'editable' => true,
@@ -182,15 +182,15 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->add('sendStartAt')
             ->add('sendEndAt')
             ->add('sentCount');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('createdAt')
             ->add('status', 'choice', [
                 'editable' => true,
@@ -208,8 +208,8 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
                 'template' => 'Mailing/show-mailing-contacts.html.twig',
             ])
             ->add('excludeContacts');
-        $this->addOrganisationsShowFields($showMapper);
-        $this->addCategoriesShowFields($showMapper);
+        $this->addOrganisationsShowFields($show);
+        $this->addCategoriesShowFields($show);
     }
 
     public function preUpdate($object)

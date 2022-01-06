@@ -11,7 +11,6 @@
 
 namespace App\Twig\Extension;
 
-use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Service;
 use App\Entity\StateGroup\Commune;
 use Twig\TwigFunction;

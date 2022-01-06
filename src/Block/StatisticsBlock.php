@@ -19,7 +19,6 @@ use Sonata\AdminBundle\Admin\Pool;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
-use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -60,7 +59,7 @@ class StatisticsBlock extends AbstractBlockService
      * @param Response|null $response
      * @return Response
      */
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         /** @var AbstractChartJsStatisticsProvider $provider */
         $provider = $this->providerLoader->getProviderByKey($blockContext->getSetting('provider'));
@@ -78,9 +77,9 @@ class StatisticsBlock extends AbstractBlockService
         return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
     }
 
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildEditForm(FormMapper $form, BlockInterface $block)
     {
-        $formMapper->add('settings', ImmutableArrayType::class, [
+        $form->add('settings', ImmutableArrayType::class, [
             'keys' => [
                 ['number', IntegerType::class, [
                     'required' => true,
@@ -120,7 +119,7 @@ class StatisticsBlock extends AbstractBlockService
         ]);
     }
 
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'number' => 5,
@@ -132,13 +131,6 @@ class StatisticsBlock extends AbstractBlockService
             'provider' => null,
             'filters' => null,
             'template' => 'Block/statistics-chart.html.twig',
-        ]);
-    }
-
-    public function getBlockMetadata($code = null)
-    {
-        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
-            'class' => 'fa fa-line-chart',
         ]);
     }
 }

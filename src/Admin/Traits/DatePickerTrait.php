@@ -24,7 +24,7 @@ use Sonata\Form\Type\DatePickerType;
 trait DatePickerTrait
 {
     protected function addDatePickerFormField(
-        FormMapper $formMapper,
+        FormMapper $form,
         string $fieldName,
         int $maxYearOffset = 2,
         array $customOptions = []): void
@@ -42,11 +42,11 @@ trait DatePickerTrait
         if (!empty($customOptions)) {
             $options = array_merge($options, $customOptions);
         }
-        $formMapper->add($fieldName, DatePickerType::class, $options);
+        $form->add($fieldName, DatePickerType::class, $options);
     }
 
     protected function addDatePickersListFields(
-        ListMapper $listMapper,
+        ListMapper $list,
         string $fieldName,
         $addProgress = false,
         bool $showOnlyMonth = true,
@@ -63,12 +63,12 @@ trait DatePickerTrait
         if (!empty($customFieldDescriptionOptions)) {
             $fieldDescriptionOptions = array_merge($fieldDescriptionOptions, $customFieldDescriptionOptions);
         }
-        $listMapper->add($fieldName, null, $fieldDescriptionOptions);
+        $list->add($fieldName, null, $fieldDescriptionOptions);
     }
 
-    public function addDatePickersShowFields(ShowMapper $showMapper, string $fieldName, bool $showOnlyMonth = true): void
+    public function addDatePickersShowFields(ShowMapper $show, string $fieldName, bool $showOnlyMonth = true): void
     {
-        $showMapper
+        $show
             ->add($fieldName, null, [
                 // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details
                 'pattern' => $showOnlyMonth ? 'MMMM yyyy' : 'dd.MM.yyyy',

@@ -12,6 +12,7 @@
 namespace App\Security\Authorization\Voter;
 
 
+use App\Entity\MetaData\AbstractMetaItem;
 use App\Entity\MetaData\MetaItem;
 use App\Entity\MetaData\MetaItemProperty;
 use App\Service\InjectAdminManagerTrait;
@@ -80,7 +81,7 @@ class MetaDataVoter extends Voter
             return false;
         }
         $metaItem = $subject instanceof MetaItemProperty ? $subject->getParent() : $subject;
-        if ($metaItem->getMetaType() === MetaItem::META_TYPE_ENTITY) {
+        if ($metaItem->getMetaType() === AbstractMetaItem::META_TYPE_ENTITY) {
             $entityClass = $this->getEntityClassForKey($metaItem->getMetaKey());
             return !empty($entityClass) && $this->canEdit($entityClass);
         }

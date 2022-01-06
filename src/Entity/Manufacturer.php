@@ -14,7 +14,6 @@ namespace App\Entity;
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -35,7 +34,7 @@ class Manufacturer extends BaseNamedEntity implements OrganisationEntityInterfac
      * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="manufacturer", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $organisation;
+    protected $organisation;
 
     /**
      * @var SpecializedProcedure[]|Collection

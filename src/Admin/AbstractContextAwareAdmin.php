@@ -171,11 +171,11 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
 
     /**
      * Adds the data grid filter base on the property configuration
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      * @param string $property
      * @param array $filterOptions
      */
-    protected function addDefaultDatagridFilter(DatagridMapper $datagridMapper, string $property, array $filterOptions = []): void
+    protected function addDefaultDatagridFilter(DatagridMapper $filter, string $property, array $filterOptions = []): void
     {
         $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($this->getClass(), $property);
         $type = null;
@@ -197,7 +197,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
             }
             $fieldDescriptionOptions = ['expanded' => false, 'multiple' => true];
         }
-        $datagridMapper->add($property, $type, $filterOptions, $fieldType, $fieldDescriptionOptions);
+        $filter->add($property, $type, $filterOptions, $fieldType, $fieldDescriptionOptions);
     }
 
     /**

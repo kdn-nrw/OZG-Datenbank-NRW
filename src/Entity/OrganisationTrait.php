@@ -12,7 +12,6 @@
 namespace App\Entity;
 
 // use App\Entity\Contact statement is required for API platform!
-use App\Entity\Contact;
 use Doctrine\Common\Collections\Collection;
 
 /**

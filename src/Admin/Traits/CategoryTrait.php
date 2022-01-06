@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait CategoryTrait
 {
-    protected function addCategoriesFormFields(FormMapper $formMapper)
+    protected function addCategoriesFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('categories', ModelType::class,
                 [
                     'btn_add' => false,
@@ -37,9 +37,9 @@ trait CategoryTrait
             );
     }
 
-    protected function addCategoriesListFields(ListMapper $listMapper)
+    protected function addCategoriesListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('categories', null, [
                 'admin_code' => CategoryAdmin::class,
             ]);
@@ -48,9 +48,9 @@ trait CategoryTrait
     /**
      * @inheritdoc
      */
-    public function addCategoriesShowFields(ShowMapper $showMapper)
+    public function addCategoriesShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('categories', null, [
                 'admin_code' => CategoryAdmin::class,
                 //'template' => 'General/Show/show-categories.twig',

@@ -87,37 +87,37 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         }
     }
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('default', ['label' => 'app.service_provider.group.general_data']);
-        $formMapper->with('general', [
+        $form->with('general', [
             'label' => false,
         ]);
-        $this->addOrganisationOneToOneFormFields($formMapper);
-        $formMapper->add('shortName', TextType::class, [
+        $this->addOrganisationOneToOneFormFields($form);
+        $form->add('shortName', TextType::class, [
             'required' => false,
         ]);
-        $formMapper->add('enablePaymentProvider', CheckboxType::class, [
+        $form->add('enablePaymentProvider', CheckboxType::class, [
             'required' => false,
         ]);
-        $formMapper->end();
-        $formMapper->end();
+        $form->end();
+        $form->end();
 
-        $formMapper->tab('app.service_provider.group.reference_data');
-        $formMapper->with('services_data', [
+        $form->tab('app.service_provider.group.reference_data');
+        $form->with('services_data', [
             'label' => false,
         ]);
-        $this->addCommunesFormFields($formMapper);
-        $this->addSpecializedProceduresFormFields($formMapper);
-        $formMapper->end();
-        $formMapper->end();
+        $this->addCommunesFormFields($form);
+        $this->addSpecializedProceduresFormFields($form);
+        $form->end();
+        $form->end();
 
-        $formMapper->tab('app.service_provider.group.security_incident');
-        $formMapper->with('security_incident', [
+        $form->tab('app.service_provider.group.security_incident');
+        $form->with('security_incident', [
             'label' => false,
         ]);
-        $formMapper->add('securityIncidents', CollectionType::class, [
+        $form->add('securityIncidents', CollectionType::class, [
             'label' => false,
             'type_options' => [
                 'delete' => true,
@@ -128,14 +128,14 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
             'inline' => 'natural',
             'ba_custom_exclude_fields' => ['serviceProvider'],
         ]);
-        $formMapper->end();
-        $formMapper->end();
+        $form->end();
+        $form->end();
 
-        $formMapper->tab('app.service_provider.tabs.infrastructure');
-        $formMapper->with('infrastructure', [
+        $form->tab('app.service_provider.tabs.infrastructure');
+        $form->with('infrastructure', [
             'label' => false,
         ]);
-        $formMapper->add('dataCenter', AdminType::class, [
+        $form->add('dataCenter', AdminType::class, [
             'label' => false,
             'delete' => false,
             'btn_add' => false,
@@ -144,8 +144,8 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
             'ba_custom_exclude_fields' => ['serviceProvider'],
             'admin_code' => DataCenterAdmin::class
         ]);
-        $formMapper->end();
-        $formMapper->end();
+        $form->end();
+        $form->end();
     }
 
     public function preUpdate($object)
@@ -183,41 +183,41 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name')
+        $filter->add('name')
             ->add('shortName');
-        $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
+        $this->addOrganisationOneToOneDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'communes');
+        $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('shortName')
             ->add('organisation.url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('shortName');
-        $this->addOrganisationOneToOneShowFields($showMapper);
-        $this->addCommunesShowFields($showMapper);
-        $this->addSpecializedProceduresShowFields($showMapper);
-        $showMapper->add('specializedProcedures.manufacturers', null, [
+        $this->addOrganisationOneToOneShowFields($show);
+        $this->addCommunesShowFields($show);
+        $this->addSpecializedProceduresShowFields($show);
+        $show->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,
             'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
         ]);
-        $showMapper->add('securityIncidents');
-        $showMapper->add('dataCenter', null, [
+        $show->add('securityIncidents');
+        $show->add('dataCenter', null, [
             'admin_code' => DataCenterAdmin::class,
             'template' => 'ServiceProviderAdmin/show-data_center.html.twig',
             'is_custom_field' => true,

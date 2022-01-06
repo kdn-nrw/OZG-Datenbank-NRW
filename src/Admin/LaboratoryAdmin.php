@@ -16,7 +16,6 @@ use App\Admin\Traits\ServiceTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -28,9 +27,9 @@ class LaboratoryAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
     use ServiceTrait;
     use ServiceProviderTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
@@ -38,45 +37,45 @@ class LaboratoryAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
             ->add('url', UrlType::class, [
                 'required' => false,
             ]);
-        $this->addServiceProvidersFormFields($formMapper);
-        $formMapper
+        $this->addServiceProvidersFormFields($form);
+        $form
             ->add('participantsOther', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addServicesFormFields($formMapper);
-        $formMapper->add('implementationUrl', UrlType::class, [
+        $this->addServicesFormFields($form);
+        $form->add('implementationUrl', UrlType::class, [
                 'required' => false,
             ])
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'serviceProviders');
+        $this->addDefaultDatagridFilter($filter, 'services');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('url', 'url');
-        $this->addServicesListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $this->addServicesListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description')
             ->add('url', 'url')
             ->add('participantsOther');
-        $this->addServiceProvidersShowFields($showMapper);
-        $this->addServicesShowFields($showMapper);
+        $this->addServiceProvidersShowFields($show);
+        $this->addServicesShowFields($show);
     }
 }

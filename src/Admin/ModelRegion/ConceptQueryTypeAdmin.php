@@ -27,9 +27,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ConceptQueryTypeAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('queryGroup', ChoiceType::class, [
                 'choices' => array_flip(ConceptQueryType::$mapTypes),
                 'attr' => [
@@ -48,13 +48,13 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
                 'required' => false,
             ])
             ->add('position', IntegerType::class);
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $datagridMapper
+        $filter->add('name');
+        $filter
             ->add('queryGroup', ChoiceFilter::class, [
                 'field_options' => [
                     'choices' => array_flip(ConceptQueryType::$mapTypes),
@@ -67,16 +67,16 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
             ]);
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('queryGroup', 'choice', [
                 'editable' => false,
                 'choices' => ConceptQueryType::$mapTypes,
                 'catalogue' => 'messages',
             ])
             ->add('name');
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait ServiceTrait
 {
-    protected function addServicesFormFields(FormMapper $formMapper)
+    protected function addServicesFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('services', ModelAutocompleteType::class, [
                     'property' => 'name',
                     'placeholder' => '',
@@ -34,9 +34,9 @@ trait ServiceTrait
             );
     }
 
-    protected function addServicesListFields(ListMapper $listMapper)
+    protected function addServicesListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('services', null,[
                 'admin_code' => ServiceAdmin::class,
             ]);
@@ -44,16 +44,16 @@ trait ServiceTrait
 
     /**
      * Add service fields for show action
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      * @param array $overrideFieldDescriptionOptions
      */
-    public function addServicesShowFields(ShowMapper $showMapper, array $overrideFieldDescriptionOptions = [])
+    public function addServicesShowFields(ShowMapper $show, array $overrideFieldDescriptionOptions = [])
     {
         $fieldDescriptionOptions = array_merge([
             'admin_code' => ServiceAdmin::class,
             'showFimTypes' => false,
         ], $overrideFieldDescriptionOptions);
-        $showMapper
+        $show
             ->add('services', null, $fieldDescriptionOptions);
     }
 }

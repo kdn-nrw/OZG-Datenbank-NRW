@@ -33,15 +33,15 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
     use CommuneTrait;
     use SpecializedProcedureTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addCommunesFormFields($formMapper);
-        $formMapper
+        $this->addCommunesFormFields($form);
+        $form
             ->add('serviceProvider', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -56,15 +56,15 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             ->add('url', UrlType::class, [
                 'required' => false
             ]);
-        $this->addSpecializedProceduresFormFields($formMapper);
-        $formMapper
+        $this->addSpecializedProceduresFormFields($form);
+        $form
             ->add('leadingSystem', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
                 'required' => false,
                 'choice_translation_domain' => false,
             ]);
-        $formMapper->add('storageTypes', ModelType::class, [
+        $form->add('storageTypes', ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
@@ -72,7 +72,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             'by_reference' => false,
             'choice_translation_domain' => false,
         ]);
-        $formMapper
+        $form
             ->add('notes', SimpleFormatterType::class, [
                 'label' => 'app.efile.entity.notes_placeholder',
                 'format' => 'richhtml',
@@ -85,7 +85,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
                 // with transform set to true 0=false, 1=true
                 'transform' => true,
             ]);
-        $formMapper
+        $form
             ->add('sumInvestments', MoneyType::class, [
                 'currency' => 'EUR',
                 'required' => false,
@@ -99,24 +99,24 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
                 'ckeditor_context' => 'default', // optional
                 'required' => false,
             ]);
-        $formMapper
+        $form
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProvider');
-        $this->addDefaultDatagridFilter($datagridMapper,'leadingSystem');
-        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
-        $this->addDefaultDatagridFilter($datagridMapper, 'storageTypes');
-        $datagridMapper->add('hasEconomicViabilityAssessment');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'communes');
+        $this->addDefaultDatagridFilter($filter, 'serviceProvider');
+        $this->addDefaultDatagridFilter($filter,'leadingSystem');
+        $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($filter, 'storageTypes');
+        $filter->add('hasEconomicViabilityAssessment');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('serviceProvider', null, [
                 'template' => 'General/Association/list_many_to_one_nolinks.html.twig',
@@ -141,19 +141,19 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
                     ['fieldName' => 'status'],
                 ]
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description');
-        $this->addCommunesShowFields($showMapper);
-        $showMapper
+        $this->addCommunesShowFields($show);
+        $show
             ->add('serviceProvider')
             ->add('status', 'choice', [
                 //'editable' => true,
@@ -162,17 +162,17 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             ])
             ->add('url', 'url')
             ->add('leadingSystem');
-        $this->addSpecializedProceduresShowFields($showMapper);
-        $showMapper->add('specializedProcedures.manufacturers', null, [
+        $this->addSpecializedProceduresShowFields($show);
+        $show->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,
             'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
         ]);
-        $showMapper
+        $show
             ->add('storageTypes', null, [
                 'admin_code' => EFileStorageTypeAdmin::class,
             ]);
-        $showMapper
+        $show
             ->add('notes', 'html')
             ->add('hasEconomicViabilityAssessment')
             ->add('sumInvestments', 'currency', [

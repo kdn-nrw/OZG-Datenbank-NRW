@@ -47,14 +47,14 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         'app.commune.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $datagridMapper->add('organisation.zipCode');
-        $datagridMapper->add('organisation.town');
-        $this->addDefaultDatagridFilter($datagridMapper, 'centralAssociations');
-        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
-        $datagridMapper->add('constituency',
+        $filter->add('name');
+        $filter->add('organisation.zipCode');
+        $filter->add('organisation.town');
+        $this->addDefaultDatagridFilter($filter, 'centralAssociations');
+        $this->addDefaultDatagridFilter($filter, 'laboratories');
+        $filter->add('constituency',
             null,
             [
                 'admin_code' => self::class,
@@ -66,17 +66,17 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'query_builder' => $this->getConstituencyQueryBuilder()
             ]
         );
-        $this->addDefaultDatagridFilter($datagridMapper, 'administrativeDistrict');
-        $this->addDefaultDatagridFilter($datagridMapper, 'communeType');
-        $datagridMapper->add('officialCommunityKey');
-        $datagridMapper->add('regionalKey');
+        $this->addDefaultDatagridFilter($filter, 'administrativeDistrict');
+        $this->addDefaultDatagridFilter($filter, 'communeType');
+        $filter->add('officialCommunityKey');
+        $filter->add('regionalKey');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addOrganisationOneToOneListFields($listMapper);
-        $listMapper
+        $list->addIdentifier('name');
+        $this->addOrganisationOneToOneListFields($list);
+        $list
             ->add('constituency', null, [
                 'admin_code' => self::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -106,15 +106,15 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                     ['fieldName' => 'administrativeDistrict'],
                 ]
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('organisation.zipCode')
             ->add('organisation.town')
             ->add('organisation.url', 'url')
@@ -125,9 +125,9 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'admin_code' => self::class,
             ])
             ->add('communeType');
-        $this->addCentralAssociationsShowFields($showMapper);
-        $this->addLaboratoriesShowFields($showMapper);
-        $showMapper->add('solutions', null, [
+        $this->addCentralAssociationsShowFields($show);
+        $this->addLaboratoriesShowFields($show);
+        $show->add('solutions', null, [
             'label' => 'app.commune_type.entity.online_solutions',
             'admin_code' => SolutionAdmin::class,
             'is_custom_field' => true,
@@ -136,7 +136,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'reference_field_list' => ['name', 'url', 'description', 'jurisdictions', 'maturity',],// 'status'
             'show_export' => true,
         ]);
-        $showMapper->add('communeSolutions', null, [
+        $show->add('communeSolutions', null, [
             'label' => 'app.commune.entity.commune_solutions',
             'admin_code' => CommuneSolutionAdmin::class,
             'is_custom_field' => true,
@@ -146,7 +146,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             //'show_export' => true,
             'showSolutions' => true,
         ]);
-        $showMapper->add('communeType.serviceSystems', null, [
+        $show->add('communeType.serviceSystems', null, [
             'label' => 'app.commune_type.entity.service_systems',
             'admin_code' => ServiceSystemAdmin::class,
             'is_custom_field' => true,
@@ -155,7 +155,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'reference_field_list' => ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority',],// 'status'
             'show_export' => true,
         ]);
-        $showMapper->add('communeType.services', null, [
+        $show->add('communeType.services', null, [
             'label' => 'app.commune_type.entity.services',
             'admin_code' => ServiceAdmin::class,
             'is_custom_field' => true,
@@ -174,7 +174,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ],// 'status'
             'show_export' => true,
         ]);
-        $showMapper
+        $show
             ->add('transparencyPortalUrl', 'url');
     }
 

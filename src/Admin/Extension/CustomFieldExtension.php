@@ -30,17 +30,16 @@ class CustomFieldExtension extends AbstractAdminExtension
     use InjectCustomFieldManagerTrait;
     use InjectManagerRegistryTrait;
 
-    public function configureFormFields(FormMapper $formMapper)
+    public function configureFormFields(FormMapper $form)
     {
-        $admin = $formMapper->getAdmin();
+        $admin = $form->getAdmin();
         $entityClass = $admin->getClass();
         $customFields = $this->customFieldManager->getCustomFieldsForRecordType($entityClass);
         if (!empty($customFields)) {
-            $addTab = true;
-            if ($formMapper->hasOpenTab()) {
-                $formMapper->end();
+            if ($form->hasOpenTab()) {
+                $form->end();
             }
-            $keys = $formMapper->keys();
+            $keys = $form->keys();
             $addTab = true;
             // Optional label for custom field tab/group, e.g. app.epayment.tabs.custom_fields
             $customLabelKey = PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($entityClass, 'tabs') . 'custom_fields';
@@ -50,25 +49,25 @@ class CustomFieldExtension extends AbstractAdminExtension
                 $labelKey = 'app.custom_field.tabs.custom_fields';
             }
             if ($addTab) {
-                $formMapper->tab('CustomFields', [
+                $form->tab('CustomFields', [
                     'label' => $labelKey,
                 ]);
             }
-            $formMapper->with('custom_field_group', [
+            $form->with('custom_field_group', [
                 'label' => $addTab ? false : $labelKey,
                 'class' => 'col-xs-12',
             ]);
-            $formMapper->add('dynamicCustomValues', CustomValueType::class, [
+            $form->add('dynamicCustomValues', CustomValueType::class, [
                 'label' => false,
                 'entity_class' => $entityClass,
             ]);
-            $formMapper->getFormBuilder()->setDataMapper(new CustomValueDataMapper(
+            $form->getFormBuilder()->setDataMapper(new CustomValueDataMapper(
                 $this->getEntityManager(),
                 OnboardingCustomValue::class
             ));
-            $formMapper->end();
+            $form->end();
             if ($addTab) {
-                $formMapper->end();
+                $form->end();
             }
         }
     }

@@ -12,7 +12,6 @@
 namespace App\Statistics\Provider;
 
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
-use App\Entity\StateGroup\DataCenter;
 use App\Entity\StateGroup\DataCenterConsumption;
 use App\Statistics\AbstractChartJsStatisticsProvider;
 use Doctrine\ORM\EntityRepository;
@@ -51,7 +50,7 @@ class DataCenterConsumptionChartProvider extends AbstractChartJsStatisticsProvid
             'backgroundColor' => $this->colors[0],
             'data' => [],
         ];
-        foreach ($groupedData as $key => $data) {
+        foreach ($groupedData as $data) {
             $dataSetConfiguration[$offset]['data'][] = $data;
         }
         $chartData = [

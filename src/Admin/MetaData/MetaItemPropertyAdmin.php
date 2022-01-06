@@ -12,7 +12,7 @@
 namespace App\Admin\MetaData;
 
 use App\Admin\AbstractAppAdmin;
-use App\Entity\FederalInformationManagementType;
+use App\Entity\MetaData\AbstractMetaItem;
 use App\Entity\MetaData\MetaItemProperty;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -27,15 +27,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class MetaItemPropertyAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('general', [
                 'label' => 'app.meta_item_property.groups.general',
                 'class' => 'col-xs-12',
             ]);
         if (!$this->isExcludedFormField('parent')) {
-            $formMapper
+            $form
                 ->add('parent', ModelType::class, [
                     'property' => 'internalLabel',
                     'required' => true,
@@ -45,10 +45,10 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
         }
         $subject = $this->getSubject();
         /** @var MetaItemProperty|null $subject */
-        if (null !== $subject && $subject->getMetaType() !== MetaItemProperty::META_TYPE_FIELD) {
-            $formMapper
+        if (null !== $subject && $subject->getMetaType() !== AbstractMetaItem::META_TYPE_FIELD) {
+            $form
                 ->add('metaType', ChoiceType::class, [
-                    'choices' => array_flip(MetaItemProperty::META_TYPES),
+                    'choices' => array_flip(AbstractMetaItem::META_TYPES),
                     'attr' => [
                         'class' => 'form-control',
                         'data-sonata-select2' => 'false'
@@ -58,7 +58,7 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
                     'disabled' => true,
                 ]);
         }
-        $formMapper
+        $form
             ->add('customLabel', TextType::class, [
                 'required' => false,
             ])
@@ -68,9 +68,9 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
                 //'format' => 'richhtml',
                 //'ckeditor_context' => 'default', // optional
             ]);
-        //$formMapper->add('placeholder', TextType::class);
-        $formMapper->end();
-        $formMapper
+        //$form->add('placeholder', TextType::class);
+        $form->end();
+        $form
             ->with('settings', [
                 'label' => 'app.meta_item_property.groups.settings',
                 'class' => 'col-xs-12',
@@ -84,15 +84,15 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
             ->end();
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('metaKey', 'string', [
                 'template' => 'MetaData/list-meta-key.html.twig',
             ])
             ->add('customLabel')
             ->add('description');
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [
@@ -105,9 +105,9 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('metaType')
             ->add('metaKey')
             ->add('customLabel')

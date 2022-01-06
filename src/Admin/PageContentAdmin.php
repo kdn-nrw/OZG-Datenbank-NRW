@@ -24,9 +24,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PageContentAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('page', ChoiceType::class, [
                 'choices' => array_flip(PageContent::$pageChoices),
                 'required' => true,
@@ -40,18 +40,18 @@ class PageContentAdmin extends AbstractAppAdmin
                 'required' => false,
             ])
             ->add('position', IntegerType::class);
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('page');
-        $datagridMapper->add('headline');
+        $filter->add('page');
+        $filter->add('headline');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('createdAt')
             ->add('page', 'choice', [
                 'editable' => true,
@@ -60,15 +60,15 @@ class PageContentAdmin extends AbstractAppAdmin
             ])
             ->add('headline')
             ->add('position');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('page')
             ->add('headline')
             ->add('bodytext');

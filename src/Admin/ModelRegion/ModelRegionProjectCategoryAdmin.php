@@ -28,37 +28,37 @@ class ModelRegionProjectCategoryAdmin extends AbstractAppAdmin implements Enable
 
     protected $baseRoutePattern = 'model-region/project-category';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addModelRegionProjectsFormFields($formMapper);
-        $formMapper->end();
+        $this->addModelRegionProjectsFormFields($form);
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'modelRegionProjects');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->add('name');
-        $this->addDefaultListActions($listMapper);
+        $list->add('name');
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description');
-        $this->addModelRegionProjectsShowFields($showMapper);
+        $this->addModelRegionProjectsShowFields($show);
     }
 }

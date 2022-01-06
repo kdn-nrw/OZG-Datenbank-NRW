@@ -27,7 +27,6 @@ use App\Exporter\Source\ServiceListValueFormatter;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -83,22 +82,22 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         }
     }*/
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('app.implementation_project.tabs.general', ['tab' => true])
             ->with('general', [
                 'label' => 'app.implementation_project.groups.general_data',
                 'class' => 'col-md-6'
             ]);
-        $formMapper->add('name', TextType::class);
-        $this->addSolutionsFormFields($formMapper);
-        $formMapper
+        $form->add('name', TextType::class);
+        $this->addSolutionsFormFields($form);
+        $form
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addLaboratoriesFormFields($formMapper);
-        $formMapper
+        $this->addLaboratoriesFormFields($form);
+        $form
             ->add('efaType', ChoiceType::class, [
                 'choices' => array_flip(ImplementationProject::EFA_TYPES),
                 'attr' => [
@@ -108,19 +107,19 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'required' => false,
                 'disabled' => false,
             ]);
-        $formMapper->end();
-        $formMapper
+        $form->end();
+        $form
             ->with('dates', [
                 'label' => 'app.implementation_project.groups.dates',
                 'class' => 'col-md-6'
             ]);
-        $this->addDatePickerFormField($formMapper, 'projectStartAt');
-        $this->addDatePickerFormField($formMapper, 'conceptStatusAt');
-        $this->addDatePickerFormField($formMapper, 'implementationStatusAt');
-        $this->addDatePickerFormField($formMapper, 'pilotingStatusAt');
-        $this->addDatePickerFormField($formMapper, 'commissioningStatusAt');
-        $this->addDatePickerFormField($formMapper, 'nationwideRolloutAt');
-        $formMapper
+        $this->addDatePickerFormField($form, 'projectStartAt');
+        $this->addDatePickerFormField($form, 'conceptStatusAt');
+        $this->addDatePickerFormField($form, 'implementationStatusAt');
+        $this->addDatePickerFormField($form, 'pilotingStatusAt');
+        $this->addDatePickerFormField($form, 'commissioningStatusAt');
+        $this->addDatePickerFormField($form, 'nationwideRolloutAt');
+        $form
             ->add('status', ModelType::class, [
                 'label' => 'app.implementation_project.entity.status_form',
                 'btn_add' => false,
@@ -129,32 +128,32 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'query' => $this->getStatusQueryBuilder(),
                 'choice_translation_domain' => false,
             ]);
-        $formMapper->end();
-        $formMapper
+        $form->end();
+        $form
             ->with('references', [
                 'label' => false,
             ]);
-        $formMapper
+        $form
             ->add('notes', SimpleFormatterType::class, [
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
             ]);
-        $this->addContactsFormFields($formMapper, false, false, 'contacts', false);
-        $this->addOrganisationsFormFields($formMapper, 'projectLeaders');
-        $this->addOrganisationsFormFields($formMapper, 'participationOrganisations');
-        $this->addOrganisationsFormFields($formMapper, 'interestedOrganisations');
-        $this->addFundingsFormFields($formMapper);
-        $this->addContactsFormFields($formMapper, false, false, 'fimExperts', false);
-        $this->addSlugFormField($formMapper, $this->getSubject());
-        $formMapper->end()
+        $this->addContactsFormFields($form, false, false, 'contacts', false);
+        $this->addOrganisationsFormFields($form, 'projectLeaders');
+        $this->addOrganisationsFormFields($form, 'participationOrganisations');
+        $this->addOrganisationsFormFields($form, 'interestedOrganisations');
+        $this->addFundingsFormFields($form);
+        $this->addContactsFormFields($form, false, false, 'fimExperts', false);
+        $this->addSlugFormField($form, $this->getSubject());
+        $form->end()
             ->end()
             ->tab('app.implementation_project.tabs.services')
             ->with('service_solutions', [
                 'label' => false,
             ]);
-        $this->addServiceFormFields($formMapper);
-        $formMapper->end();
-        $formMapper->end();
+        $this->addServiceFormFields($form);
+        $form->end();
+        $form->end();
     }
 
     /**
@@ -186,9 +185,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         return $queryBuilder;
     }
 
-    private function addServiceFormFields(FormMapper $formMapper): void
+    private function addServiceFormFields(FormMapper $form): void
     {
-        $formMapper
+        $form
             ->add('serviceSystems', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -211,7 +210,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
 
         /** @var ImplementationProject $subject */
         $subject = $this->getSubject();
-        $formMapper
+        $form
             ->add('services', CollectionType::class, [
                 'label' => false,
                 'type_options' => [
@@ -243,8 +242,8 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                     'admin_code' => ServiceAdmin::class,
                 ]
             )*/;
-        $formMapper->getFormBuilder()->addEventListener(FormEvents::POST_SET_DATA,
-            static function (FormEvent $event) use ($formMapper, $subject, $em) {
+        $form->getFormBuilder()->addEventListener(FormEvents::POST_SET_DATA,
+            static function (FormEvent $event) use ($form, $subject, $em) {
                 $serviceSystems = $subject->getServiceSystems();
                 if (count($serviceSystems) > 0) {
                     /** @var EntityManager $em */
@@ -258,36 +257,36 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 } else {
                     $queryBuilder = null;
                 }
-                $formMapper->get('services')->setAttribute('query', $queryBuilder);
+                $form->get('services')->setAttribute('query', $queryBuilder);
             });
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.service');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
-        $datagridMapper->add('status');
-        $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'conceptStatusAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationStatusAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'pilotingStatusAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'commissioningStatusAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'nationwideRolloutAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'contacts');
-        $this->addDefaultDatagridFilter($datagridMapper, 'projectLeaders');
-        $this->addDefaultDatagridFilter($datagridMapper, 'participationOrganisations');
-        $this->addDefaultDatagridFilter($datagridMapper, 'interestedOrganisations');
-        $this->addDefaultDatagridFilter($datagridMapper, 'fundings');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.bureaus');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.portals', ['label' => 'app.implementation_project.entity.portals']);
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
-        $this->addDefaultDatagridFilter($datagridMapper, 'fimExperts');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions.openDataItems');
-        $datagridMapper
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'laboratories');
+        $this->addDefaultDatagridFilter($filter, 'solutions');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystems');
+        $this->addDefaultDatagridFilter($filter, 'services.service');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystems.situation.subject');
+        $filter->add('status');
+        $this->addDefaultDatagridFilter($filter, 'projectStartAt');
+        $this->addDefaultDatagridFilter($filter, 'conceptStatusAt');
+        $this->addDefaultDatagridFilter($filter, 'implementationStatusAt');
+        $this->addDefaultDatagridFilter($filter, 'pilotingStatusAt');
+        $this->addDefaultDatagridFilter($filter, 'commissioningStatusAt');
+        $this->addDefaultDatagridFilter($filter, 'nationwideRolloutAt');
+        $this->addDefaultDatagridFilter($filter, 'contacts');
+        $this->addDefaultDatagridFilter($filter, 'projectLeaders');
+        $this->addDefaultDatagridFilter($filter, 'participationOrganisations');
+        $this->addDefaultDatagridFilter($filter, 'interestedOrganisations');
+        $this->addDefaultDatagridFilter($filter, 'fundings');
+        $this->addDefaultDatagridFilter($filter, 'services.service.bureaus');
+        $this->addDefaultDatagridFilter($filter, 'services.service.portals', ['label' => 'app.implementation_project.entity.portals']);
+        $this->addDefaultDatagridFilter($filter, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
+        $this->addDefaultDatagridFilter($filter, 'fimExperts');
+        $this->addDefaultDatagridFilter($filter, 'solutions.openDataItems');
+        $filter
             ->add('efaType', ChoiceFilter::class, [
                 'label' => 'app.implementation_project.entity.efa_type',
                 'field_options' => [
@@ -301,9 +300,9 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
             ]);
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('serviceSystems.situation.subject', 'string', [
                 'label' => 'app.situation.entity.subject',
@@ -339,16 +338,16 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'sort_parent_association_mappings' => [
                     ['fieldName' => 'status'],
                 ]
-            ]);;
-        $this->addDatePickersListFields($listMapper, 'projectStartAt', true);
-        $this->addDatePickersListFields($listMapper, 'conceptStatusAt', true);
-        $this->addDatePickersListFields($listMapper, 'implementationStatusAt', true);
-        $this->addDatePickersListFields($listMapper, 'pilotingStatusAt', true);
-        $this->addDatePickersListFields($listMapper, 'commissioningStatusAt', true);
-        $this->addDatePickersListFields($listMapper, 'nationwideRolloutAt', true);
-        $this->addServiceSystemsListFields($listMapper);
-        //$this->addSolutionsListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+            ]);
+        $this->addDatePickersListFields($list, 'projectStartAt', true);
+        $this->addDatePickersListFields($list, 'conceptStatusAt', true);
+        $this->addDatePickersListFields($list, 'implementationStatusAt', true);
+        $this->addDatePickersListFields($list, 'pilotingStatusAt', true);
+        $this->addDatePickersListFields($list, 'commissioningStatusAt', true);
+        $this->addDatePickersListFields($list, 'nationwideRolloutAt', true);
+        $this->addServiceSystemsListFields($list);
+        //$this->addSolutionsListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
@@ -375,50 +374,50 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('description')
             ->add('status', 'choice', [
                 //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
             ]);
-        $showMapper
+        $show
             ->add('notes', 'html', [
                 'template' => 'ImplementationProjectAdmin/show-notes.html.twig',
                 'is_custom_field' => true,
             ]);
-        $showMapper->add('statusInfo', null, [
+        $show->add('statusInfo', null, [
             'admin_code' => ImplementationStatusAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-status-info.html.twig',
             'is_custom_field' => true,
         ]);
-        $this->addLaboratoriesShowFields($showMapper);
-        $this->addSolutionsShowFields($showMapper);
-        $this->addContactsShowFields($showMapper, false, 'contacts');
-        $this->addOrganisationsShowFields($showMapper, 'projectLeaders');
-        $this->addOrganisationsShowFields($showMapper, 'participationOrganisations');
-        $this->addOrganisationsShowFields($showMapper, 'interestedOrganisations');
-        $this->addServiceSystemsShowFields($showMapper);
+        $this->addLaboratoriesShowFields($show);
+        $this->addSolutionsShowFields($show);
+        $this->addContactsShowFields($show, false, 'contacts');
+        $this->addOrganisationsShowFields($show, 'projectLeaders');
+        $this->addOrganisationsShowFields($show, 'participationOrganisations');
+        $this->addOrganisationsShowFields($show, 'interestedOrganisations');
+        $this->addServiceSystemsShowFields($show);
 
-        $showMapper->add('services', null, [
+        $show->add('services', null, [
             'admin_code' => ServiceAdmin::class,
             'showFimTypes' => true,
             'template' => 'ImplementationProjectAdmin/Show/show-project-services.html.twig',
             'is_custom_field' => true,
             'showProject' => false,
         ]);
-        $this->addFundingsShowFields($showMapper);
-        $showMapper->add('bureaus', null, [
+        $this->addFundingsShowFields($show);
+        $show->add('bureaus', null, [
             'admin_code' => BureauAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-bureaus.html.twig',
         ]);
-        $showMapper->add('portals', null, [
+        $show->add('portals', null, [
             'label' => 'app.implementation_project.entity.portals',
             'admin_code' => PortalAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
         ]);
-        $this->addContactsShowFields($showMapper, false, 'fimExperts');
+        $this->addContactsShowFields($show, false, 'fimExperts');
     }
 }

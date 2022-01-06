@@ -13,11 +13,9 @@ namespace App\Admin\Onboarding;
 
 
 use App\Admin\StateGroup\CommuneAdmin;
-use App\Entity\Base\BaseEntityInterface;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -26,18 +24,18 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
 {
     protected $baseRoutePattern = 'onboarding/servicekonto';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $this->configureFormGroups($formMapper);
-        $this->addMandatorFormFields($formMapper);
+        $this->configureFormGroups($form);
+        $this->addMandatorFormFields($form);
         if ($this->isGranted('ALL')) {
-            $this->addMandatorAccountFormFields($formMapper);
+            $this->addMandatorAccountFormFields($form);
         }
     }
 
-    protected function configureFormGroups(FormMapper $formMapper)
+    protected function configureFormGroups(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('General', [
                 'label' => 'app.service_account.tabs.general',
                 'description' => 'app.service_account.tabs.general_description',
@@ -60,7 +58,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
             ->end()
             ->end();
         if ($this->isGranted('ALL')) {
-            $formMapper
+            $form
                 ->tab('Mandator', [
                     'label' => 'app.service_account.tabs.mandator',
                     'tab' => true,
@@ -84,11 +82,11 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
         }
     }
 
-    protected function addMandatorFormFields(FormMapper $formMapper)
+    protected function addMandatorFormFields(FormMapper $form)
     {
-        $formMapper->tab('General');
+        $form->tab('General');
 
-        $formMapper
+        $form
             ->with('general')
             ->add('commune', CommuneType::class, [
                 'label' => false,
@@ -110,10 +108,10 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
                 'label' => 'app.service_account.entity.town',
                 'required' => false,
             ]);
-        $this->addDataCompletenessConfirmedField($formMapper);
+        $this->addDataCompletenessConfirmedField($form);
 
-        $formMapper->end();
-        $formMapper
+        $form->end();
+        $form
             ->with('admin_account')
             ->add('paymentUser', OnboardingContactType::class, [
                 'label' => false,
@@ -125,7 +123,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
                 'enable_phone_number' => false,
             ])
             ->end();
-        $formMapper
+        $form
             ->with('mandator_email')
             ->add('mandatorEmail', EmailType::class, [
                 'required' => false,
@@ -139,14 +137,14 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
                 'required' => false,
             ]);
 
-        $formMapper->end();
-        $formMapper
+        $form->end();
+        $form
             ->end();
     }
 
-    protected function addMandatorAccountFormFields(FormMapper $formMapper)
+    protected function addMandatorAccountFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('Mandator')
             ->with('account')
             ->add('answerUrl1', UrlType::class, [

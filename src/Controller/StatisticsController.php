@@ -21,36 +21,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class StatisticsController
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2020 Gert Hammes
- * @since     2020-04-13
  */
 class StatisticsController extends AbstractController
 {
-    /**
-     * @var Pool
-     */
-    private $adminPool;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
     /**
      * @var ProviderLoader
      */
     private $providerLoader;
 
     /**
-     * SearchController constructor.
-     * @param Pool $adminPool
+     * StatisticsController constructor.
+     *
      * @param ProviderLoader $providerLoader
-     * @param TranslatorInterface $translator
      */
-    public function __construct(Pool $adminPool, ProviderLoader $providerLoader, TranslatorInterface $translator)
+    public function __construct(ProviderLoader $providerLoader)
     {
-        $this->adminPool = $adminPool;
-        $this->translator = $translator;
         $this->providerLoader = $providerLoader;
     }
 

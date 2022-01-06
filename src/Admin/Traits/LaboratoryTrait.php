@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait LaboratoryTrait
 {
-    protected function addLaboratoriesFormFields(FormMapper $formMapper)
+    protected function addLaboratoriesFormFields(FormMapper $form)
     {
-        $formMapper->add('laboratories', ModelType::class, [
+        $form->add('laboratories', ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
@@ -31,9 +31,9 @@ trait LaboratoryTrait
         ]);
     }
 
-    protected function addLaboratoriesListFields(ListMapper $listMapper)
+    protected function addLaboratoriesListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('laboratories', null,[
                 'admin_code' => LaboratoryAdmin::class,
             ]);
@@ -42,9 +42,9 @@ trait LaboratoryTrait
     /**
      * @inheritdoc
      */
-    public function addLaboratoriesShowFields(ShowMapper $showMapper)
+    public function addLaboratoriesShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('laboratories', null,[
                 'admin_code' => LaboratoryAdmin::class,
             ]);

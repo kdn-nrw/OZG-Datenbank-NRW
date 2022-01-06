@@ -26,15 +26,15 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
 {
     protected $baseRoutePattern = 'onboarding/basis';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('general', [
                 'label' => 'app.commune_info.groups.general',
             ])
             ->with('app.commune_info.groups.general', ['class' => 'col-md-6']);
-        $this->addDataCompletenessConfirmedField($formMapper);
-        $formMapper
+        $this->addDataCompletenessConfirmedField($form);
+        $form
             ->add('commune', CommuneType::class, [
                 'label' => false,
                 //'required' => true,
@@ -43,8 +43,8 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             ], [
                 'admin_code' => CommuneAdmin::class,
             ]);
-        $this->addGroupEmailFormField($formMapper);
-        $formMapper->add('imageFile', VichImageType::class, [
+        $this->addGroupEmailFormField($form);
+        $form->add('imageFile', VichImageType::class, [
             'required' => false,
             'allow_delete' => true,
             //'delete_label' => '...',
@@ -54,10 +54,10 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
             'imagine_pattern' => 'default_small',
             'asset_helper' => true,
         ]);
-        $formMapper
+        $form
             ->end()
             ->with('app.commune_info.groups.content_data', ['class' => 'col-md-6']);
-        $formMapper
+        $form
             ->add('privacyText', TextareaType::class, [
                 'required' => false,
             ])
@@ -68,7 +68,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
                 'required' => false,
             ])
             ->end();
-        $formMapper
+        $form
             ->with('group_technical_data', [
                 'label' => 'app.commune_info.groups.technical_data',
                 'class' => 'clear-left-md  col-md-6',
@@ -78,16 +78,16 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
                 'help' => '<a href="https://www.wieistmeineip.de/" target="_blank">Aktuelle IP-Adresse?</a>',
             ])
             ->end();
-        $formMapper
+        $form
             ->with('app.commune_info.groups.footer_data', ['class' => 'col-md-6']);
-        $formMapper
+        $form
             ->add('openingHours', TextareaType::class, [
                 'required' => false,
             ]);
-        $formMapper
+        $form
             ->end()
             ->end();
-        $formMapper
+        $form
             ->tab('contacts', [
                 'label' => 'app.commune_info.groups.contact_data',
             ])
@@ -95,7 +95,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
                 'label' => false,
                 'class' => 'col-md-12 box-collection-static two-col box-clipboard-rows js-copy-row-values',
             ]);
-        $formMapper
+        $form
             ->add('contacts', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
                 'label' => 'app.commune_info.entity.contacts',
                 'entry_type' => OnboardingContactType::class,
@@ -103,11 +103,11 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
                     'parent_admin' => $this,
                 ],
             ]);
-        $formMapper
+        $form
             ->end()
             ->end();
 
-        $formMapper
+        $form
             ->with('Services', [
                 'label' => 'app.epayment.tabs.services',
                 'tab' => true,
@@ -135,9 +135,9 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('communeName')
             ->add('officialCommuneKey')
             ->add('imageFile')

@@ -11,7 +11,6 @@
 
 namespace App\Import;
 
-use App\Entity\StateGroup\Commune;
 use App\Import\DataProcessor\CommuneDataProcessor;
 use App\Import\Model\CommuneImportModel;
 

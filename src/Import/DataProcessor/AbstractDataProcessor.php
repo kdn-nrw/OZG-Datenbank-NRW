@@ -26,6 +26,7 @@ use App\Import\Model\AbstractImportModel;
 use App\Import\Model\PropertyMappingInterface;
 use App\Import\Model\ResultCollection;
 use App\Import\OutputInterfaceTrait;
+use App\Model\Annotation\BaseModelAnnotation;
 use App\Translator\TranslatorAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -115,8 +116,8 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
             $propertyPath = $parentProperty ? $parentProperty . '.' . $property : $property;
             $resultCollection->addPropertyMapping($propertyPath, $propertyConfiguration->getParameter());
             $dataType = $propertyConfiguration->getDataType();
-            if (($dataType === ImportModelAnnotation::DATA_TYPE_MODEL
-                    || $dataType === ImportModelAnnotation::DATA_TYPE_COLLECTION)
+            if (($dataType === BaseModelAnnotation::DATA_TYPE_MODEL
+                    || $dataType === BaseModelAnnotation::DATA_TYPE_COLLECTION)
                 && $refModelClass = $propertyConfiguration->getModelClass()) {
                 $this->setPropertyFieldMap($resultCollection, $refModelClass, $property);
             }
@@ -233,10 +234,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
             $isRequired = $propertyConfiguration->isRequired();
             $processedValue = null;
             $tmpVal = $row[$importFieldName] ?? null;
-            if ($isRequired && (null === $tmpVal
-                    || (is_scalar($tmpVal) && (string)$row[$importFieldName] === '')
-                    || empty($tmpVal))
-            ) {
+            if ($isRequired && (empty($tmpVal) || (is_scalar($tmpVal) && (string)$row[$importFieldName] === ''))) {
                 $isAutoIncrement = $propertyConfiguration->isAutoIncrement();
                 if ($isAutoIncrement) {
                     $row[$importFieldName] = $rowNr;
@@ -247,10 +245,10 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
             if ($importFieldName && array_key_exists($importFieldName, $row)) {
                 $fieldDataType = $propertyConfiguration->getDataType();
                 switch ($fieldDataType) {
-                    case ImportModelAnnotation::DATA_TYPE_CALLBACK:
+                    case BaseModelAnnotation::DATA_TYPE_CALLBACK:
                         $processedValue = $this->runCallback($propertyName, $row[$importFieldName]);
                         break;
-                    /*case ImportModelAnnotation::DATA_TYPE_CHOICE:
+                    /*case BaseModelAnnotation::DATA_TYPE_CHOICE:
                         if (!isset($this->importMetaCache[$propertyName]['_translated_choices'])) {
                             $choices = [];
                             foreach ($fieldData['choices'] as $choiceKey => $choiceLabel) {
@@ -262,8 +260,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
                         }
                         $processedValue = $parser->formatChoice($row[$importFieldName], $choices);
                         break;*/
-                    case ImportModelAnnotation::DATA_TYPE_MODEL:
-                        $processedValue = null;
+                    case BaseModelAnnotation::DATA_TYPE_MODEL:
                         if (!empty($row[$importFieldName])) {
                             $refModelClass = $propertyConfiguration->getModelClass();
                             if ($refModelClass) {
@@ -281,7 +278,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
                             }
                         }
                         break;
-                    case ImportModelAnnotation::DATA_TYPE_COLLECTION:
+                    case BaseModelAnnotation::DATA_TYPE_COLLECTION:
                         $processedValue = $propertyAccessor->getValue($importModel, $propertyName);
                         if (null === $processedValue) {
                             $processedValue = new ResultCollection();
@@ -307,12 +304,11 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
                                 $processedValue->setTotalResultCount(count($processedValue));
                             } elseif ($targetEntity = $propertyConfiguration->getTargetEntity()) {
                                 $mapToProperty = $propertyConfiguration->getMapToProperty() ?? 'name';
-                                $targetEntity = $propertyConfiguration->getTargetEntity();
                                 $processedValue = $this->findOrCreateTargetEntity($row[$importFieldName], $targetEntity, $mapToProperty, $fieldDataType);
                             }
                         }
                         break;
-                    case ImportModelAnnotation::DATA_TYPE_ARRAY:
+                    case BaseModelAnnotation::DATA_TYPE_ARRAY:
                         $tmpVal = $row[$importFieldName];
                         $mapValues = is_iterable($tmpVal) ? $tmpVal : explode(',', $tmpVal);
                         $processedValue = $mapValues;
@@ -376,7 +372,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
         $value,
         string $entityClass,
         $mapValueToProperty = 'name',
-        $dataType = ImportModelAnnotation::DATA_TYPE_MODEL
+        $dataType = BaseModelAnnotation::DATA_TYPE_MODEL
     )
     {
         $compareValue = trim(strip_tags($value));
@@ -386,7 +382,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
         $em = $this->getEntityManager();
         /** @var EntityRepository $repository */
         $repository = $em->getRepository($entityClass);
-        if ($dataType === ImportModelAnnotation::DATA_TYPE_COLLECTION) {
+        if ($dataType === BaseModelAnnotation::DATA_TYPE_COLLECTION) {
             $mapValues = is_iterable($compareValue) ? $compareValue : explode(',', $compareValue);
             $collection = new ResultCollection();
             foreach ($mapValues as $listValue) {
@@ -394,7 +390,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
                     $listValue,
                     $entityClass,
                     $mapValueToProperty,
-                    ImportModelAnnotation::DATA_TYPE_MODEL
+                    BaseModelAnnotation::DATA_TYPE_MODEL
                 );
                 if (null !== $listEntity) {
                     $collection->add($listEntity);

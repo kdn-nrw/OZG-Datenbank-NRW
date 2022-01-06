@@ -23,7 +23,6 @@ class MetaItemPropertyType extends AbstractType
 {
     /**
      * {@inheritdoc}
-     * @noinspection PhpUnusedParameterInspection
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

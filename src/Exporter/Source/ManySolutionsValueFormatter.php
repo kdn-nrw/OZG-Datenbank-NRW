@@ -102,7 +102,7 @@ class ManySolutionsValueFormatter extends ServiceSolutionValueFormatter
                     $entryValue .= ' (' . $serviceKeyValue . ')';
                 }
             }
-            $valueList[] = $entryValue . '';
+            $valueList[] = $entryValue;
         }
         return implode(',', $valueList);
     }

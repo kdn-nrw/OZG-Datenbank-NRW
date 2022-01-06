@@ -25,8 +25,8 @@ use App\Exporter\Source\ServiceListValueFormatter;
 use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -35,30 +35,30 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
 {
     use DatePickerTrait;
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.service');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
-        $datagridMapper->add('status');
-        $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'conceptStatusAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationStatusAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'pilotingStatusAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'commissioningStatusAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'nationwideRolloutAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'fundings');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.bureaus');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.portals', ['label' => 'app.implementation_project.entity.portals']);
-        $this->addDefaultDatagridFilter($datagridMapper, 'projectLeaders');
-        $this->addDefaultDatagridFilter($datagridMapper, 'participationOrganisations');
-        $this->addDefaultDatagridFilter($datagridMapper, 'interestedOrganisations');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions.openDataItems');
-        $datagridMapper
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'laboratories');
+        $this->addDefaultDatagridFilter($filter, 'solutions');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystems');
+        $this->addDefaultDatagridFilter($filter, 'services.service');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystems.situation.subject');
+        $filter->add('status');
+        $this->addDefaultDatagridFilter($filter, 'projectStartAt');
+        $this->addDefaultDatagridFilter($filter, 'conceptStatusAt');
+        $this->addDefaultDatagridFilter($filter, 'implementationStatusAt');
+        $this->addDefaultDatagridFilter($filter, 'pilotingStatusAt');
+        $this->addDefaultDatagridFilter($filter, 'commissioningStatusAt');
+        $this->addDefaultDatagridFilter($filter, 'nationwideRolloutAt');
+        $this->addDefaultDatagridFilter($filter, 'fundings');
+        $this->addDefaultDatagridFilter($filter, 'services.service.bureaus');
+        $this->addDefaultDatagridFilter($filter, 'services.service.portals', ['label' => 'app.implementation_project.entity.portals']);
+        $this->addDefaultDatagridFilter($filter, 'projectLeaders');
+        $this->addDefaultDatagridFilter($filter, 'participationOrganisations');
+        $this->addDefaultDatagridFilter($filter, 'interestedOrganisations');
+        $this->addDefaultDatagridFilter($filter, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
+        $this->addDefaultDatagridFilter($filter, 'solutions.openDataItems');
+        $filter
             ->add('efaType', ChoiceFilter::class, [
                 'label' => 'app.implementation_project.entity.efa_type',
                 'field_options' => [
@@ -72,9 +72,9 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
             ]);
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('serviceSystems.situation.subject', 'string', [
                 'label' => 'app.situation.entity.subject',
@@ -111,13 +111,13 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                     ['fieldName' => 'status'],
                 ]
             ]);
-        $this->addDatePickersListFields($listMapper, 'projectStartAt', true);
-        $this->addDatePickersListFields($listMapper, 'conceptStatusAt', true);
-        $this->addDatePickersListFields($listMapper, 'implementationStatusAt', true);
-        $this->addDatePickersListFields($listMapper, 'pilotingStatusAt', true);
-        $this->addDatePickersListFields($listMapper, 'commissioningStatusAt', true);
-        $this->addDatePickersListFields($listMapper, 'nationwideRolloutAt', true);
-        $this->addDefaultListActions($listMapper);
+        $this->addDatePickersListFields($list, 'projectStartAt', true);
+        $this->addDatePickersListFields($list, 'conceptStatusAt', true);
+        $this->addDatePickersListFields($list, 'implementationStatusAt', true);
+        $this->addDatePickersListFields($list, 'pilotingStatusAt', true);
+        $this->addDatePickersListFields($list, 'commissioningStatusAt', true);
+        $this->addDatePickersListFields($list, 'nationwideRolloutAt', true);
+        $this->addDefaultListActions($list);
     }
 
     /**
@@ -144,22 +144,22 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description');
-        $showMapper
+        $show
             ->add('notes', 'html', [
                 'template' => 'ImplementationProjectAdmin/show-notes.html.twig',
                 'is_custom_field' => true,
             ]);
-        $showMapper->add('statusInfo', null, [
+        $show->add('statusInfo', null, [
             'admin_code' => ImplementationStatusAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-status-info.html.twig',
             'is_custom_field' => true,
         ]);
-        $showMapper
+        $show
             ->add('publishedSolutions', null, [
                 'admin_code' => SolutionAdmin::class,
                 'route' => [
@@ -172,7 +172,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                     'name' => 'show',
                 ],
             ]);
-        $showMapper->add('services', null, [
+        $show->add('services', null, [
             'admin_code' => ServiceAdmin::class,
             'showFimTypes' => true,
             'template' => 'ImplementationProjectAdmin/Show/show-project-services.html.twig',
@@ -182,7 +182,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'name' => 'show',
             ],
         ]);
-        $showMapper
+        $show
             ->add('projectLeaders', null, [
                 'route' => [
                     'name' => 'show',
@@ -198,15 +198,15 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                     'name' => 'show',
                 ],
             ]);
-        $showMapper
+        $show
             ->add('fundings', null, [
                 'admin_code' => FundingAdmin::class,
             ]);
-        $showMapper->add('bureaus', null, [
+        $show->add('bureaus', null, [
             'admin_code' => BureauAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-bureaus.html.twig',
         ]);
-        $showMapper->add('portals', null, [
+        $show->add('portals', null, [
             'admin_code' => PortalAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
         ]);

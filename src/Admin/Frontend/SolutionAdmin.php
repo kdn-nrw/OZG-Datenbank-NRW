@@ -25,8 +25,8 @@ use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
@@ -42,16 +42,16 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         'app.solution.entity.form_server_solutions_form_server' => 'app.solution.entity.form_server_solutions',
     ];
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem.jurisdictions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem.situation.subject');
-        $this->addDefaultDatagridFilter($datagridMapper, 'maturity');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service');
-        $datagridMapper->add('status');
-        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
-        $datagridMapper->add('communeType', null,
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem');
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem.jurisdictions');
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem.situation.subject');
+        $this->addDefaultDatagridFilter($filter, 'maturity');
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service');
+        $filter->add('status');
+        $this->addDefaultDatagridFilter($filter, 'portals');
+        $filter->add('communeType', null,
             [
             ],
             ChoiceType::class,
@@ -63,17 +63,17 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'expanded' => false,
                 'multiple' => false,
             ]);
-        $this->addDefaultDatagridFilter($datagridMapper, 'communeSolutions.commune', [
+        $this->addDefaultDatagridFilter($filter, 'communeSolutions.commune', [
             'label' => 'app.solution.entity.communes',
         ]);
-        $this->addDefaultDatagridFilter($datagridMapper, 'formServerSolutions.formServer');
-        $this->addDefaultDatagridFilter($datagridMapper, 'paymentTypes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'authentications');
-        $this->addDefaultDatagridFilter($datagridMapper, 'analogServices');
-        $datagridMapper->add('name');
-        $datagridMapper->add('description');
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
-        $datagridMapper->add('confidenceLevel');
+        $this->addDefaultDatagridFilter($filter, 'formServerSolutions.formServer');
+        $this->addDefaultDatagridFilter($filter, 'paymentTypes');
+        $this->addDefaultDatagridFilter($filter, 'authentications');
+        $this->addDefaultDatagridFilter($filter, 'analogServices');
+        $filter->add('name');
+        $filter->add('description');
+        $this->addDefaultDatagridFilter($filter, 'modelRegionProjects');
+        $filter->add('confidenceLevel');
     }
 
     /**
@@ -93,9 +93,9 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         return $object;
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('selectedCommuneSolutions', null, [
                 'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,
@@ -150,7 +150,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'enable_filter_add' => true,
             ])
             ->add('name')/*
-            ->add('status', TemplateRegistry::TYPE_CHOICE, [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -166,7 +166,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'enable_filter_add' => true,
             ])
             ->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
@@ -191,9 +191,9 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description')
             ->add('url', 'url')
@@ -201,25 +201,25 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             ->add('authentications')
             ->add('analogServices')
             ->add('openDataItems');
-        $showMapper
-            ->add('status', TemplateRegistry::TYPE_CHOICE, [
+        $show
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('confidenceLevel', TemplateRegistry::TYPE_CHOICE, [
+            ->add('confidenceLevel', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ConfidenceLevel::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
             ->add('portals');
-        $showMapper
+        $show
             ->add('customProvider');
         $enableTabs = true;
         // Tab fields
-        $showMapper
+        $show
             ->add('communes', null, [
                 'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,

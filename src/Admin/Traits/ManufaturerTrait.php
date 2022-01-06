@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait ManufaturerTrait
 {
-    protected function addManufaturersFormFields(FormMapper $formMapper)
+    protected function addManufaturersFormFields(FormMapper $form)
     {
-        $formMapper->add('manufacturers', ModelType::class, [
+        $form->add('manufacturers', ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
@@ -31,9 +31,9 @@ trait ManufaturerTrait
         ]);
     }
 
-    protected function addManufaturersListFields(ListMapper $listMapper)
+    protected function addManufaturersListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('manufacturers', null,[
                 'admin_code' => ManufacturerAdmin::class,
             ]);
@@ -42,9 +42,9 @@ trait ManufaturerTrait
     /**
      * @inheritdoc
      */
-    public function addManufaturersShowFields(ShowMapper $showMapper)
+    public function addManufaturersShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('manufacturers', null,[
                 'admin_code' => ManufacturerAdmin::class,
             ]);

@@ -19,7 +19,6 @@ use App\Entity\OrganisationTrait;
 use App\Entity\UrlTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,7 +39,7 @@ class ModelRegionBeneficiary extends BaseNamedEntity implements OrganisationEnti
      * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="modelRegionBeneficiary", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $organisation;
+    protected $organisation;
 
     /**
      * Short name

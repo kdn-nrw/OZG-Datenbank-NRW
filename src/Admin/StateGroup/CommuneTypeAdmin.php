@@ -30,9 +30,9 @@ class CommuneTypeAdmin extends AbstractAppAdmin
     use CommuneTrait;
     use ServiceSystemTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
@@ -43,9 +43,9 @@ class CommuneTypeAdmin extends AbstractAppAdmin
                 // with transform set to true 0=false, 1=true
                 'transform' => true,
             ]);
-        $this->addCommunesFormFields($formMapper);
-        $this->addServiceSystemsFormFields($formMapper);
-        $formMapper->end();
+        $this->addCommunesFormFields($form);
+        $this->addServiceSystemsFormFields($form);
+        $form->end();
     }
 
     public function preUpdate($object)
@@ -68,29 +68,29 @@ class CommuneTypeAdmin extends AbstractAppAdmin
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'communes');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystems');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description');
-        $this->addCommunesShowFields($showMapper);
-        $this->addServiceSystemsShowFields($showMapper);
+        $this->addCommunesShowFields($show);
+        $this->addServiceSystemsShowFields($show);
     }
 }

@@ -28,10 +28,10 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
 {
     use DatePickerTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('serviceProvider')) {
-            $formMapper
+            $form
                 ->add('serviceProvider', ModelType::class, [
                     'property' => 'name',
                     'required' => true,
@@ -39,10 +39,10 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
                     'admin_code' => ServiceProviderAdmin::class
                 ]);
         }
-        $this->addDatePickerFormField($formMapper, 'occurredOn');
-        $this->addDatePickerFormField($formMapper, 'solvedOn');
+        $this->addDatePickerFormField($form, 'occurredOn');
+        $this->addDatePickerFormField($form, 'solvedOn');
 
-        $formMapper
+        $form
             ->add('subjectType', ChoiceType::class, [
                 'label' => 'app.security_incident.entity.subject_type',
                 'choices' => array_flip(SecurityIncident::$subjectTypeChoices),
@@ -100,13 +100,13 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
                 'help' => 'app.security_incident.entity.informed_parties_help',
             ]);
 
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProvider');
-        $datagridMapper->add('subjectType',
+        $this->addDefaultDatagridFilter($filter, 'serviceProvider');
+        $filter->add('subjectType',
             null, [
             ],
             ChoiceType::class,
@@ -114,7 +114,7 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
                 'choices' => array_flip(SecurityIncident::$subjectTypeChoices)
             ]
         );
-        $datagridMapper->add('extent',
+        $filter->add('extent',
             null, [
             ],
             ChoiceType::class,
@@ -122,7 +122,7 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
                 'choices' => array_flip(SecurityIncident::$extentChoices)
             ]
         );
-        $datagridMapper->add('method',
+        $filter->add('method',
             null, [
             ],
             ChoiceType::class,
@@ -132,18 +132,18 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
         );
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('serviceProvider', null, [
                 'admin_code' => ServiceProviderAdmin::class
             ])
             ->add('createdBy', null, [
                 'template' => 'General/List/list_user.html.twig',
             ]);
-        $this->addDatePickersListFields($listMapper, 'occurredOn', false, false);
-        $this->addDatePickersListFields($listMapper, 'solvedOn', false, false);
-        $listMapper
+        $this->addDatePickersListFields($list, 'occurredOn', false, false);
+        $this->addDatePickersListFields($list, 'solvedOn', false, false);
+        $list
             ->add('subjectType', 'choice', [
                 'editable' => false,
                 'choices' => SecurityIncident::$subjectTypeChoices,
@@ -159,7 +159,7 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
                 'choices' => SecurityIncident::$methodChoices,
                 'catalogue' => 'messages',
             ]);
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [
@@ -172,17 +172,17 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('serviceProvider')
             ->add('createdBy', null, [
                 'template' => 'General/Show/show-user.html.twig',
             ]);
-        $this->addDatePickersShowFields($showMapper, 'createdAt', false);
-        $this->addDatePickersShowFields($showMapper, 'occurredOn', false);
-        $this->addDatePickersShowFields($showMapper, 'solvedOn', false);
-        $showMapper->add('subjectType', 'choice', [
+        $this->addDatePickersShowFields($show, 'createdAt', false);
+        $this->addDatePickersShowFields($show, 'occurredOn', false);
+        $this->addDatePickersShowFields($show, 'solvedOn', false);
+        $show->add('subjectType', 'choice', [
                 'editable' => false,
                 'choices' => SecurityIncident::$subjectTypeChoices,
                 'catalogue' => 'messages',

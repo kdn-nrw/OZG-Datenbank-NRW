@@ -48,18 +48,18 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
         'app.central_association.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('default', ['label' => 'app.central_association.tabs.default']);
-        $formMapper->with('general', [
+        $form->with('general', [
             'label' => 'app.central_association.tabs.default',
         ]);
-        $this->addOrganisationOneToOneFormFields($formMapper);
-        $formMapper->add('shortName', TextType::class);
-        $this->addCommunesFormFields($formMapper);
-        $formMapper->end();
-        $formMapper->end();
+        $this->addOrganisationOneToOneFormFields($form);
+        $form->add('shortName', TextType::class);
+        $this->addCommunesFormFields($form);
+        $form->end();
+        $form->end();
     }
 
     public function preUpdate($object)
@@ -97,31 +97,31 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name')
+        $filter->add('name')
             ->add('shortName');
-        $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
+        $this->addOrganisationOneToOneDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'communes');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name')
+        $list->addIdentifier('name')
             ->add('shortName');
-        $this->addOrganisationOneToOneListFields($listMapper);
-        //$this->addCommunesListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $this->addOrganisationOneToOneListFields($list);
+        //$this->addCommunesListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('shortName');
-        $this->addOrganisationOneToOneShowFields($showMapper);
-        $this->addCommunesShowFields($showMapper);
+        $this->addOrganisationOneToOneShowFields($show);
+        $this->addCommunesShowFields($show);
     }
 }

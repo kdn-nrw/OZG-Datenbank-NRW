@@ -27,7 +27,6 @@ use App\Service\Onboarding\InjectInquiryManagerTrait;
 use App\Translator\InjectTranslatorTrait;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
-use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\UserBundle\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -66,7 +65,7 @@ class RecentActivitiesBlock extends AbstractBlockService
      * @param Response|null $response
      * @return Response
      */
-    public function execute(BlockContextInterface $blockContext, ?Response $response = null)
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $mode = (string)$blockContext->getSetting('mode');
         $isAdminMode = 'admin' === $mode;
@@ -296,7 +295,7 @@ class RecentActivitiesBlock extends AbstractBlockService
         }
     }
 
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'number' => 7,
@@ -308,13 +307,6 @@ class RecentActivitiesBlock extends AbstractBlockService
             'code' => false,
             'code_public' => false,
             'template' => 'Block/recent-activities.html.twig',
-        ]);
-    }
-
-    public function getBlockMetadata($code = null)
-    {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
-            'class' => 'fa fa-th-list',
         ]);
     }
 }

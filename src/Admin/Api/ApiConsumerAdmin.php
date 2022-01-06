@@ -28,9 +28,9 @@ class ApiConsumerAdmin extends AbstractAppAdmin
 {
     use InjectApiManagerTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class, [
                 'required' => true
             ])
@@ -56,27 +56,27 @@ class ApiConsumerAdmin extends AbstractAppAdmin
                 // with transform set to true 0=false, 1=true
                 'transform' => true,
             ]);
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
+        $filter->add('name');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $listMapper->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $list->addIdentifier('name');
+        $list->add('url', 'url');
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description')
             ->add('url', 'url');

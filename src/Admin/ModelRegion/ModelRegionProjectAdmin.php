@@ -50,22 +50,22 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
 
     protected $baseRoutePattern = 'model-region/project';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('default', ['label' => 'app.model_region_project.tabs.default']);
-        $formMapper->with('general', [
+        $form->with('general', [
             'label' => 'app.model_region_project.group.general_data',
             'class' => 'col-xs-12 col-md-6',
         ]);
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addDatePickerFormField($formMapper, 'projectStartAt');
-        $this->addDatePickerFormField($formMapper, 'projectEndAt', 20);
-        $formMapper
+        $this->addDatePickerFormField($form, 'projectStartAt');
+        $this->addDatePickerFormField($form, 'projectEndAt', 20);
+        $form
             ->add('categories', ModelType::class,
                 [
                     'btn_add' => 'app.common.model_list_type.add',
@@ -80,9 +80,9 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
                     'admin_code' => ModelRegionProjectCategoryAdmin::class,
                 ]
             );
-        $this->addOrganisationsFormFields($formMapper);
+        $this->addOrganisationsFormFields($form);
 
-        $formMapper->add('websites', \Sonata\Form\Type\CollectionType::class, [
+        $form->add('websites', \Sonata\Form\Type\CollectionType::class, [
             'type_options' => [
                 'delete' => true,
             ],
@@ -92,12 +92,12 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             'inline' => 'table',
             'ba_custom_exclude_fields' => ['modelRegionProject', 'description'],
         ]);
-        $formMapper->end();
-        $formMapper->with('characteristics', [
+        $form->end();
+        $form->with('characteristics', [
             'label' => 'app.model_region_project.group.characteristics',
             'class' => 'col-xs-12 col-md-6',
         ]);
-        $formMapper
+        $form
             ->add('usp', TextareaType::class, [
                 'required' => false,
             ])
@@ -110,21 +110,21 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('transferableStart', TextareaType::class, [
                 'required' => false,
             ]);
-        $formMapper->end();
-        $formMapper->with('reference_data', [
+        $form->end();
+        $form->with('reference_data', [
             'label' => 'app.model_region_project.group.reference_data',
             'class' => 'clear-left-md col-xs-12 col-md-6',
         ]);
-        $this->addModelRegionsFormFields($formMapper);
-        $this->addSolutionsFormFields($formMapper);
-        $this->addSlugFormField($formMapper, $this->getSubject());
-        $formMapper->end();
+        $this->addModelRegionsFormFields($form);
+        $this->addSolutionsFormFields($form);
+        $this->addSlugFormField($form, $this->getSubject());
+        $form->end();
 
-        $formMapper->with('group_concept_queries', [
+        $form->with('group_concept_queries', [
             'label' => 'app.model_region_project.group.concept_queries',
             'class' => 'col-xs-12 col-md-6',
         ]);
-        $formMapper
+        $form
             ->add('conceptQueries', \Sonata\Form\Type\CollectionType::class, [
                 'label' => false,
                 'type_options' => [
@@ -139,12 +139,12 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
                 'ba_custom_exclude_fields' => ['modelRegionProject'],
                 //'ba_disable_required_fields' => null !== $subject && null !== $subject->getId(),
             ]);
-        $formMapper->end();
-        $formMapper->with('documents', [
+        $form->end();
+        $form->with('documents', [
             'label' => 'app.model_region_project.group.documents',
             'class' => 'col-xs-12 col-md-6',
         ]);
-        $formMapper->add('documents', CollectionType::class, [
+        $form->add('documents', CollectionType::class, [
             'label' => false,
             'allow_add' => true,
             'allow_delete' => true,
@@ -154,8 +154,8 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
                 'parent_admin' => $this,
             ],
         ]);
-        $formMapper->end();
-        $formMapper->end();
+        $form->end();
+        $form->end();
     }
 
     public function preUpdate($object)
@@ -185,29 +185,29 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'projectEndAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'categories');
-        $this->addDefaultDatagridFilter($datagridMapper, 'organisations');
-        $datagridMapper
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'projectStartAt');
+        $this->addDefaultDatagridFilter($filter, 'projectEndAt');
+        $this->addDefaultDatagridFilter($filter, 'categories');
+        $this->addDefaultDatagridFilter($filter, 'organisations');
+        $filter
             ->add('description')
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
+        $this->addDefaultDatagridFilter($filter, 'modelRegions');
+        $this->addDefaultDatagridFilter($filter, 'solutions');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addDatePickersListFields($listMapper, 'projectStartAt');
-        $this->addDatePickersListFields($listMapper, 'projectEndAt');
-        $listMapper
+        $list->addIdentifier('name');
+        $this->addDatePickersListFields($list, 'projectStartAt');
+        $this->addDatePickersListFields($list, 'projectEndAt');
+        $list
             ->add('categories', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
@@ -220,7 +220,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
                 'enable_filter_add' => true,
                 'admin_code' => ModelRegionProjectCategoryAdmin::class,
             ]);
-        $listMapper
+        $list
             ->add('organisations', null, [
                 'template' => 'General/Association/list_many_to_many_nolinks.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -234,7 +234,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
                 'enable_filter_add' => true,
                 'admin_code' => OrganisationAdmin::class,
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**

@@ -61,7 +61,7 @@ abstract class AbstractForeignNamedPropertyChartProvider extends AbstractChartJs
             'backgroundColor' => $this->colors,
             'data' => [],
         ];
-        foreach ($groupedData as $key => $data) {
+        foreach ($groupedData as $data) {
             $dataSetConfiguration[$offset]['data'][] = $data;
         }
         $chartData = [

@@ -28,9 +28,9 @@ class InquiryAdmin extends AbstractAppAdmin
 {
     use InjectSecurityTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('user', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -44,22 +44,22 @@ class InquiryAdmin extends AbstractAppAdmin
         /** @var Inquiry|null $subject */
         if (null !== $subject && $subject->getId() > 0
             && ($this->isGranted('ALL') || $subject->getUser() === $this->security->getUser())) {
-            $formMapper->add('isRead', CheckboxType::class, [
+            $form->add('isRead', CheckboxType::class, [
                 'required' => false,
             ]);
         }
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'user');
-        $this->addDefaultDatagridFilter($datagridMapper, 'createdBy');
+        $this->addDefaultDatagridFilter($filter, 'user');
+        $this->addDefaultDatagridFilter($filter, 'createdBy');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('user')
             ->add('createdBy')
             ->add('createdAt');
@@ -76,15 +76,15 @@ class InquiryAdmin extends AbstractAppAdmin
         } else {
             $extraActions = null;
         }
-        $this->addDefaultListActions($listMapper, $extraActions);
+        $this->addDefaultListActions($list, $extraActions);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('user')
+        $show->add('user')
             ->add('createdBy')
             ->add('createdAt')
             ->add('description')

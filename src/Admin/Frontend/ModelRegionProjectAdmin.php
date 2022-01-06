@@ -24,29 +24,29 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
     use AddressTrait;
     use DatePickerTrait;
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'projectStartAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'projectEndAt');
-        $this->addDefaultDatagridFilter($datagridMapper, 'categories');
-        $this->addDefaultDatagridFilter($datagridMapper, 'organisations');
-        $datagridMapper
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'projectStartAt');
+        $this->addDefaultDatagridFilter($filter, 'projectEndAt');
+        $this->addDefaultDatagridFilter($filter, 'categories');
+        $this->addDefaultDatagridFilter($filter, 'organisations');
+        $filter
             ->add('description')
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
+        $this->addDefaultDatagridFilter($filter, 'modelRegions');
+        $this->addDefaultDatagridFilter($filter, 'solutions');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addDatePickersListFields($listMapper, 'projectStartAt');
-        $this->addDatePickersListFields($listMapper, 'projectEndAt');
-        $listMapper
+        $list->addIdentifier('name');
+        $this->addDatePickersListFields($list, 'projectStartAt');
+        $this->addDatePickersListFields($list, 'projectEndAt');
+        $list
             ->add('categories', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
@@ -58,7 +58,7 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
                 ],
                 'enable_filter_add' => true,
             ]);
-        $listMapper
+        $list
             ->add('organisations', null, [
                 'template' => 'General/Association/list_many_to_many_nolinks.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -71,34 +71,34 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
                 ],
                 'enable_filter_add' => true,
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('description');
-        $this->addDatePickersShowFields($showMapper, 'projectStartAt');
-        $this->addDatePickersShowFields($showMapper, 'projectEndAt');
-        $showMapper
+        $this->addDatePickersShowFields($show, 'projectStartAt');
+        $this->addDatePickersShowFields($show, 'projectEndAt');
+        $show
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')
             ->add('transferableStart');
-        $showMapper
+        $show
             ->add('categories')
             ->add('organisations');
-        $showMapper
+        $show
             ->add('modelRegions', null, [
                 'admin_code' => ModelRegionAdmin::class,
             ])
             ->add('websites', null, [
                 'template' => 'ModelRegion/show-project-websites.html.twig',
             ]);
-        $showMapper
+        $show
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
                 'route' => [

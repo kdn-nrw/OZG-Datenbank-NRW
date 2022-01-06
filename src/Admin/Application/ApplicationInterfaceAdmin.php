@@ -30,10 +30,10 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
 
     use SpecializedProcedureTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('application')) {
-            $formMapper
+            $form
                 ->add('application', ModelType::class, [
                     'property' => 'name',
                     'required' => true,
@@ -41,42 +41,42 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
                     'admin_code' => ApplicationAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addSpecializedProceduresFormFields($formMapper);
+        $this->addSpecializedProceduresFormFields($form);
 
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        parent::configureDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'application');
-        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
+        parent::configureDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'application');
+        $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $listMapper
+        $list->addIdentifier('name');
+        $list
             ->add('application', null, [
                 'admin_code' => ApplicationAdmin::class
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('application')
             ->add('name')
             ->add('description');
-        $this->addSpecializedProceduresShowFields($showMapper);
+        $this->addSpecializedProceduresShowFields($show);
     }
 }

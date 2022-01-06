@@ -280,7 +280,7 @@ class EpaymentService extends BaseEntity implements
             $name = $project . '';
         }
         if (null !== $solution) {
-            $name .= ($name ? ': ' : '') . $solution . '';
+            $name .= ($name ? ': ' : '') . $solution;
         }
         if (empty($name)) {
             $name = (string)$this->getId();

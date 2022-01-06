@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait FundingTrait
 {
-    protected function addFundingsFormFields(FormMapper $formMapper)
+    protected function addFundingsFormFields(FormMapper $form)
     {
-        $formMapper->add('fundings', ModelType::class, [
+        $form->add('fundings', ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
@@ -31,9 +31,9 @@ trait FundingTrait
         ]);
     }
 
-    protected function addFundingsListFields(ListMapper $listMapper)
+    protected function addFundingsListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('fundings', null,[
                 'admin_code' => FundingAdmin::class,
             ]);
@@ -42,9 +42,9 @@ trait FundingTrait
     /**
      * @inheritdoc
      */
-    public function addFundingsShowFields(ShowMapper $showMapper)
+    public function addFundingsShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('fundings', null,[
                 'admin_code' => FundingAdmin::class,
             ]);

@@ -17,11 +17,9 @@ use App\Admin\CustomFieldAdminInterface;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\DependencyInjection\InjectionTraits\InjectSecurityTrait;
-use App\Entity\Base\BaseEntityInterface;
-use App\Entity\MetaData\MetaItemProperty;
+use App\Entity\MetaData\AbstractMetaItem;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\User;
-use App\EventSubscriber\EntityPostUpdateEvent;
 use App\Service\MetaData\InjectMetaDataManagerTrait;
 use App\Service\Onboarding\InjectOnboardingManagerTrait;
 use App\Util\SnakeCaseConverter;
@@ -53,9 +51,9 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
      */
     protected $currentUserCommuneLimits;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('commune', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -67,8 +65,8 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addDataCompletenessConfirmedField($formMapper);
-        $formMapper
+        $this->addDataCompletenessConfirmedField($form);
+        $form
             ->add('status', ChoiceType::class, [
                 'label' => 'app.commune_info.entity.status',
                 'choices' => array_flip(AbstractOnboardingEntity::$statusChoices),
@@ -78,18 +76,18 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
                     return ['class' => 'onboarding-status ob-status-' . $value];
                 },
             ]);
-        $this->addGroupEmailFormField($formMapper);
-        $formMapper->end();
+        $this->addGroupEmailFormField($form);
+        $form->end();
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function addDataCompletenessConfirmedField(FormMapper $formMapper)
+    protected function addDataCompletenessConfirmedField(FormMapper $form)
     {
         $subject = $this->getSubject();
         if ($subject instanceof AbstractOnboardingEntity && $subject->getId() && !$subject->isDataCompletenessConfirmed()) {
-            $formMapper->add('dataCompletenessConfirmed', CheckboxType::class, [
+            $form->add('dataCompletenessConfirmed', CheckboxType::class, [
                 'required' => false,
             ]);
         }
@@ -104,8 +102,8 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         }
 
         $data = [
-            MetaItemProperty::META_TYPE_GROUP => $this->getFormGroups(),
-            MetaItemProperty::META_TYPE_TAB => $this->getFormTabs()
+            AbstractMetaItem::META_TYPE_GROUP => $this->getFormGroups(),
+            AbstractMetaItem::META_TYPE_TAB => $this->getFormTabs()
         ];
         foreach ($data as $metaType => &$metaTypeData) {
             if (empty($metaTypeData)) {
@@ -129,8 +127,8 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
             unset($options);
         }
         unset($metaTypeData);
-        $this->setFormGroups($data[MetaItemProperty::META_TYPE_GROUP]);
-        $this->setFormTabs($data[MetaItemProperty::META_TYPE_TAB]);
+        $this->setFormGroups($data[AbstractMetaItem::META_TYPE_GROUP]);
+        $this->setFormTabs($data[AbstractMetaItem::META_TYPE_TAB]);
 
         return $formBuilder;
     }
@@ -138,12 +136,12 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     /**
      * Adds the group email form field (if access to field is granted)
      *
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      * @param bool $useCustomLabel
      */
-    protected function addGroupEmailFormField(FormMapper $formMapper, $useCustomLabel = false): void
+    protected function addGroupEmailFormField(FormMapper $form, $useCustomLabel = false): void
     {
-        $formMapper
+        $form
             ->add('groupEmail', EmailType::class, [
                 'label' => 'app.abstract_onboarding_entity.entity.group_email' . ($useCustomLabel ? '_custom' : ''),
                 'required' => false,
@@ -189,10 +187,10 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         $this->onboardingManager->afterSave($object);
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'commune');
-        $datagridMapper->add('status',
+        $this->addDefaultDatagridFilter($filter, 'commune');
+        $filter->add('status',
             CallbackFilter::class, [
                 'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) {
                     if (!is_array($value) || !\array_key_exists('value', $value)) {
@@ -222,25 +220,25 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         );
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('commune', null, [
                 'admin_code' => CommuneAdmin::class,
             ])
             ->add('modifiedAt');
-        $this->addListStatusField($listMapper);
-        $this->addOnboardingDefaultListActions($listMapper);
+        $this->addListStatusField($list);
+        $this->addOnboardingDefaultListActions($list);
     }
 
     /**
      * Adds the list status field
      *
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function addListStatusField(ListMapper $listMapper): void
+    protected function addListStatusField(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->add('status', 'choice', [
                 'label' => 'app.commune_info.entity.status',
                 'template' => 'Onboarding/list-status.html.twig',
@@ -253,10 +251,10 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     /**
      * Adds the default list actions to the list mapper
      *
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      * @param array|null $extraActions
      */
-    protected function addOnboardingDefaultListActions(ListMapper $listMapper, ?array $extraActions = null): void
+    protected function addOnboardingDefaultListActions(ListMapper $list, ?array $extraActions = null): void
     {
         $securityHandler = $this->getSecurityHandler();
         if (null !== $securityHandler) {
@@ -277,15 +275,15 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
                 ],
             ], $extraActions);
         }
-        $this->addDefaultListActions($listMapper, $extraActions);
+        $this->addDefaultListActions($list, $extraActions);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('commune', null, [
+        $show->add('commune', null, [
             'admin_code' => CommuneAdmin::class,
         ])
             ->add('modifiedAt')

@@ -102,9 +102,9 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         return parent::hasRoute($name);
     }
 
-    protected function addDefaultListActions(ListMapper $listMapper): void
+    protected function addDefaultListActions(ListMapper $list): void
     {
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

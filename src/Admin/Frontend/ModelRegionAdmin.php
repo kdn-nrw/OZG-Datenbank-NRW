@@ -22,30 +22,30 @@ class ModelRegionAdmin extends AbstractFrontendAdmin implements EnableFullTextSe
 {
     use AddressTrait;
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addAddressDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
+        $filter->add('name');
+        $this->addAddressDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'modelRegionProjects');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addAddressListFields($listMapper);
-        $listMapper->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $list->addIdentifier('name');
+        $this->addAddressListFields($list);
+        $list->add('url', 'url');
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name');
-        $this->addAddressShowFields($showMapper);
-        $showMapper->add('url', 'url');
-        $showMapper
+        $show->add('name');
+        $this->addAddressShowFields($show);
+        $show->add('url', 'url');
+        $show
             ->add('modelRegionProjects', null, [
                 'admin_code' => ModelRegionProjectAdmin::class,
             ]);

@@ -34,7 +34,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 trait OrganisationTrait
 {
     protected function addOrganisationsFormFields(
-        FormMapper $formMapper,
+        FormMapper $form,
                    $fieldName = 'organisations',
         ?array     $filterChoices = null
     )
@@ -52,12 +52,12 @@ trait OrganisationTrait
         $queryBuilder = $this->getOrganisationQueryBuilder($filterChoices);
         if (null !== $queryBuilder) {
             $options['query'] = $queryBuilder;
-            $formMapper->add($fieldName, ModelType::class, $options, [
+            $form->add($fieldName, ModelType::class, $options, [
                     'admin_code' => OrganisationAdmin::class,
                 ]
             );
         } else {
-            $formMapper->add($fieldName, ModelAutocompleteType::class, $options, [
+            $form->add($fieldName, ModelAutocompleteType::class, $options, [
                     'admin_code' => OrganisationAdmin::class,
                 ]
             );
@@ -103,9 +103,9 @@ trait OrganisationTrait
         return $queryBuilder;
     }
 
-    protected function addOrganisationsListFields(ListMapper $listMapper, $fieldName = 'organisations')
+    protected function addOrganisationsListFields(ListMapper $list, $fieldName = 'organisations')
     {
-        $listMapper
+        $list
             ->add($fieldName, null, [
                 'template' => 'General/Association/list_many_to_many_nolinks.html.twig',
                 'admin_code' => OrganisationAdmin::class,
@@ -115,9 +115,9 @@ trait OrganisationTrait
     /**
      * @inheritdoc
      */
-    public function addOrganisationsShowFields(ShowMapper $showMapper, $fieldName = 'organisations')
+    public function addOrganisationsShowFields(ShowMapper $show, $fieldName = 'organisations')
     {
-        $showMapper
+        $show
             ->add($fieldName, null, [
                 'admin_code' => OrganisationAdmin::class,
             ]);

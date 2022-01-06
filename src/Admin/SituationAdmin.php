@@ -59,9 +59,9 @@ class SituationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdm
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('subject');
     }

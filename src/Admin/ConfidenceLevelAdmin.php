@@ -22,24 +22,24 @@ class ConfidenceLevelAdmin extends AbstractAppAdmin
 {
     use ColorCodedTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
 
-        $this->addColorFormFields($formMapper);
-        $formMapper->end();
+        $this->addColorFormFields($form);
+        $form->end();
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description');
     }

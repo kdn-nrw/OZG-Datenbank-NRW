@@ -23,10 +23,10 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('service')) {
-            $formMapper
+            $form
                 ->add('service', ModelAutocompleteType::class, [
                     'property' => 'name',
                     'required' => true,
@@ -35,7 +35,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 ]);
         }
         if (!$this->isExcludedFormField('solution')) {
-            $formMapper
+            $form
                 ->add('solution', ModelAutocompleteType::class, [
                     'property' => ['name', 'description'],
                     'required' => true,
@@ -43,7 +43,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                     'admin_code' => \App\Admin\SolutionAdmin::class
                 ]);
         }
-        $formMapper/*
+        $form/*
             ->add('status', ModelType::class, [
                 'btn_add' => false,
                 'required' => true,
@@ -60,18 +60,18 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'service');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solution');
-        /*$datagridMapper->add('description');
-        $datagridMapper->add('status');*/
-        $datagridMapper->add('maturity');
+        $this->addDefaultDatagridFilter($filter, 'service');
+        $this->addDefaultDatagridFilter($filter, 'solution');
+        /*$filter->add('description');
+        $filter->add('status');*/
+        $filter->add('maturity');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('service', null, [
                 'admin_code' => \App\Admin\ServiceAdmin::class
             ])
@@ -85,15 +85,15 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 'catalogue' => 'messages',
             ])*/
             ->add('maturity');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('service', null, [
                 'admin_code' => \App\Admin\ServiceAdmin::class
             ])

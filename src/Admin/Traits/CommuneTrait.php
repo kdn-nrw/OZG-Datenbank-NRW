@@ -12,11 +12,7 @@
 namespace App\Admin\Traits;
 
 use App\Admin\StateGroup\CommuneAdmin;
-use App\Entity\ImplementationProject;
-use App\Entity\ImplementationStatus;
 use App\Entity\StateGroup\Commune;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -29,7 +25,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
  */
 trait CommuneTrait
 {
-    protected function addCommunesFormFields(FormMapper $formMapper, array $overrideOptions = [])
+    protected function addCommunesFormFields(FormMapper $form, array $overrideOptions = [])
     {
         $fieldDescriptionOptions = [
             'admin_code' => CommuneAdmin::class,
@@ -40,7 +36,7 @@ trait CommuneTrait
                 'multiple' => true,
             ];
             $options = array_merge($options, $overrideOptions);
-            $formMapper->add('communes', EntityType::class, $options, $fieldDescriptionOptions);
+            $form->add('communes', EntityType::class, $options, $fieldDescriptionOptions);
 
         } else {
             $options = [
@@ -55,13 +51,13 @@ trait CommuneTrait
             if (!empty($overrideOptions)) {
                 $options = array_merge($options, $overrideOptions);
             }
-            $formMapper->add('communes', ModelType::class, $options, $fieldDescriptionOptions);
+            $form->add('communes', ModelType::class, $options, $fieldDescriptionOptions);
         }
     }
 
-    protected function addCommunesListFields(ListMapper $listMapper)
+    protected function addCommunesListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('communes', null,[
                 'admin_code' => CommuneAdmin::class,
             ]);
@@ -70,9 +66,9 @@ trait CommuneTrait
     /**
      * @inheritdoc
      */
-    public function addCommunesShowFields(ShowMapper $showMapper)
+    public function addCommunesShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('communes', null,[
                 'associated_property' => 'name',
                 'admin_code' => CommuneAdmin::class,

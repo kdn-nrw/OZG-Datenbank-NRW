@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait ImplementationProjectTrait
 {
-    protected function addImplementationProjectsFormFields(FormMapper $formMapper)
+    protected function addImplementationProjectsFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('implementationProjects', ModelType::class,
                 [
                     'btn_add' => false,
@@ -37,9 +37,9 @@ trait ImplementationProjectTrait
             );
     }
 
-    protected function addImplementationProjectsListFields(ListMapper $listMapper)
+    protected function addImplementationProjectsListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('implementationProjects', null, [
                 'admin_code' => ImplementationProjectAdmin::class,
             ]);
@@ -48,9 +48,9 @@ trait ImplementationProjectTrait
     /**
      * @inheritdoc
      */
-    public function addImplementationProjectsShowFields(ShowMapper $showMapper)
+    public function addImplementationProjectsShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('implementationProjects', null, [
                 'admin_code' => ImplementationProjectAdmin::class,
                 //'template' => 'General/Show/show-implementationProjects.html.twig',

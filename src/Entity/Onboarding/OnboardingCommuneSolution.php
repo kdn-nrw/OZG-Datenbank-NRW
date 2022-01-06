@@ -12,8 +12,6 @@
 namespace App\Entity\Onboarding;
 
 use App\Entity\Base\BaseEntity;
-use App\Entity\Base\HideableEntityInterface;
-use App\Entity\Base\HideableEntityTrait;
 use App\Entity\Base\SortableEntityInterface;
 use App\Entity\Base\SortableEntityTrait;
 use App\Entity\MetaData\HasMetaDateEntityInterface;
@@ -162,14 +160,11 @@ class OnboardingCommuneSolution extends BaseEntity implements
      */
     public function __toString(): string
     {
-        $name = '';
         $commune = $this->getCommune();
         $solution = $this->getSolution();
-        if (null !== $commune) {
-            $name = $commune . '';
-        }
+        $name = $commune . '';
         if (null !== $solution) {
-            $name .= ($name ? ': ' : '') . $solution . '';
+            $name .= ($name ? ': ' : '') . $solution;
         }
         if (empty($name)) {
             $name = (string)$this->getId();

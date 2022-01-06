@@ -18,7 +18,6 @@ use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableInterface;
 use Behat\Transliterator\Transliterator;
-use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -123,7 +122,7 @@ abstract class AbstractFrontendCRUDController extends CRUDController
         $this->admin->setSubject($object);
 
         $fields = $this->admin->getShow();
-        \assert($fields instanceof FieldDescriptionCollection);
+        \assert($fields instanceof \Sonata\AdminBundle\Admin\FieldDescriptionCollection);
 
         // NEXT_MAJOR: Remove this line and use commented line below it instead
         $template = $this->admin->getTemplate('show');
@@ -199,7 +198,7 @@ abstract class AbstractFrontendCRUDController extends CRUDController
             $datagrid = $parameters['datagrid'];
             if ($datagrid instanceof CustomDatagrid) {
                 $filterMenuItems = $datagrid->getFilterMenuItems();
-                foreach ($filterMenuItems as $key => $filterMenuItem) {
+                foreach ($filterMenuItems as $filterMenuItem) {
                     if (count($filterMenuItem['valueEntities']) === 1) {
                         $valueEntity = current($filterMenuItem['valueEntities']);
                         $parameters[$filterMenuItem['parameter']] = $valueEntity;

@@ -70,21 +70,21 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         'app.commune.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('default', ['label' => 'app.commune.group.general_data']);
-        $formMapper->with('general', [
+        $form->with('general', [
             'label' => 'app.commune.group.general_data',
             'class' => 'col-xs-12 col-md-6',
         ]);
-        $this->addOrganisationOneToOneFormFields($formMapper);
-        $formMapper->end();
-        $formMapper->with('meta_data', [
+        $this->addOrganisationOneToOneFormFields($form);
+        $form->end();
+        $form->with('meta_data', [
             'label' => 'app.commune.group.meta_data',
             'class' => 'col-xs-12 col-md-6',
         ]);
-        $formMapper
+        $form
             ->add('communeType', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -120,12 +120,12 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('transparencyPortalUrl', UrlType::class, [
                 'required' => false,
             ]);
-        $formMapper->end();
-        $formMapper->with('administration_contact', [
+        $form->end();
+        $form->with('administration_contact', [
             'label' => 'app.commune.group.administration_contact',
             'class' => 'clear-left-md col-xs-12 col-md-6',
         ]);
-        $formMapper
+        $form
             ->add('administrationPhoneNumber', TextType::class, [
                 'required' => false,
             ])
@@ -138,24 +138,24 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('administrationUrl', UrlType::class, [
                 'required' => false,
             ]);
-        $formMapper->end();
-        $formMapper->with('services_data', [
+        $form->end();
+        $form->with('services_data', [
             'label' => 'app.commune.group.reference_data',
             'class' => 'col-xs-12 col-md-6',
         ]);
-        $this->addServiceProvidersFormFields($formMapper);
-        $this->addCentralAssociationsFormFields($formMapper);
-        $this->addSpecializedProceduresFormFields($formMapper);
-        $this->addPortalsFormFields($formMapper);
-        $this->addLaboratoriesFormFields($formMapper);
-        $formMapper->end();
-        $formMapper->end();
-        $formMapper
+        $this->addServiceProvidersFormFields($form);
+        $this->addCentralAssociationsFormFields($form);
+        $this->addSpecializedProceduresFormFields($form);
+        $this->addPortalsFormFields($form);
+        $this->addLaboratoriesFormFields($form);
+        $form->end();
+        $form->end();
+        $form
             ->with('app.commune.tabs.commune_solutions', ['tab' => true])
             ->with('commune_solutions', [
                 'label' => false,
             ]);
-        $formMapper
+        $form
             ->add('communeSolutions', CollectionType::class, [
                 'label' => false,
                 'type_options' => [
@@ -170,8 +170,8 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 //'sortable' => 'position',
                 'ba_custom_exclude_fields' => ['commune'],
             ]);
-        $formMapper->end();
-        $formMapper->end();
+        $form->end();
+        $form->end();
     }
 
     public function preUpdate($object)
@@ -229,16 +229,16 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
-        $this->addDefaultDatagridFilter($datagridMapper, 'centralAssociations');
-        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
-        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
-        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
-        $datagridMapper->add('constituency',
+        $filter->add('name');
+        $this->addOrganisationOneToOneDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'serviceProviders');
+        $this->addDefaultDatagridFilter($filter, 'centralAssociations');
+        $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($filter, 'portals');
+        $this->addDefaultDatagridFilter($filter, 'laboratories');
+        $filter->add('constituency',
             null,
             [
                 'admin_code' => self::class,
@@ -250,17 +250,17 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'query_builder' => $this->getConstituencyQueryBuilder()
             ]
         );
-        $this->addDefaultDatagridFilter($datagridMapper, 'administrativeDistrict');
-        $this->addDefaultDatagridFilter($datagridMapper, 'communeType');
-        $datagridMapper->add('officialCommunityKey');
-        $datagridMapper->add('regionalKey');
+        $this->addDefaultDatagridFilter($filter, 'administrativeDistrict');
+        $this->addDefaultDatagridFilter($filter, 'communeType');
+        $filter->add('officialCommunityKey');
+        $filter->add('regionalKey');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addOrganisationOneToOneListFields($listMapper);
-        $listMapper
+        $list->addIdentifier('name');
+        $this->addOrganisationOneToOneListFields($list);
+        $list
             ->add('constituency', null, [
                 'admin_code' => self::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -290,15 +290,15 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                     ['fieldName' => 'administrativeDistrict'],
                 ]
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('organisation.zipCode')
             ->add('organisation.town')
             ->add('organisation.url', 'url')
@@ -310,18 +310,18 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])
             ->add('communeType')
             ->add('mainEmail');
-        $this->addContactsShowFields($showMapper, true, 'organisation.contacts');
-        $this->addServiceProvidersShowFields($showMapper);
-        $this->addCentralAssociationsShowFields($showMapper);
-        $this->addSpecializedProceduresShowFields($showMapper);
-        $this->addPortalsShowFields($showMapper);
-        $this->addLaboratoriesShowFields($showMapper);
-        $showMapper->add('specializedProcedures.manufacturers', null, [
+        $this->addContactsShowFields($show, true, 'organisation.contacts');
+        $this->addServiceProvidersShowFields($show);
+        $this->addCentralAssociationsShowFields($show);
+        $this->addSpecializedProceduresShowFields($show);
+        $this->addPortalsShowFields($show);
+        $this->addLaboratoriesShowFields($show);
+        $show->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,
             'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
         ]);
-        $showMapper->add('solutions', null, [
+        $show->add('solutions', null, [
             'label' => 'app.commune.entity.solutions',
             'admin_code' => SolutionAdmin::class,
             'is_custom_field' => true,
@@ -331,7 +331,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'show_export' => true,
             'showSolutions' => true,
         ]);
-        $showMapper->add('communeSolutions', null, [
+        $show->add('communeSolutions', null, [
             'label' => 'app.commune.entity.commune_solutions',
             'admin_code' => CommuneSolutionAdmin::class,
             'is_custom_field' => true,
@@ -341,7 +341,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             //'show_export' => true,
             'showSolutions' => true,
         ]);
-        $showMapper->add('communeType.serviceSystems', null, [
+        $show->add('communeType.serviceSystems', null, [
             'label' => 'app.commune_type.entity.service_systems',
             'admin_code' => ServiceSystemAdmin::class,
             'is_custom_field' => true,
@@ -350,7 +350,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'reference_field_list' => ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority',],// 'status'
             'show_export' => true,
         ]);
-        $showMapper->add('communeType.services', null, [
+        $show->add('communeType.services', null, [
             'label' => 'app.commune_type.entity.services',
             'admin_code' => ServiceAdmin::class,
             'is_custom_field' => true,
@@ -359,7 +359,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'reference_field_list' => ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2',],// 'status'
             'show_export' => true,
         ]);
-        $showMapper
+        $show
             ->add('transparencyPortalUrl', 'url');
     }
 

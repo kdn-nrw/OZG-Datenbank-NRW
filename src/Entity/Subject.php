@@ -14,7 +14,6 @@ namespace App\Entity;
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -43,7 +42,7 @@ class Subject extends BaseNamedEntity
      * @param Situation $situation
      * @return self
      */
-    public function addSituation($situation): self
+    public function addSituation(Situation $situation): self
     {
         if (!$this->situations->contains($situation)) {
             $this->situations->add($situation);
@@ -57,7 +56,7 @@ class Subject extends BaseNamedEntity
      * @param Situation $situation
      * @return self
      */
-    public function removeSituation($situation): self
+    public function removeSituation(Situation $situation): self
     {
         if ($this->situations->contains($situation)) {
             $this->situations->removeElement($situation);

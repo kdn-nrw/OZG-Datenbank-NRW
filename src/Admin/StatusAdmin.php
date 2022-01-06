@@ -27,16 +27,16 @@ class StatusAdmin extends AbstractAppAdmin
 {
     use ColorCodedTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $this->addDefaultStatusFormFields($formMapper);
-        $formMapper
+        $this->addDefaultStatusFormFields($form);
+        $form
             ->end();
     }
 
-    protected function addDefaultStatusFormFields(FormMapper $formMapper): void
+    protected function addDefaultStatusFormFields(FormMapper $form): void
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('level', IntegerType::class)
             ->add('description', TextareaType::class, [
@@ -44,7 +44,7 @@ class StatusAdmin extends AbstractAppAdmin
             ]);
         $subject = $this->getSubject();
         if ($subject instanceof StatusEntityInterface) {
-            $formMapper
+            $form
                 ->add('prevStatus', ModelType::class, [
                     'label' => 'app.status.entity.prev_status',
                     'btn_add' => false,
@@ -58,28 +58,28 @@ class StatusAdmin extends AbstractAppAdmin
                     'choice_translation_domain' => false,
                 ]);
         }
-        $this->addColorFormFields($formMapper);
+        $this->addColorFormFields($form);
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
+        $filter->add('name');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->addIdentifier('level');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('level')
             ->add('description');

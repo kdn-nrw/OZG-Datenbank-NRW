@@ -105,47 +105,47 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
     }
 
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         $defaultFields = $this->getDefaultFields('form');
         foreach ($defaultFields as $field => $fieldConfig) {
             $options = $fieldConfig['options'] ?? [];
             $fieldDescriptionOptions = $fieldConfig['fieldDescriptionOptions'] ?? [];
-            $formMapper->add($field, $fieldConfig['type'], $options, $fieldDescriptionOptions);
+            $form->add($field, $fieldConfig['type'], $options, $fieldDescriptionOptions);
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $defaultFields = $this->getDefaultFields('filter');
         foreach ($defaultFields as $field => $fieldConfig) {
             $filterOptions = $fieldConfig['filterOptions'] ?? [];
-            $datagridMapper->add($field, $fieldConfig['type'], $filterOptions);
+            $filter->add($field, $fieldConfig['type'], $filterOptions);
         }
     }
 
-    protected function addDefaultListFields(ListMapper $listMapper): void
+    protected function addDefaultListFields(ListMapper $list): void
     {
         $defaultFields = $this->getDefaultFields('list');
         foreach ($defaultFields as $field => $fieldConfig) {
             $fieldDescriptionOptions = $fieldConfig['fieldDescriptionOptions'] ?? [];
-            $listMapper->add($field, $fieldConfig['type'], $fieldDescriptionOptions);
+            $list->add($field, $fieldConfig['type'], $fieldDescriptionOptions);
         }
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $this->addDefaultListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * Adds the default list actions to the list mapper
      *
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      * @param array|null $extraActions
      */
-    protected function addDefaultListActions(ListMapper $listMapper, ?array $extraActions = null): void
+    protected function addDefaultListActions(ListMapper $list, ?array $extraActions = null): void
     {
         $actions = [
             'show' => [],
@@ -159,7 +159,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
         /*'if ($this->isSortableBehaviourEnabled()) {
             $actions['move'] = ['template' => '@PixSortableBehavior/Default/_sort.html.twig'];
         }*/
-        $listMapper
+        $list
             ->add('_action', null, [
                 'label' => 'app.common.actions',
                 'translation_domain' => 'messages',

@@ -20,9 +20,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait OrganisationOneToOneTrait
 {
-    protected function addOrganisationOneToOneFormFields(FormMapper $formMapper)
+    protected function addOrganisationOneToOneFormFields(FormMapper $form)
     {
-        $formMapper->add('organisation', AdminType::class, [
+        $form->add('organisation', AdminType::class, [
             'label' => false,
             'delete' => false,
             'btn_add' => false,
@@ -32,16 +32,16 @@ trait OrganisationOneToOneTrait
         ]);
     }
 
-    protected function addOrganisationOneToOneDatagridFilters(DatagridMapper $datagridMapper)
+    protected function addOrganisationOneToOneDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'organisation.contacts');
-        $datagridMapper->add('organisation.zipCode');
-        $datagridMapper->add('organisation.town');
+        $this->addDefaultDatagridFilter($filter, 'organisation.contacts');
+        $filter->add('organisation.zipCode');
+        $filter->add('organisation.town');
     }
 
-    protected function addOrganisationOneToOneListFields(ListMapper $listMapper)
+    protected function addOrganisationOneToOneListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('organisation.zipCode')
             ->add('organisation.town')
             ->add('organisation.url', 'url');
@@ -50,9 +50,9 @@ trait OrganisationOneToOneTrait
     /**
      * @inheritdoc
      */
-    public function addOrganisationOneToOneShowFields(ShowMapper $showMapper)
+    public function addOrganisationOneToOneShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('organisation.street')
             ->add('organisation.zipCode')
             ->add('organisation.town')

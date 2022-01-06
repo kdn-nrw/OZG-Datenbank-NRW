@@ -19,10 +19,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ImplementationStatusAdmin extends StatusAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $this->addDefaultStatusFormFields($formMapper);
-        $formMapper
+        $this->addDefaultStatusFormFields($form);
+        $form
             ->add('setAutomatically', BooleanType::class, [
                 'required' => false,
                 // the transform option enable compatibility with the boolean field (default 1=true, 2=false)

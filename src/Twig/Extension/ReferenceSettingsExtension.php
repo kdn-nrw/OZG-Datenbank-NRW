@@ -100,7 +100,6 @@ class ReferenceSettingsExtension extends AbstractExtension
         } else {
             $entityClass = is_object($objectOrClass) ? get_class($objectOrClass) : $objectOrClass;
         }
-        $refAdmin = null;
         $isBackendMode = $this->applicationContextHandler->isBackend();
         $editRouteName = 'edit';
         if (null !== $fieldDescription && $fieldDescription->hasAssociationAdmin()

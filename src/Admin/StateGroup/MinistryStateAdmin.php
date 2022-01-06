@@ -48,18 +48,18 @@ class MinistryStateAdmin extends AbstractAppAdmin implements EnableFullTextSearc
         'app.ministry_state.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('default', ['label' => 'app.ministry_state.tabs.default']);
-        $formMapper->with('general', [
+        $form->with('general', [
             'label' => 'app.ministry_state.tabs.default',
         ]);
-        $this->addOrganisationOneToOneFormFields($formMapper);
-        $formMapper->add('shortName', TextType::class);
-        $this->addServiceSystemsFormFields($formMapper);
-        $formMapper->end();
-        $formMapper->end();
+        $this->addOrganisationOneToOneFormFields($form);
+        $form->add('shortName', TextType::class);
+        $this->addServiceSystemsFormFields($form);
+        $form->end();
+        $form->end();
     }
 
     public function preUpdate($object)
@@ -97,29 +97,29 @@ class MinistryStateAdmin extends AbstractAppAdmin implements EnableFullTextSearc
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
+        $filter->add('name');
+        $this->addOrganisationOneToOneDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'serviceSystems');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addOrganisationOneToOneListFields($listMapper);
-        //$this->addServiceSystemsListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $list->addIdentifier('name');
+        $this->addOrganisationOneToOneListFields($list);
+        //$this->addServiceSystemsListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('shortName');
-        $this->addOrganisationOneToOneShowFields($showMapper);
-        $this->addServiceSystemsShowFields($showMapper);
+        $this->addOrganisationOneToOneShowFields($show);
+        $this->addServiceSystemsShowFields($show);
     }
 }

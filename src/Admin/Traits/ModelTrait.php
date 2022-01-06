@@ -23,13 +23,13 @@ trait ModelTrait
     /**
      * Default options for optional model type with single selection
      *
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      * @param $fieldName
      * @param array $fieldDescriptionOptions
      */
-    protected function addDefaultModelType(FormMapper $formMapper, $fieldName, array $fieldDescriptionOptions = []): void
+    protected function addDefaultModelType(FormMapper $form, $fieldName, array $fieldDescriptionOptions = []): void
     {
-        $formMapper->add($fieldName, ModelType::class, [
+        $form->add($fieldName, ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,

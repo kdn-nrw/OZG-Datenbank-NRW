@@ -177,7 +177,7 @@ class SearchIndexRepository extends EntityRepository
                     if ($wordOffset === 0) {
                         $lengthRatio = min(1, $lengthRatio + 0.15);
                     // Increase ratio if base word has multiple words and any word starts with word
-                    } elseif ($hasMultipleWords && mb_strpos($baseWord, ' ' . (string)$word) !== false) {
+                    } elseif ($hasMultipleWords && mb_strpos($baseWord, ' ' . $word) !== false) {
                         $lengthRatio = min(1, $lengthRatio + 0.075);
                     }
                     $wordCount = (int)max($row['wordCount'] ?? 1, 1);

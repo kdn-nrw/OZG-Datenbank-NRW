@@ -24,10 +24,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('formServer')) {
-            $formMapper
+            $form
                 ->add('formServer', ModelType::class, [
                     'btn_add' => false,
                     'placeholder' => '',
@@ -38,7 +38,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
                 ]);
         }
         if (!$this->isExcludedFormField('solution')) {
-            $formMapper
+            $form
                 ->add('solution', ModelAutocompleteType::class, [
                     'property' => ['name', 'description'],
                     'required' => true,
@@ -46,7 +46,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
                     'admin_code' => SolutionAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('status', ModelType::class, [
                 'btn_add' => false,
                 'required' => true,
@@ -72,17 +72,17 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'formServer');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solution');
-        $datagridMapper->add('status');
-        $datagridMapper->add('articleNumber');
+        $this->addDefaultDatagridFilter($filter, 'formServer');
+        $this->addDefaultDatagridFilter($filter, 'solution');
+        $filter->add('status');
+        $filter->add('articleNumber');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('formServer', null, [
                 'admin_code' => FormServerAdmin::class
             ])
@@ -102,15 +102,15 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
                     ['fieldName' => 'status'],
                 ]
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('formServer', null, [
                 'admin_code' => FormServerAdmin::class
             ])

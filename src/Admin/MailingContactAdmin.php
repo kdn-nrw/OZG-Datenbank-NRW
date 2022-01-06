@@ -33,9 +33,9 @@ class MailingContactAdmin extends AbstractAppAdmin implements EnableFullTextSear
         'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('mailing', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -63,16 +63,16 @@ class MailingContactAdmin extends AbstractAppAdmin implements EnableFullTextSear
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('mailing');
-        $datagridMapper->add('contact');
-        $datagridMapper->add('sendStatus');
+        $filter->add('mailing');
+        $filter->add('contact');
+        $filter->add('sendStatus');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('contact')
             ->add('sentAt')
             ->add('sendAttempts')
@@ -90,15 +90,15 @@ class MailingContactAdmin extends AbstractAppAdmin implements EnableFullTextSear
                 ],
                 'catalogue' => 'messages',
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('contact')
             ->add('sentAt')
             ->add('sendAttempts')

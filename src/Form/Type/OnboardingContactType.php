@@ -42,8 +42,6 @@ class OnboardingContactType extends AbstractType
                 ],
             ]);
         }
-        $calcProperties[] = 'externalUserName';
-        $calcProperties[] = 'mobileNumber';
         // Labels are not translated in the form type! Translate manually.
         //$label = $parentAdmin->trans($data->getLabelKey(), [], 'messages');
         if ($options['show_contact_type']) {

@@ -24,10 +24,10 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class ModelRegionProjectWebsiteAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('modelRegionProject')) {
-            $formMapper
+            $form
                 ->add('modelRegionProject', ModelType::class, [
                     'label' => 'app.model_region_project_website.entity.model_region_project',
                     'btn_add' => false,
@@ -38,38 +38,38 @@ class ModelRegionProjectWebsiteAdmin extends AbstractAppAdmin
                     'admin_code' => ModelRegionProjectAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('name', TextType::class);
-        $formMapper
+        $form
             ->add('url', UrlType::class, [
                 'required' => false,
             ]);
         if (!$this->isExcludedFormField('description')) {
-            $formMapper->add('description', TextareaType::class, [
+            $form->add('description', TextareaType::class, [
                 'required' => false,
             ]);
         }
-        $formMapper
+        $form
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProject');
-        $datagridMapper->add('name');
-        $datagridMapper->add('url');
+        $this->addDefaultDatagridFilter($filter, 'modelRegionProject');
+        $filter->add('name');
+        $filter->add('url');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('modelRegionProject', null, [
                 'admin_code' => ModelRegionProjectAdmin::class
             ]);
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**

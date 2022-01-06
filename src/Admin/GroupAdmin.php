@@ -41,30 +41,30 @@ class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        parent::configureListFields($listMapper);
+        parent::configureListFields($list);
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $listMapper->get('roles')->setTemplate('GroupAdmin/list__roles.html.twig');
+            $list->get('roles')->setTemplate('GroupAdmin/list__roles.html.twig');
         } else {
-            $listMapper->remove('roles');
+            $list->remove('roles');
         }
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
-        parent::configureFormFields($formMapper);
+        parent::configureFormFields($form);
 
-        $formMapper
+        $form
             ->tab('Group')
             ->with('General');
-        $formMapper->add('subGroups', ModelType::class, [
+        $form->add('subGroups', ModelType::class, [
             'label' => 'app.group.entity.sub_groups',
             'btn_add' => false,
             'placeholder' => '',
@@ -73,12 +73,12 @@ class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
             'by_reference' => false,
             'choice_translation_domain' => false,
         ]);
-        $formMapper
+        $form
             ->end()
             ->end();
         if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
-            $formMapper->remove('roles');
-            $formMapper->removeGroup('Roles', 'Security', true);
+            $form->remove('roles');
+            $form->removeGroup('Roles', 'Security', true);
         }
     }
 

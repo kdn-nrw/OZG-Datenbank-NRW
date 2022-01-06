@@ -18,8 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -123,12 +122,7 @@ class VSMController extends AbstractController
                     try {
                         $activeConsumerKey = $consumerService->getImportSourceKey();
                         $results[$consumerService->getImportSourceKey()] = $consumerService->search();
-                    } catch (HttpExceptionInterface $e) {
-                        /** @var FlashBag $flashBag */
-                        $flashBag = $this->session->getFlashBag();
-                        $translation = $this->translator->trans('app.api.common.search_exception', ['apiName' => $consumerService->getName()]);
-                        $flashBag->add('danger', $translation . ' ' . $e->getMessage());
-                    } catch (TransportExceptionInterface $e) {
+                    } catch (ExceptionInterface $e) {
                         /** @var FlashBag $flashBag */
                         $flashBag = $this->session->getFlashBag();
                         $translation = $this->translator->trans('app.api.common.search_exception', ['apiName' => $consumerService->getName()]);

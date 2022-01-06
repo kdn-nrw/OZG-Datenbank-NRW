@@ -21,13 +21,13 @@ use Symfony\Component\Form\Extension\Core\Type\ColorType;
  */
 trait ColorCodedTrait
 {
-    protected function addColorFormFields(FormMapper $formMapper): void
+    protected function addColorFormFields(FormMapper $form): void
     {
         $colorChoices = [];
         foreach (ColorCodedEntityInterface::CSS_CLASS_CHOICES as $cssCassName) {
             $colorChoices['app.status.entity.css_class_choices.' . str_replace('-', '_', $cssCassName)] = $cssCassName;
         }
-        $formMapper
+        $form
             ->add('color', ColorType::class, [
                 'label' => 'app.status.entity.color',
                 'required' => false,

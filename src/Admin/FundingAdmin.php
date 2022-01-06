@@ -23,33 +23,33 @@ class FundingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
 {
     use ImplementationProjectTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addImplementationProjectsFormFields($formMapper);
-        $formMapper->end();
+        $this->addImplementationProjectsFormFields($form);
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $datagridMapper->add('description');
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects');
+        $filter->add('name');
+        $filter->add('description');
+        $this->addDefaultDatagridFilter($filter, 'implementationProjects');
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description');
 
-        $this->addImplementationProjectsShowFields($showMapper);
+        $this->addImplementationProjectsShowFields($show);
     }
 }

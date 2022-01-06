@@ -24,39 +24,39 @@ class PaymentTypeAdmin extends AbstractAppAdmin
 {
     use SolutionTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('url', UrlType::class, [
                 'required' => false
             ]);
-        $this->addSolutionsFormFields($formMapper);
-        $formMapper->end();
+        $this->addSolutionsFormFields($form);
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'solutions');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addSolutionsListFields($listMapper);
-        $listMapper->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $list->addIdentifier('name');
+        $this->addSolutionsListFields($list);
+        $list->add('url', 'url');
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('url', 'url');
-        $this->addSolutionsShowFields($showMapper);
+        $this->addSolutionsShowFields($show);
     }
 }

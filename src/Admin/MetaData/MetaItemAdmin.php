@@ -25,9 +25,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class MetaItemAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('app.meta_item.groups.general_data', ['class' => 'col-xs-12'])
             ->add('metaKey', ChoiceType::class, [
                 'choices' => array_flip(FederalInformationManagementType::$mapTypes),
@@ -48,9 +48,9 @@ class MetaItemAdmin extends AbstractAppAdmin
                 //'format' => 'richhtml',
                 //'ckeditor_context' => 'default', // optional
             ]);
-        $formMapper->end();
-        $formMapper->with('app.meta_item.groups.property_data', ['class' => 'col-xs-12']);
-        $formMapper->add('metaItemProperties', CollectionType::class, [
+        $form->end();
+        $form->with('app.meta_item.groups.property_data', ['class' => 'col-xs-12']);
+        $form->add('metaItemProperties', CollectionType::class, [
             'label' => false,
             'type_options' => [
                 'delete' => false,
@@ -63,18 +63,18 @@ class MetaItemAdmin extends AbstractAppAdmin
             'inline' => 'natural',
             'ba_custom_exclude_fields' => ['parent'],
         ]);
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('metaKey', 'string', [
                 'template' => 'MetaData/list-meta-key.html.twig',
             ])
             ->add('customLabel')
             ->add('description');
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [
@@ -87,9 +87,9 @@ class MetaItemAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('metaType')
             ->add('metaKey')
             ->add('customLabel')

@@ -41,7 +41,7 @@ class MinistryState extends BaseNamedEntity implements OrganisationEntityInterfa
      * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="ministryState", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $organisation;
+    protected $organisation;
 
     /**
      * Short name

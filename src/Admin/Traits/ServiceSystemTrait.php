@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait ServiceSystemTrait
 {
-    protected function addServiceSystemsFormFields(FormMapper $formMapper)
+    protected function addServiceSystemsFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('serviceSystems', ModelType::class, [
                     'btn_add' => false,
                     'placeholder' => '',
@@ -36,9 +36,9 @@ trait ServiceSystemTrait
             );
     }
 
-    protected function addServiceSystemsListFields(ListMapper $listMapper)
+    protected function addServiceSystemsListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('serviceSystems', null,[
                 'admin_code' => ServiceSystemAdmin::class,
             ]);
@@ -47,9 +47,9 @@ trait ServiceSystemTrait
     /**
      * @inheritdoc
      */
-    public function addServiceSystemsShowFields(ShowMapper $showMapper)
+    public function addServiceSystemsShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('serviceSystems', null,[
                 'admin_code' => ServiceSystemAdmin::class,
             ]);

@@ -15,7 +15,6 @@ use App\Entity\Api\ServiceBaseResult;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\CustomEntityLabelInterface;
 use App\Entity\FederalInformationManagementType as FederalInformationManagementEntity;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 

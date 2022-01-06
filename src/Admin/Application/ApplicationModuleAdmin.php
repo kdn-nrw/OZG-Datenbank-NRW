@@ -14,7 +14,6 @@ namespace App\Admin\Application;
 use App\Admin\AbstractAppAdmin;
 use App\Admin\ApplicationAdmin;
 use App\Admin\EnableFullTextSearchAdminInterface;
-use App\Admin\StateGroup\ServiceProviderAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -28,10 +27,10 @@ class ApplicationModuleAdmin extends AbstractAppAdmin implements EnableFullTextS
 {
     protected $baseRoutePattern = 'application/module';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('application')) {
-            $formMapper
+            $form
                 ->add('application', ModelType::class, [
                     'property' => 'name',
                     'required' => true,
@@ -39,37 +38,37 @@ class ApplicationModuleAdmin extends AbstractAppAdmin implements EnableFullTextS
                     'admin_code' => ApplicationAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
 
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        parent::configureDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'application');
+        parent::configureDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'application');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $listMapper
+        $list->addIdentifier('name');
+        $list
             ->add('application', null, [
                 'admin_code' => ApplicationAdmin::class
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('application')
             ->add('name')
             ->add('description');

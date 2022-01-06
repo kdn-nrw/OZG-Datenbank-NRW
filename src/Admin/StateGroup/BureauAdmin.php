@@ -28,39 +28,39 @@ class BureauAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminI
 
     use ServiceSystemTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper->add('name', TextType::class);
-        $this->addServiceSystemsFormFields($formMapper);
-        $formMapper
+        $form->add('name', TextType::class);
+        $this->addServiceSystemsFormFields($form);
+        $form
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystems.situation.subject');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystems');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystems.situation.subject');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name');
-        $this->addServiceSystemsListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $this->addServiceSystemsListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('description');
-        $this->addServiceSystemsShowFields($showMapper);
+        $this->addServiceSystemsShowFields($show);
     }
 }

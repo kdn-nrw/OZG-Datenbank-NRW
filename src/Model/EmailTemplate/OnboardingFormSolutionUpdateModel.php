@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace App\Model\EmailTemplate;
 
 use App\Entity\Configuration\EmailTemplate;
-use App\Entity\Onboarding\CommuneInfo;
 use App\Entity\Onboarding\FormSolution;
 
 class OnboardingFormSolutionUpdateModel extends AbstractTemplateModel

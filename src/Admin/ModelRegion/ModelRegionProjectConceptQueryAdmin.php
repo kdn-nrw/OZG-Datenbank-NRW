@@ -22,10 +22,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ModelRegionProjectConceptQueryAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('modelRegionProject')) {
-            $formMapper
+            $form
                 ->add('modelRegionProject', ModelType::class, [
                     'label' => 'app.model_region_project_concept_query.entity.model_region_project',
                     'btn_add' => false,
@@ -36,7 +36,7 @@ class ModelRegionProjectConceptQueryAdmin extends AbstractAppAdmin
                     'admin_code' => ModelRegionProjectAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('conceptQueryType', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -47,32 +47,32 @@ class ModelRegionProjectConceptQueryAdmin extends AbstractAppAdmin
                     'admin_code' => ConceptQueryTypeAdmin::class,
                 ]
             );
-        $formMapper->add('description', TextareaType::class, [
+        $form->add('description', TextareaType::class, [
             'required' => false,
         ]);
-        $formMapper
+        $form
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProject');
-        $this->addDefaultDatagridFilter($datagridMapper, 'conceptQueryType');
-        $datagridMapper->add('description');
+        $this->addDefaultDatagridFilter($filter, 'modelRegionProject');
+        $this->addDefaultDatagridFilter($filter, 'conceptQueryType');
+        $filter->add('description');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('modelRegionProject', null, [
                 'admin_code' => ModelRegionProjectAdmin::class
             ])
             ->add('conceptQueryType', null, [
                 'admin_code' => ConceptQueryTypeAdmin::class
             ]);
-        $listMapper
+        $list
             ->addIdentifier('description');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**

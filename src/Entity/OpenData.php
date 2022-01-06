@@ -14,7 +14,6 @@ namespace App\Entity;
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -43,7 +42,7 @@ class OpenData extends BaseNamedEntity implements HasSolutionsEntityInterface
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution)
+    public function addSolution(Solution $solution)
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -57,7 +56,7 @@ class OpenData extends BaseNamedEntity implements HasSolutionsEntityInterface
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution)
+    public function removeSolution(Solution $solution)
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);

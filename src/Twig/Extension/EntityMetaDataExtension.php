@@ -12,6 +12,7 @@
 namespace App\Twig\Extension;
 
 use App\Entity\Base\BaseEntityInterface;
+use App\Entity\MetaData\AbstractMetaItem;
 use App\Entity\MetaData\MetaItem;
 use App\Entity\MetaData\MetaItemProperty;
 use App\Service\MetaData\InjectMetaDataManagerTrait;
@@ -73,9 +74,9 @@ class EntityMetaDataExtension extends AbstractExtension
                     'property' => $propertyName,
                     'customLabel' => $customLabel,
                     'description' => $description,
-                ];;
+                ];
                 if ($objectOrClass instanceof BaseEntityInterface
-                    && $metaItemProperty->getMetaType() === MetaItemProperty::META_TYPE_FIELD
+                    && $metaItemProperty->getMetaType() === AbstractMetaItem::META_TYPE_FIELD
                     && $propertyAccessor->isReadable($objectOrClass, $propertyName)) {
                     $subMetaItem = $this->metaDataManager->getObjectPropertyReferenceClassMetaData($objectOrClass, $propertyName);
                     if ($subMetaItem instanceof MetaItem) {

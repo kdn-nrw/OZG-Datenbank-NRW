@@ -14,7 +14,6 @@ namespace App\Entity;
 use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -67,7 +66,7 @@ class Funding extends BaseNamedEntity
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function addImplementationProject($implementationProject): self
+    public function addImplementationProject(ImplementationProject $implementationProject): self
     {
         if (!$this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->add($implementationProject);
@@ -81,7 +80,7 @@ class Funding extends BaseNamedEntity
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function removeImplementationProject($implementationProject): self
+    public function removeImplementationProject(ImplementationProject $implementationProject): self
     {
         if ($this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->removeElement($implementationProject);

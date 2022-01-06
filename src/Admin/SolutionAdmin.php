@@ -33,6 +33,7 @@ use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -119,15 +120,15 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         }
     }
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('app.solution.tabs.general', ['tab' => true])
             ->with('general', [
                 'label' => false,
             ]);
-        $this->addServiceProvidersFormFields($formMapper);
-        $formMapper
+        $this->addServiceProvidersFormFields($form);
+        $form
             ->add('customProvider', TextType::class, [
                 'required' => false,
             ])
@@ -145,17 +146,17 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->add('url', UrlType::class, [
                 'required' => false
             ]);
-        $this->addContactsFormFields($formMapper, true, false, 'solutionContacts');
-        $formMapper->add('isPublished', CheckboxType::class, [
+        $this->addContactsFormFields($form, true, false, 'solutionContacts');
+        $form->add('isPublished', CheckboxType::class, [
             'required' => false,
         ]);
-        $this->addSlugFormField($formMapper, $this->getSubject());
-        $formMapper->add('confidenceLevel', ModelType::class, [
+        $this->addSlugFormField($form, $this->getSubject());
+        $form->add('confidenceLevel', ModelType::class, [
             'btn_add' => false,
             'required' => true,
             'choice_translation_domain' => false,
         ]);
-        $formMapper
+        $form
             /*
             ->add('serviceSolutions', ModelType::class, [
                 'expanded' => true,
@@ -170,8 +171,8 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->with('relations', [
                 'label' => false,
             ]);
-        $this->addPortalsFormFields($formMapper);
-        $formMapper->add('enabledMunicipalPortal', CheckboxType::class, [
+        $this->addPortalsFormFields($form);
+        $form->add('enabledMunicipalPortal', CheckboxType::class, [
             'required' => false,
         ]);
         $overrideOptions = [];
@@ -179,7 +180,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             $overrideOptions = [
                 'disabled' => true,
             ];
-            $formMapper
+            $form
                 ->add('communeType', ChoiceType::class, [
                     'choices' => [
                         'app.solution.entity.commune_type_all' => 'all',
@@ -188,7 +189,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                     'disabled' => true,
                 ]);
         } else {
-            $formMapper
+            $form
                 ->add('communeType', ChoiceFieldMaskType::class, [
                     'choices' => [
                         'app.solution.entity.commune_type_all' => 'all',
@@ -201,9 +202,9 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                     'required' => true,
                 ]);
         }
-        $this->addCommunesFormFields($formMapper, $overrideOptions);
-        $this->addSpecializedProceduresFormFields($formMapper);
-        $formMapper
+        $this->addCommunesFormFields($form, $overrideOptions);
+        $this->addSpecializedProceduresFormFields($form);
+        $form
             ->add('paymentTypes', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -236,8 +237,8 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'by_reference' => false,
                 'choice_translation_domain' => false,
             ]);
-        $this->addModelRegionProjectsFormFields($formMapper);
-        $formMapper
+        $this->addModelRegionProjectsFormFields($form);
+        $form
             ->end()
             ->end()
             ->tab('app.solution.tabs.form_servers')
@@ -290,17 +291,17 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $this->solutionHelper->updateCommuneReferences($object);
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem.jurisdictions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service.serviceSystem.situation.subject');
-        $this->addDefaultDatagridFilter($datagridMapper, 'maturity');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSolutions.service');
-        $datagridMapper->add('status');
-        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
-        $datagridMapper->add('communeType', null,
+        $this->addDefaultDatagridFilter($filter, 'serviceProviders');
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem');
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem.jurisdictions');
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem.situation.subject');
+        $this->addDefaultDatagridFilter($filter, 'maturity');
+        $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service');
+        $filter->add('status');
+        $this->addDefaultDatagridFilter($filter, 'portals');
+        $filter->add('communeType', null,
             [
             ],
             ChoiceType::class,
@@ -312,26 +313,26 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'expanded' => false,
                 'multiple' => false,
             ]);
-        $this->addDefaultDatagridFilter($datagridMapper, 'communeSolutions.commune', [
+        $this->addDefaultDatagridFilter($filter, 'communeSolutions.commune', [
             'label' => 'app.solution.entity.communes',
         ]);
-        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
-        $this->addDefaultDatagridFilter($datagridMapper, 'formServerSolutions.formServer');
-        $this->addDefaultDatagridFilter($datagridMapper, 'paymentTypes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'authentications');
-        $this->addDefaultDatagridFilter($datagridMapper, 'analogServices');
-        $this->addDefaultDatagridFilter($datagridMapper, 'openDataItems');
-        $datagridMapper->add('name');
-        $datagridMapper->add('description');
-        $datagridMapper->add('isPublished');
-        $this->addDefaultDatagridFilter($datagridMapper, 'modelRegionProjects');
-        $datagridMapper->add('confidenceLevel');
-        $datagridMapper->add('enabledMunicipalPortal');
+        $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($filter, 'formServerSolutions.formServer');
+        $this->addDefaultDatagridFilter($filter, 'paymentTypes');
+        $this->addDefaultDatagridFilter($filter, 'authentications');
+        $this->addDefaultDatagridFilter($filter, 'analogServices');
+        $this->addDefaultDatagridFilter($filter, 'openDataItems');
+        $filter->add('name');
+        $filter->add('description');
+        $filter->add('isPublished');
+        $this->addDefaultDatagridFilter($filter, 'modelRegionProjects');
+        $filter->add('confidenceLevel');
+        $filter->add('enabledMunicipalPortal');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('selectedCommuneSolutions', null, [
                 'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,
@@ -393,7 +394,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'enable_filter_add' => true,
             ])
             ->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
@@ -415,9 +416,9 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description')
             ->add('url', 'url')
@@ -428,26 +429,26 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->add('contact')
             ->add('solutionContacts');
 
-        $showMapper
-            ->add('status', TemplateRegistry::TYPE_CHOICE, [
+        $show
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('confidenceLevel', TemplateRegistry::TYPE_CHOICE, [
+            ->add('confidenceLevel', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ConfidenceLevel::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ]);
-        $this->addPortalsShowFields($showMapper);
-        $this->addSpecializedProceduresShowFields($showMapper);
-        $showMapper
+        $this->addPortalsShowFields($show);
+        $this->addSpecializedProceduresShowFields($show);
+        $show
             ->add('customProvider');
         $enableTabs = true;
         // Tab fields
-        $showMapper
+        $show
             ->add('communes', null, [
                 'label' => 'app.solution.entity.communes',
                 'admin_code' => CommuneAdmin::class,

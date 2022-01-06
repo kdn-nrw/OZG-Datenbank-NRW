@@ -14,9 +14,9 @@ namespace App\Admin\Configuration;
 use App\Admin\AbstractAppAdmin;
 use App\Service\Mailer\InjectEmailTemplateManagerTrait;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -30,9 +30,9 @@ class EmailTemplateAdmin extends AbstractAppAdmin
 
     protected $baseRoutePattern = 'configuration/email-templates';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('general', [
                 'label' => 'app.email_template.groups.general',
                 'class' => 'col-xs-12',
@@ -72,7 +72,7 @@ class EmailTemplateAdmin extends AbstractAppAdmin
                 'required' => false,
             ])
             ->end();
-        $formMapper
+        $form
             ->with('content', [
                 'label' => 'app.email_template.groups.content',
                 'class' => 'col-xs-12',
@@ -86,9 +86,9 @@ class EmailTemplateAdmin extends AbstractAppAdmin
             ->end();
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('templateKey', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'choices' => $this->emailTemplateManager->getEmailTemplatesChoices(),
@@ -99,7 +99,7 @@ class EmailTemplateAdmin extends AbstractAppAdmin
             ->add('hidden', null, [
                 'label' => 'app.email_template.entity.hidden',
             ]);
-        $listMapper->add('_action', null, [
+        $list->add('_action', null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

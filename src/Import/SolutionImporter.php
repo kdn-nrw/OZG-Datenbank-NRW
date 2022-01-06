@@ -11,7 +11,6 @@
 
 namespace App\Import;
 
-use App\Entity\Solution;
 use App\Import\DataProcessor\SolutionDataProcessor;
 use App\Import\Model\SolutionImportModel;
 

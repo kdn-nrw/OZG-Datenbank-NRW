@@ -42,23 +42,23 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem.situation.subject', ['show_filter' => true]);
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem.situation');
-        $datagridMapper->add('name');
-        $datagridMapper->add('serviceKey');
-        $datagridMapper->add('serviceType');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceSystem');
-        $this->addDefaultDatagridFilter($datagridMapper, 'priority');
-        $datagridMapper->add('serviceSystem.serviceKey');
-        $datagridMapper->add('status');
-        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
-        $this->addDefaultDatagridFilter($datagridMapper, 'jurisdictions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'bureaus');
-        $this->addDefaultDatagridFilter($datagridMapper, 'portals');
-        $this->addDefaultDatagridFilter($datagridMapper, 'ruleAuthorities');
-        $datagridMapper->add('fimTypes.dataType',
+        $this->addDefaultDatagridFilter($filter, 'serviceSystem.situation.subject', ['show_filter' => true]);
+        $this->addDefaultDatagridFilter($filter, 'serviceSystem.situation');
+        $filter->add('name');
+        $filter->add('serviceKey');
+        $filter->add('serviceType');
+        $this->addDefaultDatagridFilter($filter, 'serviceSystem');
+        $this->addDefaultDatagridFilter($filter, 'priority');
+        $filter->add('serviceSystem.serviceKey');
+        $filter->add('status');
+        $this->addDefaultDatagridFilter($filter, 'laboratories');
+        $this->addDefaultDatagridFilter($filter, 'jurisdictions');
+        $this->addDefaultDatagridFilter($filter, 'bureaus');
+        $this->addDefaultDatagridFilter($filter, 'portals');
+        $this->addDefaultDatagridFilter($filter, 'ruleAuthorities');
+        $filter->add('fimTypes.dataType',
             null, [
             ],
             ChoiceType::class,
@@ -66,7 +66,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'choices' => array_flip(FederalInformationManagementType::$mapTypes)
             ]
         );
-        $datagridMapper->add('fimTypes.status',
+        $filter->add('fimTypes.status',
             null, [
             ],
             ChoiceType::class,
@@ -74,20 +74,20 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'choices' => array_flip(FederalInformationManagementType::$statusChoices)
             ]
         );
-        $datagridMapper->add('implementationProjects.status',
+        $filter->add('implementationProjects.status',
             null, [
                 'label' => 'app.implementation_project.entity.status',
             ],
             null,
             ['expanded' => false, 'multiple' => true]
         );
-        $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects.implementationProject');
+        $this->addDefaultDatagridFilter($filter, 'communeTypes');
+        $this->addDefaultDatagridFilter($filter, 'implementationProjects.implementationProject');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('serviceSystem.situation.subject', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
@@ -138,13 +138,13 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ])
             ->add('name')
             ->add('serviceKey');
-        $this->configureImplementationProjectStatusListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $this->configureImplementationProjectStatusListFields($list);
+        $this->addDefaultListActions($list);
     }
 
-    protected function configureImplementationProjectStatusListFields(ListMapper $listMapper)
+    protected function configureImplementationProjectStatusListFields(ListMapper $list)
     {
-        $listMapper->add('implementationProjectStatusInfo.status', 'choice', [
+        $list->add('implementationProjectStatusInfo.status', 'choice', [
             'label' => 'app.implementation_project.entity.status',
             'editable' => false,
             'class' => ImplementationStatus::class,
@@ -166,7 +166,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         ];
         foreach ($dateFields as $dateField) {
             $labelKey = SnakeCaseConverter::camelCaseToSnakeCase($dateField);
-            $this->addDatePickersListFields($listMapper, 'implementationProjectStatusInfo.' . $dateField, true, true, [
+            $this->addDatePickersListFields($list, 'implementationProjectStatusInfo.' . $dateField, true, true, [
                 'label' => 'app.service.entity.implementation_project_status_info.' . $labelKey,
                 'fallbackToCustomValue' => true,
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -231,9 +231,9 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
@@ -287,7 +287,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ->add('communeTypes')
             ->add('laboratories')
             ->add('stateMinistries');
-        $showMapper->add('implementationProjects', null, [
+        $show->add('implementationProjects', null, [
             'admin_code' => ImplementationProjectAdmin::class,
             'template' => 'ServiceAdmin/Show/show-service-projects.html.twig',
             'is_custom_field' => true,
@@ -297,7 +297,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'name' => 'show',
             ],
         ]);
-        $showMapper
+        $show
             ->add('publishedModelRegionProjects', null, [
                 'admin_code' => ModelRegionProjectAdmin::class,
                 'route' => [

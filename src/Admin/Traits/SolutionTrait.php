@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait SolutionTrait
 {
-    protected function addSolutionsFormFields(FormMapper $formMapper)
+    protected function addSolutionsFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('solutions', ModelType::class,
                 [
                     'btn_add' => false,
@@ -37,9 +37,9 @@ trait SolutionTrait
             );
     }
 
-    protected function addSolutionsListFields(ListMapper $listMapper)
+    protected function addSolutionsListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
             ]);
@@ -48,9 +48,9 @@ trait SolutionTrait
     /**
      * @inheritdoc
      */
-    public function addSolutionsShowFields(ShowMapper $showMapper)
+    public function addSolutionsShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
             ]);

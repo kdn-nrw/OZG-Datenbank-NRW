@@ -23,34 +23,34 @@ class AuthenticationAdmin extends AbstractAppAdmin implements EnableFullTextSear
 {
     use SolutionTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class);
-        $this->addSolutionsFormFields($formMapper);
-        $formMapper->end();
+        $this->addSolutionsFormFields($form);
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'solutions');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name');
-        $this->addSolutionsListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $list->addIdentifier('name');
+        $this->addSolutionsListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name');
-        $this->addSolutionsShowFields($showMapper);
+        $this->addSolutionsShowFields($show);
     }
 }

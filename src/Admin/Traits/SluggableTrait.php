@@ -20,14 +20,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 trait SluggableTrait
 {
-    protected function addSlugFormField(FormMapper $formMapper, ?object $subject): void
+    protected function addSlugFormField(FormMapper $form, ?object $subject): void
     {
         if ($subject instanceof SluggableInterface) {
-            $formMapper
+            $form
                 ->add('slug', TextType::class, [
                     'label' => 'app.common.fields.slug',
                     'required' => false,
                 ]);
-        };
+        }
     }
 }

@@ -72,7 +72,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @ORM\OneToOne(targetEntity="App\Entity\Organisation", inversedBy="commune", cascade={"all"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $organisation;
+    protected $organisation;
 
     /**
      * @var Office[]|Collection

@@ -46,19 +46,19 @@ class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin implements EnableFull
         'app.model_region_beneficiary.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('default', ['label' => 'app.model_region_beneficiary.tabs.default']);
-        $formMapper->with('general', [
+        $form->with('general', [
             'label' => 'app.model_region_beneficiary.tabs.default',
         ]);
-        $this->addOrganisationOneToOneFormFields($formMapper);
-        $formMapper->add('shortName', TextType::class, [
+        $this->addOrganisationOneToOneFormFields($form);
+        $form->add('shortName', TextType::class, [
             'required' => false,
         ]);
-        $formMapper->end();
-        $formMapper->end();
+        $form->end();
+        $form->end();
     }
 
     public function preUpdate($object)
@@ -96,33 +96,33 @@ class ModelRegionBeneficiaryAdmin extends AbstractAppAdmin implements EnableFull
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name')
+        $filter->add('name')
             ->add('shortName');
-        $this->addDefaultDatagridFilter($datagridMapper, 'organisation.modelRegionProjects');
-        $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
+        $this->addDefaultDatagridFilter($filter, 'organisation.modelRegionProjects');
+        $this->addOrganisationOneToOneDatagridFilters($filter);
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper->addIdentifier('name')
+        $list->addIdentifier('name')
             ->add('shortName');
-        $this->addOrganisationOneToOneListFields($listMapper);
-        //$this->addCommunesListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $this->addOrganisationOneToOneListFields($list);
+        //$this->addCommunesListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name')
+        $show->add('name')
             ->add('shortName')
             ->add('modelRegionProjects', null, [
                 'admin_code' => ModelRegionProjectAdmin::class,
             ]);
-        $this->addOrganisationOneToOneShowFields($showMapper);
+        $this->addOrganisationOneToOneShowFields($show);
     }
 }

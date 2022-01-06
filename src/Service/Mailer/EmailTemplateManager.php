@@ -31,7 +31,6 @@ use App\Translator\TranslatorAwareTrait;
 use App\Util\SnakeCaseConverter;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Storage\FileSystemStorage;
 
@@ -186,13 +185,13 @@ class EmailTemplateManager
      * @param string $entityClass
      * @param string $processType
      * @return string
-     */
+     * /
     private static function getEntityTemplateKey(string $entityClass, string $processType = ''): string
     {
         $entityKey = trim(str_replace(['\\', 'App_Entity'], ['_', ''], $entityClass), ' _');
         $entityKey = strtoupper(SnakeCaseConverter::camelCaseToSnakeCase($entityKey));
         return strtolower($entityKey . ($processType ? '_' . $processType : ''));
-    }
+    }*/
 
     /**
      * @param string|EmailTemplate $keyOrEntity

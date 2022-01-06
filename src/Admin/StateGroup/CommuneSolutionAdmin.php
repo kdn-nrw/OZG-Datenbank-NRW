@@ -16,12 +16,12 @@ use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\DatePickerTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -31,10 +31,10 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
 {
     use DatePickerTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('commune')) {
-            $formMapper
+            $form
                 ->add('commune', ModelAutocompleteType::class, [
                     'property' => 'name',
                     'required' => true,
@@ -43,7 +43,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 ]);
         }
         if (!$this->isExcludedFormField('solution')) {
-            $formMapper
+            $form
                 ->add('solution', ModelAutocompleteType::class, [
                     'property' => ['name', 'description'],
                     'required' => true,
@@ -51,7 +51,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                     'admin_code' => \App\Admin\SolutionAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('solutionReady', ChoiceFieldMaskType::class, [
                 'choices' => [
                     'app.commune_solution.entity.solution_ready_choices.no' => false,
@@ -63,8 +63,8 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 ],
                 'required' => false,
             ]);
-        $this->addDatePickerFormField($formMapper, 'solutionReadyAt', 5);
-        $formMapper
+        $this->addDatePickerFormField($form, 'solutionReadyAt', 5);
+        $form
             ->add('connectionPlanned', ChoiceFieldMaskType::class, [
                 'choices' => [
                     'app.commune_solution.entity.connection_planned_choices.no' => false,
@@ -76,9 +76,9 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 ],
                 'required' => false,
             ]);
-        $this->addDatePickerFormField($formMapper, 'connectionPlannedAt', 5);
+        $this->addDatePickerFormField($form, 'connectionPlannedAt', 5);
 
-        $formMapper
+        $form
             ->add('specializedProcedure', ModelType::class, [
                 'btn_add' => false,
                 'placeholder' => '',
@@ -93,13 +93,13 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'commune');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solution');
-        /*$datagridMapper->add('description');
-        $datagridMapper->add('status');*/
-        $datagridMapper
+        $this->addDefaultDatagridFilter($filter, 'commune');
+        $this->addDefaultDatagridFilter($filter, 'solution');
+        /*$filter->add('description');
+        $filter->add('status');*/
+        $filter
             ->add('solutionReady', ChoiceFilter::class, [
                 'field_options' => [
                     'choices' => [
@@ -113,7 +113,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 ],
                 'field_type' => ChoiceType::class,
             ]);
-        $datagridMapper
+        $filter
             ->add('connectionPlanned', ChoiceFilter::class, [
                 'field_options' => [
                     'choices' => [
@@ -127,12 +127,12 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 ],
                 'field_type' => ChoiceType::class,
             ]);
-        $datagridMapper->add('specializedProcedure');
+        $filter->add('specializedProcedure');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('commune', null, [
                 'admin_code' => \App\Admin\StateGroup\CommuneAdmin::class
             ])
@@ -152,15 +152,15 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 ],
             ])
             ->add('specializedProcedure');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('commune', null, [
                 'admin_code' => \App\Admin\StateGroup\CommuneAdmin::class
             ])
@@ -174,17 +174,17 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                     true => 'app.commune_solution.entity.connection_planned_choices.yes',
                 ],
             ]);
-        $this->addDatePickersShowFields($showMapper, 'solutionReadyAt', false);
-        $showMapper
+        $this->addDatePickersShowFields($show, 'solutionReadyAt', false);
+        $show
             ->add('connectionPlanned', TemplateRegistryInterface::TYPE_CHOICE, [
                 'choices' => [
                     false => 'app.commune_solution.entity.connection_planned_choices.no',
                     true => 'app.commune_solution.entity.connection_planned_choices.yes',
                 ],
             ]);
-        $this->addDatePickersShowFields($showMapper, 'connectionPlannedAt', false);
+        $this->addDatePickersShowFields($show, 'connectionPlannedAt', false);
 
-        $showMapper
+        $show
             ->add('specializedProcedure')
             ->add('comment', TextareaType::class, [
                 'required' => false,

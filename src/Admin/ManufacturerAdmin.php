@@ -43,11 +43,11 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
         'app.manufacturer.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $this->addOrganisationOneToOneFormFields($formMapper);
-        $this->addSpecializedProceduresFormFields($formMapper);
-        $formMapper
+        $this->addOrganisationOneToOneFormFields($form);
+        $this->addSpecializedProceduresFormFields($form);
+        $form
             ->end();
     }
 
@@ -86,30 +86,30 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addOrganisationOneToOneDatagridFilters($datagridMapper);
-        $this->addDefaultDatagridFilter($datagridMapper, 'specializedProcedures');
+        $filter->add('name');
+        $this->addOrganisationOneToOneDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name');
-        $this->addSpecializedProceduresListFields($listMapper);
-        $listMapper
+        $this->addSpecializedProceduresListFields($list);
+        $list
             ->add('organisation.url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper->add('name');
-        $this->addOrganisationOneToOneShowFields($showMapper);
-        $this->addSpecializedProceduresShowFields($showMapper);
+        $show->add('name');
+        $this->addOrganisationOneToOneShowFields($show);
+        $this->addSpecializedProceduresShowFields($show);
     }
 }

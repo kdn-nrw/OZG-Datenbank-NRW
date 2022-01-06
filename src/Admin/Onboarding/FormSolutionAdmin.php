@@ -13,13 +13,11 @@ namespace App\Admin\Onboarding;
 
 
 use App\Admin\StateGroup\CommuneAdmin;
-use App\Entity\Base\BaseEntityInterface;
-use App\Form\Type\CommuneAdministrativeContactType;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,14 +28,14 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
 {
     protected $baseRoutePattern = 'onboarding/formsolutions';
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->tab('general', [
                 'label' => 'app.form_solution.groups.general',
             ])
             ->with('app.form_solution.groups.general', ['class' => 'col-md-6']);
-        $formMapper
+        $form
             ->add('commune', CommuneType::class, [
                 'label' => false,
                 //'required' => true,
@@ -46,8 +44,8 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
             ], [
                 'admin_code' => CommuneAdmin::class,
             ]);
-        $this->addGroupEmailFormField($formMapper);
-        $formMapper->add('imageFile', VichImageType::class, [
+        $this->addGroupEmailFormField($form);
+        $form->add('imageFile', VichImageType::class, [
             'required' => false,
             'allow_delete' => true,
             //'delete_label' => '...',
@@ -57,11 +55,11 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
             'imagine_pattern' => 'default_small',
             'asset_helper' => true,
         ]);
-        $this->addDataCompletenessConfirmedField($formMapper);
-        $formMapper
+        $this->addDataCompletenessConfirmedField($form);
+        $form
             ->end()
             ->with('app.form_solution.groups.content_data', ['class' => 'col-md-6']);
-        $formMapper
+        $form
             ->add('privacyText', TextareaType::class, [
                 'required' => false,
             ])
@@ -77,10 +75,10 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
             ->add('accessibility', TextareaType::class, [
                 'required' => false,
             ]);
-        $formMapper
+        $form
             ->end()
             ->with('app.form_solution.groups.administration_contact', ['class' => 'col-md-6']);
-        $formMapper
+        $form
             ->add('administrationPhoneNumber', TextType::class, [
                 'label' => 'app.commune.entity.administration_phone_number',
                 'required' => false,
@@ -96,26 +94,26 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
             ->add('administrationUrl', UrlType::class, [
                 'label' => 'app.commune.entity.administration_url',
                 'required' => false,
-            ]);;
-        $formMapper
+            ]);
+        $form
             ->end()
             ->with('app.form_solution.groups.header_data', ['class' => 'col-md-6']);
-        $formMapper
+        $form
             ->add('letterheadAddress', TextareaType::class, [
                 'label' => false,
                 'required' => false,
             ]);
-        $formMapper
+        $form
             ->end()
             ->with('app.form_solution.groups.footer_data', ['class' => 'col-md-6']);
-        $formMapper
+        $form
             ->add('openingHours', TextareaType::class, [
                 'required' => false,
             ]);
-        $formMapper
+        $form
             ->end()
             ->end();
-        $formMapper
+        $form
             ->tab('contacts', [
                 'label' => 'app.form_solution.groups.contact_data',
             ])
@@ -123,15 +121,15 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
                 'label' => false,
                 'class' => 'col-md-12 box-collection-static two-col box-clipboard-rows js-copy-row-values',
             ]);
-        $formMapper
-            ->add('contacts', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+        $form
+            ->add('contacts', CollectionType::class, [
                 'label' => 'app.form_solution.entity.contacts',
                 'entry_type' => OnboardingContactType::class,
                 'entry_options' => [
                     'parent_admin' => $this,
                 ],
             ]);
-        $formMapper
+        $form
             ->end()
             ->end();
     }
@@ -139,9 +137,9 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('communeName')
             ->add('officialCommuneKey')
             ->add('imageFile')

@@ -32,27 +32,27 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
         'app.service_system.entity.situation_subject' => 'app.situation.entity.subject',
     ];
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $datagridMapper->add('serviceKey');
-        $this->addDefaultDatagridFilter($datagridMapper, 'jurisdictions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'situation');
-        $this->addDefaultDatagridFilter($datagridMapper, 'situation.subject');
-        $this->addDefaultDatagridFilter($datagridMapper, 'priority');
-        //$datagridMapper->add('status');
-        $this->addDefaultDatagridFilter($datagridMapper, 'stateMinistries');
-        $this->addDefaultDatagridFilter($datagridMapper, 'solutions');
-        $this->addDefaultDatagridFilter($datagridMapper, 'bureaus');
-        $this->addDefaultDatagridFilter($datagridMapper, 'services.portals');
-        $this->addDefaultDatagridFilter($datagridMapper, 'communeTypes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProjects');
-        $this->addDefaultDatagridFilter($datagridMapper, 'laboratories');
+        $filter->add('name');
+        $filter->add('serviceKey');
+        $this->addDefaultDatagridFilter($filter, 'jurisdictions');
+        $this->addDefaultDatagridFilter($filter, 'situation');
+        $this->addDefaultDatagridFilter($filter, 'situation.subject');
+        $this->addDefaultDatagridFilter($filter, 'priority');
+        //$filter->add('status');
+        $this->addDefaultDatagridFilter($filter, 'stateMinistries');
+        $this->addDefaultDatagridFilter($filter, 'solutions');
+        $this->addDefaultDatagridFilter($filter, 'bureaus');
+        $this->addDefaultDatagridFilter($filter, 'services.portals');
+        $this->addDefaultDatagridFilter($filter, 'communeTypes');
+        $this->addDefaultDatagridFilter($filter, 'implementationProjects');
+        $this->addDefaultDatagridFilter($filter, 'laboratories');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('serviceKey')
             ->add('jurisdictions', null, [
@@ -116,7 +116,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
                     'name' => 'list',
                 ],
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
@@ -136,9 +136,9 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
@@ -158,7 +158,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
             ]);
-        $showMapper->add('situation.subject', null, [
+        $show->add('situation.subject', null, [
             'template' => 'ServiceAdmin/show_many_to_one.html.twig',
         ])
             ->add('situation', null, [
@@ -188,7 +188,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
                     'name' => 'show',
                 ],
             ]);
-        $this->addLaboratoriesShowFields($showMapper);
+        $this->addLaboratoriesShowFields($show);
     }
 
     public function isGranted($name, $object = null)

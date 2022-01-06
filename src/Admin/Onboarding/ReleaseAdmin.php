@@ -14,7 +14,6 @@ namespace App\Admin\Onboarding;
 
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\DatePickerTrait;
-use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Onboarding\Release;
 use App\Form\Type\CommuneType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -22,7 +21,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\BooleanType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ReleaseAdmin extends AbstractOnboardingAdmin
 {
@@ -30,9 +28,9 @@ class ReleaseAdmin extends AbstractOnboardingAdmin
 
     protected $baseRoutePattern = 'onboarding/go-live';
 
-    protected function configureFormGroups(FormMapper $formMapper)
+    protected function configureFormGroups(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('general', [
                 'label' => 'app.release.groups.general',
                 'class' => 'col-md-12',
@@ -52,12 +50,12 @@ class ReleaseAdmin extends AbstractOnboardingAdmin
             ->end();
     }
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $this->configureFormGroups($formMapper);
-        $formMapper
+        $this->configureFormGroups($form);
+        $form
             ->with('general');
-        $formMapper
+        $form
             ->add('commune', CommuneType::class, [
                 'label' => false,
                 //'required' => true,
@@ -79,10 +77,10 @@ class ReleaseAdmin extends AbstractOnboardingAdmin
                 'required' => false,
             ])*/
         ;
-        $this->addDataCompletenessConfirmedField($formMapper);
+        $this->addDataCompletenessConfirmedField($form);
 
-        $formMapper->end();
-        $formMapper
+        $form->end();
+        $form
             ->with('release');
         $minDate = date_create('+1 week');
         $subject = $this->getSubject();
@@ -90,12 +88,12 @@ class ReleaseAdmin extends AbstractOnboardingAdmin
             && $releaseDate < $minDate) {
             $minDate = clone $releaseDate;
         }
-        $this->addDatePickerFormField($formMapper, 'releaseDate', 3, [
+        $this->addDatePickerFormField($form, 'releaseDate', 3, [
             'dp_min_date' => $minDate,
             'required' => true,
         ]);
-        $formMapper->end();
-        $formMapper
+        $form->end();
+        $form
             ->with('confirmation')
             ->add('releaseConfirmed', BooleanType::class, [
                 'required' => false,
@@ -106,20 +104,20 @@ class ReleaseAdmin extends AbstractOnboardingAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        parent::configureDatagridFilters($datagridMapper);;
-        $this->addDefaultDatagridFilter($datagridMapper, 'releaseDate');
+        parent::configureDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'releaseDate');
     }
 
     /**
      * Adds the list status field
      *
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function addListStatusField(ListMapper $listMapper): void
+    protected function addListStatusField(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->add('releaseStatus', 'choice', [
                 'label' => 'app.release.entity.release_status',
                 'template' => 'Onboarding/Release/list-release-status.html.twig',
@@ -127,22 +125,22 @@ class ReleaseAdmin extends AbstractOnboardingAdmin
                 'choices' => array_flip(Release::$releaseStatusChoices),
                 //'catalogue' => 'SonataAdminBundle',
             ]);
-        $this->addDatePickersListFields($listMapper, 'releaseDate', false, false);
+        $this->addDatePickersListFields($list, 'releaseDate', false, false);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        parent::configureShowFields($showMapper);
-        $showMapper
+        parent::configureShowFields($show);
+        $show
             ->add('releaseStatus', 'choice', [
                 'label' => 'app.release.entity.release_status',
                 'template' => 'Onboarding/list-status.html.twig',
                 'editable' => false,
                 'choices' => array_flip(Release::$releaseStatusChoices),
             ]);
-        $this->addDatePickersShowFields($showMapper, 'releaseDate', false);
+        $this->addDatePickersShowFields($show, 'releaseDate', false);
     }
 }

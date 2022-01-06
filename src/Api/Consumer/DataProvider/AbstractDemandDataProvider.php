@@ -15,7 +15,6 @@ use App\Api\Annotation\ApiSearchModelAnnotation;
 use App\Api\Consumer\Model\AbstractDemand;
 use App\Import\Annotation\InjectAnnotationReaderTrait;
 use App\Import\DataProvider\DataProviderInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 abstract class AbstractDemandDataProvider implements DataProviderInterface, DemandDataProviderInterface
 {

@@ -19,9 +19,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 trait AddressTrait
 {
-    protected function addAddressFormFields(FormMapper $formMapper)
+    protected function addAddressFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('street', TextType::class, [
                 'required' => false,
             ])
@@ -33,15 +33,15 @@ trait AddressTrait
             ]);
     }
 
-    protected function addAddressDatagridFilters(DatagridMapper $datagridMapper)
+    protected function addAddressDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('zipCode');
-        $datagridMapper->add('town');
+        $filter->add('zipCode');
+        $filter->add('town');
     }
 
-    protected function addAddressListFields(ListMapper $listMapper)
+    protected function addAddressListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('zipCode')
             ->add('town');
     }
@@ -49,9 +49,9 @@ trait AddressTrait
     /**
      * @inheritdoc
      */
-    public function addAddressShowFields(ShowMapper $showMapper)
+    public function addAddressShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('street')
             ->add('zipCode')
             ->add('town');

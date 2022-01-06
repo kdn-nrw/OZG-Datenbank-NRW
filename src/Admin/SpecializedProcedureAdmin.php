@@ -28,46 +28,46 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
     use ManufaturerTrait;
     use ServiceProviderTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->add('name', TextType::class);
-        $this->addManufaturersFormFields($formMapper);
-        $formMapper
+        $this->addManufaturersFormFields($form);
+        $form
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addServiceProvidersFormFields($formMapper);
-        $this->addCommunesFormFields($formMapper);
-        $formMapper->end();
+        $this->addServiceProvidersFormFields($form);
+        $this->addCommunesFormFields($form);
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'manufacturers');
-        $this->addDefaultDatagridFilter($datagridMapper, 'communes');
-        $this->addDefaultDatagridFilter($datagridMapper, 'serviceProviders');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'manufacturers');
+        $this->addDefaultDatagridFilter($filter, 'communes');
+        $this->addDefaultDatagridFilter($filter, 'serviceProviders');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name');
-        $this->addManufaturersListFields($listMapper);
-        $this->addDefaultListActions($listMapper);
+        $this->addManufaturersListFields($list);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('name')
             ->add('description');
-        $this->addManufaturersShowFields($showMapper);
-        $this->addServiceProvidersShowFields($showMapper);
-        $this->addCommunesShowFields($showMapper);
+        $this->addManufaturersShowFields($show);
+        $this->addServiceProvidersShowFields($show);
+        $this->addCommunesShowFields($show);
     }
 }

@@ -31,9 +31,9 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     use CategoryTrait;
     use AddressTrait;
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper
+        $form
             ->with('app.contact.groups.person_data', ['class' => 'col-md-6'])
             ->add('gender', ChoiceType::class, [
                 'choices' => array_flip(Contact::$genderTypeChoices),
@@ -44,7 +44,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ])
             ->add('firstName', TextType::class)
             ->add('lastName', TextType::class);
-        $formMapper->add('imageFile', VichImageType::class, [
+        $form->add('imageFile', VichImageType::class, [
             'required' => false,
             'allow_delete' => true,
             //'delete_label' => '...',
@@ -54,20 +54,20 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             'imagine_pattern' => 'default_small',
             'asset_helper' => true,
         ]);
-        $formMapper
+        $form
             ->end()
             ->with('app.contact.groups.address_data', ['class' => 'col-md-6']);
-        $this->addAddressFormFields($formMapper);
-        $formMapper
+        $this->addAddressFormFields($form);
+        $form
             ->add('url', UrlType::class, [
                 'required' => false
             ]);
-        $formMapper->end();
-        $formMapper
+        $form->end();
+        $form
             ->end()
             ->with('app.contact.groups.organisation', ['class' => 'clear-left-md col-md-6']);
         if (!$this->isExcludedFormField('organisationEntity')) {
-            $formMapper->add('organisationEntity', ModelType::class, [
+            $form->add('organisationEntity', ModelType::class, [
                 'label' => 'app.contact.entity.organisation_entity_form',
                 'btn_add' => false,
                 'placeholder' => '',
@@ -76,21 +76,21 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ]);
         }
         if (!$this->isExcludedFormField('organisationEntity')) {
-            $formMapper->add('organisation', TextType::class, [
+            $form->add('organisation', TextType::class, [
                 'label' => 'app.contact.entity.organisation_form',
                 'required' => false,
             ]);
         }
-        $formMapper
+        $form
             ->add('department', TextType::class, [
                 'required' => false,
             ])
             ->add('position', TextType::class, [
                 'required' => false,
             ]);
-        $this->addCategoriesFormFields($formMapper);
-        $formMapper->end();
-        $formMapper->with('app.contact.groups.contact', ['class' => 'col-md-6'])
+        $this->addCategoriesFormFields($form);
+        $form->end();
+        $form->with('app.contact.groups.contact', ['class' => 'col-md-6'])
             ->add('email', EmailType::class, [
                 'required' => false,
             ])
@@ -104,7 +104,7 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
                 'required' => false,
             ]);
         if (!$this->isExcludedFormField('contactType')) {
-            $formMapper->add('contactType', ChoiceType::class, [
+            $form->add('contactType', ChoiceType::class, [
                 'choices' => [
                     'app.contact.entity.contact_type_choices.default' => Contact::CONTACT_TYPE_DEFAULT,
                     'app.contact.entity.contact_type_choices.cms_address' => Contact::CONTACT_TYPE_IMPORT_CMS,
@@ -112,22 +112,22 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
                 'required' => true,
             ]);
         }
-        $formMapper->end();
+        $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $datagridMapper->add('firstName');
-        $datagridMapper->add('lastName');
-        $datagridMapper->add('email');
-        $datagridMapper->add('organisation');
-        $this->addDefaultDatagridFilter($datagridMapper, 'categories');
-        $this->addAddressDatagridFilters($datagridMapper);
+        $filter->add('firstName');
+        $filter->add('lastName');
+        $filter->add('email');
+        $filter->add('organisation');
+        $this->addDefaultDatagridFilter($filter, 'categories');
+        $this->addAddressDatagridFilters($filter);
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('gender', 'choice', [
                 'editable' => false,
                 'choices' => Contact::$genderTypeChoices,
@@ -138,17 +138,17 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->add('firstName')
             ->add('email')
             ->add('organisation');
-        $this->addAddressListFields($listMapper);
+        $this->addAddressListFields($list);
 
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $showMapper)
+    public function configureShowFields(ShowMapper $show)
     {
-        $showMapper
+        $show
             ->add('gender', 'choice', [
                 'editable' => false,
                 'choices' => Contact::$genderTypeChoices,
@@ -158,14 +158,14 @@ class ContactAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->add('lastName')
             ->add('firstName')
             ->add('email');
-        $this->addAddressShowFields($showMapper);
-        $showMapper->add('url', 'url');
-        $showMapper->add('organisation')
+        $this->addAddressShowFields($show);
+        $show->add('url', 'url');
+        $show->add('organisation')
             ->add('department')
             ->add('position')
             ->add('phoneNumber')
             ->add('faxNumber')
             ->add('mobileNumber');
-        $this->addCategoriesShowFields($showMapper);
+        $this->addCategoriesShowFields($show);
     }
 }

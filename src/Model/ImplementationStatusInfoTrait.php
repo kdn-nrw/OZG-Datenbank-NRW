@@ -72,7 +72,7 @@ trait ImplementationStatusInfoTrait
     public function isStatusActive(ImplementationStatus $status): bool
     {
         $isActive = $status === $this->getStatus();
-        if (!$isActive && null !== $statusId = $status->getId()) {
+        if (!$isActive && null !== $status->getId()) {
             $statusDate = $this->getStatusDate($status);
             $isActive = null !== $statusDate && $statusDate->getTimestamp() <= time();
         }

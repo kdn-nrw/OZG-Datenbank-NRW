@@ -88,9 +88,9 @@ class OnboardingServiceAdmin extends SolutionAdmin
         return $this->translatorNamingPrefix;
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->add('serviceProviders', null, [
                 'template' => 'SolutionAdmin/list-service-providers.html.twig',
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -138,6 +138,6 @@ class OnboardingServiceAdmin extends SolutionAdmin
                 'enable_filter_add' => true,
             ])
             ->add('url', 'url');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 }

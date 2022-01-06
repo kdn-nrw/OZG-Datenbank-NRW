@@ -23,8 +23,8 @@ use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use App\Translator\TranslatorAwareTrait;
 use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -154,8 +154,8 @@ class MetaDataManager
         $em = $this->getEntityManager();
         $admin->getFormBuilder();
         $data = [
-            MetaItemProperty::META_TYPE_GROUP => $admin->getFormGroups(),
-            MetaItemProperty::META_TYPE_TAB => $admin->getFormTabs()
+            AbstractMetaItem::META_TYPE_GROUP => $admin->getFormGroups(),
+            AbstractMetaItem::META_TYPE_TAB => $admin->getFormTabs()
         ];
         foreach ($data as $metaType => $metaTypeData) {
             if (empty($metaTypeData)) {
