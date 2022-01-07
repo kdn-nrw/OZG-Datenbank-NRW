@@ -7,7 +7,7 @@ file that was distributed with this source code.
 {# @var refSettings \App\Model\ReferenceSettings #}
     {% set tableHeaders = ['created_by', 'created_at', 'occurred_on', 'solved_on', 'subject_type', 'extent', 'method'] %}
     {% set colCount = tableHeaders|length %}
-<table class="table table-bordered table-striped table-condensed" data-sortable="true">
+<table class="table table-bordered table-striped table-condensed" data-sortable="false">
     <thead>
         <tr>
             {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': refSettings.labelPrefix} %}

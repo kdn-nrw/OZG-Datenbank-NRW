@@ -10,7 +10,7 @@ file that was distributed with this source code.
 {% else %}
     {% set referenceFieldNameList = ['name', 'service_key', 'jurisdictions', 'situation', 'subject', 'priority', 'status'] %}
 {% endif %}
-<table class="table table-bordered table-condensed" data-sortable="true">
+<table class="table table-bordered table-condensed" data-sortable="{{ field_description.option('showFimTypes') ? 'false' : 'true' }}">
     <thead>
         <tr>
             {% include 'ServiceAdmin/Show/table-head-services.html.twig' %}

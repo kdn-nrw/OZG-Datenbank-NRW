@@ -103,10 +103,12 @@
                     if (!tableNode.classList.contains('table-sortable') && tableNode.tBodies.length === 1) {
                         tableNode.classList.add('table-sortable');
                         const tableColNodes = tableNode.querySelectorAll('th');
+                        let sortableColumnCount = 0;
                         tableColNodes.forEach(function(sortableTh) {
                             const thHtml = sortableTh.innerHTML.trim();
                             if (thHtml.length > 0) {
                                 sortableTh.sortable = true;
+                                ++sortableColumnCount;
                                 if (!sortableTh.querySelector('.sort-wrap')) {
                                     sortableTh.innerHTML = '<span class="sort-wrap">' + thHtml + '</span>';
                                 }
@@ -114,16 +116,18 @@
                                 sortableTh.sortable = false;
                             }
                         });
-                        tableColNodes.forEach(function(th, index){
-                            if (th.sortable) {
-                                th.addEventListener('click', (() => {
-                                    sortByHeader(tableNode, tableColNodes, th);
-                                }));
-                                if (index === 0) {
-                                    sortByHeader(tableNode, tableColNodes, th);
+                        if (sortableColumnCount > 0) {
+                            tableColNodes.forEach(function(th, index){
+                                if (th.sortable) {
+                                    th.addEventListener('click', (() => {
+                                        sortByHeader(tableNode, tableColNodes, th);
+                                    }));
+                                    if (index === 0) {
+                                        sortByHeader(tableNode, tableColNodes, th);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }
