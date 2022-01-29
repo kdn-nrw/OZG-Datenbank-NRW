@@ -21,11 +21,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class SituationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form)
     {
-        $formMapper->add('name', TextType::class);
+        $form->add('name', TextType::class);
         if (!$this->isExcludedFormField('subject')) {
-            $formMapper->add('subject', ModelListType::class, [
+            $form->add('subject', ModelListType::class, [
                 'btn_add'       => 'app.common.model_list_type.add',       //Specify a custom label
                 'btn_list'      => 'app.common.model_list_type.list',      //which will be translated
                 'btn_delete'    => false,              //or hide the button.
@@ -34,12 +34,12 @@ class SituationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdm
             ], [
                 'placeholder' => 'app.situation.entity.subject_placeholder',
             ]);
-            /*$formMapper->add('subject', ModelType::class, [
+            /*$form->add('subject', ModelType::class, [
                 'btn_add' => false,
                 'choice_translation_domain' => false,
             ]);*/
         }
-        $formMapper->end();
+        $form->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

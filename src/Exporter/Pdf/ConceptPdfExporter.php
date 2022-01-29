@@ -49,6 +49,7 @@ class ConceptPdfExporter
             $subject = mb_substr($subject, 0, 1024);
         }
         $pdf->SetSubject($subject);
+        $templateFile = dirname(__FILE__, 4) . '/templates/ModelRegion/konzeptabfrage.pdf';
         $rootDir = dirname(__FILE__, 4);
         $targetDir = $rootDir . '/public/media/cache/pdf-export/';
         if (!is_dir($targetDir)) {
@@ -69,12 +70,12 @@ class ConceptPdfExporter
             'filename' => $filename,
         ];
         if (file_exists($targetFileAsbPath)) {
-            if (filemtime($targetFileAsbPath) > $project->getModifiedAt()->getTimestamp()) {
+            $lastChange = max($project->getModifiedAt()->getTimestamp(), filemtime($templateFile));
+            if (filemtime($targetFileAsbPath) > $lastChange) {
                 return $exportFileInfo;
             }
             unlink($targetFileAsbPath);
         }
-        $templateFile = dirname(__FILE__, 4) . '/templates/ModelRegion/konzeptabfrage.pdf';
         $pdf->setSourceFile($templateFile);
         $pdf->addPageWithTemplate(1);
         $pdf->SetTextColor(0, 0, 0);

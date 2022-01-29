@@ -23,8 +23,8 @@ use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use App\Translator\TranslatorAwareTrait;
 use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
+use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

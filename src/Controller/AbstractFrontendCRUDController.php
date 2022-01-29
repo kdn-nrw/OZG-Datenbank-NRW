@@ -20,6 +20,7 @@ use App\Entity\Base\SluggableInterface;
 use Behat\Transliterator\Transliterator;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -187,6 +188,25 @@ abstract class AbstractFrontendCRUDController extends CRUDController
     public function createAction()
     {
         return $this->redirectToRoute($this->getDefaultRouteName());
+    }
+
+    /**
+     * Export data to specified format.
+     *
+     * @throws AccessDeniedException If access is not granted
+     * @throws \RuntimeException     If the export format is invalid
+     *
+     * @return Response
+     */
+    public function exportAction(Request $request)
+    {
+        try {
+            return parent::exportAction($request);
+        } catch (\RuntimeException $e) {
+            $messageText = 'Ungültiges Export-Format angegeben';//$this->trans('app.inquiry.message.error');
+            $this->addFlash('warning', $messageText);
+        }
+        return $this->redirectToList();
     }
 
     /**

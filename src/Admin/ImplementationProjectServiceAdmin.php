@@ -25,7 +25,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
     protected function configureFormFields(FormMapper $form)
     {
         if (!$this->isExcludedFormField('implementationProject')) {
-            $formMapper
+            $form
                 ->add('implementationProject', ModelAutocompleteType::class, [
                     'property' => ['name', 'description'],
                     'required' => true,
@@ -34,7 +34,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                 ]);
         }
         if (!$this->isExcludedFormField('service')) {
-            $formMapper
+            $form
                 ->add('service', ModelAutocompleteType::class, [
                     'property' => 'name',
                     'required' => true,
@@ -42,7 +42,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                     'admin_code' => \App\Admin\ServiceAdmin::class
                 ]);
         }
-        $formMapper
+        $form
             ->add('status', ModelType::class, [
                 'btn_add' => false,
                 'required' => false,

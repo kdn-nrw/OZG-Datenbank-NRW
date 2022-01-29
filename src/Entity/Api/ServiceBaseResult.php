@@ -262,7 +262,7 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="technically_approved_by", type="string", nullable=true)
+     * @ORM\Column(name="technically_approved_by", type="text", nullable=true)
      */
     protected $technicallyApprovedBy;
 
