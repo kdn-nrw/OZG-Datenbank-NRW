@@ -44,11 +44,15 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
                 ]);
         }
         $subject = $this->getSubject();
+        $enableFieldSettings = true;
         /** @var MetaItemProperty|null $subject */
         if (null !== $subject && $subject->getMetaType() !== AbstractMetaItem::META_TYPE_FIELD) {
+            if ($subject->getMetaType() !== AbstractMetaItem::META_TYPE_ADMIN_FIELD) {
+                $enableFieldSettings = false;
+            }
             $form
                 ->add('metaType', ChoiceType::class, [
-                    'choices' => array_flip(AbstractMetaItem::META_TYPES),
+                    'choices' => array_flip(MetaItemProperty::META_TYPES),
                     'attr' => [
                         'class' => 'form-control',
                         'data-sonata-select2' => 'false'
@@ -68,20 +72,27 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
                 //'format' => 'richhtml',
                 //'ckeditor_context' => 'default', // optional
             ]);
+        $form
+            ->add('metaKey', TextType::class, [
+                'required' => false,
+                'disabled' => true,
+            ]);
         //$form->add('placeholder', TextType::class);
         $form->end();
-        $form
-            ->with('settings', [
-                'label' => 'app.meta_item_property.groups.settings',
-                'class' => 'col-xs-12',
-            ])
-            ->add('required', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add('useForCompletenessCalculation', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->end();
+        if ($enableFieldSettings) {
+            $form
+                ->with('settings', [
+                    'label' => 'app.meta_item_property.groups.settings',
+                    'class' => 'col-xs-12',
+                ])
+                ->add('required', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('useForCompletenessCalculation', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->end();
+        }
     }
 
     protected function configureListFields(ListMapper $list)

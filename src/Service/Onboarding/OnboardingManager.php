@@ -29,6 +29,15 @@ class OnboardingManager
     private $progressCalculator;
 
     /**
+     * @required
+     * @param OnboardingProgressCalculator $progressCalculator
+     */
+    public function injectOnboardingProgressCalculator(OnboardingProgressCalculator $progressCalculator): void
+    {
+        $this->progressCalculator = $progressCalculator;
+    }
+
+    /**
      * Create onboarding entity items for all communes
      *
      * @param string $entityClass
@@ -361,9 +370,6 @@ class OnboardingManager
      */
     public function getCompletionInfo(CalculateCompletenessEntityInterface $object): array
     {
-        if (null === $this->progressCalculator) {
-            $this->progressCalculator = new OnboardingProgressCalculator();
-        }
         return $this->progressCalculator->getCompletionInfo($object);
     }
 
@@ -373,7 +379,8 @@ class OnboardingManager
      */
     public function beforeSave(AbstractOnboardingEntity $object)
     {
-        $this->calculateCompletionRate($object);
+        // Calculates the completion rate for this entity
+        $this->progressCalculator->calculateCompletionRate($object);
     }
 
     /**
@@ -385,18 +392,5 @@ class OnboardingManager
         if ($object instanceof CommuneInfo && null !== $commune = $object->getCommune()) {
             $this->updateEpaymenServices($commune);
         }
-    }
-
-    /**
-     * Calculates the completion rate for this entity
-     *
-     * @return int
-     */
-    public function calculateCompletionRate(CalculateCompletenessEntityInterface $object): int
-    {
-        if (null === $this->progressCalculator) {
-            $this->progressCalculator = new OnboardingProgressCalculator();
-        }
-        return $this->progressCalculator->calculateCompletionRate($object);
     }
 }
