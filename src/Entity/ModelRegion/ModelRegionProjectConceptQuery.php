@@ -98,6 +98,55 @@ class ModelRegionProjectConceptQuery extends BaseEntity implements SortableEntit
         $this->description = $description;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getDescriptionChoice()
+    {
+        if (!empty($this->description)) {
+            $choices = $this->getValueChoices();
+            $choiceId = array_search($this->description, $choices, false);
+            if ($choiceId !== false) {
+                return $choiceId;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param int|null $descriptionChoice
+     */
+    public function setDescriptionChoice($descriptionChoice): void
+    {
+        if ($descriptionChoice > 0) {
+            $choices = $this->getValueChoices();
+            if (isset($choices[$descriptionChoice])) {
+                $this->description = $choices[$descriptionChoice];
+            } else {
+                $this->description = '';
+            }
+        } else {
+            $this->description = '';
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getValueChoices(): array
+    {
+        $choices = [];
+        if ((null !== $queryType = $this->getConceptQueryType()) && $choicesText = $queryType->getChoicesText()) {
+            $lines = explode("\n", trim(strip_tags($choicesText)));
+            $queryTypeId = $queryType->getId();
+            foreach ($lines as $offset => $line) {
+                $choiceId = $queryTypeId * 10000 + ($offset + 1);
+                $choices[$choiceId] = $line;
+            }
+        }
+        return $choices;
+    }
+
     public function __toString(): string
     {
         if (null !== $queryType = $this->getConceptQueryType()) {

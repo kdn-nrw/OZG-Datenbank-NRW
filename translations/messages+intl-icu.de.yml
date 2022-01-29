@@ -1326,6 +1326,7 @@ app:
       model_region_project: Umsetzungsprojekt
       concept_query_type: Abfrage
       description: Beschreibung
+      description_choice: Bitte wählen Sie aus
   concept_query_type:
     object_name: Konzeptabfrage
     list: Konzeptabfragen
@@ -1340,8 +1341,36 @@ app:
         3: Voraussetzungen bei Übertragung – Worauf baut das Projekt auf?
         4: Kosten bei Übertragung (ggf. Spannbreite)
         5: Nutzen bei Übertragung
+        21: Rechtliche Rahmenbedingungen
+        22: Sonstige Erfahrungswerte
+        31: Projektbestandteile
+        32: Zeitschiene
+        33: Stakeholder (ggf. Stakeholderübersicht im Anhang)
+        34: Herausforderungen bei der Umsetzung
+        35: Alternativen
+        41: Anmerkungen
+      query_group_form_choices:
+        1: Übertragbarkeit - Zielgruppe
+        2: Übertragbarkeit - Praktische Übertragbarkeit
+        3: Übertragbarkeit - Voraussetzungen bei Übertragung – Worauf baut das Projekt auf?
+        4: Übertragbarkeit - Kosten bei Übertragung (ggf. Spannbreite)
+        5: Übertragbarkeit - Nutzen bei Übertragung
+        21: Hinweise - Rechtliche Rahmenbedingungen
+        22: Hinweise - Sonstige Erfahrungswerte
+        31: Umsetzung - Projektbestandteile
+        32: Umsetzung - Zeitschiene
+        33: Umsetzung - Stakeholder (ggf. Stakeholderübersicht im Anhang)
+        34: Umsetzung - Herausforderungen bei der Umsetzung
+        35: Umsetzung - Alternativen
+        41: Sonstiges - Anmerkungen
+      query_section_choices:
+        1: Übertragbarkeit
+        2: Hinweise
+        3: Umsetzung
+        4: Sonstiges
       placeholder: Platzhalter
       position: Sortierung
+      choices_text: Auswahlmöglichkeiten
   model_region_project_document:
     object_name: Umsetzungsprojekt Dokument
     list: Umsetzungsprojekt Dokumente

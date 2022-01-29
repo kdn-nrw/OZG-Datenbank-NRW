@@ -12,11 +12,14 @@
 namespace App\Admin\ModelRegion;
 
 use App\Admin\AbstractAppAdmin;
+use App\Entity\ModelRegion\ConceptQueryType;
+use App\Entity\ModelRegion\ModelRegionProjectConceptQuery;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
@@ -47,9 +50,27 @@ class ModelRegionProjectConceptQueryAdmin extends AbstractAppAdmin
                     'admin_code' => ConceptQueryTypeAdmin::class,
                 ]
             );
-        $form->add('description', TextareaType::class, [
-            'required' => false,
-        ]);
+        $subject = $this->getSubject();
+        if ($subject instanceof ModelRegionProjectConceptQuery
+            && ($valueChoices = $subject->getValueChoices())
+            && count($valueChoices) > 0) {
+            $choices = array_merge([
+                '-' =>  0,
+            ], array_flip($valueChoices));
+            $form->add('descriptionChoice', ChoiceType::class, [
+                'choices' => $choices,
+                'choice_translation_domain' => false,
+                'multiple' => false,
+                'required' => false,
+            ]);
+            // Allow custom choices
+            //$form->get('descriptionChoice')->resetModelTransformers();
+            $form->get('descriptionChoice')->resetViewTransformers();
+        } else {
+            $form->add('description', TextareaType::class, [
+                'required' => false,
+            ]);
+        }
         $form
             ->end();
     }

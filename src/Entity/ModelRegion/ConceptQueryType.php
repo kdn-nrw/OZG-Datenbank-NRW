@@ -32,13 +32,32 @@ class ConceptQueryType extends BaseNamedEntity implements SortableEntityInterfac
     public const GROUP_3 = 3;
     public const GROUP_4 = 4;
     public const GROUP_5 = 5;
+    public const GROUP_21 = 21;
+    public const GROUP_22 = 22;
+    public const GROUP_31 = 31;
+    public const GROUP_32 = 32;
+    public const GROUP_33 = 33;
+    public const GROUP_34 = 34;
+    public const GROUP_35 = 35;
+    public const GROUP_41 = 41;
 
-    public static $mapTypes = [
-        self::GROUP_1 => 'app.concept_query_type.entity.query_group_choices.1',
-        self::GROUP_2 => 'app.concept_query_type.entity.query_group_choices.2',
-        self::GROUP_3 => 'app.concept_query_type.entity.query_group_choices.3',
-        self::GROUP_4 => 'app.concept_query_type.entity.query_group_choices.4',
-        self::GROUP_5 => 'app.concept_query_type.entity.query_group_choices.5',
+    public const GROUP_TYPE_LABEL_PREFIX = 'app.concept_query_type.entity.query_group_choices.';
+    public const GROUP_TYPE_FORM_LABEL_PREFIX = 'app.concept_query_type.entity.query_group_form_choices.';
+
+    public static $groupTypeKey = [
+        self::GROUP_1,
+        self::GROUP_2,
+        self::GROUP_3,
+        self::GROUP_4,
+        self::GROUP_5,
+        self::GROUP_21,
+        self::GROUP_22,
+        self::GROUP_31,
+        self::GROUP_32,
+        self::GROUP_33,
+        self::GROUP_34,
+        self::GROUP_35,
+        self::GROUP_41,
     ];
 
     /**
@@ -65,6 +84,15 @@ class ConceptQueryType extends BaseNamedEntity implements SortableEntityInterfac
      * @ORM\Column(name="placeholder", type="text", nullable=true)
      */
     protected $placeholder;
+
+    /**
+     * Choices for dropdown in from
+     *
+     * @var string|null
+     *
+     * @ORM\Column(name="choices_text", type="text", nullable=true)
+     */
+    private $choicesText = '';
 
     /**
      * @return string
@@ -115,13 +143,29 @@ class ConceptQueryType extends BaseNamedEntity implements SortableEntityInterfac
     }
 
     /**
+     * @return string|null
+     */
+    public function getChoicesText(): ?string
+    {
+        return $this->choicesText;
+    }
+
+    /**
+     * @param string|null $choicesText
+     */
+    public function setChoicesText(?string $choicesText): void
+    {
+        $this->choicesText = $choicesText;
+    }
+
+    /**
      * Returns the label key for the current data type
      *
      * @return string
      */
     public function getQueryGroupLabel(): string
     {
-        return self::$mapTypes[$this->getQueryGroup()];
+        return self::GROUP_TYPE_LABEL_PREFIX . $this->getQueryGroup();
     }
 
     /**
@@ -130,5 +174,19 @@ class ConceptQueryType extends BaseNamedEntity implements SortableEntityInterfac
     public function getLabelKey(): ?string
     {
         return $this->getQueryGroupLabel();
+    }
+
+    /**
+     * Returns an array with a mapping of all available type keys and their labels
+     * @param bool $useFormLabels
+     * @return array
+     */
+    public static function getTypeLabelMap($useFormLabels = false) {
+        $labelPrefix = $useFormLabels ? self::GROUP_TYPE_FORM_LABEL_PREFIX : self::GROUP_TYPE_LABEL_PREFIX;
+        $mapTypes = [];
+        foreach (self::$groupTypeKey as $key) {
+            $mapTypes[$key] = $labelPrefix . $key;
+        }
+        return $mapTypes;
     }
 }

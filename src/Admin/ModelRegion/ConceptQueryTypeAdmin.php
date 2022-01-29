@@ -31,7 +31,7 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
     {
         $form
             ->add('queryGroup', ChoiceType::class, [
-                'choices' => array_flip(ConceptQueryType::$mapTypes),
+                'choices' => array_flip(ConceptQueryType::getTypeLabelMap(true)),
                 'attr' => [
                     'class' => 'form-control',
                     'data-sonata-select2' => 'false'
@@ -42,6 +42,9 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
             ])
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
+                'required' => false,
+            ])
+            ->add('choicesText', TextareaType::class, [
                 'required' => false,
             ])
             ->add('placeholder', TextareaType::class, [
@@ -57,7 +60,7 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
         $filter
             ->add('queryGroup', ChoiceFilter::class, [
                 'field_options' => [
-                    'choices' => array_flip(ConceptQueryType::$mapTypes),
+                    'choices' => array_flip(ConceptQueryType::getTypeLabelMap(true)),
                     'required' => false,
                     'multiple' => true,
                     'expanded' => false,
@@ -72,7 +75,7 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
         $list
             ->add('queryGroup', 'choice', [
                 'editable' => false,
-                'choices' => ConceptQueryType::$mapTypes,
+                'choices' => ConceptQueryType::getTypeLabelMap(true),
                 'catalogue' => 'messages',
             ])
             ->add('name');
@@ -94,7 +97,7 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
         $show
             ->add('queryGroup', 'choice', [
                 'editable' => false,
-                'choices' => ConceptQueryType::$mapTypes,
+                'choices' => ConceptQueryType::getTypeLabelMap(true),
                 'catalogue' => 'messages',
             ])
             ->add('name')

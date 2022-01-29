@@ -597,7 +597,8 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
 
 
     /**
-     * @return array
+     * Returns the project concept queries grouped by section and query group
+     * @return array<int, array>
      */
     public function getGroupedConceptQueries()
     {
@@ -610,19 +611,46 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
                 continue;
             }
             $queryGroup = $queryType->getQueryGroup();
-            if (!isset($groupedData[$queryGroup])) {
-                $groupedData[$queryGroup] = [
+            $sectionKey = 1;
+            if ($queryGroup > 9) {
+                $sectionKey = (int) floor($queryGroup / 10);
+            }
+            if (!isset($groupedData[$sectionKey])) {
+                $groupedData[$sectionKey] = [
+                    //'section' => $sectionKey,
+                    'label' => 'app.concept_query_type.entity.query_section_choices.' . $sectionKey,
+                    'queryGroups' => [],
+                ];
+            }
+            $sectionGroupData =& $groupedData[$sectionKey]['queryGroups'];
+            if (!isset($sectionGroupData[$queryGroup])) {
+                $sectionGroupData[$queryGroup] = [
                     'label' => $queryType->getQueryGroupLabel(),
                     'queries' => [],
                 ];
             }
-            $groupedData[$queryGroup]['queries'][] = [
+            $sectionGroupData[$queryGroup]['queries'][] = [
                 'position' => $queryType->getPosition(),
                 'name' => $queryType->getName(),
                 'typeDescription' => $queryType->getDescription(),
                 'description' => $description,
             ];
         }
+        $sectionIds = array_keys($groupedData);
+        foreach ($sectionIds as $sectionId) {
+            $sectionGroupData =& $groupedData[$sectionId]['queryGroups'];
+            ksort($sectionGroupData);
+            $groupIds = array_keys($sectionGroupData);
+            foreach ($groupIds as $groupId) {
+                uasort($sectionGroupData[$groupId]['queries'], static function ($a, $b) {
+                    if ($a['position'] === $b['position']) {
+                        return 0;
+                    }
+                    return ($a['position'] > $b['position']) ? 1 : -1;
+                });
+            }
+        }
+        ksort($groupedData);
         return $groupedData;
     }
 

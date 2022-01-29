@@ -77,56 +77,67 @@ class ConceptPdfExporter
             unlink($targetFileAsbPath);
         }
         $pdf->setSourceFile($templateFile);
-        $pdf->addPageWithTemplate(1);
-        $pdf->SetTextColor(0, 0, 0);
-        $groupedQueries = $project->getGroupedConceptQueries();
+        $groupedQuerySections = $project->getGroupedConceptQueries();
         $marginRight = 21;
         $startX = $this->marginLeft;
         $startY = 40;
         $offsetBottom = 20;
         $pageWidth = $pdf->getPageWidth();
         $contentWidth = $pageWidth - $this->marginLeft - $marginRight;
-        $pdf->SetFont($this->fontFamily, '', 11);
-        $pdf->SetXY($startX, $startY);
         $pdf->setCellPaddings(1, 1, 1, 1);
         $needsEndLine = false;
-        foreach ($groupedQueries as $groupData) {
-            $rowHeights = [];
-            foreach ($groupData['queries'] as $offset => $row) {
-                $pdf2 = clone $pdf;
-                $pdf2->addPageWithTemplate(1);
-                $rowHeights[$offset] = $this->writeContent($pdf2, $row, $contentWidth);
-                unset($pdf2);
-            }
-            if ($pdf->GetY() + $rowHeights[0] > $pdf->getPageHeight() - $startY - $offsetBottom) {
-                if ($needsEndLine) {
-                    $y = $pdf->GetY();
-                    $pdf->Line($startX, $y, $startX + $contentWidth, $y, $this->lineStyle);
-                }
+        foreach ($groupedQuerySections as $sectionKey => $sectionData) {
+            $groupedQueries = $sectionData['queryGroups'];
+            if ($sectionKey === 1 || count($groupedQueries) > 1) {
                 $pdf->addPageWithTemplate(1);
+                $pdf->SetXY($startX, $startY - 14);
+                $this->writeSectionHeader($pdf, $sectionData['label']);
                 $pdf->SetXY($startX, $startY);
+            } else {
+                $pdf->setY($pdf->GetY() + 4);
+                $this->writeSectionHeader($pdf, $sectionData['label']);
+                $isNewSectionPage = false;
             }
-            $this->writeGroupHeader($pdf, $groupData, $contentWidth);
-            $lastOffset = count($groupData['queries']) - 1;
-            foreach ($groupData['queries'] as $offset => $row) {
-                if ($pdf->GetY() + $rowHeights[$offset] > $pdf->getPageHeight() - $startY - $offsetBottom) {
+            $pdf->SetFont($this->fontFamily, '', 11);
+            $pdf->SetTextColor(0, 0, 0);
+            foreach ($groupedQueries as $groupData) {
+                $rowHeights = [];
+                foreach ($groupData['queries'] as $offset => $row) {
+                    $pdf2 = clone $pdf;
+                    $pdf2->addPageWithTemplate(1);
+                    $rowHeights[$offset] = $this->writeContent($pdf2, $row, $contentWidth);
+                    unset($pdf2);
+                }
+                if ($pdf->GetY() + $rowHeights[0] > $pdf->getPageHeight() - $startY - $offsetBottom) {
                     if ($needsEndLine) {
                         $y = $pdf->GetY();
                         $pdf->Line($startX, $y, $startX + $contentWidth, $y, $this->lineStyle);
                     }
                     $pdf->addPageWithTemplate(1);
                     $pdf->SetXY($startX, $startY);
-                    if ($needsEndLine) {
-                        $pdf->Line($startX, $startY, $startX + $contentWidth, $startY, $this->lineStyle);
-                    }
-                    //$this->writeGroupHeader($pdf, $groupData, $contentWidth);
                 }
-                $this->writeContent($pdf, $row, $contentWidth, $rowHeights[$offset]);
-                if ($offset < $lastOffset) {
-                    $y = $pdf->GetY();
-                    $pdf->Line($startX, $y, $startX + $contentWidth, $y, $this->lineStyle);
-                } else {
-                    $needsEndLine = true;
+                $this->writeGroupHeader($pdf, $groupData['label'], $contentWidth);
+                $lastOffset = count($groupData['queries']) - 1;
+                foreach ($groupData['queries'] as $offset => $row) {
+                    if ($pdf->GetY() + $rowHeights[$offset] > $pdf->getPageHeight() - $startY - $offsetBottom) {
+                        if ($needsEndLine) {
+                            $y = $pdf->GetY();
+                            $pdf->Line($startX, $y, $startX + $contentWidth, $y, $this->lineStyle);
+                        }
+                        $pdf->addPageWithTemplate(1);
+                        $pdf->SetXY($startX, $startY);
+                        if ($needsEndLine) {
+                            $pdf->Line($startX, $startY, $startX + $contentWidth, $startY, $this->lineStyle);
+                        }
+                        //$this->writeGroupHeader($pdf, $groupData['label'], $contentWidth);
+                    }
+                    $this->writeContent($pdf, $row, $contentWidth, $rowHeights[$offset]);
+                    if ($offset < $lastOffset) {
+                        $y = $pdf->GetY();
+                        $pdf->Line($startX, $y, $startX + $contentWidth, $y, $this->lineStyle);
+                    } else {
+                        $needsEndLine = true;
+                    }
                 }
             }
         }
@@ -144,11 +155,30 @@ class ConceptPdfExporter
      * Write the headline of the current query group
      *
      * @param PDF $pdf
-     * @param array $groupData
+     * @param string $headerLabel
+     * @return void
+     */
+    private function writeSectionHeader(PDF $pdf, $headerLabel)
+    {
+        $headerHeight = 14;
+        $startX = $this->marginLeft;
+        //$y = $pdf->GetY();
+        $pdf->SetX($startX);
+        $pdf->SetFont($this->fontFamily, '', 16);
+        $pdf->SetTextColor(0, 48, 100);
+        $pdf->Cell(0, $headerHeight, $this->translate($headerLabel), 0, 1);
+        $pdf->SetTextColor(0, 0, 0);
+    }
+
+    /**
+     * Write the headline of the current query group
+     *
+     * @param PDF $pdf
+     * @param string $headerLabel
      * @param float $contentWidth
      * @return void
      */
-    private function writeGroupHeader(PDF $pdf, array $groupData, $contentWidth)
+    private function writeGroupHeader(PDF $pdf, $headerLabel, $contentWidth)
     {
         $headerHeight = 7;
         $startX = $this->marginLeft;
@@ -159,7 +189,7 @@ class ConceptPdfExporter
         $pdf->Rect($startX, $y, $contentWidth, $headerHeight, 'F');
         $pdf->SetDrawColor(255, 255, 255);
         $pdf->SetTextColor(255, 255, 255);
-        $pdf->Cell(0, $headerHeight, $this->translate($groupData['label']), 0, 1);
+        $pdf->Cell(0, $headerHeight, $this->translate($headerLabel), 0, 1);
     }
 
     /**
