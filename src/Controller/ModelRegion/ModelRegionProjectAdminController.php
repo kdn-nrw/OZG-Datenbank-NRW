@@ -80,6 +80,7 @@ class ModelRegionProjectAdminController extends CRUDController
         $projectReferences = $modelRegionProject->getConceptQueries();
         $mapReferencesByType = [];
         $mapTypes = [];
+        $isNewEntity = !$em->contains($modelRegionProject);
         foreach ($conceptQueryTypes as $qt) {
             $mapTypes[$qt->getId()] = $qt;
             $mapReferencesByType[$qt->getId()] = null;
@@ -100,7 +101,9 @@ class ModelRegionProjectAdminController extends CRUDController
                 $newRef->setConceptQueryType($mapTypes[$qtId]);
                 $hasChanges = true;
                 $mapReferencesByType[$qtId] = $newRef;
-                $em->persist($newRef);
+                if (!$isNewEntity) {
+                    $em->persist($newRef);
+                }
             }
         }
         if ($hasChanges) {
@@ -112,7 +115,9 @@ class ModelRegionProjectAdminController extends CRUDController
                 ++$position;
             }
             $modelRegionProject->setConceptQueries($collection);
-            $em->flush();
+            if (!$isNewEntity) {
+                $em->flush();
+            }
         }
     }
 }
