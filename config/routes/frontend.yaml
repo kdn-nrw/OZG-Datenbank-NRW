@@ -86,6 +86,10 @@ frontend_app_modelregionproject_export:
   path: /dmr-umsetzungsprojekte/export
   controller: App\Controller\ModelRegion\ModelRegionProjectController::exportAction
 
+frontend_app_modelregionproject_download:
+  path: /dmr-umsetzungsprojekte/{id}/download/{documentId}
+  controller: App\Controller\ModelRegion\ModelRegionProjectController::downloadAction
+
 frontend_app_modelregionproject_export_concept_pdf:
   path: /dmr-umsetzungsprojekte/konzeptabfrage/{id}/pdf
   controller: App\Controller\ModelRegion\ModelRegionProjectController::exportPdfConceptAction

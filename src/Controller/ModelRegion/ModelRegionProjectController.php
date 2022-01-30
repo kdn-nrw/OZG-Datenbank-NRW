@@ -14,6 +14,7 @@ namespace App\Controller\ModelRegion;
 
 use App\Admin\Frontend\ModelRegionProjectAdmin;
 use App\Controller\AbstractFrontendCRUDController;
+use App\Controller\ControllerDownloadTrait;
 
 /**
  * Class ModelRegionProjectController
@@ -24,6 +25,7 @@ use App\Controller\AbstractFrontendCRUDController;
  */
 class ModelRegionProjectController extends AbstractFrontendCRUDController
 {
+    use ControllerDownloadTrait;
     use ControllerProjectPdfExportTrait;
 
     /**

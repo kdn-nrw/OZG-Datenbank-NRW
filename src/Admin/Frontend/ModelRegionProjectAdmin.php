@@ -98,6 +98,9 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
             ->add('websites', null, [
                 'template' => 'ModelRegion/show-project-websites.html.twig',
             ]);
+        $show->add('documents', null, [
+            'template' => 'General/Show/show-attachments.html.twig',
+        ]);
         $show
             ->add('solutions', null, [
                 'admin_code' => SolutionAdmin::class,
