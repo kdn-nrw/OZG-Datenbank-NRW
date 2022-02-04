@@ -8,6 +8,7 @@ file that was distributed with this source code.
 {% set communeType = object.communeType %}
 
 {% set navRoutePrefix = app_is_backend() ? '' : 'frontend_' %}
+{#
 {% set navTabFields = [{
     key: 'solutions',
     customListTitle: 'app.commune.show.headline.online_solutions'|trans({'commune': object.name}),
@@ -27,3 +28,14 @@ file that was distributed with this source code.
     },]) %}
 {% endif %}
 {% include 'General/Show/show-fields-as-nav-tabs.html.twig' %}
+#}
+{% if communeType is not null %}
+    {% set navTabFields = [{
+        key: 'communeType.serviceSystems',
+        customListTitle: 'app.commune_type.show.headline.service_systems'|trans({'communeType': communeType.name})
+    },{
+        key: 'communeType.services',
+        customListTitle: 'app.commune_type.show.headline.services'|trans({'communeType': communeType.name})
+    }] %}
+    {% include 'General/Show/show-fields-as-nav-tabs.html.twig' %}
+{% endif %}
