@@ -1039,9 +1039,9 @@ app:
     entity:
       name: Umsetzungsprojektname
       description: Projektinformationen
-      project_start_at: Vorbereitung
-      concept_status_at: Konzeption
-      implementation_status_at: Umsetzung
+      project_start_at: Vorbereitung NRW
+      concept_status_at: Konzeption NRW
+      implementation_status_at: Umsetzung NRW
       commissioning_status_at: Start Roll-out NRW
       piloting_status_at: Pilotierung NRW
       nationwide_rollout_at: Start bundesweiter Roll-out
@@ -1618,13 +1618,13 @@ app:
       inherit_commune_types.no: Größenklassen der OZG-Leistung nicht übernehmen
       service_created_at: Landesredaktion letzte Änderung
       implementation_project_status_info:
-        project_start_at: Vorbereitung
-        concept_status_at: Konzeption
-        implementation_status_at: Umsetzung
+        project_start_at: Vorbereitung NRW
+        concept_status_at: Konzeption  NRW
+        implementation_status_at: Umsetzung  NRW
         commissioning_status_at: Start Roll-out NRW
         piloting_status_at: Pilotierung NRW
         nationwide_rollout_at: Start bundesweiter Roll-out
-        status: Umsetzungsstatus
+        status: Umsetzungsstatus NRW
   service_base_result:
     object_name: Leistung Basisdaten
     list: Leistungen Basisdaten
