@@ -21,6 +21,7 @@ final class Version20210812101551 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE ozg_implementation_project ADD efa_type INT NOT NULL');
+        $this->addSql('ALTER TABLE ozg_implementation_project CHANGE efa_type efa_type INT DEFAULT NULL');
     }
 
     public function down(Schema $schema): void

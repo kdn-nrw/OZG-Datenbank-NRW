@@ -46,7 +46,7 @@ final class Version20220129144537 extends AbstractMigration
         $this->addSql('REPLACE INTO `ozg_model_region_concept_query_type` (`id`, `query_group`, `description`, `placeholder`, `modified_at`, `created_at`, `name`, `hidden`, `position`, `choices_text`) VALUES (38,35,NULL,NULL,\'2022-01-29 14:39:31\',\'2022-01-29 14:39:31\',\'Gab es zu den gewählten Lösungswegen betrachtete Alternativen?\',0,36,NULL)');
         $this->addSql('REPLACE INTO `ozg_model_region_concept_query_type` (`id`, `query_group`, `description`, `placeholder`, `modified_at`, `created_at`, `name`, `hidden`, `position`, `choices_text`) VALUES (39,35,NULL,NULL,\'2022-01-29 14:39:40\',\'2022-01-29 14:39:40\',\'Welche Alternativen sind für Mandanten (z.B. Kommunen) empfehlenswert?\',0,37,NULL)');
         $this->addSql('REPLACE INTO `ozg_model_region_concept_query_type` (`id`, `query_group`, `description`, `placeholder`, `modified_at`, `created_at`, `name`, `hidden`, `position`, `choices_text`) VALUES (40,41,NULL,NULL,\'2022-01-29 14:39:50\',\'2022-01-29 14:39:50\',\'Haben Sie weitere Kommentare oder Anregungen?\',0,42,NULL)');
-        $this->addSql('UPDATE ozg_model_region_concept_query_type SET positionn = id WHERE id > 18');
+        $this->addSql('UPDATE ozg_model_region_concept_query_type SET position = id WHERE id > 18');
     }
 
     public function down(Schema $schema): void

@@ -260,7 +260,7 @@ class ImplementationProject extends BaseNamedEntity
     /**
      * The EfA type
      *
-     * @ORM\Column(type="integer", name="efa_type")
+     * @ORM\Column(type="integer", name="efa_type", nullable=true)
      * @var int|null
      */
     protected $efaType;
