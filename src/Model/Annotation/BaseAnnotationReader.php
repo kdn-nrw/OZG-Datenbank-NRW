@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace App\Model\Annotation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\Common\Annotations\PsrCachedReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Psr6\CacheAdapter;
 use Doctrine\ORM\Mapping;
 use ReflectionClass;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * Class BaseAnnotationReader
@@ -33,7 +35,12 @@ class BaseAnnotationReader
     protected function getReader(): Reader
     {
         if (null === $this->annotationReader) {
-            $this->annotationReader = new CachedReader(new AnnotationReader(), new ArrayCache());
+            $reader = new AnnotationReader();
+            if (class_exists(ArrayAdapter::class)) {
+                $this->annotationReader = new PsrCachedReader($reader, new ArrayAdapter());
+            } elseif (class_exists(ArrayCache::class)) {
+                $this->annotationReader = new PsrCachedReader($reader, CacheAdapter::wrap(new ArrayCache()));
+            }
         }
         return $this->annotationReader;
     }
