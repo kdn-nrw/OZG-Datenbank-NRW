@@ -83,6 +83,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 'btn_add' => false,
                 'placeholder' => '',
                 'choice_translation_domain' => false,
+                'required' => false,
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
