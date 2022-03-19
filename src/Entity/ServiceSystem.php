@@ -246,7 +246,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface, HasMe
      * @param Bureau $bureau
      * @return self
      */
-    public function addBureau($bureau): self
+    public function addBureau(Bureau $bureau): self
     {
         if (!$this->bureaus->contains($bureau)) {
             $this->bureaus->add($bureau);
@@ -260,7 +260,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface, HasMe
      * @param Bureau $bureau
      * @return self
      */
-    public function removeBureau($bureau): self
+    public function removeBureau(Bureau $bureau): self
     {
         if ($this->bureaus->contains($bureau)) {
             $this->bureaus->removeElement($bureau);

@@ -27,6 +27,7 @@ use App\Entity\OrganisationEntityInterface;
 use App\Entity\OrganisationTrait;
 use App\Entity\Portal;
 use App\Entity\Service;
+use App\Entity\ServiceSystem;
 use App\Entity\Solution;
 use App\Entity\SpecializedProcedure;
 use App\Entity\UrlTrait;
@@ -215,8 +216,15 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      */
     protected $transparencyPortalUrl;
 
+    /**
+     * @var Bureau[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Bureau", mappedBy="communes")
+     */
+    private $bureaus;
+
     public function __construct()
     {
+        $this->bureaus = new ArrayCollection();
         $this->centralAssociations = new ArrayCollection();
         $this->laboratories = new ArrayCollection();
         $this->offices = new ArrayCollection();
@@ -733,7 +741,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param ServiceBaseResult $serviceBaseResult
      * @return self
      */
-    public function addServiceBaseResult($serviceBaseResult): self
+    public function addServiceBaseResult(ServiceBaseResult $serviceBaseResult): self
     {
         if (!$this->serviceBaseResults->contains($serviceBaseResult)) {
             $this->serviceBaseResults->add($serviceBaseResult);
@@ -747,7 +755,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param ServiceBaseResult $serviceBaseResult
      * @return self
      */
-    public function removeServiceBaseResult($serviceBaseResult): self
+    public function removeServiceBaseResult(ServiceBaseResult $serviceBaseResult): self
     {
         if ($this->serviceBaseResults->contains($serviceBaseResult)) {
             $this->serviceBaseResults->removeElement($serviceBaseResult);
@@ -804,6 +812,50 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     public function setTransparencyPortalUrl(?string $transparencyPortalUrl): void
     {
         $this->transparencyPortalUrl = $transparencyPortalUrl;
+    }
+
+    /**
+     * @param Bureau $bureau
+     * @return self
+     */
+    public function addBureau(Bureau $bureau): self
+    {
+        if (!$this->bureaus->contains($bureau)) {
+            $this->bureaus->add($bureau);
+            $bureau->addCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Bureau $bureau
+     * @return self
+     */
+    public function removeBureau(Bureau $bureau): self
+    {
+        if ($this->bureaus->contains($bureau)) {
+            $this->bureaus->removeElement($bureau);
+            $bureau->removeCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Bureau[]|Collection
+     */
+    public function getBureaus()
+    {
+        return $this->bureaus;
+    }
+
+    /**
+     * @param Bureau[]|Collection $bureaus
+     */
+    public function setBureaus($bureaus): void
+    {
+        $this->bureaus = $bureaus;
     }
 
 }

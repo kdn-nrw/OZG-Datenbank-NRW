@@ -64,8 +64,23 @@ class Bureau extends BaseNamedEntity
      */
     private $services;
 
+    /**
+     * @var Commune[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Commune", inversedBy="bureaus")
+     * @ORM\JoinTable(name="ozg_bureau_commune",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="bureau_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $communes;
+
     public function __construct()
     {
+        $this->communes = new ArrayCollection();
         $this->services = new ArrayCollection();
         $this->serviceSystems = new ArrayCollection();
     }
@@ -90,7 +105,7 @@ class Bureau extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function addServiceSystem($serviceSystem): self
+    public function addServiceSystem(ServiceSystem $serviceSystem): self
     {
         if (!$this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->add($serviceSystem);
@@ -104,7 +119,7 @@ class Bureau extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function removeServiceSystem($serviceSystem): self
+    public function removeServiceSystem(ServiceSystem $serviceSystem): self
     {
         if ($this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->removeElement($serviceSystem);
@@ -134,7 +149,7 @@ class Bureau extends BaseNamedEntity
      * @param Service $service
      * @return self
      */
-    public function addService($service): self
+    public function addService(Service $service): self
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
@@ -148,7 +163,7 @@ class Bureau extends BaseNamedEntity
      * @param Service $service
      * @return self
      */
-    public function removeService($service): self
+    public function removeService(Service $service): self
     {
         if ($this->services->contains($service)) {
             $this->services->removeElement($service);
@@ -172,5 +187,49 @@ class Bureau extends BaseNamedEntity
     public function setServices(Collection $services): void
     {
         $this->services = $services;
+    }
+
+    /**
+     * @param Commune $commune
+     * @return self
+     */
+    public function addCommune(Commune $commune): self
+    {
+        if (!$this->communes->contains($commune)) {
+            $this->communes->add($commune);
+            $commune->addBureau($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Commune $commune
+     * @return self
+     */
+    public function removeCommune(Commune $commune): self
+    {
+        if ($this->communes->contains($commune)) {
+            $this->communes->removeElement($commune);
+            $commune->removeBureau($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Commune[]|Collection
+     */
+    public function getCommunes()
+    {
+        return $this->communes;
+    }
+
+    /**
+     * @param Commune[]|Collection $communes
+     */
+    public function setCommunes($communes): void
+    {
+        $this->communes = $communes;
     }
 }

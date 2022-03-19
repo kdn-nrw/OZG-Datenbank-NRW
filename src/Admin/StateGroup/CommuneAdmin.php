@@ -148,6 +148,16 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addSpecializedProceduresFormFields($form);
         $this->addPortalsFormFields($form);
         $this->addLaboratoriesFormFields($form);
+        $form
+            ->add('bureaus', ModelType::class, [
+                'label' => 'app.commune.entity.bureaus',
+                'btn_add' => false,
+                'placeholder' => '',
+                'required' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'choice_translation_domain' => false,
+            ]);
         $form->end();
         $form->end();
         $form

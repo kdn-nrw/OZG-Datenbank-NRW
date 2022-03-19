@@ -387,6 +387,7 @@ app:
       administration_email: E-Mail
       administration_url: Web
       transparency_portal_url: Transparenzportal
+      bureaus: Fachlichkeiten
   commune_solution:
     object_name: Online-Dienst für Kommune
     list: Online-Dienst für Kommune
