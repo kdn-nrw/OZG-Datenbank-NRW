@@ -209,10 +209,10 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     protected function configureListFields(ListMapper $list)
     {
         $list->addIdentifier('name');
-        $this->addDatePickersListFields($list, 'projectStartAt');
-        $this->addDatePickersListFields($list, 'projectConceptStartAt');
-        $this->addDatePickersListFields($list, 'projectImplementationStartAt');
-        $this->addDatePickersListFields($list, 'projectEndAt');
+        $this->addDatePickersListFields($list, 'projectStartAt', true);
+        $this->addDatePickersListFields($list, 'projectConceptStartAt', true);
+        $this->addDatePickersListFields($list, 'projectImplementationStartAt', true);
+        $this->addDatePickersListFields($list, 'projectEndAt', true);
         $list
             ->add('categories', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable

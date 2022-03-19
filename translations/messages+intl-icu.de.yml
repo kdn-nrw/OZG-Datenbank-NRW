@@ -1305,6 +1305,7 @@ app:
       name: Projekttitel
       description: Projektbeschreibung
       organisations: Zuwendungsempfänger
+      project_not_started: Vorbereitung (Projektantrag bewilligt)
       project_start_at: Vorbereitung (Projektantrag bewilligt)
       project_concept_start_at: Konzeption (Umsetzung beauftragt)
       project_implementation_start_at: Umsetzung (Inbetriebnahme Modellregionen)
@@ -1837,6 +1838,7 @@ app:
     service_status: 'Leika-Leistungen: Status'
     implementation_project_status: 'OZG Umsetzungsprojekte: Status'
     service_communal_implementation_status: 'Kommunale Leistungen: Umsetzungs-Status in NRW'
+    model_project_status: 'DMR Umsetzungsprojekte: Status'
   status:
     object_name: Status
     list: Status
