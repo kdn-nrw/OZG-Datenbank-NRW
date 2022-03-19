@@ -1305,8 +1305,10 @@ app:
       name: Projekttitel
       description: Projektbeschreibung
       organisations: Zuwendungsempfänger
-      project_start_at: Start
-      project_end_at: Ende
+      project_start_at: Vorbereitung (Projektantrag bewilligt)
+      project_concept_start_at: Konzeption (Umsetzung beauftragt)
+      project_implementation_start_at: Umsetzung (Inbetriebnahme Modellregionen)
+      project_end_at: Projektabschluss
       usp: Alleinstellungsmerkmal
       communes_benefits: Nutzen für alle Kommunen
       transferable_service: übertragbare/lizenzfreie Leistung

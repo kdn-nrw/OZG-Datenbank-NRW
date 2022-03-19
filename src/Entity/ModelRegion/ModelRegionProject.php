@@ -61,6 +61,20 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     /**
      * @var null|DateTime
      *
+     * @ORM\Column(nullable=true, type="datetime", name="project_concept_start_at")
+     */
+    protected $projectConceptStartAt;
+
+    /**
+     * @var null|DateTime
+     *
+     * @ORM\Column(nullable=true, type="datetime", name="project_implementation_start_at")
+     */
+    protected $projectImplementationStartAt;
+
+    /**
+     * @var null|DateTime
+     *
      * @ORM\Column(nullable=true, type="datetime", name="project_end_at")
      */
     protected $projectEndAt;
@@ -291,6 +305,38 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     /**
      * @return DateTime|null
      */
+    public function getProjectConceptStartAt(): ?DateTime
+    {
+        return $this->projectConceptStartAt;
+    }
+
+    /**
+     * @param DateTime|null $projectConceptStartAt
+     */
+    public function setProjectConceptStartAt(?DateTime $projectConceptStartAt): void
+    {
+        $this->projectConceptStartAt = $projectConceptStartAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getProjectImplementationStartAt(): ?DateTime
+    {
+        return $this->projectImplementationStartAt;
+    }
+
+    /**
+     * @param DateTime|null $projectImplementationStartAt
+     */
+    public function setProjectImplementationStartAt(?DateTime $projectImplementationStartAt): void
+    {
+        $this->projectImplementationStartAt = $projectImplementationStartAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
     public function getProjectEndAt(): ?DateTime
     {
         return $this->projectEndAt;
@@ -415,7 +461,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param ModelRegionProjectCategory $category
      * @return self
      */
-    public function addCategory(ModelRegionProjectCategory $category)
+    public function addCategory(ModelRegionProjectCategory $category): ModelRegionProject
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
@@ -428,7 +474,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param ModelRegionProjectCategory $category
      * @return self
      */
-    public function removeCategory(ModelRegionProjectCategory $category)
+    public function removeCategory(ModelRegionProjectCategory $category): ModelRegionProject
     {
         if ($this->categories->contains($category)) {
             $this->categories->removeElement($category);
@@ -564,7 +610,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param ModelRegionProjectConceptQuery $conceptQuery
      * @return self
      */
-    public function addConceptQuery(ModelRegionProjectConceptQuery $conceptQuery)
+    public function addConceptQuery(ModelRegionProjectConceptQuery $conceptQuery): ModelRegionProject
     {
         if (!$this->conceptQueries->contains($conceptQuery)) {
             $this->conceptQueries->add($conceptQuery);
@@ -578,7 +624,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @param ModelRegionProjectConceptQuery $conceptQuery
      * @return self
      */
-    public function removeConceptQuery(ModelRegionProjectConceptQuery $conceptQuery)
+    public function removeConceptQuery(ModelRegionProjectConceptQuery $conceptQuery): ModelRegionProject
     {
         if ($this->conceptQueries->contains($conceptQuery)) {
             $this->conceptQueries->removeElement($conceptQuery);
@@ -600,7 +646,7 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * Returns the project concept queries grouped by section and query group
      * @return array<int, array>
      */
-    public function getGroupedConceptQueries()
+    public function getGroupedConceptQueries(): array
     {
         $groupedData = [];
         $conceptQueries = $this->getConceptQueries();

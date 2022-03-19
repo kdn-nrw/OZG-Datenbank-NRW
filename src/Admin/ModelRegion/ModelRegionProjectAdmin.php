@@ -63,7 +63,9 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addDatePickerFormField($form, 'projectStartAt');
+        $this->addDatePickerFormField($form, 'projectStartAt', 5);
+        $this->addDatePickerFormField($form, 'projectConceptStartAt', 20);
+        $this->addDatePickerFormField($form, 'projectImplementationStartAt', 20);
         $this->addDatePickerFormField($form, 'projectEndAt', 20);
         $form
             ->add('categories', ModelType::class,
@@ -189,6 +191,8 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     {
         $filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'projectStartAt');
+        $this->addDefaultDatagridFilter($filter, 'projectConceptStartAt');
+        $this->addDefaultDatagridFilter($filter, 'projectImplementationStartAt');
         $this->addDefaultDatagridFilter($filter, 'projectEndAt');
         $this->addDefaultDatagridFilter($filter, 'categories');
         $this->addDefaultDatagridFilter($filter, 'organisations');
@@ -206,6 +210,8 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     {
         $list->addIdentifier('name');
         $this->addDatePickersListFields($list, 'projectStartAt');
+        $this->addDatePickersListFields($list, 'projectConceptStartAt');
+        $this->addDatePickersListFields($list, 'projectImplementationStartAt');
         $this->addDatePickersListFields($list, 'projectEndAt');
         $list
             ->add('categories', null, [
@@ -262,6 +268,8 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $show->add('name')
             ->add('description');
         $this->addDatePickersShowFields($show, 'projectStartAt');
+        $this->addDatePickersShowFields($show, 'projectConceptStartAt');
+        $this->addDatePickersShowFields($show, 'projectImplementationStartAt');
         $this->addDatePickersShowFields($show, 'projectEndAt');
         $show
             ->add('usp')

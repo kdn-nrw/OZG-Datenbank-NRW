@@ -113,12 +113,12 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'label' => 'app.implementation_project.groups.dates',
                 'class' => 'col-md-6'
             ]);
-        $this->addDatePickerFormField($form, 'projectStartAt');
-        $this->addDatePickerFormField($form, 'conceptStatusAt');
-        $this->addDatePickerFormField($form, 'implementationStatusAt');
-        $this->addDatePickerFormField($form, 'pilotingStatusAt');
-        $this->addDatePickerFormField($form, 'commissioningStatusAt');
-        $this->addDatePickerFormField($form, 'nationwideRolloutAt');
+        $this->addDatePickerFormField($form, 'projectStartAt', 5);
+        $this->addDatePickerFormField($form, 'conceptStatusAt', 5);
+        $this->addDatePickerFormField($form, 'implementationStatusAt', 5);
+        $this->addDatePickerFormField($form, 'pilotingStatusAt', 5);
+        $this->addDatePickerFormField($form, 'commissioningStatusAt', 5);
+        $this->addDatePickerFormField($form, 'nationwideRolloutAt', 5);
         $form
             ->add('status', ModelType::class, [
                 'label' => 'app.implementation_project.entity.status_form',
