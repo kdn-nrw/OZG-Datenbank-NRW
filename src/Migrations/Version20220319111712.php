@@ -28,10 +28,11 @@ final class Version20220319111712 extends AbstractMigration
         $this->addSql('ALTER TABLE mb_user_user CHANGE facebook_data facebook_data LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', CHANGE twitter_data twitter_data LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', CHANGE gplus_data gplus_data LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\'');
         $this->addSql('ALTER TABLE ozg_api_service_base_result CHANGE special_features special_features LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', CHANGE synonyms synonyms LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', CHANGE legal_basis_uris legal_basis_uris LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\'');
         $this->addSql('ALTER TABLE ozg_implementation_project CHANGE efa_type efa_type INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE ozg_model_region_project ADD project_concept_start_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', ADD project_implementation_start_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\'');
         $this->addSql('ALTER TABLE ozg_onboarding_epayment CHANGE xfinance_file_days xfinance_file_days LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\'');
         $this->addSql('ALTER TABLE ozg_search CHANGE parameters parameters LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\'');
         $this->addSql('ALTER TABLE ozg_statistics_log_entry CHANGE request_attributes request_attributes LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', CHANGE query_parameters query_parameters LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\'');
+        $this->addSql('ALTER TABLE ozg_model_region_project ADD project_concept_start_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\', ADD project_implementation_start_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\'');
+        $this->addSql('ALTER TABLE ozg_model_region_project ADD project_lead LONGTEXT DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
@@ -45,7 +46,7 @@ final class Version20220319111712 extends AbstractMigration
         $this->addSql('ALTER TABLE mb_user_user CHANGE facebook_data facebook_data LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`, CHANGE twitter_data twitter_data LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`, CHANGE gplus_data gplus_data LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`');
         $this->addSql('ALTER TABLE ozg_api_service_base_result CHANGE special_features special_features LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`, CHANGE synonyms synonyms LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`, CHANGE legal_basis_uris legal_basis_uris LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`');
         $this->addSql('ALTER TABLE ozg_implementation_project CHANGE efa_type efa_type INT NOT NULL');
-        $this->addSql('ALTER TABLE ozg_model_region_project DROP project_concept_start_at, DROP project_implementation_start_at');
+        $this->addSql('ALTER TABLE ozg_model_region_project DROP project_concept_start_at, DROP project_implementation_start_at, DROP project_lead');
         $this->addSql('ALTER TABLE ozg_onboarding_epayment CHANGE xfinance_file_days xfinance_file_days LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`');
         $this->addSql('ALTER TABLE ozg_search CHANGE parameters parameters LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`');
         $this->addSql('ALTER TABLE ozg_statistics_log_entry CHANGE request_attributes request_attributes LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`, CHANGE query_parameters query_parameters LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_bin`');

@@ -62,6 +62,9 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
                 'required' => false,
+            ])
+            ->add('projectLead', TextareaType::class, [
+                'required' => false,
             ]);
         $this->addDatePickerFormField($form, 'projectStartAt', 5);
         $this->addDatePickerFormField($form, 'projectConceptStartAt', 20);
@@ -198,6 +201,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $this->addDefaultDatagridFilter($filter, 'organisations');
         $filter
             ->add('description')
+            ->add('projectLead')
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')
@@ -272,6 +276,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $this->addDatePickersShowFields($show, 'projectImplementationStartAt');
         $this->addDatePickersShowFields($show, 'projectEndAt');
         $show
+            ->add('projectLead')
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')

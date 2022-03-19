@@ -90,6 +90,7 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
         $this->addDatePickersShowFields($show, 'projectImplementationStartAt');
         $this->addDatePickersShowFields($show, 'projectEndAt');
         $show
+            ->add('projectLead')
             ->add('usp')
             ->add('communesBenefits')
             ->add('transferableService')

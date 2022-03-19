@@ -52,6 +52,14 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     protected $description = '';
 
     /**
+     * Project lead
+     * @var string|null
+     *
+     * @ORM\Column(name="project_lead", type="text", nullable=true)
+     */
+    protected $projectLead = '';
+
+    /**
      * @var null|DateTime
      *
      * @ORM\Column(nullable=true, type="datetime", name="project_start_at")
@@ -284,6 +292,22 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getProjectLead(): ?string
+    {
+        return $this->projectLead;
+    }
+
+    /**
+     * @param string|null $projectLead
+     */
+    public function setProjectLead(?string $projectLead): void
+    {
+        $this->projectLead = $projectLead;
     }
 
     /**
