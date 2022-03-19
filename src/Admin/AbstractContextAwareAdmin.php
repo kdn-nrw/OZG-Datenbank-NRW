@@ -46,15 +46,16 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
      *
      * @var FilterPersisterInterface|null
      */
-    private $filterPersister;
+    private $localFilterPersister;
 
     /**
      * Keep local reference to filter persister (parent property is private)
+     * TODO: remove local property, because parent $filterPersister is protected now
      * @param FilterPersisterInterface|null $filterPersister
      */
     public function setFilterPersister(?FilterPersisterInterface $filterPersister = null)
     {
-        $this->filterPersister = $filterPersister;
+        $this->localFilterPersister = $filterPersister;
         parent::setFilterPersister($filterPersister);
     }
 
@@ -251,7 +252,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
             return;
         }
         parent::buildDatagrid();
-        if ($this->datagrid instanceof CustomDatagrid && $this->filterPersister instanceof GroupedSessionFilterPersister) {
+        if ($this->datagrid instanceof CustomDatagrid && $this->localFilterPersister instanceof GroupedSessionFilterPersister) {
             $this->datagrid->cleanValues();
         }
     }

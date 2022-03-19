@@ -38,7 +38,7 @@ class ModelRegionProjectConceptQuery extends BaseEntity implements SortableEntit
 
     /**
      * @var ModelRegionProject|null
-     * @ORM\ManyToOne(targetEntity="App\Entity\ModelRegion\ModelRegionProject", inversedBy="conceptQueries")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ModelRegion\ModelRegionProject", inversedBy="conceptQueries", cascade={"persist"})
      * @ORM\JoinColumn(name="model_region_project_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $modelRegionProject;
