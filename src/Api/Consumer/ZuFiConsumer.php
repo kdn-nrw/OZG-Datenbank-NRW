@@ -26,6 +26,8 @@ use App\Import\Model\ResultCollection;
 
 class ZuFiConsumer extends AbstractApiConsumer
 {
+    public const DEFAULT_REGIONAL_KEY = '0500000000000';
+
     use InjectManagerRegistryTrait;
 
     /**
@@ -81,13 +83,14 @@ class ZuFiConsumer extends AbstractApiConsumer
      * @param int $limit Limit the number of rows to be imported
      * @param array $serviceKeys Optional list of service keys to be imported
      * @param string $sorting
+     * @param bool $forceUpdate
      * @return int
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\Persistence\Mapping\MappingException
      * @throws \ReflectionException
      */
-    public function importCommuneServiceResults(int $limit = 500, array $serviceKeys = [], string $sorting = 'random'): int
+    public function importCommuneServiceResults(int $limit = 500, array $serviceKeys = [], string $sorting = 'random', $forceUpdate = false): int
     {
         /** @var CommuneRepository $repository */
         $em = $this->getEntityManager();
@@ -119,7 +122,7 @@ class ZuFiConsumer extends AbstractApiConsumer
             /** @var Commune|null $commune */
             if (null !== $commune && $commune->getRegionalKey()) {
                 echo 'Importing commune service results: ' . $commune->getName() . ' [ID: '.$commune->getId().'][Modified at: '.(null !== $commune->getModifiedAt() ? $commune->getModifiedAt()->format('Y-m-d H:i:s') : '-').']' . "\n";
-                $totalImportRowCount += $this->importServiceResults($limit, null, $commune, $serviceKeys);
+                $totalImportRowCount += $this->importServiceResults($limit, null, $commune, $serviceKeys, $forceUpdate);
                 ++$totalImportRowCount;
                 if ($totalImportRowCount > $limit) {
                     break;
@@ -136,6 +139,7 @@ class ZuFiConsumer extends AbstractApiConsumer
      * @param string|null $mapToFimType
      * @param Commune|null $commune
      * @param array $serviceKeys Optional list of service keys to be imported
+     * @param bool $forceUpdate
      * @return int
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -145,7 +149,8 @@ class ZuFiConsumer extends AbstractApiConsumer
         int $limit,
         ?string $mapToFimType,
         ?Commune $commune,
-        array $serviceKeys = []
+        array $serviceKeys = [],
+        $forceUpdate = false
     ): int
     {
         $demand = $this->getDemand();
@@ -167,16 +172,45 @@ class ZuFiConsumer extends AbstractApiConsumer
         $em = $this->getEntityManager();
         $em->getConfiguration()->setSQLLogger(null);
         $repository = $em->getRepository(Service::class);
+        $services = $repository->findAll();
+        $mapServicesByKey = [];
+        $shuffledServices = [];
+        $allServiceKeys = [];
+        $mappedServiceKeys = [];
+        foreach ($services as $service) {
+            /** @var Service $service */
+            $serviceKey = $service->getServiceKey();
+            if ($serviceKey && strpos($serviceKey, 'nicht im LeiKa') === false
+                && (empty($serviceKeys) || in_array($serviceKey, $serviceKeys, false))
+            ) {
+                $mapServicesByKey[$serviceKey] = $service;
+                $mappedServiceKeys[$serviceKey] = $serviceKey;
+            }
+            $allServiceKeys[$serviceKey] = $serviceKey;
+        }
+
         $sbrRepository = $em->getRepository(ServiceBaseResult::class);
         $sbrRows = $sbrRepository->findBy(['commune' => $commune]);
         $serviceUpdateMap = [];
-        $updateThreshold = strtotime('-2 weeks');
+        // Force update of user defined service key list
+        $updateThreshold = ($forceUpdate || !empty($serviceKeys)) ? time() : strtotime('-2 weeks');
         foreach ($sbrRows as $sbrRow) {
             /** @var ServiceBaseResult $sbrRow */
-            $lastUpdate = $sbrRow->getModifiedAt() ?? $sbrRow->getCreatedAt();
-            $serviceUpdateMap[$sbrRow->getServiceKey()] = null !== $lastUpdate ? $lastUpdate->getTimestamp() : $updateThreshold;
+            if (!in_array($sbrRow->getServiceKey(), $allServiceKeys, false)) {
+                $em->remove($sbrRow);
+            } else {
+                $lastUpdate = $sbrRow->getModifiedAt() ?? $sbrRow->getCreatedAt();
+                if (!$forceUpdate && null !== $lastUpdate && $lastUpdate->getTimestamp() < $updateThreshold) {
+                    $sbrServiceKey = $sbrRow->getServiceKey();
+                    unset($mappedServiceKeys[$sbrServiceKey]);
+                }
+            }
         }
-        $services = $repository->findAll();
+        $em->flush();// The number of imported entries is limited; sort randomly to prevent rechecking the same items over and over
+        shuffle($mappedServiceKeys);
+        foreach ($mappedServiceKeys as $serviceKey) {
+            $shuffledServices[$serviceKey] = $mapServicesByKey[$serviceKey];
+        }
         /** @var ZuFiDataProcessor $dataProcessor */
         $dataProcessor = $this->dataProcessor;
         $this->dataProvider->setApiConsumerEntity($this->getApiConsumerEntity());
@@ -184,14 +218,9 @@ class ZuFiConsumer extends AbstractApiConsumer
         $dataProcessor->setOutput($this->output);
         $dataProcessor->setImportSource($this->getImportSourceKey());
         $totalImportRowCount = 0;
-        foreach ($services as $service) {
+        foreach ($shuffledServices as $service) {
             /** @var Service $service */
             $serviceKey = $service->getServiceKey();
-            $lastUpdate = $serviceUpdateMap[$serviceKey] ?? null;
-            if (($lastUpdate && $lastUpdate > $updateThreshold)
-                || (!empty($serviceKeys) && !in_array($serviceKey, $serviceKeys, false))) {
-                continue;
-            }
             $demand->setServiceKey($serviceKey);
             $this->dataProvider->setDemand($demand);
             $this->dataProvider->process($dataProcessor);

@@ -12,7 +12,6 @@
 namespace App\Twig\Extension;
 
 use App\Entity\Service;
-use App\Entity\StateGroup\Commune;
 use Twig\TwigFunction;
 
 class ServiceDateExtension extends ApiQueryExtension
@@ -32,13 +31,12 @@ class ServiceDateExtension extends ApiQueryExtension
     /**
      * Returns the field description collection for the referenced fields
      *
-     * @param Commune|Service $parent
-     * @param Service|null $service
+     * @param Service $service
      * @return string
      */
-    public function getFormattedServiceDate($parent, Service $service = null): string
+    public function getFormattedServiceDate(Service $service): string
     {
-        $serviceBaseResult = $this->getServiceBaseResult($parent, $service);
+        $serviceBaseResult = $service->getServiceBaseResult();
         if (null !== $serviceBaseResult) {
             $serviceCreatedAt = $serviceBaseResult->getServiceCreatedAt();
             if (null === $serviceCreatedAt) {

@@ -70,10 +70,20 @@ class ApiQueryExtension extends AbstractExtension
         if ($this->hasGeneralApiAccess($apiIdentifier)) {
             $query = null;
             if ($apiIdentifier === ApiManager::API_KEY_ZU_FI) {
-                $query = null;
-                $serviceBaseResult = $this->getServiceBaseResult($parent, $service);
-                if (null !== $serviceBaseResult && null !== $refService = $serviceBaseResult->getService()) {
-                    $query = $refService->getServiceKey() . '|' . $serviceBaseResult->getRegionalKey();
+                $serviceKey = null;
+                $regionalKey = \App\Api\Consumer\ZuFiConsumer::DEFAULT_REGIONAL_KEY;
+                if ($parent instanceof Commune || $parent instanceof ServiceBaseResult) {
+                    $regionalKey = $parent->getRegionalKey();
+                }
+                if (null !== $service) {
+                    $serviceKey = $service->getServiceKey();
+                } elseif ($parent instanceof Service) {
+                    $serviceKey = $parent->getServiceKey();
+                } elseif ($parent instanceof ServiceBaseResult) {
+                    $serviceKey = $parent->getServiceKey();
+                }
+                if ($serviceKey && $regionalKey) {
+                    $query = $serviceKey . '|' . $regionalKey;
                 }
             }
             if ($query) {
@@ -114,29 +124,5 @@ class ApiQueryExtension extends AbstractExtension
             $this->apiAccessStorage[$internalKey] = $hasAccess;
         }
         return $this->apiAccessStorage[$internalKey];
-    }
-
-    /**
-     * Returns the service base result for the given service
-     *
-     * @param Commune|Service $parent
-     * @param Service|null $service
-     * @return ServiceBaseResult|null
-     */
-    protected function getServiceBaseResult($parent, Service $service = null): ?ServiceBaseResult
-    {
-        $serviceBaseResult = null;
-        if ($parent instanceof Commune) {
-            $serviceBaseResult = $parent->getServiceBaseResult($service);
-            if (null !== $serviceBaseResult && $regionalKey = $parent->getRegionalKey()) {
-                $serviceBaseResult->setRegionalKey($regionalKey);
-                $serviceBaseResult->setCommune($parent);
-            }
-        } elseif ($parent instanceof Service) {
-            $serviceBaseResult = $parent->getServiceBaseResult();
-        } elseif (null !== $service) {
-            $serviceBaseResult = $service->getServiceBaseResult();
-        }
-        return $serviceBaseResult;
     }
 }

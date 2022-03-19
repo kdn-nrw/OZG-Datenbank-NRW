@@ -60,6 +60,13 @@ class ZuFiCommuneImportCommand extends Command
                 'sort order of communes to be updated',
                 'random'
             )
+            ->addOption(
+                'force',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'force update of rows',
+                false
+            )
             ->setHelp('Imports the commune service data from the ZuFi API;'
                 . PHP_EOL . 'If you want to get more detailed information, use the --verbose option.');
     }
@@ -69,6 +76,7 @@ class ZuFiCommuneImportCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
         $limit = (int)$input->getOption('limit');
+        $force = (bool)$input->getOption('force');
         $serviceKeys = array_filter(explode(',', (string)$input->getArgument('serviceKeys')));
         if (!empty($serviceKeys)) {
             $io->note(sprintf('Starting import process. Limiting imported items to services %s', implode(',', $serviceKeys)));
@@ -78,7 +86,7 @@ class ZuFiCommuneImportCommand extends Command
         /** @var ZuFiConsumer $consumer */
         $consumer->setOutput($output);
         $sorting = (string)$input->getOption('sorting');
-        $importedRowCount = $consumer->importCommuneServiceResults($limit, $serviceKeys, $sorting);
+        $importedRowCount = $consumer->importCommuneServiceResults($limit, $serviceKeys, $sorting, $force);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }

@@ -4,7 +4,7 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-{% set date = app_format_service_date(object, child) %}
+{% set date = app_format_service_date(child) %}
 {% set apiKey = constant('App\\Api\\Consumer\\ApiManager::API_KEY_ZU_FI') %}
 {% set apiArguments = app_get_api_arguments(apiKey, object, child) %}
 {{ date }}

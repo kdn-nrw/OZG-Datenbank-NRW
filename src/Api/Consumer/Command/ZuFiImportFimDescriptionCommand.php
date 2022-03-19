@@ -23,6 +23,7 @@ use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -47,11 +48,19 @@ class ZuFiImportFimDescriptionCommand extends Command
                 InputArgument::OPTIONAL,
                 'optional comma separated list of service keys for import'
             )
-            ->addArgument(
+            ->addOption(
                 'limit',
-                InputArgument::OPTIONAL,
+                'l',
+                InputOption::VALUE_OPTIONAL,
                 'the maximum number of updated rows',
                 100
+            )
+            ->addOption(
+                'force',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'force update of rows',
+                false
             )
             ->setHelp('Imports the service data from the ZuFi API;'
                 . PHP_EOL . 'If you want to get more detailed information, use the --verbose option.');
@@ -61,13 +70,14 @@ class ZuFiImportFimDescriptionCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
-        $regionalKey = '0500000000000';
+        $regionalKey = \App\Api\Consumer\ZuFiConsumer::DEFAULT_REGIONAL_KEY;
         $fimType = FederalInformationManagementType::TYPE_DESCRIPTION;
         $serviceKeys = array_filter(explode(',', (string) $input->getArgument('serviceKeys')));
         if (!empty($serviceKeys)) {
             $io->note(sprintf('Starting import process. Limiting imported items to services %s', implode(',', $serviceKeys)));
         }
-        $limit = (int) $input->getArgument('limit');
+        $limit = (int) $input->getOption('limit');
+        $force = (bool)$input->getOption('force');
         $startTime = microtime(true);
         $consumer = $this->apiManager->getConfiguredConsumer(ApiManager::API_KEY_ZU_FI);
         /** @var ZuFiConsumer $consumer */
@@ -75,7 +85,7 @@ class ZuFiImportFimDescriptionCommand extends Command
         $demand = $consumer->getDemand();
         /** @var ZuFiDemand $demand */
         $demand->setRegionalKey($regionalKey);
-        $importedRowCount = $consumer->importServiceResults($limit, $fimType, null, $serviceKeys);
+        $importedRowCount = $consumer->importServiceResults($limit, $fimType, null, $serviceKeys, $force);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }
