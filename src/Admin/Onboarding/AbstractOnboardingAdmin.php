@@ -31,6 +31,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -192,6 +193,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         $this->addDefaultDatagridFilter($filter, 'commune');
         $filter->add('status',
             CallbackFilter::class, [
+                'label' => 'app.commune_info.entity.status',
                 'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) {
                     if (!is_array($value) || !\array_key_exists('value', $value)) {
                         return false;
@@ -239,7 +241,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     protected function addListStatusField(ListMapper $list): void
     {
         $list
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'template' => 'Onboarding/list-status.html.twig',
                 'editable' => false,

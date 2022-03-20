@@ -16,6 +16,8 @@ use App\Entity\Base\HasImageEntityInterface;
 use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Model\FileBinary;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Throwable;
@@ -130,9 +132,10 @@ trait ControllerDownloadTrait
         if (!$uploadFile || !$uploadFile->isReadable()) {
             throw $this->createNotFoundException(sprintf('unable to find the object file with id: %s', $fileId));
         }
+        /** @var File|UploadedFile $uploadFile */
         $fileName = $uploadFile->getFilename();
-        if (method_exists($uploadFile, 'getOriginalName')) {
-            $fileName = $uploadFile->getOriginalName();
+        if (method_exists($upload, 'getOriginalName') && $originalName = $upload->getOriginalName()) {
+            $fileName = $originalName;
         }
         return $this->file($uploadFile, $fileName, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     }

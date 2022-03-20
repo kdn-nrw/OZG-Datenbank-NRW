@@ -37,3 +37,10 @@ vich_uploader:
             inject_on_load:     true
             delete_on_update:   true
             delete_on_remove:   true
+        onboarding_document:
+            uri_prefix: /uploads/onboarding
+            upload_destination: '%kernel.project_dir%/secured-data/uploads/onboarding'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load:     true
+            delete_on_update:   true
+            delete_on_remove:   true

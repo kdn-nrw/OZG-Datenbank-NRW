@@ -21,8 +21,10 @@ use App\Entity\Onboarding\Contact;
 use App\Entity\Onboarding\Epayment;
 use App\Entity\Onboarding\EpaymentProject;
 use App\Entity\Onboarding\FormSolution;
+use App\Entity\Onboarding\OnboardingDocument;
 use App\Entity\Onboarding\Release;
 use App\Entity\Onboarding\ServiceAccount;
+use App\Entity\Onboarding\XtaServer;
 use App\Entity\StateGroup\Commune;
 use App\Service\MetaData\InjectMetaDataManagerTrait;
 use Doctrine\Common\Collections\Collection;
@@ -175,6 +177,15 @@ class OnboardingProgressCalculator
                     ];
                 }
                 break;
+            case XtaServer::class:
+                if (empty($properties)) {
+                    $properties = [
+                        'applicationType', 'organizationalKey', 'intermediaryOperatorType',
+                        'contactName', 'phoneNumber', 'email', 'osciPrivateKeyPassword',
+                        'documents',
+                    ];
+                }
+                break;
             case ServiceAccount::class:
                 if (empty($properties)) {
                     $properties = [
@@ -193,6 +204,11 @@ class OnboardingProgressCalculator
             case EpaymentProject::class:
                 if (empty($properties)) {
                     $properties = ['projectId', 'projectPassword'];
+                }
+                break;
+            case OnboardingDocument::class:
+                if (empty($properties)) {
+                    $properties = ['name'];
                 }
                 break;
             case Contact::class:

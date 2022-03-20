@@ -17,6 +17,7 @@ use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\Onboarding\CommuneInfo;
 use App\Entity\Onboarding\Epayment;
 use App\Entity\Onboarding\FormSolution;
+use App\Entity\Onboarding\XtaServer;
 use App\Entity\StateGroup\Commune;
 
 class OnboardingManager
@@ -59,7 +60,7 @@ class OnboardingManager
         $repository = $em->getRepository(Commune::class);
         $communes = $repository->findAll();
         foreach ($communes as $commune) {
-            if (!in_array($commune->getId(), $mappedIdList, true)) {
+            if ($this->isValid($entityClass, $commune) && !in_array($commune->getId(), $mappedIdList, true)) {
                 $infoEntity = new $entityClass($commune);
                 $em->persist($infoEntity);
                 ++$createdRowCount;
@@ -73,6 +74,27 @@ class OnboardingManager
         }
         $em->clear();
         return $createdRowCount;
+    }
+
+    /**
+     * Validate commune for given entity class; if false is returned, the onboarding reference is not created
+     *
+     * @param string $entityClass
+     * @param Commune $commune
+     * @return bool
+     */
+    private function isValid(string $entityClass, Commune $commune): bool
+    {
+        if ($entityClass === XtaServer::class) {
+            $bureaus = $commune->getBureaus();
+            foreach ($bureaus as $bureau) {
+                if ($bureau->getId() === XtaServer::REQUIRED_COMMUNE_BUREAU_ID) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
     }
 
     private function updateContacts(string $entityClass)
@@ -152,8 +174,8 @@ class OnboardingManager
         $dateString = $now->format('Y-m-d H:i:s');
         $communeIdList = [];
         foreach ($rows as $row) {
-            $entityId = (int) $row['id'];
-            $communeId = (int) $row['commune_id'];
+            $entityId = (int)$row['id'];
+            $communeId = (int)$row['commune_id'];
             $communeIdList[$communeId] = $communeId;
             $referencesToBeCreated = $this->updateSingleCommuneSolution($communeId);
             if (!empty($referencesToBeCreated)) {
@@ -209,15 +231,15 @@ class OnboardingManager
         $connection = $this->getEntityManager()->getConnection();
         $mapReferencesToBeCreated = [];
         foreach ($ePaymentResults as $ePayment) {
-            $communeId = (int) $ePayment->getCommune()->getId();
-            $entityId = (int) $ePayment->getId();
+            $communeId = (int)$ePayment->getCommune()->getId();
+            $entityId = (int)$ePayment->getId();
             $query = 'SELECT solution_id FROM ozg_onboarding_commune_solution WHERE enabled_epayment = 1 AND commune_id = ' . $communeId;
             $enabledCommuneSolutionIdList = $connection->fetchAllAssociative($query);
             if (!empty($enabledCommuneSolutionIdList)) {
                 $enabledCommuneSolutionIdList = array_column($enabledCommuneSolutionIdList, 'solution_id');
                 //$sql = "SELECT * FROM ozg_onboarding_epayment_service WHERE epayment_id = $ePaymentId AND solution_id NOT IN (".implode(', ', $enabledCommuneSolutionIdList).")";
                 //$existingServices = $connection->fetchAllAssociative($sql);
-                $sql = "DELETE FROM ozg_onboarding_epayment_service WHERE epayment_id = $entityId AND solution_id NOT IN (".implode(', ', $enabledCommuneSolutionIdList).")";
+                $sql = "DELETE FROM ozg_onboarding_epayment_service WHERE epayment_id = $entityId AND solution_id NOT IN (" . implode(', ', $enabledCommuneSolutionIdList) . ")";
                 $this->executeStatement($sql);
                 $referencesToBeCreated = $this->updateSingleEpaymentServices($ePayment, $enabledCommuneSolutionIdList);
                 if (!empty($referencesToBeCreated)) {
@@ -261,11 +283,11 @@ class OnboardingManager
     private function createReferences(string $tableName, array $mapReferencesToBeCreated, array $fieldTypes): void
     {
         if (!empty($mapReferencesToBeCreated)) {
-            $insert = 'INSERT INTO '.$tableName.' ('.implode(', ', array_keys($fieldTypes)).') VALUES ';
+            $insert = 'INSERT INTO ' . $tableName . ' (' . implode(', ', array_keys($fieldTypes)) . ') VALUES ';
             $sqlStatements = [];
             $insertValueList = [];
             $count = 1;
-            $placeholder = '('.implode(', ', $fieldTypes).')';
+            $placeholder = '(' . implode(', ', $fieldTypes) . ')';
             foreach ($mapReferencesToBeCreated as $entityCreateRows) {
                 foreach ($entityCreateRows as $values) {
                     $insertValueList[] = vsprintf($placeholder, $values);
@@ -317,7 +339,7 @@ class OnboardingManager
         $referencesToBeCreated = [];
         foreach ($enabledCommuneSolutionIdList as $entityId) {
             if (!in_array($entityId, $mappedSolutionIds, false)) {
-                $referencesToBeCreated[] = (int) $entityId;
+                $referencesToBeCreated[] = (int)$entityId;
                 /* Will cause out of memory
                 $ePaymentService = new EpaymentService();
                 $ePaymentService->setEpayment($ePayment);

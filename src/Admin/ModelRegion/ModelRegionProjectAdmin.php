@@ -307,6 +307,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
 
     protected function configureRoutes(RouteCollection $collection)
     {
+        parent::configureRoutes($collection);
         $collection
             ->add('download', $this->getRouterIdParameter() . '/download')
             ->add('exportPdfConcept', $this->getRouterIdParameter() . '/export-concept-pdf');

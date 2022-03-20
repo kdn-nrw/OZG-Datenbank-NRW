@@ -26,6 +26,7 @@ use App\Model\EmailTemplate\OnboardingEpaymentUpdateModel;
 use App\Model\EmailTemplate\OnboardingFormSolutionUpdateModel;
 use App\Model\EmailTemplate\OnboardingReleaseUpdateModel;
 use App\Model\EmailTemplate\OnboardingServiceAccountUpdateModel;
+use App\Model\EmailTemplate\OnboardingXtaServerUpdateModel;
 use App\Service\InjectAdminManagerTrait;
 use App\Translator\TranslatorAwareTrait;
 use App\Util\SnakeCaseConverter;
@@ -258,6 +259,7 @@ class EmailTemplateManager
             OnboardingFormSolutionUpdateModel::TEMPLATE_KEY => OnboardingFormSolutionUpdateModel::class,
             OnboardingReleaseUpdateModel::TEMPLATE_KEY => OnboardingReleaseUpdateModel::class,
             OnboardingDataCompleteUpdateModel::TEMPLATE_KEY => OnboardingDataCompleteUpdateModel::class,
+            OnboardingXtaServerUpdateModel::TEMPLATE_KEY => OnboardingXtaServerUpdateModel::class,
         ];
     }
 

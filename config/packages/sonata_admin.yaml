@@ -263,6 +263,7 @@ sonata_admin:
                     - App\Admin\Onboarding\InquiryAdmin
                     - App\Admin\Onboarding\OnboardingServiceAdmin
                     - App\Admin\Onboarding\ReleaseAdmin
+                    - App\Admin\Onboarding\XtaServerAdmin
             app_admin.menu.basic:
                 label: app.menu.basic_group
                 label_catalogue: messages

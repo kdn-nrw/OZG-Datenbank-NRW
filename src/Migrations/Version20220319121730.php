@@ -14,7 +14,7 @@ final class Version20220319121730 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Add bureau commune relation';
     }
 
     public function up(Schema $schema): void

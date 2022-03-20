@@ -14,6 +14,7 @@ namespace App\Entity\Onboarding;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\BlameableInterface;
 use App\Entity\Base\BlameableTrait;
+use App\Entity\Base\HasDocumentsEntityInterface;
 use App\Entity\Base\HasGroupEmailEntityInterface;
 use App\Entity\Base\HideableEntityInterface;
 use App\Entity\Base\HideableEntityTrait;
@@ -25,6 +26,7 @@ use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -40,6 +42,7 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     BlameableInterface,
     HideableEntityInterface,
     HasCustomFieldsEntityInterface,
+    HasDocumentsEntityInterface,
     HasMetaDateEntityInterface,
     HasGroupEmailEntityInterface,
     CalculateCompletenessEntityInterface
@@ -140,10 +143,34 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
      */
     protected $dataCompletenessConfirmed = false;
 
+    /**
+     * @var OnboardingDocument[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Onboarding\OnboardingDocument", mappedBy="onboarding", cascade={"persist", "remove"})
+     */
+    private $documents;
+
+    /**
+     * List of document types that must always be defined
+     * @see getDocuments
+     * @var array
+     */
+    protected $requiredDocumentTypes = [];
+
+    public function getName(): ?string
+    {
+        return $this->getCommuneName();
+    }
+
+    public function setName(?string $name)
+    {
+        $this->setCommuneName($name);
+    }
+
     public function __construct(Commune $commune)
     {
         $this->commune = $commune;
         $this->communeName = $commune->getName();
+        $this->documents = new ArrayCollection();
         $this->officialCommuneKey = $commune->getOfficialCommunityKey();
         $this->customValues = new ArrayCollection();
     }
@@ -378,5 +405,110 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     public function setGroupEmail(?string $groupEmail): void
     {
         $this->groupEmail = $groupEmail;
+    }
+
+    /**
+     * Add document
+     *
+     * @param OnboardingDocument $document
+     *
+     * @return self
+     */
+    public function addDocument(OnboardingDocument $document): self
+    {
+        $this->documents->add($document);
+        $document->setOnboarding($this);
+        return $this;
+    }
+
+    /**
+     * Remove document
+     *
+     * @param OnboardingDocument $document
+     */
+    public function removeDocument(OnboardingDocument $document): void
+    {
+        $this->documents->removeElement($document);
+        $document->setOnboarding(null);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return OnboardingDocument[]|ArrayCollection
+     */
+    public function getDocuments(): Collection
+    {
+        $collection = $this->documents;
+        if ($collection instanceof Collection && !empty($this->requiredDocumentTypes)) {
+            /** @var OnboardingDocument[]|ArrayCollection $collection */
+            $typeChoices = $this->requiredDocumentTypes;
+            $order = [];
+            $sorting = 1;
+            $missingTypes = [];
+            foreach ($typeChoices as $typeKey) {
+                $order[$typeKey] = $sorting;
+                $missingTypes[$typeKey] = true;
+                ++$sorting;
+            }
+            foreach ($collection as $entity) {
+                $missingTypes[$entity->getDocumentType()] = false;
+            }
+            foreach ($missingTypes as $typeKey => $isMissing) {
+                if ($isMissing) {
+                    $collection->add(new OnboardingDocument($this, $typeKey));
+                }
+            }
+            /** @var ArrayCollection $collection */
+            $iterator = $collection->getIterator();
+            $iterator->uasort(static function (OnboardingDocument $a, OnboardingDocument $b) use ($order) {
+                $orderA = $order[$a->getDocumentType()] ?? 999;
+                $orderB = $order[$b->getDocumentType()] ?? 999;
+                return ($orderA < $orderB) ? -1 : 1;
+            });
+            /** @var OnboardingDocument[] $sortedEntities */
+            $sortedEntities = iterator_to_array($iterator);
+            $collection->clear();
+            $addedTypes = [];
+            foreach ($sortedEntities as $collectionEntity) {
+                $documentType = $collectionEntity->getDocumentType();
+                // All document types except the default one can only be used once
+                if ($documentType !== OnboardingDocument::DOCUMENT_TYPE_GENERAL && isset($addedTypes[$documentType])) {
+                    continue;
+                }
+                $collection->add($collectionEntity);
+                $addedTypes[$collectionEntity->getDocumentType()] = true;
+            }
+        }
+        return $collection;
+    }
+
+    /**
+     * @param OnboardingDocument[]|Collection $documents
+     */
+    public function setDocuments($documents): void
+    {
+        $this->documents = $documents;
+    }
+
+    /**
+     * Hook on persist and update operations.
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * @return OnboardingDocument[]|array Invalid documents (without file reference)
+     */
+    public function cleanDocuments(): array
+    {
+        $removeDocuments = [];
+        foreach ($this->documents as $document) {
+            /** @var OnboardingDocument $document */
+            if (0 < (int)$document->getId() && null === $document->getLocalName()) {
+                $removeDocuments[] = $document;
+            }
+        }
+        foreach ($removeDocuments as $document) {
+            $this->removeDocument($document);
+        }
+        return $removeDocuments;
     }
 }

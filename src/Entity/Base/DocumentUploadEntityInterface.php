@@ -34,7 +34,7 @@ interface DocumentUploadEntityInterface extends NamedEntityInterface
     public function getLocalName(): ?string;
 
     /**
-     * Get parent entity referene
+     * Get parent entity reference
      *
      * @return HasUploadsEntityInterface
      */

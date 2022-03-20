@@ -42,6 +42,34 @@
                 }
             }
             self.initFormMeta(formContainer);
+            let toggleInfoContainers = formContainer.querySelectorAll('.js-toggle-info');
+            if (toggleInfoContainers.length > 0) {
+                let toggleElts = function(container) {
+                    let toggleClass = container.dataset.toggle;
+                    let showClass = null;
+                    if (container.nodeName.toLowerCase() === 'input') {
+                        let isCb = container.getAttribute('type') === 'radio' || container.getAttribute('type') === 'checkbox';
+                        if (((isCb && container.checked) || (!isCb && container.value))) {
+                            showClass = container.dataset.toggle + '-show-' + container.dataset.show;
+                        }
+                    }
+                    let toggleElts = formContainer.querySelectorAll('.' + toggleClass);
+                    for (let t = 0, nt = toggleElts.length; t < nt; t++) {
+                        toggleElts[t].setAttribute('style', 'display:none;');
+                        if (showClass && toggleElts[t].classList.contains(showClass)) {
+                            toggleElts[t].removeAttribute('style', 'display:none;');
+                        }
+                    }
+                };
+                for (let i = 0, n = toggleInfoContainers.length; i < n; i++) {
+                    toggleElts(toggleInfoContainers[i]);
+                }
+                formContainer.addEventListener('click', function (evt) {
+                    if (evt.target.matches('.js-toggle-info')) {
+                        toggleElts(evt.target);
+                    }
+                }, false);
+            }
         },
         initFormMeta: function(formContainer) {
             let self = this;
