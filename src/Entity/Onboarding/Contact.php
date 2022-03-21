@@ -40,6 +40,7 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
     public const CONTACT_TYPE_WEB = 'web';
 
     public const CONTACT_TYPE_EPAYMENT_USER = 'epay_user';
+    public const CONTACT_TYPE_XTA = 'xta_server_contact';
 
     /**
      * @var array Supported contact types
@@ -88,6 +89,13 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
      */
     protected $serviceAccount;
 
+    /**
+     * @var XtaServer|null
+     * @ORM\OneToOne(targetEntity="App\Entity\Onboarding\XtaServer", inversedBy="contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="xta_server_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    protected $xtaServer;
+
     use PersonPropertiesTrait;
     use ContactPropertiesTrait;
 
@@ -128,6 +136,8 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
             $this->serviceAccount = $onboarding;
         } elseif ($onboarding instanceof FormSolution) {
             $this->formSolution = $onboarding;
+        } elseif ($onboarding instanceof XtaServer) {
+            $this->xtaServer = $onboarding;
         }
         $this->commune = $onboarding->getCommune();
     }
@@ -221,4 +231,13 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
     {
         return $this->serviceAccount;
     }
+
+    /**
+     * @return XtaServer|null
+     */
+    public function getXtaServer()
+    {
+        return $this->xtaServer;
+    }
+
 }

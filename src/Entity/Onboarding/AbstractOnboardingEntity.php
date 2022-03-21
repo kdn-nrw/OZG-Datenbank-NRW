@@ -73,7 +73,7 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     /**
      * @var ServiceProvider|null
      * @ORM\OneToOne(targetEntity="App\Entity\StateGroup\ServiceProvider", mappedBy="organisation", cascade={"all"})
-     * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $serviceProvider;
 

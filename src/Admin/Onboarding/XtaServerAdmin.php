@@ -14,12 +14,11 @@ namespace App\Admin\Onboarding;
 
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\DatePickerTrait;
-use App\Entity\ModelRegion\ModelRegionProjectDocument;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\Onboarding\XtaServer;
 use App\Form\Type\CommuneType;
+use App\Form\Type\OnboardingContactType;
 use App\Form\Type\OnboardingDocumentType;
-use App\Validator\Constraints\MailingSenderEmail;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -28,14 +27,14 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Validator\ErrorElement;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Regex;
-use Vich\UploaderBundle\Form\Type\VichFileType;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class XtaServerAdmin extends AbstractOnboardingAdmin
 {
@@ -61,6 +60,16 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
         $form
             ->with('general');
         $form
+            ->add('commune', CommuneType::class, [
+                'label' => false,
+                //'required' => true,
+                'disabled' => true,
+                'required' => false
+            ], [
+                'admin_code' => CommuneAdmin::class,
+            ]);
+        ;
+        $form
             ->add('applicationType', ChoiceType::class, [
                 'label' => 'app.xta_server.entity.application_type',
                 'choices' => XtaServer::$applicationTypeChoices,
@@ -84,16 +93,18 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
             ->add('organizationalKey', TextType::class, [
                 'required' => $enableRequiredFields,
             ]);
-        $form
-            ->add('commune', CommuneType::class, [
-                'label' => false,
-                //'required' => true,
-                'disabled' => true,
-                'required' => false
-            ], [
-                'admin_code' => CommuneAdmin::class,
-            ]);
-        ;
+        /** @var XtaServer|null $subject */
+        $subject = $this->getSubject();
+        if ($subject instanceof XtaServer && null !== $communeType = $subject->getCommuneType()) {
+            $form
+                ->add('communeTypeName', TextType::class, [
+                    'label' => 'app.xta_server.entity.commune_type',
+                    'required' => false,
+                    'disabled' => true,
+                    'mapped' => false,
+                    'data' => $communeType . ''
+                ]);
+        }
         $form
             ->add('intermediaryOperatorType', ChoiceType::class, [
                 'label' => 'app.xta_server.entity.intermediary_operator_type',
@@ -104,16 +115,8 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
                 'choice_attr' => static function ($choice, $key, $value) {
                     return ['class' => 'onboarding-intermediary-operator-type ob-intermediary-operator-type-' . $value];
                 },
-            ])
-            ->add('contactName', TextType::class, [
-                'required' => $enableRequiredFields,
-            ])
-            ->add('phoneNumber', TextType::class, [
-                'required' => $enableRequiredFields,
-            ])
-            ->add('email', EmailType::class, [
-                'required' => $enableRequiredFields,
-            ])
+            ]);
+        $form
             ->add('comment', TextareaType::class, [
                 'required' => false,
             ]);
@@ -129,8 +132,30 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
                 },
             ]);*/
         $form->end();
+        $this->addContactFormFields($form);
         $this->addDocumentFormFields($form, $enableRequiredFields);
 
+    }
+
+    protected function addContactFormFields(FormMapper $form)
+    {
+        $form
+            ->with('contact_data', [
+                'label' => 'app.xta_server.groups.contact_data',
+                'class' => 'col-xs-12 col-md-6',
+            ]);
+        $form
+            ->add('contact', OnboardingContactType::class, [
+                'label' => false,
+                'required' => false,
+                'parent_admin' => $this,
+                'show_contact_type' => false,
+                'enable_external_user' => false,
+                'enable_mobile_number' => false,
+                'enable_phone_number' => true,
+            ]);
+        $form
+            ->end();
     }
 
     protected function addDocumentFormFields(FormMapper $form, bool $enableRequiredFields)
@@ -164,6 +189,10 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
                 'pattern' => "/^bab\:[\d]{5,8}/",
                 'message' => $this->trans('app.xta_server.entity.organizational_key_validation_error'),
             ]))
+            ->end();
+        $errorElement
+            ->with('documents')
+            ->addConstraint(new Valid())
             ->end();
     }
 
@@ -229,7 +258,6 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
                 'admin_code' => CommuneAdmin::class,
             ])
             ->add('modifiedAt')
-            //->add('description')
             ->add('status', 'choice', [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
@@ -253,9 +281,7 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
                 'editable' => false,
                 'catalogue' => 'messages',
             ])
-            ->add('contactName')
-            ->add('phoneNumber')
-            ->add('email')
+            ->add('contact')
             ->add('comment');
         $show->add('documents', null, [
             'template' => 'General/Show/show-attachments.html.twig',

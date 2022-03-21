@@ -11,7 +11,7 @@
 
 namespace App\Entity\Onboarding;
 
-use App\Entity\Base\ContactPropertiesTrait;
+use App\Entity\StateGroup\CommuneType;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -23,8 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class XtaServer extends AbstractOnboardingEntity
 {
-    use ContactPropertiesTrait;
-
     public const DOCUMENT_TYPE_PRIVATE_KEY = 'osci_private_key_file';
     public const DOCUMENT_TYPE_PUBLIC_KEY = 'osci_public_key_file';
 
@@ -88,12 +86,13 @@ class XtaServer extends AbstractOnboardingEntity
     protected $organizationalKey;
 
     /**
-     * contact name
-     * @var string|null
+     * Contact for this entity
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var Contact|null
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\Onboarding\Contact", mappedBy="xtaServer", cascade={"all"})
      */
-    private $contactName;
+    protected $contact;
 
     /**
      * Comment
@@ -206,19 +205,24 @@ class XtaServer extends AbstractOnboardingEntity
     }
 
     /**
-     * @return string|null
+     * Return the contact
+     * @return Contact
      */
-    public function getContactName(): ?string
+    public function getContact(): Contact
     {
-        return $this->contactName;
+        if (null === $this->contact) {
+            $this->contact = new Contact($this, Contact::CONTACT_TYPE_XTA);
+        }
+        return $this->contact;
     }
 
     /**
-     * @param string|null $contactName
+     * Sets the contact
+     * @param Contact|null $contact
      */
-    public function setContactName(?string $contactName): void
+    public function setContact(?Contact $contact): void
     {
-        $this->contactName = $contactName;
+        $this->contact = $contact;
     }
 
     /**
@@ -277,5 +281,16 @@ class XtaServer extends AbstractOnboardingEntity
             return $key;
         }
         return array_search(self::APPLICATION_TYPE_NEW, self::$intermediaryOperatorTypeChoices, true);
+    }
+
+    /**
+     * @return CommuneType|null
+     */
+    public function getCommuneType(): ?CommuneType
+    {
+        if (null !== $this->commune) {
+            return $this->commune->getCommuneType();
+        }
+        return null;
     }
 }

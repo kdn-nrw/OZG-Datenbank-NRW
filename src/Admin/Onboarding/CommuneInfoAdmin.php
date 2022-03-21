@@ -87,25 +87,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
         $form
             ->end()
             ->end();
-        $form
-            ->tab('contacts', [
-                'label' => 'app.commune_info.groups.contact_data',
-            ])
-            ->with('contact_data', [
-                'label' => false,
-                'class' => 'col-md-12 box-collection-static two-col box-clipboard-rows js-copy-row-values',
-            ]);
-        $form
-            ->add('contacts', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
-                'label' => 'app.commune_info.entity.contacts',
-                'entry_type' => OnboardingContactType::class,
-                'entry_options' => [
-                    'parent_admin' => $this,
-                ],
-            ]);
-        $form
-            ->end()
-            ->end();
+        $this->addContactFormFields($form);
 
         $form
             ->with('Services', [
@@ -128,6 +110,29 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
                 ],
             ])
             // app.onboarding_commune_solution.object_name
+            ->end()
+            ->end();
+    }
+
+    protected function addContactFormFields(FormMapper $form)
+    {
+        $form
+            ->tab('contacts', [
+                'label' => 'app.commune_info.groups.contact_data',
+            ])
+            ->with('contact_data', [
+                'label' => false,
+                'class' => 'col-md-12 box-collection-static two-col box-clipboard-rows js-copy-row-values',
+            ]);
+        $form
+            ->add('contacts', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+                'label' => 'app.commune_info.entity.contacts',
+                'entry_type' => OnboardingContactType::class,
+                'entry_options' => [
+                    'parent_admin' => $this,
+                ],
+            ]);
+        $form
             ->end()
             ->end();
     }

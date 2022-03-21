@@ -667,7 +667,13 @@ app:
         <p>Zur Einrichtung eines Benutzerkontos auf den XTA-Servern von DataClearing NRW benötigt DataClearing NRW das öffentliche Zertifikat (cer- oder der-Datei), dass im Auftrag der Bauaufsichtsbehörde im DVDV hinterlegt wurde. Darüber hinaus wird das private Zertifikat der beauftragenden Behörde, von dem das öffentliche Zertifikat abgeleitet wurde, benötigt. (p12-Datei + Passwort für den Zugriff darauf)</p>
         <p>Bitte füllen Sie zur Beantragung des Benutzerkontos das folgende Formular vollständig aus.</p>'
       documents: Dokumente
+      contact_data: Kontaktperson
     entity:
+      description: Beschreibung
+      commune: Kommune
+      modified_at: Letzter Eintrag
+      status: Status
+      commune_name: Kommune
       application_type: Antragsart
       application_type_choices:
         new: Beantragung eines neuen Zugangs
@@ -677,16 +683,13 @@ app:
       authority_category: Kategorie der Behörde
       organizational_key: Organisationsschlüssel im DVDV
       organizational_key_validation_error: 'Diesen Schlüssel haben Sie bei der Beantragung des DVDV-Eintrags angeben oder erhalten. (Behörden-ID) Aufbau: „bab:“+AGS (amtlicher Gemeindeschlüssel) Beispiel der Stadt Düsseldorf: „bab:05111000“'
-      #bab:<numerisches Feld, min. 5-, max. 8-stellig, mit führenden Nullen>
-      commune: Stadt / Gemeinde / Kreis
+      commune_type: Stadt / Gemeinde / Kreis
       intermediary_operator_type: Intermediärsbetreiber
       intermediary_operator_type_choices:
         1: DataClearing NRW - KRZN
         2: DataClearing NRW - citeq
         9: DataClearing NRW - Zuordnung nicht bekannt
-      contact_name: Ansprechpartner/in
-      phone_number: Telefonnummer
-      email: E-Mail-Adresse
+      contact: Kontaktperson
       comment: Bemerkung
       documents: Dokumente
       document_type_choices:
@@ -695,6 +698,7 @@ app:
         osci_private_key_file: Privater Schlüssel des OSCI-Zertifikats
       osci_private_key_password: Passwort für privaten Schlüssel
       text_footer: Im Anschluss werden das Benutzerkonto auf einem der XTA-Server von DataClearing NRW (KRZN oder citeq) einrichtet und die Zugangsdaten per E-Mail an die beauftragende Stelle übermittelt. Die Einrichtung kann einige Tage in Anspruch nehmen. Die Zugangsdaten werden bei der Konfiguration der XTA-Schnittstelle des abholenden Fachverfahrens benötigt.
+      custom_values: Benutzerdefinierte Werte
   confidence_level:
     object_name: Vertrauensniveau
     list: Vertrauensniveaus

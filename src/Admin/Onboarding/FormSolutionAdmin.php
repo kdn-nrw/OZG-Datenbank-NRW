@@ -113,6 +113,11 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
         $form
             ->end()
             ->end();
+        $this->addContactFormFields($form);
+    }
+
+    protected function addContactFormFields(FormMapper $form)
+    {
         $form
             ->tab('contacts', [
                 'label' => 'app.form_solution.groups.contact_data',
@@ -122,7 +127,7 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin
                 'class' => 'col-md-12 box-collection-static two-col box-clipboard-rows js-copy-row-values',
             ]);
         $form
-            ->add('contacts', CollectionType::class, [
+            ->add('contacts', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
                 'label' => 'app.form_solution.entity.contacts',
                 'entry_type' => OnboardingContactType::class,
                 'entry_options' => [

@@ -181,7 +181,7 @@ class OnboardingProgressCalculator
                 if (empty($properties)) {
                     $properties = [
                         'applicationType', 'organizationalKey', 'intermediaryOperatorType',
-                        'contactName', 'phoneNumber', 'email', 'osciPrivateKeyPassword',
+                        'contact', 'osciPrivateKeyPassword',
                         'documents',
                     ];
                 }
