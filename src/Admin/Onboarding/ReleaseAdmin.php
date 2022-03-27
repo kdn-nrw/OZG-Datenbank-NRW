@@ -12,6 +12,8 @@
 namespace App\Admin\Onboarding;
 
 
+use App\Admin\Base\AuditedEntityAdminInterface;
+use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\DatePickerTrait;
 use App\Entity\Onboarding\Release;
@@ -22,8 +24,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\BooleanType;
 
-class ReleaseAdmin extends AbstractOnboardingAdmin
+class ReleaseAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdminInterface
 {
+    use AuditedEntityAdminTrait;
     use DatePickerTrait;
 
     protected $baseRoutePattern = 'onboarding/go-live';

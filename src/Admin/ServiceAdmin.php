@@ -438,7 +438,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('lawShortcuts')
             ->add('relevance1')
             ->add('relevance2')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',

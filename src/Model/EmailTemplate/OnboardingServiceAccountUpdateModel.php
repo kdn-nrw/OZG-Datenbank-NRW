@@ -51,7 +51,8 @@ class OnboardingServiceAccountUpdateModel extends AbstractTemplateModel
         $template->setSenderName('KDN OZG');
         $template->setSubject('Änderung Onboarding Servicekonto NRW ###ONBOARDING_SERVICE_ACCOUNT_COMMUNE###');
         $template->setBody('Das Servicekonto ###ONBOARDING_SERVICE_ACCOUNT_COMMUNE### wurde von ###USER_FIRSTNAME### ###USER_LASTNAME### aktualisiert:
-###ONBOARDING_SERVICE_ACCOUNT_ADMIN_EDIT_URL###');
+###ONBOARDING_SERVICE_ACCOUNT_ADMIN_EDIT_URL###
+###CHANGES###');
         return $template;
     }
 

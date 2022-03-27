@@ -16,6 +16,7 @@ use App\Admin\SolutionAdmin;
 use App\Entity\Solution;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 
 
 class OnboardingServiceAdmin extends SolutionAdmin
@@ -122,7 +123,7 @@ class OnboardingServiceAdmin extends SolutionAdmin
                 'enable_filter_add' => true,
             ])
             ->add('name')/*
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',

@@ -18,6 +18,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\Form\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -90,7 +91,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
                 'admin_code' => SolutionAdmin::class
             ])
             ->add('articleNumber')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -121,7 +122,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('assistantType')
             ->add('articleKey')
             ->add('usableAsPrintTemplate')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',

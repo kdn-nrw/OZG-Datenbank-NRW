@@ -12,16 +12,22 @@
 namespace App\Admin\Onboarding;
 
 
+use App\Admin\Base\AuditedEntityAdminInterface;
+use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Mapper\BaseMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
-class ServiceAccountAdmin extends AbstractOnboardingAdmin
+class ServiceAccountAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdminInterface
 {
+    use AuditedEntityAdminTrait;
     protected $baseRoutePattern = 'onboarding/servicekonto';
 
     protected function configureFormFields(FormMapper $form)
@@ -33,9 +39,9 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
         }
     }
 
-    protected function configureFormGroups(FormMapper $form)
+    protected function configureFormGroups(BaseMapper $mapper)
     {
-        $form
+        $mapper
             ->tab('General', [
                 'label' => 'app.service_account.tabs.general',
                 'description' => 'app.service_account.tabs.general_description',
@@ -58,7 +64,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
             ->end()
             ->end();
         if ($this->isGranted('ALL')) {
-            $form
+            $mapper
                 ->tab('Mandator', [
                     'label' => 'app.service_account.tabs.mandator',
                     'tab' => true,
@@ -178,6 +184,75 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
                 'attr' => [
                     'placeholder' => 'app.service_account.entity.client_password2_placeholder',
                 ],
+            ])
+            ->end()
+            ->end();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function configureShowFields(ShowMapper $show)
+    {
+        $this->configureFormGroups($show);
+        $this->addMandatorShowFields($show);
+        if ($this->isGranted('ALL')) {
+            $this->addMandatorAccountShowFields($show);
+        }
+    }
+
+    protected function addMandatorShowFields(ShowMapper $show)
+    {
+        $show->tab('General');
+
+        $show
+            ->with('general')
+            ->add('commune', null, [
+                'admin_code' => CommuneAdmin::class,
+            ])
+            ->add('street', null, [
+            ])
+            ->add('zipCode', null, [
+            ])
+            ->add('town', null, [
+            ]);
+
+        $show->end();
+        $show
+            ->with('admin_account')
+            ->add('paymentUser', null, [
+            ])
+            ->end();
+        $show
+            ->with('mandator_email')
+            ->add('mandatorEmail', TemplateRegistryInterface::TYPE_EMAIL, [
+            ])
+            ->add('groupEmail', TemplateRegistryInterface::TYPE_EMAIL, [
+            ]);
+
+        $show->end();
+        $show
+            ->end();
+    }
+
+    protected function addMandatorAccountShowFields(ShowMapper $show)
+    {
+        $show
+            ->tab('Mandator')
+            ->with('account')
+            ->add('answerUrl1', TemplateRegistryInterface::TYPE_URL, [
+            ])
+            ->add('clientId', null, [
+            ])
+            ->add('clientPassword', null, [
+            ])
+            ->end()
+            ->with('account2')
+            ->add('answerUrl2', TemplateRegistryInterface::TYPE_URL, [
+            ])
+            ->add('clientId2', null, [
+            ])
+            ->add('clientPassword2', null, [
             ])
             ->end()
             ->end();

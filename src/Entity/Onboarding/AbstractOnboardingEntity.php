@@ -28,6 +28,7 @@ use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use SimpleThings\EntityAudit\Collection\AuditedCollection;
 
 
 /**
@@ -440,6 +441,10 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
     public function getDocuments(): Collection
     {
         $collection = $this->documents;
+        // Prevent exception when loading audits; only used by AuditReader
+        if ($collection instanceof AuditedCollection) {
+            return $collection;
+        }
         if ($collection instanceof Collection && !empty($this->requiredDocumentTypes)) {
             /** @var OnboardingDocument[]|ArrayCollection $collection */
             $typeChoices = $this->requiredDocumentTypes;

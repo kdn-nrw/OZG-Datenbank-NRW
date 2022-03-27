@@ -378,7 +378,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'enable_filter_add' => true,
             ])
             ->add('name')/*
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',

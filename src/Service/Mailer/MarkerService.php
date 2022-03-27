@@ -90,10 +90,10 @@ class MarkerService
         $admin = $this->adminManager->getAdminByEntityClass($entityClass);
         $urlEdit = '';
         $urlShow = '';
-        if (null !== $admin && $admin->hasRoute('edit')) {
+        if (null !== $admin && $admin->hasRoute('edit') && $entity->getId()) {
             $urlEdit = $admin->generateObjectUrl('edit', $entity, [], RoutingUrlGeneratorInterface::ABSOLUTE_URL);
         }
-        if (null !== $admin && $admin->hasRoute('show')) {
+        if (null !== $admin && $admin->hasRoute('show') && $entity->getId()) {
             $urlShow = $admin->generateObjectUrl('show', $entity, [], RoutingUrlGeneratorInterface::ABSOLUTE_URL);
         }
         $classLabel = PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($entityClass, '') . 'object_name';

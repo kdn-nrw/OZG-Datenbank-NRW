@@ -290,11 +290,11 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         ])
             ->add('modifiedAt')
             ->add('description')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,
-                //'catalogue' => 'SonataAdminBundle',
+                'catalogue' => 'messages',
             ])
             ->add('customValues');
     }
@@ -376,7 +376,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     protected function configureRoutes(RouteCollection $collection)
     {
         parent::configureRoutes($collection);
-        $collection->clearExcept(['list', 'edit']);
+        $collection->clearExcept(['list', 'edit', 'history', 'history_view_revision', 'history_compare_revisions']);
         $collection
             ->add('askQuestion', $this->getRouterIdParameter() . '/ask-question')
             ->add('showQuestions', $this->getRouterIdParameter() . '/show-questions');
@@ -384,6 +384,10 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
 
     public function hasRoute($name)
     {
-        return in_array($name, ['list', 'edit', 'askQuestion', 'showQuestions'], false);
+        if (in_array($name, ['create', 'delete', 'export'])) {
+            return false;
+        }
+        //['list', 'edit', 'download', 'askQuestion', 'showQuestions', 'history']
+        return parent::hasRoute($name);
     }
 }

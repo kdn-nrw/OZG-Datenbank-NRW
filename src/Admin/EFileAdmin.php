@@ -20,6 +20,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\Form\Type\BooleanType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -129,7 +130,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
                 ]
             ])
             ->add('url', 'url')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => EFileStatus::class,
                 'catalogue' => 'messages',
@@ -155,7 +156,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
         $this->addCommunesShowFields($show);
         $show
             ->add('serviceProvider')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => EFileStatus::class,
                 'catalogue' => 'messages',

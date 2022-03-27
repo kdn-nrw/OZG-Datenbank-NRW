@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Api\Consumer\ApiConsumerInterface;
+use App\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
 use App\DependencyInjection\Compiler\ApiManagerCompilerPass;
 use App\DependencyInjection\Compiler\ChartStatisticsCompilerPass;
 use App\DependencyInjection\Compiler\CustomFieldAdminCompilerPass;
@@ -70,6 +71,7 @@ class Kernel extends BaseKernel
         $container->registerForAutoconfiguration(ChartStatisticsProviderInterface::class)
             ->addTag('custom_statistics.provider');
         // https://symfony.com/doc/4.4/service_container/tags.html#create-a-compiler-pass
+        $container->addCompilerPass(new AddAuditEntityCompilerPass());
         $container->addCompilerPass(new ChartStatisticsCompilerPass());
         $container->addCompilerPass(new ApiManagerCompilerPass());
         $container->addCompilerPass(new CustomFieldAdminCompilerPass());

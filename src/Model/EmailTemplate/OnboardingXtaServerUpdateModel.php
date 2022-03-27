@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace App\Model\EmailTemplate;
 
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Configuration\EmailTemplate;
-use App\Entity\Onboarding\Release;
 use App\Entity\Onboarding\XtaServer;
+use App\Service\AuditManager;
 use Symfony\Component\Mime\Address;
 
 class OnboardingXtaServerUpdateModel extends AbstractTemplateModel
@@ -76,8 +77,40 @@ Intermediär = „DataClearing NRW - citeq“ => dataclearing@citeq.de
 Intermediär = „DataClearing NRW - Zuordnung nicht bekannt“ => Empfänger (Standard)');
         $template->setSubject('Bauportal.NRW - XTA-Antrag  ###ONBOARDING_XTA_SERVER_COMMUNE### - Daten via KDN-Formular');
         $template->setBody('Die XTA Onboarding Information von  ###ONBOARDING_XTA_SERVER_COMMUNE### wurden von ###USER_FIRSTNAME### ###USER_LASTNAME### aktualisiert:
-###ONBOARDING_XTA_SERVER_ADMIN_EDIT_URL###');
+###ONBOARDING_XTA_SERVER_ADMIN_EDIT_URL###
+###CHANGES###');
         return $template;
+    }
+
+    /**
+     * Extend audit content for related entities
+     * @param AuditManager $auditManager
+     * @param BaseEntityInterface $object
+     * @return string
+     */
+    protected function getObjectAuditContent(AuditManager $auditManager, BaseEntityInterface $object): string
+    {
+        $changesContent = '';
+        if ($object instanceof XtaServer) {
+            $revisionData = $auditManager->getLatestRevisions($object);
+            if ($revisionData['valid']) {
+                $changesContent .= $auditManager->getContentForRevisions(
+                    $object,
+                    $revisionData['previous_rev'],
+                    $revisionData['current_rev'],
+                    AuditManager::RENDER_TYPE_TEXT
+                );
+                if (null !== $contact = $object->getContact()) {
+                    $changesContent .= PHP_EOL . PHP_EOL . $auditManager->getContentForRevisions(
+                        $contact,
+                        $revisionData['previous_rev'],
+                        $revisionData['current_rev'],
+                        AuditManager::RENDER_TYPE_TEXT
+                    );
+                }
+            }
+        }
+        return trim($changesContent);
     }
 
 }

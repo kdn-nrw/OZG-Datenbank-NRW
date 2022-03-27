@@ -11,6 +11,8 @@
 
 namespace App\Admin\Onboarding;
 
+use App\Admin\Base\AuditedEntityAdminInterface;
+use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Entity\Onboarding\Epayment;
@@ -30,8 +32,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class EpaymentAdmin extends AbstractOnboardingAdmin
+class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdminInterface
 {
+    use AuditedEntityAdminTrait;
     use ServiceProviderTrait;
 
     protected $baseRoutePattern = 'onboarding/epaybl';
@@ -62,6 +65,42 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
             ->end()
             ->end();
         $form
+            ->with('Manager', [
+                'label' => 'app.epayment.tabs.manager',
+                'tab' => true,
+                'description' => 'app.epayment.tabs.manager_description',
+            ])
+            ->with('manager_info', [
+                'label' => false,
+                'class' => 'col-md-12',
+                //'description' => 'app.epayment.groups.activation_system_description',
+            ])
+            ->end()
+            ->end();
+        $form
+            ->with('Services', [
+                'label' => 'app.epayment.tabs.services',
+                'tab' => true,
+            ])
+            ->with('epayment_services', [
+                'label' => false,
+                'class' => 'col-md-12',
+            ])
+            ->end()
+            ->end();
+        $form
+            ->with('Testsystem', [
+                'label' => 'app.epayment.groups.activation_system',
+                'tab' => true,
+                'description' => 'app.epayment.groups.activation_system_description',
+            ])
+            ->with('activation_system', [
+                'label' => false,
+                'class' => 'col-md-12',
+            ])
+            ->end()
+            ->end();
+        $form
             ->with('Provider', [
                 'label' => 'app.epayment.tabs.provider',
                 'tab' => true,
@@ -82,42 +121,6 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'class' => 'col-md-12 box-collection-table four-col box-collection-epayment-projects',
                 // Show text after account group!
                 'description' => 'app.epayment.groups.account_description',
-            ])
-            ->end()
-            ->end();
-        $form
-            ->with('Manager', [
-                'label' => 'app.epayment.tabs.manager',
-                'tab' => true,
-                'description' => 'app.epayment.tabs.manager_description',
-            ])
-            ->with('manager_info', [
-                'label' => false,
-                'class' => 'col-md-12',
-                //'description' => 'app.epayment.groups.activation_system_description',
-            ])
-            ->end()
-            ->end();
-        $form
-            ->with('Testsystem', [
-                'label' => 'app.epayment.groups.activation_system',
-                'tab' => true,
-                'description' => 'app.epayment.groups.activation_system_description',
-            ])
-            ->with('activation_system', [
-                'label' => false,
-                'class' => 'col-md-12',
-            ])
-            ->end()
-            ->end();
-        $form
-            ->with('Services', [
-                'label' => 'app.epayment.tabs.services',
-                'tab' => true,
-            ])
-            ->with('epayment_services', [
-                'label' => false,
-                'class' => 'col-md-12',
             ])
             ->end()
             ->end();
@@ -418,6 +421,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
                 'editable' => false,
                 'choices' => Epayment::getDayChoices(),
                 'catalogue' => 'messages',
+                'multiple' => true,
             ])
             ->add('epaymentServices');
     }

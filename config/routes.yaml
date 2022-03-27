@@ -19,3 +19,7 @@ app_record_export:
 authentication_token:
     path: /api/authentication_token
     methods: ['POST']
+
+simple_things_entity_audit:
+    resource: "@SimpleThingsEntityAuditBundle/Resources/config/routing.yml"
+    prefix: /audit

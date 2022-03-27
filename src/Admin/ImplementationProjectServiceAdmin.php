@@ -18,6 +18,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 
 
 class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
@@ -86,7 +87,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                     ['fieldName' => 'service'],
                 ]
             ])
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
@@ -113,7 +114,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
             ->add('service', null, [
                 'admin_code' => \App\Admin\ServiceAdmin::class
             ])
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',

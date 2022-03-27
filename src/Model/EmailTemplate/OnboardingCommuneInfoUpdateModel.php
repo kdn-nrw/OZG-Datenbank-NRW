@@ -51,7 +51,8 @@ class OnboardingCommuneInfoUpdateModel extends AbstractTemplateModel
         $template->setSenderName('KDN OZG');
         $template->setSubject('Änderung Onboarding Basisdaten ###ONBOARDING_COMMUNE_INFO_COMMUNE###');
         $template->setBody('Die Onboarding Basisdaten von ###ONBOARDING_COMMUNE_INFO_COMMUNE### wurden von ###USER_FIRSTNAME### ###USER_LASTNAME### aktualisiert:
-###ONBOARDING_COMMUNE_INFO_ADMIN_EDIT_URL###');
+###ONBOARDING_COMMUNE_INFO_ADMIN_EDIT_URL###
+###CHANGES###');
         return $template;
     }
 

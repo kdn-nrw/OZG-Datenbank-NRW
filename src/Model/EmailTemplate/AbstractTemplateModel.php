@@ -15,6 +15,7 @@ namespace App\Model\EmailTemplate;
 
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Configuration\EmailTemplate;
+use App\Service\AuditManager;
 use App\Util\SnakeCaseConverter;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,6 +24,9 @@ abstract class AbstractTemplateModel
 {
     public const PROCESS_TYPE_CREATE = 'create';
     public const PROCESS_TYPE_UPDATE = 'update';
+
+
+    public const VARIABLE_KEY_AUDIT = 'changes';
 
     /**
      * @var string|null
@@ -222,6 +226,37 @@ abstract class AbstractTemplateModel
         $entityKey = trim(str_replace(['\\', 'App_Entity'], ['_', ''], $entityClass), ' _');
         $entityKey = strtoupper(SnakeCaseConverter::camelCaseToSnakeCase($entityKey));
         return strtolower($entityKey . ($processType ? '_' . $processType : ''));
+    }
+
+    /**
+     * Optionally add the audit content; this is needed here, because the relevant entities depend on the main
+     * entity, the specific email template belongs to;
+     * @see getObjectAuditContent for extending the audit content
+     *
+     * @param AuditManager $auditManager
+     * @param BaseEntityInterface $object
+     * @return void
+     */
+    public function addAuditContent(AuditManager $auditManager, BaseEntityInterface $object): void
+    {
+        $this->setVariable(self::VARIABLE_KEY_AUDIT, $this->getObjectAuditContent($auditManager, $object));
+    }
+
+    /**
+     * Optionally add the audit content; this is needed here, because the relevant entities depend on the main
+     * entity, the specific email template belongs to;
+     * The default function only adds the changes for the given entity
+     *
+     * @param AuditManager $auditManager
+     * @param BaseEntityInterface $object
+     * @return string
+     */
+    protected function getObjectAuditContent(AuditManager $auditManager, BaseEntityInterface $object): string
+    {
+        return $auditManager->getChangesForEntity(
+            $object,
+            AuditManager::RENDER_TYPE_TEXT
+        );
     }
 
 }

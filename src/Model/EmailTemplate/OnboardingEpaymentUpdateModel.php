@@ -51,7 +51,8 @@ class OnboardingEpaymentUpdateModel extends AbstractTemplateModel
         $template->setSenderName('KDN OZG');
         $template->setSubject('Änderung Onboarding ePayBL ###ONBOARDING_EPAYMENT_COMMUNE###');
         $template->setBody('Die ePayBL-Daten von ###ONBOARDING_EPAYMENT_COMMUNE### wurden von ###USER_FIRSTNAME### ###USER_LASTNAME### aktualisiert:
-###ONBOARDING_EPAYMENT_ADMIN_EDIT_URL###');
+###ONBOARDING_EPAYMENT_ADMIN_EDIT_URL###
+###CHANGES###');
         return $template;
     }
 

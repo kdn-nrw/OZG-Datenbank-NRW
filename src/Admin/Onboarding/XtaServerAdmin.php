@@ -12,6 +12,8 @@
 namespace App\Admin\Onboarding;
 
 
+use App\Admin\Base\AuditedEntityAdminInterface;
+use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\Traits\DatePickerTrait;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
@@ -27,17 +29,16 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Validator\ErrorElement;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Valid;
 
-class XtaServerAdmin extends AbstractOnboardingAdmin
+class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdminInterface
 {
+    use AuditedEntityAdminTrait;
     use DatePickerTrait;
 
     protected $baseRoutePattern = 'onboarding/xta';
@@ -91,7 +92,8 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
                 'disabled' => true,
             ])
             ->add('organizationalKey', TextType::class, [
-                'required' => $enableRequiredFields,
+                'required' => false,
+                'disabled' => true,
             ]);
         /** @var XtaServer|null $subject */
         $subject = $this->getSubject();
@@ -258,11 +260,11 @@ class XtaServerAdmin extends AbstractOnboardingAdmin
                 'admin_code' => CommuneAdmin::class,
             ])
             ->add('modifiedAt')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,
-                //'catalogue' => 'SonataAdminBundle',
+                'catalogue' => 'messages',
             ])
             ->add('customValues');
         $show

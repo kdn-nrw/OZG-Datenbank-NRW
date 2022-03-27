@@ -79,7 +79,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 'admin_code' => \App\Admin\SolutionAdmin::class
             ])
             /*->add('description')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -101,7 +101,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 'admin_code' => \App\Admin\SolutionAdmin::class
             ])
             ->add('maturity')/*
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',

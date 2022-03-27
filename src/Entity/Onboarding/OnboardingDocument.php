@@ -72,8 +72,9 @@ class OnboardingDocument extends BaseNamedEntity implements DocumentUploadEntity
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $localName;
+
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\AbstractOnboardingEntity", inversedBy="documents")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\AbstractOnboardingEntity", inversedBy="documents", cascade={"persist"})
      * @ORM\JoinColumn(name="onboarding_id", referencedColumnName="id", nullable=true)
      * @var AbstractOnboardingEntity|null
      */

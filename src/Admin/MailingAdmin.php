@@ -29,6 +29,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Validator\ErrorElement;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -172,7 +173,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     {
         $list
             ->add('createdAt')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'choices' => Mailing::$statusChoices,
                 'catalogue' => 'messages',
@@ -192,7 +193,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     {
         $show
             ->add('createdAt')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'choices' => Mailing::$statusChoices,
                 'catalogue' => 'messages',

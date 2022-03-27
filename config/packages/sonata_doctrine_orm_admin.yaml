@@ -1,4 +1,6 @@
 sonata_doctrine_orm_admin:
+  audit:
+    force: false
   templates:
     form:
       - General/Form/form_admin_fields.html.twig

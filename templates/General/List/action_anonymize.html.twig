@@ -1,0 +1,16 @@
+{# @var object \App\Entity\Base\AnonymizableEntityTrait #}
+{% if null == object.anonymizedAt %}
+    {% extends 'General/CRUD/action_generic.html.twig' %}
+
+    {%- block link_attributes -%}
+        {% set route = actions.route|default(_key) %}
+        {% set modalOptions = actions.modalOptions|default({
+            'title': 'app.common.anonymize_person_data.modal_title'|trans,
+            'message': 'app.common.anonymize_person_data.modal_message'|trans
+        }) %}
+
+        class="btn btn-sm btn-default view_link js-modal-confirm"
+        title="{{ label }}"
+        {{ modal_confirm_tags(modalOptions) }}
+    {%- endblock link_attributes -%}
+{% endif %}

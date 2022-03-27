@@ -18,6 +18,7 @@ use App\Entity\StateGroup\ServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use SimpleThings\EntityAudit\Collection\AuditedCollection;
 
 
 /**
@@ -338,6 +339,10 @@ class Epayment extends AbstractOnboardingEntity
     public function getProjects(): Collection
     {
         $collection = $this->projects;
+        // Prevent exception when loading audits; only used by AuditReader
+        if ($collection instanceof AuditedCollection) {
+            return $collection;
+        }
         if ($collection instanceof Collection) {
             $projectTypeChoices = EpaymentProject::getTypeEnvironmentChoices();
             $order = [];

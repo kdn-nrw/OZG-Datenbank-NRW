@@ -58,6 +58,7 @@ app:
       list: Übersicht
     add_sub_record: Neuen Eintrag bearbeiten
     actions: Aktionen
+    action_history: Historie
     full_text_search: Volltextsuche
     add_filter: Filter hinzufügen
     yes_no_choices:
@@ -81,6 +82,19 @@ app:
       my_service_provider: Mein IT Dienstleister
       my_inquiries: Rückfrage
     export_list: Datensätze exportieren
+    anonymize_person_data:
+      modal_title: 'Personenbezogene Daten anonymisieren (DSGVO)'
+      modal_message: |
+        Im Rahmen des Datenschutzes personenbezogener Daten können Sie die Daten anonymisieren.
+        Wenn Sie diesen Dialog bestätigen, werden die personenbezogenen Daten anonymisiert.
+
+        Folgen der Anonymisierung:
+        <ul>
+          <li><b>Achtung:</b> Dieser Schritt kann nicht rückgängig gemacht werden!</li>
+          <li>Kein Administrator von OZG kann Personendaten mehr einsehen</li>
+          <li>Kontakte und anere Datensätze bleiben weiterhin erhalten</li>
+        </ul>
+      successfull: 'Alle personenbezogenen Daten erfolgreich anonymisiert.'
   object_references:
     headline: Referenzen auf dieses Objekt
     delete_error: Der Datensatz kann nicht gelöscht werden, da es andere Datnsätze gibt, die von diesem Datensatz abhängig sind. Bitte prüfen Sie die rot markierten Datensätze.

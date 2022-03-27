@@ -12,6 +12,8 @@
 namespace App\Admin\ModelRegion;
 
 use App\Admin\AbstractAppAdmin;
+use App\Admin\Base\AuditedEntityAdminInterface;
+use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\OrganisationAdmin;
 use App\Admin\SolutionAdmin;
@@ -39,8 +41,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
+class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface, AuditedEntityAdminInterface
 {
+    use AuditedEntityAdminTrait;
     use AddressTrait;
     use DatePickerTrait;
     use ModelRegionTrait;

@@ -1,0 +1,67 @@
+{% extends 'base_ajax.html.twig' %}
+
+{% block body %}
+<div class="sonata-ba-view">
+
+    {# NEXT_MAJOR: Remove the sonata_deprecation_mute param. #}
+    {# @var admin \Sonata\AdminBundle\Admin\AbstractAdmin #}
+    {% set showtabs = admin.getshowtabs('sonata_deprecation_mute') %}
+    {% set has_tab = (showtabs|length == 1 and showtabs|keys[0] != 'default') or showtabs|length > 1 %}
+
+    {% if has_tab %}
+        {% set tab_prefix = 'tab_' ~ admin.uniqid ~ '_' ~ random() %}
+        {% set tab_query_index = app.request.query.get('_tab', 0)|split("_")|last %}
+        {% for code, show_tab in showtabs %}
+            {% set _tab_name = tab_prefix ~ '_' ~ loop.index %}
+
+            {% set groups = show_tab.groups %}
+            {{ block('show_groups') }}
+        {% endfor %}
+    {% elseif showtabs['default'] is defined %}
+        {% set groups = showtabs['default'].groups %}
+        {{ block('show_groups') }}
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block show_groups %}
+    <div class="row">
+        {% block field_row %}
+            {% for code in groups %}
+                {% set show_group = admin.showgroups[code] %}
+
+                <div class="{{ show_group.class|default('col-md-12') }} {{ no_padding|default(false) ? 'nopadding' }}">
+                    <div class="{{ show_group.box_class }}">
+                        <div class="box-header">
+                            <h4 class="box-title">
+                                {% block show_title %}
+                                    {{ show_group.label|trans({}, show_group.translation_domain|default(admin.translationDomain)) }}
+                                {% endblock %}
+                            </h4>
+                        </div>
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table">
+                                <tbody>
+                                {% for field_name in show_group.fields %}
+                                    {% block show_field %}
+                                        {% apply spaceless %}
+                                            {% set fieldContent = elements[field_name]|app_view_element_compare(object, object_compare) %}
+                                            {% if fieldContent and elements[field_name] is defined %}
+                                                <tr class="sonata-ba-view-container history-audit-compare">
+                                                    {{ elements[field_name]|app_view_element_compare(object, object_compare) }}
+                                                </tr>
+                                            {% endif %}
+                                        {% endapply %}
+                                    {% endblock %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endblock %}
+
+    </div>
+{% endblock %}

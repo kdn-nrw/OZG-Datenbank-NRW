@@ -12,6 +12,8 @@
 namespace App\Admin\Onboarding;
 
 
+use App\Admin\Base\AuditedEntityAdminInterface;
+use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
@@ -24,8 +26,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class FormSolutionAdmin extends AbstractOnboardingAdmin
+class FormSolutionAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdminInterface
 {
+    use AuditedEntityAdminTrait;
     protected $baseRoutePattern = 'onboarding/formsolutions';
 
     protected function configureFormFields(FormMapper $form)

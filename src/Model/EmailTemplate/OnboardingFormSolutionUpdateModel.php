@@ -51,7 +51,8 @@ class OnboardingFormSolutionUpdateModel extends AbstractTemplateModel
         $template->setSenderName('KDN OZG');
         $template->setSubject('Änderung Onboarding Formsolutions ###ONBOARDING_FORM_SOLUTION_COMMUNE###');
         $template->setBody('Die Onboarding Formsolutions von ###ONBOARDING_FORM_SOLUTION_COMMUNE### wurden von ###USER_FIRSTNAME### ###USER_LASTNAME### aktualisiert:
-###ONBOARDING_FORM_SOLUTION_ADMIN_EDIT_URL###');
+###ONBOARDING_FORM_SOLUTION_ADMIN_EDIT_URL###
+###CHANGES###');
         return $template;
     }
 

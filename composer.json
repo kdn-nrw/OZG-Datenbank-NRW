@@ -29,6 +29,7 @@
         "shapecode/cron-bundle": "^4.0",
         "sonata-project/admin-bundle": "^3.79",
         "sonata-project/doctrine-orm-admin-bundle": "^3.24",
+        "sonata-project/entity-audit-bundle": "^1.0",
         "sonata-project/formatter-bundle": "^4.3",
         "sonata-project/intl-bundle": "^2.9",
         "sonata-project/translation-bundle": "^2.5",

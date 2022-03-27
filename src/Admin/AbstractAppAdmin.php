@@ -12,6 +12,8 @@
 namespace App\Admin;
 
 
+use App\Admin\Base\AdminTranslatorStrategyTrait;
+use App\Admin\Base\AuditedEntityAdminInterface;
 use App\Admin\Traits\IsExcludedFormField;
 use App\DependencyInjection\InjectionTraits\InjectEventDispatcherTrait;
 use App\Entity\Base\BaseEntityInterface;
@@ -152,6 +154,13 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
             'edit' => [],
             'delete' => [],
         ];
+        if ($this instanceof AuditedEntityAdminInterface && $this->isEntityAuditEnabled()) {
+            $actions['history'] = [
+                'label' => $this->trans('app.common.action_history'),
+                'template' => 'General/List/action_history.html.twig',
+                'icon' => 'fa-history',
+            ];
+        }
         if ($extraActions) {
             $actions = array_merge($actions, $extraActions);
         }

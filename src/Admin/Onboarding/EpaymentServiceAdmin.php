@@ -12,6 +12,8 @@
 namespace App\Admin\Onboarding;
 
 use App\Admin\AbstractAppAdmin;
+use App\Admin\Base\AuditedEntityAdminInterface;
+use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Entity\Onboarding\EpaymentService;
 use App\Entity\Solution;
 use Doctrine\ORM\EntityManager;
@@ -25,8 +27,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
-class EpaymentServiceAdmin extends AbstractAppAdmin
+class EpaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdminInterface
 {
+    use AuditedEntityAdminTrait;
     protected $baseRoutePattern = 'onboarding/epayment-service';
 
     protected function configureFormFields(FormMapper $form)

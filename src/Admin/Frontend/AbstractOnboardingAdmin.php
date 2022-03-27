@@ -18,6 +18,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -82,11 +83,11 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
                 'admin_code' => CommuneAdmin::class,
             ])
             ->add('modifiedAt')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,
-                //'catalogue' => 'SonataAdminBundle',
+                'catalogue' => 'messages',
             ]);
         $this->addDefaultListActions($list);
     }
@@ -101,11 +102,11 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
         ])
             ->add('modifiedAt')
             ->add('description')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,
-                //'catalogue' => 'SonataAdminBundle',
+                'catalogue' => 'messages',
             ]);
     }
 }

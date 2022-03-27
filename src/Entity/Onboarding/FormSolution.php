@@ -15,6 +15,7 @@ use App\Entity\StateGroup\Commune;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use SimpleThings\EntityAudit\Collection\AuditedCollection;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -134,6 +135,10 @@ class FormSolution extends AbstractOnboardingEntity
     public function getContacts()
     {
         $collection = $this->contacts;
+        // Prevent exception when loading audits; only used by AuditReader
+        if ($collection instanceof AuditedCollection) {
+            return $collection;
+        }
         if ($collection instanceof Collection) {
             $typeChoices = [Contact::CONTACT_TYPE_FS];//Contact::$contactTypeChoices;
             $order = [];

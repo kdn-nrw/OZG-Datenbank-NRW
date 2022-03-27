@@ -19,6 +19,8 @@ use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\PersonInterface;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\Configuration\EmailTemplate;
+use App\Entity\Onboarding\AbstractOnboardingEntity;
+use App\Entity\StateGroup\Commune;
 use App\Model\EmailTemplate\AbstractTemplateModel;
 use App\Model\EmailTemplate\OnboardingCommuneInfoUpdateModel;
 use App\Model\EmailTemplate\OnboardingDataCompleteUpdateModel;
@@ -28,9 +30,10 @@ use App\Model\EmailTemplate\OnboardingReleaseUpdateModel;
 use App\Model\EmailTemplate\OnboardingServiceAccountUpdateModel;
 use App\Model\EmailTemplate\OnboardingXtaServerUpdateModel;
 use App\Service\InjectAdminManagerTrait;
+use App\Service\InjectAuditManagerTrait;
 use App\Translator\TranslatorAwareTrait;
-use App\Util\SnakeCaseConverter;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\Mapping\MappingException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Storage\FileSystemStorage;
@@ -38,6 +41,7 @@ use Vich\UploaderBundle\Storage\FileSystemStorage;
 class EmailTemplateManager
 {
     use InjectAdminManagerTrait;
+    use InjectAuditManagerTrait;
     use InjectManagerRegistryTrait;
     use InjectSecurityTrait;
     use TranslatorAwareTrait;
@@ -66,6 +70,15 @@ class EmailTemplateManager
         $this->setTranslator($translator);
     }
 
+    /**
+     * Create and persist entities for all defined email templates with the default values.
+     * Each entity is only created once.
+     * This function ensures, that the email template entities exist, before being used anywhere
+     *
+     * @return void
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function createTemplates(): void
     {
         $em = $this->getEntityManager();
@@ -93,7 +106,7 @@ class EmailTemplateManager
      * @param BaseEntityInterface $object
      * @param string $processType
      */
-    public function sendNotificationsForObject(BaseEntityInterface $object, string $processType)
+    public function sendNotificationsForObject(BaseEntityInterface $object, string $processType): void
     {
         $templates = $this->getEmailTemplates();
         foreach ($templates as $modelClass) {
@@ -102,6 +115,9 @@ class EmailTemplateManager
             if ($modelInstance->isMatch($object, $processType)) {
                 $this->initializeTemplateModel($modelInstance);
                 $modelInstance->setVariable('entity', $object);
+                if ($processType === AbstractTemplateModel::PROCESS_TYPE_UPDATE) {
+                    $modelInstance->addAuditContent($this->auditManager, $object);
+                }
                 $this->sendMarkerEmail($modelInstance);
             }
         }
@@ -140,10 +156,12 @@ class EmailTemplateManager
         $user = $this->security->getUser();
         $model->setUser($user);
         $subject = str_replace($search, $markers, $emailTemplate->getSubject());
-        $lines = explode(PHP_EOL, str_replace($search, $markers, $emailTemplate->getBody()));
+        $bodyContent = str_replace($search, $markers, $emailTemplate->getBody());
+        $lines = explode(PHP_EOL, $bodyContent);
         $emptyLineCount = 0;
         // Remove more than two consecutive empty lines in plain email text
         $messagePlain = '';
+        echo $bodyContent;
         foreach ($lines as $line) {
             $trimmedLine = trim($line);
             if (empty($trimmedLine)) {
@@ -156,8 +174,7 @@ class EmailTemplateManager
                 $messagePlain .= $trimmedLine . PHP_EOL;
             }
         }
-        $email->subject($subject)
-            ->text($messagePlain);
+        $email->subject($subject);
         if ($sendHtmlPart) {
             $messageHtml = $messagePlain;
             $messagePlain = trim(strip_tags($messagePlain));
@@ -172,10 +189,10 @@ class EmailTemplateManager
                     <body style="margin: 0; padding: 0;">' . $messageHtml . '</body>
                     </html>';
             }
-            $email->html($messagePlain);
+            $email->text($messagePlain);
             $email->html($messageHtml);
         } else {
-            $email->html($messagePlain);
+            $email->text($messagePlain);
         }
         return $mailer->sendMessage($email);
     }
@@ -187,14 +204,16 @@ class EmailTemplateManager
      * @param string $processType
      * @return string
      * /
-    private static function getEntityTemplateKey(string $entityClass, string $processType = ''): string
-    {
-        $entityKey = trim(str_replace(['\\', 'App_Entity'], ['_', ''], $entityClass), ' _');
-        $entityKey = strtoupper(SnakeCaseConverter::camelCaseToSnakeCase($entityKey));
-        return strtolower($entityKey . ($processType ? '_' . $processType : ''));
-    }*/
+     * private static function getEntityTemplateKey(string $entityClass, string $processType = ''): string
+     * {
+     * $entityKey = trim(str_replace(['\\', 'App_Entity'], ['_', ''], $entityClass), ' _');
+     * $entityKey = strtoupper(SnakeCaseConverter::camelCaseToSnakeCase($entityKey));
+     * return strtolower($entityKey . ($processType ? '_' . $processType : ''));
+     * }*/
 
     /**
+     * Returns the initialized email template model for the given email template key or entity
+     *
      * @param string|EmailTemplate $keyOrEntity
      * @return AbstractTemplateModel|null
      */
@@ -214,6 +233,8 @@ class EmailTemplateManager
     }
 
     /**
+     * Set the required values for the email template model
+     *
      * @param AbstractTemplateModel $model
      */
     public function initializeTemplateModel(AbstractTemplateModel $model): void
@@ -228,6 +249,11 @@ class EmailTemplateManager
         $model->setUser($this->security->getUser());
     }
 
+    /**
+     * Returns the email template entity for the given template key
+     * @param string $key
+     * @return EmailTemplate|null
+     */
     public function getEmailTemplateByKey(string $key): ?EmailTemplate
     {
         $repository = $this->getEntityManager()->getRepository(EmailTemplate::class);
@@ -299,22 +325,20 @@ class EmailTemplateManager
                             $value = 'Lorem ipsum';
                             break;
                         case 'entity':
-                            $repository = $this->getEntityManager()->getRepository($options['class']);
-                            $queryBuilder = $repository->createQueryBuilder('e');
-                            $queryBuilder->orderBy('e.id', 'desc');
-                            $queryBuilder->setMaxResults(1);
-                            $query = $queryBuilder->getQuery();
-                            $entity = null;
-                            try {
-                                $storedEntity = $query->getOneOrNullResult();
-                                if (null !== $storedEntity) {
-                                    $entity = clone $storedEntity;
-                                }
-                            } catch (NonUniqueResultException $e) {
-                                $entity = null;
-                            }
+                            $em = $this->getEntityManager();
+                            $entity = $this->findExampleEntityForClass($options['class']);
                             if (null === $entity) {
-                                $entity = new $options['class']();
+                                if (is_a($options['class'], AbstractOnboardingEntity::class, true)) {
+                                    $commune = $this->findExampleEntityForClass(Commune::class);
+                                    if (null === $commune) {
+                                        $commune = new Commune();
+                                        $commune->setName('Teststadt');
+                                        $commune->setOfficialCommunityKey('12345');
+                                    }
+                                    $entity = new $options['class']($commune);
+                                } else {
+                                    $entity = new $options['class']();
+                                }
                             }
                             $properties = [];
                             $properties['email'] = 'example@example.com';
@@ -342,12 +366,44 @@ class EmailTemplateManager
                                 }
                             }
                             $value = $entity;
+                            // clear the entity manager to prevent storage of the cloned entity
+                            try {
+                                $em->clear(get_class($entity));
+                            } catch (MappingException $e) {
+                                // Ignore
+                            }
                             break;
                     }
+                    $model->setVariable($variableDefinition->getName(), $value);
                 }
-                $model->setVariable($variableDefinition->getName(), $value);
             }
         }
         return $this->markerService->getModelMarkers($model);
+    }
+
+    /**
+     * Returns either the newest entity of the given class or null
+     *
+     * @param string $className
+     * @return int|mixed|string|null
+     */
+    private function findExampleEntityForClass(string $className)
+    {
+        $em = $this->getEntityManager();
+        $repository = $em->getRepository($className);
+        $queryBuilder = $repository->createQueryBuilder('e');
+        $queryBuilder->orderBy('e.id', 'desc');
+        $queryBuilder->setMaxResults(1);
+        $query = $queryBuilder->getQuery();
+        $entity = null;
+        try {
+            $storedEntity = $query->getOneOrNullResult();
+            if (null !== $storedEntity) {
+                $entity = clone $storedEntity;
+            }
+        } catch (NonUniqueResultException $e) {
+            $entity = null;
+        }
+        return $entity;
     }
 }

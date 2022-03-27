@@ -11,6 +11,8 @@
 
 namespace App\Admin;
 
+use App\Admin\Base\AuditedEntityAdminInterface;
+use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\StateGroup\BureauAdmin;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\DatePickerTrait;
@@ -43,8 +45,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
 
-class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
+class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface, AuditedEntityAdminInterface
 {
+    use AuditedEntityAdminTrait;
     use ContactTrait;
     use DatePickerTrait;
     use FundingTrait;
@@ -326,7 +329,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'choices' => ImplementationProject::EFA_TYPES,
                 'catalogue' => 'messages',
             ])
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
@@ -378,7 +381,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     {
         $show->add('name')
             ->add('description')
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',

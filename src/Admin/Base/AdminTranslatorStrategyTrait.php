@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Admin;
+namespace App\Admin\Base;
 
 
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
@@ -18,9 +18,6 @@ use Sonata\AdminBundle\Translator\LabelTranslatorStrategyInterface;
 /**
  * Class AdminTranslatorStrategyTrait
  *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2019 Gert Hammes
- * @since     2019-11-03
  * @property LabelTranslatorStrategyInterface $labelTranslatorStrategy
  */
 trait AdminTranslatorStrategyTrait

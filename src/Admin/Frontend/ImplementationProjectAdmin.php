@@ -98,7 +98,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 'choices' => ImplementationProject::EFA_TYPES,
                 'catalogue' => 'messages',
             ])
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',

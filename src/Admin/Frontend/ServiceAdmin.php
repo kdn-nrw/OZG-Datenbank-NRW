@@ -25,6 +25,7 @@ use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
@@ -262,7 +263,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ->add('relevance2', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
-            ->add('status', 'choice', [
+            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',

@@ -51,7 +51,8 @@ class OnboardingReleaseUpdateModel extends AbstractTemplateModel
         $template->setSenderName('KDN OZG');
         $template->setSubject('Änderung Onboarding Go-Live NRW ###ONBOARDING_RELEASE_COMMUNE###');
         $template->setBody('Die Go-Live Information von  ###ONBOARDING_RELEASE_COMMUNE### wurden von ###USER_FIRSTNAME### ###USER_LASTNAME### aktualisiert:
-###ONBOARDING_RELEASE_ADMIN_EDIT_URL###');
+###ONBOARDING_RELEASE_ADMIN_EDIT_URL###
+###CHANGES###');
         return $template;
     }
 
