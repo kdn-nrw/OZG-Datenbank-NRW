@@ -9,4 +9,11 @@
       }
     }
   }
+  .treeview-menu > li > a {
+    display: flex;
+    align-items: center;
+    > i {
+      flex: 0 0 20px;
+    }
+  }
 }

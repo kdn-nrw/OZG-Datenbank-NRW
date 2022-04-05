@@ -256,13 +256,13 @@ sonata_admin:
                 icon: '<i class="fa fa-ship"></i>'
                 items:
                     - App\Admin\Onboarding\CommuneInfoAdmin
+                    - App\Admin\Onboarding\OnboardingServiceAdmin
+                    - App\Admin\Onboarding\FormSolutionAdmin
+                    - App\Admin\Onboarding\ReleaseAdmin
+                    - App\Admin\Onboarding\DataclearingAdmin
+                    - App\Admin\Onboarding\InquiryAdmin
                     - App\Admin\Onboarding\EpaymentAdmin
                     - App\Admin\Onboarding\ServiceAccountAdmin
-                    - App\Admin\Onboarding\DataclearingAdmin
-                    - App\Admin\Onboarding\FormSolutionAdmin
-                    - App\Admin\Onboarding\InquiryAdmin
-                    - App\Admin\Onboarding\OnboardingServiceAdmin
-                    - App\Admin\Onboarding\ReleaseAdmin
                     - App\Admin\Onboarding\XtaServerAdmin
             app_admin.menu.basic:
                 label: app.menu.basic_group

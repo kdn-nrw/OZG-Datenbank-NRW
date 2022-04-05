@@ -35,8 +35,8 @@ app:
     vsm_snippet_map: VSM Snippet + Karte
     vsm_api: VSM API
     meta_data: Metadaten
-    onboarding_group: Kommunalportal Onboarding
-    onboarding_dvdv: Onboarding DVDV
+    onboarding_group: Onboarding Service Plattformen
+    onboarding_dvdv: DVDV
   block:
     solution:
       online: 'Dienste: Online'
@@ -424,9 +424,9 @@ app:
       comment: Anmerkungen
       specialized_procedure: Weiterverarbeitendes System
   abstract_onboarding_entity:
-    object_name: Onboarding
-    list: Onboarding Allgemein
-    create: Onboarding erfassen
+    object_name: Onboarding Service
+    list: Onboarding Service Allgemein
+    create: Onboarding Service erfassen
     entity:
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
       group_email_custom: '[Optional/falls abweichend] E-Mail-Adresse für Onboarding-Rückfragen'
@@ -448,7 +448,7 @@ app:
         complete_confirmed: Vollständigkeit bestätigt
   commune_info:
     object_name: Basisdaten
-    list: Onboarding Basisdaten
+    list: Kommunalportal Basisdaten
     create: Basisdaten erfassen
     actions:
       ask_question: Frage stellen
@@ -490,7 +490,7 @@ app:
       ip_address: IP-Adresse
   dataclearing:
     object_name: Dataclearing
-    list: Onboarding Dataclearing
+    list: Kommunalportal Dataclearing
     create: Dataclearing erfassen
     actions:
       ask_question: Frage stellen
@@ -503,7 +503,7 @@ app:
       custom_values: Benutzerdefinierte Werte
   epayment:
     object_name: ePayBL
-    list: Onboarding ePayBL
+    list: ePayBL
     create: ePayBL erfassen
     tabs:
       mandator: Kundenmandant
@@ -599,7 +599,7 @@ app:
         no: Nein, die Xfinanzdatei-Erzeugung ist nicht gewünscht
   form_solution:
     object_name: Formsolution
-    list: Onboarding Formsolutions
+    list: Kommunalportal Formsolutions
     create: Formsolution erfassen
     actions:
       ask_question: Frage stellen
@@ -646,26 +646,26 @@ app:
       administration_email: E-Mail
       administration_url: Web
   onboarding_commune_solution:
-    object_name: Onboarding Dienst
-    list: Onboarding Dienste
-    create: Onboarding Dienst erfassen
+    object_name: Basisdaten Dienst
+    list: Basisdaten Dienste
+    create: Basisdaten Dienst erfassen
     entity:
       solution: Dienst
-      commune_info: Onboarding Basisdaten
+      commune_info: Service Basisdaten
       commune: Kommune
       enabled_epayment: Dienst nutzen
       enabled_municipal_portal: Im Kommunalportal verfügbar
   onboarding_service:
-    object_name: Onboarding Dienst
-    list: Onboarding Dienste
-    create: Onboarding Dienst erfassen
+    object_name: Service Dienst
+    list: Kommunalportal Dienste
+    create: Service Dienst erfassen
     entity:
       name: Name
       url: URL
   xta_server:
-    object_name: XTA Onboarding
-    list: XTA Onboarding
-    create: XTA Onboarding erfassen
+    object_name: Service XTA
+    list: XTA
+    create: Service XTA erfassen
     tabs:
       custom_fields: Weitere Daten
       services: Dienste
@@ -721,10 +721,10 @@ app:
       name: Name
       description: Beschreibung
   epayment_project:
-    object_name: Onboarding ePayBL Projekt
-    list: Onboarding ePayBL Projekte
-    list_services: Projekte
-    create: Onboarding ePayBL Projekt anlegen
+    object_name: ePayBL Projekt
+    list: ePayBL
+    list_services: ePayBL Projekte
+    create: ePayBL Projekt anlegen
     entity:
       project_id: Projekt-ID
       project_password: Projekt-Password
@@ -739,11 +739,11 @@ app:
         sandbox: Integration
         production: Produktion
   epayment_service:
-    object_name: Onboarding ePayBL Dienst
-    list: Onboarding ePayBL Dienste
+    object_name: ePayBL Dienst
+    list: ePayBL Dienste
     list_services: Dienste
     list_services_status: Status der Dienste im ePayBL/Eintrag
-    create: Onboarding ePayBL Dienst anlegen
+    create: ePayBL Dienst anlegen
     groups:
       general: Basisdaten
       optional: Optional Daten
@@ -761,7 +761,7 @@ app:
       tax_number: Steuer-Kennzeichen stsl
   service_account:
     object_name: Servicekonto NRW
-    list: Onboarding Servicekonto NRW
+    list: Servicekonto NRW
     create: Servicekonto erfassen
     actions:
       ask_question: Frage stellen
@@ -816,7 +816,7 @@ app:
       client_password2_placeholder: wird von Servicekonto Betreiber ausgefüllt
   release:
     object_name: Go-Live
-    list: Go-Live
+    list: Kommunalportal Go-Live
     create: Go-Live erfassen
     actions:
       ask_question: Frage stellen
@@ -853,7 +853,7 @@ app:
       release_confirmed:  Liveschaltung bestätigt
   inquiry:
     object_name: Rückfrage
-    list: Onboarding Rückfragen
+    list: Onboarding Service Rückfragen
     create: Rückfrage stellen
     inquiry_about: Rückfrage zu
     new_inquiries_message_prefix: Es gibt
@@ -1013,13 +1013,13 @@ app:
     entity:
       template_key: Typ
       template_key_choices:
-        service_account_update: 'Onboarding Servicekonto NRW - Update'
-        commune_info_update: 'Onboarding Basisdaten - Update'
-        form_solution_update: 'Onboarding Formsolutions - Update'
-        epayment_update: 'Onboarding ePayBL - Update'
+        service_account_update: 'Kommunalportal Servicekonto NRW - Update'
+        commune_info_update: 'Kommunalportal Basisdaten - Update'
+        form_solution_update: 'Kommunalportal Formsolutions - Update'
+        epayment_update: 'Kommunalportal ePayBL - Update'
         release_update: 'Go-Live - Update'
-        onboarding_data_complete_update: 'Onboarding: Die Kommune XY bestätigt, alle notwendigen Felder ausgefüllt zu haben'
-        xta_server_update: 'XTA Onboarding - Update'
+        onboarding_data_complete_update: 'Onboarding Service Plattformen: Die Kommune XY bestätigt, alle notwendigen Felder ausgefüllt zu haben'
+        xta_server_update: 'Service XTA - Update'
       hidden: E-Mail-Versand deaktiviert?
       reply_to_email: Antwort an
       default_recipient: Empfänger (Standard)
@@ -1527,7 +1527,7 @@ app:
         implementation_projects: OZG Umsetzungsprojekte
         solutions: Online-Dienste
         communes: Kommunen
-        onboarding_dvdv: Onboarding DVDV
+        onboarding_dvdv: Onboarding Service DVDV
   payment_type:
     object_name: Bezahlverfahren
     list: Bezahlverfahren

@@ -83,9 +83,10 @@ class MenuBuilderListener
             }
             if ($isAnyOnboardingGranted) {
                 $this->addVsmNodes($menu, $currentRoute);
-                $onboardingGroup->addChild('onboarding_dvdv', [
+                $child = $onboardingGroup->addChild('onboarding_dvdv', [
                     'label' => 'app.menu.onboarding_dvdv',
                     'route' => 'app_onboarding_dvdv',
+                    'linkAttributes' => ['class' => 'nav-link'],
                     /*'extras' => [
                         'routes' => [
                             [
@@ -94,7 +95,37 @@ class MenuBuilderListener
                         ],
                     ],*/
                 ]);
+                $onboardingGroup->removeChild($child);
+                $this->addChildToGroup(
+                    $onboardingGroup,
+                    $currentRoute,
+                    $child,
+                    'app.release.list',
+                    null,
+                    'app_onboarding_dvdv'
+                );
             }
+        }
+        $this->setNavItemClasses($menu);
+    }
+
+    /**
+     * @param ItemInterface $menu
+     * @return void
+     */
+    private function setNavItemClasses(ItemInterface $menu)
+    {
+        if ($menu->hasChildren()) {
+            foreach ($menu->getChildren() as $child) {
+                $this->setNavItemClasses($child);
+            }
+        } else {
+            $navItemClass = $menu->getAttribute('class', '');
+            $menu->setAttribute('class', trim($navItemClass . ' nav-item'));
+            $menu->setAttribute('data-name', $menu->getName());
+            $navLinkClass = $menu->getLinkAttribute('class', '');
+            $menu->setLinkAttribute('class', trim($navLinkClass . ' nav-link'));
+
         }
     }
 
@@ -224,12 +255,14 @@ class MenuBuilderListener
         string $currentRoute,
         ?ItemInterface $childNode,
         ?string $moveAfterItem,
-        string $icon,
-        string $activeRoutePrefix
+        ?string $icon,
+        ?string $activeRoutePrefix
     ): void
     {
         if (null !== $childNode) {
-            $childNode->setExtra('icon', '<i class="fa ' . $icon . '" aria-hidden="true"></i>');
+            if ($icon) {
+                $childNode->setExtra('icon', '<i class="fa ' . $icon . '" aria-hidden="true"></i>');
+            }
             $childNode->setParent($parentNode);
             $newChildren = [];
             $wasAdded = false;
@@ -248,7 +281,7 @@ class MenuBuilderListener
             if (!$wasAdded) {
                 $newChildren[$childNode->getName()] = $childNode;
             }
-            if (strpos($currentRoute, $activeRoutePrefix) !== false) {
+            if ($activeRoutePrefix && strpos($currentRoute, $activeRoutePrefix) !== false) {
                 $childNode->setCurrent(true);
             }
 

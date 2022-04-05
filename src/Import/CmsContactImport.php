@@ -36,21 +36,149 @@ class CmsContactImport
         $this->importContacts($groupedContactCategories);
     }
 
+    private function initExistingContactsEmailMap()
+    {
+        $existingContactsEmailMapping = [];
+
+        $query = $this->getEntityManager()->createQueryBuilder();
+        $query
+            ->select(['c.id', 'c.email'])
+            ->from(Contact::class, 'c')
+            ->where('c.email IS NOT NULL')
+            ->andWhere('c.hidden = 0')
+            ->orderBy('c.id', 'ASC');
+        $results = $query->getQuery()->getResult();
+        $nonUniqueEmails = [];
+        foreach ($results as $result) {
+            $checkEmail = strtolower($result['email']);
+            if ($checkEmail) {
+                if (!isset($existingContactsEmailMapping[$checkEmail])) {
+                    $existingContactsEmailMapping[$checkEmail] = [];
+                }
+                $existingContactsEmailMapping[$checkEmail][] = (int) $result['id'];
+                if (1 < count($existingContactsEmailMapping[$checkEmail])) {
+                    $nonUniqueEmails[$checkEmail] = $existingContactsEmailMapping[$checkEmail];
+                }
+            }
+        }
+        $this->removeDuplicates($nonUniqueEmails);
+        return $existingContactsEmailMapping;
+    }
+
+    /**
+     * Remove duplicate contacts
+     * @param array $nonUniqueEmails
+     * @return void
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private function removeDuplicates(array $nonUniqueEmails)
+    {
+        if (empty($nonUniqueEmails)) {
+            return;
+        }
+        /** @var \Doctrine\DBAL\Connection $remoteConnection */
+        $localConnection = $this->registry->getConnection();
+        $keepIds = [];
+        foreach ($nonUniqueEmails as $contactIds) {
+            $keepIds[] = $contactIds[0];
+        }
+
+        $copyFields = [
+            'organisation_id' => 'a.organisation_id IS NULL AND b.organisation_id IS NOT NULL',
+            'phone_number' => 'a.phone_number IS NULL AND b.phone_number IS NOT NULL',
+            'zip_code' => 'a.zip_code IS NULL AND b.zip_code IS NOT NULL',
+            'town' => 'a.town IS NULL AND b.town IS NOT NULL',
+            'street' => 'a.street IS NULL AND b.street IS NOT NULL',
+            'organisation' => 'a.organisation IS NULL AND b.organisation IS NOT NULL',
+            'position' => 'a.position IS NULL AND b.position IS NOT NULL',
+            'department' => 'a.department IS NULL AND b.department IS NOT NULL',
+            'title' => 'a.title IS NULL AND b.title IS NOT NULL',
+            'mobile_number' => 'a.mobile_number IS NULL AND b.mobile_number IS NOT NULL',
+            'url' => 'a.url IS NULL AND b.url IS NOT NULL',
+        ];
+        foreach ($copyFields as $field => $fieldCondition) {
+            $sql = 'UPDATE ozg_contact a, ozg_contact b SET a.'.$field.' = b.'.$field.' 
+WHERE a.email = b.email AND a.id < b.id AND a.id IN ('.implode(',', $keepIds).') AND ' . $fieldCondition;
+            $localConnection->executeStatement($sql);
+        }
+        $deleteTables = [
+            'ozg_mailing_contact' => 'contact_id',
+            'ozg_mailing_exclude_contact' => 'contact_id',
+        ];
+        $updateTables = [
+            'ozg_contact_category' => [
+                'local_id_field' => 'contact_id',
+                'foreign_id_field' => 'category_id',
+            ],
+            'ozg_implementation_project_contact' => [
+                'local_id_field' => 'contact_id',
+                'foreign_id_field' => 'implementation_project_id',
+            ],
+            'ozg_implementation_project_fim_export' => [
+                'local_id_field' => 'contact_id',
+                'foreign_id_field' => 'implementation_project_id',
+            ],
+            'ozg_solution_contact' => [
+                'local_id_field' => 'contact_id',
+                'foreign_id_field' => 'solution_id',
+            ],
+        ];
+        foreach ($nonUniqueEmails as $email => $contactIds) {
+            $firstId = $contactIds[0];
+            $mapTableValues = [];
+            foreach ($updateTables as $table => $fieldsConfig) {
+                $localField = $fieldsConfig['local_id_field'];
+                $foreignField = $fieldsConfig['foreign_id_field'];
+                $sql = 'SELECT '.$foreignField.' FROM '.$table.' WHERE '.$localField.' = ' . $firstId;
+                $mapTableValues[$table] = $localConnection->executeQuery($sql)->fetchFirstColumn();
+            }
+            for ($i = 1, $n = count($contactIds); $i < $n; $i++) {
+                $mapId = $contactIds[$i];
+                foreach ($deleteTables as $table => $field) {
+                    $sql = 'DELETE FROM '.$table.' WHERE '.$field.' = ' . $mapId;
+                    $localConnection->executeStatement($sql);
+                }
+                foreach ($updateTables as $table => $fieldsConfig) {
+                    $localField = $fieldsConfig['local_id_field'];
+                    $foreignField = $fieldsConfig['foreign_id_field'];
+                    if (!empty($mapTableValues[$table])) {
+                        $sql = 'UPDATE '.$table.' SET '.$localField.' = ' . $firstId
+                            . ' WHERE '.$localField.' = ' . $mapId
+                            . ' AND ' . $foreignField . ' NOT IN ('.implode(',', $mapTableValues[$table]).')';
+                        $localConnection->executeStatement($sql);
+                        $sql = 'SELECT '.$foreignField.' FROM '.$table.' WHERE '.$localField.' = ' . $firstId;
+                        $mapTableValues[$table] = $localConnection->executeQuery($sql)->fetchFirstColumn();
+                    }
+                    $sql = 'DELETE FROM '.$table.' WHERE '.$localField.' = ' . $mapId;
+                    $localConnection->executeStatement($sql);
+                }
+                $sql = 'DELETE FROM ozg_contact WHERE id = ' . $mapId;
+                $localConnection->executeStatement($sql);
+            }
+        }
+    }
+
     private function importContacts(array $groupedContactCategories): array
     {
         $em = $this->getEntityManager();
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->registry->getConnection('cms');
-        if ((null !== $schemaManager = $connection->getSchemaManager()) && !$schemaManager->tablesExist(['tt_address'])) {
+        /** @var \Doctrine\DBAL\Connection $remoteConnection */
+        $remoteConnection = $this->registry->getConnection('cms');
+        if ((null !== $schemaManager = $remoteConnection->getSchemaManager()) && !$schemaManager->tablesExist(['tt_address'])) {
             return [];
         }
+        $existingContactsEmailMapping = $this->initExistingContactsEmailMap();
         $sql = 'SELECT * FROM tt_address WHERE deleted = 0 AND hidden = 0 ORDER BY uid ASC';
         /** @noinspection PhpUnhandledExceptionInspection */
-        $stmt = $connection->query($sql);
+        $stmt = $remoteConnection->executeQuery($sql);
         $mapObjects = $this->getMappedObjects(Contact::class);
         $rowCount = 0;
         $importedIds = [];
         while ($row = $stmt->fetch()) {
+            // Skip import if contact with same email already exists
+            $checkEmail = strtolower($row['email']);
+            if (!$checkEmail || isset($existingContactsEmailMapping[$checkEmail])) {
+                continue;
+            }
             /** @noinspection PhpUnhandledExceptionInspection */
             $importObject = $this->getLocalObjectForRemote($mapObjects, $row, Contact::class);
             /** @var Contact $importObject */
@@ -76,13 +204,13 @@ class CmsContactImport
                 $em->flush();
                 $rowCount = 0;
                 $sql = 'UPDATE tt_address SET hidden = 1 WHERE uid IN (' . implode(',', $importedIds) . ')';
-                $connection->executeUpdate($sql);
+                $remoteConnection->executeStatement($sql);
                 $importedIds = [];
             }
         }
         if (!empty($importedIds)) {
             $sql = 'UPDATE tt_address SET hidden = 1 WHERE uid IN (' . implode(',', $importedIds) . ')';
-            $connection->executeUpdate($sql);
+            $remoteConnection->executeStatement($sql);
         }
         $em->flush();
         //$this->deleteUnmatchedItems($mapObjects);
