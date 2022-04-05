@@ -45,8 +45,10 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
 
     protected function configureFormFields(FormMapper $form)
     {
-        $this->addOrganisationOneToOneFormFields($form);
+        $this->addOrganisationOneToOneFormFields($form, ['organizationType', 'contacts']);
+
         $this->addSpecializedProceduresFormFields($form);
+        $this->addContactsFormFields($form, false, true, 'organisation.contacts', false, false);
         $form
             ->end();
     }
@@ -89,7 +91,11 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name');
-        $this->addOrganisationOneToOneDatagridFilters($filter);
+        $this->addDefaultDatagridFilter($filter, 'organisation.contacts', [
+            'label' => 'app.manufacturer.entity.organisation__contacts',
+        ]);
+        $filter->add('organisation.zipCode');
+        $filter->add('organisation.town');
         $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
     }
 
@@ -109,7 +115,15 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
     public function configureShowFields(ShowMapper $show)
     {
         $show->add('name');
-        $this->addOrganisationOneToOneShowFields($show);
+        $show
+            ->add('organisation.street')
+            ->add('organisation.zipCode')
+            ->add('organisation.town')
+            ->add('organisation.url', 'url');
         $this->addSpecializedProceduresShowFields($show);
+        $show->add('organisation.contacts', null, [
+                'label' => 'app.manufacturer.entity.organisation__contacts',
+                'admin_code' => ContactAdmin::class,
+            ]);
     }
 }

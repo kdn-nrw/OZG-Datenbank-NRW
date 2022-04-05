@@ -20,7 +20,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait OrganisationOneToOneTrait
 {
-    protected function addOrganisationOneToOneFormFields(FormMapper $form)
+    protected function addOrganisationOneToOneFormFields(FormMapper $form, array $excludeFields = ['organizationType'])
     {
         $form->add('organisation', AdminType::class, [
             'label' => false,
@@ -28,7 +28,7 @@ trait OrganisationOneToOneTrait
             'btn_add' => false,
             'btn_list' => false,
         ], [
-            'ba_custom_exclude_fields' => ['organizationType'],
+            'ba_custom_exclude_fields' => $excludeFields,
         ]);
     }
 

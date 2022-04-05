@@ -69,12 +69,16 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
             $form->end();
         }
         $form
-            ->end()
-            ->with('app.organisation.groups.contacts', ['class' => 'col-md-6']);
-
-        $this->addContactsFormFields($form, false, true, 'contacts', false, false);
-        $form
             ->end();
+
+        if (!$this->isExcludedFormField('contacts')) {
+            $form
+                ->with('app.organisation.groups.contacts', ['class' => 'col-md-6']);
+
+            $this->addContactsFormFields($form, false, true, 'contacts', false, false);
+            $form
+                ->end();
+        }
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter)

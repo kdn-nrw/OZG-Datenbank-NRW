@@ -1273,6 +1273,7 @@ app:
       town: Ort
       url: Url
       specialized_procedures: Anbindung Fachverfahren
+      organisation__contacts: Ansprechpersonen
   maturity:
     object_name: Reifegrad
     list: Reifegrade
