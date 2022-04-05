@@ -17,3 +17,12 @@ Extend base template with custom class
         <div class="app-form-meta" data-form-id="{{ form.vars.id }}" data-meta="{{ editObjectMetaData|json_encode }}"></div>
     {% endif %}
 {% endblock %}
+
+{% block formactions %}
+    <div class="sonata-ba-form-actions well well-small form-actions">
+        {% block sonata_form_actions %}
+            {{ parent() }}
+        {% endblock %}
+    </div>
+    <div class="sonata-ba-form-spacer"></div>
+{% endblock formactions %}

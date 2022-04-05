@@ -198,6 +198,15 @@
     }
   }
 }
+.sonata-ba-form-actions {
+  + .sonata-ba-form-spacer {
+    display: none;
+  }
+  &.stuck + .sonata-ba-form-spacer {
+    display: block;
+    height: 75px;
+  }
+}
 @media (min-width: 400px) {
   .select2-drop {
     max-width: 400px;
