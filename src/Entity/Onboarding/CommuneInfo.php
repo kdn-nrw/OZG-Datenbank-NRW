@@ -132,6 +132,15 @@ class CommuneInfo extends AbstractOnboardingEntity
      */
     protected $ipAddress;
 
+    /**
+     * The completeness of the data has been confirmed
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="allow_admin_access", type="boolean", nullable=true)
+     */
+    protected $allowAdminAccess = false;
+
     public function __construct(Commune $commune)
     {
         parent::__construct($commune);
@@ -438,6 +447,22 @@ class CommuneInfo extends AbstractOnboardingEntity
     public function setIpAddress(?string $ipAddress): void
     {
         $this->ipAddress = $ipAddress;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowAdminAccess(): bool
+    {
+        return (bool) $this->allowAdminAccess;
+    }
+
+    /**
+     * @param bool $allowAdminAccess
+     */
+    public function setAllowAdminAccess(bool $allowAdminAccess): void
+    {
+        $this->allowAdminAccess = $allowAdminAccess;
     }
 
 }

@@ -20,6 +20,7 @@ use App\Form\Type\OnboardingContactType;
 use App\Form\Type\OnboardingInfoServiceType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -69,6 +70,9 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin implements AuditedEntityA
                 'required' => false,
             ])
             ->add('accessibility', TextareaType::class, [
+                'required' => false,
+            ])
+            ->add('allowAdminAccess', CheckboxType::class, [
                 'required' => false,
             ])
             ->end();

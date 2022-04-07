@@ -488,6 +488,7 @@ app:
       group_email: E-Mail-Adresse für Onboarding-Rückfragen
       commune_solutions: Dienste
       ip_address: IP-Adresse
+      allow_admin_access: Zustimmung, dass der KDN eine Admin-Berechtigung an unserem Mandanten des Kommunalportal.NRW bekommt, um initial Berechtigungen zuweisen zu können
   dataclearing:
     object_name: Dataclearing
     list: Kommunalportal Dataclearing
@@ -627,7 +628,7 @@ app:
       contact_type_choices:
         bis: BIS Admin
         fs: FS-Admin
-        epay: ePayBL-Admin
+        epay: ePayBL-Kontaktperson
         super: Supersachbearbeiter
         clerk: Sachbearbeiter
         web: Webcontent-Admin
