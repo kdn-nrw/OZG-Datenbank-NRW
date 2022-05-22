@@ -476,7 +476,7 @@ app:
       contact_type_choices:
         bis: BIS Admin
         fs: FS-Admin
-        epay: ePayBL-Admin
+        epay: ePayBL-Kontaktperson
         super: Supersachbearbeiter
         clerk: Sachbearbeiter
         web: Webcontent-Admin
@@ -1166,13 +1166,13 @@ app:
       level: Level/Sortierung
       description: Beschreibung
       set_automatically: Wird automatisch festgelegt
-      status_switch: Statuswechsel-Typ
+      status_switch: Nächster Status wenn
       status_switch_choices:
         project_start_at: Datum Vorbereitung wird erreicht
         concept_status_at: Datum Konzeption wird erreicht
         implementation_status_at: Datum Umsetzung wird erreicht
-        commissioning_status_at: Datum Start Roll-out NRW wird erreicht
         piloting_status_at: Datum Pilotierung NRW wird erreicht
+        commissioning_status_at: Datum Start Roll-out NRW wird erreicht
         nationwide_rollout_at: Datum Start bundesweiter Roll-out wird erreicht
     common:
       status_from: Ab

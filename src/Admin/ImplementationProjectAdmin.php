@@ -122,7 +122,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDatePickerFormField($form, 'pilotingStatusAt', 5);
         $this->addDatePickerFormField($form, 'commissioningStatusAt', 5);
         $this->addDatePickerFormField($form, 'nationwideRolloutAt', 5);
-        $form
+        /*$form
             ->add('status', ModelType::class, [
                 'label' => 'app.implementation_project.entity.status_form',
                 'btn_add' => false,
@@ -130,7 +130,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'expanded' => true,
                 'query' => $this->getStatusQueryBuilder(),
                 'choice_translation_domain' => false,
-            ]);
+            ]);*/
         $form->end();
         $form
             ->with('references', [

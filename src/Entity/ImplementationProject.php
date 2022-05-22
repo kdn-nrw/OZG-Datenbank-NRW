@@ -990,8 +990,11 @@ class ImplementationProject extends BaseNamedEntity
                 case ImplementationStatus::STATUS_SWITCH_IMPLEMENTATION:
                     $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->conceptStatusAt, $this->implementationStatusAt);
                     break;
+                case ImplementationStatus::STATUS_SWITCH_PILOTING:
+                    $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->implementationStatusAt, $this->pilotingStatusAt);
+                    break;
                 case ImplementationStatus::STATUS_SWITCH_COMMISSIONING:
-                    $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->implementationStatusAt, $this->commissioningStatusAt);
+                    $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->pilotingStatusAt, $this->commissioningStatusAt);
                     break;
                 case ImplementationStatus::STATUS_SWITCH_NATIONWIDE_ROLLOUT:
                     $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->commissioningStatusAt, $this->nationwideRolloutAt);
