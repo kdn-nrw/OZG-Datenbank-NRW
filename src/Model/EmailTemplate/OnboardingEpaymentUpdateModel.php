@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Model\EmailTemplate;
 
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Configuration\EmailTemplate;
 use App\Entity\Onboarding\Epayment;
+use App\Service\AuditManager;
 
 class OnboardingEpaymentUpdateModel extends AbstractTemplateModel
 {
@@ -54,6 +56,49 @@ class OnboardingEpaymentUpdateModel extends AbstractTemplateModel
 ###ONBOARDING_EPAYMENT_ADMIN_EDIT_URL###
 ###CHANGES###');
         return $template;
+    }
+
+    /**
+     * Extend audit content for related entities
+     * @param AuditManager $auditManager
+     * @param BaseEntityInterface $object
+     * @return string
+     */
+    protected function getObjectAuditContent(AuditManager $auditManager, BaseEntityInterface $object): string
+    {
+        $changesContent = '';
+        if ($object instanceof Epayment) {
+            $contact = $object->getPaymentUser();
+            $revisionData = $auditManager->getLatestRevisions($object);
+            $checkTstamp = time() - 10;
+            $hasChangesMain = $revisionData['current_rev_timestamp'] >= $checkTstamp;
+            $hasChanges = $revisionData['current_rev_timestamp'] >= $checkTstamp;
+            if (null !== $contact) {
+                $contactRevisionData = $auditManager->getLatestRevisions($contact);
+                $hasChanges = $hasChanges || $contactRevisionData['current_rev_timestamp'] >= $checkTstamp;
+            }
+            // Check if there have actually been changes (i.e. a new revision hast been added)
+            if ($hasChanges) {
+                if ($hasChangesMain) {
+                    $changesContent .= $auditManager->getContentForRevisions(
+                        $object,
+                        (int) $revisionData['previous_rev'],
+                        $revisionData['current_rev'],
+                        AuditManager::RENDER_TYPE_TEXT
+                    );
+                }
+                if (null !== $contact && !empty($contactRevisionData)) {
+                    $contactChangesContent = $auditManager->getContentForRevisions(
+                        $contact,
+                        (int) $contactRevisionData['previous_rev'],
+                        (int) $contactRevisionData['current_rev'],
+                        AuditManager::RENDER_TYPE_TEXT
+                    );
+                    $changesContent .= PHP_EOL . PHP_EOL . $contactChangesContent;
+                }
+            }
+        }
+        return trim($changesContent);
     }
 
 }

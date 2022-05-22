@@ -118,7 +118,9 @@ class EmailTemplateManager
                 if ($processType === AbstractTemplateModel::PROCESS_TYPE_UPDATE) {
                     $modelInstance->addAuditContent($this->auditManager, $object);
                 }
-                $this->sendMarkerEmail($modelInstance);
+                if ($modelInstance->isValid($object, $processType)) {
+                    $this->sendMarkerEmail($modelInstance);
+                }
             }
         }
     }

@@ -92,21 +92,33 @@ Intermediär = „DataClearing NRW - Zuordnung nicht bekannt“ => Empfänger (S
     {
         $changesContent = '';
         if ($object instanceof XtaServer) {
+            $contact = $object->getContact();
             $revisionData = $auditManager->getLatestRevisions($object);
-            if ($revisionData['valid']) {
-                $changesContent .= $auditManager->getContentForRevisions(
-                    $object,
-                    $revisionData['previous_rev'],
-                    $revisionData['current_rev'],
-                    AuditManager::RENDER_TYPE_TEXT
-                );
-                if (null !== $contact = $object->getContact()) {
-                    $changesContent .= PHP_EOL . PHP_EOL . $auditManager->getContentForRevisions(
-                        $contact,
-                        $revisionData['previous_rev'],
+            $checkTstamp = time() - 10;
+            $hasChangesMain = $revisionData['current_rev_timestamp'] >= $checkTstamp;
+            $hasChanges = $revisionData['current_rev_timestamp'] >= $checkTstamp;
+            if (null !== $contact) {
+                $contactRevisionData = $auditManager->getLatestRevisions($contact);
+                $hasChanges = $hasChanges || $contactRevisionData['current_rev_timestamp'] >= $checkTstamp;
+            }
+            // Check if there have actually been changes (i.e. a new revision hast been added)
+            if ($hasChanges) {
+                if ($hasChangesMain) {
+                    $changesContent .= $auditManager->getContentForRevisions(
+                        $object,
+                        (int) $revisionData['previous_rev'],
                         $revisionData['current_rev'],
                         AuditManager::RENDER_TYPE_TEXT
                     );
+                }
+                if (null !== $contact && !empty($contactRevisionData)) {
+                    $contactChangesContent = $auditManager->getContentForRevisions(
+                        $contact,
+                        (int) $contactRevisionData['previous_rev'],
+                        (int) $contactRevisionData['current_rev'],
+                        AuditManager::RENDER_TYPE_TEXT
+                    );
+                    $changesContent .= PHP_EOL . PHP_EOL . $contactChangesContent;
                 }
             }
         }

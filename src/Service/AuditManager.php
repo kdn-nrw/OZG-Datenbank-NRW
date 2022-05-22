@@ -12,7 +12,9 @@
 namespace App\Service;
 
 use App\Entity\Base\BaseEntityInterface;
+use SimpleThings\EntityAudit\Exception\NoRevisionFoundException;
 use SimpleThings\EntityAudit\Exception\NotAuditedException;
+use SimpleThings\EntityAudit\Revision;
 use Sonata\AdminBundle\Model\AuditManager as SonataAuditManager;
 use Twig\Environment;
 
@@ -52,11 +54,13 @@ class AuditManager
     {
         $content = '';
         $revisionData = $this->getLatestRevisions($object);
-        if ($revisionData['valid']) {
+        $checkTstamp = time() - 10;
+        // Check if there have actually been changes (i.e. a new revision hast been added)
+        if ($revisionData['current_rev_timestamp'] >= $checkTstamp) {
             $content = $this->getContentForRevisions(
                 $object,
-                $revisionData['previous_rev'],
-                $revisionData['current_rev'],
+                (int) $revisionData['previous_rev'],
+                (int) $revisionData['current_rev'],
                 $renderType
             );
         }
@@ -80,10 +84,17 @@ class AuditManager
                 if (null === $auditReader) {
                     return '';
                 }
-                $baseObject = $auditReader->find($className, $id, $oldRevision);
+                $baseObject = null;
+                try {
+                    if ($oldRevision > 0) {
+                        $baseObject = $auditReader->find($className, $id, $oldRevision);
+                    }
+                } catch (NoRevisionFoundException $e) {
+                    unset($e);
+                }
                 $compareObject = $auditReader->find($className, $id, $newRevision);
                 $admin = $this->adminManager->getAdminByEntityClass($className);
-                if (!$baseObject || !$compareObject || !$admin) {
+                if ((!$baseObject && !$compareObject) || !$admin) {
                     return '';
                 }
                 $admin->setSubject($baseObject);
@@ -114,6 +125,8 @@ class AuditManager
         $revisions = [
             'current_rev' => null,
             'previous_rev' => null,
+            'current_rev_timestamp' => null,
+            'previous_rev_timestamp' => null,
             'valid' => false,
             'exception' => null,
         ];
@@ -125,10 +138,28 @@ class AuditManager
                     $auditedRevisions = $auditReader->findRevisions($className, $id);
                     $keys = array_keys($auditedRevisions);
                     if (count($auditedRevisions) > 0) {
-                        $revisions['current_rev'] = $auditedRevisions[$keys[0]]->getRev();
+                        /** @var Revision $revCurrent */
+                        $revCurrent = $auditedRevisions[$keys[0]];
+                        $revisions['current_rev'] = $revCurrent->getRev();
+                        $revTstamp = $revCurrent->getTimestamp();
+                        if ($revTstamp instanceof \DateTime) {
+                            // Fix the date time; DateTime objects show timezone as Europe/Berlin, but are actually UTC
+                            $fixDateTime = new \DateTime($revTstamp->format('Y-m-d H:i:s'), new \DateTimeZone('UTC'));
+                            $revTstamp = $fixDateTime->getTimestamp();
+                        }
+                        $revisions['current_rev_timestamp'] = $revTstamp;
                     }
                     if (count($auditedRevisions) > 1) {
-                        $revisions['previous_rev'] = $auditedRevisions[$keys[1]]->getRev();
+                        /** @var Revision $revPrev */
+                        $revPrev = $auditedRevisions[$keys[1]];
+                        $revisions['previous_rev'] = $revPrev->getRev();
+                        $revTstamp = $revPrev->getTimestamp();
+                        if ($revTstamp instanceof \DateTime) {
+                            // Fix the date time; DateTime objects show timezone as Europe/Berlin, but are actually UTC
+                            $fixDateTime = new \DateTime($revTstamp->format('Y-m-d H:i:s'), new \DateTimeZone('UTC'));
+                            $revTstamp = $fixDateTime->getTimestamp();
+                        }
+                        $revisions['previous_rev_timestamp'] = $revTstamp;
                         $revisions['valid'] = true;
                     }
                 }

@@ -114,8 +114,7 @@ class AuditCompareExtension extends AbstractExtension
         }
 
         // Compare the rendered output of both objects by using the (possibly) overridden field block
-        $isDiff = $baseValueOutput !== $compareValueOutput;
-
+        $isDiff = trim(strip_tags($baseValueOutput)) !== trim(strip_tags($compareValueOutput));
         if ($isDiff || !$onlyShowChanges) {
             return $this->render($fieldDescription, $template, [
                 'field_description' => $fieldDescription,

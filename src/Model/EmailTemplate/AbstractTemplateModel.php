@@ -215,6 +215,21 @@ abstract class AbstractTemplateModel
     }
 
     /**
+     * Check if all data for the email are set; this is called after all variables are set
+     *
+     * @param BaseEntityInterface $object
+     * @param string $processType
+     * @return bool
+     */
+    public function isValid(BaseEntityInterface $object, string $processType): bool
+    {
+        if ($processType === self::PROCESS_TYPE_UPDATE) {
+            return !empty($this->variables[self::VARIABLE_KEY_AUDIT]);
+        }
+        return true;
+    }
+
+    /**
      * Returns the internal key for the given entity class
      *
      * @param string $entityClass

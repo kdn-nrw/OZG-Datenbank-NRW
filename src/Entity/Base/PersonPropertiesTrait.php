@@ -61,7 +61,10 @@ trait PersonPropertiesTrait
      */
     public function getGender(): int
     {
-        return $this->gender ?? PersonInterface::GENDER_UNKNOWN;
+        if (!isset(self::$genderTypeChoices[$this->gender])) {
+            return PersonInterface::GENDER_UNKNOWN;
+        }
+        return $this->gender;
     }
 
     /**

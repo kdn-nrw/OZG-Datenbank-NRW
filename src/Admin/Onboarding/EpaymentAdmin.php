@@ -391,7 +391,12 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
     {
         $show
             ->add('communeName')
-            ->add('officialCommuneKey')
+            ->add('street')
+            ->add('zipCode')
+            ->add('town')
+            ->add('officialCommuneKey');
+        $this->addServiceProvidersShowFields($show, 'paymentOperator');
+        $show
             ->add('paymentProviderAccountId')
             ->add('paymentProvider')
             ->add('paymentUser')
@@ -399,9 +404,9 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
             ->add('mandatorEmail')
             ->add('groupEmail')
             ->add('testIpAddress')
-            ->add('clientNumberIntegration')
+            /*->add('clientNumberIntegration')
             ->add('clientNumberProduction')
-            ->add('managerNumber')
+            ->add('managerNumber')*/
             ->add('cashRegisterPersonalAccountNumber')
             ->add('lengthReceiptNumber')
             ->add('cashRegisterCheckProcedureStatus')
