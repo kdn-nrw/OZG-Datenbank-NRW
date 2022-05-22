@@ -15,6 +15,7 @@
 /.idea/
 /docker-compose.yml
 /doc-dev-local/
+/.ddev
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
