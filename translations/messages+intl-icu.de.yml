@@ -552,6 +552,9 @@ app:
       admin_account: Einrichtung dezentraler Admin
       epayment_services: Dienste
       services_epayment_services: Dienste
+    validation:
+      invalid_key_length_first: 'Sie haben angegeben, dass die erste Kontierungsangabe eine Länge von {keyLength} Zeichen hat. Bitte machen Sie für den Dienst {solutionName} eine Angabe, die genau dieser Anzahl von Zeichen entspricht'
+      invalid_key_length_second: 'Sie haben angegeben, dass die zweite Kontierungsangabe eine Länge von {keyLength} Zeichen hat. Bitte machen Sie für den Dienst {solutionName} eine Angabe, die genau dieser Anzahl von Zeichen entspricht'
     entity:
       description: Beschreibung
       commune: Name des Mandanten

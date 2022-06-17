@@ -74,7 +74,7 @@ class AuditManager
      * @param string $renderType
      * @return string
      */
-    public function getContentForRevisions(BaseEntityInterface $object, $oldRevision, $newRevision, string $renderType = self::RENDER_TYPE_HTML): string
+    public function getContentForRevisions(BaseEntityInterface $object, int $oldRevision, int $newRevision, string $renderType = self::RENDER_TYPE_HTML): string
     {
         $content = '';
         if ($id = $object->getId()) {
@@ -92,7 +92,11 @@ class AuditManager
                 } catch (NoRevisionFoundException $e) {
                     unset($e);
                 }
-                $compareObject = $auditReader->find($className, $id, $newRevision);
+                try {
+                    $compareObject = $auditReader->find($className, $id, $newRevision);
+                } catch (NoRevisionFoundException $e) {
+                    $compareObject = null;
+                }
                 $admin = $this->adminManager->getAdminByEntityClass($className);
                 if ((!$baseObject && !$compareObject) || !$admin) {
                     return '';

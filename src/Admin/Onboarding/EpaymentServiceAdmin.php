@@ -74,12 +74,31 @@ class EpaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdmi
             ])
             ->add('bookingText', TextareaType::class, [
                 'required' => $enableRequiredFields,
-            ])
+            ]);
+        $attr1 = [];
+        $attr2 = [];
+
+        $subject = $this->getSubject();
+        if (($subject instanceof EpaymentService) && $ePayment = $subject->getEpayment()) {
+            if (0 < $keyLength1 = (int)$ePayment->getLengthFirstAccountAssignmentInformation()) {
+                $attr1 = [
+                    'placeholder' => sprintf('Diese Angabe muss genau %d Zeichen betragen', $keyLength1),
+                ];
+            }
+            if (0 < $keyLength2 = (int)$ePayment->getLengthSecondAccountAssignmentInformation()) {
+                $attr2 = [
+                    'placeholder' => sprintf('Diese Angabe muss genau %d Zeichen betragen', $keyLength2),
+                ];
+            }
+        }
+        $form
             ->add('valueFirstAccountAssignmentInformation', TextareaType::class, [
                 'required' => $enableRequiredFields,
+                'attr' => $attr1,
             ])
             ->add('valueSecondAccountAssignmentInformation', TextareaType::class, [
                 'required' => $enableRequiredFields,
+                'attr' => $attr2,
             ])
             ->end();
         $form

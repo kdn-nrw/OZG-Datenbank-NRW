@@ -19,6 +19,7 @@ use App\Entity\Onboarding\Epayment;
 use App\Form\Type\CommuneType;
 use App\Form\Type\EpaymentProjectType;
 use App\Form\Type\OnboardingContactType;
+use App\Validator\Constraints\OnboardingEpaymentServices;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
@@ -26,11 +27,16 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
+use Sonata\Form\Validator\ErrorElement;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdminInterface
 {
@@ -203,28 +209,34 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
                     'placeholder' => 'kann von ePayBL zur Verfügung gestellt werden',
                 ],
             ])
-            ->add('lengthReceiptNumber', TextType::class, [
+            ->add('lengthReceiptNumber', IntegerType::class, [
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Bspw. 12 Zeichen',
+                    'min' => 0,
+                    'max' => 100,
                 ],
             ])
             ->add('cashRegisterCheckProcedureStatus', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('lengthFirstAccountAssignmentInformation', TextType::class, [
+            ->add('lengthFirstAccountAssignmentInformation', IntegerType::class, [
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Bspw. 12 Zeichen',
+                    'min' => 0,
+                    'max' => 100,
                 ],
             ])
             ->add('contentFirstAccountAssignmentInformation', TextareaType::class, [
                 'required' => false,
             ])
-            ->add('lengthSecondAccountAssignmentInformation', TextType::class, [
+            ->add('lengthSecondAccountAssignmentInformation', IntegerType::class, [
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Bspw. 12 Zeichen',
+                    'min' => 0,
+                    'max' => 100,
                 ],
             ])
             ->add('contentSecondAccountAssignmentInformation', TextareaType::class, [
@@ -294,6 +306,21 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
         ])*/
         $form
             ->end()
+            ->end();
+    }
+
+    public function validate(ErrorElement $errorElement, $object)
+    {
+        $errorElement
+            ->with('epaymentServices')
+            ->addConstraint(new All([
+                new OnboardingEpaymentServices([
+                    'field' => 'valueFirstAccountAssignmentInformation',
+                ]),
+                new OnboardingEpaymentServices([
+                    'field' => 'valueSecondAccountAssignmentInformation',
+                ]),
+            ]))
             ->end();
     }
 

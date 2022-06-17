@@ -107,7 +107,7 @@ Intermediär = „DataClearing NRW - Zuordnung nicht bekannt“ => Empfänger (S
                     $changesContent .= $auditManager->getContentForRevisions(
                         $object,
                         (int) $revisionData['previous_rev'],
-                        $revisionData['current_rev'],
+                        (int) $revisionData['current_rev'],
                         AuditManager::RENDER_TYPE_TEXT
                     );
                 }

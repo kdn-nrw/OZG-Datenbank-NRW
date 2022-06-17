@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use SimpleThings\EntityAudit\Collection\AuditedCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -143,8 +144,8 @@ class Epayment extends AbstractOnboardingEntity
     protected $applicationName = 'Kommunalportal';
 
     /**
-     * @ORM\Column(type="string", name="length_receipt_number", length=255, nullable=true)
-     * @var string|null
+     * @ORM\Column(type="integer", name="length_receipt_number", nullable=true)
+     * @var int|null
      */
     protected $lengthReceiptNumber;
 
@@ -155,8 +156,8 @@ class Epayment extends AbstractOnboardingEntity
     protected $cashRegisterCheckProcedureStatus = true;
 
     /**
-     * @ORM\Column(type="string", name="length_first_account_assignment_information", length=255, nullable=true)
-     * @var string|null
+     * @ORM\Column(type="integer", name="length_first_account_assignment_information", nullable=true)
+     * @var int|null
      */
     protected $lengthFirstAccountAssignmentInformation;
 
@@ -167,8 +168,8 @@ class Epayment extends AbstractOnboardingEntity
     protected $contentFirstAccountAssignmentInformation;
 
     /**
-     * @ORM\Column(type="string", name="length_second_account_assignment_information", length=255, nullable=true)
-     * @var string|null
+     * @ORM\Column(type="integer", name="length_second_account_assignment_information", nullable=true)
+     * @var int|null
      */
     protected $lengthSecondAccountAssignmentInformation;
 
@@ -189,6 +190,7 @@ class Epayment extends AbstractOnboardingEntity
      * @var EpaymentService[]|Collection
      * @ORM\OneToMany(targetEntity="App\Entity\Onboarding\EpaymentService", mappedBy="epayment", cascade={"all"}, orphanRemoval=true)
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
+     * @Assert\Valid()
      */
     private $epaymentServices;
 
@@ -567,17 +569,17 @@ class Epayment extends AbstractOnboardingEntity
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getLengthReceiptNumber(): ?string
+    public function getLengthReceiptNumber(): ?int
     {
         return $this->lengthReceiptNumber;
     }
 
     /**
-     * @param string|null $lengthReceiptNumber
+     * @param int|null $lengthReceiptNumber
      */
-    public function setLengthReceiptNumber(?string $lengthReceiptNumber): void
+    public function setLengthReceiptNumber(?int $lengthReceiptNumber): void
     {
         $this->lengthReceiptNumber = $lengthReceiptNumber;
     }
@@ -600,33 +602,33 @@ class Epayment extends AbstractOnboardingEntity
 
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getLengthFirstAccountAssignmentInformation(): ?string
+    public function getLengthFirstAccountAssignmentInformation(): ?int
     {
         return $this->lengthFirstAccountAssignmentInformation;
     }
 
     /**
-     * @param string|null $lengthFirstAccountAssignmentInformation
+     * @param int|null $lengthFirstAccountAssignmentInformation
      */
-    public function setLengthFirstAccountAssignmentInformation(?string $lengthFirstAccountAssignmentInformation): void
+    public function setLengthFirstAccountAssignmentInformation(?int $lengthFirstAccountAssignmentInformation): void
     {
         $this->lengthFirstAccountAssignmentInformation = $lengthFirstAccountAssignmentInformation;
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getLengthSecondAccountAssignmentInformation(): ?string
+    public function getLengthSecondAccountAssignmentInformation(): ?int
     {
         return $this->lengthSecondAccountAssignmentInformation;
     }
 
     /**
-     * @param string|null $lengthSecondAccountAssignmentInformation
+     * @param int|null $lengthSecondAccountAssignmentInformation
      */
-    public function setLengthSecondAccountAssignmentInformation(?string $lengthSecondAccountAssignmentInformation): void
+    public function setLengthSecondAccountAssignmentInformation(?int $lengthSecondAccountAssignmentInformation): void
     {
         $this->lengthSecondAccountAssignmentInformation = $lengthSecondAccountAssignmentInformation;
     }

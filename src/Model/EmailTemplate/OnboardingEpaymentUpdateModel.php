@@ -83,7 +83,7 @@ class OnboardingEpaymentUpdateModel extends AbstractTemplateModel
                     $changesContent .= $auditManager->getContentForRevisions(
                         $object,
                         (int) $revisionData['previous_rev'],
-                        $revisionData['current_rev'],
+                        (int) $revisionData['current_rev'],
                         AuditManager::RENDER_TYPE_TEXT
                     );
                 }
