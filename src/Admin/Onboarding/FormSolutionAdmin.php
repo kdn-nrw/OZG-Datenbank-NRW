@@ -15,10 +15,12 @@ namespace App\Admin\Onboarding;
 use App\Admin\Base\AuditedEntityAdminInterface;
 use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\StateGroup\CommuneAdmin;
+use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -57,6 +59,22 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin implements AuditedEntity
             'image_uri' => true,
             'imagine_pattern' => 'default_small',
             'asset_helper' => true,
+        ]);
+        $communeName = '';
+        $subject = $this->getSubject();
+        if ($subject instanceof AbstractOnboardingEntity && null !== $commune = $subject->getCommune()) {
+            $communeName = $commune . '';
+        }
+        $form->add('licenseConfirmed', CheckboxType::class, [
+            'label' => $this->trans('app.form_solution.entity.license_confirmed_form', ['communeName' => $communeName]),
+            'required' => false,
+            'translation_domain' => false,
+            'row_attr' => ['class' => 'form-group-help-above'],
+            'help' => sprintf('<h3>%s</h3><p>%s</p>',
+                $this->trans('app.form_solution.entity.license_confirmed'),
+                $this->trans('app.form_solution.entity.license_confirmed_help')
+            ),
+            'help_html' => true,
         ]);
         $this->addDataCompletenessConfirmedField($form);
         $form

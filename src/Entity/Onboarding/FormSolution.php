@@ -123,6 +123,15 @@ class FormSolution extends AbstractOnboardingEntity
      */
     protected $letterheadAddress;
 
+    /**
+     * The license availability has been confirmed
+     *
+     * @var bool|null
+     *
+     * @ORM\Column(name="license_confirmed", type="boolean", nullable=true)
+     */
+    protected $licenseConfirmed = false;
+
     public function __construct(Commune $commune)
     {
         parent::__construct($commune);
@@ -344,33 +353,6 @@ class FormSolution extends AbstractOnboardingEntity
     /**
      * @return string|null
      */
-    public function getLetterheadAddress(): ?string
-    {
-        if (null === $this->letterheadAddress && null !== $this->commune) {
-            $communeTypeName = $this->commune->getCommuneType() . '';
-            if (strpos($communeTypeName, 'Stadt') !== false) {
-                $communePrefix = 'Stadt';
-            } elseif (strpos($communeTypeName, 'Stadt') !== false) {
-                $communePrefix = 'Stadt';
-            } elseif ($communeTypeName === 'Kreis') {
-                $communePrefix = 'Kreis';
-            } else {
-                $communePrefix = '';
-            }
-            $lines = [
-                trim($communePrefix . ' '.$this->getCommuneName()),
-                'Die Bürgermeisterin / Der Bürgermeister oder ähnliches',
-                $this->commune->getStreet(),
-                trim($this->commune->getZipCode() . ' ' . $this->commune->getTown()),
-            ];
-            $this->letterheadAddress = implode("\n", array_filter($lines));
-        }
-        return $this->letterheadAddress;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getAdministrationEmail(): ?string
     {
         return $this->commune->getAdministrationEmail();
@@ -433,10 +415,55 @@ class FormSolution extends AbstractOnboardingEntity
     }
 
     /**
+     * @return string|null
+     */
+    public function getLetterheadAddress(): ?string
+    {
+        if (null === $this->letterheadAddress && null !== $this->commune) {
+            $communeTypeName = $this->commune->getCommuneType() . '';
+            if (strpos($communeTypeName, 'Stadt') !== false) {
+                $communePrefix = 'Stadt';
+            } elseif (strpos($communeTypeName, 'Stadt') !== false) {
+                $communePrefix = 'Stadt';
+            } elseif ($communeTypeName === 'Kreis') {
+                $communePrefix = 'Kreis';
+            } else {
+                $communePrefix = '';
+            }
+            $lines = [
+                trim($communePrefix . ' '.$this->getCommuneName()),
+                'Die Bürgermeisterin / Der Bürgermeister oder ähnliches',
+                $this->commune->getStreet(),
+                trim($this->commune->getZipCode() . ' ' . $this->commune->getTown()),
+            ];
+            $this->letterheadAddress = implode("\n", array_filter($lines));
+        }
+        return $this->letterheadAddress;
+    }
+
+    /**
      * @param string|null $letterheadAddress
      */
     public function setLetterheadAddress(?string $letterheadAddress): void
     {
         $this->letterheadAddress = $letterheadAddress;
     }
+
+    /**
+     * @return bool|null
+     */
+    public function isLicenseConfirmed(): ?bool
+    {
+        return $this->licenseConfirmed;
+    }
+
+    /**
+     * @param bool|null $licenseConfirmed
+     */
+    public function setLicenseConfirmed(?bool $licenseConfirmed): void
+    {
+        $this->licenseConfirmed = $licenseConfirmed;
+    }
+
+
 }

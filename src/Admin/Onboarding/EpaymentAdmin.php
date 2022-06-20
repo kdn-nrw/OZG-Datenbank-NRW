@@ -211,6 +211,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
             ])
             ->add('lengthReceiptNumber', IntegerType::class, [
                 'required' => false,
+                'row_attr' => ['class' => 'form-group-number'],
                 'attr' => [
                     'placeholder' => 'Bspw. 12 Zeichen',
                     'min' => 0,
@@ -222,6 +223,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
             ])
             ->add('lengthFirstAccountAssignmentInformation', IntegerType::class, [
                 'required' => false,
+                'row_attr' => ['class' => 'form-group-number'],
                 'attr' => [
                     'placeholder' => 'Bspw. 12 Zeichen',
                     'min' => 0,
@@ -233,6 +235,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
             ])
             ->add('lengthSecondAccountAssignmentInformation', IntegerType::class, [
                 'required' => false,
+                'row_attr' => ['class' => 'form-group-number'],
                 'attr' => [
                     'placeholder' => 'Bspw. 12 Zeichen',
                     'min' => 0,

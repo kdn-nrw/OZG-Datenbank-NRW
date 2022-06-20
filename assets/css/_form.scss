@@ -243,3 +243,20 @@
     }
   }
 }
+.form-group-number {
+  .form-control {
+    max-width: 200px;
+  }
+}
+.form-group-help-above {
+  > .sonata-ba-field {
+    display: flex;
+    flex-direction: column;
+    > div {
+      order: 1;
+    }
+    > .help-block {
+      order: 0;
+    }
+  }
+}

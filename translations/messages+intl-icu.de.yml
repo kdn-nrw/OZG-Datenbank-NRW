@@ -649,6 +649,9 @@ app:
       administration_fax_number: Fax
       administration_email: E-Mail
       administration_url: Web
+      license_confirmed: Bestätigung der Lizenz
+      license_confirmed_form: 'Hiermit bestätigt die Gemeinde/Stadt {communeName} das Vorhandensein der notwendigen Form-Solutions-Lizenz.'
+      license_confirmed_help: 'Bitte wählen Sie dieses Feld <span class="text-decoration: underline;">erst</span> an, nachdem Sie einen Vertrag mit Form-Solutions geschlossen haben, andernfalls kann es zu rechtlichen Problem aufgrund der fehlenden Lizensierung kommen.'
   onboarding_commune_solution:
     object_name: Basisdaten Dienst
     list: Basisdaten Dienste
