@@ -71,40 +71,6 @@ class MenuBuilderListener
         if (null !== $onboardingGroup) {
             $onboardingGroup->removeChild('app.dataclearing.list');
             $onboardingGroup->removeChild('app.inquiry.list');
-            $checkRoles = ['ROLE_' . EpaymentAdmin::class . '_LIST'];
-            $isAnyOnboardingGranted = $isSuperAdmin;
-            if (!$isSuperAdmin) {
-                foreach ($checkRoles as $role) {
-                    if ($this->security->isGranted(strtoupper($role))) {
-                        $isAnyOnboardingGranted = true;
-                        break;
-                    }
-                }
-            }
-            if ($isAnyOnboardingGranted) {
-                $this->addVsmNodes($menu, $currentRoute);
-                $child = $onboardingGroup->addChild('onboarding_dvdv', [
-                    'label' => 'app.menu.onboarding_dvdv',
-                    'route' => 'app_onboarding_dvdv',
-                    'linkAttributes' => ['class' => 'nav-link'],
-                    /*'extras' => [
-                        'routes' => [
-                            [
-                                'route' => 'app_search_list',
-                            ],
-                        ],
-                    ],*/
-                ]);
-                $onboardingGroup->removeChild($child);
-                $this->addChildToGroup(
-                    $onboardingGroup,
-                    $currentRoute,
-                    $child,
-                    'app.release.list',
-                    null,
-                    'app_onboarding_dvdv'
-                );
-            }
         }
         $this->setNavItemClasses($menu);
     }
