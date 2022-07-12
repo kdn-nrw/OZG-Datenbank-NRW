@@ -162,7 +162,7 @@ class OnboardingProgressCalculator
                 if (empty($properties)) {
                     $properties = [
                         ['privacyText', 'privacyUrl'], ['imprintText', 'imprintUrl'],
-                        'accessibility',
+                        'accessibility', 'licenseConfirmed',
                         'administrationPhoneNumber', 'administrationFaxNumber', 'administrationEmail', 'administrationUrl',
                         'letterheadAddress', 'openingHours',
                         'contacts',

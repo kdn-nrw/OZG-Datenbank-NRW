@@ -21,7 +21,6 @@ use App\Form\Type\OnboardingContactType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -177,6 +176,7 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin implements AuditedEntity
             ->add('accessibility')
             ->add('openingHours')
             ->add('contacts')
-            ->add('groupEmail');
+            ->add('groupEmail')
+            ->add('licenseConfirmed');
     }
 }

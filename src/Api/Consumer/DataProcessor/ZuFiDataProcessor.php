@@ -91,12 +91,20 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
                     $fimEntity->setService($service);
                     $em->persist($fimEntity);
                 } else {
-                    $targetEntity = $fimEntity->getServiceBaseResult();
+                    $targetEntity = null;
+                    $sbrEntity = $fimEntity->getServiceBaseResult();
+                    if (null !== $targetEntity && $targetEntity->getCommune() !== $commune) {
+                        $fimEntity->setServiceBaseResult(null);
+                        $sbrEntity->setFimType(null);
+                    } else {
+                        $targetEntity = $sbrEntity;
+                    }
                     // Fallback in case service base result is not set in FIM entity
                     if (null === $targetEntity) {
                         $targetEntity = $sbrRepository->findOneBy([
                             'service' => $service->getId(),
-                            'fimType' => $fimEntity->getId()
+                            'fimType' => $fimEntity->getId(),
+                            'commune' => $commune
                         ]);
                     }
                 }

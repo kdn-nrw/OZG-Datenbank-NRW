@@ -234,7 +234,7 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="url_online_service", type="string", nullable=true)
+     * @ORM\Column(name="url_online_service", type="string", length=1024, nullable=true)
      */
     protected $urlOnlineService;
 
@@ -279,6 +279,23 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
      * @ORM\Column(nullable=true, type="datetime", name="service_created_at")
      */
     protected $serviceCreatedAt;
+
+    /**
+     * Set name
+     *
+     * @param string|null $name
+     * @return self
+     * @noinspection ReturnTypeCanBeDeclaredInspection
+     */
+    public function setName(?string $name)
+    {
+        if ($name && mb_strlen($name) > 255) {
+            $name = mb_substr($name, 0, 255);
+        }
+        $this->name = $name;
+
+        return $this;
+    }
 
     /**
      * @return Service|null
@@ -709,6 +726,9 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
      */
     public function setUrlOnlineService(?string $urlOnlineService): void
     {
+        if ($urlOnlineService && strlen($urlOnlineService) > 1024) {
+            $urlOnlineService = substr($urlOnlineService, 0, 1024);
+        }
         $this->urlOnlineService = $urlOnlineService;
     }
 

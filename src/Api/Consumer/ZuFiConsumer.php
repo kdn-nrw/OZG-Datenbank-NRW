@@ -189,24 +189,33 @@ class ZuFiConsumer extends AbstractApiConsumer
             $allServiceKeys[$serviceKey] = $serviceKey;
         }
 
-        $sbrRepository = $em->getRepository(ServiceBaseResult::class);
-        $sbrRows = $sbrRepository->findBy(['commune' => $commune]);
-        $serviceUpdateMap = [];
-        // Force update of user defined service key list
-        $updateThreshold = ($forceUpdate || !empty($serviceKeys)) ? time() : strtotime('-2 weeks');
-        foreach ($sbrRows as $sbrRow) {
-            /** @var ServiceBaseResult $sbrRow */
-            if (!in_array($sbrRow->getServiceKey(), $allServiceKeys, false)) {
-                $em->remove($sbrRow);
+        if ($forceUpdate || empty($serviceKeys)) {
+            $deleteItems = [];
+            $query = 'SELECT id, service_key, created_at, modified_at FROM ozg_api_service_base_result WHERE ';
+            if (null === $commune) {
+                $query .= ' commune_id IS NULL';
             } else {
-                $lastUpdate = $sbrRow->getModifiedAt() ?? $sbrRow->getCreatedAt();
-                if (!$forceUpdate && null !== $lastUpdate && $lastUpdate->getTimestamp() < $updateThreshold) {
-                    $sbrServiceKey = $sbrRow->getServiceKey();
-                    unset($mappedServiceKeys[$sbrServiceKey]);
+                $query .= ' commune_id = ' . $commune->getId();
+            }
+            $sbrRows = $this->fetchAllAssociative($query);
+            // Force update of user defined service key list
+            $updateThreshold = ($forceUpdate || !empty($serviceKeys)) ? time() : strtotime('-2 weeks');
+            foreach ($sbrRows as $sbrRow) {
+                $sbrServiceKey = $sbrRow['service_key'];
+                if (!in_array($sbrServiceKey, $allServiceKeys, false)) {
+                    $deleteItems[] = (int) $sbrRow['id'];
+                } else {
+                    $lastUpdate = !empty($sbrRow['modified_at']) ? $sbrRow['modified_at'] : $sbrRow['created_at'];
+                    if (!$forceUpdate && null !== $lastUpdate && strtotime($lastUpdate) > $updateThreshold) {
+                        unset($mappedServiceKeys[$sbrServiceKey]);
+                    }
                 }
             }
+            if (!empty($deleteItems)) {
+                $sql = 'DELETE FROM ozg_api_service_base_result WHERE id IN (' . implode(', ', $deleteItems) . ')';
+                $this->executeStatement($sql);
+            }
         }
-        $em->flush();// The number of imported entries is limited; sort randomly to prevent rechecking the same items over and over
         shuffle($mappedServiceKeys);
         foreach ($mappedServiceKeys as $serviceKey) {
             $shuffledServices[$serviceKey] = $mapServicesByKey[$serviceKey];
@@ -240,6 +249,38 @@ class ZuFiConsumer extends AbstractApiConsumer
         }
         $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
         return $totalImportRowCount;
+    }
+
+    /**
+     * Execute a raw sql statement; used instead of Doctrine DQL for performance reasons
+     *
+     * @param string $sql
+     * @throws \Doctrine\DBAL\Exception
+     */
+    protected function executeStatement(string $sql)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        if (method_exists($connection, 'executeStatement')) {
+            $connection->executeStatement($sql);
+        } else {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $connection->executeUpdate($sql);
+        }
+    }
+
+    /**
+     * Execute a raw sql statement; used instead of Doctrine DQL for performance reasons
+     *
+     * @param string $sql
+     * @throws \Doctrine\DBAL\Exception
+     */
+    protected function fetchAllAssociative(string $sql)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        if (method_exists($connection, 'fetchAllAssociative')) {
+            return $connection->fetchAllAssociative($sql);
+        }
+        return $connection->fetchAll($sql);
     }
 
     /**
