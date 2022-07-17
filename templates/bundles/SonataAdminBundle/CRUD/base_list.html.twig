@@ -85,6 +85,8 @@ Extend base template with custom class
                     {% endfor %}
                 </ul>
             </li>
+            {% block custom_filters_actions %}
+            {% endblock %}
         </ul>
     {% endif -%}
 {% endblock %}

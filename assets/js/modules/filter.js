@@ -146,8 +146,80 @@
                     filterBox.parentNode.classList.add('app-container-filter');
                     filterBox.parentNode.prepend(filterSelection);
                     checkEmptyState(navbarElement);
+                    let customFilterLinks = filterSelection.querySelectorAll('.js-custom-filter');
+                    if (customFilterLinks.length > 0) {
+                        for (let i = 0, n = customFilterLinks.length; i < n; i++) {
+                             let customFilters = JSON.parse(customFilterLinks[i].dataset.filterValue);
+                             if (self.checkCustomFilterActive(filterSelection, filterBox, filterForm, customFilters)) {
+                                 customFilterLinks[i].classList.add('active');
+                             }
+                        }
+                        document.addEventListener('click', function (event) {
+                            let linkElement = event.target.matches('.js-custom-filter');
+                            if (!linkElement) {
+                                linkElement = event.target.closest('.js-custom-filter');
+                            }
+                            // If the clicked element doesn't have the right selector, bail
+                            if (!linkElement) return;
+
+                            // Don't follow the link
+                            event.preventDefault();
+
+                            // Log the clicked element in the console
+                            if (linkElement.dataset) {
+                                let customFilters = JSON.parse(linkElement.dataset.filterValue);
+                                self.onCustomFilterClicked(filterSelection, filterBox, filterForm, customFilters);
+                            }
+
+                        }, false);
+                    }
                 }
             }
         },
+        checkCustomFilterActive: function (filterSelection, filterBox, filterForm, customFilters) {
+
+            let filterId = filterBox.getAttribute('id').replace('filter-container', 'filter');
+            let isActive = true;
+            Object.keys(customFilters).forEach(function (item) {
+                let filterTarget = filterId + '-' + item;
+                let itemFilter = document.getElementById(filterTarget);
+                if (itemFilter) {
+                    let valueField = document.getElementById('filter_'+item+'_value');
+                    if (valueField) {
+                        if (valueField.tagName.toLowerCase() === 'select') {
+                            isActive = isActive && valueField.value == customFilters[item];
+                        } else if (valueField.tagName.toLowerCase() === 'input') {
+                            isActive = isActive && valueField.value == customFilters[item];
+                        }
+                    }
+                }
+            });
+            return isActive;
+        },
+        onCustomFilterClicked: function (filterSelection, filterBox, filterForm, customFilters) {
+
+            let filterId = filterBox.getAttribute('id').replace('filter-container', 'filter');
+            //filter-s62d41a9d9c3b7-status
+            Object.keys(customFilters).forEach(function (item) {
+                let filterTarget = filterId + '-' + item;
+                let itemFilter = document.getElementById(filterTarget);
+                if (itemFilter) {
+                    let selectFilter = filterSelection.querySelector('a[filter-target="' + filterTarget + '"]');
+                    if (selectFilter && itemFilter.offsetParent === null) {
+                        selectFilter.click();
+                    }
+                    let valueField = document.getElementById('filter_'+item+'_value');
+                    if (valueField) {
+                        if (valueField.tagName.toLowerCase() === 'select') {
+                            valueField.value = customFilters[item];
+                            $(valueField).select2("val", customFilters[item]);
+                        } else if (valueField.tagName.toLowerCase() === 'input') {
+                            valueField.value = customFilters[item];
+                        }
+                    }
+                }
+            });
+            filterForm.submit();
+        }
     };
 }));

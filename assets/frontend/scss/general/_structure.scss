@@ -42,6 +42,7 @@
   }
   &.full-width {
     .app-content-wrapper {
+      > .app-container > .content,
       > .content {
         margin-right: 0;
         margin-left: 0;

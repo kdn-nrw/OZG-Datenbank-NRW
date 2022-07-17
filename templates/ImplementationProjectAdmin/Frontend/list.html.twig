@@ -7,6 +7,22 @@ file that was distributed with this source code.
 
 {% extends 'Frontend/Admin/CRUD/list.html.twig' %}
 
+{% block custom_filters_actions %}
+<li class="app-filter-custom-action">
+    {# {% set filterData = {'status': 9, 'pilotingStatusAt': {'start': null, 'end': 'now'|date("Y-m-d H:i:s")}} %} #}
+    {% set filterData = {'status': 9} %}
+    <a href="#" class="sonata-ba-action js-custom-filter" data-filter-value="{{ filterData|json_encode }}" title="{{ 'app.implementation_project.filter.currently_status_9_title'|trans }}">
+        <span class="item-label">{{ 'app.implementation_project.filter.currently_status_9'|trans }}</span>
+    </a>
+</li>
+    <li class="app-filter-custom-action">
+        {# {% set filterData = {'status': 9, 'pilotingStatusAt': {'start': null, 'end': 'now'|date("Y-m-d H:i:s")}} %} #}
+        {% set filterData = {'status': 6} %}
+        <a href="#" class="sonata-ba-action js-custom-filter" data-filter-value="{{ filterData|json_encode }}" title="{{ 'app.implementation_project.filter.currently_status_6_title'|trans }}">
+            <span class="item-label">{{ 'app.implementation_project.filter.currently_status_6'|trans }}</span>
+        </a>
+    </li>
+{% endblock %}
 {% block sonata_page_content %}
     <section class="content">
         {% if filterSubject is defined and filterSubject is not null %}
@@ -15,7 +31,7 @@ file that was distributed with this source code.
             {% include 'PageContent/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_IMPLEMENTATION_PROJECTS')} %}
         {% endif %}
     </section>
-    <div class="mb-chart-container" id="container-project-timeline" data-url="{{ path('frontend_app_implementationproject_timeline') }}">
+    <div class="mb-chart-container app-container" id="container-project-timeline" data-url="{{ path('frontend_app_implementationproject_timeline') }}">
         <section class="content">
             <div class="box box-widget box-page-content">
                 <div class="box-header with-border">
@@ -29,7 +45,9 @@ file that was distributed with this source code.
             </div>
         </section>
     </div>
+    <div class="app-container js-wrap-list" data-type="implementation_project">
     {{ parent() }}
+    </div>
     {% if filterSubject is defined and filterSubject is not null %}
     {% else %}
         <section class="content content-bottom">

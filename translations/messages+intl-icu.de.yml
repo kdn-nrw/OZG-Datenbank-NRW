@@ -1099,6 +1099,11 @@ app:
     object_name: OZG Umsetzungsprojekt
     list: OZG Umsetzungsprojekte
     create: OZG Umsetzungsprojekt anlegen
+    filter:
+      currently_status_9: 'Projekte bereits in der Pilotierung NRW'
+      currently_status_6: 'Projekte bereits im Rollout NRW'
+      currently_status_9_title: 'Umsetzungsprojekte, die heute bereits in der Pilotierungs-Phase in NRW sind'
+      currently_status_6_title: 'Umsetzungsprojekte, die heute bereits in der Rollout-Phase in NRW sind'
     actions:
       list: OZG Umsetzungsprojekt Übersicht
       show: OZG Umsetzungsprojekt anzeigen

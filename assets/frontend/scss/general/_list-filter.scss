@@ -1,0 +1,95 @@
+.app-container-filter {
+  display: flex;
+  flex-direction: column;
+  .app-filter-selection {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    list-style: none;
+    padding: 0 15px;
+    .sonata-ba-action {
+      .fa {
+        margin-right: 8px;
+      }
+      .sonata-filter-count {
+        margin-left: 8px;
+      }
+    }
+    > li {
+      &:not(:last-child) {
+        margin: 0 8px 5px 0;
+      }
+      > .sonata-ba-action {
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+        border-top: 3px solid #3c8dbc;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+        border-radius: 3px;
+        padding: 10px;
+        margin: 0 5px 0 0;
+        background: #fff;
+        flex: 0 0 auto;
+      }
+    }
+  }
+  .sonata-filters-box {
+    float: none;
+  }
+  @media (min-width: 1200px) {
+    flex-direction: column;
+    margin: 0 0 20px 0;
+    position: relative;
+    padding-bottom: 15px;
+    .app-filter-selection {
+      border-top: none;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+      margin: 0 0 8px 0;
+      background: transparent;
+      flex: 0 0 auto;
+      > li {
+        &:not(:last-child) {
+          margin: 0 8px 0 0;
+        }
+      }
+    }
+    .box {
+      margin-bottom: 0;
+    }
+    .sonata-filters-box {
+      padding: 0;
+    }
+    .sonata-filter-form {
+      flex: 1 1 auto;
+      padding: 0;
+      > .row {
+        display: flex;
+        flex-direction: row;
+        margin: 0;
+        > .col-lg-9 {
+          flex: 1 1 auto;
+          float: none;
+          width: auto;
+        }
+        > .col-lg-3 {
+          flex: 0 1 auto;
+          float: none;
+          margin: -10px -10px -10px auto;
+          padding: 10px 30px;
+          width: auto;
+          background: $gray-200;
+          .form-group:last-child {
+            margin: 0;
+          }
+        }
+      }
+      // make width of default filter column bigger if advanced filter is disabled
+      .advanced-filter[style*="display: none;"] + .col-sm-4{
+        width: 66.6666666%;
+        max-width: 66.6666666%;
+      }
+    }
+  }
+}
