@@ -25,6 +25,7 @@ use App\Entity\MetaData\HasMetaDateEntityInterface;
 use App\Entity\Organisation;
 use App\Entity\OrganisationEntityInterface;
 use App\Entity\OrganisationTrait;
+use App\Entity\PaymentPlatform;
 use App\Entity\Portal;
 use App\Entity\Service;
 use App\Entity\ServiceSystem;
@@ -222,6 +223,13 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      */
     private $bureaus;
 
+    /**
+     * @var PaymentPlatform[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\PaymentPlatform", mappedBy="communes")
+     * @ORM\OrderBy({"name" = "ASC"})
+     */
+    private $paymentPlatforms;
+
     public function __construct()
     {
         $this->bureaus = new ArrayCollection();
@@ -233,6 +241,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
         $this->communeSolutions = new ArrayCollection();
         $this->specializedProcedures = new ArrayCollection();
         $this->serviceBaseResults = new ArrayCollection();
+        $this->paymentPlatforms = new ArrayCollection();
     }
 
     /**
@@ -858,4 +867,40 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
         $this->bureaus = $bureaus;
     }
 
+
+    /**
+     * @param PaymentPlatform $paymentPlatform
+     * @return self
+     */
+    public function addPaymentPlatform(PaymentPlatform $paymentPlatform): self
+    {
+        if (!$this->paymentPlatforms->contains($paymentPlatform)) {
+            $this->paymentPlatforms->add($paymentPlatform);
+            $paymentPlatform->addCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param PaymentPlatform $paymentPlatform
+     * @return self
+     */
+    public function removePaymentPlatform(PaymentPlatform $paymentPlatform): self
+    {
+        if ($this->paymentPlatforms->contains($paymentPlatform)) {
+            $this->paymentPlatforms->removeElement($paymentPlatform);
+            $paymentPlatform->removeCommune($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return PaymentPlatform[]|Collection
+     */
+    public function getPaymentPlatforms()
+    {
+        return $this->paymentPlatforms;
+    }
 }

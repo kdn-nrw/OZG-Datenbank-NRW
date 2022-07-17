@@ -402,6 +402,7 @@ app:
       administration_url: Web
       transparency_portal_url: Transparenzportal
       bureaus: Fachlichkeiten
+      payment_platforms: Bezahlplattformen
   commune_solution:
     object_name: Online-Dienst für Kommune
     list: Online-Dienst für Kommune
@@ -1542,13 +1543,22 @@ app:
         communes: Kommunen
         onboarding_dvdv: Onboarding Service DVDV
   payment_type:
-    object_name: Bezahlverfahren
-    list: Bezahlverfahren
-    create: Bezahlverfahren anlegen
+    object_name: Zahlverfahren
+    list: Zahlverfahren
+    create: Zahlverfahren anlegen
     entity:
       name: Name
       url: Url
       solutions: Online-Dienste
+  payment_platform:
+    object_name: Bezahlplattform
+    list: Bezahlplattformen
+    create: Bezahlplattformen anlegen
+    entity:
+      name: Name
+      description: Info
+      communes: Kommunen
+      manufacturer: Hersteller
   portal:
     object_name: Portal
     list: Portale
@@ -1897,7 +1907,7 @@ app:
       open_data_items: Open Data
       maturity: Reifegrad
       form_server_solutions: Formularserver
-      payment_types: Bezahlverfahren
+      payment_types: Zahlverfahren
       is_published: Online-Dienst öffentlich sichtbar?
       model_region_projects: Umsetzungsprojekte
       implementation_projects: OZG Umsetzungsprojekte

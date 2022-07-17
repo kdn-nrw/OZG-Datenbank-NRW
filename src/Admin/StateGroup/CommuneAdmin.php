@@ -23,6 +23,7 @@ use App\Admin\Traits\CentralAssociationTrait;
 use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\LaboratoryTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
+use App\Admin\Traits\PaymentPlatformTrait;
 use App\Admin\Traits\PortalTrait;
 use App\Admin\Traits\ServiceProviderTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
@@ -55,6 +56,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     use ContactTrait;
     use LaboratoryTrait;
     use OrganisationOneToOneTrait;
+    use PaymentPlatformTrait;
     use PortalTrait;
     use ServiceProviderTrait;
     use SpecializedProcedureTrait;
@@ -147,6 +149,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addCentralAssociationsFormFields($form);
         $this->addSpecializedProceduresFormFields($form);
         $this->addPortalsFormFields($form);
+        $this->addPaymentPlatformsFormFields($form);
         $this->addLaboratoriesFormFields($form);
         $form
             ->add('bureaus', ModelType::class, [
@@ -247,6 +250,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addDefaultDatagridFilter($filter, 'centralAssociations');
         $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
         $this->addDefaultDatagridFilter($filter, 'portals');
+        $this->addDefaultDatagridFilter($filter, 'paymentPlatforms');
         $this->addDefaultDatagridFilter($filter, 'laboratories');
         $filter->add('constituency',
             null,
@@ -325,6 +329,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addCentralAssociationsShowFields($show);
         $this->addSpecializedProceduresShowFields($show);
         $this->addPortalsShowFields($show);
+        $this->addPaymentPlatformsShowFields($show);
         $this->addLaboratoriesShowFields($show);
         $show->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',

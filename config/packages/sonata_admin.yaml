@@ -269,6 +269,7 @@ sonata_admin:
                 label_catalogue: messages
                 icon: '<i class="fa fa-object-group"></i>'
                 items:
+                    - App\Admin\PaymentPlatformAdmin
                     - App\Admin\PaymentTypeAdmin
                     - App\Admin\AuthenticationAdmin
                     - App\Admin\AnalogServiceAdmin
