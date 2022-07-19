@@ -37,7 +37,7 @@
 .box-comments {
   > .box-inquiry {
     > .box-comment {
-      border-left: 4px solid #3c8dbc;
+      border-left: 4px solid $blue;
     }
     &:not(:first-child) {
       border-top: 8px solid #fff;

@@ -1,4 +1,7 @@
 .box {
+  &.box-primary {
+    border-color: $blue;
+  }
   .nav-tabs-app-custom {
     .nav-tabs {
       padding-left: 15px;

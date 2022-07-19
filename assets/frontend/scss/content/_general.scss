@@ -60,6 +60,9 @@
     }
   }
 }
+.box.box-primary {
+  border-top-color: $blue;
+}
 
 @import "typo";
 @import "tables";

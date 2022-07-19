@@ -23,13 +23,26 @@
         display: inline-flex;
         align-items: center;
         white-space: nowrap;
-        border-top: 3px solid #3c8dbc;
+        border-top: 3px solid $blue;
         box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
         border-radius: 3px;
         padding: 10px;
         margin: 0 5px 0 0;
         background: #fff;
         flex: 0 0 auto;
+        transition: all .2s linear;
+      }
+    }
+    .app-filter-custom-action {
+      > .sonata-ba-action {
+        &:hover, &:active, &:focus {
+          background: $blue;
+          color: #fff;
+        }
+        &.active {
+          background: $blue;
+          color: #fff;
+        }
       }
     }
   }

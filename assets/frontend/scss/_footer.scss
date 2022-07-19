@@ -53,8 +53,6 @@
         }
     }
     .footer-meta {
-/*position: absolute;*/
-bottom: 0;
         font-size: .9375rem;
         a.footericon {
             margin-right: 1rem;
@@ -111,6 +109,9 @@ bottom: 0;
             }
         }
         .footer-social-nav {
+            > .nav > li > a {
+                padding: 0;
+            }
             @include media-breakpoint-down(sm) {
                 margin-top: 1rem;
             }
