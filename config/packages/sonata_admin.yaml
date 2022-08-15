@@ -264,6 +264,7 @@ sonata_admin:
                     - App\Admin\Onboarding\EpaymentAdmin
                     - App\Admin\Onboarding\ServiceAccountAdmin
                     - App\Admin\Onboarding\XtaServerAdmin
+                    - App\Admin\Onboarding\MonumentAuthorityAdmin
             app_admin.menu.basic:
                 label: app.menu.basic_group
                 label_catalogue: messages

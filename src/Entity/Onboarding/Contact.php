@@ -41,6 +41,7 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
 
     public const CONTACT_TYPE_EPAYMENT_USER = 'epay_user';
     public const CONTACT_TYPE_XTA = 'xta_server_contact';
+    public const CONTACT_TYPE_MONUMENT_AUTHORITY = 'monument_authority_contact';
 
     /**
      * @var array Supported contact types
@@ -96,6 +97,13 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
      */
     protected $xtaServer;
 
+    /**
+     * @var MonumentAuthority|null
+     * @ORM\OneToOne(targetEntity="App\Entity\Onboarding\MonumentAuthority", inversedBy="contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="monument_authority_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    protected $monumentAuthority;
+
     use PersonPropertiesTrait;
     use ContactPropertiesTrait;
 
@@ -138,6 +146,8 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
             $this->formSolution = $onboarding;
         } elseif ($onboarding instanceof XtaServer) {
             $this->xtaServer = $onboarding;
+        } elseif ($onboarding instanceof MonumentAuthority) {
+            $this->monumentAuthority = $onboarding;
         }
         $this->commune = $onboarding->getCommune();
     }
@@ -235,9 +245,17 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
     /**
      * @return XtaServer|null
      */
-    public function getXtaServer()
+    public function getXtaServer(): ?XtaServer
     {
         return $this->xtaServer;
+    }
+
+    /**
+     * @return MonumentAuthority|null
+     */
+    public function getMonumentAuthority(): ?MonumentAuthority
+    {
+        return $this->monumentAuthority;
     }
 
 }

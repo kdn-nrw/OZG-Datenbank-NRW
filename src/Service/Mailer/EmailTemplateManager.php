@@ -26,6 +26,7 @@ use App\Model\EmailTemplate\OnboardingCommuneInfoUpdateModel;
 use App\Model\EmailTemplate\OnboardingDataCompleteUpdateModel;
 use App\Model\EmailTemplate\OnboardingEpaymentUpdateModel;
 use App\Model\EmailTemplate\OnboardingFormSolutionUpdateModel;
+use App\Model\EmailTemplate\OnboardingMonumentAuthorityUpdateModel;
 use App\Model\EmailTemplate\OnboardingReleaseUpdateModel;
 use App\Model\EmailTemplate\OnboardingServiceAccountUpdateModel;
 use App\Model\EmailTemplate\OnboardingXtaServerUpdateModel;
@@ -288,6 +289,7 @@ class EmailTemplateManager
             OnboardingReleaseUpdateModel::TEMPLATE_KEY => OnboardingReleaseUpdateModel::class,
             OnboardingDataCompleteUpdateModel::TEMPLATE_KEY => OnboardingDataCompleteUpdateModel::class,
             OnboardingXtaServerUpdateModel::TEMPLATE_KEY => OnboardingXtaServerUpdateModel::class,
+            OnboardingMonumentAuthorityUpdateModel::TEMPLATE_KEY => OnboardingMonumentAuthorityUpdateModel::class,
         ];
     }
 

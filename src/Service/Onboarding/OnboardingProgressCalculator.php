@@ -21,6 +21,7 @@ use App\Entity\Onboarding\Contact;
 use App\Entity\Onboarding\Epayment;
 use App\Entity\Onboarding\EpaymentProject;
 use App\Entity\Onboarding\FormSolution;
+use App\Entity\Onboarding\MonumentAuthority;
 use App\Entity\Onboarding\OnboardingDocument;
 use App\Entity\Onboarding\Release;
 use App\Entity\Onboarding\ServiceAccount;
@@ -178,6 +179,15 @@ class OnboardingProgressCalculator
                 }
                 break;
             case XtaServer::class:
+                if (empty($properties)) {
+                    $properties = [
+                        'applicationType', 'organizationalKey', 'intermediaryOperatorType',
+                        'contact', 'osciPrivateKeyPassword',
+                        'documents',
+                    ];
+                }
+                break;
+            case MonumentAuthority::class:
                 if (empty($properties)) {
                     $properties = [
                         'applicationType', 'organizationalKey', 'intermediaryOperatorType',

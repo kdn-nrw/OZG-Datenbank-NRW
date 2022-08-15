@@ -17,6 +17,7 @@ use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\Onboarding\CommuneInfo;
 use App\Entity\Onboarding\Epayment;
 use App\Entity\Onboarding\FormSolution;
+use App\Entity\Onboarding\MonumentAuthority;
 use App\Entity\Onboarding\XtaServer;
 use App\Entity\StateGroup\Commune;
 
@@ -89,6 +90,15 @@ class OnboardingManager
             $bureaus = $commune->getBureaus();
             foreach ($bureaus as $bureau) {
                 if ($bureau->getId() === XtaServer::REQUIRED_COMMUNE_BUREAU_ID) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if ($entityClass === MonumentAuthority::class) {
+            $bureaus = $commune->getBureaus();
+            foreach ($bureaus as $bureau) {
+                if ($bureau->getId() === MonumentAuthority::REQUIRED_COMMUNE_BUREAU_ID) {
                     return true;
                 }
             }

@@ -17,6 +17,7 @@ namespace App\Command;
 use App\Entity\Onboarding\CommuneInfo;
 use App\Entity\Onboarding\Epayment;
 use App\Entity\Onboarding\FormSolution;
+use App\Entity\Onboarding\MonumentAuthority;
 use App\Entity\Onboarding\Release;
 use App\Entity\Onboarding\ServiceAccount;
 use App\Entity\Onboarding\XtaServer;
@@ -58,6 +59,7 @@ class OnboardingGenerateCommand extends Command
         $importedRowCount += $this->onboardingManager->createItems(Release::class);
         $importedRowCount += $this->onboardingManager->createItems(ServiceAccount::class);
         $importedRowCount += $this->onboardingManager->createItems(XtaServer::class);
+        $importedRowCount += $this->onboardingManager->createItems(MonumentAuthority::class);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished onboarding update process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }

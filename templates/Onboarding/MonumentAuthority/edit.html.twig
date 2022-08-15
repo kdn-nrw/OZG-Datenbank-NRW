@@ -1,0 +1,25 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+
+{% block sonata_pre_fieldsets %}
+    {% if objectId|default(admin.id(object)) is not null and objectCompletenessInfo is defined %}
+        {% include 'Onboarding/Partials/object-completeness-state.html.twig' %}
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
+
+{% block formactions %}
+    <div class="box box-primary box-footer-text" style="margin: 30px 0;">
+        <div class="box-body">
+            <p>Im Anschluss werden das Benutzerkonto auf einem der XTA-Server von DataClearing NRW (KRZN oder citeq) eingerichtet und die Zugangsdaten per E-Mail an die beauftragende Stelle übermittelt.<br>
+                Die Einrichtung kann einige Tage in Anspruch nehmen.<br>
+                Die Zugangsdaten werden bei der Konfiguration der XTA-Schnittstelle des abholenden Fachverfahrens benötigt.</p>
+        </div>
+    </div>
+    {{ parent() }}
+{% endblock formactions %}

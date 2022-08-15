@@ -37,6 +37,8 @@ app:
     meta_data: Metadaten
     onboarding_group: Onboarding Service Plattformen
     onboarding_dvdv: DVDV
+    onboarding_submenu_1: Kommunalportal.NRW
+    onboarding_submenu_2: Bauportal.NRW
   block:
     solution:
       online: 'Dienste: Online'
@@ -671,9 +673,60 @@ app:
       name: Name
       url: URL
   xta_server:
-    object_name: Service XTA
-    list: XTA
-    create: Service XTA erfassen
+    object_name: Service Untere Bauaufsichtsbehörde
+    list: Untere Bauaufsichtsbehörde
+    create: Service Untere Bauaufsichtsbehörde erfassen
+    tabs:
+      custom_fields: Weitere Daten
+      services: Dienste
+    actions:
+      ask_question: Frage stellen
+      show_questions: Rückfragen
+    groups:
+      general: Basisdaten
+      general_description: '<p><strong>Beantragung eines Benutzerkontos für einen XTA-Server von DataClearing NRW</strong></p>
+        <p>Wenn eine Bau- oder Bauaufsichtsbehörde des Bundeslandes Nordrhein-Westfalen weder ein Fachverfahren einsetzt, das eine direkte Abholung via OSCI beim Intermediär unterstützt, noch Zugriff auf einen OSCI-Adapter oder XTA-Server hat, der sich im direkten Einflussbereich der Behörde (Kommune/Kreis oder betreuendes Rechenzentrum) befindet, kann im Rahmen des Projektes Bauportal.NRW ein XTA-Server von DataClearing NRW verwendet werden.</p>
+        <p>Der XTA-Server holt dann im Auftrag der Behörde die Nachrichten via OSCI beim Intermediär ab. Da das verwendete Fachverfahren keine Inhaltsentschlüsselung unterstützt, muss der XTA-Server die OSCI-Nachrichten im Auftrag der Behörde entschlüsseln und stellt diese danach zur Abholung für das Fachverfahren bereit. Die anschließende Abholung der Nachrichten vom XTA-Server durch das Fachverfahren erfolgt transportverschlüsselt.</p>
+        <p>Voraussetzung für die Möglichkeit zur Nutzung der XTA-Server von DataClearing NRW ist ein bereits vollständig erstellter Eintrag für die Bauaufsichtsbehörde im DVDV und die Nutzung eines OSCI-Intermediärs von DataClearing NRW (KRZN oder citeq) zur Übermittlung der Antragsdaten an die Behörde. Wird ein anderer OSCI-Intermediär verwendet, ist die Nutzung der XTA-Server von DataClearing NRW nicht möglich.</p>
+        <p>Zur Einrichtung eines Benutzerkontos auf den XTA-Servern von DataClearing NRW benötigt DataClearing NRW das öffentliche Zertifikat (cer- oder der-Datei), dass im Auftrag der Bauaufsichtsbehörde im DVDV hinterlegt wurde. Darüber hinaus wird das private Zertifikat der beauftragenden Behörde, von dem das öffentliche Zertifikat abgeleitet wurde, benötigt. (p12-Datei + Passwort für den Zugriff darauf)</p>
+        <p>Bitte füllen Sie zur Beantragung des Benutzerkontos das folgende Formular vollständig aus.</p>'
+      documents: Dokumente
+      contact_data: Kontaktperson
+    entity:
+      description: Beschreibung
+      commune: Kommune
+      modified_at: Letzter Eintrag
+      status: Status
+      commune_name: Kommune
+      application_type: Antragsart
+      application_type_choices:
+        new: Beantragung eines neuen Zugangs
+        update: Änderung eines bestehenden Zugangs (Zertifkatsaustausch)
+      application_type_info_update: Der Zertifikatsaustausch kann auf dem XTA-Server erst dann erfolgen, wenn bereits vorher das Zertifikat im DVDV erfolgreich ausgetauscht wurde. Erst nach dem erfolgreichen Austausch des Zertifikats auf dem XTA-Server, kann auch das Zertifikat im verwendeten Fachverfahren ausgetauscht werden.
+      state: Bundesland
+      authority_category: Kategorie der Behörde
+      organizational_key: Organisationsschlüssel im DVDV
+      organizational_key_validation_error: 'Diesen Schlüssel haben Sie bei der Beantragung des DVDV-Eintrags angeben oder erhalten. (Behörden-ID) Aufbau: „bab:“+AGS (amtlicher Gemeindeschlüssel) Beispiel der Stadt Düsseldorf: „bab:05111000“'
+      commune_type: Stadt / Gemeinde / Kreis
+      intermediary_operator_type: Intermediärsbetreiber
+      intermediary_operator_type_choices:
+        1: DataClearing NRW - KRZN
+        2: DataClearing NRW - citeq
+        9: DataClearing NRW - Zuordnung nicht bekannt
+      contact: Kontaktperson
+      comment: Bemerkung
+      documents: Dokumente
+      document_type_choices:
+        general: Dokument
+        osci_public_key_file: Öffentlicher Schlüssel des OSCI-Zertifikats
+        osci_private_key_file: Privater Schlüssel des OSCI-Zertifikats
+      osci_private_key_password: Passwort für privaten Schlüssel
+      text_footer: Im Anschluss werden das Benutzerkonto auf einem der XTA-Server von DataClearing NRW (KRZN oder citeq) einrichtet und die Zugangsdaten per E-Mail an die beauftragende Stelle übermittelt. Die Einrichtung kann einige Tage in Anspruch nehmen. Die Zugangsdaten werden bei der Konfiguration der XTA-Schnittstelle des abholenden Fachverfahrens benötigt.
+      custom_values: Benutzerdefinierte Werte
+  monument_authority:
+    object_name: Service Untere Denkmalbehörde
+    list: Untere Denkmalbehörde
+    create: Service Untere Denkmalbehörde erfassen
     tabs:
       custom_fields: Weitere Daten
       services: Dienste
@@ -1027,7 +1080,8 @@ app:
         epayment_update: 'Kommunalportal ePayBL - Update'
         release_update: 'Go-Live - Update'
         onboarding_data_complete_update: 'Onboarding Service Plattformen: Die Kommune XY bestätigt, alle notwendigen Felder ausgefüllt zu haben'
-        xta_server_update: 'Service XTA - Update'
+        xta_server_update: 'Service Untere Bauaufsichtsbehörde - Update'
+        monument_authority_update: 'Service Untere Denkmalbehörde - Update'
       hidden: E-Mail-Versand deaktiviert?
       reply_to_email: Antwort an
       default_recipient: Empfänger (Standard)

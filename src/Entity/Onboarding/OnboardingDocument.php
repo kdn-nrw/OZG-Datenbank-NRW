@@ -40,6 +40,8 @@ class OnboardingDocument extends BaseNamedEntity implements DocumentUploadEntity
         'app.abstract_onboarding_entity.entity.document_type_choices.general' => self::DOCUMENT_TYPE_GENERAL,
         'app.xta_server.entity.document_type_choices.osci_public_key_file' => XtaServer::DOCUMENT_TYPE_PUBLIC_KEY,
         'app.xta_server.entity.document_type_choices.osci_private_key_file' => XtaServer::DOCUMENT_TYPE_PRIVATE_KEY,
+        'app.monument_authority.entity.document_type_choices.osci_public_key_file' => MonumentAuthority::DOCUMENT_TYPE_PUBLIC_KEY,
+        'app.monument_authority.entity.document_type_choices.osci_private_key_file' => MonumentAuthority::DOCUMENT_TYPE_PRIVATE_KEY,
     ];
 
     /**

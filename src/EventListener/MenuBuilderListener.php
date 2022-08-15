@@ -67,12 +67,46 @@ class MenuBuilderListener
             $this->addVsmNodes($menu, $currentRoute);
         }
         $this->moveContactMenuToTop($menu, $currentRoute);
-        $onboardingGroup = $menu->getChild('app.onboarding_group');
-        if (null !== $onboardingGroup) {
-            $onboardingGroup->removeChild('app.dataclearing.list');
-            $onboardingGroup->removeChild('app.inquiry.list');
-        }
+        $this->updateOnboardingMenu($menu, $currentRoute);
         $this->setNavItemClasses($menu);
+    }
+
+    /**
+     * Add extra level in onboarding navigation
+     *
+     * @param ItemInterface $menu
+     * @param string $currentRoute
+     * @return void
+     */
+    private function updateOnboardingMenu(ItemInterface $menu, string $currentRoute): void
+    {
+        $groupNode = $menu->getChild('app.onboarding_group');
+        if (null !== $groupNode) {
+            $groupNode->removeChild('app.dataclearing.list');
+            $groupNode->removeChild('app.inquiry.list');
+            $subNavGroups = [
+                'app.menu.onboarding_submenu_1' => [],
+                'app.menu.onboarding_submenu_2' => [],
+            ];
+            $moveToSecondItem = ['app.xta_server.list', 'app.monument_authority.list'];
+            foreach ($groupNode->getChildren() as $child) {
+                $sNr = in_array($child->getName(), $moveToSecondItem, false) ? 2 : 1;
+                $subNavGroups['app.menu.onboarding_submenu_' . $sNr][] = $child;
+            }
+            foreach ($subNavGroups as $key => $children) {
+                $subNavNode = $groupNode->addChild($key, [
+                    // Translate label here and set "safe_label", so soft hyphen (&shy;) in translation will not be escaped
+                    'label' => $this->translate($key),
+                    //'route' => 'app_vsm_snippet',
+                ]);
+                $subNavNode->setExtra('safe_label', true);
+
+                foreach ($children as $child) {
+                    $groupNode->removeChild($child);
+                    $subNavNode->addChild($child);
+                }
+            }
+        }
     }
 
     /**
