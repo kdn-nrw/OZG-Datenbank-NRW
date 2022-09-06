@@ -29,6 +29,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use SimpleThings\EntityAudit\Collection\AuditedCollection;
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 
 
 /**
@@ -38,6 +39,15 @@ use SimpleThings\EntityAudit\Collection\AuditedCollection;
  * @ORM\Table(name="ozg_onboarding")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="record_type", type="string")
+ * @DiscriminatorMap(typeProperty="record_type", mapping={
+ *    "communeinfo"="App\Entity\Onboarding\CommuneInfo",
+ *    "epayment"="App\Entity\Onboarding\Epayment",
+ *    "formsolution"="App\Entity\Onboarding\FormSolution",
+ *    "release"="App\Entity\Onboarding\Release",
+ *    "serviceaccount"="App\Entity\Onboarding\ServiceAccount",
+ *    "xtaserver"="App\Entity\Onboarding\XtaServer",
+ *    "monumentauthority"="App\Entity\Onboarding\MonumentAuthority"
+ * })
  */
 abstract class AbstractOnboardingEntity extends BaseEntity implements
     BlameableInterface,
@@ -148,7 +158,7 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
      * @var OnboardingDocument[]|Collection
      * @ORM\OneToMany(targetEntity="App\Entity\Onboarding\OnboardingDocument", mappedBy="onboarding", cascade={"persist", "remove"})
      */
-    private $documents;
+    protected $documents;
 
     /**
      * List of document types that must always be defined

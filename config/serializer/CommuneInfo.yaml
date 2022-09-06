@@ -1,0 +1,30 @@
+App\Entity\Onboarding\CommuneInfo:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    contacts:
+      groups: ['item:read']
+    privacyText:
+      groups: ['item:read']
+    privacyUrl:
+      groups: ['item:read']
+    imprintText:
+      groups: ['item:read']
+    imprintUrl:
+      groups: ['item:read']
+    accessibility:
+      groups: ['item:read']
+    openingHours:
+      groups: ['item:read']
+    imageFile:
+      groups: ['item:read']
+    imageName:
+      groups: ['item:read']
+    imageSize:
+      groups: ['item:read']
+    communeSolutions:
+      groups: ['item:read']
+    ipAddress:
+      groups: ['item:read']
+    allowAdminAccess:
+      groups: ['item:read']

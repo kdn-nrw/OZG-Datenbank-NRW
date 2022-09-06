@@ -55,6 +55,13 @@ final class JwtDecorator implements OpenApiFactoryInterface
             ],
         ]);
 
+//        $schemas = $openApi->getComponents()->getSecuritySchemes() ?? [];
+//        $schemas['JWT'] = new \ArrayObject([
+//            'type' => 'http',
+//            'scheme' => 'bearer',
+//            'bearerFormat' => 'JWT',
+//        ]);
+
         $pathItem = new Model\PathItem(
             'JWT Token',
             null,
@@ -63,7 +70,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
             null,
             new Model\Operation(
                 'postCredentialsItem',
-                [],
+                ['Token'],
                 [
                     '200' => [
                         'description' => 'Get JWT token',

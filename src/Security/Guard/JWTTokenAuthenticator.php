@@ -54,6 +54,12 @@ class JWTTokenAuthenticator extends BaseAuthenticator
         }
 
         // Use group names in token instead of roles to prevent token size being too big
+        // Warning: Because of this the authorization check for roles is always false, because the RoleHierarchyVoter
+        // uses the roles set in the token, NOT the actual user roles
+        // \Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter
+        // \Symfony\Component\Security\Core\Authorization\AccessDecisionManager::decideUnanimous
+        // This means to check the api permissions, use custom voter attributes:
+        // \App\Security\Authorization\Voter\ApiAccessVoter
         /** @var User $user */
         $groups = [];
         foreach ($user->getGroups() as $group) {

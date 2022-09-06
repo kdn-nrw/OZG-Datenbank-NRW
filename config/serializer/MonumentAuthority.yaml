@@ -1,0 +1,22 @@
+App\Entity\Onboarding\MonumentAuthority:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    applicationType:
+      groups: [ 'item:read' ]
+    intermediaryOperatorType:
+      groups: [ 'item:read' ]
+    state:
+      groups: [ 'item:read' ]
+    authorityCategory:
+      groups: [ 'item:read' ]
+    organizationalKey:
+      groups: [ 'item:read' ]
+    contact:
+      groups: [ 'item:read' ]
+    comment:
+      groups: [ 'item:read' ]
+    requiredDocumentTypes:
+      groups: [ 'item:read' ]
+    osciPrivateKeyPassword:
+      groups: [ 'item:read' ]

@@ -1,0 +1,22 @@
+App\Entity\Onboarding\Release:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    street:
+      groups: ['collection:read', 'item:read']
+    town:
+      groups: ['collection:read', 'item:read']
+    zipCode:
+      groups: ['collection:read', 'item:read']
+    email:
+      groups: ['item:read']
+    phoneNumber:
+      groups: ['item:read']
+    mobileNumber:
+      groups: ['item:read']
+    releaseStatus:
+      groups: ['item:read']
+    releaseDate:
+      groups: ['item:read']
+    releaseConfirmed:
+      groups: ['item:read']

@@ -1,0 +1,6 @@
+App\Entity\Base\BaseNamedEntity:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    name:
+      groups: [ 'collection:read', 'item:read' ]

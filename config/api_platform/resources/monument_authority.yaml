@@ -1,0 +1,23 @@
+App\Entity\Onboarding\MonumentAuthority:
+  attributes:
+    security: 'is_granted("PERMISSION_API_ONBOARDING")'
+    pagination_items_per_page: 25
+  description: 'Bauportal.NRW Untere Denkmalbehörde'
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'monument_authority:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit Einträgen für Bauportal.NRW Untere Denkmalbehörde zurück'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'monument_authority:read']
+      openapi_context:
+        summary: 'Gibt einen Eintrag für Bauportal.NRW Untere Denkmalbehörde zurück'

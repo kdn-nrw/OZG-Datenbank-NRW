@@ -62,7 +62,7 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface, Has
      *
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $providerType;
+    protected $providerType;
 
     /**
      * Project environment
@@ -71,7 +71,7 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface, Has
      *
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $projectEnvironment;
+    protected $projectEnvironment;
 
     /**
      * Project id
@@ -80,7 +80,7 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface, Has
      *
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $projectId;
+    protected $projectId;
 
     /**
      * Project id
@@ -89,7 +89,7 @@ class EpaymentProject extends BaseEntity implements HideableEntityInterface, Has
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $projectPassword;
+    protected $projectPassword;
 
     /**
      * @var Epayment|null

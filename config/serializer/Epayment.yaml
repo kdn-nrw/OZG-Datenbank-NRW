@@ -1,0 +1,70 @@
+App\Entity\Onboarding\Epayment:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    street:
+      groups: ['item:read']
+    town:
+      groups: ['item:read']
+    zipCode:
+      groups: ['item:read']
+    email:
+      groups: ['item:read']
+    phoneNumber:
+      groups: ['item:read']
+    mobileNumber:
+      groups: ['item:read']
+    paymentProviderAccountId:
+      groups: ['item:read']
+    paymentProvider:
+      groups: ['item:read']
+    paymentUser:
+      groups: ['item:read']
+    mandatorEmail:
+      groups: ['item:read']
+    testIpAddress:
+      groups: ['item:read']
+    projects:
+      groups: ['item:read']
+    clientNumberIntegration:
+      groups: ['item:read']
+    clientNumberProduction:
+      groups: ['item:read']
+    managerNumber:
+      groups: ['item:read']
+    budgetOffice:
+      groups: ['item:read']
+    objectNumber:
+      groups: ['item:read']
+    cashRegisterPersonalAccountNumber:
+      groups: ['item:read']
+    indicatorDunningProcedure:
+      groups: ['item:read']
+    bookingText:
+      groups: ['item:read']
+    descriptionOfTheBookingList:
+      groups: ['item:read']
+    managerNo:
+      groups: ['item:read']
+    applicationName:
+      groups: ['item:read']
+    lengthReceiptNumber:
+      groups: ['item:read']
+    cashRegisterCheckProcedureStatus:
+      groups: ['item:read']
+    lengthFirstAccountAssignmentInformation:
+      groups: ['item:read']
+    contentFirstAccountAssignmentInformation:
+      groups: ['item:read']
+    lengthSecondAccountAssignmentInformation:
+      groups: ['item:read']
+    contentSecondAccountAssignmentInformation:
+      groups: ['item:read']
+    paymentOperator:
+      groups: ['item:read']
+    epaymentServices:
+      groups: ['item:read']
+    xFinanceFileRequired:
+      groups: ['item:read']
+    xFinanceFileDays:
+      groups: ['item:read']

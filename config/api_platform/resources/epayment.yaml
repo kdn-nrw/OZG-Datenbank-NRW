@@ -1,0 +1,23 @@
+App\Entity\Onboarding\Epayment:
+  attributes:
+    security: 'is_granted("PERMISSION_API_ONBOARDING")'
+    pagination_items_per_page: 25
+  description: 'Kommunalportal ePayment'
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'epayment:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit Kommunalportal ePayment zurück'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'epayment:read']
+      openapi_context:
+        summary: 'Gibt einen Eintrag der Kommunalportal ePayment zurück'

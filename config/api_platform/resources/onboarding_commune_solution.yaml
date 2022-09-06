@@ -1,0 +1,23 @@
+App\Entity\Onboarding\OnboardingCommuneSolution:
+  attributes:
+    security: 'is_granted("PERMISSION_API_ONBOARDING")'
+    pagination_items_per_page: 25
+  description: 'Kommunalportal Basisdaten Dienste'
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'onboarding_commune_solution:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit Kommunalportal Basisdaten Dienste zurück'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'onboarding_commune_solution:read']
+      openapi_context:
+        summary: 'Gibt einen Eintrag der Kommunalportal Basisdaten Dienste zurück'

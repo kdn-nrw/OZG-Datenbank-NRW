@@ -54,7 +54,7 @@ class Epayment extends AbstractOnboardingEntity
      * @var Contact|null
      * @ORM\OneToOne(targetEntity="App\Entity\Onboarding\Contact", mappedBy="epayment", cascade={"all"})
      */
-    private $paymentUser;
+    protected $paymentUser;
 
     /**
      * @ORM\Column(type="string", name="mandator_email", length=255, nullable=true)
@@ -192,7 +192,7 @@ class Epayment extends AbstractOnboardingEntity
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      * @Assert\Valid()
      */
-    private $epaymentServices;
+    protected $epaymentServices;
 
     /**
      * Toggle XFinance export
@@ -209,7 +209,7 @@ class Epayment extends AbstractOnboardingEntity
      *
      * @ORM\Column(name="xfinance_file_days", type="json", nullable=true)
      */
-    private $xFinanceFileDays = [];
+    protected $xFinanceFileDays = [];
 
 
     public function __construct(Commune $commune)

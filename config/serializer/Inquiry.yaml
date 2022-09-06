@@ -1,0 +1,22 @@
+App\Entity\Onboarding\Inquiry:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    user:
+      groups: ['item:read']
+    isRead:
+      groups: ['item:read']
+    referenceId:
+      groups: ['item:read']
+    referenceSource:
+      groups: ['item:read']
+    description:
+      groups: ['item:read']
+    readAt:
+      groups: ['item:read']
+    readBy:
+      groups: ['item:read']
+    parent:
+      groups: ['item:read']
+    answers:
+      groups: ['item:read']

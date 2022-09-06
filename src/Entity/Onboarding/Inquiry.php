@@ -64,7 +64,7 @@ class Inquiry extends BaseEntity implements BlameableInterface, HideableEntityIn
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description = '';
+    protected $description = '';
 
     /**
      * @var null|DateTime

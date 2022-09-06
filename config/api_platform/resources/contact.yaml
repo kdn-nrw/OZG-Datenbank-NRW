@@ -1,0 +1,23 @@
+App\Entity\Onboarding\Contact:
+  attributes:
+    security: 'is_granted("PERMISSION_API_ONBOARDING")'
+    pagination_items_per_page: 25
+  description: 'Kommunalportal Kontakte'
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'onboarding_contact:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit Kommunalportal Kontakte zurück'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'onboarding_contact:read']
+      openapi_context:
+        summary: 'Gibt einen Eintrag der Kommunalportal Kontakte zurück'

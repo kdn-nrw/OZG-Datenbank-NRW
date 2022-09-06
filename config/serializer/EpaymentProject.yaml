@@ -1,0 +1,14 @@
+App\Entity\Onboarding\EpaymentProject:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    providerType:
+      groups: ['item:read']
+    projectEnvironment:
+      groups: ['item:read']
+    projectId:
+      groups: ['item:read']
+    projectPassword:
+      groups: ['item:read']
+    epayment:
+      groups: ['item:read']

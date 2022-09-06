@@ -119,7 +119,7 @@ class MonumentAuthority extends AbstractOnboardingEntity
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $osciPrivateKeyPassword;
+    protected $osciPrivateKeyPassword;
 
     /**
      * @return int|null

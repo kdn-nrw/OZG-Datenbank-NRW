@@ -51,7 +51,7 @@ class OnboardingDocument extends BaseNamedEntity implements DocumentUploadEntity
      *
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $documentType = self::DOCUMENT_TYPE_GENERAL;
+    protected $documentType = self::DOCUMENT_TYPE_GENERAL;
 
     /**
      * @Vich\UploadableField(mapping="onboarding_document", fileNameProperty="localName", originalName="name", size="fileSize")
@@ -59,14 +59,14 @@ class OnboardingDocument extends BaseNamedEntity implements DocumentUploadEntity
      *
      * @var File
      */
-    private $file;
+    protected $file;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      *
      * @var int|null
      */
-    private $fileSize;
+    protected $fileSize;
 
     /**
      * @var string|null

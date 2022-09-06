@@ -41,70 +41,70 @@ class EpaymentService extends BaseEntity implements
      * @ORM\ManyToOne(targetEntity="App\Entity\Solution", cascade={"persist"})
      * @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
      */
-    private $solution;
+    protected $solution;
 
     /**
      * @var Epayment|null
      * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\Epayment", inversedBy="epaymentServices", cascade={"persist"})
      * @ORM\JoinColumn(name="epayment_id", referencedColumnName="id")
      */
-    private $epayment;
+    protected $epayment;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="booking_text", type="text", nullable=true)
      */
-    private $bookingText;
+    protected $bookingText;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="value_first_account_assignment_information", type="text", nullable=true)
      */
-    private $valueFirstAccountAssignmentInformation;
+    protected $valueFirstAccountAssignmentInformation;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="value_second_account_assignment_information", type="text", nullable=true)
      */
-    private $valueSecondAccountAssignmentInformation;
+    protected $valueSecondAccountAssignmentInformation;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="cost_unit", type="text", nullable=true)
      */
-    private $costUnit;
+    protected $costUnit;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="payers", type="text", nullable=true)
      */
-    private $payers;
+    protected $payers;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="product_description", type="text", nullable=true)
      */
-    private $productDescription;
+    protected $productDescription;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="tax_number", type="text", nullable=true)
      */
-    private $taxNumber;
+    protected $taxNumber;
 
     /**
      * @return Solution|null

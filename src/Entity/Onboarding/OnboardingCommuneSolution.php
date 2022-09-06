@@ -37,7 +37,7 @@ class OnboardingCommuneSolution extends BaseEntity implements
      * @ORM\ManyToOne(targetEntity="App\Entity\Solution", cascade={"persist"})
      * @ORM\JoinColumn(name="solution_id", referencedColumnName="id")
      */
-    private $solution;
+    protected $solution;
 
     /**
      * @var Commune
@@ -51,7 +51,7 @@ class OnboardingCommuneSolution extends BaseEntity implements
      * @ORM\ManyToOne(targetEntity="App\Entity\Onboarding\CommuneInfo", inversedBy="communeSolutions", cascade={"persist"})
      * @ORM\JoinColumn(name="commune_info_id", referencedColumnName="id")
      */
-    private $communeInfo;
+    protected $communeInfo;
 
     /**
      * @var bool

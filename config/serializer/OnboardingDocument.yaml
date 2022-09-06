@@ -1,0 +1,14 @@
+App\Entity\Onboarding\OnboardingDocument:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    documentType:
+      groups: [ 'item:read' ]
+    file:
+      groups: [ 'item:read' ]
+    fileSize:
+      groups: [ 'item:read' ]
+    localName:
+      groups: [ 'item:read' ]
+    onboarding:
+      groups: [ 'item:read' ]

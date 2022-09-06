@@ -1,0 +1,30 @@
+App\Entity\Onboarding\AbstractOnboardingEntity:
+  attributes:
+    id:
+      groups: ['collection:read', 'item:read']
+    commune:
+      groups: ['collection:read', 'item:read']
+#    communeName:
+#      groups: ['item:read']
+#    officialCommuneKey:
+#      groups: ['item:read']
+    serviceProvider:
+      groups: ['item:read']
+    groupEmail:
+      groups: ['item:read']
+    status:
+      groups: ['item:read']
+    completionRate:
+      groups: ['item:read']
+    description:
+      groups: ['item:read']
+    customValues:
+      groups: ['item:read']
+    messageCount:
+      groups: ['item:read']
+    dataCompletenessConfirmed:
+      groups: ['item:read']
+    documents:
+      groups: ['item:read']
+    requiredDocumentTypes:
+      groups: ['item:read']

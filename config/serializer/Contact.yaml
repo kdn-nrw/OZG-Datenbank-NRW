@@ -1,0 +1,32 @@
+App\Entity\Onboarding\Contact:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    commune:
+      groups: ['item:read']
+    onboardingEntity:
+      groups: ['item:read']
+    gender:
+      groups: ['item:read']
+    title:
+      groups: ['item:read']
+    firstName:
+      groups: ['item:read']
+    lastName:
+      groups: ['item:read']
+    email:
+      groups: ['collection:read', 'item:read']
+    phoneNumber:
+      groups: ['item:read']
+    mobileNumber:
+      groups: ['item:read']
+    street:
+      groups: ['item:read']
+    town:
+      groups: ['item:read']
+    zipCode:
+      groups: ['item:read']
+    contactType:
+      groups: ['item:read']
+    externalUserName:
+      groups: ['item:read']

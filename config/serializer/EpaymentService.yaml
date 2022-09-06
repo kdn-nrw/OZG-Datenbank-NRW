@@ -1,0 +1,24 @@
+App\Entity\Onboarding\EpaymentService:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    solution:
+      groups: ['item:read']
+    epayment:
+      groups: ['item:read']
+    bookingText:
+      groups: ['item:read']
+    description:
+      groups: ['item:read']
+    valueFirstAccountAssignmentInformation:
+      groups: ['item:read']
+    valueSecondAccountAssignmentInformation:
+      groups: ['item:read']
+    costUnit:
+      groups: ['item:read']
+    payers:
+      groups: ['item:read']
+    productDescription:
+      groups: ['item:read']
+    taxNumber:
+      groups: ['item:read']

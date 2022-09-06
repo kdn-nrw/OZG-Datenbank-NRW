@@ -50,7 +50,7 @@ class ServiceAccount extends AbstractOnboardingEntity
      * @var Contact|null
      * @ORM\OneToOne(targetEntity="App\Entity\Onboarding\Contact", mappedBy="serviceAccount", cascade={"all"})
      */
-    private $paymentUser;
+    protected $paymentUser;
 
     /**
      * @ORM\Column(type="string", name="mandator_email", length=255, nullable=true)

@@ -12,7 +12,6 @@
 namespace App\EventListener;
 
 
-use App\Admin\Onboarding\EpaymentAdmin;
 use App\Translator\TranslatorAwareTrait;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Event\ConfigureMenuEvent;
@@ -104,6 +103,9 @@ class MenuBuilderListener
                 foreach ($children as $child) {
                     $groupNode->removeChild($child);
                     $subNavNode->addChild($child);
+                }
+                if (count($subNavNode->getChildren()) === 0) {
+                    $groupNode->removeChild($key);
                 }
             }
         }

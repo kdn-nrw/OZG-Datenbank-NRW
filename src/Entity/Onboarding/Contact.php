@@ -117,7 +117,7 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
      *
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $contactType;
+    protected $contactType;
 
     /**
      * External user name
@@ -126,7 +126,7 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $externalUserName;
+    protected $externalUserName;
 
     /**
      * Contact constructor.
@@ -150,6 +150,32 @@ class Contact extends BaseEntity implements HideableEntityInterface, PersonInter
             $this->monumentAuthority = $onboarding;
         }
         $this->commune = $onboarding->getCommune();
+    }
+
+    /**
+     * @return ?object
+     */
+    public function getOnboardingEntity(): ?object
+    {
+        if (null !== $this->communeInfo) {
+            return $this->communeInfo;
+        }
+        if (null !== $this->epayment) {
+            return $this->epayment;
+        }
+        if (null !== $this->serviceAccount) {
+            return $this->serviceAccount;
+        }
+        if (null !== $this->formSolution) {
+            return $this->formSolution;
+        }
+        if (null !== $this->xtaServer) {
+            return $this->xtaServer;
+        }
+        if (null !== $this->monumentAuthority) {
+            return $this->monumentAuthority;
+        }
+        return null;
     }
 
     /**

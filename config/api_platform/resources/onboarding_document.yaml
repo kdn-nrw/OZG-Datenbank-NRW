@@ -1,0 +1,23 @@
+App\Entity\Onboarding\OnboardingDocument:
+  attributes:
+    security: 'is_granted("PERMISSION_API_ONBOARDING")'
+    pagination_items_per_page: 25
+  description: 'Kommunalportal Basisdaten Dokumente'
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'onboarding_document:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit Kommunalportal Basisdaten Dokumente zurück'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'onboarding_document:read']
+      openapi_context:
+        summary: 'Gibt einen Eintrag der Kommunalportal Basisdaten Dokumente zurück'

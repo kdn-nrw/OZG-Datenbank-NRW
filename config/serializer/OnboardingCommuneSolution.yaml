@@ -1,0 +1,14 @@
+App\Entity\Onboarding\OnboardingCommuneSolution:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    solution:
+      groups: [ 'item:read' ]
+    commune:
+      groups: [ 'item:read' ]
+    communeInfo:
+      groups: [ 'item:read' ]
+    enabledEpayment:
+      groups: [ 'item:read' ]
+    enabledMunicipalPortal:
+      groups: [ 'item:read' ]

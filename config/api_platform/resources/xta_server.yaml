@@ -1,0 +1,23 @@
+App\Entity\Onboarding\XtaServer:
+  attributes:
+    security: 'is_granted("PERMISSION_API_ONBOARDING")'
+    pagination_items_per_page: 25
+  description: 'Bauportal.NRW Untere Bauaufsichtsbehörde'
+
+  collectionOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['collection:read', 'xta_server:collection:read']
+      openapi_context:
+        summary: 'Gibt eine Liste mit Einträgen für Bauportal.NRW Untere Bauaufsichtsbehörde zurück'
+
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        enable_max_depth: 1
+        groups: ['item:read', 'xta_server:read']
+      openapi_context:
+        summary: 'Gibt einen Eintrag für Bauportal.NRW Untere Bauaufsichtsbehörde zurück'

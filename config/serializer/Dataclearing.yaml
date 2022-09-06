@@ -1,0 +1,6 @@
+App\Entity\Onboarding\Dataclearing:
+  attributes:
+    id:
+      groups: [ 'collection:read', 'item:read' ]
+    name:
+      groups: [ 'collection:read', 'item:read' ]
