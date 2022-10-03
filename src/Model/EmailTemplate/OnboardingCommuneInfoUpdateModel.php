@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Model\EmailTemplate;
 
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Configuration\EmailTemplate;
 use App\Entity\Onboarding\CommuneInfo;
+use App\Service\AuditManager;
 
 class OnboardingCommuneInfoUpdateModel extends AbstractTemplateModel
 {
@@ -54,6 +56,26 @@ class OnboardingCommuneInfoUpdateModel extends AbstractTemplateModel
 ###ONBOARDING_COMMUNE_INFO_ADMIN_EDIT_URL###
 ###CHANGES###');
         return $template;
+    }
+
+    /**
+     * Extend audit content for related entities
+     * @param AuditManager $auditManager
+     * @param BaseEntityInterface $object
+     * @return string
+     */
+    protected function getObjectAuditContent(AuditManager $auditManager, BaseEntityInterface $object): string
+    {
+        $changesContent = parent::getObjectAuditContent($auditManager, $object);
+        if ($object instanceof CommuneInfo) {
+            $checkTstamp = time() - 10;
+            $revisionChangedEntityMap = [];
+            $this->addCollectionRevisionMeta($revisionChangedEntityMap, $object->getContacts(), $auditManager, $checkTstamp);
+            $this->addCollectionRevisionMeta($revisionChangedEntityMap, $object->getDocuments(), $auditManager, $checkTstamp);
+            //$this->addCollectionRevisionMeta($revisionChangedEntityMap, $object->getCommuneSolutions(), $auditManager, $checkTstamp);
+            $changesContent .= $this->getChangeRevisionEntitiesContent($auditManager, $revisionChangedEntityMap);
+        }
+        return trim($changesContent);
     }
 
 }

@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class LogEntry
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_statistics_log_entry")
+ * @ORM\Table(name="ozg_statistics_log_entry",indexes={@ORM\Index(name="IDX_ROUTE", columns={"route"})})
  */
 class LogEntry extends BaseEntity
 {

@@ -72,30 +72,25 @@ class OnboardingEpaymentUpdateModel extends AbstractTemplateModel
             $revisionData = $auditManager->getLatestRevisions($object);
             $checkTstamp = time() - 10;
             $hasChangesMain = $revisionData['current_rev_timestamp'] >= $checkTstamp;
-            $hasChanges = $revisionData['current_rev_timestamp'] >= $checkTstamp;
-            if (null !== $contact) {
-                $contactRevisionData = $auditManager->getLatestRevisions($contact);
-                $hasChanges = $hasChanges || $contactRevisionData['current_rev_timestamp'] >= $checkTstamp;
+            $hasChanges = $hasChangesMain;
+            $revisionChangedEntityMap = [];
+            $this->addEntityRevisionMeta($revisionChangedEntityMap, $contact, $auditManager, $checkTstamp);
+            $this->addCollectionRevisionMeta($revisionChangedEntityMap, $object->getEpaymentServices(), $auditManager, $checkTstamp);
+            $this->addCollectionRevisionMeta($revisionChangedEntityMap, $object->getProjects(), $auditManager, $checkTstamp);
+            if (!empty($revisionChangedEntityMap)) {
+                $hasChanges = true;
             }
             // Check if there have actually been changes (i.e. a new revision hast been added)
             if ($hasChanges) {
                 if ($hasChangesMain) {
                     $changesContent .= $auditManager->getContentForRevisions(
                         $object,
-                        (int) $revisionData['previous_rev'],
-                        (int) $revisionData['current_rev'],
+                        (int)$revisionData['previous_rev'],
+                        (int)$revisionData['current_rev'],
                         AuditManager::RENDER_TYPE_TEXT
                     );
                 }
-                if (null !== $contact && !empty($contactRevisionData)) {
-                    $contactChangesContent = $auditManager->getContentForRevisions(
-                        $contact,
-                        (int) $contactRevisionData['previous_rev'],
-                        (int) $contactRevisionData['current_rev'],
-                        AuditManager::RENDER_TYPE_TEXT
-                    );
-                    $changesContent .= PHP_EOL . PHP_EOL . $contactChangesContent;
-                }
+                $changesContent .= $this->getChangeRevisionEntitiesContent($auditManager, $revisionChangedEntityMap);
             }
         }
         return trim($changesContent);

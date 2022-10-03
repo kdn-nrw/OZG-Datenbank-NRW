@@ -17,6 +17,7 @@ use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Configuration\EmailTemplate;
 use App\Service\AuditManager;
 use App\Util\SnakeCaseConverter;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -272,6 +273,77 @@ abstract class AbstractTemplateModel
             $object,
             AuditManager::RENDER_TYPE_TEXT
         );
+    }
+
+    /**
+     * Add change information for the given collection
+     *
+     * @param array $revisionChangedEntityMap
+     * @param Collection $collection
+     * @param AuditManager $auditManager
+     * @param int $checkTstamp
+     * @return bool
+     */
+    final protected function addCollectionRevisionMeta(array &$revisionChangedEntityMap, Collection $collection, AuditManager $auditManager, int $checkTstamp): bool
+    {
+        $collectionHasChanges = false;
+        foreach ($collection as $entity) {
+            if ($entity instanceof BaseEntityInterface) {
+                if ($this->addEntityRevisionMeta($revisionChangedEntityMap, $entity, $auditManager, $checkTstamp)) {
+                    $collectionHasChanges = true;
+                }
+            }
+        }
+        return $collectionHasChanges;
+    }
+
+    /**
+     * Add change information for the given entity
+     *
+     * @param array $revisionChangedEntityMap
+     * @param BaseEntityInterface $entity
+     * @param AuditManager $auditManager
+     * @param int $checkTstamp
+     * @return bool
+     */
+    final protected function addEntityRevisionMeta(array &$revisionChangedEntityMap, BaseEntityInterface $entity, AuditManager $auditManager, int $checkTstamp): bool
+    {
+        $revisionData = $auditManager->getLatestRevisions($entity);
+        $hasRevChanges = $revisionData['current_rev_timestamp'] >= $checkTstamp;
+        if ($hasRevChanges) {
+            $revisionChangedEntityMap[] = [
+                'entity' => $entity,
+                'revision_data' => $revisionData,
+            ];
+        }
+        return $hasRevChanges;
+    }
+
+    /**
+     * Returns the email content with changes for the given entities
+     *
+     * @param AuditManager $auditManager
+     * @param array $revisionChangedEntityMap
+     * @return string
+     */
+    final protected function getChangeRevisionEntitiesContent(AuditManager $auditManager, array $revisionChangedEntityMap): string
+    {
+        $changesContent = '';
+        if (!empty($revisionChangedEntityMap)) {
+            foreach ($revisionChangedEntityMap as $revEntry) {
+                if (!empty($revEntry['revision_data'])) {
+                    $revisionData = $revEntry['revision_data'];
+                    $revChangesContent = $auditManager->getContentForRevisions(
+                        $revEntry['entity'],
+                        (int)$revisionData['previous_rev'],
+                        (int)$revisionData['current_rev'],
+                        AuditManager::RENDER_TYPE_TEXT
+                    );
+                    $changesContent .= PHP_EOL . PHP_EOL . $revChangesContent;
+                }
+            }
+        }
+        return $changesContent;
     }
 
 }

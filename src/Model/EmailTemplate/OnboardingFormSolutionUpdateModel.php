@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Model\EmailTemplate;
 
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Configuration\EmailTemplate;
 use App\Entity\Onboarding\FormSolution;
+use App\Service\AuditManager;
 
 class OnboardingFormSolutionUpdateModel extends AbstractTemplateModel
 {
@@ -54,6 +56,25 @@ class OnboardingFormSolutionUpdateModel extends AbstractTemplateModel
 ###ONBOARDING_FORM_SOLUTION_ADMIN_EDIT_URL###
 ###CHANGES###');
         return $template;
+    }
+
+    /**
+     * Extend audit content for related entities
+     * @param AuditManager $auditManager
+     * @param BaseEntityInterface $object
+     * @return string
+     */
+    protected function getObjectAuditContent(AuditManager $auditManager, BaseEntityInterface $object): string
+    {
+        $changesContent = parent::getObjectAuditContent($auditManager, $object);
+        if ($object instanceof FormSolution) {
+            $checkTstamp = time() - 10;
+            $revisionChangedEntityMap = [];
+            $this->addCollectionRevisionMeta($revisionChangedEntityMap, $object->getContacts(), $auditManager, $checkTstamp);
+            $this->addCollectionRevisionMeta($revisionChangedEntityMap, $object->getDocuments(), $auditManager, $checkTstamp);
+            $changesContent .= $this->getChangeRevisionEntitiesContent($auditManager, $revisionChangedEntityMap);
+        }
+        return trim($changesContent);
     }
 
 }

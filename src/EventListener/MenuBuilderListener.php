@@ -87,7 +87,8 @@ class MenuBuilderListener
                 'app.menu.onboarding_submenu_1' => [],
                 'app.menu.onboarding_submenu_2' => [],
             ];
-            $moveToSecondItem = ['app.xta_server.list', 'app.monument_authority.list'];
+            $moveToSecondItem = ['app.xta_server.list', ];//'app.monument_authority.list'
+            $groupNode->removeChild('app.monument_authority.list');
             foreach ($groupNode->getChildren() as $child) {
                 $sNr = in_array($child->getName(), $moveToSecondItem, false) ? 2 : 1;
                 $subNavGroups['app.menu.onboarding_submenu_' . $sNr][] = $child;
