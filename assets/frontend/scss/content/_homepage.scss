@@ -1,0 +1,155 @@
+.home-content-wrapper {
+  background: url("../../images/bg_homepage.jpg") no-repeat top center;
+  background-size: cover;
+  .box {
+    background: transparent;
+    .box-header {
+      border: none;
+      text-align: center;
+      padding: 50px 15px 0;
+      &::before {
+        content: "";
+        display: block;
+        background: url("../../images/NRW-Karte.png") no-repeat top center;
+        background-size: contain;
+        width: 100%;
+        min-height: 150px;
+      }
+      .box-title {
+        color: #fff;
+        font-size: 3.7rem;
+        font-weight: normal;
+        margin-top: 30px;
+      }
+    }
+    .box-body {
+      border: none;
+      padding: 0 0 200px 0;
+      h2 {
+        text-align: center;
+        font-size: 1.8rem;
+        margin-top: 7px;
+        margin-bottom: 50px;
+        padding: 0 15px;
+      }
+      @media (min-width: 996px) {
+        padding: 0 0 200px 0;
+        h2 {
+          margin-bottom: 70px;
+        }
+      }
+      ul {
+        display: block;
+        flex-direction: column;
+        flex-wrap: wrap;
+        background: $kdnblau1;
+        padding: 30px 15px;
+        justify-content: center;
+        li {
+          margin: 0 0 30px;
+          padding: 0;
+          list-style: none;
+          max-width: 450px;
+          a {
+            border: 2px solid $kdnorange;
+            background-color: #fff;
+            color: $kdnblau1;
+            border-radius: 50px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            position: relative;
+            min-height: 300px;
+            padding: 50px 30px 30px 120px;
+            font-size: 36px;
+            font-weight: 500;
+            line-height: 1.4;
+            overflow: hidden;
+            transition: all .2s linear;
+            hyphens: auto;
+            &::before {
+              content: "";
+              display: block;
+              background-repeat: no-repeat;
+              background-position: left center;
+              background-size: contain;
+              height: 100%;
+              width: 60px;
+              z-index: 0;
+              position: absolute;
+              left: 20px;
+              top: 0;
+              transition: all .2s linear;
+            }
+            &::after {
+              content: "";
+              display: block;
+              background: $kdnblau1;
+              position: absolute;
+              height: 120px;
+              width: 5px;
+              left: 100px;
+              top: 86px;
+              z-index: 0;
+              transition: all .2s linear;
+            }
+            &:hover, &:focus {
+              background-color: $kdnorange;
+              color: #fff;
+              &::before {
+                filter: brightness(0) invert(1);
+              }
+              &::after {
+                background: #fff;
+              }
+            }
+          }
+          &:first-child {
+            a {
+              &::before {
+                background-image: url("../../images/Rakete.png");
+              }
+            }
+            + li a::before {
+              background-image: url("../../images/Netzwerk.png");
+            }
+          }
+          &:last-child {
+            a {
+              &::before {
+                background-image: url("../../images/Deutschland.png");
+              }
+            }
+          }
+        }
+        @media (min-width: 480px) {
+          display: flex;
+          align-items: center;
+          li {
+            a {
+              padding-left: 160px;
+              padding-top: 76px;
+
+              &::before {
+                width: 100px;
+              }
+              &::after {
+                left: 140px;
+              }
+            }
+          }
+        }
+        @media (min-width: 996px) {
+          flex-direction: row;
+          padding: 50px 15px;
+          li {
+            margin: 0 34px 30px;
+            a {
+              padding: 80px 30px 30px 160px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -60,6 +60,9 @@ file that was distributed with this source code.
             'icon': 'search'
         },
     } %}
+
+{% block html_attributes %} lang="de" class="no-js"{% endblock %}
+
 {% block meta_tags %}
     {{ parent() }}
     <meta name="robots" content="index,follow"/>
@@ -126,7 +129,7 @@ file that was distributed with this source code.
                             {% apply spaceless %}
                                 <div class="logo-wrapper ">
                                     <a href="/">
-                                        <img src="https://www.kdn.de/typo3conf/ext/citko_config/Resources/Public/Icons/kdn-logo-neu2.svg" height="70px" alt="">
+                                        <img src="https://www.kdn.de/typo3conf/ext/citko_config/Resources/Public/Icons/kdn-logo-neu2.svg" height="70" alt="">
                                     </a>
                                 </div>
                             {% endapply %}

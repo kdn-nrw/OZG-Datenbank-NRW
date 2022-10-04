@@ -29,7 +29,7 @@ file that was distributed with this source code.
         {% else %}
             {{ block('sonata_type_date_picker_widget_html') }}
         {% endif %}
-        <script type="text/javascript">
+        <script>
             jQuery(function ($) {
                 $('#{{ datepicker_use_button ? 'dp_' : '' }}{{ id }}').datetimepicker({{ dp_options|json_encode|raw }});
             });
@@ -60,7 +60,7 @@ file that was distributed with this source code.
         {% else %}
             {{ block('sonata_type_datetime_picker_widget_html') }}
         {% endif %}
-        <script type="text/javascript">
+        <script>
             jQuery(function ($) {
                 $('#{{ datepicker_use_button ? 'dtp_' : '' }}{{ id }}').datetimepicker({{ dp_options|json_encode|raw }});
             });
@@ -71,7 +71,7 @@ file that was distributed with this source code.
 {% block sonata_type_datetime_range_script_block %}
     {% spaceless %}
         {{ block('form_widget') }}
-        <script type="text/javascript">
+        <script>
             jQuery(function ($) {
                 var $startDateTimePicker = $('#{{ startId }}');
                 var $endDateTimePicker = $('#{{ endId }}');

@@ -152,4 +152,16 @@
             font-size: 0.9375rem;
         }
     }
+    #topBtn {
+        margin: 2rem auto 0;
+        padding: 0 3rem;
+        background-color: #E1EAEE;
+        border: none;
+        cursor: pointer;
+        > i {
+            padding: 0.5rem 0;
+            font-size: 1.5rem;
+            color: #215566;
+        }
+    }
 }

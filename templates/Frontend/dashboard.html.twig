@@ -8,100 +8,101 @@ file that was distributed with this source code.
 
 {% block title %}{{ 'title_dashboard'|trans({}, 'SonataAdminBundle') }}{% endblock %}
 {% block breadcrumb %}{% endblock %}
-{% block content %}
-    <div style="width: 100%;overflow: hidden">
-    <div class="row">
-        <div class="{% if app.user %}col-12{% else %} col-md-7 col-lg-8{% endif %}">
-            {% include 'PageContent/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_HOME')} %}
-        </div>
-        {#
-        {% if not app.user %}
-        <div class="col-12 col-md-5 col-lg-4">
-            <div class="box box-widget box-page-content">
-                <div class="box-header with-border">
-                    <h1 class="box-title">{{ 'app.frontend.login.headline'|trans }}</h1>
-                </div>
-                <div class="box-body">
-                    {% include 'Frontend/Admin/Partials/_login.html.twig' with {
-                        'loginRoute': 'app_login',
-                        'loginShowLogo': false,
-                        'reset_route': path('sonata_user_admin_resetting_request')
-                    } %}
-                </div>
+
+{% block sonata_wrapper %}
+    <div id="header">
+    </div>
+    <main class="app-content-wrapper home-content-wrapper">
+        {% include 'PageContent/Partials/_page_content.html.twig' with {'pageKey': constant('App\\Entity\\PageContent::PAGE_HOME')} %}
+    </main>
+    {% include 'Kdn/Layout/_footer.twig' %}
+    {#
+    {% if not app.user %}
+    <div class="col-12 col-md-5 col-lg-4">
+        <div class="box box-widget box-page-content">
+            <div class="box-header with-border">
+                <h1 class="box-title">{{ 'app.frontend.login.headline'|trans }}</h1>
+            </div>
+            <div class="box-body">
+                {% include 'Frontend/Admin/Partials/_login.html.twig' with {
+                    'loginRoute': 'app_login',
+                    'loginShowLogo': false,
+                    'reset_route': path('sonata_user_admin_resetting_request')
+                } %}
             </div>
         </div>
-        {% endif %}
-        #}
-        {#
-        <div class="col-xs-12">
-            {{ sonata_block_render({ 'type': 'App\\Block\\RecentSolutionsBlock' }, {
-                'code':  'App\\Admin\\Frontend\\SolutionAdmin',
-                'translation_domain':  'messages',
-                'mode':  'public',
-                'mode':  'public',
-                'title':  'app.solution.recent_solutions'
-            }) }}
-        </div>
-        #}
-        <div class="col-12 col-md-5 col-lg-4">
-
-        </div>
-        <div class="col-xs-12 col-sm-6 col-lg-4">
-            {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
-                'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
-                'icon':  'fa-tasks',
-                'text':  'app.block.service_system.total',
-                'color': 'bg-green',
-            }) }}
-        </div>
-        <div class="col-xs-12 col-sm-6 col-lg-4">
-            {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
-                'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
-                'icon':  'fa-tasks',
-                'text':  'app.block.service_system.communal_execution',
-                'color': 'bg-green',
-                'filters': {
-                    'jurisdictions': { 'value':  [3] }
-                }
-            }) }}
-        </div>
-        <div class="col-xs-12 col-sm-6 col-lg-4">
-            {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
-                'code':  'App\\Admin\\Frontend\\ImplementationProjectAdmin',
-                'icon':  'fa-wrench',
-                'text':  'app.block.implementation_project.total',
-                'color': 'bg-green'
-            }) }}
-        </div>
-        {#
-        <div class="col-xs-12 col-lg-6">
-            {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
-                'title': 'app.statistics.solution_maturity',
-                'translation_domain': 'messages',
-                'mode': 'admin',
-                'provider':  'App\\Statistics\\Provider\\SolutionMaturityChartProvider'
-            }) }}
-        </div>
-        <div class="col-xs-12 col-lg-6">
-            {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
-                'title': 'app.statistics.implementation_project_status',
-                'translation_domain': 'messages',
-                'mode': 'admin',
-                'provider':  'App\\Statistics\\Provider\\ImplementationProjectStatusChartProvider'
-            }) }}
-        </div>
-        #}
-        {#
-        <div class="col-xs-12 col-lg-6">
-            {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
-                'title': 'app.statistics.solution_status',
-                'translation_domain': 'messages',
-                'mode': 'admin',
-                'provider':  'App\\Statistics\\Provider\\SolutionStatusChartProvider'
-            }) }}
-        </div>
-        #}
     </div>
+    {% endif %}
+    #}
+    {#
+    <div class="col-xs-12">
+        {{ sonata_block_render({ 'type': 'App\\Block\\RecentSolutionsBlock' }, {
+            'code':  'App\\Admin\\Frontend\\SolutionAdmin',
+            'translation_domain':  'messages',
+            'mode':  'public',
+            'mode':  'public',
+            'title':  'app.solution.recent_solutions'
+        }) }}
     </div>
+    #}
+    {#
+    <div class="col-12 col-md-5 col-lg-4">
 
+    </div>
+    <div class="col-xs-12 col-sm-6 col-lg-4">
+        {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
+            'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
+            'icon':  'fa-tasks',
+            'text':  'app.block.service_system.total',
+            'color': 'bg-green',
+        }) }}
+    </div>
+    <div class="col-xs-12 col-sm-6 col-lg-4">
+        {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
+            'code':  'App\\Admin\\Frontend\\ServiceSystemAdmin',
+            'icon':  'fa-tasks',
+            'text':  'app.block.service_system.communal_execution',
+            'color': 'bg-green',
+            'filters': {
+                'jurisdictions': { 'value':  [3] }
+            }
+        }) }}
+    </div>
+    <div class="col-xs-12 col-sm-6 col-lg-4">
+        {{ sonata_block_render({ 'type': 'sonata.admin.block.stats' }, {
+            'code':  'App\\Admin\\Frontend\\ImplementationProjectAdmin',
+            'icon':  'fa-wrench',
+            'text':  'app.block.implementation_project.total',
+            'color': 'bg-green'
+        }) }}
+    </div>
+    #}
+    {#
+    <div class="col-xs-12 col-lg-6">
+        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+            'title': 'app.statistics.solution_maturity',
+            'translation_domain': 'messages',
+            'mode': 'admin',
+            'provider':  'App\\Statistics\\Provider\\SolutionMaturityChartProvider'
+        }) }}
+    </div>
+    <div class="col-xs-12 col-lg-6">
+        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+            'title': 'app.statistics.implementation_project_status',
+            'translation_domain': 'messages',
+            'mode': 'admin',
+            'provider':  'App\\Statistics\\Provider\\ImplementationProjectStatusChartProvider'
+        }) }}
+    </div>
+    #}
+    {#
+    <div class="col-xs-12 col-lg-6">
+        {{ sonata_block_render({ 'type': 'App\\Block\\StatisticsBlock' }, {
+            'title': 'app.statistics.solution_status',
+            'translation_domain': 'messages',
+            'mode': 'admin',
+            'provider':  'App\\Statistics\\Provider\\SolutionStatusChartProvider'
+        }) }}
+    </div>
+    #}
 {% endblock %}
