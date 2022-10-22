@@ -17,7 +17,6 @@ use App\Api\Consumer\Model\ZuFiDemand;
 use App\Api\Consumer\Model\ZuFiResult;
 use App\Api\Form\Type\ZuFiType;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
-use App\Entity\Api\ServiceBaseResult;
 use App\Entity\FederalInformationManagementType;
 use App\Entity\Repository\CommuneRepository;
 use App\Entity\Service;
@@ -90,7 +89,7 @@ class ZuFiConsumer extends AbstractApiConsumer
      * @throws \Doctrine\Persistence\Mapping\MappingException
      * @throws \ReflectionException
      */
-    public function importCommuneServiceResults(int $limit = 500, array $serviceKeys = [], string $sorting = 'random', $forceUpdate = false): int
+    public function importCommuneServiceResults(int $limit = 500, array $serviceKeys = [], string $sorting = 'random', bool $forceUpdate = false): int
     {
         /** @var CommuneRepository $repository */
         $em = $this->getEntityManager();
@@ -122,7 +121,7 @@ class ZuFiConsumer extends AbstractApiConsumer
             /** @var Commune|null $commune */
             if (null !== $commune && $commune->getRegionalKey()) {
                 echo 'Importing commune service results: ' . $commune->getName() . ' [ID: '.$commune->getId().'][Modified at: '.(null !== $commune->getModifiedAt() ? $commune->getModifiedAt()->format('Y-m-d H:i:s') : '-').']' . "\n";
-                $totalImportRowCount += $this->importServiceResults($limit, null, $commune, $serviceKeys, $forceUpdate);
+                $totalImportRowCount += $this->importServiceResults($limit, $commune, $serviceKeys, $forceUpdate);
                 ++$totalImportRowCount;
                 if ($totalImportRowCount > $limit) {
                     break;
@@ -136,8 +135,7 @@ class ZuFiConsumer extends AbstractApiConsumer
     /**
      * Import service data
      * @param int $limit Limit the number of rows to be imported
-     * @param string|null $mapToFimType
-     * @param Commune|null $commune
+     * @param Commune|int|null $commune
      * @param array $serviceKeys Optional list of service keys to be imported
      * @param bool $forceUpdate
      * @return int
@@ -147,10 +145,9 @@ class ZuFiConsumer extends AbstractApiConsumer
      */
     public function importServiceResults(
         int $limit,
-        ?string $mapToFimType,
         ?Commune $commune,
         array $serviceKeys = [],
-        $forceUpdate = false
+        bool $forceUpdate = false
     ): int
     {
         $demand = $this->getDemand();
@@ -160,6 +157,10 @@ class ZuFiConsumer extends AbstractApiConsumer
         }
         if (!$demand->getZipCode() && !$demand->getRegionalKey()) {
             throw new InvalidParametersException('The demand parameters are not set. You must set the zip code or regional key in the demand!');
+        }
+        $mapToFimType = null;
+        if ($demand->getRegionalKey() === self::DEFAULT_REGIONAL_KEY) {
+            $mapToFimType = FederalInformationManagementType::TYPE_DESCRIPTION;
         }
         $validFimTypes = array_keys(FederalInformationManagementType::$mapTypes);
         if (null === $commune && (null === $mapToFimType || !in_array($mapToFimType, $validFimTypes, false))) {
@@ -174,13 +175,16 @@ class ZuFiConsumer extends AbstractApiConsumer
         $repository = $em->getRepository(Service::class);
         $services = $repository->findAll();
         $mapServicesByKey = [];
-        $shuffledServices = [];
         $allServiceKeys = [];
         $mappedServiceKeys = [];
         foreach ($services as $service) {
             /** @var Service $service */
-            $serviceKey = $service->getServiceKey();
-            if ($serviceKey && strpos($serviceKey, 'nicht im LeiKa') === false
+            $serviceKey = strtolower($service->getServiceKey());
+            if ($serviceKey
+                && strpos($serviceKey, 'nicht') === false
+                && strpos($serviceKey, 'nciht') === false
+                && strpos($serviceKey, 'unbekannt') === false
+                && strpos($serviceKey, 'neu') === false
                 && (empty($serviceKeys) || in_array($serviceKey, $serviceKeys, false))
             ) {
                 $mapServicesByKey[$serviceKey] = $service;
@@ -190,33 +194,34 @@ class ZuFiConsumer extends AbstractApiConsumer
         }
 
         if ($forceUpdate || empty($serviceKeys)) {
-            $deleteItems = [];
-            $query = 'SELECT id, service_key, created_at, modified_at FROM ozg_api_service_base_result WHERE ';
-            if (null === $commune) {
-                $query .= ' commune_id IS NULL';
-            } else {
-                $query .= ' commune_id = ' . $commune->getId();
-            }
-            $sbrRows = $this->fetchAllAssociative($query);
-            // Force update of user defined service key list
-            $updateThreshold = ($forceUpdate || !empty($serviceKeys)) ? time() : strtotime('-2 weeks');
-            foreach ($sbrRows as $sbrRow) {
-                $sbrServiceKey = $sbrRow['service_key'];
-                if (!in_array($sbrServiceKey, $allServiceKeys, false)) {
-                    $deleteItems[] = (int) $sbrRow['id'];
-                } else {
-                    $lastUpdate = !empty($sbrRow['modified_at']) ? $sbrRow['modified_at'] : $sbrRow['created_at'];
-                    if (!$forceUpdate && null !== $lastUpdate && strtotime($lastUpdate) > $updateThreshold) {
-                        unset($mappedServiceKeys[$sbrServiceKey]);
-                    }
-                }
-            }
-            if (!empty($deleteItems)) {
-                $sql = 'DELETE FROM ozg_api_service_base_result WHERE id IN (' . implode(', ', $deleteItems) . ')';
-                $this->executeStatement($sql);
-            }
+            $this->removeOldEntries(
+                $forceUpdate,
+                !empty($serviceKeys),
+                $commune,
+                $allServiceKeys,
+                $mappedServiceKeys
+            );
         }
-        shuffle($mappedServiceKeys);
+        $shuffledServices = [];
+        // Order service mapping so oldest or new entries are imported first
+        if (null !== $commune || $demand->getRegionalKey() === self::DEFAULT_REGIONAL_KEY) {
+            $sbrRows = $this->fetchBaseResultRows($commune, $demand->getRegionalKey());
+            $mapRowsByServiceKey = [];
+            foreach ($sbrRows as $row) {
+                $mapRowsByServiceKey[$row['service_key']] = $row['modified_at'] ?: $row['created_at'];
+            }
+            $unmappedKeys = array_diff($mappedServiceKeys, array_keys($mapRowsByServiceKey));
+            $mappedServiceKeys = [];
+            foreach ($unmappedKeys as $serviceKey) {
+                $mappedServiceKeys[$serviceKey] = $serviceKey;
+            }
+            asort($mapRowsByServiceKey);
+            foreach (array_keys($mapRowsByServiceKey) as $serviceKey) {
+                $mappedServiceKeys[$serviceKey] = $serviceKey;
+            }
+        } else {
+            shuffle($mappedServiceKeys);
+        }
         foreach ($mappedServiceKeys as $serviceKey) {
             $shuffledServices[$serviceKey] = $mapServicesByKey[$serviceKey];
         }
@@ -249,6 +254,66 @@ class ZuFiConsumer extends AbstractApiConsumer
         }
         $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
         return $totalImportRowCount;
+    }
+
+    /**
+     * Returns the service base result data
+     *
+     * @param Commune|null $commune Optional commine
+     * @param ?string $regionalKey Optional regional key
+     * @return void
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private function fetchBaseResultRows(?Commune $commune, ?string $regionalKey = null): array
+    {
+        $query = 'SELECT id, service_key, created_at, modified_at FROM ozg_api_service_base_result WHERE ';
+        if (null !== $commune) {
+            $query .= ' commune_id = ' . $commune->getId();
+            $query .= ' commune_id IS NULL';
+        } elseif (null !== $regionalKey) {
+            $query .= " regional_key = $regionalKey";
+        } else {
+            $query .= ' commune_id IS NULL';
+        }
+        return $this->fetchAllAssociative($query);
+    }
+
+    /**
+     * Remove old entries after 2 weeks threshold
+     * @param bool $forceUpdate
+     * @param bool $hasServiceKeys
+     * @param Commune|null $commune
+     * @param array $allServiceKeys
+     * @param array $mappedServiceKeys
+     * @return void
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private function removeOldEntries(
+        bool $forceUpdate,
+        bool $hasServiceKeys,
+        ?Commune $commune,
+        array $allServiceKeys,
+        array &$mappedServiceKeys
+    ) {
+        $deleteItems = [];
+        $sbrRows = $this->fetchBaseResultRows($commune);
+        // Force update of user defined service key list
+        $updateThreshold = ($forceUpdate || $hasServiceKeys) ? time() : strtotime('-2 weeks');
+        foreach ($sbrRows as $sbrRow) {
+            $sbrServiceKey = $sbrRow['service_key'];
+            if (!in_array($sbrServiceKey, $allServiceKeys, false)) {
+                $deleteItems[] = (int) $sbrRow['id'];
+            } else {
+                $lastUpdate = !empty($sbrRow['modified_at']) ? $sbrRow['modified_at'] : $sbrRow['created_at'];
+                if (!$forceUpdate && null !== $lastUpdate && strtotime($lastUpdate) > $updateThreshold) {
+                    unset($mappedServiceKeys[$sbrServiceKey]);
+                }
+            }
+        }
+        if (!empty($deleteItems)) {
+            $sql = 'DELETE FROM ozg_api_service_base_result WHERE id IN (' . implode(', ', $deleteItems) . ')';
+            $this->executeStatement($sql);
+        }
     }
 
     /**

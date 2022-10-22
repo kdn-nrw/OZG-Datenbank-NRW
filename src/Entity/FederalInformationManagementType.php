@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class FederalInformationManagementType
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_service_fim")
+ * @ORM\Table(name="ozg_service_fim",indexes={@ORM\Index(name="IDX_DATA_TYPE", columns={"data_type"})})
  */
 class FederalInformationManagementType extends BaseEntity implements CustomEntityLabelInterface
 {
@@ -108,9 +108,9 @@ class FederalInformationManagementType extends BaseEntity implements CustomEntit
     }
 
     /**
-     * @param Service $service
+     * @param ?Service $service
      */
-    public function setService($service): void
+    public function setService(?Service $service): void
     {
         $this->service = $service;
     }

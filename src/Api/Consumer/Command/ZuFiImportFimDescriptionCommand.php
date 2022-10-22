@@ -71,7 +71,6 @@ class ZuFiImportFimDescriptionCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
         $regionalKey = \App\Api\Consumer\ZuFiConsumer::DEFAULT_REGIONAL_KEY;
-        $fimType = FederalInformationManagementType::TYPE_DESCRIPTION;
         $serviceKeys = array_filter(explode(',', (string) $input->getArgument('serviceKeys')));
         if (!empty($serviceKeys)) {
             $io->note(sprintf('Starting import process. Limiting imported items to services %s', implode(',', $serviceKeys)));
@@ -85,7 +84,7 @@ class ZuFiImportFimDescriptionCommand extends Command
         $demand = $consumer->getDemand();
         /** @var ZuFiDemand $demand */
         $demand->setRegionalKey($regionalKey);
-        $importedRowCount = $consumer->importServiceResults($limit, $fimType, null, $serviceKeys, $force);
+        $importedRowCount = $consumer->importServiceResults($limit, null, $serviceKeys, $force);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
     }

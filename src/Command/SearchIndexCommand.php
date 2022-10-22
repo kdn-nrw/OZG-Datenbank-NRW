@@ -70,7 +70,7 @@ class SearchIndexCommand extends Command
                 'entity-id',
                 'id',
                 InputOption::VALUE_OPTIONAL,
-                'only index given class; escape backslashes; don\'t start with backslash'
+                'only index entity with given id'
             );
     }
 

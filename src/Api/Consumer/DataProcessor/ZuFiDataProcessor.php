@@ -95,7 +95,9 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
                     $sbrEntity = $fimEntity->getServiceBaseResult();
                     if (null !== $targetEntity && $targetEntity->getCommune() !== $commune) {
                         $fimEntity->setServiceBaseResult(null);
-                        $sbrEntity->setFimType(null);
+                        if (null !== $sbrEntity) {
+                            $sbrEntity->setFimType(null);
+                        }
                     } else {
                         $targetEntity = $sbrEntity;
                     }

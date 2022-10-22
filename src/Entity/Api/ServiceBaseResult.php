@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class API consumer
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_api_service_base_result")
+ * @ORM\Table(name="ozg_api_service_base_result",indexes={@ORM\Index(name="IDX_REGIONAL_KEY", columns={"regional_key"})})
  */
 class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
 {
