@@ -353,7 +353,20 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
                 'entry_options' => [
                     'parent_admin' => $this,
                 ],
+                'row_attr' => [
+                    'class' => 'form-group-col ct-col-75',
+                ],
             ])
+            ->add('paymentTypes', ChoiceType::class, [
+                'label' => 'app.epayment.groups.payment_type_help',
+                'choices' => array_flip(Epayment::$paymentTypeChoices),
+                'expanded' => true,
+                'multiple' => true,
+                'row_attr' => [
+                    'class' => 'form-group-col label-normal ct-col-25',
+                ],
+            ]);
+        $form
             ->end()
             ->end();
         $this->addManagerFormFields($form);

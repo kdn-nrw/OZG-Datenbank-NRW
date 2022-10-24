@@ -542,7 +542,7 @@ app:
         <ul>
         <li>Giropay (mit Zahlgarantie)</li>
         <li>Kreditkarte (Mastercard und Visa) (mit Zahlgarantie)</li>
-        <li>Paypal (u.U. mit Zahlgarantie durch AGB von PayPal)</li>
+        <li>PayPal (u.U. mit Zahlgarantie durch AGB von PayPal)</li>
         <li>Paydirekt (mit Zahlgarantie)</li>
         </ul>
         </div></div></div>
@@ -552,6 +552,13 @@ app:
       mandator_email_description: 'Über die Mailadresse werden wichtige Informationen u.a. bzgl. Wartungsarbeiten oder ggf. Informationen zu Verträgen mit Zahlungsverkehrsdienstleistern kommuniziert.'
       activation_system: Testsystem
       activation_system_description: 'Für das Produktivsystem ist keine separate Freischaltung in den Netzen des Betreibers notwendig. Das Integrationssystem steht dem Kunden als Testsystem zur Verfügung. Es kann über die URLs <a href="https://epay2.stadt-koeln.de/portal" target="_blank">https://epay2.stadt-koeln.de/portal</a> erreicht werden. Hierfür müssen entsprechende Freischaltungen eingerichtet werden.<br><br>Der Kunde teilt hierzu der Kundenbetreuung seine Ausgangs-IP mit. Diese kann vom Kunden bspw. über <a href="http://www.wieistmeineip.de" target="_blank">http://www.wieistmeineip.de</a> ermittelt werden.'
+      payment_types: 'Bezahlarten'
+      payment_type_help: 'Bitte wählen Sie hier aus, welche Bezahlarten Sie in Ihrem Mandanten anbieten werden. Das hilft uns dabei, zu erkennen, wann die in der Tabelle links gemachten Angaben vollständig sind.'
+      payment_type_choices:
+        giropay: 'Giropay'
+        credit_card: 'Kreditkarte'
+        paypal: 'PayPal'
+        paydirekt: 'Paydirekt'
       admin_account: Einrichtung dezentraler Admin
       epayment_services: Dienste
       services_epayment_services: Dienste

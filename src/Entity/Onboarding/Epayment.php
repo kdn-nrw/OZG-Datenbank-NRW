@@ -32,6 +32,18 @@ class Epayment extends AbstractOnboardingEntity
 {
     public const DEFAULT_PAYMENT_PROVIDER = 'Girosolution';
 
+    public const PAYMENT_TYPE_GIROPAY = 1;
+    public const PAYMENT_TYPE_CREDIT_CARD = 2;
+    public const PAYMENT_TYPE_PAYPAL = 3;
+    public const PAYMENT_TYPE_PAY_DIREKT = 4;
+
+    public static $paymentTypeChoices = [
+        self::PAYMENT_TYPE_GIROPAY => 'app.epayment.groups.payment_type_choices.giropay',
+        self::PAYMENT_TYPE_CREDIT_CARD => 'app.epayment.groups.payment_type_choices.credit_card',
+        self::PAYMENT_TYPE_PAYPAL => 'app.epayment.groups.payment_type_choices.paypal',
+        self::PAYMENT_TYPE_PAY_DIREKT => 'app.epayment.groups.payment_type_choices.paydirekt',
+    ];
+
     use AddressTrait;
     use ContactPropertiesTrait;
 
@@ -211,6 +223,14 @@ class Epayment extends AbstractOnboardingEntity
      */
     protected $xFinanceFileDays = [];
 
+    /**
+     * Payment types for payment service provider
+     *
+     * @var array|int[]
+     *
+     * @ORM\Column(name="payment_types", type="simple_array", nullable=true)
+     */
+    protected $paymentTypes = [];
 
     public function __construct(Commune $commune)
     {
@@ -773,5 +793,62 @@ class Epayment extends AbstractOnboardingEntity
             $dayChoices[$key] = $f->format($timestamp);//strftime('%A', $timestamp)
         }
         return $dayChoices;
+    }
+
+
+    /**
+     * Return payment types
+     *
+     * @return int[]|array
+     */
+    public function getPaymentTypes(): array
+    {
+        if (null === $this->paymentTypes) {
+            $this->paymentTypes = [];
+        }
+        return $this->paymentTypes;
+    }
+
+    /**
+     * Set payment types
+     *
+     * @param array|int[]|null $paymentTypes
+     * @return self
+     */
+    public function setPaymentTypes(?array $paymentTypes): self
+    {
+        $this->paymentTypes = $paymentTypes ?: [];
+
+        return $this;
+    }
+
+    /**
+     * Add a payment type
+     *
+     * @param int $paymentType
+     * @return self
+     */
+    public function addPaymentType(int $paymentType): self
+    {
+        if (!in_array($paymentType, $this->getPaymentTypes(), true)) {
+            $this->paymentTypes[] = $paymentType;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a payment type
+     *
+     * @param int $paymentType
+     * @return self
+     */
+    public function removePaymentType(int $paymentType): self
+    {
+        if (false !== $key = array_search($paymentType, $this->getPaymentTypes(), true)) {
+            unset($this->paymentTypes[$key]);
+        }
+
+        return $this;
     }
 }
