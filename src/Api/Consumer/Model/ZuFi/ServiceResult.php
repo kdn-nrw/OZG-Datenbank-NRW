@@ -12,10 +12,12 @@
 namespace App\Api\Consumer\Model\ZuFi;
 
 use App\Api\Annotation\ApiSearchModelAnnotation;
-use App\Api\Consumer\Model\AbstractResult;
-use App\Import\Model\ResultCollection;
 
-class ServiceResult extends AbstractResult
+/**
+ * Class ServiceResult
+ * @ApiSearchModelAnnotation(targetEntity="\App\Entity\Api\ServiceBaseResult")
+ */
+class ServiceResult extends ServiceBaseResult
 {
     /**
      * @var string|null
@@ -25,21 +27,15 @@ class ServiceResult extends AbstractResult
 
     /**
      * @var string|null
-     * @ApiSearchModelAnnotation(parameter="kurztext", dataType="string", required=false)
+     * @ApiSearchModelAnnotation(parameter="leistungsbezeichnung2", dataType="string", required=false)
      */
-    protected $teaser;
+    protected $name2;
 
     /**
      * @var string|null
-     * @ApiSearchModelAnnotation(parameter="Volltext", dataType="string", required=false)
+     * @ApiSearchModelAnnotation(parameter="datum", dataType="string", required=false, disableImport=true)
      */
-    protected $description;
-
-    /**
-     * @var string|null
-     * @ApiSearchModelAnnotation(parameter="schluessel", dataType="string", required=true)
-     */
-    protected $serviceKey;
+    protected $date;
 
     /**
      * @var array
@@ -49,106 +45,58 @@ class ServiceResult extends AbstractResult
 
     /**
      * @var string|null
-     * @ApiSearchModelAnnotation(parameter="urheber", dataType="string", required=true)
+     * @ApiSearchModelAnnotation(parameter="erforderlicheUnterlagen", dataType="string", required=false)
+     */
+    protected $requiredDocuments;
+
+    /**
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="fachlichFreigegebenAm", dataType="string", required=false)
+     */
+    protected $technicallyApprovedAt;
+
+    /**
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="fachlichFreigegebenDurch", dataType="string", required=false)
+     */
+    protected $technicallyApprovedBy;
+
+    /**
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="urheber", dataType="string", required=false, mapToProperty="communeAuthor")
      */
     protected $author;
 
     /**
+     * @var bool|null
+     * @ApiSearchModelAnnotation(parameter="wspRelevanz", dataType="bool", required=false, mapToProperty="communeWspRelevance")
+     */
+    protected $wspRelevance;
+
+    /**
+     * Disable import because DateTime conversion is required!
      * @var string|null
-     * @ApiSearchModelAnnotation(parameter="rechtsgrundlage", dataType="string", required=true)
+     * @ApiSearchModelAnnotation(parameter="letzteAktualisierung", dataType="string", required=false, disableImport=true)
      */
-    protected $legalBasis;
+    protected $lastUpdatedAt;
 
     /**
-     * @var ResultCollection|UriResult[]
-     * @ApiSearchModelAnnotation(parameter="rechtsgrundlageLinks", modelClass="App\Api\Consumer\Model\ZuFi\UriResult", dataType="collection", required=false)
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="urlOnlineDienst", dataType="string", required=false)
      */
-    protected $legalBasisUris;
-
-    public function __construct()
-    {
-        $this->legalBasisUris = new ResultCollection();
-    }
+    protected $urlOnlineService;
 
     /**
-     * @return string|null
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="urlInfo", dataType="string", required=false, mapToProperty="communeOnlineServiceUrlInfo")
      */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+    protected $urlOnlineServiceInfo;
 
     /**
-     * @param string|null $name
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="weiterfuehrendeInformationen", dataType="string", required=false)
      */
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTeaser(): ?string
-    {
-        return $this->teaser;
-    }
-
-    /**
-     * @param string|null $teaser
-     */
-    public function setTeaser(?string $teaser): void
-    {
-        $this->teaser = $teaser;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getServiceKey(): ?string
-    {
-        return $this->serviceKey;
-    }
-
-    /**
-     * @param string|null $serviceKey
-     */
-    public function setServiceKey(?string $serviceKey): void
-    {
-        $this->serviceKey = $serviceKey;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSynonyms(): array
-    {
-        return $this->synonyms;
-    }
-
-    /**
-     * @param array $synonyms
-     */
-    public function setSynonyms(array $synonyms): void
-    {
-        $this->synonyms = array_filter($synonyms);
-    }
+    protected $furtherInformation;
 
     /**
      * @return string|null
@@ -167,59 +115,51 @@ class ServiceResult extends AbstractResult
     }
 
     /**
-     * @param string|null $legalBasis
+     * @return bool|null
      */
-    public function setLegalBasis(?string $legalBasis): void
+    public function getWspRelevance(): ?bool
     {
-        $this->legalBasis = $legalBasis;
+        return $this->wspRelevance;
+    }
+
+    /**
+     * @param bool|null $wspRelevance
+     */
+    public function setWspRelevance(?bool $wspRelevance): void
+    {
+        $this->wspRelevance = $wspRelevance;
     }
 
     /**
      * @return string|null
      */
-    public function getLegalBasis(): ?string
+    public function getLastUpdatedAt(): ?string
     {
-        return $this->legalBasis;
+        return $this->lastUpdatedAt;
     }
 
     /**
-     * @return ResultCollection|UriResult[]
+     * @param string|null $lastUpdatedAt
      */
-    public function getLegalBasisUris(): ResultCollection
+    public function setLastUpdatedAt(?string $lastUpdatedAt): void
     {
-        return $this->legalBasisUris;
+        $this->lastUpdatedAt = $lastUpdatedAt;
     }
 
     /**
-     * @param ResultCollection|UriResult[] $legalBasisUris
+     * @return string|null
      */
-    public function setLegalBasisUris(ResultCollection $legalBasisUris): void
+    public function getUrlOnlineServiceInfo(): ?string
     {
-        $this->legalBasisUris = $legalBasisUris;
+        return $this->urlOnlineServiceInfo;
     }
 
     /**
-     * @param UriResult $legalBasisUri
+     * @param string|null $urlOnlineServiceInfo
      */
-    public function addLegalBasisUri(UriResult $legalBasisUri): void
+    public function setUrlOnlineServiceInfo(?string $urlOnlineServiceInfo): void
     {
-        $this->legalBasisUris->add($legalBasisUri);
+        $this->urlOnlineServiceInfo = $urlOnlineServiceInfo;
     }
 
-    /**
-     * Returns the import key data
-     *
-     * @return array|null
-     */
-    public function getImportKeyData(): ?array
-    {
-        return [
-            'serviceKey' => $this->getServiceKey(),
-        ];
-    }
-
-    public function __toString()
-    {
-        return $this->getName() . ' - ' . $this->getServiceKey();
-    }
 }

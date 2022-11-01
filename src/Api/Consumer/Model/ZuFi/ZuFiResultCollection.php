@@ -12,6 +12,7 @@
 namespace App\Api\Consumer\Model\ZuFi;
 
 use App\Api\Annotation\ApiSearchModelAnnotation;
+use App\Entity\Service;
 use App\Import\Model\ResultCollection;
 
 class ZuFiResultCollection extends ResultCollection
@@ -21,6 +22,11 @@ class ZuFiResultCollection extends ResultCollection
      * @ApiSearchModelAnnotation(parameter="leistungStammtext", dataType="model", modelClass="App\Api\Consumer\Model\ZuFi\ServiceBaseResult", required=false)
      */
     protected $serviceBase;
+
+    /**
+     * @var Service|null
+     */
+    protected $ozgService;
 
     /**
      * @return ServiceBaseResult|null
@@ -41,9 +47,25 @@ class ZuFiResultCollection extends ResultCollection
     /**
      * {@inheritDoc}
      */
-    public function isEmpty()
+    public function isValid(): bool
     {
-        return parent::isEmpty() && null === $this->serviceBase;
+        return parent::isValid() || null !== $this->serviceBase;
+    }
+
+    /**
+     * @return Service|null
+     */
+    public function getOzgService(): ?Service
+    {
+        return $this->ozgService;
+    }
+
+    /**
+     * @param Service|null $ozgService
+     */
+    public function setOzgService(?Service $ozgService): void
+    {
+        $this->ozgService = $ozgService;
     }
 
 }

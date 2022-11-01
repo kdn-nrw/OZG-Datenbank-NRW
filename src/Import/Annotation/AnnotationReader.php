@@ -56,7 +56,6 @@ class AnnotationReader extends BaseAnnotationReader
                 foreach ($propertyAnnotations as $propertyAnnotation) {
                     if ($propertyAnnotation instanceof BaseModelAnnotation) {
                         $annotations[$property->getName()] = $propertyAnnotation;
-                        continue;
                     }
                 }
             }

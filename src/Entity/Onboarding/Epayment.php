@@ -845,8 +845,11 @@ class Epayment extends AbstractOnboardingEntity
      */
     public function removePaymentType(int $paymentType): self
     {
-        if (false !== $key = array_search($paymentType, $this->getPaymentTypes(), true)) {
-            unset($this->paymentTypes[$key]);
+        $tmpPaymentTypes = $this->getPaymentTypes();
+        foreach ($tmpPaymentTypes as $key => $checkType) {
+            if ((int) $checkType === $paymentType) {
+                unset($this->paymentTypes[$key]);
+            }
         }
 
         return $this;

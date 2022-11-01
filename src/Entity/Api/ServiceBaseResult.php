@@ -90,7 +90,7 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
      *
      * @var string|null
      *
-     * @ORM\Column(name="performance", type="text", nullable=true)
+     * @ORM\Column(name="performance", type="string", nullable=true)
      */
     protected $performance;
 
@@ -114,7 +114,7 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
      *
      * @var string|null
      *
-     * @ORM\Column(name="type", type="text", nullable=true)
+     * @ORM\Column(name="type", type="string", nullable=true)
      */
     protected $type;
 
@@ -122,7 +122,7 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
      *
      * @var string|null
      *
-     * @ORM\Column(name="service_type", type="text", nullable=true)
+     * @ORM\Column(name="service_type", type="string", nullable=true)
      */
     protected $serviceType;
 
@@ -130,7 +130,7 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
      *
      * @var string|null
      *
-     * @ORM\Column(name="date", type="text", nullable=true)
+     * @ORM\Column(name="date", type="string", nullable=true)
      */
     protected $date;
 
@@ -279,6 +279,43 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
      * @ORM\Column(nullable=true, type="datetime", name="service_created_at")
      */
     protected $serviceCreatedAt;
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="commune_author", type="string", nullable=true)
+     */
+    protected $communeAuthor;
+
+    /**
+     * @var bool|null
+     * @ORM\Column(name="commune_has_details", type="boolean", nullable=true)
+     */
+    protected $communeHasDetails = false;
+
+    /**
+     * @var bool|null
+     * @ORM\Column(name="commune_wsp_relevance", type="boolean", nullable=true)
+     */
+    protected $communeWspRelevance = false;
+
+    /**
+     * @var string|null
+     * @ORM\Column(nullable=true, type="string", name="commune_last_updated_at")
+     */
+    protected $communeLastUpdatedAt;
+
+    /**
+     * @var string|null
+     * @ORM\Column(name="commune_online_service_url_info", type="string", nullable=true)
+     */
+    protected $communeOnlineServiceUrlInfo;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="commune_office_name", type="string", nullable=true)
+     */
+    protected $communeOfficeName;
 
     /**
      * Set name
@@ -837,30 +874,135 @@ class ServiceBaseResult extends BaseNamedEntity implements ImportEntityInterface
     }
 
     /**
-     * Returns the date string converted to a DateTime instance or null of the date is empty or cannot be converted
-     * @return DateTime|null
-     */
-    public function getConvertedDate(): ?DateTime
-    {
-        if (null !== $dateStr = $this->getDate()) {
-            preg_match('/^(\d{2})[\.-](\d{2})[\.-](\d{4})(\s[\d:]*)/', $dateStr, $matches);
-            if (count($matches) > 3) {
-                $dateStr = trim($matches[3] . '-' . $matches[2] . '-' . $matches[1] . ($matches[4] ?? ''));
-            }
-            if (false !== $serviceCreatedAt = date_create($dateStr)) {
-                $serviceCreatedAt->setTimezone(new \DateTimeZone('UTC'));
-                return $serviceCreatedAt;
-            }
-        }
-        return null;
-    }
-
-    /**
      * @param DateTime|null $serviceCreatedAt
      */
     public function setServiceCreatedAt(?DateTime $serviceCreatedAt): void
     {
         $this->serviceCreatedAt = $serviceCreatedAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCommuneAuthor(): ?string
+    {
+        return $this->communeAuthor;
+    }
+
+    /**
+     * @param string|null $communeAuthor
+     */
+    public function setCommuneAuthor(?string $communeAuthor): void
+    {
+        $this->communeAuthor = $communeAuthor;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getCommuneHasDetails(): ?bool
+    {
+        return $this->communeHasDetails;
+    }
+
+    /**
+     * @param bool|null $communeHasDetails
+     */
+    public function setCommuneHasDetails(?bool $communeHasDetails): void
+    {
+        $this->communeHasDetails = $communeHasDetails;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getCommuneWspRelevance(): ?bool
+    {
+        return $this->communeWspRelevance;
+    }
+
+    /**
+     * @param bool|null $communeWspRelevance
+     */
+    public function setCommuneWspRelevance(?bool $communeWspRelevance): void
+    {
+        $this->communeWspRelevance = $communeWspRelevance;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCommuneLastUpdatedAt(): ?string
+    {
+        return $this->communeLastUpdatedAt;
+    }
+
+    /**
+     * @param string|null $communeLastUpdatedAt
+     */
+    public function setCommuneLastUpdatedAt(?string $communeLastUpdatedAt): void
+    {
+        $this->communeLastUpdatedAt = $communeLastUpdatedAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCommuneOnlineServiceUrlInfo(): ?string
+    {
+        return $this->communeOnlineServiceUrlInfo;
+    }
+
+    /**
+     * @param string|null $communeOnlineServiceUrlInfo
+     */
+    public function setCommuneOnlineServiceUrlInfo(?string $communeOnlineServiceUrlInfo): void
+    {
+        $this->communeOnlineServiceUrlInfo = $communeOnlineServiceUrlInfo;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCommuneOfficeName(): ?string
+    {
+        return $this->communeOfficeName;
+    }
+
+    /**
+     * @param string|null $communeOfficeName
+     */
+    public function setCommuneOfficeName(?string $communeOfficeName): void
+    {
+        $this->communeOfficeName = $communeOfficeName;
+    }
+
+    /**
+     * Returns the date string converted to a DateTime instance or null of the date is empty or cannot be converted
+     * @return DateTime|null
+     */
+    public function getConvertedDate(): ?DateTime
+    {
+        return self::convertDateStringToObject($this->getDate());
+    }
+
+    /**
+     * Returns the date string converted to a DateTime instance or null of the date is empty or cannot be converted
+     * @return DateTime|null
+     */
+    public static function convertDateStringToObject(?string $dateStr): ?DateTime
+    {
+        if (!empty($dateStr)) {
+            preg_match('/^(\d{2})[\.-](\d{2})[\.-](\d{4})(\s[\d:]*)/', $dateStr, $matches);
+            if (count($matches) > 3) {
+                $dateStr = trim($matches[3] . '-' . $matches[2] . '-' . $matches[1] . ($matches[4] ?? ''));
+            }
+            if (false !== $dateTimeObject = date_create($dateStr)) {
+                $dateTimeObject->setTimezone(new \DateTimeZone('UTC'));
+                return $dateTimeObject;
+            }
+        }
+        return null;
     }
 
     public function __toString(): string

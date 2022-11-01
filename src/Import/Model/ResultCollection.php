@@ -39,6 +39,11 @@ class ResultCollection extends ArrayCollection implements PropertyMappingInterfa
      * @var array
      */
     protected $unmappedData = [];
+    /**
+     * Contains the raw data from the result
+     * @var array
+     */
+    protected $rawData = [];
 
     /**
      * @var array|string
@@ -155,6 +160,22 @@ class ResultCollection extends ArrayCollection implements PropertyMappingInterfa
     }
 
     /**
+     * @param array $rawData
+     */
+    public function setRawData(array $rawData): void
+    {
+        $this->rawData = $rawData;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRawData(): array
+    {
+        return $this->rawData;
+    }
+
+    /**
      * Add property field mapping
      *
      * @param string $property
@@ -174,5 +195,13 @@ class ResultCollection extends ArrayCollection implements PropertyMappingInterfa
     public function getPropertyMapping(string $property): string
     {
         return $this->mapProperties[$property] ?? $property;
+    }
+
+    /**
+     * Returns true, if the result collection is valid, i.e. not empty
+     */
+    public function isValid(): bool
+    {
+        return !$this->isEmpty();
     }
 }

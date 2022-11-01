@@ -362,6 +362,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
                 'choices' => array_flip(Epayment::$paymentTypeChoices),
                 'expanded' => true,
                 'multiple' => true,
+                'required' => false,
                 'row_attr' => [
                     'class' => 'form-group-col label-normal ct-col-25',
                 ],

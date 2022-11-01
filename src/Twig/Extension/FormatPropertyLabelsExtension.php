@@ -18,6 +18,7 @@ use App\Util\SnakeCaseConverter;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class FormatPropertyLabelsExtension extends AbstractExtension
 {
@@ -36,6 +37,18 @@ class FormatPropertyLabelsExtension extends AbstractExtension
      *
      * @return array An array of functions
      */
+    public function getFunctions()
+    {
+        return [
+            new TwigFunction('app_get_object_property_label_key', [$this, 'getObjectPropertyLabelKey']),
+        ];
+    }
+
+    /**
+     * Returns a list of functions to add to the existing list.
+     *
+     * @return array An array of functions
+     */
     public function getFilters()
     {
         return [
@@ -45,11 +58,28 @@ class FormatPropertyLabelsExtension extends AbstractExtension
 
 
     /**
+     * @param object $object The object
+     * @param string $property The property
+     * @param ?string $customPrefix Optional custom label prefix
+     * @return string
+     */
+    public function getObjectPropertyLabelKey(object $object, string $property, ?string $customPrefix = null): string
+    {
+        if ($customPrefix) {
+            return rtrim($customPrefix, '.') . '.' . SnakeCaseConverter::camelCaseToSnakeCase($property);
+        }
+        $group = $object instanceof BaseEntityInterface ? 'entity' : 'model';
+        $labelPrefix = PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix(get_class($object), $group);
+        return $labelPrefix . SnakeCaseConverter::camelCaseToSnakeCase($property);
+    }
+
+
+    /**
      * @param BaseEntityInterface $object The object
      * @param array $propertyList The property list to be translated
      * @return string
      */
-    public function getObjectPropertyLabels($object, array $propertyList)
+    public function getObjectPropertyLabels(BaseEntityInterface $object, array $propertyList): string
     {
         $labelPrefix = PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix(get_class($object));
         $sentenceParts = [];

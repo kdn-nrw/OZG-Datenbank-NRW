@@ -23,4 +23,18 @@ interface PropertyMappingInterface
      */
     public function setUnmappedData(array $unmappedData): void;
 
+    /**
+     * Sets the raw data of the api result
+     *
+     * @param array $rawData
+     *
+     * @return void
+     */
+    public function setRawData(array $rawData): void;
+
+    /**
+     * Returns the raw data of the api result
+     * @return array
+     */
+    public function getRawData(): array;
 }

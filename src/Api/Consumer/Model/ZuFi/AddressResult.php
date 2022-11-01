@@ -47,6 +47,30 @@ class AddressResult extends AbstractResult
     protected $town;
 
     /**
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="postfach", dataType="string", required=false)
+     */
+    protected $poBox;
+
+    /**
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="zusatz", dataType="string", required=false)
+     */
+    protected $addressSupplement;
+
+    /**
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="geokodierung", dataType="string", required=false)
+     */
+    protected $geocoding;
+
+    /**
+     * @var string|null
+     * @ApiSearchModelAnnotation(parameter="anfahrturl", dataType="string", required=false)
+     */
+    protected $routeUrl;
+
+    /**
      * @return string|null
      */
     public function getType(): ?string
@@ -124,6 +148,70 @@ class AddressResult extends AbstractResult
     public function setTown(?string $town): void
     {
         $this->town = $town;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPoBox(): ?string
+    {
+        return $this->poBox;
+    }
+
+    /**
+     * @param string|null $poBox
+     */
+    public function setPoBox(?string $poBox): void
+    {
+        $this->poBox = $poBox;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAddressSupplement(): ?string
+    {
+        return $this->addressSupplement;
+    }
+
+    /**
+     * @param string|null $addressSupplement
+     */
+    public function setAddressSupplement(?string $addressSupplement): void
+    {
+        $this->addressSupplement = $addressSupplement;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGeocoding(): ?string
+    {
+        return $this->geocoding;
+    }
+
+    /**
+     * @param string|null $geocoding
+     */
+    public function setGeocoding(?string $geocoding): void
+    {
+        $this->geocoding = $geocoding;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRouteUrl(): ?string
+    {
+        return $this->routeUrl;
+    }
+
+    /**
+     * @param string|null $routeUrl
+     */
+    public function setRouteUrl(?string $routeUrl): void
+    {
+        $this->routeUrl = $routeUrl;
     }
 
 

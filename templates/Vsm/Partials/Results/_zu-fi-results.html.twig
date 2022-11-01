@@ -14,44 +14,50 @@ file that was distributed with this source code.
         </div>
     </div>
 {% endif %}
-{% include 'Vsm/Partials/_search-result-nav.html.twig' with {'results': consumerResults, 'consumer': consumer} %}
-<ul class="search-result-list search-result-in-box">
-    {% set startOffset = results.offset %}
-    {% for child in results %}
-        {# @var child \App\Api\Consumer\Model\ZuFiResult #}
-        <li class="item search-result-item" id="{{ consumer.importSourceKey }}-result-{{ loop.index }}">
-            <div class="item-header">
-                <div class="item-count" title="{{ loop.index }}. {{ 'app.api.common.search_result'|trans }}">{{ startOffset + loop.index }}</div>
-                <h4 class="item-title">
-                    {{ child ~ '' }}
-                </h4>
-            </div>
-            <div class="item-content">
-            {% if child.service %}
-                <div class="item-sub-result item-result-service">
-                    {% include 'Vsm/Partials/Results/Model/_zu-fi-service.html.twig' with {'service': child.service} %}
+{% if results.empty %}
+    {% if consumer.demand.regionalKey != constant('App\\Api\\Consumer\\ZuFiConsumer::DEFAULT_REGIONAL_KEY') %}
+        <div class="alert alert-warning">{{ 'app.api.zu_fi.result.empty_warning'|trans }}</div>
+    {% endif %}
+{% else %}
+    {% include 'Vsm/Partials/_search-result-nav.html.twig' with {'results': consumerResults, 'consumer': consumer} %}
+    <ul class="search-result-list search-result-in-box">
+        {% set startOffset = results.offset %}
+        {% for child in results %}
+            {# @var child \App\Api\Consumer\Model\ZuFiResult #}
+            <li class="item search-result-item" id="{{ consumer.importSourceKey }}-result-{{ loop.index }}">
+                <div class="item-header">
+                    <div class="item-count" title="{{ loop.index }}. {{ 'app.api.common.search_result'|trans }}">{{ startOffset + loop.index }}</div>
+                    <h4 class="item-title">
+                        {{ child ~ '' }}
+                    </h4>
                 </div>
-            {% endif %}
-            {% if child.organisations|length > 0 %}
-                <div class="item-sub-result-list">
-                    {% for organisation in child.organisations %}
-                        <div class="col-xs-12 col-md-6{% if loop.index % 2 == 1 %} clear-left-md{% endif %}">
-                            <div class="item-sub-result item-result-organisation">
-                            {% include 'Vsm/Partials/Results/Model/_zu-fi-organisation.html.twig' with {'organisation': organisation} %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            {% if child.unmappedData|length > 0 %}
-                {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': child.unmappedData}) %}
-                {% if mapValueHtml|trim|length > 0 %}
-                    <div class="unmapped-values uv-{{ consumer.importSourceKey }}">
-                        {{ mapValueHtml|raw }}
+                <div class="item-content">
+                {% if child.service %}
+                    <div class="item-sub-result item-result-service">
+                        {% include 'Vsm/Partials/Results/Model/_zu-fi-service.html.twig' with {'service': child.service} %}
                     </div>
                 {% endif %}
-            {% endif %}
-            </div>
-        </li>
-    {% endfor %}
-</ul>
+                {% if child.organisations|length > 0 %}
+                    <div class="item-sub-result-list">
+                        {% for organisation in child.organisations %}
+                            <div class="col-xs-12 col-md-6{% if loop.index % 2 == 1 %} clear-left-md{% endif %}">
+                                <div class="item-sub-result item-result-organisation">
+                                {% include 'Vsm/Partials/Results/Model/_zu-fi-organisation.html.twig' with {'organisation': organisation} %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if child.unmappedData|length > 0 %}
+                    {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': child.unmappedData}) %}
+                    {% if mapValueHtml|trim|length > 0 %}
+                        <div class="unmapped-values uv-{{ consumer.importSourceKey }}">
+                            {{ mapValueHtml|raw }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

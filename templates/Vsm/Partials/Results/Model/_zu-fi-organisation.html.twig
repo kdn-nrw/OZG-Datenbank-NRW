@@ -30,6 +30,14 @@ file that was distributed with this source code.
                 {% endfor %}
             {% endif %}
         </dd>
+        <dt>{{ 'app.api.zu_fi.result.organisation_model.contact_persons'|trans }}</dt>
+        <dd>
+            {% if organisation.contactPersons|length > 0 %}
+                {% for contactPersonModel in organisation.contactPersons %}
+                    {% include 'Vsm/Partials/Results/Model/_zu-fi-contact-person.html.twig' with {'contactPerson': contactPersonModel} %}
+                {% endfor %}
+            {% endif %}
+        </dd>
     </dl>
     {% if organisation.unmappedData|length > 0 %}
         {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': organisation.unmappedData}) %}

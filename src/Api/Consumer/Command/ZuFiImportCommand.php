@@ -48,18 +48,17 @@ class ZuFiImportCommand extends Command
                 InputArgument::OPTIONAL,
                 'optional comma separated list of service keys for import'
             )
+            ->addArgument(
+                'regionalKey',
+                InputArgument::OPTIONAL,
+                'the regional key'
+            )
             ->addOption(
                 'limit',
                 'l',
                 InputOption::VALUE_OPTIONAL,
                 'the maximum number of updated rows',
                 100
-            )
-            ->addArgument(
-                'regional-key',
-                'r',
-                InputOption::VALUE_OPTIONAL,
-                'the regional key'
             )
             ->addOption(
                 'commune-id',
@@ -75,7 +74,7 @@ class ZuFiImportCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
-        $regionalKey = (string) $input->getOption('regionalKey');
+        $regionalKey = (string) $input->getArgument('regionalKey');
         $limit = (int) $input->getOption('limit');
         $startTime = microtime(true);
         $consumer = $this->apiManager->getConfiguredConsumer(ApiManager::API_KEY_ZU_FI);

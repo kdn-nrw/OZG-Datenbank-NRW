@@ -7,7 +7,18 @@ file that was distributed with this source code.
 {# @var service \App\Api\Consumer\Model\ZuFi\ServiceBaseResult #}
 {# @var resultCollection \App\Api\Consumer\Model\ZuFi\ZuFiResultCollection #}
 <div class="item">
-    <h5 class="item-title">{{ 'app.api.zu_fi.result.service_base'|trans }}: {{ service ~ '' }}</h5>
+    <h5 class="item-title">
+        {{ 'app.api.zu_fi.result.service_base'|trans }}:
+        {% if results.ozgService %}
+            {% set serviceReferenceSettings = app_get_reference_settings(results.ozgService) %}
+            <a href="{{ serviceReferenceSettings.admin.generateObjectUrl('show', results.ozgService, {'id': results.ozgService.id}) }}">
+                {{ service ~ '' }}
+                <i class="fa fa-eye" aria-hidden="true"></i>
+            </a>
+        {% else %}
+            {{ service ~ '' }}
+        {% endif %}
+        </h5>
     {% if service.teaser %}
         {{ service.teaser|raw }}
     {% endif %}

@@ -371,7 +371,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'is_custom_field' => true,
             'is_tab_field' => true,
             'is_custom_rendered' => true,
-            'reference_field_list' => ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2',],// 'status'
+            'reference_field_list' => ['name', 'service_created_at', 'service_key', 'service_type', 'law_shortcuts', 'relevance1', 'relevance2', 'commune_service_vsm_info',],// 'status'
             'show_export' => true,
         ]);
         $show

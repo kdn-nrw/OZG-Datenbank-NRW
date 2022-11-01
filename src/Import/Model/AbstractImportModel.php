@@ -13,6 +13,11 @@ namespace App\Import\Model;
 
 abstract class AbstractImportModel implements PropertyMappingInterface
 {
+    /**
+     * Contains the raw data from the result
+     * @var array
+     */
+    protected $rawData = [];
 
     /**
      * Contains the data from the result that were not mapped to a result property
@@ -34,6 +39,22 @@ abstract class AbstractImportModel implements PropertyMappingInterface
     public function setUnmappedData(array $unmappedData): void
     {
         $this->unmappedData = $unmappedData;
+    }
+
+    /**
+     * @param array $rawData
+     */
+    public function setRawData(array $rawData): void
+    {
+        $this->rawData = $rawData;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRawData(): array
+    {
+        return $this->rawData;
     }
 
     /**

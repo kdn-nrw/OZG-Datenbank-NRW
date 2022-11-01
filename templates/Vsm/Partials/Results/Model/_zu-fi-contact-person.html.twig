@@ -1,0 +1,38 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var contactPerson \App\Api\Consumer\Model\ZuFi\ContactPersonResult #}
+<div class="item item-contact-person">
+    {{ contactPerson ~ '' }}
+    {% if contactPerson.position %}
+        <br>{{ contactPerson.position }}
+    {% endif %}
+    {% if contactPerson.address %}
+        <br>{{ contactPerson.address }}
+    {% endif %}
+    {% if contactPerson.room %}
+        <br>{{ 'app.api.zu_fi.result.contact_person_model.room'|trans }}: {{ contactPerson.room }}
+    {% endif %}
+    {% if contactPerson.officeHours %}
+        <br>{{ 'app.api.zu_fi.result.contact_person_model.office_hours'|trans }}: {{ contactPerson.officeHours }}
+    {% endif %}
+    {% if contactPerson.url %}
+        <br>{{ 'app.api.zu_fi.result.contact_person_model.url'|trans }}: {{ contactPerson.url }}
+    {% endif %}
+    {% if contactPerson.communications|length > 0 %}
+        {% for communicationModel in contactPerson.communications %}
+            {% include 'Vsm/Partials/Results/Model/_zu-fi-communication.html.twig' with {'communication': communicationModel} %}
+        {% endfor %}
+    {% endif %}
+    {% if contactPerson.unmappedData|length > 0 %}
+        {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': contactPerson.unmappedData}) %}
+        {% if mapValueHtml|trim|length > 0 %}
+            <div class="unmapped-values uv-contactPerson">
+                {{ mapValueHtml|raw }}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

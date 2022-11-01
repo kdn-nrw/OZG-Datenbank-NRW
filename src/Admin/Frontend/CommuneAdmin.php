@@ -162,7 +162,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'is_tab_field' => true,
             'is_custom_rendered' => true,
             'reference_field_list' => [
-                'name', 'service_key',  'service_created_at',
+                'name', 'service_key',  'service_created_at', 'commune_service_vsm_info',
                 //'service_type', 'law_shortcuts', 'relevance1', 'relevance2',
                 'implementation_project_status_info.status',
                 'implementation_project_status_info.project_start_at',

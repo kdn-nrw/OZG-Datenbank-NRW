@@ -89,11 +89,12 @@ class ArsAgsConsumer extends AbstractApiConsumer
         $communes = $repository->findAllWithMissingKeys('modifiedAt', 'DESC');
         $dataProcessor = $this->dataProcessor;
         $this->dataProvider->setApiConsumerEntity($this->getApiConsumerEntity());
-        $dataProcessor->setImportModelClass($this->getImportModelClass());
         $dataProcessor->setOutput($this->output);
         $dataProcessor->setImportSource($this->getImportSourceKey());
         $totalUpdatedRowCount = 0;
         foreach ($communes as $commune) {
+            $dataProcessor->unsetResultCollection();
+            $dataProcessor->setImportModelClass($this->getImportModelClass());
             /** @var Commune $commune */
             $communityKey = rtrim((string)$commune->getOfficialCommunityKey(), '0');
             $regionalKey = rtrim((string)$commune->getRegionalKey(), '0');

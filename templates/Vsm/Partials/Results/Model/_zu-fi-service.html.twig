@@ -40,6 +40,18 @@ file that was distributed with this source code.
                 &ndash;
             {% endif %}
         </dd>
+        {% set additionalProperties = ['group', 'callSign', 'performanceDetail', 'performanceDetail', 'name2',
+            'type', 'serviceType', 'shortText', 'requiredDocuments', 'requirements', 'costs',
+            'processingTime', 'processFlow', 'deadlines', 'forms', 'furtherInformation',
+            'pointOfContact', 'technicallyApprovedAt', 'technicallyApprovedBy', 'hints', 'wspRelevance',
+            'lastUpdatedAt', 'urlOnlineService', 'urlOnlineServiceInfo'] %}
+        {% for property in additionalProperties %}
+            {% set addValue = attribute(service, property) %}
+            {% if addValue %}
+                <dt>{{ app_get_object_property_label_key(service, property, 'app.api.zu_fi.result.service_base_model.')|raw|trans }}</dt>
+                <dd>{{ addValue|app_format_custom_value }}</dd>
+            {% endif %}
+        {% endfor %}
     </dl>
     {% if service.unmappedData|length > 0 %}
         {% set mapValueHtml = include('Vsm/Partials/Results/Model/_unmapped.html.twig', {'unmappedData': service.unmappedData}) %}

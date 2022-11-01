@@ -219,11 +219,22 @@ class ZuFiConsumer extends AbstractApiConsumer
             foreach (array_keys($mapRowsByServiceKey) as $serviceKey) {
                 $mappedServiceKeys[$serviceKey] = $serviceKey;
             }
+            if (!empty($serviceKeys)) {
+                $tmpServiceKeys = $mapRowsByServiceKey;
+                $mapRowsByServiceKey = [];
+                foreach ($serviceKeys as $serviceKey) {
+                    if (isset($tmpServiceKeys[$serviceKey])) {
+                        $mapRowsByServiceKey[$serviceKey] = $serviceKey;
+                    }
+                }
+            }
         } else {
             shuffle($mappedServiceKeys);
         }
         foreach ($mappedServiceKeys as $serviceKey) {
-            $shuffledServices[$serviceKey] = $mapServicesByKey[$serviceKey];
+            if (isset($mapServicesByKey[$serviceKey])) {
+                $shuffledServices[$serviceKey] = $mapServicesByKey[$serviceKey];
+            }
         }
         /** @var ZuFiDataProcessor $dataProcessor */
         $dataProcessor = $this->dataProcessor;
@@ -238,18 +249,17 @@ class ZuFiConsumer extends AbstractApiConsumer
             $demand->setServiceKey($serviceKey);
             $this->dataProvider->setDemand($demand);
             $this->dataProvider->process($dataProcessor);
-            $results = $this->dataProcessor->getResultCollection();
             /** @var ZuFiResultCollection $results */
+            $results = $this->dataProcessor->getResultCollection();
+            $results->setOzgService($service);
             $serviceModel = $results->getServiceBase();
-            if (null !== $serviceModel && $serviceModel->getServiceKey()) {
-                $dataProcessor->addServiceResult($service, $serviceModel);
-                ++$totalImportRowCount;
-                if ($totalImportRowCount % 100 === 0) {
-                    $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
-                }
-                if ($totalImportRowCount >= $limit) {
-                    break;
-                }
+            $dataProcessor->addServiceResult($service, $serviceModel, $results);
+            ++$totalImportRowCount;
+            if ($totalImportRowCount % 100 === 0) {
+                $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
+            }
+            if ($totalImportRowCount >= $limit) {
+                break;
             }
         }
         $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
@@ -269,7 +279,6 @@ class ZuFiConsumer extends AbstractApiConsumer
         $query = 'SELECT id, service_key, created_at, modified_at FROM ozg_api_service_base_result WHERE ';
         if (null !== $commune) {
             $query .= ' commune_id = ' . $commune->getId();
-            $query .= ' commune_id IS NULL';
         } elseif (null !== $regionalKey) {
             $query .= " regional_key = $regionalKey";
         } else {
@@ -356,21 +365,58 @@ class ZuFiConsumer extends AbstractApiConsumer
     public function search(): ResultCollection
     {
         $demand = $this->getDemand();
+        $communeRepository = $this->getEntityManager()->getRepository(Commune::class);
+        $commune = null;
         /** @var ZuFiDemand $demand */
         // Set either the zip code or the regional key from the commune entity, if one of the values is empty
         if (!$demand->getRegionalKey() && $demand->getZipCode()) {
-            $communeRepository = $this->getEntityManager()->getRepository(Commune::class);
             $commune = $communeRepository->findOneBy(['zipCode' => $demand->getZipCode()]);
             if (null !== $commune && $regionalKey = $commune->getRegionalKey()) {
                 $demand->setRegionalKey($regionalKey);
             }
         } elseif ($demand->getRegionalKey() && !$demand->getZipCode()) {
-            $communeRepository = $this->getEntityManager()->getRepository(Commune::class);
             $commune = $communeRepository->findOneBy(['regionalKey' => $demand->getRegionalKey()]);
             if (null !== $commune && $zipCode = $commune->getZipCode()) {
                 $demand->setZipCode($zipCode);
             }
         }
-        return parent::search();
+        if (null === $commune && $demand->getRegionalKey()) {
+            $commune = $communeRepository->findOneBy(['regionalKey' => $demand->getRegionalKey()]);
+        }
+        /** @var ZuFiResultCollection $resultCollection */
+        $resultCollection = parent::search();
+        if ($commune instanceof Commune) {
+            $this->updateOrCreateServiceBaseResult($commune, $resultCollection);
+        }
+        return $resultCollection;
+    }
+
+    /**
+     * @param Commune $commune
+     * @param ZuFiResultCollection $resultCollection
+     * @return void
+     */
+    private function updateOrCreateServiceBaseResult(Commune $commune, ZuFiResultCollection $resultCollection): void
+    {
+        if ($serviceBaseResultModel = $resultCollection->getServiceBase()) {
+            $serviceRepository = $this->getEntityManager()->getRepository(Service::class);
+            $ozgService = $serviceRepository->findOneBy(['serviceKey' => $serviceBaseResultModel->getServiceKey()]);
+            if ($ozgService) {
+                $resultCollection->setOzgService($ozgService);
+                /** @var ZuFiDataProcessor $dataProcessor */
+                $dataProcessor = $this->dataProcessor;
+                $dataProcessor->addServiceResult($ozgService, $serviceBaseResultModel, $resultCollection);
+                try {
+                    $dataProcessor->processImportedServiceResults(
+                        $commune->getRegionalKey(),
+                        null,
+                        $commune
+                    );
+                } catch (\Exception $e) {
+                    // Skip optional update of stored result
+                    unset($e);
+                }
+            }
+        }
     }
 }

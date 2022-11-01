@@ -12,6 +12,7 @@
 namespace App\Import\DataProcessor;
 
 use App\Api\Consumer\Model\AbstractResult;
+use App\Api\Consumer\Model\ZuFi\ZuFiResultCollection;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Base\BaseEntityInterface;
@@ -98,6 +99,14 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
             $this->resultCollection = new ResultCollection();
         }
         return $this->resultCollection;
+    }
+
+    /**
+     * Unset the result collection
+     */
+    public function unsetResultCollection(): void
+    {
+        $this->resultCollection = null;
     }
 
     /**
@@ -227,6 +236,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
         foreach (array_keys($row) as $key) {
             $mapKeys[$parser->getCleanFieldName($key)] = $key;
         }
+        $importModel->setRawData($row);
         foreach ($modelConfiguration as $propertyName => $propertyConfiguration) {
             /** @var ImportModelAnnotation $propertyConfiguration */
             $parameter = $parser->getCleanFieldName($propertyConfiguration->getParameter());
@@ -239,6 +249,8 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
                 if ($isAutoIncrement) {
                     $row[$importFieldName] = $rowNr;
                 } else {
+                    $unmappedData['_key_' . $importFieldName] = -1;
+                    $importModel->setUnmappedData($unmappedData);
                     return false;
                 }
             }
@@ -371,26 +383,24 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
     protected function findOrCreateTargetEntity(
         $value,
         string $entityClass,
-        $mapValueToProperty = 'name',
-        $dataType = BaseModelAnnotation::DATA_TYPE_MODEL
+        string $mapValueToProperty = 'name',
+        string $dataType = BaseModelAnnotation::DATA_TYPE_MODEL
     )
     {
-        $compareValue = trim(strip_tags($value));
-        if (empty($compareValue)) {
+        if (empty($value)) {
             return null;
         }
         $em = $this->getEntityManager();
         /** @var EntityRepository $repository */
         $repository = $em->getRepository($entityClass);
         if ($dataType === BaseModelAnnotation::DATA_TYPE_COLLECTION) {
-            $mapValues = is_iterable($compareValue) ? $compareValue : explode(',', $compareValue);
+            $mapValues = is_iterable($value) ? $value : explode(',', trim(strip_tags($value)));
             $collection = new ResultCollection();
             foreach ($mapValues as $listValue) {
                 $listEntity = $this->findOrCreateTargetEntity(
                     $listValue,
                     $entityClass,
-                    $mapValueToProperty,
-                    BaseModelAnnotation::DATA_TYPE_MODEL
+                    $mapValueToProperty
                 );
                 if (null !== $listEntity) {
                     $collection->add($listEntity);
@@ -398,6 +408,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
             }
             return $collection;
         }
+        $compareValue = trim(strip_tags($value));
         $hasChanges = false;
         $entity = $repository->findOneBy([$mapValueToProperty => $compareValue]);
         if (null === $entity) {
@@ -439,7 +450,8 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
         $em = $this->getEntityManager();
         $expressionBuilder = $em->getExpressionBuilder();
         $targetEntity = null;
-        if ($entityClass instanceof ImportEntityInterface && !empty($importKeyData['importId'])) {
+        if ($expressionBuilder && is_a($entityClass, ImportEntityInterface::class, true)
+            && !empty($importKeyData['importId'])) {
             $importId = (int)$importKeyData['importId'];
             $targetEntity = $this->findEntityByConditions($entityClass, [
                 //$expressionBuilder->eq('LOWER(e.name)', ':name'),
@@ -513,9 +525,9 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
      */
     protected function processEntity(
         AbstractImportModel $importModel,
-        string $entityClass,
-        array $modelEntityPropertyMapping,
-        PropertyAccessor $accessor
+        string              $entityClass,
+        array               $modelEntityPropertyMapping,
+        PropertyAccessor    $accessor
     ): BaseEntity
     {
         $em = $this->getEntityManager();
@@ -558,6 +570,18 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
     protected function getModelEntityPropertyMapping(): array
     {
         $modelClass = $this->getImportModelClass();
+        return $this->getEntityPropertyMappingForModel($modelClass);
+    }
+
+    /**
+     * Creates the mapping for the current model properties to the entity class and entity properties
+     *
+     * @param string $modelClass
+     * @return array
+     * @throws ReflectionException
+     */
+    protected function getEntityPropertyMappingForModel(string $modelClass): array
+    {
         $importConfiguration = $this->annotationReader->getModelPropertyConfiguration($modelClass);
         $mapping = [];
         foreach ($importConfiguration as $propertyName => $propertyConfiguration) {
@@ -569,6 +593,13 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
         return $mapping;
     }
 
+    /**
+     * Convert the given collection to an array
+     *
+     * @param ResultCollection $collection
+     * @return array
+     * @throws ReflectionException
+     */
     protected function convertCollectionToArray(ResultCollection $collection): array
     {
         $dataRows = [];
@@ -583,7 +614,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
             foreach ($mapProperties as $mapProperty) {
                 $value = $accessor->getValue($model, $mapProperty);
                 if ($value instanceof ResultCollection) {
-                    $row[$mapProperty] = $value;
+                    $row[$mapProperty] = $this->convertCollectionToArray($value);
                 } else {
                     $row[$mapProperty] = $value;
                 }

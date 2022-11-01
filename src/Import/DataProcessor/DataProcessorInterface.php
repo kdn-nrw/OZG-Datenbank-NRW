@@ -63,4 +63,9 @@ interface DataProcessorInterface
      * @return ResultCollection
      */
     public function getResultCollection(): ResultCollection;
+
+    /**
+     * Unset the result collection
+     */
+    public function unsetResultCollection(): void;
 }

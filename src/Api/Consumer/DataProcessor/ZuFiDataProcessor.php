@@ -11,14 +11,19 @@
 
 namespace App\Api\Consumer\DataProcessor;
 
+use App\Api\Consumer\Model\ZuFi\OrganisationResult;
 use App\Api\Consumer\Model\ZuFi\ServiceBaseResult;
+use App\Api\Consumer\Model\ZuFi\ServiceResult;
 use App\Api\Consumer\Model\ZuFi\ZuFiResultCollection;
+use App\Api\Consumer\Model\ZuFiResult;
+use App\Entity\Api\ServiceBaseResult as ServiceBaseResultEntity;
 use App\Entity\FederalInformationManagementType;
 use App\Entity\Service;
 use App\Entity\StateGroup\Commune;
 use App\Import\Model\ResultCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ZuFiDataProcessor extends DefaultApiDataProcessor
 {
@@ -39,11 +44,19 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
         return $this->resultCollection;
     }
 
-    public function addServiceResult(Service $service, ServiceBaseResult $model)
+    /**
+     * Adds the result for the given service to the list
+     * @param Service $service
+     * @param ?ServiceBaseResult $model
+     * @param ZuFiResultCollection $resultCollection
+     * @return void
+     */
+    public function addServiceResult(Service $service, ?ServiceBaseResult $model, ZuFiResultCollection $resultCollection): void
     {
         $this->serviceResults[] = [
             'service' => $service,
             'model' => $model,
+            'resultCollection' => $resultCollection,
         ];
     }
 
@@ -66,18 +79,28 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
         /** @var EntityManager $em */
         $em = $this->getEntityManager();
         $rowOffset = 0;
-        $this->setImportModelClass(ServiceBaseResult::class);
         $accessor = PropertyAccess::createPropertyAccessor();
-        $modelEntityPropertyMapping = $this->getModelEntityPropertyMapping();
+        $modelEntityPropertyMapping = $this->getEntityPropertyMappingForModel(ServiceBaseResult::class);
         $targetEntityClass = current(array_keys($modelEntityPropertyMapping));
         $entityPropertyMapping = $modelEntityPropertyMapping[$targetEntityClass];
-        $sbrRepository = $em->getRepository(\App\Entity\Api\ServiceBaseResult::class);
+        $serviceModelEntityPropertyMapping = $this->getEntityPropertyMappingForModel(ServiceResult::class);
+        $serviceTargetEntityClass = current(array_keys($serviceModelEntityPropertyMapping));
+        $serviceEntityPropertyMapping = $serviceModelEntityPropertyMapping[$serviceTargetEntityClass];
+        $sbrRepository = $em->getRepository(ServiceBaseResultEntity::class);
         foreach ($this->serviceResults as $dataRow) {
             $service = $dataRow['service'];
             $importModel = $dataRow['model'];
+            $resultCollection = $dataRow['resultCollection'];
+            if (null === $importModel) {
+                $importModel = new ServiceBaseResult();
+                $importModel->setName($service->getName());
+                $importModel->setServiceKey($service->getServiceKey());
+                $importModel->setDescription($service->getDescription());
+            }
             /**
              * @var Service $service
              * @var ServiceBaseResult $importModel
+             * @var ZuFiResultCollection $resultCollection
              */
             $serviceKey = $service->getServiceKey();
             $targetEntity = null;
@@ -118,9 +141,7 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
                 ]);
             }
             if (null === $targetEntity) {
-                $targetEntity = new \App\Entity\Api\ServiceBaseResult();
-                $targetEntity->setService($service);
-                $targetEntity->setServiceKey($serviceKey);
+                $targetEntity = new ServiceBaseResultEntity();
                 $targetEntity->setImportSource($this->importSource);
                 $targetEntity->setImportId($service->getId());
                 $em->persist($targetEntity);
@@ -128,20 +149,34 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
             if (null !== $fimEntity) {
                 $fimEntity->setServiceBaseResult($targetEntity);
             }
-            if (null !== $commune) {
+            $this->mapImportProperties($accessor, $entityPropertyMapping, $targetEntity, $importModel);
+            if ($commune) {
                 $commune->addServiceBaseResult($targetEntity);
-            }
-            foreach ($entityPropertyMapping as $entityProperty => $modelProperty) {
-                if ($accessor->isWritable($targetEntity, $entityProperty)) {
-                    $value = $accessor->getValue($importModel, $modelProperty);
-                    if ($value instanceof ResultCollection) {
-                        $processedValue = $this->convertCollectionToArray($value);
-                        $accessor->setValue($targetEntity, $entityProperty, $processedValue);
-                    } else {
-                        $accessor->setValue($targetEntity, $entityProperty, $value);
+                $targetEntity->setImportSource($this->importSource . '_c' . $commune->getId());
+                $targetEntity->setCommuneHasDetails(false);
+                if (!$resultCollection->isEmpty()) {
+                    /** @var ZuFiResult $firstResult */
+                    $firstResult = $resultCollection->first();
+                    if (($firstResult instanceof ZuFiResult) && $communeServiceDetails = $firstResult->getService()) {
+                        $targetEntity->setCommuneHasDetails(true);
+                        // Mke sure the values of the base result are not overridden with empty values
+                        foreach ($entityPropertyMapping as $modelProperty) {
+                            if (in_array($modelProperty, $serviceEntityPropertyMapping, false)
+                                && !$accessor->getValue($communeServiceDetails, $modelProperty)
+                                && !!($baseValue = $accessor->getValue($importModel, $modelProperty))) {
+                                $accessor->setValue($communeServiceDetails, $modelProperty, $baseValue);
+                            }
+                        }
+                        $this->mapImportProperties($accessor, $serviceEntityPropertyMapping, $targetEntity, $communeServiceDetails);
+                    }
+                    if ($firstOrganisation = $firstResult->getOrganisations()->first()) {
+                        /** @var OrganisationResult $firstOrganisation */
+                        $targetEntity->setCommuneOfficeName($firstOrganisation->getName());
                     }
                 }
             }
+            $targetEntity->setService($service);
+            $targetEntity->setServiceKey($serviceKey);
             $serviceCreatedAt = $targetEntity->getConvertedDate();
             $targetEntity->setServiceCreatedAt($serviceCreatedAt);
             $targetEntity->setRegionalKey($regionalKey);
@@ -155,5 +190,32 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
         $em->flush();
         $this->serviceResults = [];
         return $rowOffset;
+    }
+
+    /**
+     * @param PropertyAccessor $accessor The property accessor
+     * @param array $entityPropertyMapping<string, string> The mapping of the entity and model properties
+     * @param ServiceBaseResultEntity $targetEntity
+     * @param ServiceBaseResult $importModel
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function mapImportProperties(
+        PropertyAccessor $accessor,
+        array $entityPropertyMapping,
+        ServiceBaseResultEntity $targetEntity,
+        ServiceBaseResult $importModel): void
+    {
+        foreach ($entityPropertyMapping as $entityProperty => $modelProperty) {
+            if ($accessor->isWritable($targetEntity, $entityProperty)) {
+                $value = $accessor->getValue($importModel, $modelProperty);
+                if ($value instanceof ResultCollection) {
+                    $processedValue = $this->convertCollectionToArray($value);
+                    $accessor->setValue($targetEntity, $entityProperty, $processedValue);
+                } else {
+                    $accessor->setValue($targetEntity, $entityProperty, $value);
+                }
+            }
+        }
     }
 }

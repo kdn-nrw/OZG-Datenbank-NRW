@@ -19,6 +19,8 @@ file that was distributed with this source code.
             {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
         {% elseif property == 'serviceCreatedAt' %}
             {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'child': child} %}
+        {% elseif property == 'communeServiceVsmInfo' %}
+            {% include 'CommuneAdmin/show-commune-service-vsm-info.html.twig' with {'child': child} %}
         {% else %}
             {% set value = child|app_attribute_recursive(property) %}
             {{ value|app_format_custom_value }}

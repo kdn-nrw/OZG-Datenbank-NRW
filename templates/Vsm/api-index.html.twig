@@ -34,7 +34,7 @@ file that was distributed with this source code.
                         {% set consumerResults = results[consumer.importSourceKey] %}
                         {# @var consumerResults \App\Import\Model\ResultCollection #}
                         <div class="search-result-container" data-url="{{ consumer.queryUrl }}">
-                            {% if not consumerResults.empty %}
+                            {% if consumerResults.valid %}
                                 {% if consumerResults.totalResultCount > 0 %}
                                 <h3 class="search-result-title">
                                     {{ 'app.api.common.search_results'|trans({'count': consumerResults.totalResultCount}) }}

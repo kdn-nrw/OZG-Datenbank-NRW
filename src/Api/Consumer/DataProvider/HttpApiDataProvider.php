@@ -101,6 +101,7 @@ class HttpApiDataProvider extends AbstractDemandDataProvider
      */
     public function process(DataProcessorInterface $dataProcessor): int
     {
+        $dataProcessor->unsetResultCollection();
         $demand = $this->getDemand();
         $options = [
             'timeout' => 10,

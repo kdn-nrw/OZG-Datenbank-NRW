@@ -53,10 +53,17 @@ class OrganisationResult extends AbstractResult
      */
     protected $communications;
 
+    /**
+     * @var ResultCollection|ContactPersonResult[]
+     * @ApiSearchModelAnnotation(parameter="kontaktperson", modelClass="App\Api\Consumer\Model\ZuFi\ContactPersonResult", dataType="collection", required=false)
+     */
+    protected $contactPersons;
+
     public function __construct()
     {
         $this->addresses = new ResultCollection();
         $this->communications = new ResultCollection();
+        $this->contactPersons = new ResultCollection();
     }
 
     /**
@@ -169,6 +176,30 @@ class OrganisationResult extends AbstractResult
     public function addCommunication(CommunicationResult $communication): void
     {
         $this->communications->add($communication);
+    }
+
+    /**
+     * @return ContactPersonResult[]|ResultCollection
+     */
+    public function getContactPersons()
+    {
+        return $this->contactPersons;
+    }
+
+    /**
+     * @param ContactPersonResult[]|ResultCollection $contactPersons
+     */
+    public function setContactPersons($contactPersons): void
+    {
+        $this->contactPersons = $contactPersons;
+    }
+
+    /**
+     * @param ContactPersonResult $ContactPerson
+     */
+    public function addContactPerson(ContactPersonResult $contactPerson): void
+    {
+        $this->contactPersons->add($contactPerson);
     }
 
     public function __toString()
