@@ -162,8 +162,10 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'is_tab_field' => true,
             'is_custom_rendered' => true,
             'reference_field_list' => [
-                'name', 'service_key',  'service_created_at', 'commune_service_vsm_info',
-                //'service_type', 'law_shortcuts', 'relevance1', 'relevance2',
+                'name', 'service_key',  'service_created_at',
+                //'service_type', 'law_shortcuts',
+                'relevance1',
+                // 'relevance2',
                 'implementation_project_status_info.status',
                 'implementation_project_status_info.project_start_at',
                 'implementation_project_status_info.concept_status_at',
@@ -171,6 +173,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 'implementation_project_status_info.piloting_status_at',
                 'implementation_project_status_info.commissioning_status_at',
                 'implementation_project_status_info.nationwide_rollout_at',
+                'commune_service_vsm_info',
             ],// 'status'
             'show_export' => true,
         ]);
