@@ -9,21 +9,18 @@
  */
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['chart.js'], function (Chart) {
-            return factory(Chart);
-        });
+        define(factory);
     } else if (typeof module === 'object' && module.exports) {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like environments that support module.exports,
         // like Node.
-        module.exports = factory(require('chart.js'));
+        module.exports = factory();
     } else {
         // Browser globals (root is window)
         // noinspection JSUndefinedPropertyAssignment
-        root.appChart = factory(root.Chart);
+        root.appFrontend = factory();
     }
-}(this, function (Chart) {
+}(this, function () {
     "use strict";
     return {
         setUpList: function (chartContainers) {
@@ -32,7 +29,11 @@
                 self.load(chartContainers.item(i));
             }
         },
-
+        /**
+         * Parse given string for javascript function definition and initialize function if found
+         * @param str
+         * @returns {*}
+         */
         parseFunction: function (str) {
             let fn_body_idx = str.indexOf('{'),
                 fn_body = str.substring(fn_body_idx + 1, str.lastIndexOf('}')),
@@ -68,13 +69,17 @@
 
         initializeCanvas: function (container, chartConfig) {
             let self = this;
-            let canvas = document.createElement("canvas");
-            canvas.setAttribute("class", "mb-statistics-chart");
-            container.innerHTML = '';
-            container.appendChild(canvas);
-            const data = self.parseJson(chartConfig);
-            const context = canvas.getContext('2d');
-            let myChart = new Chart(context, data);
+            import('chart.js/auto').then(({ default: Chart }) => {
+                let canvas = document.createElement("canvas");
+                canvas.setAttribute("class", "mb-statistics-chart");
+                container.innerHTML = '';
+                container.appendChild(canvas);
+                const data = self.parseJson(chartConfig);
+                const context = canvas.getContext('2d');
+                let myChart = new Chart(context, data);
+            }).catch(error => {
+                console.log('An error occurred while loading the chart.js/auto component', error);
+            });
         },
 
         load: function(container) {
