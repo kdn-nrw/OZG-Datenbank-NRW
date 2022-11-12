@@ -56,8 +56,8 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
      * Scales options
      *
      * @var array
-     */
-    protected $scalesOptions = [];
+     *
+    protected $scalesOptions = [];/
 
 
     /**
@@ -165,16 +165,16 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
      * @return array
      */
     protected function getChartOptions() {
-        $this->addSectionOptions('title', $this->titleOptions);
+        $this->addSectionOptions('plugins', $this->titleOptions, 'title');
         if (!empty($this->legendOptions)) {
-            $this->addSectionOptions('legend', $this->legendOptions);
+            $this->addSectionOptions('plugins', $this->legendOptions, 'legend');
         }
         if (!empty($this->tooltipsOptions)) {
-            $this->addSectionOptions('tooltips', $this->tooltipsOptions);
+            $this->addSectionOptions('plugins', $this->tooltipsOptions, 'tooltip');
         }
-        if (!empty($this->scalesOptions)) {
-            $this->addSectionOptions('scales', $this->scalesOptions);
-        }
+//        if (!empty($this->scalesOptions)) {
+//            $this->addSectionOptions('scales', $this->scalesOptions);
+//        }
         return $this->chartJsOptions;
     }
 

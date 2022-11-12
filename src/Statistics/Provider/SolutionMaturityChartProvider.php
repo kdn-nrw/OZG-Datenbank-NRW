@@ -27,10 +27,15 @@ class SolutionMaturityChartProvider extends AbstractForeignNamedPropertyChartPro
         // Show participant count instead of average result in tooltips; store participant count in custom
         // variable baTooltipLabels
         'callbacks' => [
-            'label' => 'function(item, data) {
-                var label = item.xLabel ? item.xLabel : data.labels[item.index];
-                var count = item.yLabel ? item.yLabel : data.datasets[item.datasetIndex].data[item.index];
+            'label' => 'function(context) {
+                //var label = item.xLabel ? item.xLabel : data.labels[item.index];
+                let label = context.dataset.label || "";
+                let count = context.formattedValue;
+
                 var value = label === "n.a" ? "Kein Reifegrad" : "Reifegrad " + label;
+                if (label) {
+                    label += ": ";
+                }
                 value += ": " + count + " Online-Dienste";
                 return value;
             }',
