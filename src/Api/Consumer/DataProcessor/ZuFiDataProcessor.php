@@ -53,10 +53,18 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
      */
     public function addServiceResult(Service $service, ?ServiceBaseResult $model, ZuFiResultCollection $resultCollection): void
     {
+        $communeResult = null;
+        if (!$resultCollection->isEmpty()) {
+            /** @var ZuFiResult $firstResult */
+            $firstResult = $resultCollection->first();
+            if (($firstResult instanceof ZuFiResult)) {
+                $communeResult = $firstResult;
+            }
+        }
         $this->serviceResults[] = [
             'service' => $service,
             'model' => $model,
-            'resultCollection' => $resultCollection,
+            'communeResult' => $communeResult,
         ];
     }
 
@@ -90,7 +98,7 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
         foreach ($this->serviceResults as $dataRow) {
             $service = $dataRow['service'];
             $importModel = $dataRow['model'];
-            $resultCollection = $dataRow['resultCollection'];
+            $communeResult = $dataRow['communeResult'];
             if (null === $importModel) {
                 $importModel = new ServiceBaseResult();
                 $importModel->setName($service->getName());
@@ -100,7 +108,7 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
             /**
              * @var Service $service
              * @var ServiceBaseResult $importModel
-             * @var ZuFiResultCollection $resultCollection
+             * @var ZuFiResult|null $communeResult
              */
             $serviceKey = $service->getServiceKey();
             $targetEntity = null;
@@ -151,13 +159,13 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
             }
             $this->mapImportProperties($accessor, $entityPropertyMapping, $targetEntity, $importModel);
             if ($commune) {
-                $commune->addServiceBaseResult($targetEntity);
+                // Don't add to commune to prevent loading of all 3000+ service base results for commune (=> memory)
+                //$commune->addServiceBaseResult($targetEntity);
+                $targetEntity->setCommune($commune);
                 $targetEntity->setImportSource($this->importSource . '_c' . $commune->getId());
                 $targetEntity->setCommuneHasDetails(false);
-                if (!$resultCollection->isEmpty()) {
-                    /** @var ZuFiResult $firstResult */
-                    $firstResult = $resultCollection->first();
-                    if (($firstResult instanceof ZuFiResult) && $communeServiceDetails = $firstResult->getService()) {
+                if ($communeResult) {
+                    if ($communeServiceDetails = $communeResult->getService()) {
                         $targetEntity->setCommuneHasDetails(true);
                         // Mke sure the values of the base result are not overridden with empty values
                         foreach ($entityPropertyMapping as $modelProperty) {
@@ -169,7 +177,7 @@ class ZuFiDataProcessor extends DefaultApiDataProcessor
                         }
                         $this->mapImportProperties($accessor, $serviceEntityPropertyMapping, $targetEntity, $communeServiceDetails);
                     }
-                    if ($firstOrganisation = $firstResult->getOrganisations()->first()) {
+                    if ($firstOrganisation = $communeResult->getOrganisations()->first()) {
                         /** @var OrganisationResult $firstOrganisation */
                         $targetEntity->setCommuneOfficeName($firstOrganisation->getName());
                     }

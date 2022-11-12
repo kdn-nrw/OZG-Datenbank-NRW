@@ -236,7 +236,7 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
         foreach (array_keys($row) as $key) {
             $mapKeys[$parser->getCleanFieldName($key)] = $key;
         }
-        $importModel->setRawData($row);
+        //$importModel->setRawData($row);
         foreach ($modelConfiguration as $propertyName => $propertyConfiguration) {
             /** @var ImportModelAnnotation $propertyConfiguration */
             $parameter = $parser->getCleanFieldName($propertyConfiguration->getParameter());

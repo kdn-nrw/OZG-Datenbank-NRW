@@ -204,8 +204,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * One commune has many service base results (imported through ZuFi api, mapped by regional key)
      *
      * @var ArrayCollection|ServiceBaseResult[]
-     * @ORM\OneToMany(targetEntity="App\Entity\Api\ServiceBaseResult", mappedBy="commune", cascade={"all"})
-     * @ORM\JoinColumn(name="service_base_result_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     * @ORM\OneToMany(targetEntity="App\Entity\Api\ServiceBaseResult", mappedBy="commune", cascade={"persist", "remove"})
      */
     private $serviceBaseResults;
 

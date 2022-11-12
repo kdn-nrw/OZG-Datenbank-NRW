@@ -172,8 +172,12 @@ class ZuFiConsumer extends AbstractApiConsumer
         }
         $em = $this->getEntityManager();
         $em->getConfiguration()->setSQLLogger(null);
-        $repository = $em->getRepository(Service::class);
-        $services = $repository->findAll();
+        if (null !== $commune && null !== $communeType = $commune->getCommuneType()) {
+            $services = $communeType->getServices();
+        } else {
+            $repository = $em->getRepository(Service::class);
+            $services = $repository->findAll();
+        }
         $mapServicesByKey = [];
         $allServiceKeys = [];
         $mappedServiceKeys = [];
@@ -251,9 +255,10 @@ class ZuFiConsumer extends AbstractApiConsumer
             $this->dataProvider->process($dataProcessor);
             /** @var ZuFiResultCollection $results */
             $results = $this->dataProcessor->getResultCollection();
-            $results->setOzgService($service);
+            //$results->setOzgService($service);
             $serviceModel = $results->getServiceBase();
             $dataProcessor->addServiceResult($service, $serviceModel, $results);
+            unset($results);
             ++$totalImportRowCount;
             if ($totalImportRowCount % 100 === 0) {
                 $dataProcessor->processImportedServiceResults($demand->getRegionalKey(), $mapToFimType, $commune);
