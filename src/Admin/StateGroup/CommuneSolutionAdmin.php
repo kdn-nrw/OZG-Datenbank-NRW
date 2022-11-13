@@ -52,19 +52,6 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 ]);
         }
         $form
-            ->add('solutionReady', ChoiceFieldMaskType::class, [
-                'choices' => [
-                    'app.commune_solution.entity.solution_ready_choices.no' => false,
-                    'app.commune_solution.entity.solution_ready_choices.yes' => true,
-                ],
-                'map' => [
-                    false => [],
-                    true => ['solutionReadyAt'],
-                ],
-                'required' => false,
-            ]);
-        $this->addDatePickerFormField($form, 'solutionReadyAt', 5);
-        $form
             ->add('connectionPlanned', ChoiceFieldMaskType::class, [
                 'choices' => [
                     'app.commune_solution.entity.connection_planned_choices.no' => false,
@@ -101,20 +88,6 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
         /*$filter->add('description');
         $filter->add('status');*/
         $filter
-            ->add('solutionReady', ChoiceFilter::class, [
-                'field_options' => [
-                    'choices' => [
-                        'app.commune_solution.entity.solution_ready_choices.no' => false,
-                        'app.commune_solution.entity.solution_ready_choices.yes' => true,
-                    ],
-                    'required' => false,
-                    'multiple' => true,
-                    'expanded' => false,
-                    //'choice_translation_domain' => 'SonataAdminBundle',
-                ],
-                'field_type' => ChoiceType::class,
-            ]);
-        $filter
             ->add('connectionPlanned', ChoiceFilter::class, [
                 'field_options' => [
                     'choices' => [
@@ -140,12 +113,6 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
             ->add('solution', null, [
                 'admin_code' => \App\Admin\SolutionAdmin::class
             ])
-            ->add('solutionReady', TemplateRegistryInterface::TYPE_CHOICE, [
-                'choices' => [
-                    false => 'app.commune_solution.entity.connection_planned_choices.no',
-                    true => 'app.commune_solution.entity.connection_planned_choices.yes',
-                ],
-            ])
             ->add('connectionPlanned', TemplateRegistryInterface::TYPE_CHOICE, [
                 'choices' => [
                     false => 'app.commune_solution.entity.connection_planned_choices.no',
@@ -168,14 +135,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
             ->add('solution', null, [
                 'admin_code' => \App\Admin\SolutionAdmin::class
             ])
-            ->add('description')
-            ->add('solutionReady', TemplateRegistryInterface::TYPE_CHOICE, [
-                'choices' => [
-                    false => 'app.commune_solution.entity.connection_planned_choices.no',
-                    true => 'app.commune_solution.entity.connection_planned_choices.yes',
-                ],
-            ]);
-        $this->addDatePickersShowFields($show, 'solutionReadyAt', false);
+            ->add('description');
         $show
             ->add('connectionPlanned', TemplateRegistryInterface::TYPE_CHOICE, [
                 'choices' => [

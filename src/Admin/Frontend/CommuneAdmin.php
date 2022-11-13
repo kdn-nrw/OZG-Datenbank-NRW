@@ -142,7 +142,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             'is_custom_field' => true,
             'is_tab_field' => true,
             'is_custom_rendered' => true,
-            'reference_field_list' => ['solution', 'solution_ready', 'connection_planned', 'specialized_procedure', 'comment',],
+            'reference_field_list' => ['solution', 'connection_planned', 'specialized_procedure', 'comment',],
             //'show_export' => true,
             'showSolutions' => true,
         ]);
