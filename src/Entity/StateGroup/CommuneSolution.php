@@ -61,22 +61,6 @@ class CommuneSolution extends BaseNamedEntity
      *
      * @var bool|null
      *
-     * @ORM\Column(name="solution_ready", type="boolean")
-     */
-    protected $solutionReady;
-
-    /**
-     * @var null|DateTime
-     *
-     * @ORM\Column(nullable=true, type="datetime", name="solution_ready_at")
-     */
-    protected $solutionReadyAt;
-
-    /**
-     * Solution is ready?
-     *
-     * @var bool|null
-     *
      * @ORM\Column(name="connection_planned", type="boolean", nullable=true)
      */
     protected $connectionPlanned;
@@ -151,7 +135,7 @@ class CommuneSolution extends BaseNamedEntity
     /**
      * @param Commune $commune
      */
-    public function setCommune($commune): void
+    public function setCommune(Commune $commune): void
     {
         $this->commune = $commune;
     }
@@ -167,7 +151,7 @@ class CommuneSolution extends BaseNamedEntity
     /**
      * @param Solution $solution
      */
-    public function setSolution($solution): void
+    public function setSolution(Solution $solution): void
     {
         $this->solution = $solution;
     }
@@ -189,41 +173,6 @@ class CommuneSolution extends BaseNamedEntity
     public function setDescription(?string $description): void
     {
         $this->description = $description;
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function getSolutionReady(): ?bool
-    {
-        if (null === $this->solutionReady && null !== $this->solution && null !== $status = $this->solution->getStatus()) {
-            $this->solutionReady = stripos($status->getName(), 'offline') === false;
-        }
-        return $this->solutionReady;
-    }
-
-    /**
-     * @param bool|null $solutionReady
-     */
-    public function setSolutionReady(?bool $solutionReady): void
-    {
-        $this->solutionReady = $solutionReady;
-    }
-
-    /**
-     * @return DateTime|null
-     */
-    public function getSolutionReadyAt(): ?DateTime
-    {
-        return $this->solutionReadyAt;
-    }
-
-    /**
-     * @param DateTime|null $solutionReadyAt
-     */
-    public function setSolutionReadyAt(?DateTime $solutionReadyAt): void
-    {
-        $this->solutionReadyAt = $solutionReadyAt;
     }
 
     /**
@@ -285,7 +234,7 @@ class CommuneSolution extends BaseNamedEntity
     /**
      * @param SpecializedProcedure|null $specializedProcedure
      */
-    public function setSpecializedProcedure($specializedProcedure): void
+    public function setSpecializedProcedure(?SpecializedProcedure $specializedProcedure): void
     {
         $this->specializedProcedure = $specializedProcedure;
     }

@@ -63,18 +63,17 @@ class SolutionHelper
         }
         $solutionId = $object->getId();
         if (!empty($insertCommunes)) {
-            $sql = 'INSERT'.' INTO ozg_solutions_communes (solution_id, commune_id, commune_type, solution_ready, connection_planned, modified_at, created_at, hidden)';
+            $sql = 'INSERT'.' INTO ozg_solutions_communes (solution_id, commune_id, commune_type, connection_planned, modified_at, created_at, hidden)';
             $valueRows = [];
             foreach ($insertCommunes as $communeId) {
-                $valueRows[] = "($solutionId, $communeId, '$communeType', 0, 0, NOW(), NOW(), 0)";
+                $valueRows[] = "($solutionId, $communeId, '$communeType', 0, NOW(), NOW(), 0)";
             }
             $sql .= ' VALUES ' . implode(', ', $valueRows);
             $this->executeStatement($sql);
         }
         // Use SQL statements because entity manager is too slow!
         $status = $object->getStatus();
-        $solutionReady = (null !== $status && stripos($status->getName(), 'offline') === false) ? 1 : 0;
-        $sql = "UPDATE ozg_solutions_communes SET commune_type = '$communeType', solution_ready = $solutionReady WHERE solution_id = $solutionId";
+        $sql = "UPDATE ozg_solutions_communes SET commune_type = '$communeType' WHERE solution_id = $solutionId";
         $this->executeStatement($sql);
         if ($communeType === Solution::COMMUNE_TYPE_SELECTED) {
             $deleteItems = [];

@@ -432,11 +432,6 @@ app:
       commune: Kommune
       name: Name des Dienstes
       description: Beschreibung des Dienstes
-      solution_ready: Lösung steht bereit
-      solution_ready_choices:
-        no: Nein
-        yes: Ja
-      solution_ready_at: Bereit ab
       connection_planned: Anschluss geplant
       connection_planned_choices:
         no: kein Anschluss geplant

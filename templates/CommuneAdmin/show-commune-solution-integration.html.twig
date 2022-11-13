@@ -8,7 +8,7 @@ file that was distributed with this source code.
     {% if field_description.option('reference_field_list') %}
         {% set referenceFieldNameList = field_description.option('reference_field_list') %}
     {% else %}
-        {% set referenceFieldNameList = ['commune', 'solution', 'solution_ready', 'connection_planned', 'specialized_procedure', 'comment',] %}
+        {% set referenceFieldNameList = ['commune', 'solution', 'connection_planned', 'specialized_procedure', 'comment',] %}
     {% endif %}
     {% set exportEnabled = field_description.option('show_export') %}
     {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
@@ -48,15 +48,6 @@ file that was distributed with this source code.
                                 </div>
                             {% else %}
                                 {% include 'General/Show/Partials/link-child-name-show.html.twig' with {'child': child.solution, 'refSettings': solutionRefSettings} %}
-                            {% endif %}
-                        {% elseif property == 'solutionReady' %}
-                            {% set value = attribute(child, property) %}
-                            {{ ('app.commune_solution.entity.solution_ready_choices.' ~ (value ? 'yes' : 'no'))|trans }}
-                            {% if value %}
-                                {% set subValue = attribute(child, 'solutionReadyAt') %}
-                                {% if subValue %}
-                                    ({{ subValue|app_format_custom_value }})
-                                {% endif %}
                             {% endif %}
                         {% elseif property == 'connectionPlanned' %}
                             {% set value = attribute(child, property) %}
