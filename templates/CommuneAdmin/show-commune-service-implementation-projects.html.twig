@@ -1,0 +1,17 @@
+{# @var object \App\Entity\StateGroup\Commune #}
+{% if object and child %}
+    {% set uniqueImplementationProjects = child.uniqueImplementationProjects %}
+    {% if uniqueImplementationProjects|length > 0 %}
+        {% set entityClass = 'App\\Entity\\ImplementationProject' %}
+        {% set projectRefSettings = app_get_reference_settings(entityClass, field_description) %}
+        {% for project in uniqueImplementationProjects %}
+            {# @var project \App\Entity\ImplementationProject #}
+            <a href="{{ projectRefSettings.admin.generateObjectUrl('show', project) }}">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+                {{ project ~ '' }}
+            </a>
+            {% if not loop.last %}, {% endif %}
+        {% endfor %}
+    {% else %}
+    {% endif %}
+{% endif %}

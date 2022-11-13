@@ -3,7 +3,7 @@
   th .sort-wrap {
     cursor: pointer;
     position: relative;
-    margin-right: 10px;
+    margin-right: 12px;
     display: inline-block;
     &:after {
       color: black;
@@ -12,20 +12,24 @@
       display: block;
       position: absolute;
       top: 50%;
-      right: -12px;
-      margin-top: -12px;
+      right: -14px;
+      margin-top: -4px;
     }
   }
 
   th.sort-asc .sort-wrap:hover:after,
   th.sort-asc.sort-by-active .sort-wrap:after {
   // th.sort-desc.sort-by-active .sort-wrap:hover:after
-    content: "↓";
+    //content: "↓";
+    @include fa-icon();
+    content: $fa-var-arrow-down;
   }
 
   th.sort-desc .sort-wrap:hover:after,
   th.sort-desc.sort-by-active .sort-wrap:after {
   // th.sort-asc.sort-by-active .sort-wrap:hover:after
-    content: "↑";
+    //content: "↑";
+    @include fa-icon();
+    content: $fa-var-arrow-up;
   }
 }
