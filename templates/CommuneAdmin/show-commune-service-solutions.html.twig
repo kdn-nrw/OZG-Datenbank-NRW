@@ -1,0 +1,18 @@
+{# @var object \App\Entity\StateGroup\Commune #}
+{% if object and child %}
+    {# @var child \App\Entity\Service #}
+    {% set communeSolutionsForService = object.serviceSolutions(child) %}
+    {% if communeSolutionsForService|length > 0 %}
+        {% set entityClass = 'App\\Entity\\Solution' %}
+        {% set solutionRefSettings = app_get_reference_settings(entityClass, field_description) %}
+        {% for solution in communeSolutionsForService %}
+            {# @var solution \App\Entity\Solution #}
+            <a href="{{ solutionRefSettings.admin.generateObjectUrl('show', solution) }}">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+                {{ solution ~ '' }}
+            </a>
+            {% if not loop.last %}, {% endif %}
+        {% endfor %}
+    {% else %}
+    {% endif %}
+{% endif %}

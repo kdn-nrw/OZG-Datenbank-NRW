@@ -1800,6 +1800,7 @@ app:
         nationwide_rollout_at: Start bundesweiter Roll-out
         status: Umsetzungsstatus NRW
       commune_service_vsm_info: VSM
+      commune_service_solutions: Lösung der Kommune
   service_base_result:
     object_name: Leistung Basisdaten
     list: Leistungen Basisdaten

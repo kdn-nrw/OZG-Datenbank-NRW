@@ -2,6 +2,8 @@
 body {
     background-color: lightgray;
 }
+@import "font-awesome/scss/variables";
+@import "font-awesome/scss/mixins";
 @import "../frontend/scss/general/keyframes";
 @import "../frontend/scss/general/mixins";
 @import "admin-include";

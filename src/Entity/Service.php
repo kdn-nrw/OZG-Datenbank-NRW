@@ -1148,7 +1148,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Bureau $authorityBureau
      * @return self
      */
-    public function addAuthorityBureau($authorityBureau): self
+    public function addAuthorityBureau(Bureau $authorityBureau): self
     {
         if (!$this->authorityBureaus->contains($authorityBureau)) {
             $this->authorityBureaus->add($authorityBureau);
@@ -1161,7 +1161,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Bureau $authorityBureau
      * @return self
      */
-    public function removeAuthorityBureau($authorityBureau): self
+    public function removeAuthorityBureau(Bureau $authorityBureau): self
     {
         if ($this->authorityBureaus->contains($authorityBureau)) {
             $this->authorityBureaus->removeElement($authorityBureau);
@@ -1241,6 +1241,9 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     }
 
     /**
+     * Return the implementation projects metadata for this service; if you need a list of the projects,
+     * use getUniqueImplementationProjects
+     *
      * @return ImplementationProjectService[]|Collection
      */
     public function getImplementationProjects()
@@ -1249,11 +1252,28 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
     }
 
     /**
+     * Set the implementation projects metadata for this service
+     *
      * @param ImplementationProjectService[]|Collection $implementationProjects
      */
     public function setImplementationProjects($implementationProjects): void
     {
         $this->implementationProjects = $implementationProjects;
+    }
+
+    /**
+     * Return all implementation projects for this service; this returns the actual projects, not the metadata
+     * @return ImplementationProject[]
+     */
+    public function getUniqueImplementationProjects(): array
+    {
+        $list = [];
+        foreach ($this->getImplementationProjects() as $sip) {
+            if (null !== $project = $sip->getImplementationProject()) {
+                $list[$project->getId()] = $project;
+            }
+        }
+        return $list;
     }
 
     /**
@@ -1273,7 +1293,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Portal $portal
      * @return self
      */
-    public function addPortal($portal): self
+    public function addPortal(Portal $portal): self
     {
         if (!$this->portals->contains($portal)) {
             $this->portals->add($portal);
@@ -1286,7 +1306,7 @@ class Service extends AbstractService implements SluggableInterface, HasMetaDate
      * @param Portal $portal
      * @return self
      */
-    public function removePortal($portal): self
+    public function removePortal(Portal $portal): self
     {
         if ($this->portals->contains($portal)) {
             $this->portals->removeElement($portal);

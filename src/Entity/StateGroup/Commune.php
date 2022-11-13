@@ -423,7 +423,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param CommuneSolution $communeSolution
      * @return self
      */
-    public function addCommuneSolution($communeSolution): self
+    public function addCommuneSolution(CommuneSolution $communeSolution): self
     {
         if (!$this->communeSolutions->contains($communeSolution)) {
             $this->communeSolutions->add($communeSolution);
@@ -437,7 +437,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param CommuneSolution $communeSolution
      * @return self
      */
-    public function removeCommuneSolution($communeSolution): self
+    public function removeCommuneSolution(CommuneSolution $communeSolution): self
     {
         if ($this->communeSolutions->contains($communeSolution)) {
             $this->communeSolutions->removeElement($communeSolution);
@@ -463,10 +463,30 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     }
 
     /**
+     * Returns all solutions of the current commune for the given service
+     *
+     * @return array|Solution[]
+     */
+    public function getServiceSolutions(Service $service): array
+    {
+        $solutions = [];
+        foreach ($this->getSolutions() as $solution) {
+            /** @var Solution $solution */
+            foreach ($solution->getServiceSolutions() as $serviceSolution) {
+                if ($serviceSolution->getService() === $service) {
+                    $solutions[$solution->getId()] = $solution;
+                    break;
+                }
+            }
+        }
+        return $solutions;
+    }
+
+    /**
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function addSpecializedProcedure($specializedProcedure): self
+    public function addSpecializedProcedure(SpecializedProcedure $specializedProcedure): self
     {
         if (!$this->specializedProcedures->contains($specializedProcedure)) {
             $this->specializedProcedures->add($specializedProcedure);
@@ -480,7 +500,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function removeSpecializedProcedure($specializedProcedure): self
+    public function removeSpecializedProcedure(SpecializedProcedure $specializedProcedure): self
     {
         if ($this->specializedProcedures->contains($specializedProcedure)) {
             $this->specializedProcedures->removeElement($specializedProcedure);
