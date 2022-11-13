@@ -14,20 +14,38 @@ file that was distributed with this source code.
 {% endif %}
 {% for field in referenceFieldNameList %}
     {% set property = field|app_format_property_name %}
-    <td>
-        {% if property == 'name' %}
-            {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
-        {% elseif property == 'serviceCreatedAt' %}
-            {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'child': child} %}
-        {% elseif property == 'implementationProjects' %}
-            {% include 'CommuneAdmin/show-commune-service-implementation-projects.html.twig' with {'child': child} %}
-        {% elseif property == 'communeServiceVsmInfo' %}
-            {% include 'CommuneAdmin/show-commune-service-vsm-info.html.twig' with {'child': child} %}
-        {% elseif property == 'communeServiceSolutions' %}
-            {% include 'CommuneAdmin/show-commune-service-solutions.html.twig' with {'child': child} %}
+    {% if property == 'serviceCreatedAt' %}
+        {% set dateTimeValue = app_format_service_date(child) %}
+        {% if dateTimeValue %}
+            <td data-sval="{{ dateTimeValue|date("Ymd", "Europe/Berlin") }}">
+                {% include 'ServiceAdmin/Show/show-service-date.html.twig' with {'serviceDate': dateTimeValue, 'child': child} %}
+            </td>
         {% else %}
-            {% set value = child|app_attribute_recursive(property) %}
-            {{ value|app_format_custom_value }}
+            <td data-sval="00000000"></td>
         {% endif %}
-    </td>
+    {% elseif property == 'implementationProjectStatusInfo.commissioningStatusAt' and child.implementationProjectStatusInfo %}
+        {% set dateTimeValue = child|app_attribute_recursive(property) %}
+        {% if dateTimeValue %}
+            <td data-sval="{{ dateTimeValue|date("Ymd", "Europe/Berlin") }}">
+                {{ dateTimeValue|date("d.m.Y", "Europe/Berlin") }}
+            </td>
+        {% else %}
+            <td data-sval="00000000"></td>
+        {% endif %}
+    {% else %}
+        <td>
+            {% if property == 'name' %}
+                {% include 'General/Show/Partials/link-child-name-show.html.twig' %}
+            {% elseif property == 'implementationProjects' %}
+                {% include 'CommuneAdmin/show-commune-service-implementation-projects.html.twig' with {'child': child} %}
+            {% elseif property == 'communeServiceVsmInfo' %}
+                {% include 'CommuneAdmin/show-commune-service-vsm-info.html.twig' with {'child': child} %}
+            {% elseif property == 'communeServiceSolutions' %}
+                {% include 'CommuneAdmin/show-commune-service-solutions.html.twig' with {'child': child} %}
+            {% else %}
+                {% set value = child|app_attribute_recursive(property) %}
+                {{ value|app_format_custom_value }}
+            {% endif %}
+        </td>
+    {% endif %}
 {% endfor %}

@@ -25,6 +25,7 @@ class ServiceDateExtension extends ApiQueryExtension
     {
         return [
             new TwigFunction('app_format_service_date', [$this, 'getFormattedServiceDate']),
+            new TwigFunction('app_get_service_date', [$this, 'getServiceDate']),
         ];
     }
 
@@ -36,16 +37,28 @@ class ServiceDateExtension extends ApiQueryExtension
      */
     public function getFormattedServiceDate(Service $service): string
     {
+        if ($serviceCreatedAt = $this->getServiceDate($service)) {
+            return date('d.m.Y', $serviceCreatedAt->getTimestamp());
+        }
+        return '';
+    }
+
+    /**
+     * Returns the field description collection for the referenced fields
+     *
+     * @param Service $service
+     * @return ?\DateTime
+     */
+    public function getServiceDate(Service $service): ?\DateTime
+    {
         $serviceBaseResult = $service->getServiceBaseResult();
         if (null !== $serviceBaseResult) {
             $serviceCreatedAt = $serviceBaseResult->getServiceCreatedAt();
             if (null === $serviceCreatedAt) {
                 $serviceCreatedAt = $serviceBaseResult->getConvertedDate();
             }
-            if (null !== $serviceCreatedAt) {
-                return date('d.m.Y', $serviceCreatedAt->getTimestamp());
-            }
+            return $serviceCreatedAt;
         }
-        return '';
+        return null;
     }
 }

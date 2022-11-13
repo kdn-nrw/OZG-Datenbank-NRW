@@ -85,12 +85,26 @@ class ExportController extends AbstractController
      * @param string $property
      * @return Response
      */
-    public function exportAction(Request $request, string $recordType, int $recordId, string $property)
+    public function adminExportAction(Request $request, string $recordType, int $recordId, string $property): Response
+    {
+        return $this->exportAction($request, $recordType, $recordId, $property);
+    }
+
+    /**
+     * Export data to specified format.
+     *
+     * @param Request $request
+     * @param string $recordType
+     * @param int $recordId
+     * @param string $property
+     * @return Response
+     */
+    public function exportAction(Request $request, string $recordType, int $recordId, string $property): Response
     {
         $format = $request->get('format') ?? 'xlsx';
         $admin = $this->adminManager->getAdminInstance($recordType);
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
-        if (null !== $admin && $admin->hasAccess('export')
+        if ($admin->hasAccess('export')
             && (null !== $object = $admin->getModelManager()->find($admin->getClass(), $recordId))
             && $propertyAccessor->isReadable($object, $property)) {
             $admin->setSubject($object);
@@ -101,6 +115,9 @@ class ExportController extends AbstractController
             $fieldDescription = $show->get($property);
             $refSettings = $this->adminManager->getConfigurationForEntityProperty($object, $fieldDescription->getName());
             $exportAdmin = $fieldDescription->getAssociationAdmin();
+            if (null === $exportAdmin && $adminCode = $fieldDescription->getOption('admin_code')) {
+                $exportAdmin = $this->adminManager->getAdminInstance($adminCode);
+            }
             if (null === $exportAdmin || !($exportAdmin instanceof AbstractContextAwareAdmin)) {
                 throw new \InvalidArgumentException('The association admin is null for the property %s in the admin %s', $property, $admin->getCode());
             }

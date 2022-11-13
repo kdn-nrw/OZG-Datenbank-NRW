@@ -45,6 +45,10 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block app_show_custom_fields %}
-    {% include 'SolutionAdmin/show-solution-tab-fields.html.twig' %}
+    {% if app_is_backend() %}
+        {% include 'SolutionAdmin/show-solution-tab-fields.html.twig' %}
+    {% else %}
+        {% include 'SolutionAdmin/Frontend/show-solution-tab-fields.html.twig' %}
+    {% endif %}
     {{ parent() }}
 {% endblock %}

@@ -13,6 +13,7 @@ namespace App\Admin;
 
 use App\Admin\ModelRegion\ModelRegionProjectAdmin;
 use App\Admin\StateGroup\CommuneAdmin;
+use App\Admin\StateGroup\CommuneSolutionAdmin;
 use App\Admin\StateGroup\ServiceProviderAdmin;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ContactTrait;
@@ -449,14 +450,15 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $enableTabs = true;
         // Tab fields
         $show
-            ->add('communes', null, [
-                'label' => 'app.solution.entity.communes',
-                'admin_code' => CommuneAdmin::class,
+            ->add('connectionPlannedCommuneSolutions', null, [
+                'label' => 'app.solution.entity.connection_planned_commune_solutions',
+                'admin_code' => CommuneSolutionAdmin::class,
                 'associated_property' => 'name',
-                'check_has_all_modifier' => true,
+                'custom_label' => 'app.solution.entity.connection_planned_commune_solutions',
                 'is_custom_field' => $enableTabs,
                 'is_tab_field' => $enableTabs,
                 'is_custom_rendered' => $enableTabs,
+                'show_export' => true,
             ])
             ->add('serviceProviders', null, [
                 'admin_code' => ServiceProviderAdmin::class,

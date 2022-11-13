@@ -28,6 +28,8 @@ file that was distributed with this source code.
     {% include 'General/Show/Partials/implementation-projects-list.html.twig' %}
 {% elseif field_description.name ends with 'securityIncidents' %}
     {% include 'General/Show/Partials/security-incidents-list.html.twig' %}
+{% elseif field_description.name ends with 'connectionPlannedCommuneSolutions' %}
+    {% include 'SolutionAdmin/Show/show-communes-solutions-list.html.twig' %}
 {% elseif field_description.name ends with 'communes' %}
     {% set showHasAll = field_description.option('check_has_all_modifier') and object.communeType == constant('App\\Entity\\Solution::COMMUNE_TYPE_ALL') %}
     {% if showHasAll %}

@@ -16,6 +16,10 @@ app_record_export:
     path: /record-export/{recordType}/{recordId}/{property}
     controller: App\Controller\ExportController::exportAction
 
+app_backend_record_export:
+    path: /admin/record-export/{recordType}/{recordId}/{property}
+    controller: App\Controller\ExportController::adminExportAction
+
 authentication_token:
     path: /api/authentication_token
     methods: ['POST']

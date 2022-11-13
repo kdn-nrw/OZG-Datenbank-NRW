@@ -717,7 +717,7 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     /**
      * @return CommuneSolution[]|Collection
      */
-    public function getSelectedCommuneSolutions()
+    public function getSelectedCommuneSolutions(): Collection
     {
         $selectedCommunes = new ArrayCollection();
         foreach ($this->getCommuneSolutions() as $communeSolution) {
@@ -726,6 +726,20 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
             }
         }
         return $selectedCommunes;
+    }
+
+    /**
+     * @return CommuneSolution[]|Collection
+     */
+    public function getConnectionPlannedCommuneSolutions(): Collection
+    {
+        $connectionPlannedCommunes = new ArrayCollection();
+        foreach ($this->getCommuneSolutions() as $communeSolution) {
+            if (null !== $communeSolution->getCommune() && $communeSolution->getConnectionPlanned()) {
+                $connectionPlannedCommunes->add($communeSolution);
+            }
+        }
+        return $connectionPlannedCommunes;
     }
 
     /**

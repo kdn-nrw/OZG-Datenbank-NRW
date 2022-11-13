@@ -438,8 +438,10 @@ app:
         no: kein Anschluss geplant
         yes: Anschluss geplant
       connection_planned_at: Geplant ab
+      connection_planned_at_empty: ohne Datum
       comment: Anmerkungen
       specialized_procedure: Weiterverarbeitendes System
+      contacts: Ansprechperson im Fachamt für die Dienste-Anbindung
   abstract_onboarding_entity:
     object_name: Onboarding Service
     list: Onboarding Service Allgemein
@@ -1217,7 +1219,7 @@ app:
       interested_organisations: An Mitarbeit interessiert (erweitertes Projektteam)
       laboratories: Stichwörter
       bureaus: Fachlichkeiten
-      portals: voraussichtliches Zielportal
+      portals: Zielportal
       fundings: Finanzierung
       fim_experts: FIM Methodenexperte
       service_system_keys: OZG-IDs
@@ -1991,6 +1993,7 @@ app:
       jurisdictions: Zuständigkeiten
       confidence_level: Mindest-Vertrauensniveau
       enabled_municipal_portal: Im Kommunalportal verfügbar
+      connection_planned_commune_solutions: Verknüpfte Kommunen
     messages:
       no_service_selected: Keine Leika-Leistung gwählt oder Leika-Leistung gelöscht.
   specialized_procedure:

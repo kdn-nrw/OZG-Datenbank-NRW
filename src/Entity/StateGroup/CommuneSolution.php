@@ -12,9 +12,12 @@
 namespace App\Entity\StateGroup;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\Contact;
 use App\Entity\Solution;
 use App\Entity\SpecializedProcedure;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -86,6 +89,25 @@ class CommuneSolution extends BaseNamedEntity
      * @ORM\JoinColumn(name="specialized_procedure_id", nullable=true, referencedColumnName="id", onDelete="SET NULL")
      */
     private $specializedProcedure;
+
+    /**
+     * @var Contact[]|Collection
+     * @ORM\ManyToMany(targetEntity="App\Entity\Contact")
+     * @ORM\JoinTable(name="ozg_solutions_communes_contact",
+     *     joinColumns={
+     *     @ORM\JoinColumn(name="solutions_communes_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    protected $contacts;
+
+    public function __construct()
+    {
+        $this->contacts = new ArrayCollection();
+    }
 
     /**
      * @return string|null
@@ -264,6 +286,48 @@ class CommuneSolution extends BaseNamedEntity
             $name .= ' (' . $specializedProcedure->getName() . ')';
         }
         return $name;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function addContact(Contact $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return self
+     */
+    public function removeContact(Contact $contact): self
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|Collection
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param Contact[]|Collection $contacts
+     */
+    public function setContacts($contacts): void
+    {
+        $this->contacts = $contacts;
     }
 
 }
