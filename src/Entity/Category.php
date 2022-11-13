@@ -155,7 +155,7 @@ class Category extends BaseNamedEntity implements CategoryEntityInterface, Impor
      * @param Contact $contact
      * @return self
      */
-    public function addContact($contact): self
+    public function addContact(Contact $contact): self
     {
         if (!$this->contacts->contains($contact)) {
             $this->contacts->add($contact);
@@ -169,7 +169,7 @@ class Category extends BaseNamedEntity implements CategoryEntityInterface, Impor
      * @param Contact $contact
      * @return self
      */
-    public function removeContact($contact): self
+    public function removeContact(Contact $contact): self
     {
         if ($this->contacts->contains($contact)) {
             $this->contacts->removeElement($contact);

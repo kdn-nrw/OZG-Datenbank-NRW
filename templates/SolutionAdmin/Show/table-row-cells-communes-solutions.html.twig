@@ -1,0 +1,50 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+{# @var child \App\Entity\StateGroup\CommuneSolution #}
+<tr>
+    <td>
+        {% include 'General/Show/Partials/link-child-name-show.html.twig' with {refSettings: communeReferenceSettings, child: child.commune} %}
+    </td>
+    <td>
+        {% if child.connectionPlanned %}
+            {{ 'app.commune_solution.entity.connection_planned_choices.yes'|trans }}
+        {% else %}
+            {{ 'app.commune_solution.entity.connection_planned_choices.no'|trans }}
+        {% endif %}
+    </td>
+    <td>
+        {% if child.connectionPlannedAt %}
+            {{ child.connectionPlannedAt|date("d.m.Y", "Europe/Berlin") }}
+        {% else %}
+            {{ 'app.commune_solution.entity.connection_planned_at_empty'|trans }}
+        {% endif %}
+    </td>
+    <td>
+        {% if child.specializedProcedure %}
+            {{ child.specializedProcedure ~ '' }}
+        {% endif %}
+    </td>
+    <td>
+        {% if child.comment %}
+            {{ child.comment|nl2br }}
+        {% endif %}
+    </td>
+    <td>
+        {% for contact in child.contacts %}
+            {% if loop.index > 1 %}
+                ,
+            {% endif %}
+            <a href="mailto:{{ contact.email }}">{{ contact ~ '' }}</a>
+        {% endfor %}
+    </td>
+    {% if refSettings.edit.enabled %}
+        <td>
+            {% include 'General/Show/Partials/link-to-child.html.twig' %}
+        </td>
+    {% endif %}
+</tr>

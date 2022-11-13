@@ -1,0 +1,34 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{# @var refSettings \App\Model\ReferenceSettings #}
+<table class="table table-bordered table-striped table-condensed" data-sortable="true">
+    <thead>
+    <tr>
+        {% set tableHeaders = ['commune', 'connection_planned', 'connection_planned_at', 'specialized_procedure', 'comment', 'contacts'] %}
+
+        {% if field_description is defined and field_description.option('custom_label_prefix') is not empty %}
+            {% set labelPrefix = field_description.option('custom_label_prefix') %}
+        {% else %}
+            {% set labelPrefix = refSettings.labelPrefix %}
+        {% endif %}
+        {% include 'General/Show/Table/table-head-general.html.twig' with {'tableHeaders': tableHeaders, 'labelPrefix': labelPrefix} %}
+        {% if refSettings.edit.enabled %}
+            <th></th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% set communeReferenceSettings = app_get_reference_settings('App\\Entity\\StateGroup\\Commune') %}
+    {% for child in entities %}
+        {# @var child \App\Entity\StateGroup\CommuneSolution #}
+        {% include 'SolutionAdmin/Show/table-row-cells-communes-solutions.html.twig' with {'child': child} %}
+    {% endfor %}
+    </tbody>
+</table>
+{% if field_description.option('show_export') %}
+    {% include 'General/Show/Partials/link-child-list-export.html.twig' %}
+{% endif %}

@@ -13,10 +13,18 @@ namespace App\Admin\StateGroup;
 
 use App\Admin\AbstractAppAdmin;
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\SolutionAdmin;
+use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\DatePickerTrait;
+use App\Entity\Contact;
+use App\Entity\StateGroup\CommuneSolution;
+use App\Exporter\Source\ManyEntitiesValueFormatter;
+use App\Model\ExportSettings;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
@@ -29,6 +37,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
+    use ContactTrait;
     use DatePickerTrait;
 
     protected function configureFormFields(FormMapper $form)
@@ -39,7 +48,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                     'property' => 'name',
                     'required' => true,
                 ], [
-                    'admin_code' => \App\Admin\StateGroup\CommuneAdmin::class
+                    'admin_code' => CommuneAdmin::class
                 ]);
         }
         if (!$this->isExcludedFormField('solution')) {
@@ -48,7 +57,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                     'property' => ['name', 'description'],
                     'required' => true,
                 ], [
-                    'admin_code' => \App\Admin\SolutionAdmin::class
+                    'admin_code' => SolutionAdmin::class
                 ]);
         }
         $form
@@ -78,8 +87,41 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
             ])
             ->add('comment', TextareaType::class, [
                 'required' => false,
-            ])
+            ]);
+        $form->add('contacts', ModelType::class, [
+            'btn_add' => false,
+            'placeholder' => '',
+            'required' => false,
+            'multiple' => true,
+            'by_reference' => false,
+            'choice_translation_domain' => false,
+            'query' => $this->getContactOrganisationQueryBuilder()
+        ]);
+        $form
             ->end();
+    }
+
+    /**
+     * Returns the query builder for the constituencies (sub-set of communes)
+     *
+     * @return QueryBuilder
+     */
+    private function getContactOrganisationQueryBuilder(): ?QueryBuilder
+    {
+        $subject = $this->getSubject();
+        if ($subject instanceof CommuneSolution && $commune = $subject->getCommune()) {
+            /** @var EntityManager $em */
+            $em = $this->modelManager->getEntityManager(Contact::class);
+
+            $queryBuilder = $em->createQueryBuilder()
+                ->select('c')
+                ->from(Contact::class, 'c')
+                ->where('c.organisationEntity = :organisation')
+                ->setParameter('organisation', $commune->getOrganisation())
+                ->orderBy('c.lastName', 'ASC');
+            return $queryBuilder;
+        }
+        return null;
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter)
@@ -109,12 +151,12 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
     {
         $list
             ->add('commune', null, [
-                'admin_code' => \App\Admin\StateGroup\CommuneAdmin::class
+                'admin_code' => CommuneAdmin::class
             ])
             ->add('solution', null, [
-                'admin_code' => \App\Admin\SolutionAdmin::class
+                'admin_code' => SolutionAdmin::class
             ])
-            ->add('connectionPlanned', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('connectionPlanned', FieldDescriptionInterface::TYPE_CHOICE, [
                 'choices' => [
                     false => 'app.commune_solution.entity.connection_planned_choices.no',
                     true => 'app.commune_solution.entity.connection_planned_choices.yes',
@@ -131,14 +173,14 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
     {
         $show
             ->add('commune', null, [
-                'admin_code' => \App\Admin\StateGroup\CommuneAdmin::class
+                'admin_code' => CommuneAdmin::class
             ])
             ->add('solution', null, [
-                'admin_code' => \App\Admin\SolutionAdmin::class
+                'admin_code' => SolutionAdmin::class
             ])
             ->add('description');
         $show
-            ->add('connectionPlanned', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('connectionPlanned', FieldDescriptionInterface::TYPE_CHOICE, [
                 'choices' => [
                     false => 'app.commune_solution.entity.connection_planned_choices.no',
                     true => 'app.commune_solution.entity.connection_planned_choices.yes',
@@ -151,5 +193,19 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
             ->add('comment', TextareaType::class, [
                 'required' => false,
             ]);
+        $this->addContactsShowFields($show);
+    }
+
+    /**
+     * Custom export settings for this admin
+     * @inheritDoc
+     */
+    public function getExportSettings(): ExportSettings
+    {
+        $settings = parent::getExportSettings();
+        $settings->addExcludeFields(['communeType']);
+        $customServiceFormatter = new ManyEntitiesValueFormatter();
+        $settings->addCustomPropertyValueFormatter('contacts', $customServiceFormatter);
+        return $settings;
     }
 }

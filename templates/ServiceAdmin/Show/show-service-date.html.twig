@@ -4,7 +4,15 @@ This file is part of the KDN OZG package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
-{% set date = app_format_service_date(child) %}
+{% if serviceDate is defined %}
+    {% if serviceDate %}
+        {% set date = serviceDate|date("d.m.Y", "Europe/Berlin") %}
+    {% else %}
+        {% set date = '' %}
+    {% endif %}
+{% else %}
+    {% set date = app_format_service_date(child) %}
+{% endif %}
 {% if date|length > 1 %}
     {{ date }}
     {% set apiKey = constant('App\\Api\\Consumer\\ApiManager::API_KEY_ZU_FI') %}
