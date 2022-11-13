@@ -121,6 +121,9 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ])
             ->add('transparencyPortalUrl', UrlType::class, [
                 'required' => false,
+            ])
+            ->add('portalInterfaceUrl', UrlType::class, [
+                'required' => false,
             ]);
         $form->end();
         $form->with('administration_contact', [
@@ -375,7 +378,8 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             'show_export' => true,
         ]);
         $show
-            ->add('transparencyPortalUrl', 'url');
+            ->add('transparencyPortalUrl', 'url')
+            ->add('portalInterfaceUrl', 'url');
     }
 
     /**

@@ -217,6 +217,14 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     protected $transparencyPortalUrl;
 
     /**
+     * Portal interface url
+     * @var string|null
+     *
+     * @ORM\Column(type="string", name="portal_interface_url", length=2048, nullable=true)
+     */
+    protected $portalInterfaceUrl;
+
+    /**
      * @var Bureau[]|Collection
      * @ORM\ManyToMany(targetEntity="App\Entity\StateGroup\Bureau", mappedBy="communes")
      */
@@ -807,6 +815,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     }
 
     /**
+     * Return the transparency portal url
      * @return string|null
      */
     public function getTransparencyPortalUrl(): ?string
@@ -815,11 +824,33 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
     }
 
     /**
+     * Set the transparency portal url
+     *
      * @param string|null $transparencyPortalUrl
      */
     public function setTransparencyPortalUrl(?string $transparencyPortalUrl): void
     {
         $this->transparencyPortalUrl = $transparencyPortalUrl;
+    }
+
+    /**
+     * Return the portal interface url
+     *
+     * @return string|null
+     */
+    public function getPortalInterfaceUrl(): ?string
+    {
+        return $this->portalInterfaceUrl;
+    }
+
+    /**
+     * Set the portal interface url
+     *
+     * @param string|null $portalInterfaceUrl
+     */
+    public function setPortalInterfaceUrl(?string $portalInterfaceUrl): void
+    {
+        $this->portalInterfaceUrl = $portalInterfaceUrl;
     }
 
     /**
