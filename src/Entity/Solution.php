@@ -39,7 +39,6 @@ class Solution extends BaseBlamableEntity implements NamedEntityInterface, Impor
     public const COMMUNE_TYPE_ALL = 'all';
     public const COMMUNE_TYPE_SELECTED = 'selected';
 
-    use ContactTextTrait;
     use HideableEntityTrait;
     use ImportTrait;
     use SluggableEntityTrait;

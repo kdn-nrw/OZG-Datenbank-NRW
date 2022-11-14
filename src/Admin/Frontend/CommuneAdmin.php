@@ -190,7 +190,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     {
         $settings = parent::getExportSettings();
         $settings->addExcludeFields(['specializedProcedures', 'portals', 'specializedProcedures.manufacturers',
-            'contact', 'serviceProviders', 'organisation.contacts', 'communeType.serviceSystems', 'communeType.services']);
+            'serviceProviders', 'organisation.contacts', 'communeType.serviceSystems', 'communeType.services']);
         //$settings->setAdditionFields(['manufacturers']);
         return $settings;
     }

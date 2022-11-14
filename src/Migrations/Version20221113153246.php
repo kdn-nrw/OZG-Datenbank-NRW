@@ -36,6 +36,14 @@ final class Version20221113153246 extends AbstractMigration
         $this->addSql('UPDATE ozg_implementation_project SET status_id = 6 WHERE status_id = 8');
         $this->addSql('UPDATE ozg_implementation_status SET next_status_id = NULL WHERE id = 6');
         $this->addSql('DELETE FROM ozg_implementation_status WHERE id = 8');
+        if ($schema->getTable('ozg_commune')->hasColumn('contact')) {
+            $this->addSql('ALTER TABLE ozg_commune DROP contact');
+            $this->addSql('ALTER TABLE ozg_commune_audit DROP contact');
+        }
+        if ($schema->getTable('ozg_solution')->hasColumn('contact')) {
+            $this->addSql('ALTER TABLE ozg_solution DROP contact');
+            $this->addSql('ALTER TABLE ozg_solution_audit DROP contact');
+        }
     }
 
     public function down(Schema $schema): void
@@ -51,6 +59,14 @@ final class Version20221113153246 extends AbstractMigration
         if ($schema->getTable('ozg_commune')->hasColumn('portal_interface_url')) {
             $this->addSql('ALTER TABLE ozg_commune DROP portal_interface_url');
             $this->addSql('ALTER TABLE ozg_commune_audit DROP portal_interface_url');
+        }
+        if (!$schema->getTable('ozg_commune')->hasColumn('contact')) {
+            $this->addSql('ALTER TABLE ozg_commune ADD contact LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`');
+            $this->addSql('ALTER TABLE ozg_commune_audit ADD contact LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`');
+        }
+        if (!$schema->getTable('ozg_solution')->hasColumn('contact')) {
+            $this->addSql('ALTER TABLE ozg_solution ADD contact LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`');
+            $this->addSql('ALTER TABLE ozg_solution_audit ADD contact LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`');
         }
     }
 }

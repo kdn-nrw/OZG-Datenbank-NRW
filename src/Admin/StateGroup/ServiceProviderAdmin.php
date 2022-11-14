@@ -43,7 +43,6 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
     protected $baseRoutePattern = 'state/serviceprovider';
 
     use CommuneTrait;
-    use ContactTrait;
     use AddressTrait;
     use OrganisationOneToOneTrait;
     use SpecializedProcedureTrait;

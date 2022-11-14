@@ -258,11 +258,25 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
         return $name;
     }
 
+    public function getNameAndCategory(): string
+    {
+        $name = $this->getFullName();
+        $categories = $this->getCategories();
+        if ($categories->count() > 0) {
+            $categoryNames = [];
+            foreach ($categories as $category) {
+                $categoryNames[] = $category . '';
+            }
+            $name .= ' (' . implode(', ', $categoryNames) . ')';
+        }
+        return $name;
+    }
+
     /**
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution): self
+    public function addSolution(Solution $solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -276,7 +290,7 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution): self
+    public function removeSolution(Solution $solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
@@ -306,7 +320,7 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function addImplementationProject($implementationProject): self
+    public function addImplementationProject(ImplementationProject $implementationProject): self
     {
         if (!$this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->add($implementationProject);
@@ -320,7 +334,7 @@ class Contact extends BaseEntity implements ImportEntityInterface, HasSolutionsE
      * @param ImplementationProject $implementationProject
      * @return self
      */
-    public function removeImplementationProject($implementationProject): self
+    public function removeImplementationProject(ImplementationProject $implementationProject): self
     {
         if ($this->implementationProjects->contains($implementationProject)) {
             $this->implementationProjects->removeElement($implementationProject);

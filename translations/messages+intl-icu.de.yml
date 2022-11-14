@@ -1590,7 +1590,7 @@ app:
       zip_code: PLZ
       town: Ort
       url: Url
-      contacts: OZG-Ansprechpersonen
+      contacts: Kontakte
       organization_type: Typ
       organization_type_choices:
         default: Standard

@@ -17,7 +17,6 @@ use App\Entity\Base\AppBaseEntity;
 use App\Entity\Base\SluggableEntityTrait;
 use App\Entity\Base\SluggableInterface;
 use App\Entity\Base\SoftdeletableEntityInterface;
-use App\Entity\ContactTextTrait;
 use App\Entity\HasManufacturerEntityInterface;
 use App\Entity\HasSolutionsEntityInterface;
 use App\Entity\Laboratory;
@@ -28,7 +27,6 @@ use App\Entity\OrganisationTrait;
 use App\Entity\PaymentPlatform;
 use App\Entity\Portal;
 use App\Entity\Service;
-use App\Entity\ServiceSystem;
 use App\Entity\Solution;
 use App\Entity\SpecializedProcedure;
 use App\Entity\UrlTrait;
@@ -48,7 +46,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasManufacturerEntityInterface, SluggableInterface, HasMetaDateEntityInterface, HasSolutionsEntityInterface
 {
     use AddressTrait;
-    use ContactTextTrait;
     use OrganisationTrait;
     use SluggableEntityTrait;
     use UrlTrait;
@@ -315,7 +312,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function addServiceProvider($serviceProvider): self
+    public function addServiceProvider(ServiceProvider $serviceProvider): self
     {
         if (!$this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->add($serviceProvider);
@@ -329,7 +326,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param ServiceProvider $serviceProvider
      * @return self
      */
-    public function removeServiceProvider($serviceProvider): self
+    public function removeServiceProvider(ServiceProvider $serviceProvider): self
     {
         if ($this->serviceProviders->contains($serviceProvider)) {
             $this->serviceProviders->removeElement($serviceProvider);
@@ -359,7 +356,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution): self
+    public function addSolution(Solution $solution): self
     {
         if (null === $this->findCommuneSolutionBySolution($solution)) {
             $communeSolution = new CommuneSolution();
@@ -375,7 +372,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution): self
+    public function removeSolution(Solution $solution): self
     {
         if (null === $communeSolution = $this->findCommuneSolutionBySolution($solution)) {
             $this->communeSolutions->removeElement($communeSolution);
@@ -530,7 +527,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param Portal $portal
      * @return self
      */
-    public function addPortal($portal): self
+    public function addPortal(Portal $portal): self
     {
         if (!$this->portals->contains($portal)) {
             $this->portals->add($portal);
@@ -544,7 +541,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param Portal $portal
      * @return self
      */
-    public function removePortal($portal): self
+    public function removePortal(Portal $portal): self
     {
         if ($this->portals->contains($portal)) {
             $this->portals->removeElement($portal);
@@ -574,7 +571,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param CentralAssociation $centralAssociation
      * @return self
      */
-    public function addCentralAssociation($centralAssociation): self
+    public function addCentralAssociation(CentralAssociation $centralAssociation): self
     {
         if (!$this->centralAssociations->contains($centralAssociation)) {
             $this->centralAssociations->add($centralAssociation);
@@ -588,7 +585,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param CentralAssociation $centralAssociation
      * @return self
      */
-    public function removeCentralAssociation($centralAssociation): self
+    public function removeCentralAssociation(CentralAssociation $centralAssociation): self
     {
         if ($this->centralAssociations->contains($centralAssociation)) {
             $this->centralAssociations->removeElement($centralAssociation);
@@ -618,7 +615,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param Laboratory $laboratory
      * @return self
      */
-    public function addLaboratory($laboratory): self
+    public function addLaboratory(Laboratory $laboratory): self
     {
         if (!$this->laboratories->contains($laboratory)) {
             $this->laboratories->add($laboratory);
@@ -632,7 +629,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @param Laboratory $laboratory
      * @return self
      */
-    public function removeLaboratory($laboratory): self
+    public function removeLaboratory(Laboratory $laboratory): self
     {
         if ($this->laboratories->contains($laboratory)) {
             $this->laboratories->removeElement($laboratory);

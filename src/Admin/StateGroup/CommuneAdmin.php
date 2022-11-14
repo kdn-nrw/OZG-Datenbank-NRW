@@ -12,6 +12,7 @@
 namespace App\Admin\StateGroup;
 
 use App\Admin\AbstractAppAdmin;
+use App\Admin\ContactAdmin;
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\ExtendedSearchAdminInterface;
 use App\Admin\ManufacturerAdmin;
@@ -326,8 +327,12 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
                 'admin_code' => self::class,
             ])
             ->add('communeType')
-            ->add('mainEmail');
-        $this->addContactsShowFields($show, true, 'organisation.contacts');
+            ->add('mainEmail')
+            ->add('organisation.contacts', null, [
+                'admin_code' => ContactAdmin::class,
+                'associated_property' => 'fullName',
+                'template' => 'General/Show/show-contacts-with-category.html.twig',
+            ]);
         $this->addServiceProvidersShowFields($show);
         $this->addCentralAssociationsShowFields($show);
         $this->addSpecializedProceduresShowFields($show);

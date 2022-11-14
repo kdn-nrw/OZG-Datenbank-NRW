@@ -59,6 +59,8 @@ trait OrganisationOneToOneTrait
             ->add('organisation.url', 'url')
             ->add('organisation.contacts', null, [
                 'admin_code' => ContactAdmin::class,
+                'associated_property' => 'fullName',
+                'template' => 'General/Show/show-contacts-with-category.html.twig',
             ]);
     }
 }
