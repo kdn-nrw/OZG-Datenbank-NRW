@@ -33,6 +33,9 @@ final class Version20221113153246 extends AbstractMigration
             $this->addSql('ALTER TABLE ozg_commune ADD portal_interface_url VARCHAR(2048) DEFAULT NULL');
             $this->addSql('ALTER TABLE ozg_commune_audit ADD portal_interface_url VARCHAR(2048) DEFAULT NULL');
         }
+        $this->addSql('UPDATE ozg_implementation_project SET status_id = 6 WHERE status_id = 8');
+        $this->addSql('UPDATE ozg_implementation_status SET next_status_id = NULL WHERE id = 6');
+        $this->addSql('DELETE FROM ozg_implementation_status WHERE id = 8');
     }
 
     public function down(Schema $schema): void

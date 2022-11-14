@@ -25,6 +25,7 @@ use App\Form\DataTransformer\EntityCollectionToIdArrayTransformer;
 use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
@@ -521,13 +522,13 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('relevance2', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('priority', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('priority', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Priority::class,
                 'catalogue' => 'messages',
@@ -544,7 +545,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('authorityBureaus')
             ->add('authorityStateMinistries')
             ->add('communeTypes')
-            ->add('notes', 'html');
+            ->add('notes', FieldDescriptionInterface::TYPE_HTML);
         $this->addLaboratoriesShowFields($show);
         $this->addSpecializedProceduresShowFields($show);
         $this->addPortalsShowFields($show);

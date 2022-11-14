@@ -13,11 +13,12 @@ namespace App\Admin;
 
 use App\Admin\Traits\ColorCodedTrait;
 use App\Entity\StatusEntityInterface;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,6 +27,19 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class StatusAdmin extends AbstractAppAdmin
 {
     use ColorCodedTrait;
+
+    /**
+     * Configures a list of default sort values.
+     *
+     * @phpstan-param array{_page?: int, _per_page?: int, _sort_by?: string, _sort_order?: string} $sortValues
+     * @param array $sortValues
+     */
+    protected function configureDefaultSortValues(array &$sortValues)
+    {
+        parent::configureDefaultSortValues($sortValues);
+        $sortValues[DatagridInterface::SORT_ORDER] = $sortValues[DatagridInterface::SORT_ORDER] ?? 'ASC';
+        $sortValues[DatagridInterface::SORT_BY] = $sortValues[DatagridInterface::SORT_BY] ?? 'level';
+    }
 
     protected function configureFormFields(FormMapper $form)
     {
@@ -45,17 +59,21 @@ class StatusAdmin extends AbstractAppAdmin
         $subject = $this->getSubject();
         if ($subject instanceof StatusEntityInterface) {
             $form
-                ->add('prevStatus', ModelType::class, [
+                ->add('prevStatus', EntityType::class, [
                     'label' => 'app.status.entity.prev_status',
-                    'btn_add' => false,
+                    'class' => $this->getClass(),
                     'required' => false,
                     'choice_translation_domain' => false,
+                    'placeholder' => 'app.status.entity.prev_status_placeholder',
+                    'empty_data' => null,
                 ])
-                ->add('nextStatus', ModelType::class, [
+                ->add('nextStatus', EntityType::class, [
                     'label' => 'app.status.entity.next_status',
-                    'btn_add' => false,
+                    'class' => $this->getClass(),
                     'required' => false,
                     'choice_translation_domain' => false,
+                    'placeholder' => 'app.status.entity.next_status_placeholder',
+                    'empty_data' => null,
                 ]);
         }
         $this->addColorFormFields($form);
@@ -69,8 +87,14 @@ class StatusAdmin extends AbstractAppAdmin
     protected function configureListFields(ListMapper $list)
     {
         $list
-            ->addIdentifier('name')
-            ->addIdentifier('level');
+            ->addIdentifier('name');
+        if (is_a($this->getClass(), StatusEntityInterface::class, true)) {
+            $list->add('nextStatus', null, [
+                'label' => 'app.status.entity.next_status',
+            ]);
+        }
+        $list
+            ->add('level');
         $this->addDefaultListActions($list);
     }
 

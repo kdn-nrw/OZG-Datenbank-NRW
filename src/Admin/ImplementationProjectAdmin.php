@@ -31,6 +31,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -272,7 +273,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDefaultDatagridFilter($filter, 'serviceSystems');
         $this->addDefaultDatagridFilter($filter, 'services.service');
         $this->addDefaultDatagridFilter($filter, 'serviceSystems.situation.subject');
-        $filter->add('status');
+        $this->addDefaultDatagridFilter($filter, 'status');
         $this->addDefaultDatagridFilter($filter, 'projectStartAt');
         $this->addDefaultDatagridFilter($filter, 'conceptStatusAt');
         $this->addDefaultDatagridFilter($filter, 'implementationStatusAt');
@@ -381,13 +382,13 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     {
         $show->add('name')
             ->add('description')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
             ]);
         $show
-            ->add('notes', 'html', [
+            ->add('notes', FieldDescriptionInterface::TYPE_HTML, [
                 'template' => 'ImplementationProjectAdmin/show-notes.html.twig',
                 'is_custom_field' => true,
             ]);
@@ -422,5 +423,6 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
             'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
         ]);
         $this->addContactsShowFields($show, false, 'fimExperts');
+        $this->addDatePickersShowFields($show, 'nationwideRolloutAt', false);
     }
 }

@@ -32,14 +32,14 @@ use App\Model\ExportSettings;
 use App\Service\SolutionHelper;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistry;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -74,17 +74,18 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $this->solutionHelper = $solutionHelper;
     }
 
-    protected $datagridValues = [
-
-        // display the first page (default = 1)
-        '_page' => 1,
-
-        // reverse order (default = 'ASC')
-        '_sort_order' => 'DESC',
-
-        // name of the ordered field (default = the model's id field, if any)
-        '_sort_by' => 'id',
-    ];
+    /**
+     * Configures a list of default sort values.
+     *
+     * @phpstan-param array{_page?: int, _per_page?: int, _sort_by?: string, _sort_order?: string} $sortValues
+     * @param array $sortValues
+     */
+    protected function configureDefaultSortValues(array &$sortValues)
+    {
+        parent::configureDefaultSortValues($sortValues);
+        $sortValues[DatagridInterface::SORT_ORDER] = $sortValues[DatagridInterface::SORT_ORDER] ?? 'DESC';
+        $sortValues[DatagridInterface::SORT_BY] = $sortValues[DatagridInterface::SORT_BY] ?? 'id';
+    }
 
     /**
      * @var string[]

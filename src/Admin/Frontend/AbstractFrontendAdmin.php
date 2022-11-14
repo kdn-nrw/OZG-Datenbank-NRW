@@ -17,6 +17,7 @@ use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableInterface;
 use App\Model\ExportSettings;
 use RuntimeException;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface as RoutingUrlGeneratorInterface;
@@ -218,8 +219,8 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
     {
         parent::configureDefaultSortValues($sortValues);
         if (is_subclass_of($this->getClass(), NamedEntityInterface::class)) {
-            $sortValues['_sort_order'] = $sortValues['_sort_order'] ?? 'ASC';
-            $sortValues['_sort_by'] = $sortValues['_sort_by'] ?? 'name';
+            $sortValues[DatagridInterface::SORT_ORDER] = $sortValues[DatagridInterface::SORT_ORDER] ?? 'ASC';
+            $sortValues[DatagridInterface::SORT_BY] = $sortValues[DatagridInterface::SORT_BY] ?? 'name';
         }
     }
 }

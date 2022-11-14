@@ -22,6 +22,7 @@ use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SortableEntityInterface;
 use App\EventSubscriber\EntityPostCreateEvent;
 use App\EventSubscriber\EntityPostUpdateEvent;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -54,12 +55,12 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
     private $sortableBehaviourEnabled = false;
 
     /**
-     * Returns the default fields for the given action; used to auto-configure CRUD display for simple admins
+     * Returns the default fields for the given action; used to autoconfigure CRUD display for simple admins
      *
      * @param string $adminAction The executed admin action (form, list, show or filter)
      * @return array Field array with field configuration
      */
-    protected function getDefaultFields($adminAction): array
+    protected function getDefaultFields(string $adminAction): array
     {
         $defaultFields = [];
         if (is_subclass_of($this->getClass(), NamedEntityInterface::class)) {
@@ -92,9 +93,9 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
      */
     protected function configureDefaultSortValues(array &$sortValues)
     {
-        if ($this->sortableBehaviourEnabled = true) {
-            $sortValues['_sort_order'] = $sortValues['_sort_order'] ?? 'ASC';
-            $sortValues['_sort_by'] = $sortValues['_sort_by'] ?? 'sorting';
+        if ($this->sortableBehaviourEnabled) {
+            $sortValues[DatagridInterface::SORT_ORDER] = $sortValues[DatagridInterface::SORT_ORDER] ?? 'ASC';
+            $sortValues[DatagridInterface::SORT_BY] = $sortValues[DatagridInterface::SORT_BY] ?? 'sorting';
         }
     }
 

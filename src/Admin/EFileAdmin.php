@@ -17,10 +17,10 @@ use App\Entity\EFileStatus;
 use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\Form\Type\BooleanType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -130,7 +130,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
                 ]
             ])
             ->add('url', 'url')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => EFileStatus::class,
                 'catalogue' => 'messages',
@@ -156,7 +156,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
         $this->addCommunesShowFields($show);
         $show
             ->add('serviceProvider')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => EFileStatus::class,
                 'catalogue' => 'messages',
@@ -174,7 +174,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
                 'admin_code' => EFileStorageTypeAdmin::class,
             ]);
         $show
-            ->add('notes', 'html')
+            ->add('notes', FieldDescriptionInterface::TYPE_HTML)
             ->add('hasEconomicViabilityAssessment')
             ->add('sumInvestments', 'currency', [
                 'currency' => 'EUR',
@@ -182,7 +182,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             ->add('followUpCosts', 'currency', [
                 'currency' => 'EUR',
             ])
-            ->add('savingPotentialNotes', 'html');
+            ->add('savingPotentialNotes', FieldDescriptionInterface::TYPE_HTML);
     }
 
     /**

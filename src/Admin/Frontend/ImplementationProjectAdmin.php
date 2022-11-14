@@ -25,6 +25,7 @@ use App\Exporter\Source\ServiceListValueFormatter;
 use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
@@ -150,7 +151,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
             ->add('name')
             ->add('description');
         $show
-            ->add('notes', 'html', [
+            ->add('notes', FieldDescriptionInterface::TYPE_HTML, [
                 'template' => 'ImplementationProjectAdmin/show-notes.html.twig',
                 'is_custom_field' => true,
             ]);
@@ -210,6 +211,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
             'admin_code' => PortalAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
         ]);
+        $this->addDatePickersShowFields($show, 'nationwideRolloutAt', false);
     }
 
     public function isGranted($name, $object = null)

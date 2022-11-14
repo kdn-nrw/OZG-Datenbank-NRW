@@ -38,7 +38,7 @@ trait ImplementationStatusInfoTrait
     public function getStatusDate(ImplementationStatus $status): ?DateTime
     {
         $statusDate = null;
-        if (null !== $status && null !== $statusId = $status->getId()) {
+        if (null !== $statusId = $status->getId()) {
             switch ($statusId) {
                 case ImplementationStatus::STATUS_ID_PREPARED:
                     $statusDate = $this->getProjectStartAt();
@@ -54,9 +54,6 @@ trait ImplementationStatusInfoTrait
                     break;
                 case ImplementationStatus::STATUS_ID_COMMISSIONING:
                     $statusDate = $this->getCommissioningStatusAt();
-                    break;
-                case ImplementationStatus::STATUS_ID_NATIONWIDE_ROLLOUT:
-                    $statusDate = $this->getNationwideRolloutAt();
                     break;
             }
         }
