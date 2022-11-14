@@ -373,6 +373,11 @@ app:
     list: Kommunen
     list_fe: Kommunen in NRW
     create: Kommune anlegen
+    type_label: "{count, plural,
+        =0 {Keine Kommunen}
+        one {1 Kommune}
+        other {# Kommunen}
+      }"
     actions:
       list: Kommunen Übersicht
       show: Kommune anzeigen
@@ -2008,6 +2013,7 @@ app:
       manufacturers: Hersteller
       service_providers: IT Dienstleister
       communes: Kommunen
+      commune_count: Anz. Kommunen
   statistics:
     solution_maturity: 'Online-Dienste: Reifegrade'
     solution_status: 'Online-Dienste: Status'
@@ -2025,6 +2031,8 @@ app:
       description: Beschreibung
       prev_status: Vorheriger Status
       next_status: Nächster Status
+      prev_status_placeholder: Keiner/wählen
+      next_status_placeholder: Keiner/wählen
       color: Farbe (für Statistik)
       css_class: CSS-Klasse für Hintergrundfarbe
       css_class_choices:

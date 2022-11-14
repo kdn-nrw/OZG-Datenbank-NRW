@@ -55,6 +55,19 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
         $list
             ->addIdentifier('name');
         $this->addManufaturersListFields($list);
+        $list
+            ->add('references', 'string', [
+                'label' => 'app.specialized_procedure.entity.commune_count',
+                'template' => 'SpecializedProcedureAdmin/list-references.html.twig',
+                'filterParamName' => 'specializedProcedures',
+                'referenceLabel' => 'app.commune.type_label',
+                //https://ozg.ddev.site/admin/state/commune/list?filter%5BfullText%5D%5Btype%5D=&filter%5BfullText%5D%5Bvalue%5D=&filter%5Borganisation__contacts%5D%5Btype%5D=&filter%5Borganisation__zipCode%5D%5Btype%5D=&filter%5Borganisation__zipCode%5D%5Bvalue%5D=&filter%5Borganisation__town%5D%5Btype%5D=&filter%5Borganisation__town%5D%5Bvalue%5D=&filter%5BserviceProviders%5D%5Btype%5D=&filter%5BcentralAssociations%5D%5Btype%5D=&filter%5BspecializedProcedures%5D%5Btype%5D=&filter%5BspecializedProcedures%5D%5Bvalue%5D=11&filter%5B_page%5D=1&filter%5B_sort_by%5D=name&filter%5B_sort_order%5D=ASC
+                //https://ozg.ddev.site/admin/state/commune/list?filter%5BfullText%5D%5Btype%5D=&filter%5BfullText%5D%5Bvalue%5D=&filter%5Borganisation__contacts%5D%5Btype%5D=&filter%5Borganisation__zipCode%5D%5Btype%5D=&filter%5Borganisation__zipCode%5D%5Bvalue%5D=&filter%5Borganisation__town%5D%5Btype%5D=&filter%5Borganisation__town%5D%5Bvalue%5D=&filter%5BserviceProviders%5D%5Btype%5D=&filter%5BcentralAssociations%5D%5Btype%5D=&filter%5BspecializedProcedures%5D%5Btype%5D=&filter%5BspecializedProcedures%5D%5Bvalue%5D%5B%5D=7&filter%5Bportals%5D%5Btype%5D=&filter%5BpaymentPlatforms%5D%5Btype%5D=&filter%5Blaboratories%5D%5Btype%5D=&filter%5Bconstituency%5D%5Btype%5D=&filter%5BadministrativeDistrict%5D%5Btype%5D=&filter%5BcommuneType%5D%5Btype%5D=&filter%5BofficialCommunityKey%5D%5Btype%5D=&filter%5BofficialCommunityKey%5D%5Bvalue%5D=&filter%5BregionalKey%5D%5Btype%5D=&filter%5BregionalKey%5D%5Bvalue%5D=&filter%5Bname%5D%5Btype%5D=&filter%5Bname%5D%5Bvalue%5D=&filter%5B_page%5D=1&filter%5B_sort_by%5D=sorting&filter%5B_sort_order%5D=ASC&filter%5B_per_page%5D=32
+                'route' => [
+                    'prefix' => 'admin_app_stategroup_commune',
+                    'name' => 'list',
+                ],
+            ]);
         $this->addDefaultListActions($list);
     }
 

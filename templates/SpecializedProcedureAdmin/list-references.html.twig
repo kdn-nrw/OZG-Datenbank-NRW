@@ -1,0 +1,21 @@
+{#
+This file is part of the KDN OZG package.
+(c) Gert Hammes <info@gerthammes.de>
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    {% set proopertyRefCount = object.communes|length %}
+    {% if proopertyRefCount and field_description.options.route.prefix %}
+        <div>
+            {% set routePrefix = field_description.options.route.prefix %}
+            {% set targetRoute = routePrefix ~ '_' ~ field_description.options.route.name %}
+            {% set filterParamName = field_description.options.filterParamName %}
+            <a href="{{ path(targetRoute, {'filter': {(filterParamName): {'type': '', 'value': {'': object.id}}}}) }}" class="label label-primary">
+               {{ field_description.options.referenceLabel|trans({'count': proopertyRefCount}) }}
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}
