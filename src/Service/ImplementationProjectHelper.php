@@ -107,18 +107,33 @@ class ImplementationProjectHelper
     /**
      * Updates the status for all implementation projects
      *
-     * @return void
+     * @param int $forceUpdateStatusId Force recheck of current status if project currently has this status
+     * @return int The number of updated rows
      */
-    public function setCurrentStatusForAll(): void
+    public function setCurrentStatusForAll(int $forceUpdateStatusId): int
     {
+        $updatedRowCount = 0;
         $em = $this->registry->getManager();
         /** @var EntityRepository $repository */
         $repository = $this->registry->getRepository(ImplementationProject::class);
+        $initialStatusEntity = $em->find(ImplementationStatus::class, ImplementationStatus::STATUS_ID_PREPARED);
         $result = $repository->findAll();
         foreach ($result as $project) {
+            /** @var ImplementationProject $project */
             $project->updateStatus();
+            $status = $project->getStatus();
+            if ($initialStatusEntity && (null === $status || $status->getId() === $forceUpdateStatusId)) {
+                $newStatus = $project->determineNewStatus($initialStatusEntity);
+            } else {
+                $newStatus = $project->determineNewStatus($status);
+            }
+            if (null !== $newStatus && $newStatus !== $status) {
+                $project->setStatus($newStatus);
+                ++$updatedRowCount;
+            }
         }
         $em->flush();
+        return $updatedRowCount;
     }
 
 }

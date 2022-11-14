@@ -427,7 +427,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function addServiceSystem($serviceSystem): self
+    public function addServiceSystem(ServiceSystem $serviceSystem): self
     {
         if (!$this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->add($serviceSystem);
@@ -441,7 +441,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function removeServiceSystem($serviceSystem): self
+    public function removeServiceSystem(ServiceSystem $serviceSystem): self
     {
         if ($this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->removeElement($serviceSystem);
@@ -540,7 +540,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution): self
+    public function addSolution(Solution $solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -554,7 +554,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution): self
+    public function removeSolution(Solution $solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);
@@ -567,7 +567,7 @@ class ImplementationProject extends BaseNamedEntity
     /**
      * @return Solution[]|Collection
      */
-    public function getPublishedSolutions()
+    public function getPublishedSolutions(): Collection
     {
         $publishedSolutions = new ArrayCollection();
         foreach ($this->solutions as $solution) {
@@ -598,7 +598,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Contact $contact
      * @return self
      */
-    public function addContact($contact): self
+    public function addContact(Contact $contact): self
     {
         if (!$this->contacts->contains($contact)) {
             $this->contacts->add($contact);
@@ -612,7 +612,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Contact $contact
      * @return self
      */
-    public function removeContact($contact): self
+    public function removeContact(Contact $contact): self
     {
         if ($this->contacts->contains($contact)) {
             $this->contacts->removeElement($contact);
@@ -642,7 +642,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Organisation $interestedOrganisation
      * @return self
      */
-    public function addInterestedOrganisation($interestedOrganisation): self
+    public function addInterestedOrganisation(Organisation $interestedOrganisation): self
     {
         if (!$this->interestedOrganisations->contains($interestedOrganisation)) {
             $this->interestedOrganisations->add($interestedOrganisation);
@@ -656,7 +656,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Organisation $interestedOrganisation
      * @return self
      */
-    public function removeInterestedOrganisation($interestedOrganisation): self
+    public function removeInterestedOrganisation(Organisation $interestedOrganisation): self
     {
         if ($this->interestedOrganisations->contains($interestedOrganisation)) {
             $this->interestedOrganisations->removeElement($interestedOrganisation);
@@ -686,7 +686,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Organisation $participationOrganisation
      * @return self
      */
-    public function addParticipationOrganisation($participationOrganisation): self
+    public function addParticipationOrganisation(Organisation $participationOrganisation): self
     {
         if (!$this->participationOrganisations->contains($participationOrganisation)) {
             $this->participationOrganisations->add($participationOrganisation);
@@ -700,7 +700,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Organisation $participationOrganisation
      * @return self
      */
-    public function removeParticipationOrganisation($participationOrganisation): self
+    public function removeParticipationOrganisation(Organisation $participationOrganisation): self
     {
         if ($this->participationOrganisations->contains($participationOrganisation)) {
             $this->participationOrganisations->removeElement($participationOrganisation);
@@ -730,7 +730,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Laboratory $laboratory
      * @return self
      */
-    public function addLaboratory($laboratory): self
+    public function addLaboratory(Laboratory $laboratory): self
     {
         if (!$this->laboratories->contains($laboratory)) {
             $this->laboratories->add($laboratory);
@@ -744,7 +744,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Laboratory $laboratory
      * @return self
      */
-    public function removeLaboratory($laboratory): self
+    public function removeLaboratory(Laboratory $laboratory): self
     {
         if ($this->laboratories->contains($laboratory)) {
             $this->laboratories->removeElement($laboratory);
@@ -774,7 +774,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Organisation $projectLeader
      * @return self
      */
-    public function addProjectLeader($projectLeader): self
+    public function addProjectLeader(Organisation $projectLeader): self
     {
         if (!$this->projectLeaders->contains($projectLeader)) {
             $this->projectLeaders->add($projectLeader);
@@ -788,7 +788,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Organisation $projectLeader
      * @return self
      */
-    public function removeProjectLeader($projectLeader): self
+    public function removeProjectLeader(Organisation $projectLeader): self
     {
         if ($this->projectLeaders->contains($projectLeader)) {
             $this->projectLeaders->removeElement($projectLeader);
@@ -818,7 +818,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Funding $funding
      * @return self
      */
-    public function addFunding($funding): self
+    public function addFunding(Funding $funding): self
     {
         if (!$this->fundings->contains($funding)) {
             $this->fundings->add($funding);
@@ -832,7 +832,7 @@ class ImplementationProject extends BaseNamedEntity
      * @param Funding $funding
      * @return self
      */
-    public function removeFunding($funding): self
+    public function removeFunding(Funding $funding): self
     {
         if ($this->fundings->contains($funding)) {
             $this->fundings->removeElement($funding);
@@ -946,11 +946,11 @@ class ImplementationProject extends BaseNamedEntity
 
     /**
      * Returns the EfA type
-     * @return int|null
+     * @return int
      */
-    public function getEfaType(): ?int
+    public function getEfaType(): int
     {
-        return $this->efaType;
+        return (int) $this->efaType;
     }
 
     /**
@@ -973,12 +973,25 @@ class ImplementationProject extends BaseNamedEntity
     }
 
     /**
-     * Updates the project status based on the date fields set in the project
-     * @param int $callCount
+     * Update the project status based on the date fields set in the project
      */
-    public function updateStatus($callCount = 1): void
+    public function updateStatus(): void
     {
         $status = $this->getStatus();
+        $newStatus = $this->determineNewStatus($status);
+        if (null !== $newStatus && $newStatus !== $status) {
+            $this->setStatus($newStatus);
+        }
+    }
+
+    /**
+     * Find the next project status based on the date fields set in the project
+     * @param ImplementationStatus|null $status
+     * @param int $callCount
+     * @return ImplementationStatus|null
+     */
+    public function determineNewStatus(?ImplementationStatus $status, int $callCount = 1): ?ImplementationStatus
+    {
         if ($callCount < 10 && null !== $status && null !== $switchType = $status->getStatusSwitch()) {
             switch ($switchType) {
                 case ImplementationStatus::STATUS_SWITCH_PREPARED:
@@ -996,18 +1009,15 @@ class ImplementationProject extends BaseNamedEntity
                 case ImplementationStatus::STATUS_SWITCH_COMMISSIONING:
                     $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->pilotingStatusAt, $this->commissioningStatusAt);
                     break;
-                case ImplementationStatus::STATUS_SWITCH_NATIONWIDE_ROLLOUT:
-                    $newStatus = $this->getNewStatusBasedOnDateTime($status, $this->commissioningStatusAt, $this->nationwideRolloutAt);
-                    break;
                 default:
                     $newStatus = null;
                     break;
             }
             if (null !== $newStatus && $newStatus !== $status) {
-                $this->setStatus($newStatus);
-                $this->updateStatus($callCount + 1);
+                return $this->determineNewStatus($newStatus, $callCount + 1);
             }
         }
+        return $status;
     }
 
     /**

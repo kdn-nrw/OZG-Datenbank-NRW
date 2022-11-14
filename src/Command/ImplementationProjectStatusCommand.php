@@ -18,7 +18,9 @@ use App\Service\ImplementationProjectHelper;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @CronJob("17 1 * * *")
@@ -44,11 +46,23 @@ class ImplementationProjectStatusCommand extends Command
     public function configure(): void
     {
         $this
-            ->setDescription('Update the implementation project status based on the given dates');
+            ->setDescription('Update the implementation project status based on the given dates')
+            ->addOption(
+                'force-update-status-id',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'force update check for all projects with given status id'
+            );
     }
 
     public function execute(InputInterface $input, OutputInterface $output): void
     {
-        $this->implementationProjectHelper->setCurrentStatusForAll();
+        $io = new SymfonyStyle($input, $output);
+        $io->title($this->getDescription());
+        $startTime = microtime(true);
+        $forceUpdateStatusId = (int) $input->getOption('force-update-status-id');
+        $updatedRowCount = $this->implementationProjectHelper->setCurrentStatusForAll($forceUpdateStatusId);
+        $durationSeconds = round(microtime(true) - $startTime, 3);
+        $io->note(sprintf('Finished update process. %s records were update in %s seconds', $updatedRowCount, $durationSeconds));
     }
 }

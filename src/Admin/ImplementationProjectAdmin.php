@@ -110,6 +110,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 ],
                 'required' => false,
                 'disabled' => false,
+                'empty_data' => 0,
             ]);
         $form->end();
         $form
@@ -123,15 +124,19 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $this->addDatePickerFormField($form, 'pilotingStatusAt', 5);
         $this->addDatePickerFormField($form, 'commissioningStatusAt', 5);
         $this->addDatePickerFormField($form, 'nationwideRolloutAt', 5);
-        /*$form
-            ->add('status', ModelType::class, [
-                'label' => 'app.implementation_project.entity.status_form',
-                'btn_add' => false,
-                'required' => true,
-                'expanded' => true,
-                'query' => $this->getStatusQueryBuilder(),
-                'choice_translation_domain' => false,
-            ]);*/
+        $subject = $this->getSubject();
+        if ($subject instanceof ImplementationProject
+            && ((null === $status = $subject->getStatus()) || !$status->isSetAutomatically())) {
+            $form
+                ->add('status', ModelType::class, [
+                    'label' => 'app.implementation_project.entity.status_form',
+                    'btn_add' => false,
+                    'required' => true,
+                    'expanded' => true,
+                    'query' => $this->getStatusQueryBuilder(),
+                    'choice_translation_domain' => false,
+                ]);
+        }
         $form->end();
         $form
             ->with('references', [
@@ -176,14 +181,20 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         $queryBuilder = $em->createQueryBuilder()
             ->select('s')
             ->from(ImplementationStatus::class, 's');
+        $allowedStatusList = [
+            0
+        ];
         if (null !== $status) {
-            $queryBuilder->where($queryBuilder->expr()->orX(
-                $queryBuilder->expr()->eq('s.setAutomatically', 0),
-                $queryBuilder->expr()->eq('s', $status->getId())
-            ));
-        } else {
-            $queryBuilder->where('s.setAutomatically = 0');
+            $allowedStatusList[] = $status->getId();
         }
+        $checkStatus = $em->find(ImplementationStatus::class, ImplementationStatus::STATUS_ID_PREPARED);
+        if (null !== $newStatus = $subject->determineNewStatus($checkStatus)) {
+            $allowedStatusList[] = $newStatus->getId();
+        }
+        $queryBuilder->where($queryBuilder->expr()->orX(
+            $queryBuilder->expr()->eq('s.setAutomatically', 0),
+            $queryBuilder->expr()->in('s', $allowedStatusList)
+        ));
         $queryBuilder->orderBy('s.level', 'ASC');
         $queryBuilder->addOrderBy('s.name', 'ASC');
         return $queryBuilder;

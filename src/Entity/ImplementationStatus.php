@@ -35,7 +35,6 @@ class ImplementationStatus extends AbstractStatus
     public const STATUS_SWITCH_IMPLEMENTATION = 3;
     public const STATUS_SWITCH_COMMISSIONING = 4;
     public const STATUS_SWITCH_PILOTING = 6;
-    public const STATUS_SWITCH_NATIONWIDE_ROLLOUT = 5;
 
     public static $statusSwitchChoices = [
         self::STATUS_SWITCH_PREPARED => 'app.implementation_status.entity.status_switch_choices.project_start_at',
