@@ -72,7 +72,10 @@ class ReferenceSettingsExtension extends AbstractExtension
      */
     public function getObjectFieldDescriptionMeta($object, FieldDescriptionInterface $fieldDescription): ReferenceSettings
     {
-        $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($object, $fieldDescription->getName());
+        if (!($property = $fieldDescription->getOption('referenceProperty'))) {
+            $property = $fieldDescription->getName();
+        }
+        $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($object, $property);
         if ($propertyConfiguration['entity_class']) {
             return $this->getReferenceSettings($propertyConfiguration['entity_class'], $fieldDescription);
         }

@@ -459,6 +459,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'is_custom_field' => $enableTabs,
                 'is_tab_field' => $enableTabs,
                 'is_custom_rendered' => $enableTabs,
+                'referenceProperty' => 'communeSolutions',
                 'show_export' => true,
             ])
             ->add('serviceProviders', null, [

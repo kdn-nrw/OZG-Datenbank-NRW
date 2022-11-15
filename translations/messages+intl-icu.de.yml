@@ -443,8 +443,10 @@ app:
         no: kein Anschluss geplant
         yes: Anschluss geplant
       connection_planned_at: Geplant ab
-      connection_planned_at_empty: ohne Datum
+      connection_planned_at_commune: Inbetriebnahme Kommune
+      connection_planned_at_empty: 'n.b.'
       comment: Anmerkungen
+      no_connections_planned: Hier werden nur Kommunen angezeigt, für die der Anschluss geplant ist. Bisher ist der Anschluss für diesen Online-Dienst noch von keiner Kommune geplant.
       specialized_procedure: Weiterverarbeitendes System
       contacts: Ansprechperson im Fachamt für die Dienste-Anbindung
   abstract_onboarding_entity:

@@ -9,6 +9,7 @@ file that was distributed with this source code.
 <tr>
     <td>
         {% include 'General/Show/Partials/link-child-name-show.html.twig' with {refSettings: communeReferenceSettings, child: child.commune} %}
+        {% include 'General/Show/Partials/link-to-child.html.twig' with {refSettings: communeReferenceSettings, child: child.commune} %}
     </td>
     <td>
         {% if child.connectionPlanned %}

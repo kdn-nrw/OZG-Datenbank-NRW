@@ -6,7 +6,10 @@ file that was distributed with this source code.
 #}
 
 {# @var refSettings \App\Model\ReferenceSettings #}
-{% if refSettings.admin.hasAccess('export') %}
+{% if refSettings is not defined %}
+    {% set refSettings = app_object_field_description_meta(object, field_description) %}
+{% endif %}
+{% if refSettings.admin and refSettings.admin.hasAccess('export') %}
     {% set exportUrl = app_is_backend() ? 'app_backend_record_export' : 'app_record_export' %}
     <div class="reference-list-toolbar" style="padding: 0 10px 10px">
         <a href="{{ path(exportUrl, {'recordType': field_description.admin.code, 'recordId': object.id, 'property': field_description.name, 'format': 'xlsx'}) }}" class="link-record-export" target="_blank" title="{{ 'app.common.export_list'|trans }}">
