@@ -52,6 +52,12 @@ class ImplementationProjectStatusCommand extends Command
                 'f',
                 InputOption::VALUE_OPTIONAL,
                 'force update check for all projects with given status id'
+            )
+            ->addOption(
+                'project-id',
+                'p',
+                InputOption::VALUE_OPTIONAL,
+                'force update check for given project id list (CSV)'
             );
     }
 
@@ -61,7 +67,13 @@ class ImplementationProjectStatusCommand extends Command
         $io->title($this->getDescription());
         $startTime = microtime(true);
         $forceUpdateStatusId = (int) $input->getOption('force-update-status-id');
-        $updatedRowCount = $this->implementationProjectHelper->setCurrentStatusForAll($forceUpdateStatusId);
+        $projectIdStr = (string) $input->getOption('project-id');
+        $projectIdList = null;
+        if (!empty($projectIdStr)) {
+            $projectIdList = array_map('intval', explode(',', $projectIdStr));
+            $projectIdList = array_filter($projectIdList);
+        }
+        $updatedRowCount = $this->implementationProjectHelper->setCurrentStatusForAll($forceUpdateStatusId, $projectIdList);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished update process. %s records were update in %s seconds', $updatedRowCount, $durationSeconds));
     }
