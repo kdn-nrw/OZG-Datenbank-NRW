@@ -128,7 +128,7 @@ sonata_admin:
                     provider: App\Statistics\Provider\ImplementationProjectStatusChartProvider
 
             - { position: left,  type: sonata.admin.block.admin_list, settings: { groups: [app.ozg_implementation_group, app.settings_group, app.state_group, app.onboarding_group] } }
-            - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [app.implementation_group, app.digital_model_reqion_group, app.application_group, app.efile_group, app_admin.menu.system] } }
+            - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [app.implementation_group, app.digital_model_reqion_group, app.efile_group, app_admin.menu.system] } }
             -
                 class:    col-xs-6 col-lg-3
                 position: top                        # zone in the dashboard
@@ -224,6 +224,7 @@ sonata_admin:
                     - App\Admin\OrganisationAdmin
                     - App\Admin\FundingAdmin
                     - App\Admin\ConfidenceLevelAdmin
+                    - App\Admin\Application\ApplicationCategoryAdmin
                     #- App\Admin\JurisdictionAdmin
             app.digital_model_reqion_group:
                 label: app.menu.digital_model_reqion_group
@@ -235,13 +236,6 @@ sonata_admin:
                     - App\Admin\ModelRegion\ModelRegionBeneficiaryAdmin
                     - App\Admin\ModelRegion\ModelRegionProjectCategoryAdmin
                     - App\Admin\ModelRegion\ConceptQueryTypeAdmin
-            app.application_group:
-                label: app.menu.application_group
-                label_catalogue: messages
-                icon: '<i class="fa fa-object-group"></i>'
-                items:
-                    - App\Admin\ApplicationAdmin
-                    - App\Admin\ApplicationCategoryAdmin
             app.efile_group:
                 label: app.menu.efile_group
                 label_catalogue: messages

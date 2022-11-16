@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Entity;
+namespace App\Entity\Application;
 
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\CategoryEntityInterface;
+use App\Entity\ImportEntityInterface;
+use App\Entity\ImportTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Category
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_application_category")
+ * @ORM\Table(name="ozg_specialized_procedure_category")
  */
 class ApplicationCategory extends BaseNamedEntity implements CategoryEntityInterface, ImportEntityInterface
 {
@@ -47,7 +50,7 @@ class ApplicationCategory extends BaseNamedEntity implements CategoryEntityInter
      *
      * @var ArrayCollection|ApplicationCategory[]
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\ApplicationCategory", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="App\Entity\Application\ApplicationCategory", mappedBy="parent")
      */
     protected $children;
 
@@ -56,7 +59,7 @@ class ApplicationCategory extends BaseNamedEntity implements CategoryEntityInter
      *
      * @var ApplicationCategory|null
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\ApplicationCategory", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Application\ApplicationCategory", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $parent;

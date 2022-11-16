@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 trait SpecializedProcedureTrait
 {
-    protected function addSpecializedProceduresFormFields(FormMapper $form)
+    protected function addSpecializedProceduresFormFields(FormMapper $form, string $propertyName = 'specializedProcedures')
     {
-        $form->add('specializedProcedures', ModelType::class, [
+        $form->add($propertyName, ModelType::class, [
             'btn_add' => false,
             'placeholder' => '',
             'required' => false,
@@ -31,10 +31,10 @@ trait SpecializedProcedureTrait
         ]);
     }
 
-    protected function addSpecializedProceduresListFields(ListMapper $list)
+    protected function addSpecializedProceduresListFields(ListMapper $list, string $propertyName = 'specializedProcedures')
     {
         $list
-            ->add('specializedProcedures', null,[
+            ->add($propertyName, null,[
                 'admin_code' => SpecializedProcedureAdmin::class,
             ]);
     }
@@ -42,10 +42,10 @@ trait SpecializedProcedureTrait
     /**
      * @inheritdoc
      */
-    public function addSpecializedProceduresShowFields(ShowMapper $show)
+    public function addSpecializedProceduresShowFields(ShowMapper $show, string $propertyName = 'specializedProcedures')
     {
         $show
-            ->add('specializedProcedures', null,[
+            ->add($propertyName, null,[
                 'admin_code' => SpecializedProcedureAdmin::class,
             ]);
     }

@@ -12,8 +12,8 @@
 namespace App\Admin\Application;
 
 use App\Admin\AbstractAppAdmin;
-use App\Admin\ApplicationAdmin;
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\SpecializedProcedureAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -35,7 +35,7 @@ class ApplicationModuleAdmin extends AbstractAppAdmin implements EnableFullTextS
                     'property' => 'name',
                     'required' => true,
                 ], [
-                    'admin_code' => ApplicationAdmin::class
+                    'admin_code' => SpecializedProcedureAdmin::class
                 ]);
         }
         $form
@@ -58,7 +58,7 @@ class ApplicationModuleAdmin extends AbstractAppAdmin implements EnableFullTextS
         $list->addIdentifier('name');
         $list
             ->add('application', null, [
-                'admin_code' => ApplicationAdmin::class
+                'admin_code' => SpecializedProcedureAdmin::class
             ]);
         $this->addDefaultListActions($list);
     }

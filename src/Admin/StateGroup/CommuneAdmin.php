@@ -34,6 +34,7 @@ use App\Entity\OrganisationEntityInterface;
 use App\Entity\StateGroup\Commune;
 use App\Entity\StateGroup\CommuneSolution;
 use App\Model\ExportSettings;
+use App\Service\InjectAutomaticDataMapperTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -52,6 +53,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
 {
     protected $baseRoutePattern = 'state/commune';
 
+    use InjectAutomaticDataMapperTrait;
     use AddressTrait;
     use CentralAssociationTrait;
     use ContactTrait;
@@ -216,11 +218,21 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $modelManager = $this->getModelManager();
         $csEm = $modelManager->getEntityManager(CommuneSolution::class);
         $communeSolutions = $object->getCommuneSolutions();
+        $dataMap = [];
         foreach ($communeSolutions as $communeSolution) {
             if (!$csEm->contains($communeSolution)) {
                 $csEm->persist($communeSolution);
             }
+            if ((null !== $solution = $communeSolution->getSolution())
+                && (null !== $specializedProcedure = $communeSolution->getSpecializedProcedure())) {
+                $key = $solution->getId() . '_' . $specializedProcedure->getId();
+                $dataMap[$key] = [
+                    'solution' => $solution,
+                    'specializedProcedure' => $specializedProcedure,
+                ];
+            }
         }
+        $this->automaticDataMapper->addAutoAssignedApplicationServices($dataMap);
     }
 
     private function updateOrganisation(OrganisationEntityInterface $object)

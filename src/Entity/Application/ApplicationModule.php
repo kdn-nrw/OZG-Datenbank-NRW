@@ -11,8 +11,8 @@
 
 namespace App\Entity\Application;
 
-use App\Entity\Application;
 use App\Entity\Base\BaseNamedEntity;
+use App\Entity\SpecializedProcedure;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -20,13 +20,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ApplicationModule
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_application_module")
+ * @ORM\Table(name="ozg_specialized_procedure_module")
  */
 class ApplicationModule extends BaseNamedEntity
 {
     /**
-     * @var Application
-     * @ORM\ManyToOne(targetEntity="App\Entity\Application", inversedBy="applicationModules", cascade={"persist"})
+     * @var SpecializedProcedure
+     * @ORM\ManyToOne(targetEntity="App\Entity\SpecializedProcedure", inversedBy="applicationModules", cascade={"persist"})
      * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $application;
@@ -41,17 +41,17 @@ class ApplicationModule extends BaseNamedEntity
     protected $description = '';
 
     /**
-     * @return Application|null
+     * @return SpecializedProcedure|null
      */
-    public function getApplication(): ?Application
+    public function getApplication(): ?SpecializedProcedure
     {
         return $this->application;
     }
 
     /**
-     * @param Application $application
+     * @param SpecializedProcedure $application
      */
-    public function setApplication(Application $application): void
+    public function setApplication(SpecializedProcedure $application): void
     {
         $this->application = $application;
     }

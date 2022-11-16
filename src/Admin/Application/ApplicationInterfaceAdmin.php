@@ -12,8 +12,8 @@
 namespace App\Admin\Application;
 
 use App\Admin\AbstractAppAdmin;
-use App\Admin\ApplicationAdmin;
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Admin\SpecializedProcedureAdmin;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -38,7 +38,7 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
                     'property' => 'name',
                     'required' => true,
                 ], [
-                    'admin_code' => ApplicationAdmin::class
+                    'admin_code' => SpecializedProcedureAdmin::class
                 ]);
         }
         $form
@@ -46,7 +46,7 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
             ->add('description', TextareaType::class, [
                 'required' => false,
             ]);
-        $this->addSpecializedProceduresFormFields($form);
+        $this->addSpecializedProceduresFormFields($form, 'connectedSpecializedProcedures');
 
         $form->end();
     }
@@ -55,7 +55,7 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
     {
         parent::configureDatagridFilters($filter);
         $this->addDefaultDatagridFilter($filter, 'application');
-        $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
+        $this->addDefaultDatagridFilter($filter, 'connectedSpecializedProcedures');
     }
 
     protected function configureListFields(ListMapper $list)
@@ -63,7 +63,7 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
         $list->addIdentifier('name');
         $list
             ->add('application', null, [
-                'admin_code' => ApplicationAdmin::class
+                'admin_code' => SpecializedProcedureAdmin::class
             ]);
         $this->addDefaultListActions($list);
     }
@@ -77,6 +77,6 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
             ->add('application')
             ->add('name')
             ->add('description');
-        $this->addSpecializedProceduresShowFields($show);
+        $this->addSpecializedProceduresShowFields($show, 'connectedSpecializedProcedures');
     }
 }

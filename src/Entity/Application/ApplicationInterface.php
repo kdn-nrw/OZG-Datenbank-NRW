@@ -11,7 +11,6 @@
 
 namespace App\Entity\Application;
 
-use App\Entity\Application;
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\SpecializedProcedure;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,13 +22,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ApplicationInterface
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_application_interface")
+ * @ORM\Table(name="ozg_specialized_procedure_interface")
  */
 class ApplicationInterface extends BaseNamedEntity
 {
     /**
-     * @var Application
-     * @ORM\ManyToOne(targetEntity="App\Entity\Application", inversedBy="applicationInterfaces", cascade={"persist"})
+     * @var SpecializedProcedure
+     * @ORM\ManyToOne(targetEntity="App\Entity\SpecializedProcedure", inversedBy="applicationInterfaces", cascade={"persist"})
      * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $application;
@@ -46,7 +45,7 @@ class ApplicationInterface extends BaseNamedEntity
     /**
      * @var SpecializedProcedure[]|Collection
      * @ORM\ManyToMany(targetEntity="App\Entity\SpecializedProcedure")
-     * @ORM\JoinTable(name="ozg_application_interface_specialized_procedures",
+     * @ORM\JoinTable(name="ozg_specialized_procedure_interface_connected",
      *     joinColumns={
      *     @ORM\JoinColumn(name="application_interface_id", referencedColumnName="id")
      *   },
@@ -55,25 +54,25 @@ class ApplicationInterface extends BaseNamedEntity
      *   }
      * )
      */
-    private $specializedProcedures;
+    private $connectedSpecializedProcedures;
 
     public function __construct()
     {
-        $this->specializedProcedures = new ArrayCollection();
+        $this->connectedSpecializedProcedures = new ArrayCollection();
     }
 
     /**
-     * @return Application|null
+     * @return SpecializedProcedure|null
      */
-    public function getApplication(): ?Application
+    public function getApplication(): ?SpecializedProcedure
     {
         return $this->application;
     }
 
     /**
-     * @param Application $application
+     * @param SpecializedProcedure $application
      */
-    public function setApplication(Application $application): void
+    public function setApplication(SpecializedProcedure $application): void
     {
         $this->application = $application;
     }
@@ -98,10 +97,10 @@ class ApplicationInterface extends BaseNamedEntity
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function addSpecializedProcedure($specializedProcedure): self
+    public function addSpecializedProcedure(SpecializedProcedure $specializedProcedure): self
     {
-        if (!$this->specializedProcedures->contains($specializedProcedure)) {
-            $this->specializedProcedures->add($specializedProcedure);
+        if (!$this->connectedSpecializedProcedures->contains($specializedProcedure)) {
+            $this->connectedSpecializedProcedures->add($specializedProcedure);
         }
 
         return $this;
@@ -111,10 +110,10 @@ class ApplicationInterface extends BaseNamedEntity
      * @param SpecializedProcedure $specializedProcedure
      * @return self
      */
-    public function removeSpecializedProcedure($specializedProcedure): self
+    public function removeSpecializedProcedure(SpecializedProcedure $specializedProcedure): self
     {
-        if ($this->specializedProcedures->contains($specializedProcedure)) {
-            $this->specializedProcedures->removeElement($specializedProcedure);
+        if ($this->connectedSpecializedProcedures->contains($specializedProcedure)) {
+            $this->connectedSpecializedProcedures->removeElement($specializedProcedure);
         }
 
         return $this;
@@ -123,17 +122,17 @@ class ApplicationInterface extends BaseNamedEntity
     /**
      * @return SpecializedProcedure[]|Collection
      */
-    public function getSpecializedProcedures()
+    public function getConnectedSpecializedProcedures()
     {
-        return $this->specializedProcedures;
+        return $this->connectedSpecializedProcedures;
     }
 
     /**
-     * @param SpecializedProcedure[]|Collection $specializedProcedures
+     * @param SpecializedProcedure[]|Collection $connectedSpecializedProcedures
      */
-    public function setSpecializedProcedures($specializedProcedures): void
+    public function setConnectedSpecializedProcedures($connectedSpecializedProcedures): void
     {
-        $this->specializedProcedures = $specializedProcedures;
+        $this->connectedSpecializedProcedures = $connectedSpecializedProcedures;
     }
 
     public function __toString(): string

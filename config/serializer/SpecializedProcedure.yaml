@@ -4,6 +4,14 @@ App\Entity\SpecializedProcedure:
       groups: ['collection:read', 'item:read']
     name:
       groups: ['collection:read', 'item:read']
+    street:
+      groups: ['specialized_procedure:read']
+    town:
+      groups: ['specialized_procedure:read']
+    zipCode:
+      groups: ['specialized_procedure:read']
+    url:
+      groups: ['specialized_procedure:read']
     solutions:
       groups: ['specialized_procedure:collection:read', 'specialized_procedure:read']
     manufacturers:
@@ -14,3 +22,31 @@ App\Entity\SpecializedProcedure:
       groups: ['specialized_procedure:collection:read', 'specialized_procedure:read']
     services:
       groups: ['specialized_procedure:collection:read', 'specialized_procedure:read']
+    description:
+      groups: ['specialized_procedure:read']
+    categories:
+      groups: ['specialized_procedure:read']
+    businessPremises:
+      groups: ['specialized_procedure:read']
+    accessibilityTestConducted:
+      groups: ['specialized_procedure:read']
+    privacy:
+      groups: ['specialized_procedure:read']
+    archive:
+      groups: ['specialized_procedure:read']
+    inHouseDevelopment:
+      groups: ['specialized_procedure:read']
+    applicationModules:
+      groups: ['specialized_procedure:read']
+    applicationInterfaces:
+      groups: ['specialized_procedure:read']
+    accessibilityTestOrganisations:
+      groups: ['specialized_procedure:read']
+    accessibilityTestOrganisationOthers:
+      groups: ['specialized_procedure:read']
+    accessibilitySelfTesting:
+      groups: ['specialized_procedure:read']
+    accessibilityTestResultType:
+      groups: ['specialized_procedure:read']
+#    accessibilityDocuments:
+#      groups: ['specialized_procedure:read']

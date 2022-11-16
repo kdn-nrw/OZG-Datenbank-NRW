@@ -15,6 +15,7 @@ use App\Entity\Application;
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\DocumentUploadEntityInterface;
 use App\Entity\Base\HasUploadsEntityInterface;
+use App\Entity\SpecializedProcedure;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -26,7 +27,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * ApplicationAccessibilityDocument
  *
  * @ORM\Entity
- * @ORM\Table(name="ozg_application_accessibility_document")
+ * @ORM\Table(name="ozg_specialized_procedure_accessibility_document")
  * @Vich\Uploadable
  */
 class ApplicationAccessibilityDocument extends BaseNamedEntity implements DocumentUploadEntityInterface
@@ -54,8 +55,8 @@ class ApplicationAccessibilityDocument extends BaseNamedEntity implements Docume
     protected $localName;
 
     /**
-     * @var Application|null
-     * @ORM\ManyToOne(targetEntity="App\Entity\Application", inversedBy="accessibilityDocuments")
+     * @var SpecializedProcedure|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\SpecializedProcedure", inversedBy="accessibilityDocuments")
      * @ORM\JoinColumn(nullable=true)
      */
     private $application;
@@ -117,11 +118,11 @@ class ApplicationAccessibilityDocument extends BaseNamedEntity implements Docume
     /**
      * Set model region project
      *
-     * @param Application|null $application
+     * @param SpecializedProcedure|null $application
      *
      * @return self
      */
-    public function setApplication(?Application $application): self
+    public function setApplication(?SpecializedProcedure $application): self
     {
         $this->application = $application;
 
@@ -131,9 +132,9 @@ class ApplicationAccessibilityDocument extends BaseNamedEntity implements Docume
     /**
      * Get model region project
      *
-     * @return Application|null
+     * @return SpecializedProcedure|null
      */
-    public function getApplication(): Application
+    public function getApplication(): SpecializedProcedure
     {
         return $this->application;
     }

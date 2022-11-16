@@ -1,5 +1,5 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
-App\Entity\Application\ApplicationCategory:
+App\Entity\Application\ApplicationInterface:
   attributes:
     id:
       groups: ['collection:read', 'item:read']
@@ -7,5 +7,7 @@ App\Entity\Application\ApplicationCategory:
       groups: ['collection:read', 'item:read']
     description:
       groups: ['item:read']
-    communes:
-      ignore: true
+#    application:
+#      groups: ['item:read']
+    connectedSpecializedProcedures:
+      groups: ['item:read', 'specialized_procedure:read']

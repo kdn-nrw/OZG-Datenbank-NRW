@@ -14,7 +14,6 @@ simple_things_entity_audit:
     - App\Entity\ModelRegion\ModelRegionProject
     - App\Entity\StateGroup\Commune
     - App\Entity\StateGroup\ServiceProvider
-    - App\Entity\Application
     - App\Entity\ImplementationProject
     - App\Entity\Solution
     - App\Entity\SpecializedProcedure

@@ -235,60 +235,6 @@ app:
       description: Beschreibung
       communes: Kommunen
       payment_operator: 'ePayBL-Betreiber'
-  application:
-    object_name: Anwendung
-    list: Anwendungen
-    create: Anwendung anlegen
-    tabs:
-      general: Anwendung
-      privacy: Datenschutz
-      security: IT-Sicherheit
-      accessibility: Barrierefreiheit
-      archive: Archiv
-      context: OZG Kontext
-      license: Lizenz
-    groups:
-      accessibility_general: Barrierefreiheit
-      accessibility_meta: Barrierefreiheit Test
-      accessibility_documents: Zertifikate / Testberichte
-    actions:
-      list: Anwendungen Übersicht
-      show: Anwendung anzeigen
-      edit: Anwendung bearbeiten
-    entity:
-      name: Name
-      description: Beschreibung
-      categories: Softwarekategorien
-      manufacturers: Hersteller
-      service_providers: Anwendende KDN Mitglieder
-      communes: Anwendende Kommunen
-      accessibility_test_conducted: Test zur Barrierefreiheit durchgeführt
-      accessibility_test_organisations: Test durchgeführt durch
-      accessibility_test_organisation_others: Test durchgeführt durch
-      accessibility_test_organisation_others_form: Test durchgeführt durch (Sonstige)
-      accessibility_self_testing: Eigentestung
-      accessibility_self_testing_choices:
-        yes: Ja
-        no: Nein
-      accessibility_test_result_type: Testergebnis Barrierefreiheit
-      accessibility_test_result_type_choices:
-        empty: keine Angabe
-        1: Nicht relevant
-        2: Ausnahmegenehmigung liegt vor
-        3: Hersteller arbeitet an der Umsetzung
-        4: Prüfung erfolgt im Rahmen der IBN-Testphase
-        5: Erfüllt
-      accessibility_documents: Zertifikate / Testberichte
-      privacy: Datenschutz
-      archive: Archiv
-      in_house_development: Eigenentwicklung
-      in_house_development_choices:
-        no: Nein
-        yes: Ja
-        yes_reuse: Ja und wir stellen die Anwendung zur Nachnutzung zur Verfügung
-      application_modules: Module
-      application_interfaces: Schnittstellen
-      business_premises: Betriebsstätten
   application_module:
     object_name: Modul
     list: Module
@@ -297,7 +243,7 @@ app:
       link_application_module_list:   'Module'
       link_application_module_create: 'Modul hinzufügen'
     entity:
-      application: Anwendung
+      application: Fachverfahren
       name: Name
       description: Beschreibung
   application_interface:
@@ -308,14 +254,14 @@ app:
       link_application_interface_list:   'Schnittstellen'
       link_application_interface_create: 'Schnittstelle hinzufügen'
     entity:
-      application: Anwendung
+      application: Fachverfahren
       name: Name
       description: Beschreibung
-      specialized_procedures: Fachverfahren
+      connected_specialized_procedures: Verbundene Fachverfahren
   application_category:
-    object_name: Kategorie
-    list: Kategorien
-    create: Kategorie anlegen
+    object_name: Fachverfahren Kategorie
+    list: Fachverfahren Kategorien
+    create: Fachverfahren Kategorie anlegen
     entity:
       name: Name
       description: Beschreibung
@@ -2007,15 +1953,61 @@ app:
     object_name: Fachverfahren
     list: Fachverfahren
     create: Fachverfahren anlegen
+
+    tabs:
+      general: Fachverfahren
+      privacy: Datenschutz
+      security: IT-Sicherheit
+      accessibility: Barrierefreiheit
+      archive: Archiv
+      context: OZG Kontext
+      license: Lizenz
+    groups:
+      accessibility_general: Barrierefreiheit
+      accessibility_meta: Barrierefreiheit Test
+      accessibility_documents: Zertifikate / Testberichte
+    actions:
+      list: Fachverfahren Übersicht
+      show: Fachverfahren anzeigen
+      edit: Fachverfahren bearbeiten
     entity:
       name: Name
       description: Beschreibung
-      url: Url
-      solutions: Online-Dienste
+      categories: Softwarekategorien
       manufacturers: Hersteller
       service_providers: IT Dienstleister
       communes: Kommunen
+      accessibility_test_conducted: Test zur Barrierefreiheit durchgeführt
+      accessibility_test_organisations: Test durchgeführt durch
+      accessibility_test_organisation_others: Test durchgeführt durch
+      accessibility_test_organisation_others_form: Test durchgeführt durch (Sonstige)
+      accessibility_self_testing: Eigentestung
+      accessibility_self_testing_choices:
+        yes: Ja
+        no: Nein
+      accessibility_test_result_type: Testergebnis Barrierefreiheit
+      accessibility_test_result_type_choices:
+        empty: keine Angabe
+        1: Nicht relevant
+        2: Ausnahmegenehmigung liegt vor
+        3: Hersteller arbeitet an der Umsetzung
+        4: Prüfung erfolgt im Rahmen der IBN-Testphase
+        5: Erfüllt
+      accessibility_documents: Zertifikate / Testberichte
+      privacy: Datenschutz
+      archive: Archiv
+      in_house_development: Eigenentwicklung
+      in_house_development_choices:
+        no: Nein
+        yes: Ja
+        yes_reuse: Ja und wir stellen die Anwendung zur Nachnutzung zur Verfügung
+      application_modules: Module
+      application_interfaces: Schnittstellen
+      business_premises: Betriebsstätten
+      url: Url
+      solutions: Online-Dienste
       commune_count: Anz. Kommunen
+      services: Leika-Leistungen
   statistics:
     solution_maturity: 'Online-Dienste: Reifegrade'
     solution_status: 'Online-Dienste: Status'
