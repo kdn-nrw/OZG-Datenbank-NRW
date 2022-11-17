@@ -71,7 +71,7 @@ class ModelRegionProjectAdminController extends CRUDController
      */
     private function initializeConceptQueries(ModelRegionProject $modelRegionProject)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         $ctRepository = $em->getRepository(ConceptQueryType::class);
         /** @var ConceptQueryType[] $conceptQueryTypes */
         $conceptQueryTypes = $ctRepository->findBy([], ['position' => 'ASC', 'id' => 'ASC']);

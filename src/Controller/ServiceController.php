@@ -13,8 +13,10 @@ namespace App\Controller;
 
 
 use App\Admin\Frontend\ServiceAdmin;
+use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\ServiceSystem;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -26,6 +28,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ServiceController extends AbstractFrontendCRUDController
 {
+    use InjectManagerRegistryTrait;
+
     /**
      * @inheritDoc
      */
@@ -42,7 +46,13 @@ class ServiceController extends AbstractFrontendCRUDController
         return ServiceAdmin::class;
     }
 
-    public function getChoicesAction(Request $request)
+    /**
+     * Returns the service choices for the selected service systems
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getChoicesAction(Request $request): JsonResponse
     {
         $result = 'ERROR';
         $jsonData = [];
@@ -52,9 +62,9 @@ class ServiceController extends AbstractFrontendCRUDController
             $selectedChoices = $changeData['groupValues'];//array_filter($changeData['groupValues'], 'is_int');
             $selectedChoices[] = 0;
             $jsonData['selectedChoices'] = $selectedChoices;
-            $doctrine = $this->getDoctrine();
+            $em = $this->getEntityManager();
             /** @var EntityRepository $repository */
-            $repository = $doctrine->getRepository(ServiceSystem::class);
+            $repository = $em->getRepository(ServiceSystem::class);
             $queryBuilder = $repository->createQueryBuilder('ss');
             $queryBuilder->where('ss IN (:selectedChoices)')
                 ->setParameter('selectedChoices', $selectedChoices)

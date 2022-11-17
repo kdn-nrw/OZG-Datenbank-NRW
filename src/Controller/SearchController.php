@@ -13,6 +13,7 @@ namespace App\Controller;
 
 
 use App\Admin\ExtendedSearchAdminInterface;
+use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Search;
 use App\Form\Type\SearchType;
 use Sonata\AdminBundle\Admin\Pool;
@@ -36,6 +37,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class SearchController extends AbstractController
 {
+    use InjectManagerRegistryTrait;
+
     /**
      * @var Pool
      */
@@ -70,7 +73,7 @@ class SearchController extends AbstractController
             $search = $this->initSearchModel(null);
             $adminList = $this->createAdminList();
             $searchForm = $this->initSearchForm($search, $adminList);
-            $repository = $this->getDoctrine()->getManager()->getRepository(Search::class);
+            $repository = $this->getEntityManager()->getRepository(Search::class);
             $searchList = $repository->findAll();
             $response = $this->render('Search/index.html.twig', [
                 'adminList' => $adminList,
@@ -119,7 +122,7 @@ class SearchController extends AbstractController
             $currentUser = $this->getUser();
             $search->setUser($currentUser);
             if (null !== $search && ($search->getUser() === $currentUser || $search->isShowForAll())) {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEntityManager();
                 $em->remove($search);
                 $em->flush();
                 /** @var FlashBag $flashBag */
@@ -153,7 +156,7 @@ class SearchController extends AbstractController
                     $currentUser = $this->getUser();
                     $search->setUser($currentUser);
                 }
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEntityManager();
                 if (null === $search->getId()) {
                     $em->persist($search);
                 }
@@ -217,7 +220,7 @@ class SearchController extends AbstractController
         $search = null;
         if ($id) {
             /** @var Search|null $search */
-            $search = $this->getDoctrine()->getManager()->find(Search::class, $id);
+            $search = $this->getEntityManager()->find(Search::class, $id);
             if (null === $search->getUser()) {
                 /** @var UserInterface $currentUser */
                 $currentUser = $this->getUser();
