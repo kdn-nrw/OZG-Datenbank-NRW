@@ -35,7 +35,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -196,6 +198,18 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name');
+        $filter
+            ->add('status', ChoiceFilter::class, [
+                'label' => 'app.model_region_project.entity.status',
+                'field_options' => [
+                    'choices' => array_flip(ModelRegionProject::$statusChoices),
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => false,
+                    //'choice_translation_domain' => 'SonataAdminBundle',
+                ],
+                'field_type' => ChoiceType::class,
+            ]);
         $this->addDefaultDatagridFilter($filter, 'projectStartAt');
         $this->addDefaultDatagridFilter($filter, 'projectConceptStartAt');
         $this->addDefaultDatagridFilter($filter, 'projectImplementationStartAt');

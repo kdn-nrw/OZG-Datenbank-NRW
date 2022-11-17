@@ -37,6 +37,20 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     use ImportTrait;
     use SluggableEntityTrait;
 
+    public const STATUS_NOT_STARTED = 1;
+    public const STATUS_PREPARATION = 2;
+    public const STATUS_CONCEPT = 3;
+    public const STATUS_IMPLEMENTATION = 4;
+    public const STATUS_FINISHED = 5;
+
+    public static $statusChoices = [
+        self::STATUS_NOT_STARTED => 'app.model_region_project.entity.project_not_started',
+        self::STATUS_PREPARATION => 'app.model_region_project.entity.project_start_at',
+        self::STATUS_CONCEPT => 'app.model_region_project.entity.project_concept_start_at',
+        self::STATUS_IMPLEMENTATION => 'app.model_region_project.entity.project_implementation_start_at',
+        self::STATUS_FINISHED => 'app.model_region_project.entity.project_end_at',
+    ];
+
     /**
      * @var ModelRegion[]|Collection
      * @ORM\ManyToMany(targetEntity="App\Entity\ModelRegion\ModelRegion", mappedBy="modelRegionProjects")
@@ -58,6 +72,12 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * @ORM\Column(name="project_lead", type="text", nullable=true)
      */
     protected $projectLead = '';
+
+    /**
+     * @ORM\Column(type="integer", name="status", nullable=true)
+     * @var int|null
+     */
+    private $status;
 
     /**
      * @var null|DateTime
@@ -308,6 +328,22 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     public function setProjectLead(?string $projectLead): void
     {
         $this->projectLead = $projectLead;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int|null $status
+     */
+    public function setStatus(?int $status): void
+    {
+        $this->status = $status;
     }
 
     /**
@@ -570,10 +606,24 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
      * Hook on persist and update operations.
      * @ORM\PrePersist
      * @ORM\PreUpdate
+     */
+    public function prePersist(): void
+    {
+        $this->cleanDocuments();
+        $newStatus = $this->determineNewStatus();
+        if ($newStatus !== $this->status) {
+            $this->setStatus($newStatus);
+        }
+    }
+
+    /**
+     * Hook on persist and update operations.
+     *
      * @return ModelRegionProjectDocument[]|array Invalid documents (without file reference)
      */
     public function cleanDocuments(): array
     {
+        $this->status = $this->determineNewStatus();
         $removeDocuments = [];
         foreach ($this->documents as $document) {
             /** @var ModelRegionProjectDocument $document */
@@ -730,6 +780,29 @@ class ModelRegionProject extends BaseNamedEntity implements SluggableInterface, 
     public function setConceptQueries($conceptQueries): void
     {
         $this->conceptQueries = $conceptQueries;
+    }
+
+    /**
+     * Find the next project status based on the date fields set in the project
+     *
+     * @return int|null
+     */
+    public function determineNewStatus(): ?int
+    {
+        $now = date_create();
+        $now->setTimezone(new \DateTimeZone('UTC'));
+        if (null !== $this->projectEndAt && $this->projectEndAt < $now) {
+            $status = self::STATUS_FINISHED;
+        } elseif (null !== $this->projectImplementationStartAt && $this->projectImplementationStartAt < $now) {
+            $status = self::STATUS_IMPLEMENTATION;
+        } elseif (null !== $this->projectConceptStartAt && $this->projectConceptStartAt < $now) {
+            $status = self::STATUS_CONCEPT;
+        } elseif (null !== $this->projectStartAt && $this->projectStartAt < $now) {
+            $status = self::STATUS_PREPARATION;
+        } else {
+            $status = self::STATUS_NOT_STARTED;
+        }
+        return $status;
     }
 
 }

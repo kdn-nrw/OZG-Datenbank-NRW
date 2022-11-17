@@ -33,48 +33,38 @@ class ModelRegionProjectStatusChartProvider extends AbstractForeignNamedProperty
     protected function loadData()
     {
         $alias = 's';
+        $em = $this->getEntityManager();
         /** @var EntityRepository $repository */
-        $repository = $this->getEntityManager()->getRepository($this->getEntityClass());
+        $repository = $em->getRepository($this->getEntityClass());
         $queryBuilder = $repository->createQueryBuilder($alias);
-        $selects = ['s.projectStartAt', 's.projectConceptStartAt', 's.projectImplementationStartAt', 's.projectEndAt',];
+        $selects = ['COUNT(s.status) AS groupCount', 's.status AS groupKey'];
         $queryBuilder
             ->select($selects);
         $this->addCustomDataConditions($queryBuilder, $alias);
         $queryBuilder
-            ->orderBy('s.id');
+            ->groupBy('s.status')
+            ->orderBy('s.status');
         $query = $queryBuilder->getQuery();
         $result = $query->getArrayResult();
-        $labels = [
-            0 => $this->translator->trans('app.model_region_project.entity.project_not_started'),
-            1 => $this->translator->trans('app.model_region_project.entity.project_start_at'),
-            2 => $this->translator->trans('app.model_region_project.entity.project_concept_start_at'),
-            3 => $this->translator->trans('app.model_region_project.entity.project_implementation_start_at'),
-            4 => $this->translator->trans('app.model_region_project.entity.project_end_at'),
-        ];
+        $tmpLabels = ModelRegionProject::$statusChoices;
+        $labels = [];
         $data = [];
-        foreach ($labels as $key) {
-            $data[$key] = 0;
+        foreach ($tmpLabels as $choiceId => $choiceLabel) {
+            $dataLabel = $this->translator->trans($choiceLabel);
+            $data[$dataLabel] = 0;
+            $labels[$choiceId] = $dataLabel;
         }
-        $now = date_create();
-        $now->setTimezone(new \DateTimeZone('UTC'));
         foreach ($result as $row) {
-            if (null !== $row['projectEndAt'] && $row['projectEndAt'] < $now) {
-                $status = 4;
-            } elseif (null !== $row['projectImplementationStartAt'] && $row['projectImplementationStartAt'] < $now) {
-                $status = 3;
-            } elseif (null !== $row['projectConceptStartAt'] && $row['projectConceptStartAt'] < $now) {
-                $status = 2;
-            } elseif (null !== $row['projectStartAt'] && $row['projectStartAt'] < $now) {
-                $status = 1;
-            } else {
-                $status = 0;
+            /** @var ModelRegionProject $entity */
+            $status = (int) $row['groupKey'];
+            if (isset($labels[$status])) {
+                $key = $labels[$status];
+                $data[$key] = (int) $row['groupCount'];
             }
-            $key = $labels[$status];
-            ++$data[$key];
         }
         // Remove "not started" entry, if all projects have started
-        if (empty($data[$labels[0]])) {
-            unset($data[$labels[0]]);
+        if (empty($data[$labels[ModelRegionProject::STATUS_NOT_STARTED]])) {
+            unset($data[$labels[ModelRegionProject::STATUS_NOT_STARTED]]);
         }
         $rowCount = count($data);
         $colorOffset = 0;

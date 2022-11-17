@@ -14,9 +14,12 @@ namespace App\Admin\Frontend;
 use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\DatePickerTrait;
+use App\Entity\ModelRegion\ModelRegionProject;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
@@ -27,10 +30,22 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $filter->add('name');
-        $this->addDefaultDatagridFilter($filter, 'projectStartAt');
+        $filter
+            ->add('status', ChoiceFilter::class, [
+                'label' => 'app.model_region_project.entity.status',
+                'field_options' => [
+                    'choices' => array_flip(ModelRegionProject::$statusChoices),
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => false,
+                    //'choice_translation_domain' => 'SonataAdminBundle',
+                ],
+                'field_type' => ChoiceType::class,
+            ]);
+        /*$this->addDefaultDatagridFilter($filter, 'projectStartAt');
         $this->addDefaultDatagridFilter($filter, 'projectConceptStartAt');
         $this->addDefaultDatagridFilter($filter, 'projectImplementationStartAt');
-        $this->addDefaultDatagridFilter($filter, 'projectEndAt');
+        $this->addDefaultDatagridFilter($filter, 'projectEndAt');*/
         $this->addDefaultDatagridFilter($filter, 'categories');
         $this->addDefaultDatagridFilter($filter, 'organisations');
         $filter

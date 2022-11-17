@@ -7,6 +7,37 @@ file that was distributed with this source code.
 
 {% extends 'Frontend/Admin/CRUD/list.html.twig' %}
 
+{% block custom_filters_actions %}
+    <li class="app-filter-custom-action">
+        {# {% set filterData = {'status': 2, 'projectStartAt': {'start': null, 'end': 'now'|date("Y-m-d H:i:s")}} %} #}
+        {% set filterData = {'status': 2} %}
+        <a href="#" class="sonata-ba-action js-custom-filter" data-filter-value="{{ filterData|json_encode }}" title="{{ 'app.model_region_project.entity.filter.currently_status_2_title'|trans }}">
+            <span class="item-label">{{ 'app.model_region_project.entity.filter.currently_status_2'|trans }}</span>
+        </a>
+    </li>
+    <li class="app-filter-custom-action">
+        {# {% set filterData = {'status': 3, 'projectConceptStartAt': {'start': null, 'end': 'now'|date("Y-m-d H:i:s")}} %} #}
+        {% set filterData = {'status': 3} %}
+        <a href="#" class="sonata-ba-action js-custom-filter" data-filter-value="{{ filterData|json_encode }}" title="{{ 'app.model_region_project.entity.filter.currently_status_3_title'|trans }}">
+            <span class="item-label">{{ 'app.model_region_project.entity.filter.currently_status_3'|trans }}</span>
+        </a>
+    </li>
+    <li class="app-filter-custom-action">
+        {# {% set filterData = {'status': 4, 'projectImplementationStartAt': {'start': null, 'end': 'now'|date("Y-m-d H:i:s")}} %} #}
+        {% set filterData = {'status': 4} %}
+        <a href="#" class="sonata-ba-action js-custom-filter" data-filter-value="{{ filterData|json_encode }}" title="{{ 'app.model_region_project.entity.filter.currently_status_4_title'|trans }}">
+            <span class="item-label">{{ 'app.model_region_project.entity.filter.currently_status_4'|trans }}</span>
+        </a>
+    </li>
+    <li class="app-filter-custom-action">
+        {# {% set filterData = {'status': 5, 'projectEndAt': {'start': null, 'end': 'now'|date("Y-m-d H:i:s")}} %} #}
+        {% set filterData = {'status': 5} %}
+        <a href="#" class="sonata-ba-action js-custom-filter" data-filter-value="{{ filterData|json_encode }}" title="{{ 'app.model_region_project.entity.filter.currently_status_5_title'|trans }}">
+            <span class="item-label">{{ 'app.model_region_project.entity.filter.currently_status_5'|trans }}</span>
+        </a>
+    </li>
+{% endblock %}
+
 {% block sonata_page_content %}
     {{ parent() }}
     {% if filterSubject is defined and filterSubject is not null %}

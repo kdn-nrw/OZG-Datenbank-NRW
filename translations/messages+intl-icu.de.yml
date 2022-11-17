@@ -1427,6 +1427,22 @@ app:
       project_concept_start_at: Konzeption (Umsetzung beauftragt)
       project_implementation_start_at: Umsetzung (Inbetriebnahme Modellregionen)
       project_end_at: Projektabschluss
+      status: Status
+      status_choices:
+        1: Noch nicht gestartet
+        2: Vorbereitung
+        3: Konzeption
+        4: Umsetzung
+        5: Projektabschluss
+      filter:
+        currently_status_2: 'Projekte in Vorbereitung'
+        currently_status_3: 'Projekte in Konzeption'
+        currently_status_4: 'Projekte in Umsetzung'
+        currently_status_5: 'Abgeschlossene Projekte'
+        currently_status_2_title: 'Umsetzungsprojekte, die heute in Vorbereitung sind'
+        currently_status_3_title: 'Umsetzungsprojekte, die heute in Konzeption sind'
+        currently_status_4_title: 'Umsetzungsprojekte, die heute in Umsetzung sind'
+        currently_status_5_title: 'Umsetzungsprojekte, die heute bereits abgeschlossene sind'
       usp: Alleinstellungsmerkmal
       communes_benefits: Nutzen für alle Kommunen
       transferable_service: übertragbare/lizenzfreie Leistung
