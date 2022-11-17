@@ -97,7 +97,7 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
             ->add('createdBy', null, [
                 'template' => 'General/List/list_user.html.twig',
             ]);
-        $list->add('_action', null, [
+        $list->add(ListMapper::NAME_ACTIONS, null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

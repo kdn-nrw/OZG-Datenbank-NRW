@@ -105,7 +105,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
 
     protected function addDefaultListActions(ListMapper $list): void
     {
-        $list->add('_action', null, [
+        $list->add(ListMapper::NAME_ACTIONS, null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

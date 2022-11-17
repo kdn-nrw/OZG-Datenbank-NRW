@@ -103,7 +103,7 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
             ])
             ->add('customLabel')
             ->add('description');
-        $list->add('_action', null, [
+        $list->add(ListMapper::NAME_ACTIONS, null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

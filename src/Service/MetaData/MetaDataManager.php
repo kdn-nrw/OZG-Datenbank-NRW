@@ -25,6 +25,7 @@ use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -205,7 +206,7 @@ class MetaDataManager
             foreach ($fieldDescriptions->getElements() as $fieldDescription) {
                 /** @var FieldDescriptionInterface $fieldDescription */
                 $name = $fieldDescription->getName();
-                if ($name === '_action') {
+                if ($name === ListMapper::NAME_ACTIONS) {
                     continue;
                 }
                 $label = $fieldDescription->getOption('label');

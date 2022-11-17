@@ -86,7 +86,7 @@ class CustomFieldAdmin extends AbstractAppAdmin
                 'choices' => $this->getRecordTypes(),
                 'catalogue' => 'messages',
             ]);
-        $list->add('_action', null, [
+        $list->add(ListMapper::NAME_ACTIONS, null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

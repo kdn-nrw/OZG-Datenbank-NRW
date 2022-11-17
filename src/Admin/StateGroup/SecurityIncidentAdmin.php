@@ -159,7 +159,7 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
                 'choices' => SecurityIncident::$methodChoices,
                 'catalogue' => 'messages',
             ]);
-        $list->add('_action', null, [
+        $list->add(ListMapper::NAME_ACTIONS, null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

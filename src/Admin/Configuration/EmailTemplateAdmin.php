@@ -99,7 +99,7 @@ class EmailTemplateAdmin extends AbstractAppAdmin
             ->add('hidden', null, [
                 'label' => 'app.email_template.entity.hidden',
             ]);
-        $list->add('_action', null, [
+        $list->add(ListMapper::NAME_ACTIONS, null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [

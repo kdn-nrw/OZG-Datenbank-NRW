@@ -75,7 +75,7 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
             ->add('service')
             ->add('dataType')
             ->add('status');
-        $list->add('_action', null, [
+        $list->add(ListMapper::NAME_ACTIONS, null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',
             'actions' => [
