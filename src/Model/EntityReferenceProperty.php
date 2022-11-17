@@ -14,7 +14,7 @@ namespace App\Model;
 use App\Entity\Base\BaseEntityInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -329,7 +329,7 @@ class EntityReferenceProperty
      */
     public function getObjectValue($object)
     {
-        if (null !== $object && is_object($object)) {
+        if (is_object($object)) {
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
             return $propertyAccessor->getValue($object, $this->name);
         }

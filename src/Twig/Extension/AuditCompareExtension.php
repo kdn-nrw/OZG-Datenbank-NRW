@@ -12,7 +12,7 @@
 namespace App\Twig\Extension;
 
 use App\Service\Mailer\InjectEmailTemplateManagerTrait;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Exception\NoValueException;
 use Twig\Environment;
 use Twig\Error\LoaderError;

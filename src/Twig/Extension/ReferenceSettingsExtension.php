@@ -19,7 +19,7 @@ use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Util\ClassUtils;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
