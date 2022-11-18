@@ -435,6 +435,11 @@ services:
         persist_filters: true
     public: true
 
+  App\Admin\Extension\ImplementationProjectExtension:
+    tags:
+      - { name: sonata.admin.extension, target: App\Admin\ImplementationProjectAdmin }
+      - { name: sonata.admin.extension, target: App\Admin\Frontend\ImplementationProjectAdmin }
+
   App\Admin\JurisdictionAdmin:
     arguments:
       - ~

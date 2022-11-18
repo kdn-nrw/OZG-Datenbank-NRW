@@ -16,10 +16,10 @@ use App\Datagrid\CustomDatagrid;
 use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
 use App\Form\Filter\GroupedSessionFilterPersister;
-use App\Model\Annotation\BaseModelAnnotation;
 use App\Model\ExportSettings;
 use App\Model\ReferenceSettings;
 use App\Service\ApplicationContextHandler;
+use App\Service\InjectAdminHelperTrait;
 use App\Service\InjectAdminManagerTrait;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Doctrine\ORM\Query;
@@ -29,10 +29,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Filter\Persister\FilterPersisterInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
-use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
-use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
-use Sonata\Form\Type\DateRangePickerType;
-use Sonata\Form\Type\DateTimeRangePickerType;
 
 /**
  * Class AbstractContextAwareAdmin
@@ -40,6 +36,7 @@ use Sonata\Form\Type\DateTimeRangePickerType;
 abstract class AbstractContextAwareAdmin extends AbstractAdmin implements ContextAwareAdminInterface, CustomExportAdminInterface
 {
     use InjectAdminManagerTrait;
+    use InjectAdminHelperTrait;
 
     /**
      * Component responsible for persisting filters.
@@ -176,29 +173,9 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
      * @param string $property
      * @param array $filterOptions
      */
-    protected function addDefaultDatagridFilter(DatagridMapper $filter, string $property, array $filterOptions = []): void
+    final protected function addDefaultDatagridFilter(DatagridMapper $filter, string $property, array $filterOptions = []): void
     {
-        $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($this->getClass(), $property);
-        $type = null;
-        $fieldType = null;
-        $fieldDescriptionOptions = [];
-        if (!empty($propertyConfiguration['default_label']) && empty($filterOptions['label'])) {
-            $filterOptions['label'] = $propertyConfiguration['default_label'];
-        }
-        $dataType = $propertyConfiguration['data_type'];
-        if ($dataType === BaseModelAnnotation::DATA_TYPE_DATE_TIME) {
-            $type = DateTimeRangeFilter::class;
-            $filterOptions['field_type'] = DateTimeRangePickerType::class;
-        } elseif ($dataType === BaseModelAnnotation::DATA_TYPE_DATE) {
-            $type = DateRangeFilter::class;
-            $filterOptions['field_type'] = DateRangePickerType::class;
-        } elseif (!empty($propertyConfiguration['entity_class'])) {
-            if (!empty($propertyConfiguration['admin_class'])) {
-                $filterOptions['admin_code'] = $propertyConfiguration['admin_class'];
-            }
-            $fieldDescriptionOptions = ['expanded' => false, 'multiple' => true];
-        }
-        $filter->add($property, $type, $filterOptions, $fieldType, $fieldDescriptionOptions);
+        $this->adminHelper->addDefaultDataGridFilter($this->getClass(), $filter, $property, $filterOptions);
     }
 
     /**

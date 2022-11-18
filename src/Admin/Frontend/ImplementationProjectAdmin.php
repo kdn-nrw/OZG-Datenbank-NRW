@@ -23,55 +23,14 @@ use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
 use App\Exporter\Source\ServiceListValueFormatter;
 use App\Model\ExportSettings;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 class ImplementationProjectAdmin extends AbstractFrontendAdmin implements EnableFullTextSearchAdminInterface
 {
     use DatePickerTrait;
-
-    protected function configureDatagridFilters(DatagridMapper $filter)
-    {
-        $filter->add('name');
-        $this->addDefaultDatagridFilter($filter, 'laboratories');
-        $this->addDefaultDatagridFilter($filter, 'solutions');
-        $this->addDefaultDatagridFilter($filter, 'serviceSystems');
-        $this->addDefaultDatagridFilter($filter, 'services.service');
-        $this->addDefaultDatagridFilter($filter, 'serviceSystems.situation.subject');
-        $filter->add('status');
-        $this->addDefaultDatagridFilter($filter, 'projectStartAt');
-        $this->addDefaultDatagridFilter($filter, 'conceptStatusAt');
-        $this->addDefaultDatagridFilter($filter, 'implementationStatusAt');
-        $this->addDefaultDatagridFilter($filter, 'pilotingStatusAt');
-        $this->addDefaultDatagridFilter($filter, 'commissioningStatusAt');
-        $this->addDefaultDatagridFilter($filter, 'nationwideRolloutAt');
-        $this->addDefaultDatagridFilter($filter, 'fundings');
-        $this->addDefaultDatagridFilter($filter, 'services.service.bureaus');
-        $this->addDefaultDatagridFilter($filter, 'services.service.portals', ['label' => 'app.implementation_project.entity.portals']);
-        $this->addDefaultDatagridFilter($filter, 'projectLeaders');
-        $this->addDefaultDatagridFilter($filter, 'participationOrganisations');
-        $this->addDefaultDatagridFilter($filter, 'interestedOrganisations');
-        $this->addDefaultDatagridFilter($filter, 'services.service.communeTypes', ['label' => 'app.service_system.entity.commune_types']);
-        $this->addDefaultDatagridFilter($filter, 'solutions.openDataItems');
-        $filter
-            ->add('efaType', ChoiceFilter::class, [
-                'label' => 'app.implementation_project.entity.efa_type',
-                'field_options' => [
-                    'choices' => array_flip(ImplementationProject::EFA_TYPES),
-                    'required' => false,
-                    'multiple' => true,
-                    'expanded' => false,
-                    //'choice_translation_domain' => 'SonataAdminBundle',
-                ],
-                'field_type' => ChoiceType::class,
-            ]);
-    }
 
     protected function configureListFields(ListMapper $list)
     {
@@ -93,13 +52,13 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                 ],
                 'enable_filter_add' => true,
             ])
-            ->add('efaType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('efaType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.implementation_project.entity.efa_type',
                 'editable' => false,
                 'choices' => ImplementationProject::EFA_TYPES,
                 'catalogue' => 'messages',
             ])
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
