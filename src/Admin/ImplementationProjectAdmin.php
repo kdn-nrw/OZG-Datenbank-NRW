@@ -147,12 +147,12 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 'format' => 'richhtml',
                 'ckeditor_context' => 'default', // optional
             ]);
-        $this->addContactsFormFields($form, false, false, 'contacts', false);
+        $this->addContactsFormFields($form, false, 'contacts', false);
         $this->addOrganisationsFormFields($form, 'projectLeaders');
         $this->addOrganisationsFormFields($form, 'participationOrganisations');
         $this->addOrganisationsFormFields($form, 'interestedOrganisations');
         $this->addFundingsFormFields($form);
-        $this->addContactsFormFields($form, false, false, 'fimExperts', false);
+        $this->addContactsFormFields($form, false, 'fimExperts', false);
         $this->addSlugFormField($form, $this->getSubject());
         $form->end()
             ->end()
@@ -410,7 +410,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         ]);
         $this->addLaboratoriesShowFields($show);
         $this->addSolutionsShowFields($show);
-        $this->addContactsShowFields($show, false, 'contacts');
+        $this->addContactsShowFields($show, 'contacts');
         $this->addOrganisationsShowFields($show, 'projectLeaders');
         $this->addOrganisationsShowFields($show, 'participationOrganisations');
         $this->addOrganisationsShowFields($show, 'interestedOrganisations');
@@ -433,7 +433,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
             'admin_code' => PortalAdmin::class,
             'template' => 'ImplementationProjectAdmin/show-services-portals.html.twig',
         ]);
-        $this->addContactsShowFields($show, false, 'fimExperts');
+        $this->addContactsShowFields($show, 'fimExperts');
         $this->addDatePickersShowFields($show, 'nationwideRolloutAt', false);
     }
 }

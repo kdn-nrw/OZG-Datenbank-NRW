@@ -17,13 +17,11 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 trait ContactTrait
 {
     protected function addContactsFormFields(
         FormMapper $form,
-        $addOldField = false,
         $editable = false,
         $fieldName = 'contacts',
         $addTab = true,
@@ -54,11 +52,6 @@ trait ContactTrait
                     'ba_custom_exclude_fields' => ['organisationEntity', 'organisation', 'contactType',],
                 ]);
 
-            if ($addOldField) {
-                $form->add('contact', TextareaType::class, [
-                    'required' => $required,
-                ]);
-            }
             if ($addTab) {
                 $form->end();
                 $form->end();
@@ -72,11 +65,6 @@ trait ContactTrait
                 'by_reference' => false,
                 'choice_translation_domain' => false,
             ]);
-            if ($addOldField) {
-                $form->add('contact', TextareaType::class, [
-                    'required' => $required,
-                ]);
-            }
         }
     }
 
@@ -91,14 +79,11 @@ trait ContactTrait
     /**
      * @inheritdoc
      */
-    public function addContactsShowFields(ShowMapper $show, $addOldField = false, $fieldName = 'contacts'): void
+    public function addContactsShowFields(ShowMapper $show, $fieldName = 'contacts'): void
     {
         $show
             ->add($fieldName, null, [
                 'admin_code' => ContactAdmin::class,
             ]);
-        if ($addOldField) {
-            $show->add('contact');
-        }
     }
 }

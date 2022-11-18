@@ -75,7 +75,7 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
             $form
                 ->with('app.organisation.groups.contacts', ['class' => 'col-md-6']);
 
-            $this->addContactsFormFields($form, false, true, 'contacts', false, false);
+            $this->addContactsFormFields($form, true, 'contacts', false, false);
             $form
                 ->end();
         }

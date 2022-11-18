@@ -48,7 +48,7 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
         $this->addOrganisationOneToOneFormFields($form, ['organizationType', 'contacts']);
 
         $this->addSpecializedProceduresFormFields($form);
-        $this->addContactsFormFields($form, false, true, 'organisation.contacts', false, false);
+        $this->addContactsFormFields($form, true, 'organisation.contacts', false, false);
         $form
             ->end();
     }

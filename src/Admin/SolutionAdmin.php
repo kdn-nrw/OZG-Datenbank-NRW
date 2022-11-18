@@ -35,11 +35,11 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -148,7 +148,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->add('url', UrlType::class, [
                 'required' => false
             ]);
-        $this->addContactsFormFields($form, true, false, 'solutionContacts');
+        $this->addContactsFormFields($form, false, 'solutionContacts');
         $form->add('isPublished', CheckboxType::class, [
             'required' => false,
         ]);
@@ -380,7 +380,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'enable_filter_add' => true,
             ])
             ->add('name')/*
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -428,17 +428,16 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->add('authentications')
             ->add('analogServices')
             ->add('openDataItems')
-            ->add('contact')
             ->add('solutionContacts');
 
         $show
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('confidenceLevel', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('confidenceLevel', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ConfidenceLevel::class,
                 'catalogue' => 'messages',

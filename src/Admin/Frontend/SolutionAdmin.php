@@ -25,7 +25,7 @@ use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -150,7 +150,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
                 'enable_filter_add' => true,
             ])
             ->add('name')/*
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -182,7 +182,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             'publishedServiceSolutions',
             'customProvider', 'name', 'maturity', 'url', 'status',
         ]);
-        $settings->addExcludeFields(['serviceSolutions', 'contact']);
+        $settings->addExcludeFields(['serviceSolutions',]);
         $settings->addCustomLabel('publishedServiceSolutions', $this->trans('app.solution.entity.service_solutions'));
         $settings->addCustomPropertyValueFormatter('publishedServiceSolutions', $customServiceFormatter);
         return $settings;
@@ -202,13 +202,13 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             ->add('analogServices')
             ->add('openDataItems');
         $show
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
                 //'template' => 'ServiceAdmin/show_choice.html.twig',
             ])
-            ->add('confidenceLevel', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('confidenceLevel', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ConfidenceLevel::class,
                 'catalogue' => 'messages',

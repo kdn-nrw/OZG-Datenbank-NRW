@@ -47,6 +47,9 @@ class ServiceSolutionValueFormatter implements CustomPropertyValueFormatterInter
      */
     public function getPropertyValue(string $propertyPath, $objectOrArray): ?string
     {
+        if (!is_object($objectOrArray)) {
+            return '';
+        }
         /** @var Service|Solution $objectOrArray */
         if ($propertyPath === 'serviceSolutions') {
             $collection = $objectOrArray->getServiceSolutions();
