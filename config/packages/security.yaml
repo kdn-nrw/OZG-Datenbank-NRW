@@ -1,109 +1,137 @@
 security:
+  #enable_authenticator_manager: true
+  # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+  #password_hashers:
+  #  Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+  # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+  #providers:
+  #  users_in_memory: { memory: null
 
-    role_hierarchy:
-        ROLE_APP_SOLUTION_COMMUNE_EDIT: [ROLE_USER]
-        ROLE_VSM:         [ROLE_USER]
-        ROLE_API_ONBOARDING: [ROLE_USER]
-        ROLE_ADMIN:       [ROLE_USER, ROLE_VSM, ROLE_SONATA_ADMIN]
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_VSM, ROLE_ALLOWED_TO_SWITCH]
-        ROLE_SHOW_BACKEND: [ROLE_ADMIN, ROLE_USER]
-        SONATA:           [ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT]  # if you are using acl then this line must be commented
+  role_hierarchy:
+    ROLE_APP_SOLUTION_COMMUNE_EDIT: [ ROLE_USER ]
+    ROLE_VSM: [ ROLE_USER ]
+    ROLE_API_ONBOARDING: [ ROLE_USER ]
+    ROLE_ADMIN: [ ROLE_USER, ROLE_VSM, ROLE_SONATA_ADMIN ]
+    ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_VSM, ROLE_ALLOWED_TO_SWITCH ]
+    ROLE_SHOW_BACKEND: [ ROLE_ADMIN, ROLE_USER ]
+    SONATA: [ ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT ]  # if you are using acl then this line must be commented
 
-    encoders:
-        Symfony\Component\Security\Core\User\UserInterface: sha512
+  encoders:
+    Symfony\Component\Security\Core\User\UserInterface: sha512
 
-    # set access_strategy to unanimous, else you may have unexpected behaviors
-    access_decision_manager:
-        strategy: unanimous
+  # set access_strategy to unanimous, else you may have unexpected behaviors
+  access_decision_manager:
+    strategy: unanimous
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        sonata_user_bundle:
-            id: sonata.user.security.user_provider
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    sonata_user_bundle:
+      id: sonata.user.security.user_provider
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
 
-        api_logout:
-            pattern:   ^/api/logout
-            stateless: true
-            anonymous: true
+    api_logout:
+      pattern: ^/api/logout
+      stateless: true
+      anonymous: true
 
-        api:
-            pattern: ^/api/
-            stateless: true
-            anonymous: true
-            provider: sonata_user_bundle
-            json_login:
-                check_path: /api/authentication_token
-                username_path: email
-                password_path: password
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            guard:
-                authenticators:
-                    - App\Security\Guard\JWTTokenAuthenticator
+    api:
+      pattern: ^/api/
+      stateless: true
+      anonymous: true
+      provider: sonata_user_bundle
+      json_login:
+        check_path: /api/authentication_token
+        username_path: email
+        password_path: password
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+      guard:
+        authenticators:
+          - App\Security\Guard\JWTTokenAuthenticator
 
-        # -> custom firewall for the admin area of the URL
-        admin:
-            pattern:            /admin(.*)
-            context:            user
-            switch_user:
-                provider:       sonata_user_bundle
-                parameter:      _switch_user
-                role:           ROLE_ALLOWED_TO_SWITCH
-            form_login:
-                provider:       sonata_user_bundle
-                login_path:     /admin/login
-                use_forward:    false
-                check_path:     /admin/login_check
-                failure_path:   null
-            logout:
-                path:           /admin/logout
-                target:         /admin/login
-            anonymous:          true
-        # -> end custom configuration
+    # -> custom firewall for the admin area of the URL
+    admin:
+      pattern: /admin(.*)
+      context: user
+      switch_user:
+        provider: sonata_user_bundle
+        parameter: _switch_user
+        role: ROLE_ALLOWED_TO_SWITCH
+      form_login:
+        provider: sonata_user_bundle
+        login_path: /admin/login
+        use_forward: false
+        check_path: /admin/login_check
+        failure_path: null
+      logout:
+        path: /admin/logout
+        target: /admin/login
+      anonymous: true
+    # -> end custom configuration
 
-        # default login area for standard users
+    # default login area for standard users
 
-        # This firewall is used to handle the public login area
-        # This part is handled by the FOS User Bundle
-        main:
-            anonymous: true
-            pattern:             .*
-#            context:             user
-#            form_login:
-#                provider:       sonata_user_bundle
-#                login_path:    /login
-#                use_forward:    false
-#                check_path:     /login_check
-#                failure_path:   null
-            provider: 'sonata_user_bundle'
-            logout:              true
-            guard:
-                authenticators:
-                    - App\Security\FrontendAuthenticator
+    # This firewall is used to handle the public login area
+    # This part is handled by the FOS User Bundle
+    main:
+      #lazy: true
+      #provider: users_in_memory
 
-            # activate different ways to authenticate
+      # activate different ways to authenticate
+      # https://symfony.com/doc/current/security.html#the-firewall
 
-            # http_basic: true
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+      # https://symfony.com/doc/current/security/impersonating_user.html
+      # switch_user: true
+      anonymous: true
+      pattern: .*
+      #            context:             user
+      #            form_login:
+      #                provider:       sonata_user_bundle
+      #                login_path:    /login
+      #                use_forward:    false
+      #                check_path:     /login_check
+      #                failure_path:   null
+      provider: 'sonata_user_bundle'
+      logout: true
+      guard:
+        authenticators:
+          - App\Security\FrontendAuthenticator
 
-            # form_login: true
-            # https://symfony.com/doc/current/security/form_login_setup.html
+      # activate different ways to authenticate
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # Admin login page needs to be accessed without credential
-        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      # http_basic: true
+      # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
-        # Secured part of the site
-        # This config requires being logged for the whole site and having the admin role for the admin part.
-        # Change these rules to adapt them to your needs
-        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
-        - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      # form_login: true
+      # https://symfony.com/doc/current/security/form_login_setup.html
+
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+    # Admin login page needs to be accessed without credential
+    - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/admin/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+    # Secured part of the site
+    # This config requires being logged for the whole site and having the admin role for the admin part.
+    # Change these rules to adapt them to your needs
+    - { path: ^/admin/, role: [ ROLE_ADMIN, ROLE_SONATA_ADMIN ] }
+    - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+when@test:
+  security:
+    password_hashers:
+      # By default, password hashers are resource intensive and take time. This is
+      # important to generate secure password hashes. In tests however, secure hashes
+      # are not important, waste resources and increase test times. The following
+      # reduces the work factor to the lowest possible values.
+      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+        algorithm: auto
+        cost: 4 # Lowest possible value for bcrypt
+        time_cost: 3 # Lowest possible value for argon
+        memory_cost: 10 # Lowest possible value for argon
