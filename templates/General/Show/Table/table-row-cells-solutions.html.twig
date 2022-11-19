@@ -52,11 +52,5 @@ file that was distributed with this source code.
                 {{ contact ~ '' }}
             {% endfor %}
         {% endif %}
-        {% if child.contact %}
-            {% if contactCount > 0 %}
-                ,
-            {% endif %}
-            {{ child.contact }}
-        {% endif %}
     </td>
 {% endif %}
