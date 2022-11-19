@@ -1169,13 +1169,13 @@ services:
   Sonata\AdminBundle\Bridge\Exporter\AdminExporter: '@sonata.admin.admin_exporter'
 
   App\OpenApi\JwtDecorator:
-    decorates: 'api_platform.openapi.factory'
+    decorates: 'ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface'
     # pass the old service as an argument
     arguments:
       - '@.inner'
 
   App\OpenApi\PaginationExtensionDecorator:
-    decorates: 'api_platform.doctrine.orm.query_extension.pagination'
+    decorates: 'ApiPlatform\Doctrine\Orm\Extension\PaginationExtension'
     arguments:
       - '@request_stack'
       - '@.inner'

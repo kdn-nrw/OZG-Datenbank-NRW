@@ -64,24 +64,22 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        if (null !== $admin) {
-            $id = $admin->getRequest()->get('id');
+        $id = $admin->getRequest()->get('id');
 
-            $menu->addChild('app.service_provider.actions.show', [
-                'uri' => $admin->generateUrl('show', ['id' => $id])
+        $menu->addChild('app.service_provider.actions.show', [
+            'uri' => $admin->generateUrl('show', ['id' => $id])
+        ]);
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('app.service_provider.actions.edit', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id])
             ]);
+        }
 
-            if ($this->isGranted('EDIT')) {
-                $menu->addChild('app.service_provider.actions.edit', [
-                    'uri' => $admin->generateUrl('edit', ['id' => $id])
-                ]);
-            }
-
-            if ($this->isGranted('LIST')) {
-                $menu->addChild('app.security_incident.list', [
-                    'uri' => $admin->getChild(SecurityIncidentAdmin::class)->generateUrl('list')
-                ]);
-            }
+        if ($this->isGranted('LIST')) {
+            $menu->addChild('app.security_incident.list', [
+                'uri' => $admin->getChild(SecurityIncidentAdmin::class)->generateUrl('list')
+            ]);
         }
     }
 

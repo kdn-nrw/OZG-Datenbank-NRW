@@ -40,24 +40,22 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        if (null !== $admin) {
-            $id = $admin->getRequest()->get('id');
+        $id = $admin->getRequest()->get('id');
 
-            $menu->addChild('app.form_server.actions.show', [
-                'uri' => $admin->generateUrl('show', ['id' => $id])
+        $menu->addChild('app.form_server.actions.show', [
+            'uri' => $admin->generateUrl('show', ['id' => $id])
+        ]);
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('app.form_server.actions.edit', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id])
             ]);
+        }
 
-            if ($this->isGranted('EDIT')) {
-                $menu->addChild('app.form_server.actions.edit', [
-                    'uri' => $admin->generateUrl('edit', ['id' => $id])
-                ]);
-            }
-
-            if ($this->isGranted('LIST')) {
-                $menu->addChild('app.form_server.actions.solutions_list', [
-                    'uri' => $admin->getChild(FormServerSolutionAdmin::class)->generateUrl('list')
-                ]);
-            }
+        if ($this->isGranted('LIST')) {
+            $menu->addChild('app.form_server.actions.solutions_list', [
+                'uri' => $admin->getChild(FormServerSolutionAdmin::class)->generateUrl('list')
+            ]);
         }
     }
 

@@ -51,26 +51,24 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        if (null !== $admin) {
-            $id = $admin->getRequest()->get('id');
+        $id = $admin->getRequest()->get('id');
 
-            $menu->addChild('app.mailing.actions.show', [
-                'uri' => $admin->generateUrl('show', ['id' => $id])
+        $menu->addChild('app.mailing.actions.show', [
+            'uri' => $admin->generateUrl('show', ['id' => $id])
+        ]);
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('app.mailing.actions.edit', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id])
             ]);
+        }
 
-            if ($this->isGranted('EDIT')) {
-                $menu->addChild('app.mailing.actions.edit', [
-                    'uri' => $admin->generateUrl('edit', ['id' => $id])
+        if ($this->isGranted('LIST')) {
+            $childAdmin = $admin->getChild(MailingContactAdmin::class);
+            if (null !== $childAdmin) {
+                $menu->addChild('app.mailing.actions.contact_list', [
+                    'uri' => $childAdmin->generateUrl('list')
                 ]);
-            }
-
-            if ($this->isGranted('LIST')) {
-                $childAdmin = $admin->getChild(MailingContactAdmin::class);
-                if (null !== $childAdmin) {
-                    $menu->addChild('app.mailing.actions.contact_list', [
-                        'uri' => $childAdmin->generateUrl('list')
-                    ]);
-                }
             }
         }
     }

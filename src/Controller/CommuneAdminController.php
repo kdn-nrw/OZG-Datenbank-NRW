@@ -51,9 +51,10 @@ class CommuneAdminController extends CRUDController
     public function integrationsAction(Request $request, int $id): Response
     {
         $commune = $this->getEntityManager()->find(Commune::class, $id);
-        if (null === $commune || !$this->admin->isGranted('SHOW')) {
-            $this->createAccessDeniedException();
+        if (null === $commune) {
+            throw $this->createAccessDeniedException();
         }
+        $this->admin->checkAccess('show', $commune);
         return $this->renderPartialTemplate(
             $commune,
             'communeSolutions',
@@ -69,9 +70,10 @@ class CommuneAdminController extends CRUDController
     public function solutionsAction(Request $request, int $id): Response
     {
         $commune = $this->getEntityManager()->find(Commune::class, $id);
-        if (null === $commune || !$this->admin->isGranted('SHOW')) {
-            $this->createAccessDeniedException();
+        if (null === $commune) {
+            throw $this->createAccessDeniedException();
         }
+        $this->admin->checkAccess('show', $commune);
         return $this->renderPartialTemplate(
             $commune,
             'solutions',
@@ -90,7 +92,7 @@ class CommuneAdminController extends CRUDController
         try {
             $show = $this->admin->getShow();
         } catch (\LogicException $e) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $fieldDescription = $show->get($property);

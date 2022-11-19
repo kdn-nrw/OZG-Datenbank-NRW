@@ -56,9 +56,10 @@ class CommuneController extends AbstractFrontendCRUDController
     public function integrationsAction(Request $request, int $id): Response
     {
         $commune = $this->getEntityManager()->find(Commune::class, $id);
-        if (null === $commune || !$this->admin->isGranted('SHOW')) {
-            $this->createAccessDeniedException();
+        if (null === $commune) {
+            throw $this->createAccessDeniedException();
         }
+        $this->admin->checkAccess('show', $commune);
         return $this->renderPartialTemplate(
             $commune,
             'communeSolutions',
@@ -74,9 +75,10 @@ class CommuneController extends AbstractFrontendCRUDController
     public function solutionsAction(Request $request, int $id): Response
     {
         $commune = $this->getEntityManager()->find(Commune::class, $id);
-        if (null === $commune || !$this->admin->isGranted('SHOW')) {
-            $this->createAccessDeniedException();
+        if (null === $commune) {
+            throw $this->createAccessDeniedException();
         }
+        $this->admin->checkAccess('show', $commune);
         return $this->renderPartialTemplate(
             $commune,
             'solutions',
@@ -93,9 +95,6 @@ class CommuneController extends AbstractFrontendCRUDController
     protected function renderPartialTemplate(BaseEntityInterface $object, string $property, string $view): Response
     {
         $show = $this->admin->getShow();
-        if (null === $show) {
-            $this->createAccessDeniedException();
-        }
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $fieldDescription = $show->get($property);
         $parameters = [

@@ -101,24 +101,22 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        if (null !== $admin) {
-            $id = $admin->getRequest()->get('id');
+        $id = $admin->getRequest()->get('id');
 
-            $menu->addChild('app.solution.actions.show', [
-                'uri' => $admin->generateUrl('show', ['id' => $id])
+        $menu->addChild('app.solution.actions.show', [
+            'uri' => $admin->generateUrl('show', ['id' => $id])
+        ]);
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('app.solution.actions.edit', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id])
             ]);
+        }
 
-            if ($this->isGranted('EDIT')) {
-                $menu->addChild('app.solution.actions.edit', [
-                    'uri' => $admin->generateUrl('edit', ['id' => $id])
-                ]);
-            }
-
-            if ($this->isGranted('LIST') && null !== $childAdmin = $admin->getChild(ServiceSolutionAdmin::class)) {
-                $menu->addChild('app.solution.actions.list', [
-                    'uri' => $childAdmin->generateUrl('list')
-                ]);
-            }
+        if ($this->isGranted('LIST') && null !== $childAdmin = $admin->getChild(ServiceSolutionAdmin::class)) {
+            $menu->addChild('app.solution.actions.list', [
+                'uri' => $childAdmin->generateUrl('list')
+            ]);
         }
     }
 

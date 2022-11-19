@@ -62,24 +62,22 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        if (null !== $admin) {
-            $id = $admin->getRequest()->get('id');
+        $id = $admin->getRequest()->get('id');
 
-            $menu->addChild('app.implementation_project.actions.show', [
-                'uri' => $admin->generateUrl('show', ['id' => $id])
+        $menu->addChild('app.implementation_project.actions.show', [
+            'uri' => $admin->generateUrl('show', ['id' => $id])
+        ]);
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('app.implementation_project.actions.edit', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id])
             ]);
+        }
 
-            if ($this->isGranted('EDIT')) {
-                $menu->addChild('app.implementation_project.actions.edit', [
-                    'uri' => $admin->generateUrl('edit', ['id' => $id])
-                ]);
-            }
-
-            if ($this->isGranted('LIST')) {
-                $menu->addChild('app.implementation_project.actions.list', [
-                    'uri' => $admin->getChild(ImplementationProjectServiceAdmin::class)->generateUrl('list')
-                ]);
-            }
+        if ($this->isGranted('LIST')) {
+            $menu->addChild('app.implementation_project.actions.list', [
+                'uri' => $admin->getChild(ImplementationProjectServiceAdmin::class)->generateUrl('list')
+            ]);
         }
     }*/
 

@@ -59,30 +59,28 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        if (null !== $admin) {
-            $id = $admin->getRequest()->get('id');
+        $id = $admin->getRequest()->get('id');
 
-            $menu->addChild('app.specialized_procedure.actions.show', [
-                'uri' => $admin->generateUrl('show', ['id' => $id])
+        $menu->addChild('app.specialized_procedure.actions.show', [
+            'uri' => $admin->generateUrl('show', ['id' => $id])
+        ]);
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('app.specialized_procedure.actions.edit', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id])
             ]);
+        }
 
-            if ($this->isGranted('EDIT')) {
-                $menu->addChild('app.specialized_procedure.actions.edit', [
-                    'uri' => $admin->generateUrl('edit', ['id' => $id])
-                ]);
-            }
+        if ($this->isGranted('LIST') && null !== $childAdmin = $admin->getChild(ApplicationModuleAdmin::class)) {
+            $menu->addChild('app.application_module.breadcrumb.link_application_module_list', [
+                'uri' => $childAdmin->generateUrl('list')
+            ]);
+        }
 
-            if ($this->isGranted('LIST') && null !== $childAdmin = $admin->getChild(ApplicationModuleAdmin::class)) {
-                $menu->addChild('app.application_module.breadcrumb.link_application_module_list', [
-                    'uri' => $childAdmin->generateUrl('list')
-                ]);
-            }
-
-            if ($this->isGranted('LIST') && null !== $childAdmin = $admin->getChild(ApplicationInterfaceAdmin::class)) {
-                $menu->addChild('app.application_interface.breadcrumb.link_application_interface_list', [
-                    'uri' => $childAdmin->generateUrl('list')
-                ]);
-            }
+        if ($this->isGranted('LIST') && null !== $childAdmin = $admin->getChild(ApplicationInterfaceAdmin::class)) {
+            $menu->addChild('app.application_interface.breadcrumb.link_application_interface_list', [
+                'uri' => $childAdmin->generateUrl('list')
+            ]);
         }
     }
 
