@@ -166,7 +166,7 @@ class SecurityIncident extends BaseEntity implements BlameableInterface
     /**
      * @param ServiceProvider $serviceProvider
      */
-    public function setServiceProvider($serviceProvider): void
+    public function setServiceProvider(ServiceProvider $serviceProvider): void
     {
         $this->serviceProvider = $serviceProvider;
     }
@@ -341,9 +341,9 @@ class SecurityIncident extends BaseEntity implements BlameableInterface
         }
         $createdBy = $this->getCreatedBy();
         if (null !== $createdBy) {
-            if ($createdBy instanceof \Sonata\UserBundle\Model\User) {
+            if ($createdBy instanceof User) {
                 $text .= ', ' . $createdBy->getFullname();
-                if ($createdBy instanceof User && null !== $organisation = $createdBy->getOrganisation()) {
+                if (null !== $organisation = $createdBy->getOrganisation()) {
                     $text .= ', ' . $organisation;
                 }
                 $text .= ' (' . $createdBy->getEmail() . ')';

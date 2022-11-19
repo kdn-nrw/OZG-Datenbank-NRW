@@ -56,7 +56,7 @@ trait ControllerDownloadTrait
      * @param int|null $documentId
      * @return Response
      */
-    public function downloadAction(Request $request, $id = null, $documentId = null): Response
+    public function downloadAction(Request $request, $id = null, int $documentId = null): Response
     {
         /** @noinspection SuspiciousAssignmentsInspection */
         $id = (int)$request->get($this->admin->getIdParameter());

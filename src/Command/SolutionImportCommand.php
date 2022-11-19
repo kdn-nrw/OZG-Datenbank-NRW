@@ -70,7 +70,10 @@ class SolutionImportCommand extends Command
                 . PHP_EOL . 'If you want to get more detailed information, use the --verbose option.');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -85,5 +88,6 @@ class SolutionImportCommand extends Command
         $importedRowCount = $this->importer->run($dataProvider);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
+        return 0;
     }
 }

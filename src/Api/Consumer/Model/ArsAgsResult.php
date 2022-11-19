@@ -162,7 +162,7 @@ class ArsAgsResult extends AbstractResult
     /**
      * @return array|string[]
      */
-    public function getZipCodes()
+    public function getZipCodes(): array
     {
         return $this->zipCodes;
     }
@@ -170,7 +170,7 @@ class ArsAgsResult extends AbstractResult
     /**
      * @param array|string[] $zipCodes
      */
-    public function setZipCodes($zipCodes): void
+    public function setZipCodes(array $zipCodes): void
     {
         $this->zipCodes = $zipCodes;
     }

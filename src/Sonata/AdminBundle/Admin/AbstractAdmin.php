@@ -1439,7 +1439,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
     final public function getUniqId(): string
     {
         if (null === $this->uniqId) {
-            $this->uniqId = sprintf('s%s', uniqid());
+            $this->uniqId = sprintf('s%s', uniqid('', true));
         }
 
         return $this->uniqId;

@@ -58,7 +58,7 @@ class FormServer extends BaseNamedEntity
      * @param FormServerSolution $formServerSolution
      * @return self
      */
-    public function removeFormServerSolution($formServerSolution): self
+    public function removeFormServerSolution(FormServerSolution $formServerSolution): self
     {
         if ($this->formServerSolutions->contains($formServerSolution)) {
             $this->formServerSolutions->removeElement($formServerSolution);

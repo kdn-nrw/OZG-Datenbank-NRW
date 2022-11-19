@@ -12,7 +12,6 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\AbstractContextAwareAdmin;
-use App\Admin\Base\AdminTranslatorStrategyTrait;
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableInterface;

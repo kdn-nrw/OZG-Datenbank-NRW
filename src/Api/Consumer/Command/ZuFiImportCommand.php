@@ -70,7 +70,10 @@ class ZuFiImportCommand extends Command
                 . PHP_EOL . 'If you want to get more detailed information, use the --verbose option.');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -78,26 +81,29 @@ class ZuFiImportCommand extends Command
         $limit = (int) $input->getOption('limit');
         $startTime = microtime(true);
         $consumer = $this->apiManager->getConfiguredConsumer(ApiManager::API_KEY_ZU_FI);
-        /** @var ZuFiConsumer $consumer */
-        $consumer->setOutput($output);
-        /** @var ZuFiDemand $demand */
-        $demand = $consumer->getDemand();
-        $commune = null;
-        if (0 < $communeId = (int) $input->getOption('commune-id')) {
-            $commune = $this->getEntityManager()->find(Commune::class, $communeId);
-        } elseif ($regionalKey) {
-            $demand->setRegionalKey($regionalKey);
-            if ($regionalKey !== ZuFiConsumer::DEFAULT_REGIONAL_KEY) {
-                $repository = $this->getEntityManager()->getRepository(Commune::class);
-                $commune = $repository->findOneBy(['regionalKey' => $regionalKey]);
+        if ($consumer instanceof ZuFiConsumer) {
+            $consumer->setOutput($output);
+            /** @var ZuFiDemand $demand */
+            $demand = $consumer->getDemand();
+            $commune = null;
+            if (0 < $communeId = (int) $input->getOption('commune-id')) {
+                $commune = $this->getEntityManager()->find(Commune::class, $communeId);
+            } elseif ($regionalKey) {
+                $demand->setRegionalKey($regionalKey);
+                if ($regionalKey !== ZuFiConsumer::DEFAULT_REGIONAL_KEY) {
+                    $repository = $this->getEntityManager()->getRepository(Commune::class);
+                    $commune = $repository->findOneBy(['regionalKey' => $regionalKey]);
+                }
             }
+            $serviceKeys = array_filter(explode(',', (string) $input->getArgument('serviceKeys')));
+            if (!empty($serviceKeys)) {
+                $io->note(sprintf('Starting import process. Limiting imported items to services %s', implode(',', $serviceKeys)));
+            }
+            $importedRowCount = $consumer->importServiceResults($limit, $commune, $serviceKeys);
+            $durationSeconds = round(microtime(true) - $startTime, 3);
+            $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
+            return 0;
         }
-        $serviceKeys = array_filter(explode(',', (string) $input->getArgument('serviceKeys')));
-        if (!empty($serviceKeys)) {
-            $io->note(sprintf('Starting import process. Limiting imported items to services %s', implode(',', $serviceKeys)));
-        }
-        $importedRowCount = $consumer->importServiceResults($limit, $commune, $serviceKeys);
-        $durationSeconds = round(microtime(true) - $startTime, 3);
-        $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
+        return 1;
     }
 }

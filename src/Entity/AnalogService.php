@@ -42,7 +42,7 @@ class AnalogService extends BaseNamedEntity implements HasSolutionsEntityInterfa
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution): self
+    public function addSolution(Solution $solution): self
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -56,7 +56,7 @@ class AnalogService extends BaseNamedEntity implements HasSolutionsEntityInterfa
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution): self
+    public function removeSolution(Solution $solution): self
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);

@@ -33,7 +33,7 @@ use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -506,7 +506,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
             ]);
     }
 
-    protected function configureRoutes(RouteCollection $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection
             ->add('download', $this->getRouterIdParameter() . '/download');

@@ -70,7 +70,7 @@ class ManySolutionsValueFormatter extends ServiceSolutionValueFormatter
      * @param Collection $collection
      * @return Collection
      */
-    protected function getUniqueServiceSolutionCollection($collection): Collection
+    protected function getUniqueServiceSolutionCollection(Collection $collection): Collection
     {
         $serviceSolutions = new ArrayCollection();
         foreach ($collection as $entity) {
@@ -89,7 +89,7 @@ class ManySolutionsValueFormatter extends ServiceSolutionValueFormatter
      * @param Collection $collection
      * @return string|null
      */
-    protected function getSolutionListValue($collection): ?string
+    protected function getSolutionListValue(Collection $collection): ?string
     {
         $valueList = [];
         foreach ($collection as $entity) {

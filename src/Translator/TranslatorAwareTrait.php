@@ -32,12 +32,12 @@ trait TranslatorAwareTrait
      * unless the text domain is overridden
      *
      * @param string $message Message to be translated
-     * @param string $textDomain (Optional) Translator text domain
+     * @param string|null $textDomain (Optional) Translator text domain
      * @param array  $parameters An array of parameters for the message
      *
      * @return string
      */
-    final protected function translate($message, $textDomain = null, array $parameters = array()): string
+    final protected function translate(string $message, string $textDomain = null, array $parameters = array()): string
     {
         /*$textValue = $message;
         if ($textDomain === null) {
@@ -53,7 +53,7 @@ trait TranslatorAwareTrait
     /**
      * @param TranslatorInterface $translator
      */
-    final public function setTranslator($translator): void
+    final public function setTranslator(TranslatorInterface $translator): void
     {
         $this->translator = $translator;
     }

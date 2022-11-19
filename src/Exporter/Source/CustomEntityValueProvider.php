@@ -12,6 +12,7 @@
 namespace App\Exporter\Source;
 
 use App\Entity\Base\BaseEntity;
+use App\Entity\Base\BaseEntityInterface;
 use App\Model\ExportCellValue;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
@@ -120,7 +121,7 @@ class CustomEntityValueProvider
      * @param bool $forceUpdate Force update of cache item
      * @return array|mixed
      */
-    protected function getCacheItemData(BaseEntity $entity, $forceUpdate = false)
+    protected function getCacheItemData(BaseEntity $entity, bool $forceUpdate = false)
     {
         $itemId = $entity->getId();
         if (null !== $modifiedAt = $entity->getModifiedAt()) {
@@ -163,16 +164,16 @@ class CustomEntityValueProvider
     }
 
     /**
-     * @param BaseEntity $entity
+     * @param BaseEntityInterface $entity
      * @return ExportCellValue[]
      */
-    protected function getPropertyValueModelList($entity): array
+    protected function getPropertyValueModelList(BaseEntityInterface $entity): array
     {
         return $this->processData($entity);
     }
 
     /**
-     * @param object|array $objectOrArray
+     * @param BaseEntityInterface|array $objectOrArray
      * @return array
      */
     protected function processData($objectOrArray): array

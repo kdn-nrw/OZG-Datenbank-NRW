@@ -39,7 +39,7 @@ class CustomFieldExtension extends AbstractAdminExtension
             if ($form->hasOpenTab()) {
                 $form->end();
             }
-            $keys = $form->keys();
+            $form->keys();
             $addTab = true;
             $domain = $admin->getTranslationDomain();
             // Optional label for custom field tab/group, e.g. app.epayment.tabs.custom_fields

@@ -136,7 +136,7 @@ class XlsxWriter implements TypedWriterInterface
      * @param int $number
      * @return string
      */
-    public static function formatColumnName($number): string
+    public static function formatColumnName(int $number): string
     {
         for ($char = ''; $number >= 0; $number = (int)($number / 26) - 1) {
             $char = chr($number % 26 + 0x41) . $char;
@@ -208,7 +208,7 @@ class XlsxWriter implements TypedWriterInterface
      * @param string $column
      * @param string $value
      */
-    private function setHeader($column, $value): void
+    private function setHeader(string $column, string $value): void
     {
         if ($this->showHeaders) {
             $this->setCellValue($column, self::LABEL_ROW, $value);
@@ -238,7 +238,7 @@ class XlsxWriter implements TypedWriterInterface
      * @param string $name
      * @return string
      */
-    private function getColumn($name): string
+    private function getColumn(string $name): string
     {
         if (isset($this->headerColumns[$name])) {
             $currentColumn = $this->headerColumns[$name];

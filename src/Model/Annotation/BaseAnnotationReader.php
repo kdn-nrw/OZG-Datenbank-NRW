@@ -16,8 +16,6 @@ namespace App\Model\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\PsrCachedReader;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Cache\Psr6\CacheAdapter;
 use Doctrine\ORM\Mapping;
 use ReflectionClass;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -36,11 +34,7 @@ class BaseAnnotationReader
     {
         if (null === $this->annotationReader) {
             $reader = new AnnotationReader();
-            if (class_exists(ArrayAdapter::class)) {
-                $this->annotationReader = new PsrCachedReader($reader, new ArrayAdapter());
-            } elseif (class_exists(ArrayCache::class)) {
-                $this->annotationReader = new PsrCachedReader($reader, CacheAdapter::wrap(new ArrayCache()));
-            }
+            $this->annotationReader = new PsrCachedReader($reader, new ArrayAdapter());
         }
         return $this->annotationReader;
     }

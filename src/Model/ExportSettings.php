@@ -140,7 +140,7 @@ class ExportSettings
     /**
      * @return array|string[]
      */
-    public function getFieldsStart()
+    public function getFieldsStart(): array
     {
         return $this->fieldsStart;
     }
@@ -148,7 +148,7 @@ class ExportSettings
     /**
      * @param array|string[] $fieldsStart
      */
-    public function setFieldsStart($fieldsStart): void
+    public function setFieldsStart(array $fieldsStart): void
     {
         $this->fieldsStart = $fieldsStart;
     }
@@ -216,7 +216,7 @@ class ExportSettings
     /**
      * @param array|string[] $processedPropertyMap
      */
-    public function setProcessedPropertyMap($processedPropertyMap): void
+    public function setProcessedPropertyMap(array $processedPropertyMap): void
     {
         $this->processedPropertyMap = $processedPropertyMap;
     }

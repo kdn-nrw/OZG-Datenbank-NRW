@@ -42,9 +42,9 @@ class ImplementationProjectExtension extends AbstractAdminExtension
     private $modelManager;
 
     /**
-     * @phpstan-param DatagridMapper<T> $filter
+     * @phpstan-param DatagridMapper $filter
      */
-    public function configureDatagridFilters(DatagridMapper $filter)
+    public function configureDatagridFilters(DatagridMapper $filter): void
     {
         $admin = $filter->getAdmin();
         $this->modelManager = $admin->getModelManager();
@@ -129,8 +129,8 @@ class ImplementationProjectExtension extends AbstractAdminExtension
                     }
                     return false;
                 },
+                'field_type' => ModelType::class,
             ],
-            ModelType::class,
             [
                 'model_manager' => $this->modelManager,
                 'class' => CommuneType::class,

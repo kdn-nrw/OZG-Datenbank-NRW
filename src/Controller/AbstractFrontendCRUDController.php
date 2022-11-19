@@ -21,9 +21,9 @@ use Behat\Transliterator\Transliterator;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class AbstractFrontendCRUDController
@@ -48,7 +48,7 @@ abstract class AbstractFrontendCRUDController extends CRUDController
      */
     abstract protected function getAdminClassName(): string;
 
-    public function index()
+    public function index(): RedirectResponse
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('sonata_admin_dashboard');
@@ -108,7 +108,7 @@ abstract class AbstractFrontendCRUDController extends CRUDController
      * @param BaseEntityInterface $object
      * @return Response
      */
-    private function showObject(Request $request, $object): Response
+    private function showObject(Request $request, BaseEntityInterface $object): Response
     {
         $this->admin->checkAccess('show', $object);
 

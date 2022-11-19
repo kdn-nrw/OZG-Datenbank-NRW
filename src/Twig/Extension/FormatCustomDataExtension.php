@@ -93,7 +93,7 @@ class FormatCustomDataExtension extends AbstractExtension
      * @param object|null $data
      * @return string
      */
-    public function getCollectionItemLabel($data): string
+    public function getCollectionItemLabel(?object $data): string
     {
         if ($data instanceof CustomEntityLabelInterface) {
             $label = $this->translate($data->getLabelKey());

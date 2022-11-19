@@ -128,7 +128,7 @@ class TextConverter
      *
      * @return bool
      */
-    private static function isUtf8($string): bool
+    private static function isUtf8(string $string): bool
     {
         $length = \strlen($string);
 

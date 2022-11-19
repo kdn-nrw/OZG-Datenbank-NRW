@@ -149,7 +149,7 @@ class MetaItemProperty extends AbstractMetaItem
             $this->setCustomLabel($mergeItem->getCustomLabel());
         }
         if (($overrideIfEmpty || !empty($mergeItem->getPlaceholder()))
-            && $mergeItem->setPlaceholder() !== $this->getPlaceholder()) {
+            && $mergeItem->getPlaceholder() !== $this->getPlaceholder()) {
             $this->setPlaceholder($mergeItem->getPlaceholder());
         }
     }

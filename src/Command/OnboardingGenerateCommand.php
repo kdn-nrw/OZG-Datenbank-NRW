@@ -46,7 +46,10 @@ class OnboardingGenerateCommand extends Command
         $this->setDescription('Generate onboarding entities from communes');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -62,5 +65,6 @@ class OnboardingGenerateCommand extends Command
         $importedRowCount += $this->onboardingManager->createItems(MonumentAuthority::class);
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished onboarding update process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
+        return 0;
     }
 }

@@ -13,7 +13,6 @@ namespace App\Api\Consumer\DataProvider;
 
 use App\Api\Consumer\InvalidParametersException;
 use App\Entity\Api\ApiConsumer as ApiConsumerEntity;
-use App\Import\Annotation\InjectAnnotationReaderTrait;
 use App\Import\DataProcessor\DataProcessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;

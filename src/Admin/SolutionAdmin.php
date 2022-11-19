@@ -80,7 +80,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
      * @phpstan-param array{_page?: int, _per_page?: int, _sort_by?: string, _sort_order?: string} $sortValues
      * @param array $sortValues
      */
-    protected function configureDefaultSortValues(array &$sortValues)
+    protected function configureDefaultSortValues(array &$sortValues): void
     {
         parent::configureDefaultSortValues($sortValues);
         $sortValues[DatagridInterface::SORT_ORDER] = $sortValues[DatagridInterface::SORT_ORDER] ?? 'DESC';

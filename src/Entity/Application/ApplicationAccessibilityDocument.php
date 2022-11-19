@@ -11,7 +11,6 @@
 
 namespace App\Entity\Application;
 
-use App\Entity\Application;
 use App\Entity\Base\BaseNamedEntity;
 use App\Entity\Base\DocumentUploadEntityInterface;
 use App\Entity\Base\HasUploadsEntityInterface;

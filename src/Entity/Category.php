@@ -93,7 +93,7 @@ class Category extends BaseNamedEntity implements CategoryEntityInterface, Impor
      * @param Category $category
      * @return self
      */
-    public function addChild($category): self
+    public function addChild(Category $category): self
     {
         if (!$this->children->contains($category) && $category->getId() !== $this->getId()) {
             $this->children->add($category);
@@ -107,7 +107,7 @@ class Category extends BaseNamedEntity implements CategoryEntityInterface, Impor
      * @param Category $category
      * @return self
      */
-    public function removeChild($category): self
+    public function removeChild(Category $category): self
     {
         if ($this->children->contains($category)) {
             $this->children->removeElement($category);

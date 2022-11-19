@@ -55,9 +55,13 @@ class MailingSendCommand extends Command
             );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $limit = max(1, min(500, (int)$input->getOption('limit')));
         $this->mailingSender->run($limit);
+        return 0;
     }
 }

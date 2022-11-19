@@ -42,7 +42,7 @@ class Authentication extends BaseNamedEntity implements HasSolutionsEntityInterf
      * @param Solution $solution
      * @return self
      */
-    public function addSolution($solution)
+    public function addSolution(Solution $solution)
     {
         if (!$this->solutions->contains($solution)) {
             $this->solutions->add($solution);
@@ -56,7 +56,7 @@ class Authentication extends BaseNamedEntity implements HasSolutionsEntityInterf
      * @param Solution $solution
      * @return self
      */
-    public function removeSolution($solution)
+    public function removeSolution(Solution $solution)
     {
         if ($this->solutions->contains($solution)) {
             $this->solutions->removeElement($solution);

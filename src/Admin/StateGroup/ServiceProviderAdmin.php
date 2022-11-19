@@ -16,7 +16,6 @@ use App\Admin\EnableFullTextSearchAdminInterface;
 use App\Admin\ManufacturerAdmin;
 use App\Admin\Traits\AddressTrait;
 use App\Admin\Traits\CommuneTrait;
-use App\Admin\Traits\ContactTrait;
 use App\Admin\Traits\OrganisationOneToOneTrait;
 use App\Admin\Traits\SpecializedProcedureTrait;
 use App\Entity\Contact;
@@ -232,7 +231,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
     }
 
     /**
-     * @phpstan-param T $object
+     * @param object $object
      */
     protected function alterNewInstance(object $object): void
     {

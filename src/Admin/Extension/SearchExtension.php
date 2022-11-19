@@ -46,7 +46,7 @@ class SearchExtension extends AbstractAdminExtension
     }
 
     /**
-     * @phpstan-param DatagridMapper<T> $filter
+     * @phpstan-param DatagridMapper $filter
      */
     public function configureDatagridFilters(DatagridMapper $filter): void
     {

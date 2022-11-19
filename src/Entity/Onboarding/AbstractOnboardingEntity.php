@@ -401,7 +401,7 @@ abstract class AbstractOnboardingEntity extends BaseEntity implements
      * @param bool $fallbackToDefault
      * @return string|null
      */
-    public function getGroupEmail($fallbackToDefault = false): ?string
+    public function getGroupEmail(bool $fallbackToDefault = false): ?string
     {
         if ($fallbackToDefault && null === $this->groupEmail && $mainCommuneEmail = $this->commune->getMainEmail()) {
             $mailParts = explode('@', $mainCommuneEmail);

@@ -87,8 +87,9 @@ class CommuneAdminController extends CRUDController
      */
     protected function renderPartialTemplate(BaseEntityInterface $object, string $property, string $view): Response
     {
-        $show = $this->admin->getShow();
-        if (null === $show) {
+        try {
+            $show = $this->admin->getShow();
+        } catch (\LogicException $e) {
             $this->createAccessDeniedException();
         }
         $propertyAccessor = PropertyAccess::createPropertyAccessor();

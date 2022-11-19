@@ -181,7 +181,8 @@ class ConceptQueryType extends BaseNamedEntity implements SortableEntityInterfac
      * @param bool $useFormLabels
      * @return array
      */
-    public static function getTypeLabelMap($useFormLabels = false) {
+    public static function getTypeLabelMap(bool $useFormLabels = false): array
+    {
         $labelPrefix = $useFormLabels ? self::GROUP_TYPE_FORM_LABEL_PREFIX : self::GROUP_TYPE_LABEL_PREFIX;
         $mapTypes = [];
         foreach (self::$groupTypeKey as $key) {

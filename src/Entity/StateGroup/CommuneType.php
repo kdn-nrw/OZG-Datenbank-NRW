@@ -76,7 +76,7 @@ class CommuneType extends BaseNamedEntity
      * @param Commune $commune
      * @return self
      */
-    public function addCommune($commune): self
+    public function addCommune(Commune $commune): self
     {
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
@@ -90,7 +90,7 @@ class CommuneType extends BaseNamedEntity
      * @param Commune $commune
      * @return self
      */
-    public function removeCommune($commune): self
+    public function removeCommune(Commune $commune): self
     {
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);
@@ -152,7 +152,7 @@ class CommuneType extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function addServiceSystem($serviceSystem): self
+    public function addServiceSystem(ServiceSystem $serviceSystem): self
     {
         if (!$this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->add($serviceSystem);
@@ -166,7 +166,7 @@ class CommuneType extends BaseNamedEntity
      * @param ServiceSystem $serviceSystem
      * @return self
      */
-    public function removeServiceSystem($serviceSystem): self
+    public function removeServiceSystem(ServiceSystem $serviceSystem): self
     {
         if ($this->serviceSystems->contains($serviceSystem)) {
             $this->serviceSystems->removeElement($serviceSystem);
@@ -196,7 +196,7 @@ class CommuneType extends BaseNamedEntity
      * @param Service $service
      * @return self
      */
-    public function addService($service): self
+    public function addService(Service $service): self
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
@@ -210,7 +210,7 @@ class CommuneType extends BaseNamedEntity
      * @param Service $service
      * @return self
      */
-    public function removeService($service): self
+    public function removeService(Service $service): self
     {
         if ($this->services->contains($service)) {
             $this->services->removeElement($service);

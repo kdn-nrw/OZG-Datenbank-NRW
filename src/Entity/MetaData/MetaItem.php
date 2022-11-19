@@ -54,7 +54,7 @@ class MetaItem extends AbstractMetaItem
      * @param MetaItemProperty $metaItemProperty
      * @return self
      */
-    public function addMetaItemProperty($metaItemProperty): self
+    public function addMetaItemProperty(MetaItemProperty $metaItemProperty): self
     {
         if (null !== $existingProperty = $this->getMetaItemProperty($metaItemProperty->getMetaKey())) {
             $existingProperty->merge($metaItemProperty);
@@ -71,7 +71,7 @@ class MetaItem extends AbstractMetaItem
      * @param MetaItemProperty $metaItemProperty
      * @return self
      */
-    public function removeMetaItemProperty($metaItemProperty): self
+    public function removeMetaItemProperty(MetaItemProperty $metaItemProperty): self
     {
         if (null !== $existingProperty = $this->getMetaItemProperty($metaItemProperty->getMetaKey())) {
             $this->metaItemProperties->removeElement($existingProperty);

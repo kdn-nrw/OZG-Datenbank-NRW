@@ -16,6 +16,8 @@ use Sonata\AdminBundle\Exception\NoValueException;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Twig\Extension\AbstractExtension;
 use Twig\TemplateWrapper;
 use Twig\TwigFilter;
@@ -54,10 +56,10 @@ class AuditCompareExtension extends AbstractExtension
     public function renderViewElementCompare(
         Environment               $environment,
         FieldDescriptionInterface $fieldDescription,
-                                  $baseObject,
-                                  $compareObject,
-                                  $onlyShowChanges = true
-    )
+        $baseObject,
+        $compareObject,
+        bool $onlyShowChanges = true
+    ): string
     {
         $template = $this->getTemplate(
             $fieldDescription,
@@ -131,13 +133,17 @@ class AuditCompareExtension extends AbstractExtension
     /**
      * Get template.
      *
+     * @param FieldDescriptionInterface $fieldDescription
      * @param string $defaultTemplate
-     *
+     * @param Environment $environment
      * @return TemplateWrapper
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     protected function getTemplate(
         FieldDescriptionInterface $fieldDescription,
-                                  $defaultTemplate,
+        string                    $defaultTemplate,
         Environment               $environment
     )
     {

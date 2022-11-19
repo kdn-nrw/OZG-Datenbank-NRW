@@ -63,16 +63,15 @@ class SolutionHelper
         }
         $solutionId = $object->getId();
         if (!empty($insertCommunes)) {
-            $sql = 'INSERT'.' INTO ozg_solutions_communes (solution_id, commune_id, commune_type, connection_planned, modified_at, created_at, hidden)';
+            $insSql = 'INSERT'.' INTO ozg_solutions_communes (solution_id, commune_id, commune_type, connection_planned, modified_at, created_at, hidden)';
             $valueRows = [];
             foreach ($insertCommunes as $communeId) {
                 $valueRows[] = "($solutionId, $communeId, '$communeType', 0, NOW(), NOW(), 0)";
             }
-            $sql .= ' VALUES ' . implode(', ', $valueRows);
-            $this->executeStatement($sql);
+            $insSql .= ' VALUES ' . implode(', ', $valueRows);
+            $this->executeStatement($insSql);
         }
         // Use SQL statements because entity manager is too slow!
-        $status = $object->getStatus();
         $sql = "UPDATE ozg_solutions_communes SET commune_type = '$communeType' WHERE solution_id = $solutionId";
         $this->executeStatement($sql);
         if ($communeType === Solution::COMMUNE_TYPE_SELECTED) {
@@ -83,8 +82,8 @@ class SolutionHelper
                 }
             }
             if (!empty($deleteItems)) {
-                $sql = 'DELETE FROM ozg_solutions_communes WHERE id IN (' . implode(', ', $deleteItems) . ')';
-                $this->executeStatement($sql);
+                $delSql = 'DELETE FROM ozg_solutions_communes WHERE id IN (' . implode(', ', $deleteItems) . ')';
+                $this->executeStatement($delSql);
             }
         }
     }

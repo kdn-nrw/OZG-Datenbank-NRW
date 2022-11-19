@@ -23,19 +23,11 @@ use App\Service\ApplicationContextHandler;
 use App\Service\InjectAdminHelperTrait;
 use App\Service\InjectAdminManagerTrait;
 use App\Sonata\AdminBundle\Admin\AbstractAdmin;
-use App\Sonata\AdminBundle\Datagrid\OrderByToSelectWalker;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Doctrine\ORM\Query;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
-use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
-use Sonata\Form\Type\DateRangePickerType;
-use Sonata\Form\Type\DateTimeRangePickerType;
-use Sonata\AdminBundle\Filter\Persister\FilterPersisterInterface;
-use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
-
 /**
  * Class AbstractContextAwareAdmin
  */

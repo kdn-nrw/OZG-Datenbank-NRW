@@ -87,7 +87,7 @@ class CommuneDataProcessor extends AbstractDataProcessor
      * @param bool $allowEmptyType
      * @return Commune|null
      */
-    private static function findCommuneWithMatchingNameAndType(ObjectManager $objectManager, string $name, $communeTypes, $allowEmptyType = true): ?Commune
+    private static function findCommuneWithMatchingNameAndType(ObjectManager $objectManager, string $name, $communeTypes, bool $allowEmptyType = true): ?Commune
     {
         /** @var CommuneRepository $repository */
         $repository = $objectManager->getRepository(Commune::class);

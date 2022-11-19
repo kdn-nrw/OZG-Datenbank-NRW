@@ -31,7 +31,7 @@ class ApiAccessVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::API_ONBOARDING_READ], false)) {
+        if ($attribute !== self::API_ONBOARDING_READ) {
             return false;
         }
 

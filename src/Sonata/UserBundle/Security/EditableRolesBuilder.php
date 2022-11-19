@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Sonata\UserBundle\Security;
 
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\Pool;
 use Sonata\AdminBundle\SonataConfiguration;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -66,11 +65,11 @@ class EditableRolesBuilder
 
     /**
      * @param string|bool|null $domain
-     * @param bool             $expanded
+     * @param bool $expanded
      *
      * @return array
      */
-    public function getRoles($domain = false, $expanded = true)
+    public function getRoles($domain = false, bool $expanded = true): array
     {
         $roles = [];
 

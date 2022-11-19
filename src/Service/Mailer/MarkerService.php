@@ -223,7 +223,7 @@ class MarkerService
      * @param mixed $fieldValue
      * @param string|null $markerGroup
      */
-    private function addFieldValueMarker(array &$markers, $fieldName, $fieldValue, $markerGroup): void
+    private function addFieldValueMarker(array &$markers, string $fieldName, $fieldValue, ?string $markerGroup): void
     {
         if (is_object($fieldValue)) {
             if ($fieldValue instanceof DateTime) {
@@ -283,9 +283,9 @@ class MarkerService
      * @param array $markers The marker array
      * @param string|null $prefix The optional prefix value for the marker
      * @param string $fieldName
-     * @param string $fieldValue
+     * @param mixed $fieldValue
      */
-    private function addMarker(array &$markers, $prefix, $fieldName, $fieldValue): void
+    private function addMarker(array &$markers, ?string $prefix, string $fieldName, $fieldValue): void
     {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $fieldName, $matches);
         $ret = $matches[0];

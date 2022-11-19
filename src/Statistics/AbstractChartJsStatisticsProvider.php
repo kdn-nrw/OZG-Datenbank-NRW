@@ -111,7 +111,7 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
      *
      * @return array
      */
-    abstract protected function createChartData();
+    abstract protected function createChartData(): array;
 
     /**
      * Adds the given plugin
@@ -121,7 +121,7 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
      * @param string $name
      * @param array $options
      */
-    protected function addPlugin($name, $options)
+    protected function addPlugin(string $name, array $options)
     {
         $this->addSectionOptions('plugins', $options, $name);
         if (isset($this->availablePlugins[$name])) {
@@ -144,10 +144,10 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
      * If no key is given, the entire section options are overwritten
      *
      * @param string $section
-     * @param string $key
      * @param array $options
+     * @param string|null $key
      */
-    private function addSectionOptions($section, $options, $key = null)
+    private function addSectionOptions(string $section, array $options, string $key = null)
     {
         if (!empty($key)) {
             if (!isset($this->chartJsOptions[$section])) {

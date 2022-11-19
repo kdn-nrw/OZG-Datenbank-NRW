@@ -263,7 +263,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @return self
      * @deprecated
      */
-    public function addOffice($office): self
+    public function addOffice(Office $office): self
     {
         if (!$this->offices->contains($office)) {
             $this->offices->add($office);
@@ -278,7 +278,7 @@ class Commune extends AppBaseEntity implements OrganisationEntityInterface, HasM
      * @return self
      * @deprecated
      */
-    public function removeOffice($office): self
+    public function removeOffice(Office $office): self
     {
         if ($this->offices->contains($office)) {
             $this->offices->removeElement($office);

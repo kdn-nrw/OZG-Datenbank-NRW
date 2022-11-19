@@ -23,7 +23,7 @@ App\Entity\ImplementationProject:
       normalization_context:
         enable_max_depth: 1
         groups: ['item:read', 'implementation_project:read']
-      #\ApiPlatform\Core\OpenApi\Factory\OpenApiFactory::collectPaths
+      #\ApiPlatform\OpenApi\Factory\OpenApiFactory::collectPaths
       openapi_context:
         summary: 'Gibt ein OZG Umsetzungsprojekt zurück'
   #    put:

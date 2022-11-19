@@ -47,8 +47,12 @@ class ContactImportCommand extends Command
             ->setDescription('Import contacts from defined data sources');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->cmsContactImport->import();
+        return 0;
     }
 }

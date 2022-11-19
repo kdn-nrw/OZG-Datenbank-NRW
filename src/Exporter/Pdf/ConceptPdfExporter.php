@@ -11,6 +11,7 @@
 
 namespace App\Exporter\Pdf;
 
+use App\Import\DataParser;
 use App\Translator\TranslatorAwareTrait;
 use App\Entity\ModelRegion\ModelRegionProject;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -64,7 +65,7 @@ class ConceptPdfExporter
         if (strlen($filename) > 100) {
             $filename = substr($filename, 0, 100);
         }
-        $filename = 'Konzeptabfrage-' . \App\Import\DataParser::cleanStringValue($filename) . '.pdf';
+        $filename = 'Konzeptabfrage-' . DataParser::cleanStringValue($filename) . '.pdf';
         $exportFileInfo = [
             'abs_path' => $targetFileAsbPath,
             'filename' => $filename,
@@ -158,7 +159,7 @@ class ConceptPdfExporter
      * @param string $headerLabel
      * @return void
      */
-    private function writeSectionHeader(PDF $pdf, $headerLabel)
+    private function writeSectionHeader(PDF $pdf, string $headerLabel)
     {
         $headerHeight = 14;
         $startX = $this->marginLeft;
@@ -178,7 +179,7 @@ class ConceptPdfExporter
      * @param float $contentWidth
      * @return void
      */
-    private function writeGroupHeader(PDF $pdf, $headerLabel, $contentWidth)
+    private function writeGroupHeader(PDF $pdf, string $headerLabel, float $contentWidth)
     {
         $headerHeight = 7;
         $startX = $this->marginLeft;
@@ -201,7 +202,7 @@ class ConceptPdfExporter
      * @param float $rectHeight
      * @return float|mixed
      */
-    private function writeContent(PDF $pdf, array $row, $contentWidth, $rectHeight = 0)
+    private function writeContent(PDF $pdf, array $row, float $contentWidth, $rectHeight = 0)
     {
         $contentStartY = $pdf->GetY();
         $pdf->SetFont($this->fontFamily, '', 10);

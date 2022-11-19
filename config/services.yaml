@@ -1170,11 +1170,15 @@ services:
 
   App\OpenApi\JwtDecorator:
     decorates: 'api_platform.openapi.factory'
-    autoconfigure: false
+    # pass the old service as an argument
+    arguments:
+      - '@.inner'
 
   App\OpenApi\PaginationExtensionDecorator:
     decorates: 'api_platform.doctrine.orm.query_extension.pagination'
-    autoconfigure: false
+    arguments:
+      - '@request_stack'
+      - '@.inner'
 
   App\Security\Guard\JWTTokenAuthenticator:
     parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator

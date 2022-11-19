@@ -77,13 +77,13 @@ class PhoneticUtility
         $word = preg_replace('/[^a-zA-Z]/', '', $word);
 
 
-        $wordlen = mb_strlen($word);
+        $wordLength = mb_strlen($word);
         $char = str_split($word);
 
 
         // Special cases for first character (Anlaut)
         if ($char[0] === 'c') {
-            if ($wordlen == 1) {
+            if ($wordLength === 1) {
                 $code = 8;
                 $x = 1;
             } else {
@@ -110,7 +110,7 @@ class PhoneticUtility
             $x = 0;
         }
 
-        for (; $x < $wordlen; $x++) {
+        for (; $x < $wordLength; $x++) {
 
             switch ($char[$x]) {
                 case 'a':
@@ -126,7 +126,7 @@ class PhoneticUtility
                     break;
                 case 'd':
                 case 't':
-                    if ($x + 1 < $wordlen) {
+                    if ($x + 1 < $wordLength) {
                         switch ($char[$x + 1]) {
                             case 'c':
                             case 's':
@@ -150,7 +150,7 @@ class PhoneticUtility
                     $code .= "4";
                     break;
                 case 'c':
-                    if ($x + 1 < $wordlen) {
+                    if ($x + 1 < $wordLength) {
                         switch ($char[$x + 1]) {
                             case 'a':
                             case 'h':
@@ -211,17 +211,17 @@ class PhoneticUtility
         }
         $code = preg_replace("/(.)\\1+/", "\\1", $code);
 
-        $codelen = mb_strlen($code);
+        $codeLength = mb_strlen($code);
         $num = str_split($code);
-        $phoneticcode = $num[0];
+        $phoneticCode = $num[0];
 
-        for ($x = 1; $x < $codelen; $x++) {
-            if ($num[$x] != "0") {
-                $phoneticcode .= $num[$x];
+        for ($x = 1; $x < $codeLength; $x++) {
+            if ($num[$x] !== "0") {
+                $phoneticCode .= $num[$x];
             }
         }
 
-        return $phoneticcode;
+        return $phoneticCode;
     }
 
 }

@@ -89,7 +89,7 @@ class CentralAssociation extends BaseNamedEntity implements OrganisationEntityIn
      * @param Commune $commune
      * @return self
      */
-    public function addCommune($commune): self
+    public function addCommune(Commune $commune): self
     {
         if (!$this->communes->contains($commune)) {
             $this->communes->add($commune);
@@ -103,7 +103,7 @@ class CentralAssociation extends BaseNamedEntity implements OrganisationEntityIn
      * @param Commune $commune
      * @return self
      */
-    public function removeCommune($commune): self
+    public function removeCommune(Commune $commune): self
     {
         if ($this->communes->contains($commune)) {
             $this->communes->removeElement($commune);

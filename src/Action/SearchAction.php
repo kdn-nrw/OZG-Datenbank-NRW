@@ -98,15 +98,22 @@ final class SearchAction
             $request->get('page'),
             $request->get('offset')
         )) {
-            foreach ($pager->getResults() as $result) {
+            $hasShowAction = $admin->hasRoute('show');
+
+            /** @var \Sonata\AdminBundle\Datagrid\Pager $pager */
+            foreach ($pager->getCurrentPageResults() as $result) {
+                $link = null;
+                if ($hasShowAction && $admin->hasAccess('show', $result)) {
+                    $link = $admin->generateObjectUrl('show', $result);
+                }
                 $results[] = [
                     'label' => $admin->toString($result),
-                    'link' => $admin->getSearchResultLink($result),
+                    'link' => $link,
                     'id' => $admin->id($result),
                 ];
             }
             $page = (int)$pager->getPage();
-            $total = (int)$pager->getNbResults();
+            $total = (int)$pager->countResults();
         }
 
         $response = new JsonResponse([

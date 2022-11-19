@@ -39,7 +39,10 @@ class ModelRegionProjectStatusCommand extends Command
             ->setDescription('Update the model region project status based on the given project dates');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -67,5 +70,6 @@ class ModelRegionProjectStatusCommand extends Command
         }
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished update process. %s records were update in %s seconds', $updatedRowCount, $durationSeconds));
+        return 0;
     }
 }

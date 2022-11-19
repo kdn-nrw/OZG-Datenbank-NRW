@@ -101,6 +101,7 @@ class AdminManager
         $key = SnakeCaseConverter::classNameToSnakeCase($entityClass);
         $context = $this->applicationContextHandler->getApplicationContext();
         $cacheKey = $context . '-' . $key . '-' . $property;
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($entityOrClass, $entityClass, $property) {
             $item->expiresAfter(604800);
             $propertyParts = explode('.', $property);

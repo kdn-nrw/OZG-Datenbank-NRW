@@ -39,11 +39,11 @@ final class ProviderLoader
     /**
      * Returns all providers for the given provider type
      *
-     * @param string $type Provider type (excel|csv|chart)
+     * @param string|null $type Provider type (excel|csv|chart)
      *
      * @return AbstractStatisticsProvider[]
      */
-    public function getProviders($type = null): array
+    public function getProviders(string $type = null): array
     {
         $providers = [];
         foreach ($this->registry as $providerKey => $provider) {
@@ -61,7 +61,7 @@ final class ProviderLoader
      *
      * @return AbstractStatisticsProvider|null
      */
-    public function getProviderByKey($providerKey): ?AbstractStatisticsProvider
+    public function getProviderByKey(string $providerKey): ?AbstractStatisticsProvider
     {
         return $this->registry[$providerKey] ?? null;
     }

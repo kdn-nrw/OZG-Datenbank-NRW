@@ -1,13 +1,15 @@
 <?php
 namespace App\Api\ApiPlatform\Filter;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractContextAwareFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use App\Entity\Base\NamedEntityInterface;
 use App\Search\Finder;
 use Doctrine\ORM\QueryBuilder;
 
-final class FulltextSearchFilter extends AbstractContextAwareFilter
+final class FulltextSearchFilter extends AbstractFilter implements SearchFilterInterface
 {
     /**
      * @var Finder
@@ -26,7 +28,7 @@ final class FulltextSearchFilter extends AbstractContextAwareFilter
         $this->finder = $finder;
     }
 
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = [])
     {
         // otherwise filter is applied to order and page as well
         if ($property !== self::FULL_TEXT_SEARCH_PROPERTY) {

@@ -50,7 +50,7 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
      * @param string $adminClassName
      * @param array $customLabels
      */
-    public function setAdminClass(string $adminClassName, $customLabels = []): void
+    public function setAdminClass(string $adminClassName, array $customLabels = []): void
     {
         if (preg_match('/^((.*Bundle|[^\\\\]+)?(\\\\.+)*\\\\)?([^\\\\]+)$/', $adminClassName, $matches) === 1) {
             $bundle = preg_replace('/^(.*)Bundle$/', '$1', str_replace('\\', '', $matches[2]));
@@ -117,7 +117,7 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
      *
      * @return string
      */
-    public function getLabel($label, $context = '', $type = ''): string
+    public function getLabel(string $label, string $context = '', string $type = ''): string
     {
         if (array_key_exists($label, self::$commonTranslations)) {
             return self::$commonTranslations[$label];

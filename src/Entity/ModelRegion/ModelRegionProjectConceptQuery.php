@@ -101,7 +101,7 @@ class ModelRegionProjectConceptQuery extends BaseEntity implements SortableEntit
     /**
      * @return int|null
      */
-    public function getDescriptionChoice()
+    public function getDescriptionChoice(): ?int
     {
         if (!empty($this->description)) {
             $choices = $this->getValueChoices();
@@ -116,7 +116,7 @@ class ModelRegionProjectConceptQuery extends BaseEntity implements SortableEntit
     /**
      * @param int|null $descriptionChoice
      */
-    public function setDescriptionChoice($descriptionChoice): void
+    public function setDescriptionChoice(?int $descriptionChoice): void
     {
         if ($descriptionChoice > 0) {
             $choices = $this->getValueChoices();

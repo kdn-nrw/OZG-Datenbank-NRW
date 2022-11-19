@@ -75,6 +75,7 @@ class RecentActivitiesBlock extends AbstractBlockService
             /** @var User $user */
             $lastModified = $user->getUpdatedAt() ? $user->getUpdatedAt()->getTimestamp() : strtotime("today");
             $cacheKey = $mode . '_block_recent_activities_' . $lastModified . '_' . $user->getId();
+            /** @noinspection PhpPossiblePolymorphicInvocationInspection */
             $items = $this->cache->get($cacheKey, function (ItemInterface $item) use ($user, $limit) {
                 // Expires at midnight, so it will be loaded once the next time the user logs in
                 $item->expiresAfter(86400 - (time() - strtotime("today")));
@@ -192,7 +193,7 @@ class RecentActivitiesBlock extends AbstractBlockService
      * @param UserInterface|null $user
      * @param int $limit
      * @param array $items
-     */
+     * /
     private function addShowEntries(?UserInterface $user, int $limit, array &$items): void
     {
         $repository = $this->getEntityManager()->getRepository(LogEntry::class);
@@ -209,13 +210,13 @@ class RecentActivitiesBlock extends AbstractBlockService
             ->setMaxResults($limit * 3);
         $results = $queryBuilder->getQuery()->execute();
         foreach ($results as $logEntry) {
-            /** @var LogEntry $logEntry */
+            /** @var LogEntry $logEntry * /
             $this->addLogItem($logEntry, $items);
             if (count($items) >= $limit) {
                 break;
             }
         }
-    }
+    }*/
 
     /**
      * Add default log entries (exclude show entries)
@@ -223,7 +224,7 @@ class RecentActivitiesBlock extends AbstractBlockService
      * @param UserInterface|null $user
      * @param int $limit
      * @param array $items
-     */
+     * /
     private function addDefaultEntries(?UserInterface $user, int $limit, array &$items): void
     {
         $repository = $this->getEntityManager()->getRepository(LogEntry::class);
@@ -242,19 +243,19 @@ class RecentActivitiesBlock extends AbstractBlockService
             ->setMaxResults($limit * 3);
         $results = $queryBuilder->getQuery()->execute();
         foreach ($results as $logEntry) {
-            /** @var LogEntry $logEntry */
+            /** @var LogEntry $logEntry * /
             $this->addLogItem($logEntry, $items);
             if (count($items) >= $limit) {
                 break;
             }
         }
-    }
+    }*/
 
     /**
      * Adds the given log entry to the item list
      * @param LogEntry $logEntry
      * @param array $items
-     */
+     * /
     private function addLogItem(LogEntry $logEntry, array &$items): void
     {
         if ($route = $logEntry->getRoute()) {
@@ -296,7 +297,7 @@ class RecentActivitiesBlock extends AbstractBlockService
                 ];
             }
         }
-    }
+    }*/
 
     public function configureSettings(OptionsResolver $resolver): void
     {

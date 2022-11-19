@@ -35,7 +35,7 @@ class DataCenterConsumptionChartProvider extends AbstractChartJsStatisticsProvid
     /**
      * @inheritDoc
      */
-    protected function createChartData()
+    protected function createChartData(): array
     {
         $groupedData = $this->loadData();
         $xAxisLabels = array_keys($groupedData);

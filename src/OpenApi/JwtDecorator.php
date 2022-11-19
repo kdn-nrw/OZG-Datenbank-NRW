@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace App\OpenApi;
 
-use ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface;
-use ApiPlatform\Core\OpenApi\OpenApi;
-use ApiPlatform\Core\OpenApi\Model;
+use ApiPlatform\OpenApi\OpenApi;
+use ApiPlatform\OpenApi\Model;
+use ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface;
 
 /**
  * Class JwtDecorator
@@ -31,7 +31,9 @@ final class JwtDecorator implements OpenApiFactoryInterface
     {
         $openApi = ($this->decorated)($context);
         $schemas = $openApi->getComponents()->getSchemas();
-
+        if (null === $schemas) {
+            $schemas = new \ArrayObject([]);
+        }
         $schemas['Token'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [

@@ -66,7 +66,10 @@ class ZuFiImportFimDescriptionCommand extends Command
                 . PHP_EOL . 'If you want to get more detailed information, use the --verbose option.');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -79,13 +82,16 @@ class ZuFiImportFimDescriptionCommand extends Command
         $force = (bool)$input->getOption('force');
         $startTime = microtime(true);
         $consumer = $this->apiManager->getConfiguredConsumer(ApiManager::API_KEY_ZU_FI);
-        /** @var ZuFiConsumer $consumer */
-        $consumer->setOutput($output);
-        $demand = $consumer->getDemand();
-        /** @var ZuFiDemand $demand */
-        $demand->setRegionalKey($regionalKey);
-        $importedRowCount = $consumer->importServiceResults($limit, null, $serviceKeys, $force);
-        $durationSeconds = round(microtime(true) - $startTime, 3);
-        $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
+        if ($consumer instanceof ZuFiConsumer) {
+            $consumer->setOutput($output);
+            $demand = $consumer->getDemand();
+            /** @var ZuFiDemand $demand */
+            $demand->setRegionalKey($regionalKey);
+            $importedRowCount = $consumer->importServiceResults($limit, null, $serviceKeys, $force);
+            $durationSeconds = round(microtime(true) - $startTime, 3);
+            $io->note(sprintf('Finished import process. %s records were imported in %s seconds', $importedRowCount, $durationSeconds));
+            return 0;
+        }
+        return 1;
     }
 }

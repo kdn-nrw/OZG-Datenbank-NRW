@@ -74,7 +74,10 @@ class SearchIndexCommand extends Command
             );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -90,5 +93,6 @@ class SearchIndexCommand extends Command
         }
         $changedRecordCount = $this->indexer->run($limit, $onlyEntityClass);
         $io->note(sprintf('Finished indexing. %s records were changed', $changedRecordCount));
+        return 0;
     }
 }

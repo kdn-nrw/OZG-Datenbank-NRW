@@ -54,7 +54,10 @@ class LogAggregateCommand extends Command
         $this->setDescription('Aggregate log entries');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -124,6 +127,7 @@ class LogAggregateCommand extends Command
         // ozg_statistics_log_search
         $durationSeconds = round(microtime(true) - $startTime, 3);
         $io->note(sprintf('Finished log aggregation. %d records of %d were aggregated in %s seconds', $importedRowCount, $totalRowCount, $durationSeconds));
+        return 0;
     }
 
     private function initPathMap()

@@ -172,7 +172,7 @@ class BaseMailer
      * @param string $glue
      * @return string
      */
-    private function formatAndMergeRecipients($recipients, $glue = ', '): string
+    private function formatAndMergeRecipients($recipients, string $glue = ', '): string
     {
         $recipientArray = [];
         if (!empty($recipients)) {
@@ -194,7 +194,7 @@ class BaseMailer
      * @param array $debugTable
      * @return string
      */
-    private function formatDebugTablePlain($debugTable): string
+    private function formatDebugTablePlain(array $debugTable): string
     {
         $debugOutput = PHP_EOL . PHP_EOL . PHP_EOL;
         $debugOutput .= str_pad('', 60, '-', STR_PAD_LEFT) . PHP_EOL;

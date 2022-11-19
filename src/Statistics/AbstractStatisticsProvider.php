@@ -53,7 +53,7 @@ abstract class AbstractStatisticsProvider
     /**
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -61,16 +61,16 @@ abstract class AbstractStatisticsProvider
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
     /**
      * @param string $type
-     * @return AbstractStatisticsProvider
+     * @return self
      */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->type = $type;
         return $this;

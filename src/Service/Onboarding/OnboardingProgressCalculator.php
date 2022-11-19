@@ -187,7 +187,7 @@ class OnboardingProgressCalculator
                     ];
                 }
                 break;
-            case MonumentAuthority::class:
+            /** @noinspection PhpDuplicateSwitchCaseBodyInspection */ case MonumentAuthority::class:
                 if (empty($properties)) {
                     $properties = [
                         'applicationType', 'organizationalKey', 'intermediaryOperatorType',

@@ -12,7 +12,7 @@
 namespace App\Exporter\Source;
 
 use App\Admin\AbstractContextAwareAdmin;
-use App\Entity\Base\BaseEntity;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\NamedEntityInterface;
 use App\Model\ExportCellValue;
 use App\Model\ExportSettings;
@@ -85,10 +85,10 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
     }
 
     /**
-     * @param BaseEntity $entity
+     * @param BaseEntityInterface $entity
      * @return ExportCellValue[]
      */
-    protected function getPropertyValueModelList($entity): array
+    protected function getPropertyValueModelList(BaseEntityInterface $entity): array
     {
         $data = [];
         foreach ($this->propertyPaths as $name => $propertyPath) {

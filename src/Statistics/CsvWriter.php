@@ -44,7 +44,7 @@ class CsvWriter
      * @param ExportOptions $options
      * @return Response
      */
-    public function export($fileName, array $data, ExportOptions $options)
+    public function export(string $fileName, array $data, ExportOptions $options)
     {
         $headers = $this->exportHelper->generateHeaders($options);
         // $response = new Response($content);

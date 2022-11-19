@@ -132,7 +132,7 @@ class EmailTemplateManager
      * @param bool $sendHtmlPart
      * @return bool
      */
-    protected function sendMarkerEmail(AbstractTemplateModel $model, $sendHtmlPart = false): bool
+    protected function sendMarkerEmail(AbstractTemplateModel $model, bool $sendHtmlPart = false): bool
     {
         $emailTemplate = $model->getEmailTemplate();
         if ($emailTemplate->isHidden()) {
@@ -315,7 +315,7 @@ class EmailTemplateManager
      * @param bool $useTestData
      * @return array The model markers
      */
-    public function getModelMarkers(AbstractTemplateModel $model, $useTestData = false): array
+    public function getModelMarkers(AbstractTemplateModel $model, bool $useTestData = false): array
     {
         if ($useTestData) {
             $variableDefinitions = $model->getVariableDefinitions();
