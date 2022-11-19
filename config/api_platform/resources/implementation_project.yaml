@@ -1,13 +1,12 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
 App\Entity\ImplementationProject:
   #shortName: 'Leika-Leistungen'
-  description: 'Umsetzungsprojekte'
+  ##description: 'Umsetzungsprojekte'
   attributes:
     pagination_items_per_page: 25
 
-  collectionOperations:
-    get:
-      method: 'GET'
+  operations:
+    ApiPlatform\Metadata\GetCollection:
       normalization_context:
         enable_max_depth: 1
         groups: ['collection:read', 'implementation_project:collection:read']
@@ -17,9 +16,7 @@ App\Entity\ImplementationProject:
   #    post:
   #      security: 'is_granted("ROLE_ADMIN")'
 
-  itemOperations:
-    get:
-      method: 'GET'
+    ApiPlatform\Metadata\Get:
       normalization_context:
         enable_max_depth: 1
         groups: ['item:read', 'implementation_project:read']

@@ -24,9 +24,10 @@ final class OpenApiFactory implements OpenApiFactoryInterface
         $filteredPaths = new Model\Paths();
         foreach ($paths as $path => $pathItem) {
             // If a prefix is configured on API Platform's routes, it must appear here.
-            if ($path === '/weathers/{id}') {
-                continue;
-            }
+            // TODO: filter unnecessary paths
+//            if ($path === '/weathers/{id}') {
+//                continue;
+//            }
             $filteredPaths->addPath($path, $pathItem);
         }
 

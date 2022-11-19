@@ -1,13 +1,12 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
 App\Entity\Subject:
   #shortName: 'Leika-Leistungen'
-  description: 'OZG Themenfelder'
+  ##description: 'OZG Themenfelder'
   attributes:
     pagination_items_per_page: 25
 
-  collectionOperations:
-    get:
-      method: 'GET'
+  operations:
+    ApiPlatform\Metadata\GetCollection:
       normalization_context:
         enable_max_depth: 1
         groups: ['collection:read', 'subject:collection:read', 'service-system-situation-subject']
@@ -16,9 +15,7 @@ App\Entity\Subject:
 #    post:
 #      security: 'is_granted("ROLE_ADMIN")'
 
-  itemOperations:
-    get:
-      method: 'GET'
+    ApiPlatform\Metadata\Get:
       normalization_context:
         enable_max_depth: 1
         groups: ['item:read', 'subject:read', 'service-system-situation-subject']

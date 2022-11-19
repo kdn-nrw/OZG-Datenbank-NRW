@@ -1,13 +1,12 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
 App\Entity\StateGroup\CommuneType:
   #shortName: 'Leika-Leistungen'
-  description: 'Größenklasse der Kommunen'
+  ##description: 'Größenklasse der Kommunen'
   attributes:
     pagination_items_per_page: 25
 
-  collectionOperations:
-    get:
-      method: 'GET'
+  operations:
+    ApiPlatform\Metadata\GetCollection:
       normalization_context:
         enable_max_depth: 1
         groups: ['collection:read', 'commune_type:collection:read']
@@ -16,9 +15,7 @@ App\Entity\StateGroup\CommuneType:
   #    post:
   #      security: 'is_granted("ROLE_ADMIN")'
 
-  itemOperations:
-    get:
-      method: 'GET'
+    ApiPlatform\Metadata\Get:
       normalization_context:
         enable_max_depth: 1
         groups: ['item:read', 'commune_type:read']

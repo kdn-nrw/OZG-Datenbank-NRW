@@ -3,7 +3,7 @@ api_platform:
     title: 'KDN OZG API'
 
     # The description of the API.
-    description: 'OZG NRW kommunal – Onlinedienste zum Onlinezugangsgesetz'
+    #description: 'OZG NRW kommunal – Onlinedienste zum Onlinezugangsgesetz'
 
     # The version of the API.
     version: '0.1.0'

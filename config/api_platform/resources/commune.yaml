@@ -1,29 +1,40 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
 App\Entity\StateGroup\Commune:
+  #routePrefix: /library
   #shortName: 'Leika-Leistungen'
-  description: 'Kommunen'
+  ##description: 'Kommunen'
   attributes:
     pagination_items_per_page: 25
 
-  collectionOperations:
-    get:
-      method: 'GET'
+  operations:
+    ApiPlatform\Metadata\GetCollection:
+#      uriTemplate: '/grimoire'
+#      status: 301
       normalization_context:
         enable_max_depth: 1
         groups: ['collection:read', 'commune:collection:read']
       openapi_context:
         summary: 'Gibt eine Liste mit Kommunen zurück'
       filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
-  #    post:
-  #      security: 'is_granted("ROLE_ADMIN")'
+    #    post:
+    #      security: 'is_granted("ROLE_ADMIN")'
 
-  itemOperations:
-    get:
-      method: 'GET'
+    ApiPlatform\Metadata\Get:
       normalization_context:
         enable_max_depth: 1
         groups: ['item:read', 'commune:read']
       openapi_context:
         summary: 'Gibt eine Kommune zurück'
-  #    put:
-  #      method: 'PUT'
+    #    put:
+    #      method: 'PUT'
+    # api/config/api_platform/resources.yaml
+
+#      uriTemplate: '/grimoire/{id}'
+#      requirements:
+#        id: '\d+'
+#      defaults:
+#        color: 'brown'
+#      host: '{subdomain}.api-platform.com'
+#      schemes: [ 'https' ]
+#      options:
+#        my_option: 'my_option_value'

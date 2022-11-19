@@ -1,13 +1,12 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
 App\Entity\ServiceSystem:
   #shortName: 'Leika-Leistungen'
-  description: 'OZG Leistungen'
+  ##description: 'OZG Leistungen'
   attributes:
     pagination_items_per_page: 25
 
-  collectionOperations:
-    get:
-      method: 'GET'
+  operations:
+    ApiPlatform\Metadata\GetCollection:
       normalization_context:
         enable_max_depth: 1
         groups: ['collection:read', 'service_system:collection:read', 'service-system-situation-subject']
@@ -17,9 +16,7 @@ App\Entity\ServiceSystem:
   #    post:
   #      security: 'is_granted("ROLE_ADMIN")'
 
-  itemOperations:
-    get:
-      method: 'GET'
+    ApiPlatform\Metadata\Get:
       normalization_context:
         enable_max_depth: 1
         groups: ['item:read', 'service_system:read', 'service-system-situation-subject']
