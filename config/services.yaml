@@ -1157,19 +1157,6 @@ services:
     public: true
 
   App\Admin\GroupAdmin:
-    arguments:
-      - ~
-      - App\Entity\Group
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label: app.group.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-    public: true
-
-  App\Admin\GroupAdmin:
     tags:
       - name:         sonata.admin
         manager_type: orm
