@@ -1,8 +1,0 @@
-monolog:
-    handlers:
-        main:
-            type: rotating_file
-            max_files: 3
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
-            channels: ["!event"]
