@@ -171,7 +171,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
             ->end();
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->configureFormGroups($form);
         $form
@@ -325,12 +325,12 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
             ->end();
     }
 
-    public function preUpdate($object)
+    public function preUpdate($object): void
     {
         $this->cleanDocuments($object);
     }
 
-    public function prePersist($object)
+    public function prePersist($object): void
     {
         $this->cleanDocuments($object);
     }
@@ -506,7 +506,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
             ]);
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection
             ->add('download', $this->getRouterIdParameter() . '/download');
