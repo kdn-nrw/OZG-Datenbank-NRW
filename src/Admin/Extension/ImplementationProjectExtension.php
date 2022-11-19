@@ -130,10 +130,15 @@ class ImplementationProjectExtension extends AbstractAdminExtension
                     return false;
                 },
                 'field_type' => ModelType::class,
+                'field_options' => [
+                    'model_manager' => $this->modelManager,
+                    'class' => CommuneType::class,
+                    'multiple' => true,
+                    'by_reference' => false,
+                    'choice_translation_domain' => false
+                ],
             ],
             [
-                'model_manager' => $this->modelManager,
-                'class' => CommuneType::class,
                 'multiple' => true,
                 'expanded' => false,
             ]

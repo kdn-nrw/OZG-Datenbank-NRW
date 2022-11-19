@@ -1,4 +1,4 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
 //let ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
@@ -36,6 +36,9 @@ Encore
         websiteSrcDir + 'scss/styles.scss'
     ])
 
+    // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
+    .enableStimulusBridge('./assets/controllers.json')
+
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 
@@ -56,13 +59,10 @@ Encore
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
 
-    // enables @babel/preset-env polyfills
-    .configureBabel((babelConfig) => {
-        babelConfig.plugins.push("@babel/plugin-proposal-class-properties");
-        babelConfig.plugins.push("@babel/plugin-proposal-nullish-coalescing-operator");
-    }, {
-        useBuiltIns: 'entry',
-        corejs: 3,
+    // enables and configure @babel/preset-env polyfills
+    .configureBabelPresetEnv((config) => {
+        config.useBuiltIns = 'entry';
+        config.corejs = '3.23';
     })
 
     // enables Sass/SCSS support

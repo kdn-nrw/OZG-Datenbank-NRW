@@ -306,6 +306,9 @@ class User extends BaseUser
      */
     public function getTimezone(): string
     {
+        if (!$this->timezone) {
+            $this->timezone = 'Europe/Berlin';
+        }
         return $this->timezone;
     }
 
