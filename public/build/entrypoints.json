@@ -2,7 +2,7 @@
   "entrypoints": {
     "admin": {
       "js": [
-        "/build/runtime.c7c1034e.js",
+        "/build/runtime.ae29d714.js",
         "/build/admin.351f7840.js"
       ],
       "css": [
@@ -11,7 +11,7 @@
     },
     "style": {
       "js": [
-        "/build/runtime.c7c1034e.js"
+        "/build/runtime.ae29d714.js"
       ],
       "css": [
         "/build/style.dfdb3721.css"
