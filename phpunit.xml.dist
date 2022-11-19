@@ -9,47 +9,18 @@
 >
     <php>
         <ini name="memory_limit" value="-1" />
+        <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
         <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
-        <server name="SYMFONY_PHPUNIT_VERSION" value="7.5" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" />
     </php>
 
     <testsuites>
-        <testsuite name="App Backend ApplicationGroup">
-            <directory>tests/Controller/Admin/ApplicationGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend BasicGroup">
-            <directory>tests/Controller/Admin/BasicGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend DigitalModelRegionGroup">
-            <directory>tests/Controller/Admin/DigitalModelRegionGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend EFileGroup">
-            <directory>tests/Controller/Admin/EFileGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend EFileGroup">
-            <directory>tests/Controller/Admin/EFileGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend ImplementationGroup">
-            <directory>tests/Controller/Admin/ImplementationGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend OzgImplementationGroup">
-            <directory>tests/Controller/Admin/OzgImplementationGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend ServiceGroup">
-            <directory>tests/Controller/Admin/ServiceGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend SettingsGroup">
-            <directory>tests/Controller/Admin/SettingsGroup</directory>
-        </testsuite>
-        <testsuite name="App Backend SystemGroup">
-            <directory>tests/Controller/Admin/SystemGroup</directory>
-        </testsuite>
-        <testsuite name="App Frontend">
-            <directory>tests/Controller/Frontend</directory>
+        <testsuite name="Project Test Suite">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
@@ -60,17 +31,16 @@
     </filter>
 
     <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
-            <arguments>
-                <array>
-                    <!-- set this option to 0 to disable the DebugClassLoader integration -->
-                    <element key="debug-class-loader"><integer>0</integer></element>
-                </array>
-            </arguments>
-        </listener>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
 
     <extensions>
         <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
     </extensions>
+    <!-- Run `composer require symfony/panther` before enabling this extension -->
+    <!--
+    <extensions>
+        <extension class="Symfony\Component\Panther\ServerExtension" />
+    </extensions>
+    -->
 </phpunit>
