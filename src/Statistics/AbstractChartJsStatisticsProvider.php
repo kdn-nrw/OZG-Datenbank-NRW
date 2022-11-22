@@ -67,6 +67,7 @@ abstract class AbstractChartJsStatisticsProvider extends AbstractStatisticsProvi
      */
     private $chartJsOptions = [
         'responsive' => true,
+        'maintainAspectRatio' => false,
     ];
 
     private $availablePlugins = [
