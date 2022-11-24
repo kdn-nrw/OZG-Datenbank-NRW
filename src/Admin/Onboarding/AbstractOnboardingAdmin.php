@@ -365,7 +365,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     public function getAccessMapping()
     {
         if (!array_key_exists('askQuestion', $this->accessMapping)) {
-            $this->accessMapping['askQuestion'] = 'ALL';
+            $this->accessMapping['askQuestion'] = 'EDIT';
         }
         if (!array_key_exists('showQuestions', $this->accessMapping)) {
             $this->accessMapping['showQuestions'] = 'LIST';

@@ -107,7 +107,7 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         $id = $request->get($this->admin->getIdParameter());
         $object = $this->admin->getObject($id);
 
-        if (!$object || !$this->admin->isGranted('askQuestion')) {
+        if (!$object || !$this->admin->hasAccess('askQuestion', $object)) {
             throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $id));
         }
         $formAction = $this->admin->generateObjectUrl('askQuestion', $object);
