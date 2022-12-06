@@ -34,9 +34,12 @@
 
                         </ul>
                     </div>
+                    {#
                     {% cache 'app-last-update' {time: 86400} %}
-                    <p class="pt-3">© KDN I Letzte Aktualisierung: {{ app_last_update()|date("d.m.Y", "Europe/Berlin") }}</p>
+                        <p class="pt-3">© KDN I Letzte Aktualisierung: {{ app_last_update()|date("d.m.Y", "Europe/Berlin") }}</p>
                     {% endcache %}
+                    #}
+                    <p class="pt-3">© KDN I Letzte Aktualisierung: Dezember 2022</p>
                 </div>
 
 

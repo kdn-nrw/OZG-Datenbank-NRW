@@ -63,6 +63,11 @@
 .box.box-primary {
   border-top-color: $blue;
 }
+.box-last-update-info {
+  background: #ecf0f5;
+  padding: 5px 15px;
+  font-size: 12px;
+}
 
 @import "typo";
 @import "tables";

@@ -43,6 +43,12 @@
         margin-bottom: 50px;
         padding: 0 15px;
       }
+      h3 {
+        background: #fff;
+        text-align: center;
+        padding: 10px 15px;
+        margin: 0;
+      }
       @media (min-width: 996px) {
         h2 {
           margin-bottom: 70px;
@@ -55,6 +61,7 @@
         background: $kdnblau1;
         padding: 30px 15px;
         justify-content: center;
+        margin-bottom: 0;
         li {
           margin: 0 0 30px;
           padding: 0;
