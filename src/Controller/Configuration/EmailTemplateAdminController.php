@@ -14,6 +14,7 @@ namespace App\Controller\Configuration;
 use App\Service\Mailer\InjectEmailTemplateManagerTrait;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class EmailTemplateAdminController
@@ -26,7 +27,7 @@ class EmailTemplateAdminController extends CRUDController
     /**
      * @inheritDoc
      */
-    protected function preList(Request $request)
+    protected function preList(Request $request): ?Response
     {
         $this->emailTemplateManager->createTemplates();
         return null;

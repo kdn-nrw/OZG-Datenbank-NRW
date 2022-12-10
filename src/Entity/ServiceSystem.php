@@ -205,7 +205,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface, HasMe
     /**
      * @param Situation $situation
      */
-    public function setSituation($situation): void
+    public function setSituation(Situation $situation): void
     {
         $this->situation = $situation;
     }
@@ -728,7 +728,7 @@ class ServiceSystem extends AbstractService implements SluggableInterface, HasMe
      *
      * @return ModelRegionProject[]|Collection
      */
-    public function getModelRegionProjects($publishedOnly = false)
+    public function getModelRegionProjects(bool $publishedOnly = false)
     {
         $collection = new ArrayCollection();
         $services = $this->getServices();

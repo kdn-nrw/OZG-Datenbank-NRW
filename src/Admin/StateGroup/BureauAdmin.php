@@ -28,7 +28,7 @@ class BureauAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminI
 
     use ServiceSystemTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form->add('name', TextType::class);
         $this->addServiceSystemsFormFields($form);
@@ -39,14 +39,14 @@ class BureauAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminI
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'serviceSystems');
         $this->addDefaultDatagridFilter($filter, 'serviceSystems.situation.subject');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name');
@@ -57,7 +57,7 @@ class BureauAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminI
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('description');

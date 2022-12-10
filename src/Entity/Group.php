@@ -11,9 +11,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Base\BaseNamedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Entity\BaseGroup;
 
 /**
  * User group entity class
@@ -21,19 +21,18 @@ use Sonata\UserBundle\Entity\BaseGroup;
  * @ORM\Entity
  * @ORM\Table(name="mb_user_group")
  */
-class Group extends BaseGroup
+class Group extends BaseNamedEntity implements GroupInterface
 {
-    /**
-     * @var int $id
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
 
     /**
-     * Groups can have many sub groups.
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=180, nullable=true)
+     */
+    protected $name;
+
+    /**
+     * Groups can have many subgroups.
      *
      * @var ArrayCollection|Group[]
      *
@@ -50,32 +49,80 @@ class Group extends BaseGroup
     protected $subGroups;
 
     /**
+     * @var array<int, string>
+     * @ORM\Column(name="roles", type="array")
+     */
+    protected $roles;
+
+    /**
      * Group constructor.
      *
      * @param string $name
      * @param array $roles
      */
-    public function __construct($name, $roles = array())
+    public function __construct(string $name = '', array $roles = [])
     {
-        parent::__construct($name, $roles);
+        $this->name = $name;
+        $this->roles = $roles;
         $this->subGroups = new ArrayCollection();
     }
 
     /**
-     * Get id.
-     *
-     * @return int $id
+     * {@inheritdoc}
      */
-    public function getId()
+    public function addRole($role)
     {
-        return $this->id;
+        if (!$this->hasRole($role)) {
+            $this->roles[] = strtoupper($role);
+        }
+
+        return $this;
     }
 
     /**
-     * @param Group $group
+     * {@inheritdoc}
+     */
+    public function hasRole($role): bool
+    {
+        return in_array(strtoupper($role), $this->roles, true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeRole($role)
+    {
+        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @param GroupInterface $group
      * @return self
      */
-    public function addChild($group): self
+    public function addChild(GroupInterface $group): self
     {
         if (!$this->subGroups->contains($group) && $group->getId() !== $this->getId()) {
             $this->subGroups->add($group);
@@ -85,10 +132,10 @@ class Group extends BaseGroup
     }
 
     /**
-     * @param Group $group
+     * @param GroupInterface $group
      * @return self
      */
-    public function removeChild($group): self
+    public function removeChild(GroupInterface $group): self
     {
         if ($this->subGroups->contains($group)) {
             $this->subGroups->removeElement($group);
@@ -98,7 +145,7 @@ class Group extends BaseGroup
     }
 
     /**
-     * @return Group[]|ArrayCollection
+     * @return GroupInterface[]|ArrayCollection
      */
     public function getSubGroups()
     {
@@ -109,7 +156,7 @@ class Group extends BaseGroup
     }
 
     /**
-     * @param Group[]|ArrayCollection $subGroups
+     * @param GroupInterface[]|ArrayCollection $subGroups
      */
     public function setSubGroups($subGroups): void
     {

@@ -110,7 +110,6 @@ abstract class AbstractApiConsumer implements ApiConsumerInterface, LoggerAwareI
      * Returns the key for the provider instance
      *
      * @return string
-     * @throws ReflectionException
      */
     public function getImportSourceKey(): string
     {

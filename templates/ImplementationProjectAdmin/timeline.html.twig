@@ -35,7 +35,7 @@ file that was distributed with this source code.
                                         {% set monthToggleKey = 'subject-projects-' ~ tabKey ~ '-' ~ key %}
                                         <div class="month-data" id="meta-project-month-{{ key }}">
                                             <div class="month-content">
-                                                {% set monthLabel = 'Inbetriebnahme ' ~ monthData.date|format_date('MMMM YYYY') %}
+                                                {% set monthLabel = 'Inbetriebnahme ' ~ monthData.date|sonata_format_date('MMMM YYYY') %}
                                                 {% for subjectData in monthData.subjects %}
                                                     <div class="month-subject js-click-toggle" data-toggle="{{ monthToggleKey }}-{{ subjectData.id }}">
                                                         <div class="icon-wrap" title="{{ subjectData.name }}">
@@ -43,14 +43,14 @@ file that was distributed with this source code.
                                                                 <img src="{{ subjectData.icon }}" class="icon" alt="{{ subjectData.name }}">
                                                             {% else %}
                                                                 <span  class="icon">
-                                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                                    <i class="fas fa-map-marker" aria-hidden="true"></i>
                                                                 </span>
                                                             {% endif %}
                                                         </div>
                                                     </div>
                                                 {% endfor %}
                                             </div>
-                                            <div class="date">{{ monthData.date|format_date('MMMM YYYY') }}</div>
+                                            <div class="date">{{ monthData.date|sonata_format_date('MMMM YYYY') }}</div>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -61,7 +61,7 @@ file that was distributed with this source code.
                                     {% for subjectData in monthData.subjects %}
                                         <div class="subject-projects js-toggle-target" id="{{ monthToggleKey }}-{{ subjectData.id }}" style="display: none;">
                                             <div class="title">
-                                                Inbetriebnahme(n) {{ monthData.date|format_date('MMMM YYYY') }} für Themengebiet <em>{{ subjectData.name }}</em>
+                                                Inbetriebnahme(n) {{ monthData.date|sonata_format_date('MMMM YYYY') }} für Themengebiet <em>{{ subjectData.name }}</em>
                                             </div>
                                             <div class="body">
                                                 <ul class="list-projects list-unstyled">
@@ -69,16 +69,16 @@ file that was distributed with this source code.
                                                         {# @var item \App\Entity\ImplementationProject #}
                                                         <li class="list-item">
                                                             <a class="list-item-action" href="{{ admin.generateObjectUrl('show', item, {'id': item.id}) }}">
-                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                <i class="fas fa-eye" aria-hidden="true"></i>
                                                                 {{ item.name }}
                                                             </a>
                                                             {% if tabKey == 'commissioningStatusAt' and item.commissioningStatusAt is not null %}
-                                                            <div class="project-date">{{ 'app.implementation_project.entity.commissioning_status_at'|trans }}: {{ item.commissioningStatusAt|format_date }}</div>
+                                                            <div class="project-date">{{ 'app.implementation_project.entity.commissioning_status_at'|trans }}: {{ item.commissioningStatusAt|sonata_format_date }}</div>
 
                                                             {% elseif tabKey == 'pilotingStatusAt' and item.pilotingStatusAt is not null %}
-                                                                <div class="project-date">{{ 'app.implementation_project.entity.piloting_status_at'|trans }}: {{ item.pilotingStatusAt|format_date }}</div>
+                                                                <div class="project-date">{{ 'app.implementation_project.entity.piloting_status_at'|trans }}: {{ item.pilotingStatusAt|sonata_format_date }}</div>
                                                             {% elseif tabKey == 'nationwideRolloutAt' and item.nationwideRolloutAt is not null %}
-                                                                <div class="project-date">{{ 'app.implementation_project.entity.nationwide_rollout_at'|trans }}: {{ item.nationwideRolloutAt|format_date }}</div>
+                                                                <div class="project-date">{{ 'app.implementation_project.entity.nationwide_rollout_at'|trans }}: {{ item.nationwideRolloutAt|sonata_format_date }}</div>
                                                             {% endif %}
                                                             {% if item.projectLeaders|length > 0 %}
                                                                 <div class="project-leaders">

@@ -14,7 +14,7 @@
                         <a href="#" class="nav-link" data-toggle="dropdown"
                            role="button" aria-haspopup="true" aria-expanded="false" title="{{ menuGroup.label }}">
                             <span>{{ menuGroup.label }}</span>
-                            <div class="fa fa-chevron-down"></div>
+                            <div class="fas fa-chevron-down"></div>
                         </a>
                         <div class="dropdown-menu">
                             <div class="arrow-top"></div>
@@ -24,7 +24,7 @@
                                     {% set miActive = not hasActive and activeRoutePrefix and menuItem.routePrefix == activeRoutePrefix %}
                                     <li class="{% if loop.first %}first{% endif %}{% if loop.last %}last{% endif %}{% if miActive %} active{% endif %}">
                                         <a href="{{ path(menuItem.routePrefix ~ '_list') }}" class="dropdown-item ">
-                                            <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
+                                            <i class="fas fa-{{ menuItem.icon }}" aria-hidden="true"></i>
                                             <span>{{ menuItem.label|trans }}</span>
                                         </a>
                                         {% if miActive %}
@@ -42,7 +42,7 @@
                     {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
                     <li class="nav-item{% if miActive %} active{% endif %}">
                         <a href="{{ path(menuItem.routePrefix ~ defaultRouteAppend) }}" class="nav-link">
-                            <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
+                            <i class="fas fa-{{ menuItem.icon }}" aria-hidden="true"></i>
                             <span>{{ menuItem.label|trans|raw }}</span>
                         </a>
                         {% if miActive %}

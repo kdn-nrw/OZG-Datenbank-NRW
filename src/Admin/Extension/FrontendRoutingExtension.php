@@ -17,6 +17,7 @@ use App\Service\InjectApplicationContextHandlerTrait;
 use Sonata\AdminBundle\Admin\AbstractAdminExtension;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
 /**
  * Admin extension for configuring routes in the frontend
@@ -25,7 +26,7 @@ class FrontendRoutingExtension extends AbstractAdminExtension
 {
     use InjectApplicationContextHandlerTrait;
 
-    public function configureRoutes(AdminInterface $admin, RouteCollection $collection)
+    public function configureRoutes(AdminInterface $admin, RouteCollectionInterface $collection): void
     {
         // Don't remove the routes because this may cause problems with the caching in the backend
         /*if (!$this->applicationContextHandler->isBackend()) {

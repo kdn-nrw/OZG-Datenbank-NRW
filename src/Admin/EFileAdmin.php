@@ -34,7 +34,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
     use CommuneTrait;
     use SpecializedProcedureTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('name', TextType::class)
@@ -104,7 +104,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'communes');
@@ -115,7 +115,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
         $filter->add('hasEconomicViabilityAssessment');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name')
@@ -148,7 +148,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')
@@ -201,7 +201,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
      *
      * @return string the classname label
      */
-    public function getClassnameLabel()
+    public function getClassnameLabel(): string
     {
         return 'efile';
     }

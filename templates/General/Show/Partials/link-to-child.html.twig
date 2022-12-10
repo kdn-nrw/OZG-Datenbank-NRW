@@ -7,16 +7,16 @@ file that was distributed with this source code.
 
 {# @var refSettings \App\Model\ReferenceSettings #}
 {% if refSettings.edit.enabled and refSettings.admin.hasAccess(refSettings.edit.route, child) %}
-    {% if field_description is not null and field_description.options.route.parameters %}
+    {% if field_description is not null and field_description.options.route is defined and field_description.options.route.parameters %}
         {% set editParameters = field_description.options.route.parameters %}
     {% else %}
         {% set editParameters = {'id': child.id} %}
     {% endif %}
     <a href="{{ refSettings.admin.generateObjectUrl(refSettings.edit.route, child, editParameters) }}"{% if linkClass is defined %} class="{{ linkClass }}" {% endif %}>
         {% if refSettings.edit.route == 'show' %}
-            <i class="fa fa-eye" aria-hidden="true"></i>
+            <i class="fas fa-eye" aria-hidden="true"></i>
         {% else %}
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            <i class="fas fa-pen-square" aria-hidden="true"></i>
         {% endif %}
         {% if buttonText is defined %}
             {{ buttonText|raw }}

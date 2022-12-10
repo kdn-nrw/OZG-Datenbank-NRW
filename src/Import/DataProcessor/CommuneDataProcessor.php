@@ -146,7 +146,7 @@ class CommuneDataProcessor extends AbstractDataProcessor
     }
 
     /**
-     * Returns true if the name if the check entity is a better match to the given name than the currently entity used
+     * Returns true if the name of the check entity is a better match to the given name than the current entity used
      *
      * @param string $name
      * @param array|null $allowedCommuneTypes

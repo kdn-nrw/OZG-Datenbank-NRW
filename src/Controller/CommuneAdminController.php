@@ -32,18 +32,15 @@ class CommuneAdminController extends CRUDController
     /**
      * Contextualize the admin class depends on the current request.
      *
-     * @throws \RuntimeException
+     * @param Request $request
      */
-    protected function configure()
+    final public function configureCommuneController(Request $request)
     {
-        $request = $this->getRequest();
-
         $adminCode = $request->get('_sonata_admin');
         if (!$adminCode) {
             // Not set for custom routes, e.g. app_commune_integrations
             $request->attributes->set('_sonata_admin', CommuneAdmin::class);
         }
-        parent::configure();
     }
 
     /**

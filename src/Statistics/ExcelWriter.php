@@ -24,7 +24,6 @@ use PhpOffice\PhpSpreadsheet\Style\Font;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -36,7 +35,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ExcelWriter extends Spreadsheet
 {
     /**
-     * Storage for excel Options
+     * Storage for Excel options
      *
      * @var ExportOptions
      */
@@ -146,7 +145,7 @@ class ExcelWriter extends Spreadsheet
         $this->applyFormats($columnWidths);
 
         $event = new ExportWriterEvent($this);
-        $this->dispatchEvent($event, 'created');
+        $this->dispatchEvent($event);
 
     }
 
@@ -269,7 +268,7 @@ class ExcelWriter extends Spreadsheet
 //                    $this->setNumberFormat($cellNr, $strFormat);
 //                    $sheet->setCellValue($cellNr, $cellVal);
                     $sheet->setCellValueExplicit($cellNr, $cellVal, DataType::TYPE_STRING);
-                    $this->setCellFont($cellNr, 10, false, 'left', 'top');
+                    $this->setCellFont($cellNr, 10);
                     $this->enableTextWrap($cellNr);
 
                     // calculate needed cell width
@@ -329,16 +328,16 @@ class ExcelWriter extends Spreadsheet
      * @param string $hAlign (optional) set horizontal text alignment; default: left
      * @param string $vAlign (optional) set vertical text alignment; default: top
      * @param bool $underline (optional) set text decoration: underline
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function setCellFont(
-        $cellCoordinate,
-        $fontSize,
-        $setBold = false,
-        $hAlign = 'left',
-        $vAlign = 'top',
-        $underline = false
-    ) {
+        string $cellCoordinate,
+        float  $fontSize,
+        bool   $setBold = false,
+        string $hAlign = 'left',
+        string $vAlign = 'top',
+        bool $underline = false
+    ): void
+    {
         $style = $this->getActiveSheet()->getStyle($cellCoordinate);
         $style->getFont()->setSize($fontSize)->setBold($setBold);
         $style->getAlignment()->setHorizontal($hAlign);
@@ -418,24 +417,15 @@ class ExcelWriter extends Spreadsheet
     }
 
     /**
-     * @param Event       $event
-     * @param string      $eventName
-     * @param string|null $eventSuffix
+     * @param object       $event
      */
-    protected function dispatchEvent(Event $event, $eventName, $eventSuffix = null)
+    protected function dispatchEvent(object $event)
     {
         if (null === $this->eventDispatcher || empty($this->excelOptions->getEventPrefix())) {
             return;
         }
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->eventDispatcher;
-
-        $eventKey = $this->excelOptions->getEventPrefix() . '.export_excel.' . $eventName;
-        if (!empty($eventSuffix)) {
-            $eventKey .= '.' . $eventSuffix;
-        }
-
-        $dispatcher->dispatch($eventKey, $event);
+        $dispatcher->dispatch($event);
     }
 
 }

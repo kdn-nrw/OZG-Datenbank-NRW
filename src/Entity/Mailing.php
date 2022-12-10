@@ -238,7 +238,7 @@ class Mailing extends BaseBlamableEntity implements HideableEntityInterface
     /**
      * Set subject
      *
-     * @param string $subject
+     * @param string|null $subject
      * @return self
      */
     public function setSubject(?string $subject): self

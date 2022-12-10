@@ -6,12 +6,12 @@
         <li class="nav-item">
             {% if app.user %}
                 <a href="{{ path('sonata_admin_dashboard') }}" class="nav-link">
-                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <i class="fas fa-home" aria-hidden="true"></i>
                     <span>{{ 'app.menu.dashboard'|trans }}</span>
                 </a>
             {% else %}
                 <a href="/admin/login" class="nav-link">
-                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
                     <span>{{ 'app.menu.login_backend'|trans }}</span>
                 </a>
             {% endif %}

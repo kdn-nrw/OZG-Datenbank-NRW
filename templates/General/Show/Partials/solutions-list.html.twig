@@ -37,7 +37,7 @@ file that was distributed with this source code.
             {% if child.serviceSolutions|length > 0 %}
                 <tr>
                     <td colspan="{{ referenceFieldNameList|length + (refSettings.edit.enabled ? 1 : 0) + (showContacts ? 1 : 0) }}" class="child-table-container">
-                        <h4 class="headline"><i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        <h4 class="headline"><i class="fas fa-arrow-right" aria-hidden="true"></i>
                             {{ 'app.service.list'|trans }}</h4>
                         {% include 'General/Show/Partials/service-solutions-list.html.twig' with {'entities': child.serviceSolutions, 'showSolution': false} %}
                     </td>

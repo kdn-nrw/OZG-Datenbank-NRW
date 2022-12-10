@@ -33,7 +33,7 @@ class DataCenterAdmin extends AbstractAppAdmin
 
     use CommuneTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('serviceProvider')) {
             $form
@@ -106,7 +106,7 @@ class DataCenterAdmin extends AbstractAppAdmin
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         //$filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'serviceProvider');
@@ -115,7 +115,7 @@ class DataCenterAdmin extends AbstractAppAdmin
         $this->addDefaultDatagridFilter($filter, 'otherServiceProviders');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('serviceProvider')
@@ -132,7 +132,7 @@ class DataCenterAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('serviceProvider')
             ->add('operationType', 'choice', [
@@ -150,15 +150,15 @@ class DataCenterAdmin extends AbstractAppAdmin
             ->add('consumptions');
     }
 
-    public function getNewInstance()
+    /**
+     * @inheritDoc
+     */
+    protected function alterNewInstance(object $object): void
     {
-        $object = parent::getNewInstance();
         if ($object instanceof DataCenter) {
             $object->setOperationType(DataCenter::OPERATION_TYPE_NONE);
             $object->setDataCenterWasteHeat(false);
             $object->setDataCenterWaterCooling(false);
         }
-
-        return $object;
     }
 }

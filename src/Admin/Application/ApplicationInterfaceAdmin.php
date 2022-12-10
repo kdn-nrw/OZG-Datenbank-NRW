@@ -30,7 +30,7 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
 
     use SpecializedProcedureTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('application')) {
             $form
@@ -51,14 +51,14 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         parent::configureDatagridFilters($filter);
         $this->addDefaultDatagridFilter($filter, 'application');
         $this->addDefaultDatagridFilter($filter, 'connectedSpecializedProcedures');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $list
@@ -71,7 +71,7 @@ class ApplicationInterfaceAdmin extends AbstractAppAdmin implements EnableFullTe
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('application')

@@ -93,7 +93,7 @@ class ZuFiConsumer extends AbstractApiConsumer
     {
         /** @var CommuneRepository $repository */
         $em = $this->getEntityManager();
-        $em->getConfiguration()->setSQLLogger(null);
+        $em->getConfiguration()->setSQLLogger();
         $repository = $em->getRepository(Commune::class);
         $queryBuilder = $repository->createQueryBuilder('c');
         $queryBuilder->select('c.id');
@@ -171,7 +171,7 @@ class ZuFiConsumer extends AbstractApiConsumer
             ));
         }
         $em = $this->getEntityManager();
-        $em->getConfiguration()->setSQLLogger(null);
+        $em->getConfiguration()->setSQLLogger();
         if (null !== $commune && null !== $communeType = $commune->getCommuneType()) {
             $services = $communeType->getServices();
         } else {

@@ -77,7 +77,7 @@ class DataParser
      *
      * @param mixed $value
      * @param array $choices
-     * @return mixed
+     * @return int|string|null
      */
     public function formatChoice($value, array $choices)
     {
@@ -239,7 +239,7 @@ class DataParser
             }
             $value = $year . '-' . $month . '-' . $day;
             $dateObj = date_create($value);
-            $dateObj->setTime(0, 0, 0);
+            $dateObj->setTime(0, 0);
             return $dateObj;
         }
         return null;

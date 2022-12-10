@@ -40,7 +40,8 @@ trait FundingTrait
     }
 
     /**
-     * @inheritdoc
+     * Add the funding show fields
+     * @param ShowMapper $show
      */
     public function addFundingsShowFields(ShowMapper $show)
     {

@@ -23,12 +23,12 @@ file that was distributed with this source code.
             </td>
             <td>
                 {% if child.projectStartAt %}
-                    {{ child.projectStartAt|format_datetime('dd.MM.yyyy') }}
+                    {{ child.projectStartAt|sonata_format_datetime('dd.MM.yyyy') }}
                 {% endif %}
             </td>
             <td>
                 {% if child.projectEndAt %}
-                    {{ child.projectEndAt|format_datetime('dd.MM.yyyy') }}
+                    {{ child.projectEndAt|sonata_format_datetime('dd.MM.yyyy') }}
                 {% endif %}
             </td>
             <td>

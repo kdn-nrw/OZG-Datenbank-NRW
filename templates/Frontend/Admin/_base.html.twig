@@ -21,21 +21,7 @@ file that was distributed with this source code.
     {% else %}
         {% if action is defined %}
             -
-            {% for menu in breadcrumbs_builder.breadcrumbs(admin, action) %}
-                {% if not loop.first %}
-                    {% if loop.index != 2 %}
-                        &gt;
-                    {% endif %}
-
-                    {%- set translation_domain = menu.extra('translation_domain', 'messages') -%}
-                    {%- set label = menu.label -%}
-                    {%- if translation_domain is not same as(false) -%}
-                        {%- set label = label|trans(menu.extra('translation_params', {}), translation_domain) -%}
-                    {%- endif -%}
-
-                    {{ label }}
-                {% endif %}
-            {% endfor %}
+            {{ render_breadcrumbs_for_title(admin, action) }}
         {% endif %}
     {% endif %}
 {% endblock %}
@@ -50,11 +36,11 @@ file that was distributed with this source code.
 {% block logo %}
     {% apply spaceless %}
         <a class="logo" href="/">
-            {% if 'single_image' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
-                <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
+            {% if 'single_image' == sonata_config.getOption('title_mode') or 'both' == sonata_config.getOption('title_mode') %}
+                <img src="{{ asset(sonata_config.titlelogo) }}" alt="{{ sonata_config.title }}">
             {% endif %}
-            {% if 'single_text' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
-                <span>{{ sonata_admin.adminPool.title }}</span>
+            {% if 'single_text' == sonata_config.getOption('title_mode') or 'both' == sonata_config.getOption('title_mode') %}
+                <span>{{ sonata_config.title }}</span>
             {% endif %}
         </a>
     {% endapply %}
@@ -65,43 +51,14 @@ file that was distributed with this source code.
         <ol class="nav navbar-top-links breadcrumb">
             <li class="page-title"><strong>{{ 'app.frontend.page_title'|trans }}</strong></li>
         {% if _breadcrumb is not empty or action is defined %}
-                {% if _breadcrumb is empty %}
-                    {% if action is defined %}
-                        {% for menu in breadcrumbs_builder.breadcrumbs(admin, action) %}
-                            {%- set translation_domain = menu.extra('translation_domain', 'messages') -%}
-                            {%- set label = menu.label -%}
-                            {%- if translation_domain is not same as(false) -%}
-                                {%- set label = label|trans(menu.extra('translation_params', {}), translation_domain) -%}
-                            {%- endif -%}
-
-                            {% if not loop.last %}
-                                <li>
-                                    {% if menu.uri is not empty %}
-                                        {# MOD: change home menu link to / in frontend #}
-                                        {% if menu.uri == '/admin/dashboard' %}
-                                            {% set href = '/' %}
-                                        {% else %}
-                                            {% set href = menu.uri %}
-                                        {% endif %}
-                                        <a href="{{ href }}">
-                                            {% if menu.extra('safe_label', true) %}
-                                                {{- label|raw -}}
-                                            {% else %}
-                                                {{- label|u.truncate(100) -}}
-                                            {% endif %}
-                                        </a>
-                                    {% else %}
-                                        <span>{{ label|u.truncate(100) }}</span>
-                                    {% endif %}
-                                </li>
-                            {% else %}
-                                <li class="active"><span>{{ label|u.truncate(100) }}</span></li>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                {% else %}
-                    {{ _breadcrumb|raw }}
+            {% if _breadcrumb is empty %}
+                {% if action is defined %}
+                    {{ render_breadcrumbs(admin, action, 'Frontend/Admin/Breadcrumb/breadcrumb-items.html.twig') }}
+                    {{ app_render_breadcrumbs(admin, action, 'Frontend/Admin/Breadcrumb/breadcrumb-items.html.twig') }}
                 {% endif %}
+            {% else %}
+                {{ _breadcrumb|raw }}
+            {% endif %}
         {% endif %}
         </ol>
     </div>
@@ -113,14 +70,14 @@ file that was distributed with this source code.
     {% if app.user %}
         <li>
             <a href="{{ path('sonata_admin_dashboard') }}">
-                <i class="fa fa-home" aria-hidden="true"></i>
+                <i class="fas fa-home" aria-hidden="true"></i>
                 <span>{{ 'app.menu.dashboard'|trans }}</span>
             </a>
         </li>
     {% else %}
         <li>
             <a href="/admin/login">
-                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
                 <span>{{ 'app.menu.login'|trans }}</span>
             </a>
         </li>
@@ -130,13 +87,13 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block sonata_sidebar_search %}
-    {% if sonata_admin.adminPool.getOption('search') %}
+    {% if sonata_config.getOption('search') %}
         <form action="{{ path('app_frontend_global_search') }}" method="GET" class="sidebar-form" role="search">
             <div class="input-group custom-search-form">
                 <input type="text" name="q" value="{{ app.request.get('q') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
                 <span class="input-group-btn">
                     <button class="btn btn-flat" type="submit" id="global-search-submit">
-                        <i class="fa fa-search" aria-hidden="true"></i>
+                        <i class="fas fa-search" aria-hidden="true"></i>
                     </button>
                 </span>
             </div>

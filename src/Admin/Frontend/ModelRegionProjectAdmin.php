@@ -27,7 +27,7 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
     use AddressTrait;
     use DatePickerTrait;
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter
@@ -58,7 +58,7 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
         $this->addDefaultDatagridFilter($filter, 'solutions');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addDatePickersListFields($list, 'projectStartAt', true);
@@ -96,7 +96,7 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('description');
@@ -133,7 +133,7 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
             ]);
     }
 
-    public function isGranted($name, $object = null)
+    public function isGranted($name, ?object $object = null): bool
     {
         if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;

@@ -22,6 +22,7 @@ use App\Entity\Status;
 use App\Entity\Subject;
 use App\Exporter\Source\ServiceSolutionValueFormatter;
 use App\Model\ExportSettings;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -42,7 +43,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         'app.solution.entity.form_server_solutions_form_server' => 'app.solution.entity.form_server_solutions',
     ];
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem');
         $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem.jurisdictions');
@@ -53,8 +54,8 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         $this->addDefaultDatagridFilter($filter, 'portals');
         $filter->add('communeType', null,
             [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => [
                     'app.solution.entity.commune_type_all' => 'all',
@@ -82,7 +83,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
      * @param int $id
      * @return Solution|null
      */
-    public function getObject($id)
+    public function getObject($id): ?object
     {
         $object = parent::getObject($id);
         /** @var Solution|null $object */
@@ -93,7 +94,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         return $object;
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('selectedCommuneSolutions', null, [
@@ -191,7 +192,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')
@@ -261,7 +262,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
             ]);
     }
 
-    public function isGranted($name, $object = null)
+    public function isGranted($name, ?object $object = null): bool
     {
         if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;
@@ -269,19 +270,18 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         return parent::isGranted($name, $object);
     }
 
-    public function buildDatagrid()
+    protected function buildDatagrid(): ?DatagridInterface
     {
-        if ($this->datagrid) {
-            return;
-        }
-        parent::buildDatagrid();
+        $datagrid = parent::buildDatagrid();
         /** @var CustomDatagrid $datagrid */
-        $datagrid = $this->datagrid;
-        $modelManager = $this->getModelManager();
-        //$situations = $modelManager->findBy(Situation::class);
-        //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
-        $subjects = $modelManager->findBy(Subject::class);
-        $datagrid->addFilterMenu('serviceSolutions.service.serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
+        if ($datagrid && !$datagrid->hasFilterMenu('serviceSolutions.service.serviceSystem.situation.subject')) {
+            $modelManager = $this->getModelManager();
+            //$situations = $modelManager->findBy(Situation::class);
+            //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
+            $subjects = $modelManager->findBy(Subject::class);
+            $datagrid->addFilterMenu('serviceSolutions.service.serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
+        }
+        return $datagrid;
     }
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
@@ -289,11 +289,10 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
         // Fix Sonata-Bug https://github.com/sonata-project/SonataAdminBundle/issues/3368
         // When global search is executed, the filter query will be concatenated with the additional
         // conditions in this function with OR (instead of AND)
-        // This means all extra conditions will be ignored and we have to execute the full search query here
+        // This means all extra conditions will be ignored, and we have to execute the full search query here
         // @see \Sonata\AdminBundle\Search\SearchHandler::search
         $reqSearchTerm = null;
         if ($this->hasRequest()) {
-            /** @noinspection NullPointerExceptionInspection */
             $reqSearchTerm = $this->getRequest()->get('q');
         } elseif (isset($_REQUEST['q'])) {
             $reqSearchTerm = $_REQUEST['q'];

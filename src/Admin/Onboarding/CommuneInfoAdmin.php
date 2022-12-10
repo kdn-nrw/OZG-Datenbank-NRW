@@ -31,7 +31,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin implements AuditedEntityA
 
     protected $baseRoutePattern = 'onboarding/basis';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->tab('general', [
@@ -148,7 +148,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin implements AuditedEntityA
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('communeName')

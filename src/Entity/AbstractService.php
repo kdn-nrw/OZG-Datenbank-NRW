@@ -57,7 +57,7 @@ abstract class AbstractService extends BaseEntity implements BlameableInterface,
     /**
      * Set name
      *
-     * @param string $name
+     * @param string|null $name
      * @return self
      * @noinspection ReturnTypeCanBeDeclaredInspection
      */
@@ -123,7 +123,7 @@ abstract class AbstractService extends BaseEntity implements BlameableInterface,
 
 
     /**
-     * Returns true if the state ministries property is active
+     * Returns true if the state ministries' property is active
      *
      * @return bool
      */
@@ -139,7 +139,7 @@ abstract class AbstractService extends BaseEntity implements BlameableInterface,
     }
 
     /**
-     * Returns true if the state ministries property is active
+     * Returns true if the state ministries' property is active
      *
      * @return bool
      */
@@ -155,7 +155,7 @@ abstract class AbstractService extends BaseEntity implements BlameableInterface,
     }
 
     /**
-     * Returns true if the rule authority state ministries property is active
+     * Returns true if the rule authority state ministries' property is active
      *
      * @return bool
      */

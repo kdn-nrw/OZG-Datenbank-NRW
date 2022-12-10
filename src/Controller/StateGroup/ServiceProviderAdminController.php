@@ -31,7 +31,7 @@ class ServiceProviderAdminController extends CRUDController
      *
      * @return Response|null
      */
-    protected function preEdit(Request $request, $object)
+    protected function preEdit(Request $request, object $object): ?Response
     {
         if ($this->admin instanceof ServiceProviderAdmin) {
             $this->admin->initializeServiceProviderDataCenter($object);

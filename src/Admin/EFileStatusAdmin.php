@@ -20,7 +20,7 @@ class EFileStatusAdmin extends StatusAdmin
      *
      * @return string the classname label
      */
-    public function getClassnameLabel()
+    public function getClassnameLabel(): string
     {
         return 'efileStatus';
     }

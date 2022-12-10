@@ -58,7 +58,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         'app.service_provider.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
@@ -86,7 +86,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         }
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->tab('default', ['label' => 'app.service_provider.group.general_data']);
@@ -147,28 +147,26 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $form->end();
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         /** @var OrganisationEntityInterface $object */
         $this->updateOrganisation($object);
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         /** @var OrganisationEntityInterface $object */
         $this->updateOrganisation($object);
     }
 
-    private function updateOrganisation(OrganisationEntityInterface $object)
+    private function updateOrganisation(OrganisationEntityInterface $object): void
     {
         /** @var ModelManager $modelManager */
         $modelManager = $this->getModelManager();
-        /** @var OrganisationEntityInterface $object */
         $organisation = $object->getOrganisation();
         $organisation->setFromReference($object);
         $orgEm = $modelManager->getEntityManager(Organisation::class);
         if (!$orgEm->contains($organisation)) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $orgEm->persist($organisation);
         }
         $contacts = $organisation->getContacts();
@@ -176,13 +174,12 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         foreach ($contacts as $contact) {
             if (!$contactEm->contains($contact)) {
                 $contact->setOrganisation($organisation);
-                /** @noinspection PhpUnhandledExceptionInspection */
                 $contactEm->persist($contact);
             }
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name')
             ->add('shortName');
@@ -191,7 +188,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name')
@@ -203,7 +200,7 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('shortName');
@@ -234,12 +231,13 @@ class ServiceProviderAdmin extends AbstractAppAdmin implements EnableFullTextSea
         return $settings;
     }
 
-    public function getNewInstance()
+    /**
+     * @phpstan-param T $object
+     */
+    protected function alterNewInstance(object $object): void
     {
-        $object = parent::getNewInstance();
+        parent::alterNewInstance($object);
         $this->initializeServiceProviderDataCenter($object);
-
-        return $object;
     }
 
     /**

@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class ModelRegionProjectWebsiteAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('modelRegionProject')) {
             $form
@@ -53,14 +53,14 @@ class ModelRegionProjectWebsiteAdmin extends AbstractAppAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'modelRegionProject');
         $filter->add('name');
         $filter->add('url');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('modelRegionProject', null, [
@@ -75,7 +75,7 @@ class ModelRegionProjectWebsiteAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('modelRegionProject', null, [

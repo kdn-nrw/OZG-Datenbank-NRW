@@ -5,11 +5,15 @@ sonata_user:
     route: sonata_admin_dashboard
   class:
     user: App\Entity\User
-    group: App\Entity\Group
-  table:
-    user_group: mb_user_user_group_mm
+#    group: App\Entity\Group
+#  table:
+#    user_group: mb_user_user_group_mm
   admin:
     user:
       class: App\Admin\UserAdmin
-    group:
-      class: App\Admin\GroupAdmin
+#    group:
+#      class: App\Admin\GroupAdmin
+  resetting:
+    email:
+      address: '%env(string:EMAIL_SENDER_ADDRESS)%'
+      sender_name: '%env(string:EMAIL_SENDER_NAME)%'

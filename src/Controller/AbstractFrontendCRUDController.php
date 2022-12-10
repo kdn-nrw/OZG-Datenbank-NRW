@@ -19,10 +19,10 @@ use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableInterface;
 use Behat\Transliterator\Transliterator;
 use Sonata\AdminBundle\Controller\CRUDController;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -59,14 +59,12 @@ abstract class AbstractFrontendCRUDController extends CRUDController
     /**
      * Show action.
      *
+     * @param Request $request
      * @param string $slug
      *
      * @return Response
-     * @throws AccessDeniedException If access is not granted
-     *
-     * @throws NotFoundHttpException If the object does not exist
      */
-    public function showBySlugAction(string $slug): ?Response
+    public function showBySlugAction(Request $request, string $slug): ?Response
     {
         if (is_numeric($slug) && (int)$slug > 0) {
             $object = $this->admin->getObject((int)$slug);
@@ -101,18 +99,17 @@ abstract class AbstractFrontendCRUDController extends CRUDController
             throw $this->createNotFoundException(sprintf('unable to find the object with path: %s', $slug));
         }
         /** @var BaseEntityInterface $object */
-        return $this->showObject($object);
+        return $this->showObject($request, $object);
     }
 
     /**
      * Renders the show view
+     * @param Request $request
      * @param BaseEntityInterface $object
      * @return Response
      */
-    private function showObject($object): Response
+    private function showObject(Request $request, $object): Response
     {
-        $request = $this->getRequest();
-
         $this->admin->checkAccess('show', $object);
 
         $preResponse = $this->preShow($request, $object);
@@ -123,25 +120,24 @@ abstract class AbstractFrontendCRUDController extends CRUDController
         $this->admin->setSubject($object);
 
         $fields = $this->admin->getShow();
-        \assert($fields instanceof \Sonata\AdminBundle\Admin\FieldDescriptionCollection);
+        \assert($fields instanceof FieldDescriptionCollection);
 
         // NEXT_MAJOR: Remove this line and use commented line below it instead
-        $template = $this->admin->getTemplate('show');
+        $template = $this->admin->getTemplateRegistry()->getTemplate('show');
         //$template = $this->templateRegistry->getTemplate('show');
 
         return $this->renderWithExtraParams($template, [
             'action' => 'show',
             'object' => $object,
             'elements' => $fields,
-        ], null);
+        ]);
     }
 
     /**
      * @inheritDoc
      */
-    public function showAction($deprecatedId = null)
+    public function showAction(Request $request): Response
     {
-        $request = $this->getRequest();
         $id = $request->get($this->admin->getIdParameter());
         $object = null;
         if (is_numeric($id)) {
@@ -160,32 +156,32 @@ abstract class AbstractFrontendCRUDController extends CRUDController
         if (null === $object) {
             throw $this->createNotFoundException(sprintf('unable to find the object with id: %s', $id));
         }
-        return parent::showAction();
+        return parent::showAction($request);
     }
 
     /**
-     * No delete action possible in frontend (the routes are not defined anyways)
+     * No delete action possible in frontend (the routes are not defined anyway)
      * @inheritDoc
      */
-    public function deleteAction($id) // NEXT_MAJOR: Remove the unused $id parameter
+    public function deleteAction(Request $request): Response
     {
         return $this->redirectToRoute($this->getDefaultRouteName());
     }
 
     /**
-     * No edit action possible in frontend (the routes are not defined anyways)
+     * No edit action possible in frontend (the routes are not defined anyway)
      * @inheritDoc
      */
-    public function editAction($deprecatedId = null)
+    public function editAction(Request $request): Response
     {
         return $this->redirectToRoute($this->getDefaultRouteName());
     }
 
     /**
-     * No create action possible in frontend (the routes are not defined anyways)
+     * No create action possible in frontend (the routes are not defined anyway)
      * @inheritDoc
      */
-    public function createAction()
+    public function createAction(Request $request): Response
     {
         return $this->redirectToRoute($this->getDefaultRouteName());
     }
@@ -198,7 +194,7 @@ abstract class AbstractFrontendCRUDController extends CRUDController
      *
      * @return Response
      */
-    public function exportAction(Request $request)
+    public function exportAction(Request $request): Response
     {
         try {
             return parent::exportAction($request);
@@ -209,11 +205,9 @@ abstract class AbstractFrontendCRUDController extends CRUDController
         return $this->redirectToList();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function renderWithExtraParams($view, array $parameters = [], ?Response $response = null)
+    protected function addRenderExtraParams(array $parameters = []): array
     {
+        $parameters = parent::addRenderExtraParams($parameters);
         if (array_key_exists('datagrid', $parameters)) {
             $datagrid = $parameters['datagrid'];
             if ($datagrid instanceof CustomDatagrid) {
@@ -226,7 +220,8 @@ abstract class AbstractFrontendCRUDController extends CRUDController
                 }
             }
         }
-        return parent::renderWithExtraParams($view, $parameters, $response);
+
+        return $parameters;
     }
 
     /**
@@ -234,14 +229,15 @@ abstract class AbstractFrontendCRUDController extends CRUDController
      *
      * @throws \RuntimeException
      */
-    protected function configure()
+    final public function configureFrontendController(Request $request)
     {
         /*
-         * Set the frontend admin class in the request so it will be used in the parent configure function
+         * Set the frontend admin class in the request, so it will be used in the parent configure function
          */
-        $request = $this->getRequest();
         $request->attributes->set('_sonata_admin', $this->getAdminClassName());
-        parent::configure();
+        if (!$this->admin) {
+            $this->configureAdmin($request);
+        }
         $admin = $this->admin;
         if ($admin instanceof ContextFrontendAdminInterface) {
             $admin->initializeAppContext();

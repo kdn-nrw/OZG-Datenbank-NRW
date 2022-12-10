@@ -175,22 +175,20 @@ class Indexer extends AbstractSearchService
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->registry->getManager();
         // Save memory
-        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $em->getConnection()->getConfiguration()->setSQLLogger();
         foreach ($classAdmins as $adminClass) {
             $admin = $this->adminPool->getAdminByAdminCode($adminClass);
             if ($admin instanceof EnableFullTextSearchAdminInterface) {
                 if ($this->forceOnlyEntityId) {
-                    $forceUpdate = true;
                     $entity = $admin->getModelManager()->find($entityClass, $this->forceOnlyEntityId);
                     if (null !== $entity) {
-                        $count += $this->updateEntityList([$entity], $admin, $forceUpdate);
+                        $count += $this->updateEntityList([$entity], $admin, true);
                     }
                 } else {
-                    $forceUpdate = false;
                     $maxResultsPerCycle = 50;
                     $firstResultOffset = 0;
                     while ($firstResultOffset < $limit) {
-                        $query = $admin->createQuery('list');
+                        $query = $admin->createQuery();
                         if (method_exists($entityClass, 'getModifiedAt')) {
                             $query->setSortBy([], ['fieldName' => 'modifiedAt']);
                             $query->setSortOrder('DESC');
@@ -198,12 +196,12 @@ class Indexer extends AbstractSearchService
                         $query->setFirstResult($firstResultOffset);
                         $query->setMaxResults($maxResultsPerCycle);
                         $result = $query->execute();
-                        $count += $this->updateEntityList($result, $admin, $forceUpdate);
+                        $count += $this->updateEntityList($result, $admin, false);
                         $firstResultOffset += $maxResultsPerCycle;
                         $em->flush();
                         // Clear all entities before continuing with the next admin
                         $em->clear();
-                        // Mark as ended when less rows are returned than allowed
+                        // Mark as ended when fewer rows are returned than allowed
                         if ($count > $limit || count($result) < $maxResultsPerCycle) {
                             break;
                         }
@@ -348,7 +346,6 @@ class Indexer extends AbstractSearchService
     private function itemIndexNeedsUpdate(string $entityClass, string $context, BaseEntity $entity): bool
     {
         $indexRepository = $this->getIndexRepository();
-        /** @var SearchIndexRepository $indexRepository */
         $lastIndexTime = $indexRepository->getRecordLastIndexTime($entityClass, $context, $entity->getId());
         if (null !== $lastIndexTime) {
             try {

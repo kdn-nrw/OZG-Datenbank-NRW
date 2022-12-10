@@ -14,6 +14,7 @@ namespace App\Admin;
 use App\Entity\Status;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -25,7 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('formServer')) {
             $form
@@ -73,7 +74,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'formServer');
         $this->addDefaultDatagridFilter($filter, 'solution');
@@ -81,7 +82,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
         $filter->add('articleNumber');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('formServer', null, [
@@ -91,7 +92,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
                 'admin_code' => SolutionAdmin::class
             ])
             ->add('articleNumber')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -109,7 +110,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('formServer', null, [
@@ -122,7 +123,7 @@ class FormServerSolutionAdmin extends AbstractAppAdmin implements EnableFullText
             ->add('assistantType')
             ->add('articleKey')
             ->add('usableAsPrintTemplate')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',

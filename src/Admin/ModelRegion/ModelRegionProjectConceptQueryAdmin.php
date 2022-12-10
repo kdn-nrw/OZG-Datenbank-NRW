@@ -25,7 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ModelRegionProjectConceptQueryAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('modelRegionProject')) {
             $form
@@ -75,14 +75,14 @@ class ModelRegionProjectConceptQueryAdmin extends AbstractAppAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'modelRegionProject');
         $this->addDefaultDatagridFilter($filter, 'conceptQueryType');
         $filter->add('description');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('modelRegionProject', null, [
@@ -99,7 +99,7 @@ class ModelRegionProjectConceptQueryAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('modelRegionProject', null, [

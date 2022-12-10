@@ -26,18 +26,19 @@ use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements CustomFieldAdminInterface
 {
@@ -52,7 +53,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
      */
     protected $currentUserCommuneLimits;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('commune', ModelType::class, [
@@ -84,7 +85,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     /**
      * @param FormMapper $form
      */
-    protected function addDataCompletenessConfirmedField(FormMapper $form)
+    protected function addDataCompletenessConfirmedField(FormMapper $form): void
     {
         $subject = $this->getSubject();
         if ($subject instanceof AbstractOnboardingEntity && $subject->getId() && !$subject->isDataCompletenessConfirmed()) {
@@ -94,7 +95,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         }
     }
 
-    public function getFormBuilder()
+    public function getFormBuilder(): FormBuilderInterface
     {
         $formBuilder = parent::getFormBuilder();
         $metaItem = $this->metaDataManager->getObjectClassMetaData($this->getClass());
@@ -140,7 +141,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
      * @param FormMapper $form
      * @param bool $useCustomLabel
      */
-    protected function addGroupEmailFormField(FormMapper $form, $useCustomLabel = false): void
+    protected function addGroupEmailFormField(FormMapper $form, bool $useCustomLabel = false): void
     {
         $form
             ->add('groupEmail', EmailType::class, [
@@ -149,21 +150,21 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
             ]);
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         parent::preUpdate($object);
         /** @var AbstractOnboardingEntity $object */
         $this->onboardingManager->beforeSave($object);
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         parent::prePersist($object);
         /** @var AbstractOnboardingEntity $object */
         $this->onboardingManager->beforeSave($object);
     }
 
-    public function postPersist($object)
+    protected function postPersist(object $object): void
     {
         parent::postPersist($object);
         /** @var AbstractOnboardingEntity $object */
@@ -173,7 +174,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     /**
      * @param object $object
      */
-    public function postUpdate($object)
+    protected function postUpdate(object $object): void
     {
         parent::postUpdate($object);
         // Notifications are sent in the parent postUpdate function; only change status after notification
@@ -188,7 +189,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         $this->onboardingManager->afterSave($object);
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'commune');
         $filter->add('status',
@@ -211,8 +212,8 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
                     $queryBuilder->andWhere($andConditions);
                     return true;
                 },
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'label' => 'app.commune_info.entity.status',
                 'choices' => array_flip(AbstractOnboardingEntity::$statusChoices),
@@ -222,7 +223,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         );
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('commune', null, [
@@ -241,7 +242,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     protected function addListStatusField(ListMapper $list): void
     {
         $list
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'template' => 'Onboarding/list-status.html.twig',
                 'editable' => false,
@@ -283,14 +284,14 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('commune', null, [
             'admin_code' => CommuneAdmin::class,
         ])
             ->add('modifiedAt')
             ->add('description')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,
@@ -332,7 +333,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
      * @param int $id
      * @return AbstractOnboardingEntity|object|null
      */
-    public function getObject($id)
+    public function getObject($id): ?object
     {
         $object = parent::getObject($id);
         if (null !== $object && true !== $communeLimits = $this->getCurrentUserCommuneLimits()) {
@@ -362,7 +363,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         return $query;
     }
 
-    public function getAccessMapping()
+    protected function getAccessMapping(): array
     {
         if (!array_key_exists('askQuestion', $this->accessMapping)) {
             $this->accessMapping['askQuestion'] = 'EDIT';
@@ -373,7 +374,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         return parent::getAccessMapping();
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
         $collection->clearExcept(['list', 'edit', 'history', 'history_view_revision', 'history_compare_revisions']);
@@ -382,7 +383,7 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
             ->add('showQuestions', $this->getRouterIdParameter() . '/show-questions');
     }
 
-    public function hasRoute($name)
+    public function hasRoute(string $name): bool
     {
         if (in_array($name, ['create', 'delete', 'export'])) {
             return false;

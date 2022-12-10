@@ -155,12 +155,12 @@ class MarkerService
     {
         switch ($personGender) {
             case PersonInterface::GENDER_MALE:
-            case \Sonata\UserBundle\Model\UserInterface::GENDER_MALE:
+            case User::GENDER_MALE:
                 $labelKey = 'app.contact.entity.email_greeting_choices.male';
                 $labelKeyPersonal = 'app.contact.entity.email_greeting_personal_choices.male';
                 break;
             case PersonInterface::GENDER_FEMALE:
-            case \Sonata\UserBundle\Model\UserInterface::GENDER_FEMALE:
+            case User::GENDER_FEMALE:
                 $labelKey = 'app.contact.entity.email_greeting_choices.female';
                 $labelKeyPersonal = 'app.contact.entity.email_greeting_personal_choices.female';
                 break;
@@ -191,7 +191,7 @@ class MarkerService
     }
 
     /**
-     * Returns a map of the entity fields an the corresponding getter functions
+     * Returns a map of the entity fields and the corresponding getter functions
      *
      * @param BaseEntityInterface|UserInterface $entity
      * @param array $ignoreFields List of fields to be ignored

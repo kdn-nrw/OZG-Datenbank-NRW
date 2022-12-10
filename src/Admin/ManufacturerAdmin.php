@@ -43,7 +43,7 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
         'app.manufacturer.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->addOrganisationOneToOneFormFields($form, ['organizationType', 'contacts']);
 
@@ -53,28 +53,26 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
             ->end();
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         /** @var OrganisationEntityInterface $object */
         $this->updateOrganisation($object);
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         /** @var OrganisationEntityInterface $object */
         $this->updateOrganisation($object);
     }
 
-    private function updateOrganisation(OrganisationEntityInterface $object)
+    private function updateOrganisation(OrganisationEntityInterface $object): void
     {
         /** @var ModelManager $modelManager */
         $modelManager = $this->getModelManager();
-        /** @var OrganisationEntityInterface $object */
         $organisation = $object->getOrganisation();
         $organisation->setFromReference($object);
         $orgEm = $modelManager->getEntityManager(Organisation::class);
         if (!$orgEm->contains($organisation)) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $orgEm->persist($organisation);
         }
         $contacts = $organisation->getContacts();
@@ -82,13 +80,12 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
         foreach ($contacts as $contact) {
             if (!$contactEm->contains($contact)) {
                 $contact->setOrganisation($organisation);
-                /** @noinspection PhpUnhandledExceptionInspection */
                 $contactEm->persist($contact);
             }
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'organisation.contacts', [
@@ -99,7 +96,7 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
         $this->addDefaultDatagridFilter($filter, 'specializedProcedures');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name');
@@ -112,7 +109,7 @@ class ManufacturerAdmin extends AbstractAppAdmin implements EnableFullTextSearch
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name');
         $show

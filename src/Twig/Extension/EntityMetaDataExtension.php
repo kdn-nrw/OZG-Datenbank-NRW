@@ -39,8 +39,8 @@ class EntityMetaDataExtension extends AbstractExtension
     }
 
     /**
-     * Returns the meta data for the entity class managed by this admin as a json string;
-     * returns null if entity has no meta data
+     * Returns the metadata for the entity class managed by this admin as a json string;
+     * returns null if entity has no metadata
      *
      * @param object|string $objectOrClass
      * @return array|null
@@ -90,7 +90,7 @@ class EntityMetaDataExtension extends AbstractExtension
     }
 
     /**
-     * Returns the meta data for the entity class managed by this admin; returns null if entity has no meta data
+     * Returns the metadata for the entity class managed by this admin; returns null if entity has no metadata
      * @param object|string $objectOrClass
      * @return MetaItem|null
      */
@@ -101,7 +101,7 @@ class EntityMetaDataExtension extends AbstractExtension
 
     /**
      * Returns the meta item property entity for the given object (or object class name) and property key.
-     * Returns null if no meta data for the class or property exist
+     * Returns null if no metadata for the class or property exist
      *
      * @param object|string $objectOrClass The entity class name
      * @param string $propertyKey The object property name

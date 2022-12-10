@@ -84,7 +84,7 @@ class ArsAgsConsumer extends AbstractApiConsumer
     {
         /** @var CommuneRepository $repository */
         $em = $this->getEntityManager();
-        $em->getConfiguration()->setSQLLogger(null);
+        $em->getConfiguration()->setSQLLogger();
         $repository = $em->getRepository(Commune::class);
         $communes = $repository->findAllWithMissingKeys('modifiedAt', 'DESC');
         $dataProcessor = $this->dataProcessor;

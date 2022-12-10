@@ -126,7 +126,7 @@ class SearchIndexRepository extends EntityRepository
             }
             // If word has less than 3 characters, only match words that start with the given word
             $prefixCond = $wordLength > 3 ? '%' : '';
-            // Compare numeric metaphone values if metaphone returns a non empty string
+            // Compare numeric metaphone values if metaphone returns a non-empty string
             if ($mpStr !== '') {
                 $searchConditions[] = $queryBuilder->expr()->andX(
                     'LENGTH(si.baseword) >= ' . $wordLength,

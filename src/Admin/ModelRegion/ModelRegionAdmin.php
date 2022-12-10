@@ -30,7 +30,7 @@ class ModelRegionAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
 
     protected $baseRoutePattern = 'model-region/model-region';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->tab('default', ['label' => 'app.model_region.tabs.default']);
@@ -49,14 +49,14 @@ class ModelRegionAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addAddressDatagridFilters($filter);
         $this->addDefaultDatagridFilter($filter, 'modelRegionProjects');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addAddressListFields($list);
@@ -67,7 +67,7 @@ class ModelRegionAdmin extends AbstractAppAdmin implements EnableFullTextSearchA
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name');
         $this->addAddressShowFields($show);

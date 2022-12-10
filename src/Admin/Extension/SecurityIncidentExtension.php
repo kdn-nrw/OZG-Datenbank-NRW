@@ -25,7 +25,7 @@ class SecurityIncidentExtension extends AbstractAdminExtension
 {
     use InjectSecurityTrait;
 
-    public function alterNewInstance(AdminInterface $admin, $object)
+    public function alterNewInstance(AdminInterface $admin, object $object): void
     {
         /** @var SecurityIncident $object */
         $user = $this->security->getUser();

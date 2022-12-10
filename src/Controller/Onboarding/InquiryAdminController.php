@@ -74,7 +74,7 @@ class InquiryAdminController extends CRUDController
      *
      * @return RedirectResponse
      */
-    protected function redirectTo($object)
+    protected function redirectTo(Request $request, object $object): RedirectResponse
     {
         if ($object instanceof Inquiry) {
             $referencedObject = $this->inquiryManager->getReferencedObject($object->getReferenceSource(), $object->getReferenceId());
@@ -82,7 +82,7 @@ class InquiryAdminController extends CRUDController
                 return new RedirectResponse($backUrl);
             }
         }
-        return parent::redirectTo($object);
+        return parent::redirectTo($request, $object);
     }
 
     protected function addRenderExtraParams(array $parameters = []): array

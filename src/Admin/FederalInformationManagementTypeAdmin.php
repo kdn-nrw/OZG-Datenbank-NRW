@@ -15,7 +15,7 @@ use App\Entity\FederalInformationManagementType as FederalInformationManagementE
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('service')) {
             $form
@@ -69,7 +69,7 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
         $form->end();
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('service')
@@ -88,7 +88,7 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('service')
@@ -98,7 +98,7 @@ class FederalInformationManagementTypeAdmin extends AbstractAppAdmin
             ->add('implementationTeamProposal');
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('create');
         $collection->remove('delete');

@@ -35,7 +35,7 @@ class MailingSendCommand extends Command
 
     /**
      * @required
-     * @param MailingSender $implementationProjectHelper
+     * @param MailingSender $mailingSender
      */
     public function injectMailingSender(MailingSender $mailingSender): void
     {

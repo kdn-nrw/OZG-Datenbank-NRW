@@ -32,7 +32,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdmi
     use AuditedEntityAdminTrait;
     protected $baseRoutePattern = 'onboarding/epayment-service';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $enableRequiredFields = true;
         $parentFieldDescription = $this->getParentFieldDescription();
@@ -131,7 +131,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdmi
     private function getSolutionQueryBuilder(): QueryBuilder
     {
         /** @var EntityManager $em */
-        $em = $this->modelManager->getEntityManager(Solution::class);
+        $em = $this->getModelManager()->getEntityManager(Solution::class);
 
         /** @var EpaymentService $subject */
         $subject = $this->getSubject();
@@ -152,14 +152,14 @@ class EpaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdmi
         return $queryBuilder;
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'epayment');
         $this->addDefaultDatagridFilter($filter, 'solution');
         /*$filter->add('description');*/
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('epayment', null, [
@@ -188,7 +188,7 @@ class EpaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdmi
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('epayment', null, [

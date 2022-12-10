@@ -47,7 +47,7 @@ class BaseAnnotationReader
 
     /**
      * Returns basic meta information about the given property belonging to the given class
-     * The meta data contains the data type and if set, the target entity for Doctrine ORM references
+     * The metadata contains the data type and if set, the target entity for Doctrine ORM references
      *
      * @param string $entityClass
      * @param string $propertyName

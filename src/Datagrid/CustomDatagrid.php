@@ -12,7 +12,7 @@
 namespace App\Datagrid;
 
 
-use Sonata\AdminBundle\Datagrid\Datagrid;
+use App\Sonata\AdminBundle\Datagrid\Datagrid;
 
 /**
  * Class CustomDatagrid
@@ -29,6 +29,16 @@ class CustomDatagrid extends Datagrid implements FulltextSearchDatagridInterface
      * @var array|null
      */
     private $recordIdList;
+
+    /**
+     * Returns true, if the given filter menu is defined
+     * @param string $filterName
+     * @return bool
+     */
+    public function hasFilterMenu(string $filterName): bool
+    {
+        return isset($this->filterMenuItems[$filterName]);
+    }
 
     /**
      * Add the filter information for displaying the menu items
@@ -79,13 +89,13 @@ class CustomDatagrid extends Datagrid implements FulltextSearchDatagridInterface
         $this->recordIdList = $recordIdList;
     }
 
-    public function getResults()
+    public function getResults(): iterable
     {
         $this->buildPager();
 
         if (null === $this->results) {
             if (null !== $this->recordIdList) {
-                $results = $this->pager->getResults();
+                $results = $this->getPager()->getCurrentPageResults();
 
                 $sortedResults = [];
                 foreach ($this->recordIdList as $recordId) {
@@ -100,7 +110,7 @@ class CustomDatagrid extends Datagrid implements FulltextSearchDatagridInterface
                 }
                 $this->results = array_values(array_filter($sortedResults));
             } else {
-                $this->results = $this->pager->getResults();
+                $this->results = $this->getPager()->getCurrentPageResults();
             }
         }
 
@@ -114,10 +124,11 @@ class CustomDatagrid extends Datagrid implements FulltextSearchDatagridInterface
      */
     public function cleanValues()
     {
-        if (!empty($this->values)) {
+        $values = $this->getValues();
+        if (!empty($values)) {
             $filters = $this->getFilters();
             $filterNames = array_keys($filters);
-            $valueNames = array_keys($this->values);
+            $valueNames = array_keys($values);
             foreach ($valueNames as $name) {
                 if (strpos($name, '_') !== 0 && !in_array($name, $filterNames, false)) {
                     unset($this->values[$name]);

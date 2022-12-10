@@ -15,10 +15,10 @@
             {%- endblock link_attributes -%}
     >
         {% if messageCountInfo.new > 0 %}
-            <i class="fa fa-question-circle text-primary" aria-hidden="true"></i>
+            <i class="fas fa-question-circle text-primary" aria-hidden="true"></i>
             {{ 'app.inquiry.total_inquiries_new_message'|trans({'count': messageCountInfo.new}) }}
         {% else %}
-            <i class="fa fa-question-circle-o text-muted" aria-hidden="true"></i>
+            <i class="fas fa-question-circle-o text-muted" aria-hidden="true"></i>
             <span class="text-muted">
                 {{ 'app.inquiry.total_inquiries_message'|trans({'count': messageCountInfo.total}) }}
             </span>

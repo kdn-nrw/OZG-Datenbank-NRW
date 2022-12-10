@@ -23,7 +23,7 @@ class EntityReferenceMapper
     use InjectManagerRegistryTrait;
 
     /**
-     * Mapping of entity reference meta data
+     * Mapping of entity reference metadata
      * @var array
      */
     private $entityReferenceMeta = [];

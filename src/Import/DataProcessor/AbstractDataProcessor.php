@@ -520,7 +520,9 @@ abstract class AbstractDataProcessor implements DataProcessorInterface, LoggerAw
      * @param string $entityClass
      * @param array $modelEntityPropertyMapping
      * @param PropertyAccessor $accessor
-     * @throws \Doctrine\ORM\ORMException
+     * @return BaseEntity
+     * @throws GeneralImportException
+     * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Doctrine\ORM\Query\QueryException
      */
     protected function processEntity(

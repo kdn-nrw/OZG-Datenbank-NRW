@@ -17,10 +17,10 @@ use App\Admin\Base\AuditedEntityAdminTrait;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Form\Type\CommuneType;
 use App\Form\Type\OnboardingContactType;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Mapper\BaseMapper;
+use Sonata\AdminBundle\Mapper\BaseGroupedMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -30,7 +30,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin implements AuditedEnti
     use AuditedEntityAdminTrait;
     protected $baseRoutePattern = 'onboarding/servicekonto';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->configureFormGroups($form);
         $this->addMandatorFormFields($form);
@@ -39,7 +39,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin implements AuditedEnti
         }
     }
 
-    protected function configureFormGroups(BaseMapper $mapper)
+    protected function configureFormGroups(BaseGroupedMapper $mapper)
     {
         $mapper
             ->tab('General', [
@@ -192,7 +192,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin implements AuditedEnti
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $this->configureFormGroups($show);
         $this->addMandatorShowFields($show);
@@ -225,9 +225,9 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin implements AuditedEnti
             ->end();
         $show
             ->with('mandator_email')
-            ->add('mandatorEmail', TemplateRegistryInterface::TYPE_EMAIL, [
+            ->add('mandatorEmail', FieldDescriptionInterface::TYPE_EMAIL, [
             ])
-            ->add('groupEmail', TemplateRegistryInterface::TYPE_EMAIL, [
+            ->add('groupEmail', FieldDescriptionInterface::TYPE_EMAIL, [
             ]);
 
         $show->end();
@@ -240,7 +240,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin implements AuditedEnti
         $show
             ->tab('Mandator')
             ->with('account')
-            ->add('answerUrl1', TemplateRegistryInterface::TYPE_URL, [
+            ->add('answerUrl1', FieldDescriptionInterface::TYPE_URL, [
             ])
             ->add('clientId', null, [
             ])
@@ -248,7 +248,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin implements AuditedEnti
             ])
             ->end()
             ->with('account2')
-            ->add('answerUrl2', TemplateRegistryInterface::TYPE_URL, [
+            ->add('answerUrl2', FieldDescriptionInterface::TYPE_URL, [
             ])
             ->add('clientId2', null, [
             ])

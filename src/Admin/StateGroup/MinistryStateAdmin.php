@@ -48,7 +48,7 @@ class MinistryStateAdmin extends AbstractAppAdmin implements EnableFullTextSearc
         'app.ministry_state.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->tab('default', ['label' => 'app.ministry_state.tabs.default']);
@@ -62,28 +62,26 @@ class MinistryStateAdmin extends AbstractAppAdmin implements EnableFullTextSearc
         $form->end();
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         /** @var OrganisationEntityInterface $object */
         $this->updateOrganisation($object);
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         /** @var OrganisationEntityInterface $object */
         $this->updateOrganisation($object);
     }
 
-    private function updateOrganisation(OrganisationEntityInterface $object)
+    private function updateOrganisation(OrganisationEntityInterface $object): void
     {
         /** @var ModelManager $modelManager */
         $modelManager = $this->getModelManager();
-        /** @var OrganisationEntityInterface $object */
         $organisation = $object->getOrganisation();
         $organisation->setFromReference($object);
         $orgEm = $modelManager->getEntityManager(Organisation::class);
         if (!$orgEm->contains($organisation)) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $orgEm->persist($organisation);
         }
         $contacts = $organisation->getContacts();
@@ -91,20 +89,19 @@ class MinistryStateAdmin extends AbstractAppAdmin implements EnableFullTextSearc
         foreach ($contacts as $contact) {
             if (!$contactEm->contains($contact)) {
                 $contact->setOrganisation($organisation);
-                /** @noinspection PhpUnhandledExceptionInspection */
                 $contactEm->persist($contact);
             }
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addOrganisationOneToOneDatagridFilters($filter);
         $this->addDefaultDatagridFilter($filter, 'serviceSystems');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addOrganisationOneToOneListFields($list);
@@ -115,7 +112,7 @@ class MinistryStateAdmin extends AbstractAppAdmin implements EnableFullTextSearc
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('shortName');

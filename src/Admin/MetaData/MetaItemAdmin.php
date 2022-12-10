@@ -15,7 +15,7 @@ use App\Admin\AbstractAppAdmin;
 use App\Entity\FederalInformationManagementType;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -25,7 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class MetaItemAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('app.meta_item.groups.general_data', ['class' => 'col-xs-12'])
@@ -66,7 +66,7 @@ class MetaItemAdmin extends AbstractAppAdmin
         $form->end();
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('metaKey', 'string', [
@@ -87,7 +87,7 @@ class MetaItemAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('metaType')
@@ -96,7 +96,7 @@ class MetaItemAdmin extends AbstractAppAdmin
             ->add('description');
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('create');
         $collection->remove('delete');

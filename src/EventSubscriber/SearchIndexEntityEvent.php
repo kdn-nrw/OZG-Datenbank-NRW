@@ -12,7 +12,6 @@
 namespace App\EventSubscriber;
 
 use App\Entity\Base\BaseEntity;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Symfony\Contracts\EventDispatcher\Event as ContractEvent;
 
@@ -28,7 +27,7 @@ class SearchIndexEntityEvent extends ContractEvent
     protected $object;
 
     /**
-     * @var AbstractAdmin
+     * @var AdminInterface
      */
     protected $admin;
 

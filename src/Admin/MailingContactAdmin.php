@@ -33,7 +33,7 @@ class MailingContactAdmin extends AbstractAppAdmin implements EnableFullTextSear
         'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('mailing', ModelType::class, [
@@ -63,14 +63,14 @@ class MailingContactAdmin extends AbstractAppAdmin implements EnableFullTextSear
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('mailing');
         $filter->add('contact');
         $filter->add('sendStatus');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('contact')
@@ -96,7 +96,7 @@ class MailingContactAdmin extends AbstractAppAdmin implements EnableFullTextSear
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('contact')

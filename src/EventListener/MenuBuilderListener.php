@@ -174,21 +174,21 @@ class MenuBuilderListener
                 'route' => 'app_vsm_api_index',
             ]);
             $childNode->setExtras([
-                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+                'icon' => '<i class="fas fa-search" aria-hidden="true"></i>',
             ]);
             $childNode = $vsmChild->addChild('app.vsm_snippet', [
                 'label' => 'app.menu.vsm_snippet',
                 'route' => 'app_vsm_snippet',
             ]);
             $childNode->setExtras([
-                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+                'icon' => '<i class="fas fa-search" aria-hidden="true"></i>',
             ]);
             $childNode = $vsmChild->addChild('app.vsm_snippet_map', [
                 'label' => 'app.menu.vsm_snippet_map',
                 'route' => 'app_vsm_snippet_map',
             ]);
             $childNode->setExtras([
-                'icon' => '<i class="fa fa-search" aria-hidden="true"></i>',
+                'icon' => '<i class="fas fa-search" aria-hidden="true"></i>',
             ]);
             $groupNode->removeChild($vsmChild);
             $this->addChildToGroup(
@@ -264,7 +264,7 @@ class MenuBuilderListener
     {
         if (null !== $childNode) {
             if ($icon) {
-                $childNode->setExtra('icon', '<i class="fa ' . $icon . '" aria-hidden="true"></i>');
+                $childNode->setExtra('icon', '<i class="fas ' . $icon . '" aria-hidden="true"></i>');
             }
             $childNode->setParent($parentNode);
             $newChildren = [];

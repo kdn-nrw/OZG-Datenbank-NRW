@@ -109,6 +109,7 @@ class HttpApiDataProvider extends AbstractDemandDataProvider
             'verify_host' => 0,
         ];
         if (null !== $proxy = $this->getApiConsumerEntity()->getProxy()) {
+            /** @noinspection HttpUrlsUsage */
             $options['proxy'] = str_replace(['http://', 'https://'], '', $proxy);
         }
         $response = $this->client->request($demand->getRequestMethod(), $this->buildQueryUrl(), $options);

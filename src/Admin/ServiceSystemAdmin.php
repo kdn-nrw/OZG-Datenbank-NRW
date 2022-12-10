@@ -45,7 +45,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
         'app.service_system.entity.situation_subject' => 'app.situation.entity.subject',
     ];
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('app.service_system.tabs.general', ['tab' => true])
@@ -213,19 +213,19 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
             ->end();
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         /** @var ServiceSystem $object */
         $object->saveInheritedValues();
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         /** @var ServiceSystem $object */
         $object->saveInheritedValues();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter->add('serviceKey');
@@ -243,7 +243,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
         $this->addDefaultDatagridFilter($filter, 'implementationProjects');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name')
@@ -307,6 +307,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
                     'prefix' => 'admin_app_service',
                     'name' => 'list',
                 ],
+                'virtual_field' => true,
             ]);
         $this->addDefaultListActions($list);
     }
@@ -314,7 +315,7 @@ class ServiceSystemAdmin extends AbstractAppAdmin implements ExtendedSearchAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name', null, [

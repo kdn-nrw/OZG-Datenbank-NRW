@@ -22,7 +22,7 @@ use Sonata\AdminBundle\Admin\AdminInterface;
  */
 class ExportConfigurationExtension extends AbstractAdminExtension
 {
-    public function configureExportFields(AdminInterface $admin, array $fields)
+    public function configureExportFields(AdminInterface $admin, array $fields): array
     {
         if ($admin instanceof CustomExportAdminInterface) {
             $exportSettings = $admin->getExportSettings();

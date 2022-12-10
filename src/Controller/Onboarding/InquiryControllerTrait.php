@@ -39,8 +39,10 @@ trait InquiryControllerTrait
      * @param BaseEntityInterface $entity
      *
      * @param string $formAction
-     * @param string $backUrl
+     * @param string|null $backUrl
      * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function renderAskQuestion(
         Request $request,

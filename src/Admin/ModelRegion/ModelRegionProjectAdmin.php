@@ -33,7 +33,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -55,7 +55,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
 
     protected $baseRoutePattern = 'model-region/project';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->tab('default', ['label' => 'app.model_region_project.tabs.default']);
@@ -168,17 +168,17 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $form->end();
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         $this->cleanDocuments($object);
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         $this->cleanDocuments($object);
     }
 
-    public function cleanDocuments($object)
+    public function cleanDocuments($object): void
     {
         /** @var ModelRegionProject $object */
         $removeDocuments = $object->cleanDocuments();
@@ -195,7 +195,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter
@@ -227,7 +227,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
         $this->addDefaultDatagridFilter($filter, 'solutions');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addDatePickersListFields($list, 'projectStartAt', true);
@@ -284,7 +284,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('description');
@@ -322,7 +322,7 @@ class ModelRegionProjectAdmin extends AbstractAppAdmin implements EnableFullText
             ]);
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
         $collection

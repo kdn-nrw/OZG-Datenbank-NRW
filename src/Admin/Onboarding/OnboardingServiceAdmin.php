@@ -16,7 +16,6 @@ use App\Admin\SolutionAdmin;
 use App\Entity\Solution;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 
 
 class OnboardingServiceAdmin extends SolutionAdmin
@@ -29,11 +28,10 @@ class OnboardingServiceAdmin extends SolutionAdmin
         // Fix Sonata-Bug https://github.com/sonata-project/SonataAdminBundle/issues/3368
         // When global search is executed, the filter query will be concatenated with the additional
         // conditions in this function with OR (instead of AND)
-        // This means all extra conditions will be ignored and we have to execute the full search query here
+        // This means all extra conditions will be ignored, and we have to execute the full search query here
         // @see \Sonata\AdminBundle\Search\SearchHandler::search
         $reqSearchTerm = null;
         if ($this->hasRequest()) {
-            /** @noinspection NullPointerExceptionInspection */
             $reqSearchTerm = $this->getRequest()->get('q');
         } elseif (isset($_REQUEST['q'])) {
             $reqSearchTerm = $_REQUEST['q'];
@@ -79,9 +77,9 @@ class OnboardingServiceAdmin extends SolutionAdmin
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getTranslatorNamingPrefix()
+    protected function getTranslatorNamingPrefix(): ?string
     {
         if (null === $this->translatorNamingPrefix) {
             $this->translatorNamingPrefix = SolutionAdmin::class;
@@ -89,7 +87,7 @@ class OnboardingServiceAdmin extends SolutionAdmin
         return $this->translatorNamingPrefix;
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('serviceProviders', null, [

@@ -196,7 +196,7 @@ class CustomEntityValueProvider
             $rawValue = $this->propertyAccessor->getValue($objectOrArray, $propertyPath);
             return ExportCellValue::formatValue($rawValue, $this->dateTimeFormat);
         } catch (UnexpectedTypeException $e) {
-            //non existent object in path will be ignored
+            //non-existent object in path will be ignored
             return null;
         }
     }

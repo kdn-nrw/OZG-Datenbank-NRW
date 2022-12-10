@@ -78,7 +78,7 @@ trait OrganisationTrait
         if (null !== $filterChoices && array_key_exists('entityTypes', $filterChoices)) {
             $allowedEntityTypes = $filterChoices['entityTypes'];
             /** @var EntityManager $em */
-            $em = $this->modelManager->getEntityManager(ServiceProvider::class);
+            $em = $this->getModelManager()->getEntityManager(ServiceProvider::class);
 
             $queryBuilder = $em->createQueryBuilder()
                 ->select('o')

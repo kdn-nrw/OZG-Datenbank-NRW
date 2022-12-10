@@ -28,7 +28,7 @@ class ModelRegionProjectCategoryAdmin extends AbstractAppAdmin implements Enable
 
     protected $baseRoutePattern = 'model-region/project-category';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('name', TextType::class)
@@ -39,13 +39,13 @@ class ModelRegionProjectCategoryAdmin extends AbstractAppAdmin implements Enable
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'modelRegionProjects');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->add('name');
         $this->addDefaultListActions($list);
@@ -54,7 +54,7 @@ class ModelRegionProjectCategoryAdmin extends AbstractAppAdmin implements Enable
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

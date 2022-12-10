@@ -94,7 +94,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         'app.solution.entity.form_server_solutions_form_server' => 'app.solution.entity.form_server_solutions',
     ];
 
-    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && $action !== 'edit') {
             return;
@@ -122,7 +122,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         }
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('app.solution.tabs.general', ['tab' => true])
@@ -281,19 +281,19 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
             ->end();
     }
 
-    public function postUpdate($object)
+    protected function postUpdate(object $object): void
     {
         /** @var Solution $object */
         $this->solutionHelper->updateCommuneReferences($object);
     }
 
-    public function postPersist($object)
+    protected function postPersist(object $object): void
     {
         /** @var Solution $object */
         $this->solutionHelper->updateCommuneReferences($object);
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'serviceProviders');
         $this->addDefaultDatagridFilter($filter, 'serviceSolutions.service.serviceSystem');
@@ -305,8 +305,8 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $this->addDefaultDatagridFilter($filter, 'portals');
         $filter->add('communeType', null,
             [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => [
                     'app.solution.entity.commune_type_all' => 'all',
@@ -332,7 +332,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
         $filter->add('enabledMunicipalPortal');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('selectedCommuneSolutions', null, [
@@ -418,7 +418,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

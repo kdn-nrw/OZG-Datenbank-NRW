@@ -24,7 +24,7 @@ class PaymentTypeAdmin extends AbstractAppAdmin
 {
     use SolutionTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('name', TextType::class)
@@ -35,13 +35,13 @@ class PaymentTypeAdmin extends AbstractAppAdmin
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'solutions');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addSolutionsListFields($list);
@@ -52,7 +52,7 @@ class PaymentTypeAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

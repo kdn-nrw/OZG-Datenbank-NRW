@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ImplementationStatusAdmin extends StatusAdmin
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->addDefaultStatusFormFields($form);
         $form

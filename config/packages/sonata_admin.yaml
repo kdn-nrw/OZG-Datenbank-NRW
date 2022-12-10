@@ -1,4 +1,6 @@
 # https://sonata-project.org/bundles/admin/3-x/doc/reference/dashboard.html
+parameters:
+    sonata.intl.locale_detector.request.class: \Sonata\IntlBundle\Locale\RequestStackDetector
 sonata_admin:
     title_logo: 'template/logo.svg'
     title: KDN - DWH
@@ -10,7 +12,7 @@ sonata_admin:
     templates:
         show: 'General/Show/show.html.twig'
     options:
-        legacy_twig_text_extension: false
+        logo_content: icon
         use_icheck: false # disable iCheck
     assets:
 #        javascripts:
@@ -38,15 +40,15 @@ sonata_admin:
 #            - bundles/sonatacore/js/base.js
         extra_javascripts:
             - bundles/fosckeditor/ckeditor.js
-            - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
-            - bundles/sonataformatter/markitup/sets/markdown/set.js
-            - bundles/sonataformatter/markitup/sets/html/set.js
-            - bundles/sonataformatter/markitup/sets/textile/set.js
-        extra_stylesheets:
-            - bundles/sonataformatter/markitup/skins/sonata/style.css
-            - bundles/sonataformatter/markitup/sets/markdown/style.css
-            - bundles/sonataformatter/markitup/sets/html/style.css
-            - bundles/sonataformatter/markitup/sets/textile/style.css
+            #- bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
+            #- bundles/sonataformatter/markitup/sets/markdown/set.js
+            #- bundles/sonataformatter/markitup/sets/html/set.js
+            #- bundles/sonataformatter/markitup/sets/textile/set.js
+        #extra_stylesheets:
+            #- bundles/sonataformatter/markitup/skins/sonata/style.css
+            #- bundles/sonataformatter/markitup/sets/markdown/style.css
+            #- bundles/sonataformatter/markitup/sets/html/style.css
+            #- bundles/sonataformatter/markitup/sets/textile/style.css
     dashboard:
         blocks:
             -
@@ -72,7 +74,7 @@ sonata_admin:
                 type:     sonata.admin.block.stats   # block id
                 settings:
                     code:  App\Admin\Frontend\ServiceSystemAdmin    # admin code - service id
-                    icon:  fa-tasks                  # font awesome icon
+                    icon:  fas fa-tasks       # font awesome icon
                     text:  app.block.service_system.total
                     color: bg-green                 # colors: bg-green, bg-red and bg-aqua
                     #filters:                         # filter values
@@ -83,7 +85,7 @@ sonata_admin:
                 type:     sonata.admin.block.stats   # block id
                 settings:
                     code:  App\Admin\Frontend\ServiceSystemAdmin    # admin code - service id
-                    icon:  fa-tasks                  # font awesome icon
+                    icon:  fas fa-tasks                  # font awesome icon
                     text:  app.block.service_system.communal_execution
                     color: bg-green                 # colors: bg-green, bg-red and bg-aqua
                     filters:                         # filter values
@@ -94,7 +96,7 @@ sonata_admin:
                 type:     sonata.admin.block.stats   # block id
                 settings:
                     code:  App\Admin\ImplementationProjectAdmin    # admin code - service id
-                    icon:  fa-wrench                  # font awesome icon
+                    icon:  fas fa-wrench                  # font awesome icon
                     text:  app.block.implementation_project.total
                     color: bg-green                 # colors: bg-green, bg-red and bg-aqua
                     #filters:                         # filter values
@@ -135,7 +137,7 @@ sonata_admin:
                 type:     sonata.admin.block.stats   # block id
                 settings:
                     code:  App\Admin\SolutionAdmin    # admin code - service id
-                    icon:  fa-lightbulb-o                  # font awesome icon
+                    icon:  fas fa-lightbulb                  # font awesome icon
                     text:  app.block.solution.online            # static text or translation message
                     color: bg-green                 # colors: bg-green, bg-red and bg-aqua
                     filters:                         # filter values
@@ -146,7 +148,7 @@ sonata_admin:
                 type:     sonata.admin.block.stats   # block id
                 settings:
                     code:  App\Admin\SolutionAdmin    # admin code - service id
-                    icon:  fa-lightbulb-o                  # font awesome icon
+                    icon:  fas fa-lightbulb                  # font awesome icon
                     text:  app.block.solution.partially_online            # static text or translation message
                     color: bg-yellow                 # colors: bg-green, bg-red and bg-aqua
                     filters:                         # filter values
@@ -157,7 +159,7 @@ sonata_admin:
                 type:     sonata.admin.block.stats   # block id
                 settings:
                     code:  App\Admin\SolutionAdmin    # admin code - service id
-                    icon:  fa-lightbulb-o                  # font awesome icon
+                    icon:  fas fa-lightbulb                  # font awesome icon
                     text:  app.block.solution.offline            # static text or translation message
                     color: bg-red                 # colors: bg-green, bg-red and bg-aqua
                     filters:                         # filter values
@@ -168,7 +170,7 @@ sonata_admin:
                 type:     sonata.admin.block.stats   # block id
                 settings:
                     code:  App\Admin\SolutionAdmin    # admin code - service id
-                    icon:  fa-lightbulb-o                  # font awesome icon
+                    icon:  fas fa-lightbulb                  # font awesome icon
                     text:  app.block.solution.maturity_4
                     color: bg-green                 # colors: bg-green, bg-red and bg-aqua
                     filters:                         # filter values
@@ -178,14 +180,14 @@ sonata_admin:
             app.ozg_implementation_group:
                 label: app.menu.ozg_implementation_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-building"></i>'
+                icon: '<i class="fas fa-building"></i>'
                 items:
                     - App\Admin\SolutionAdmin
                     - App\Admin\ImplementationProjectAdmin
             app.settings_group:
                 label: app.menu.settings_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-wrench"></i>'
+                icon: '<i class="fas fa-wrench"></i>'
                 items:
                     - App\Admin\SubjectAdmin
                     - App\Admin\SituationAdmin
@@ -194,7 +196,7 @@ sonata_admin:
             app.state_group:
                 label: app.menu.state_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-building"></i>'
+                icon: '<i class="fas fa-building"></i>'
                 items:
                     - App\Admin\StateGroup\CommuneAdmin
                     - App\Admin\StateGroup\ServiceProviderAdmin
@@ -207,7 +209,7 @@ sonata_admin:
             app.implementation_group:
                 label: app.menu.implementation_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-object-group"></i>'
+                icon: '<i class="fas fa-object-group"></i>'
                 items:
                     - App\Admin\MaturityAdmin
                     - App\Admin\StatusAdmin
@@ -229,7 +231,7 @@ sonata_admin:
             app.digital_model_reqion_group:
                 label: app.menu.digital_model_reqion_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-object-group"></i>'
+                icon: '<i class="fas fa-object-group"></i>'
                 items:
                     - App\Admin\ModelRegion\ModelRegionAdmin
                     - App\Admin\ModelRegion\ModelRegionProjectAdmin
@@ -239,7 +241,7 @@ sonata_admin:
             app.efile_group:
                 label: app.menu.efile_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-object-group"></i>'
+                icon: '<i class="fas fa-object-group"></i>'
                 items:
                     - App\Admin\EFileAdmin
                     - App\Admin\EFileStatusAdmin
@@ -247,7 +249,7 @@ sonata_admin:
             app.onboarding_group:
                 label: app.menu.onboarding_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-ship"></i>'
+                icon: '<i class="fas fa-ship"></i>'
                 items:
                     - App\Admin\Onboarding\CommuneInfoAdmin
                     - App\Admin\Onboarding\OnboardingServiceAdmin
@@ -262,7 +264,7 @@ sonata_admin:
             app_admin.menu.basic:
                 label: app.menu.basic_group
                 label_catalogue: messages
-                icon: '<i class="fa fa-object-group"></i>'
+                icon: '<i class="fas fa-object-group"></i>'
                 items:
                     - App\Admin\PaymentPlatformAdmin
                     - App\Admin\PaymentTypeAdmin
@@ -275,10 +277,10 @@ sonata_admin:
                 label: app.system_group
                 #label_catalogue: messages
                 label_catalogue: SonataAdminBundle
-                icon: '<i class="fa fa-cog"></i>'
+                icon: '<i class="fas fa-cog"></i>'
                 items:
                     - sonata.user.admin.user
-                    - sonata.user.admin.group
+                    - App\Admin\GroupAdmin
                     - App\Admin\Api\ApiConsumerAdmin
                     - App\Admin\MetaData\MetaItemAdmin
                     - App\Admin\Configuration\CustomFieldAdmin

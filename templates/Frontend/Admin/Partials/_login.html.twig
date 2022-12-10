@@ -2,13 +2,13 @@
     {% if loginShowLogo is defined and loginShowLogo %}
     <div class="login-logo">
         <a href="{{ path('sonata_admin_dashboard') }}">
-            {% if sonata_admin.adminPool.getOption('title_mode') in ['single_image', 'both'] %}
+            {% if 'icon' == sonata_config.getOption('logo_content') or 'all' == sonata_config.getOption('logo_content') %}
                 <div>
-                    <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
+                    <img src="{{ asset(sonata_config.logo) }}" alt="{{ sonata_config.title }}">
                 </div>
             {% endif %}
-            {% if sonata_admin.adminPool.getOption('title_mode') in ['single_text', 'both'] %}
-                <span>{{ sonata_admin.adminPool.title }}</span>
+            {% if 'text' == sonata_config.getOption('logo_content') or 'all' == sonata_config.getOption('logo_content') %}
+                <span>{{ sonata_config.title }}</span>
             {% endif %}
         </a>
     </div>
@@ -47,7 +47,7 @@
                                    id="_submit"
                                    name="_submit"
                                    type="submit"
-                                   value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+                                   value="{{ 'security.login.submit'|trans({}, 'SonataUserBundle') }}" />
                         </span>
                 </div>
                 <span class="help-block sonata-ba-field-help">{{ 'message_two_step_code_help'|trans({}, 'SonataUserBundle') }}</span>
@@ -86,12 +86,12 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
-                                {{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
+                                {{ 'security.login.remember_me'|trans({}, 'SonataUserBundle') }}
                             </label>
                         </div>
                     </div>
                     <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'security.login.submit'|trans({}, 'SonataUserBundle') }}</button>
                     </div>
                 </div>
             </form>

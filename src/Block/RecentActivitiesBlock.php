@@ -46,7 +46,7 @@ class RecentActivitiesBlock extends AbstractBlockService
     /**
      * @var Security
      */
-    private $security;
+    private Security $security;
 
     /**
      * @param Environment $twig
@@ -89,10 +89,13 @@ class RecentActivitiesBlock extends AbstractBlockService
             'items' => $items,
             'isAdminMode' => $isAdminMode,
         ];
+        $response = $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
         if ($isAdminMode) {
-            return $this->renderPrivateResponse($blockContext->getTemplate(), $parameters, $response);
+            $response
+                ->setTtl(0)
+                ->setPrivate();
         }
-        return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
+        return $response;
     }
 
     /**
@@ -147,7 +150,7 @@ class RecentActivitiesBlock extends AbstractBlockService
                 ];
             }
         }
-        $userMessages = $this->inquiryManager->findUserInquiries($user, true);
+        $userMessages = $this->inquiryManager->findUserInquiries($user);
         if ($userMessages) {
             $prefix = $this->translator->trans('app.common.recent_activities.my_inquiries');
             foreach ($userMessages as $message) {
@@ -302,7 +305,7 @@ class RecentActivitiesBlock extends AbstractBlockService
             'mode' => 'admin',
             'title' => null,
             'translation_domain' => null,
-            'icon' => 'fa fa-th-list',
+            'icon' => 'fas fa-th-list',
             'class' => null,
             'code' => false,
             'code_public' => false,

@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PageContentAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('page', ChoiceType::class, [
@@ -43,13 +43,13 @@ class PageContentAdmin extends AbstractAppAdmin
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('page');
         $filter->add('headline');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('createdAt')
@@ -66,7 +66,7 @@ class PageContentAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('page')

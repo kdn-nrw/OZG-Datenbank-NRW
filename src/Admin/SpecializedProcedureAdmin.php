@@ -52,7 +52,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
     use ServiceTrait;
     use ServiceProviderTrait;
 
-    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && $action !== 'edit') {
             return;
@@ -86,7 +86,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
         }
     }
 
-    protected function configureFormGroups(FormMapper $form)
+    protected function configureFormGroups(FormMapper $form): void
     {
         $form
             ->tab('tabs.general', [
@@ -352,7 +352,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'manufacturers');
@@ -388,7 +388,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
             ]);
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         // Name | Kategorie | Hersteller | Eigenentwicklung (Hier würde nur ein „Ja“ oder ein Haken erscheinen) | KDN Mitglied (nur der Kurzname) alle Felder sortierbar
         $list
@@ -456,7 +456,7 @@ class SpecializedProcedureAdmin extends AbstractAppAdmin implements EnableFullTe
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

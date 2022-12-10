@@ -16,7 +16,7 @@ use App\Entity\ModelRegion\ConceptQueryType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -27,7 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ConceptQueryTypeAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('queryGroup', ChoiceType::class, [
@@ -54,7 +54,7 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter
@@ -70,7 +70,7 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
             ]);
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('queryGroup', 'choice', [
@@ -92,7 +92,7 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('queryGroup', 'choice', [
@@ -104,7 +104,7 @@ class ConceptQueryTypeAdmin extends AbstractAppAdmin
             ->add('description');
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         //$collection->remove('create');
         //$collection->remove('delete');

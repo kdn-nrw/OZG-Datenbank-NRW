@@ -30,17 +30,17 @@ file that was distributed with this source code.
             </td>
             <td>
                 {% if child.createdAt %}
-                    {{ child.createdAt|format_datetime('dd.MM.yyyy') }}
+                    {{ child.createdAt|sonata_format_datetime('dd.MM.yyyy') }}
                 {% endif %}
             </td>
             <td>
                 {% if child.occurredOn %}
-                    {{ child.occurredOn|format_datetime('dd.MM.yyyy') }}
+                    {{ child.occurredOn|sonata_format_datetime('dd.MM.yyyy') }}
                 {% endif %}
             </td>
             <td>
                 {% if child.solvedOn %}
-                    {{ child.solvedOn|format_datetime('dd.MM.yyyy') }}
+                    {{ child.solvedOn|sonata_format_datetime('dd.MM.yyyy') }}
                 {% endif %}
             </td>
             <td>

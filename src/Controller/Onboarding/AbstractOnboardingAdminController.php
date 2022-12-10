@@ -35,19 +35,19 @@ abstract class AbstractOnboardingAdminController extends CRUDController
      *
      * @throws \RuntimeException
      */
-    protected function configure()
+    final public function configureOnboardingController(Request $request)
     {
-        parent::configure();
-        $templateRegistry = $this->admin->getTemplateRegistry();
-        if (null !== $templateRegistry) {
-            $templateRegistry->setTemplate('edit', 'Onboarding/edit.html.twig');
+        if (!$this->admin) {
+            $this->configureAdmin($request);
         }
+        $templateRegistry = $this->admin->getTemplateRegistry();
+        $templateRegistry->setTemplate('edit', 'Onboarding/edit.html.twig');
     }
 
     /**
      * @inheritDoc
      */
-    protected function preList(Request $request)
+    protected function preList(Request $request): ?Response
     {
         $this->onboardingManager->createItems($this->admin->getClass());
         return null;
@@ -121,19 +121,12 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         return $this->renderAskQuestion($request, $inquiryManager, $object, $formAction, $backUrl);
     }
 
-    /**
-     * Renders a view while passing mandatory parameters on to the template.
-     *
-     * @param string               $view       The view name
-     * @param array<string, mixed> $parameters An array of parameters to pass to the view
-     *
-     * @return Response A Response instance
-     */
-    public function renderWithExtraParams($view, array $parameters = [], ?Response $response = null)
+    protected function addRenderExtraParams(array $parameters = []): array
     {
+        $parameters = parent::addRenderExtraParams($parameters);
         if ($parameters['action'] === 'edit' && $parameters['object'] instanceof AbstractOnboardingEntity) {
             $parameters['objectCompletenessInfo'] = $this->onboardingManager->getCompletionInfo($parameters['object']);
         }
-        return parent::renderWithExtraParams($view, $parameters, $response);
+        return $parameters;
     }
 }

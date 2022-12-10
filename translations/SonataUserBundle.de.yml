@@ -20,3 +20,14 @@ app:
       model_regions: Modellregionen
       organisation: Organisation
       service_providers: IT Dienstleister
+      groups: Benutzergruppen
+form.group_user: 'Benutzer'
+form.group_security: 'Sicherheit'
+form.group_profile: 'Profil'
+form.group_general: 'Allgemein'
+form.group_app_user_groups_references: 'Referenzen'
+form.group_status: 'Status'
+form.group_groups: 'Gruppen'
+form.label_groups: 'Gruppen'
+form.group_roles: 'Rollen'
+form.group_keys: 'Schlüssel'

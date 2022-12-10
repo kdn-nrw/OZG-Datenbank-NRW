@@ -22,8 +22,10 @@ use App\Entity\Subject;
 use App\Exporter\Source\ServiceFimValueFormatter;
 use App\Model\ExportSettings;
 use App\Util\SnakeCaseConverter;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -43,7 +45,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         'app.service.entity.service_system_priority' => 'app.service_system.entity.priority',
     ];
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'serviceSystem.situation.subject', ['show_filter' => true]);
         $this->addDefaultDatagridFilter($filter, 'serviceSystem.situation');
@@ -61,16 +63,16 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         $this->addDefaultDatagridFilter($filter, 'ruleAuthorities');
         $filter->add('fimTypes.dataType',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => array_flip(FederalInformationManagementType::$mapTypes)
             ]
         );
         $filter->add('fimTypes.status',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => array_flip(FederalInformationManagementType::$statusChoices)
             ]
@@ -79,14 +81,13 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             null, [
                 'label' => 'app.implementation_project.entity.status',
             ],
-            null,
             ['expanded' => false, 'multiple' => true]
         );
         $this->addDefaultDatagridFilter($filter, 'communeTypes');
         $this->addDefaultDatagridFilter($filter, 'implementationProjects.implementationProject');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('serviceSystem.situation.subject', null, [
@@ -101,6 +102,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                     ['fieldName' => 'subject'],
                 ],
                 'enable_filter_add' => true,
+                'virtual_field' => true,
             ])
             ->add('serviceSystem.situation', null, [
                 'sortable' => true, // IMPORTANT! make the column sortable
@@ -160,6 +162,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
                 ['fieldName' => 'status'],
             ],
             'fallbackToCustomValue' => true,
+            'virtual_field' => true,
         ]);
         $dateFields = [
             'projectStartAt', 'conceptStatusAt',
@@ -232,7 +235,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name', null, [
@@ -263,7 +266,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ->add('relevance2', null, [
                 'template' => 'ServiceAdmin/show_field_inline_label.html.twig',
             ])
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -308,7 +311,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             ->add('fimTypes');
     }
 
-    public function isGranted($name, $object = null)
+    public function isGranted($name, ?object $object = null): bool
     {
         if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;
@@ -316,10 +319,10 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         return parent::isGranted($name, $object);
     }
 
-    public function buildDatagrid()
+    protected function buildDatagrid(): ?DatagridInterface
     {
         if ($this->datagrid) {
-            return;
+            return $this->datagrid;
         }
         parent::buildDatagrid();
         /** @var CustomDatagrid $datagrid */
@@ -329,6 +332,7 @@ class ServiceAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
         $subjects = $modelManager->findBy(Subject::class);
         $datagrid->addFilterMenu('serviceSystem.situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
+        return $this->datagrid;
     }
 
 

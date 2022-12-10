@@ -23,6 +23,7 @@ use App\Entity\ImplementationStatus;
 use App\Entity\Subject;
 use App\Exporter\Source\ServiceListValueFormatter;
 use App\Model\ExportSettings;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -32,11 +33,11 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
 {
     use DatePickerTrait;
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name')
-            ->add('serviceSystems.situation.subject', 'string', [
+            ->add('serviceSystems.situation.subject', FieldDescriptionInterface::TYPE_ARRAY, [
                 'label' => 'app.situation.entity.subject',
                 //'associated_property' => 'name',
                 'template' => 'ImplementationProjectAdmin/list-service-system-subjects.html.twig',
@@ -51,6 +52,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
                     ['fieldName' => 'subject'],
                 ],
                 'enable_filter_add' => true,
+                'virtual_field' => true,
             ])
             ->add('efaType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.implementation_project.entity.efa_type',
@@ -104,7 +106,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')
@@ -173,7 +175,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
         $this->addDatePickersShowFields($show, 'nationwideRolloutAt', false);
     }
 
-    public function isGranted($name, $object = null)
+    public function isGranted($name, ?object $object = null): bool
     {
         if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;
@@ -181,19 +183,18 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
         return parent::isGranted($name, $object);
     }
 
-    public function buildDatagrid()
+    protected function buildDatagrid(): ?DatagridInterface
     {
-        if ($this->datagrid) {
-            return;
-        }
-        parent::buildDatagrid();
+        $datagrid = parent::buildDatagrid();
         /** @var CustomDatagrid $datagrid */
-        $datagrid = $this->datagrid;
-        $modelManager = $this->getModelManager();
-        //$situations = $modelManager->findBy(Situation::class);
-        //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
-        $subjects = $modelManager->findBy(Subject::class);
-        $datagrid->addFilterMenu('serviceSystems.situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
+        if ($datagrid && !$datagrid->hasFilterMenu('serviceSystems.situation.subject')) {
+            $modelManager = $this->getModelManager();
+            //$situations = $modelManager->findBy(Situation::class);
+            //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
+            $subjects = $modelManager->findBy(Subject::class);
+            $datagrid->addFilterMenu('serviceSystems.situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
+        }
+        return $datagrid;
     }
 
 

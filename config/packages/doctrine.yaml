@@ -51,7 +51,6 @@ doctrine:
             enabled: true
         mappings:
           SonataUserBundle: null
-          FOSUserBundle: null
           App:
             is_bundle: false
             type: annotation

@@ -45,6 +45,6 @@ class DefaultController extends AbstractController
                 }
             }
         }
-        return $this->redirectToRoute($redirectRoute, $redirectParams, 302);
+        return $this->redirectToRoute($redirectRoute, $redirectParams);
     }
 }

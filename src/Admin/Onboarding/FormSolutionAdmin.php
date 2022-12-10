@@ -32,7 +32,7 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin implements AuditedEntity
     use AuditedEntityAdminTrait;
     protected $baseRoutePattern = 'onboarding/formsolutions';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->tab('general', [
@@ -147,7 +147,7 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin implements AuditedEntity
                 'class' => 'col-md-12 box-collection-static two-col box-clipboard-rows js-copy-row-values',
             ]);
         $form
-            ->add('contacts', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
+            ->add('contacts', CollectionType::class, [
                 'label' => 'app.form_solution.entity.contacts',
                 'entry_type' => OnboardingContactType::class,
                 'entry_options' => [
@@ -162,7 +162,7 @@ class FormSolutionAdmin extends AbstractOnboardingAdmin implements AuditedEntity
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('communeName')

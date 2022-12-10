@@ -12,34 +12,34 @@
 namespace App\Admin;
 
 
-use App\Admin\Base\AdminTranslatorStrategyTrait;
 use App\Admin\ModelRegion\ModelRegionAdmin;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\Admin\StateGroup\ServiceProviderAdmin;
 use App\Admin\Traits\CommuneTrait;
 use App\Admin\Traits\ModelRegionTrait;
-use FOS\UserBundle\Model\UserManagerInterface;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\UserBundle\Form\Type\RolesMatrixType;
+use Sonata\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User admin
  */
-class UserAdmin extends AbstractAdmin
+class UserAdmin extends AbstractAppAdmin
 {
-    use AdminTranslatorStrategyTrait;
     use ModelRegionTrait;
     use CommuneTrait;
 
@@ -47,11 +47,37 @@ class UserAdmin extends AbstractAdmin
      * @var UserManagerInterface
      */
     protected $userManager;
+    protected $classnameLabel = 'user';
+
+    public function __construct(UserManagerInterface $userManager)
+    {
+        parent::__construct();
+        $this->userManager = $userManager;
+    }
+
+    protected function preUpdate(object $object): void
+    {
+        if ($object instanceof UserInterface) {
+            //$this->getUserManager()->updateCanonicalFields($object);
+            $this->getUserManager()->updatePassword($object);
+        }
+    }
+
+    protected function configureFormOptions(array &$formOptions): void
+    {
+        $formOptions['validation_groups'] = ['Default'];
+
+        if (!$this->hasSubject() || null === $this->getSubject()->getId()) {
+            $formOptions['validation_groups'][] = 'Registration';
+        } else {
+            $formOptions['validation_groups'][] = 'Profile';
+        }
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function getFormBuilder()
+    public function getFormBuilder(): FormBuilderInterface
     {
         $this->formOptions['data_class'] = $this->getClass();
 
@@ -67,17 +93,6 @@ class UserAdmin extends AbstractAdmin
         $this->defineFormBuilder($formBuilder);
 
         return $formBuilder;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function preUpdate($user): void
-    {
-        if ($user instanceof UserInterface) {
-            $this->getUserManager()->updateCanonicalFields($user);
-            $this->getUserManager()->updatePassword($user);
-        }
     }
 
     public function setUserManager(UserManagerInterface $userManager): void
@@ -115,14 +130,15 @@ class UserAdmin extends AbstractAdmin
             ->add('id')
             ->add('username')
             ->add('email')
-            ->add('groups');
+            ->add('groups', null, [
+                'label' => 'app.user.entity.groups',
+            ]);
         $filter->add('communes',
             null, [
                 'label' => 'app.user.entity.communes',
                 'admin_code' => CommuneAdmin::class,
                 'translation_domain' => 'messages',
             ],
-            null,
             ['expanded' => false, 'multiple' => true]
         );
         $filter->add('modelRegions',
@@ -131,7 +147,6 @@ class UserAdmin extends AbstractAdmin
                 'admin_code' => ModelRegionAdmin::class,
                 'translation_domain' => 'messages',
             ],
-            null,
             ['expanded' => false, 'multiple' => true]
         );
         $filter->add('serviceProviders',
@@ -140,7 +155,6 @@ class UserAdmin extends AbstractAdmin
                 'admin_code' => ServiceProviderAdmin::class,
                 'translation_domain' => 'messages',
             ],
-            null,
             ['expanded' => false, 'multiple' => true]
         );
         $filter->add('organisation',
@@ -149,7 +163,6 @@ class UserAdmin extends AbstractAdmin
                 'admin_code' => OrganisationAdmin::class,
                 'translation_domain' => 'messages',
             ],
-            null,
             ['expanded' => false, 'multiple' => true]
         );
     }
@@ -172,7 +185,9 @@ class UserAdmin extends AbstractAdmin
             ]);
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             $list
-                ->add('groups');
+                ->add('groups', null, [
+                    'label' => 'app.user.entity.groups',
+                ]);
         }
         $list
             ->add('enabled', null, ['editable' => true])
@@ -189,7 +204,10 @@ class UserAdmin extends AbstractAdmin
 
         if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
             $list
-                ->add('impersonating', 'string', ['template' => '@SonataUser/Admin/Field/impersonating.html.twig']);
+                ->add('impersonating', FieldDescriptionInterface::TYPE_STRING, [
+                    'virtual_field' => true,
+                    'template' => '@SonataUser/Admin/Field/impersonating.html.twig',
+                ]);
         }
     }
 
@@ -214,7 +232,6 @@ class UserAdmin extends AbstractAdmin
                 ->with('Status', ['class' => 'col-md-4'])->end()
                 ->with('Groups', ['class' => 'col-md-4'])->end()
                 //->with('Keys', ['class' => 'col-md-4'])->end()
-                ->with('Roles', ['class' => 'col-md-12'])->end()
                 ->end();
         }
         $genderOptions = [
@@ -264,6 +281,11 @@ class UserAdmin extends AbstractAdmin
                 ->add('enabled', null, ['required' => false])
                 ->end()
                 ->with('Groups')
+                /*->add('realRoles', RolesMatrixType::class, [
+                    'label' => false,
+                    'multiple' => true,
+                    'required' => false,
+                ])*/
                 ->add('groups', ModelType::class, [
                     'required' => false,
                     'expanded' => true,

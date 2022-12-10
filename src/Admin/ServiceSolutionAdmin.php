@@ -23,7 +23,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('service')) {
             $form
@@ -31,7 +31,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                     'property' => 'name',
                     'required' => true,
                 ], [
-                    'admin_code' => \App\Admin\ServiceAdmin::class
+                    'admin_code' => ServiceAdmin::class
                 ]);
         }
         if (!$this->isExcludedFormField('solution')) {
@@ -40,7 +40,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                     'property' => ['name', 'description'],
                     'required' => true,
                 ], [
-                    'admin_code' => \App\Admin\SolutionAdmin::class
+                    'admin_code' => SolutionAdmin::class
                 ]);
         }
         $form/*
@@ -49,18 +49,18 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 'required' => true,
                 'choice_translation_domain' => false,
             ])*/
-            ->add('maturity', ModelType::class, [
-                'btn_add' => false,
-                'placeholder' => '',
-                'choice_translation_domain' => false,
-            ])
+        ->add('maturity', ModelType::class, [
+            'btn_add' => false,
+            'placeholder' => '',
+            'choice_translation_domain' => false,
+        ])
             /*->add('description', TextareaType::class, [
                 'required' => false,
             ])*/
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'service');
         $this->addDefaultDatagridFilter($filter, 'solution');
@@ -69,14 +69,14 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $filter->add('maturity');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('service', null, [
-                'admin_code' => \App\Admin\ServiceAdmin::class
+                'admin_code' => ServiceAdmin::class
             ])
             ->add('solution', null, [
-                'admin_code' => \App\Admin\SolutionAdmin::class
+                'admin_code' => SolutionAdmin::class
             ])
             /*->add('description')
             ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
@@ -91,14 +91,14 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('service', null, [
-                'admin_code' => \App\Admin\ServiceAdmin::class
+                'admin_code' => ServiceAdmin::class
             ])
             ->add('solution', null, [
-                'admin_code' => \App\Admin\SolutionAdmin::class
+                'admin_code' => SolutionAdmin::class
             ])
             ->add('maturity')/*
             ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
@@ -110,16 +110,15 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
         ;
     }
 
-    public function getNewInstance()
+    /**
+     * @inheritDoc
+     */
+    protected function alterNewInstance(object $object): void
     {
-        /** @var ServiceSolution $object */
-        $object = parent::getNewInstance();
         $defaultMaturity = $this->getModelManager()->find(Maturity::class, Maturity::DEFAULT_ID);
         if (null !== $defaultMaturity) {
             /** @var Maturity $defaultMaturity */
             $object->setMaturity($defaultMaturity);
         }
-
-        return $object;
     }
 }

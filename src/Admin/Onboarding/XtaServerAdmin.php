@@ -23,10 +23,11 @@ use App\Form\Type\OnboardingContactType;
 use App\Form\Type\OnboardingDocumentType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Mapper\BaseGroupedMapper;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Validator\ErrorElement;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -43,7 +44,7 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
 
     protected $baseRoutePattern = 'onboarding/xta';
 
-    protected function configureFormGroups(FormMapper $form)
+    protected function configureFormGroups(BaseGroupedMapper $form)
     {
         $form
             ->with('general', [
@@ -54,7 +55,7 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
             ->end();
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->configureFormGroups($form);
         $enableRequiredFields = false;
@@ -69,7 +70,6 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
             ], [
                 'admin_code' => CommuneAdmin::class,
             ]);
-        ;
         $form
             ->add('applicationType', ChoiceType::class, [
                 'label' => 'app.xta_server.entity.application_type',
@@ -80,7 +80,7 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
                 'choice_attr' => static function ($choice, $key, $value) {
                     return ['class' => 'onboarding-application-type js-toggle-info ob-application-type-' . $value, 'data-toggle' => 'ob-application-type', 'data-show' => $value,];
                 },
-                'help' => '<span class="text-danger ob-application-type ob-application-type-show-2" style="display: none">Der Zertifikatsaustausch kann auf dem XTA-Server erst dann erfolgen, wenn bereits vorher das Zertifikat im DVDV erfolgreich ausgetauscht wurde. Erst nach dem erfolgreichen Austausch des Zertifikats auf dem XTA-Server, kann auch das Zertifikat im verwendeten Fachverfahren ausgetauscht werden.</span>',
+                'help' => '<span class="text-danger ob-application-type ob-application-type-show-2" style="display: none">Der Zertifikatsaustausch kann auf dem XTA-Server erst dann erfolgen, wenn bereits vorher das Zertifikat im DVDV erfolgreich ausgetauscht wurde. Erst nach dem erfolgreichen Austausch des Zertifikats auf dem XTA-Server kann auch das Zertifikat im verwendeten Fachverfahren ausgetauscht werden.</span>',
             ]);
         $form
             ->add('state', TextType::class, [
@@ -198,7 +198,7 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         parent::configureDatagridFilters($filter);
         $filter
@@ -226,19 +226,19 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
             ]);
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('commune', null, [
                 'admin_code' => CommuneAdmin::class,
             ])
-            ->add('applicationType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('applicationType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.xta_server.entity.application_type',
                 'choices' => array_flip(XtaServer::$applicationTypeChoices),
                 'editable' => false,
                 'catalogue' => 'messages',
             ])
-            ->add('intermediaryOperatorType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('intermediaryOperatorType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.xta_server.entity.intermediary_operator_type',
                 'choices' => array_flip(XtaServer::$intermediaryOperatorTypeChoices),
                 'editable' => false,
@@ -253,14 +253,14 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('commune', null, [
                 'admin_code' => CommuneAdmin::class,
             ])
             ->add('modifiedAt')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,
@@ -268,7 +268,7 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
             ])
             ->add('customValues');
         $show
-            ->add('applicationType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('applicationType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.xta_server.entity.application_type',
                 'choices' => array_flip(XtaServer::$applicationTypeChoices),
                 'editable' => false,
@@ -277,7 +277,7 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
             ->add('state')
             ->add('authorityCategory')
             ->add('organizationalKey')
-            ->add('intermediaryOperatorType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('intermediaryOperatorType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.xta_server.entity.intermediary_operator_type',
                 'choices' => array_flip(XtaServer::$intermediaryOperatorTypeChoices),
                 'editable' => false,
@@ -292,7 +292,7 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
             ->add('osciPrivateKeyPassword');
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
         $collection

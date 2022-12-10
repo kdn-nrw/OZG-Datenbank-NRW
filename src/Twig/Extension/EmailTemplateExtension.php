@@ -11,45 +11,26 @@
 
 namespace App\Twig\Extension;
 
-use App\Entity\Configuration\EmailTemplate;
-use App\Model\EmailTemplate\AbstractTemplateModel;
-use App\Service\Mailer\InjectEmailTemplateManagerTrait;
+use App\Twig\EmailTemplateRuntime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class EmailTemplateExtension extends AbstractExtension
 {
-    use InjectEmailTemplateManagerTrait;
-
     /**
-     * Returns a list of functions to add to the existing list.
-     *
-     * @return array An array of functions
+     * @return TwigFunction[]
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new TwigFunction('app_email_template_get_model', [$this, 'getEmailTemplateModel']),
-            new TwigFunction('app_email_template_get_markers', [$this, 'getEmailTemplateMarkers']),
+            new TwigFunction('app_email_template_get_model', [EmailTemplateRuntime::class, 'getEmailTemplateModel'], [
+                'is_safe' => ['html'],
+                'needs_environment' => false,
+            ]),
+            new TwigFunction('app_email_template_get_markers', [EmailTemplateRuntime::class, 'getEmailTemplateMarkers'], [
+                'is_safe' => ['html'],
+                'needs_environment' => false,
+            ]),
         ];
-    }
-
-    /**
-     * @param string|EmailTemplate $keyOrEntity
-     * @return AbstractTemplateModel|null
-     */
-    public function getEmailTemplateModel($keyOrEntity): ?AbstractTemplateModel
-    {
-        return $this->emailTemplateManager->getEmailTemplateModel($keyOrEntity);
-    }
-
-    /**
-     * @param AbstractTemplateModel $model
-     * @param bool $useTestData
-     * @return array The model markers
-     */
-    public function getEmailTemplateMarkers(AbstractTemplateModel $model, $useTestData = false): array
-    {
-        return $this->emailTemplateManager->getModelMarkers($model, $useTestData);
     }
 }

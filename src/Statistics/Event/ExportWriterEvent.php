@@ -23,20 +23,22 @@ class ExportWriterEvent extends Event
     /**
      * @var ExcelWriter
      */
-    private $excelWriter;
+    private ExcelWriter $excelWriter;
 
     /**
      * ExcelWriterEvent constructor.
      * @param ExcelWriter $excelWriter
      */
-    public function __construct(ExcelWriter $excelWriter) {
+    public function __construct(ExcelWriter $excelWriter)
+    {
         $this->excelWriter = $excelWriter;
     }
 
     /**
      * @return ExcelWriter
      */
-    public function getExcelWriter() {
+    public function getExcelWriter(): ExcelWriter
+    {
         return $this->excelWriter;
     }
 }

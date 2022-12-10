@@ -22,7 +22,7 @@ use App\Service\InjectAdminManagerTrait;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use App\Translator\TranslatorAwareTrait;
 use App\Util\SnakeCaseConverter;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -50,7 +50,7 @@ class MetaDataManager
     }
 
     /**
-     * Create meta data for all entities that implement HasMetaDateEntityInterface; add all properties defined in the
+     * Create metadata for all entities that implement HasMetaDateEntityInterface; add all properties defined in the
      * admin (if an admin class exists)
      *
      * @throws \Doctrine\ORM\ORMException
@@ -98,7 +98,7 @@ class MetaDataManager
     }
 
     /**
-     * Returns the meta data for entity classes that are referenced in another entity
+     * Returns the metadata for entity classes that are referenced in another entity
      *
      * @param string|BaseEntityInterface $objectOrClass
      * @param string $property
@@ -133,7 +133,6 @@ class MetaDataManager
         if (!empty($objectAdminClasses)) {
             foreach ($objectAdminClasses as $adminClass) {
                 $admin = $this->adminManager->getAdminInstance($adminClass);
-                /** @var AbstractAdmin $admin */
                 $this->addFieldDescriptions($metaItem, $admin->getList(), $entityPropertyNames);
                 $this->addFieldDescriptions($metaItem, $admin->getShow(), $entityPropertyNames);
                 if ($admin instanceof AbstractOnboardingAdmin) {
@@ -147,17 +146,22 @@ class MetaDataManager
      * Add meta properties for form groups and tabs
      *
      * @param MetaItem $metaItem
-     * @param AbstractAdmin $admin
+     * @param AdminInterface $admin
      * @throws \Doctrine\ORM\ORMException
      */
-    protected function addFormGroupsAndTabs(MetaItem $metaItem, AbstractAdmin $admin): void
+    protected function addFormGroupsAndTabs(MetaItem $metaItem, AdminInterface $admin): void
     {
         $em = $this->getEntityManager();
+        if (!$admin->hasSubject()) {
+            $admin->setSubject($admin->getNewInstance());
+        }
         $admin->getFormBuilder();
         $data = [
             AbstractMetaItem::META_TYPE_GROUP => $admin->getFormGroups(),
             AbstractMetaItem::META_TYPE_TAB => $admin->getFormTabs()
         ];
+        $translator = $admin->getTranslator();
+        $domain = $admin->getTranslationDomain();
         foreach ($data as $metaType => $metaTypeData) {
             if (empty($metaTypeData)) {
                 continue;
@@ -178,8 +182,8 @@ class MetaDataManager
                     $em->persist($property);
                     $metaItem->addMetaItemProperty($property);
                 }
-                if (!$property->getDescription() && $options['description']) {
-                    $property->setDescription($admin->trans($options['description']));
+                if (!$property->getDescription() && !empty($options['description'])) {
+                    $property->setDescription($translator->trans($options['description'], [], $domain));
                 }
                 if ($label && $label !== $property->getInternalLabel()) {
                     $property->setInternalLabel($label);
@@ -230,7 +234,7 @@ class MetaDataManager
     }
 
     /**
-     * Returns the meta data for the entity class managed by this admin; returns null if entity has no meta data
+     * Returns the metadata for the entity class managed by this admin; returns null if entity has no metadata
      * @param object|string $objectOrClass
      * @return MetaItem|null
      */

@@ -13,44 +13,47 @@ Extend base template with custom class
     {# @var admin \Sonata\AdminBundle\Admin\AbstractAdmin #}
     <thead>
     <tr class="sonata-ba-list-field-header">
-        {% for field_description in admin.list.elements %}
-            {% if admin.hasRoute('batch') and field_description.getOption('code') == '_batch' and batchactions|length > 0 %}
+        {% for field_description in admin.list.getElements() %}
+            {% if admin.hasRoute('batch') and field_description.name == constant('Sonata\\AdminBundle\\Datagrid\\ListMapper::NAME_BATCH') and batchactions|length > 0 %}
                 <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
                     <input type="checkbox" id="list_batch_checkbox">
                 </th>
-            {% elseif field_description.getOption('code') == '_select' %}
+            {% elseif field_description.name == constant('Sonata\\AdminBundle\\Datagrid\\ListMapper::NAME_SELECT') %}
                 <th class="sonata-ba-list-field-header sonata-ba-list-field-header-select"></th>
-            {% elseif field_description.name == '_action' and app.request.isXmlHttpRequest %}
+            {% elseif field_description.name == constant('Sonata\\AdminBundle\\Datagrid\\ListMapper::NAME_ACTIONS') and app.request.isXmlHttpRequest %}
+                {# NEXT_MAJOR: Remove this case in version 5 and recommend using the option `ajax_hidden` instead. #}
                 {# Action buttons disabled in ajax view! #}
             {% elseif field_description.getOption('ajax_hidden') == true and app.request.isXmlHttpRequest %}
                 {# Disable fields with 'ajax_hidden' option set to true #}
             {% else %}
                 {% set sortable = false %}
-                {% if field_description.options.sortable is defined and field_description.options.sortable %}
+                {% if field_description.option('sortable', false) %}
                     {% set sortable             = true %}
-                    {# NEXT_MAJOR: Remove next line and uncomment the other one #}
-                    {% set sort_parameters      = sonata_sort_parameters(field_description, admin) %}
-                    {# {% set sort_parameters      = admin.datagrid.sortparameters(field_description) %} #}
-                    {% set current              = admin.datagrid.values._sort_by is defined
-                        and (admin.datagrid.values._sort_by == field_description
-                        or admin.datagrid.values._sort_by.name == sort_parameters.filter._sort_by) %}
+                    {% set sort_parameters      = admin.datagrid.sortparameters(field_description) %}
+                    {% set current              = admin.datagrid.values[constant('Sonata\\AdminBundle\\Datagrid\\DatagridInterface::SORT_BY')] is defined
+                        and (admin.datagrid.values[constant('Sonata\\AdminBundle\\Datagrid\\DatagridInterface::SORT_BY')] == field_description
+                        or admin.datagrid.values[constant('Sonata\\AdminBundle\\Datagrid\\DatagridInterface::SORT_BY')].name == sort_parameters.filter[constant('Sonata\\AdminBundle\\Datagrid\\DatagridInterface::SORT_BY')]) %}
                     {% set sort_active_class    = current ? 'sonata-ba-list-field-order-active' : '' %}
-                    {% set sort_by              = current ? admin.datagrid.values._sort_order : field_description.options._sort_order %}
+                    {% set sort_by              = current ? admin.datagrid.values[constant('Sonata\\AdminBundle\\Datagrid\\DatagridInterface::SORT_ORDER')] : field_description.option(constant('Sonata\\AdminBundle\\Datagrid\\DatagridInterface::SORT_ORDER'), sort_parameters.filter[constant('Sonata\\AdminBundle\\Datagrid\\DatagridInterface::SORT_ORDER')]) %}
                 {% endif %}
 
                 {% apply spaceless %}
                     {% set fieldMeta = app_object_property_meta_data(admin.class, field_description.name) %}
-                    <th class="sonata-ba-list-field-header-{{ field_description.type }}{% if sortable %} sonata-ba-list-field-header-order-{{ sort_by|lower }} {{ sort_active_class }}{% endif %}{% if field_description.options.header_class is defined %} {{ field_description.options.header_class }}{% endif %}{% if fieldMeta is not null %} th-popover{% endif %}"{% if field_description.options.header_style is defined %} style="{{ field_description.options.header_style }}"{% endif %}
+                    <th class="sonata-ba-list-field-header-{{ field_description.type }}{% if sortable %} sonata-ba-list-field-header-order-{{ sort_by|lower }} {{ sort_active_class }}{% endif %}{% if field_description.option('header_class') %} {{ field_description.option('header_class') }}{% endif %}{% if fieldMeta is not null %} th-popover{% endif %}"{% if field_description.option('header_style') %} style="{{ field_description.option('header_style') }}"{% endif %}
                         {% if fieldMeta is not null and fieldMeta.customLabel is not empty %} title="{{ fieldMeta.customLabel|raw|replace({'"': "'"}) }}"{% endif %}>
-                        {% if sortable %}<a href="{{ admin.generateUrl('list', sort_parameters|merge({_list_mode: admin.getListMode()})) }}">{% endif %}
-                            {% if field_description.getOption('label_icon') %}
-                                <i class="sonata-ba-list-field-header-label-icon {{ field_description.getOption('label_icon') }}" aria-hidden="true"></i>
-                            {% endif %}
-                            {% if field_description.label is not same as(false) %}
-                                {{ field_description.label|trans({}, field_description.translationDomain) }}
-                            {% endif %}
-                            {% if sortable %}</a>{% endif %}
-                            {% include 'MetaData/help-popover.html.twig' with {'fieldMeta': fieldMeta} %}
+                        {% if sortable %}
+                            <a href="{{ admin.generateUrl('list', sort_parameters|merge({_list_mode: admin.getListMode()})) }}">
+                        {% endif %}
+                        {% if field_description.getOption('label_icon') %}
+                            <span class="sonata-ba-list-field-header-label-icon">
+                                {{ field_description.getOption('label_icon')|parse_icon }}
+                            </span>
+                        {% endif %}
+                        {% if field_description.label is not same as(false) %}
+                            {{ field_description.label|trans({}, field_description.translationDomain) }}
+                        {% endif %}
+                        {% if sortable %}</a>{% endif %}
+                        {% include 'MetaData/help-popover.html.twig' with {'fieldMeta': fieldMeta} %}
                     </th>
                 {% endapply %}
             {% endif %}
@@ -65,7 +68,7 @@ Extend base template with custom class
 
             <li class="dropdown sonata-actions">
                 <a href="#" class="dropdown-toggle sonata-ba-action" data-toggle="dropdown">
-                    <i class="fa fa-filter" aria-hidden="true"></i>
+                    <i class="fas fa-filter" aria-hidden="true"></i>
                     {{ 'app.link_filters'|trans({}, 'SonataAdminBundle') }}
                     <span class="badge sonata-filter-count"></span>
                     <b class="caret"></b>

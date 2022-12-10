@@ -22,14 +22,14 @@ class ModelRegionAdmin extends AbstractFrontendAdmin implements EnableFullTextSe
 {
     use AddressTrait;
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addAddressDatagridFilters($filter);
         $this->addDefaultDatagridFilter($filter, 'modelRegionProjects');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addAddressListFields($list);
@@ -40,7 +40,7 @@ class ModelRegionAdmin extends AbstractFrontendAdmin implements EnableFullTextSe
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name');
         $this->addAddressShowFields($show);
@@ -51,7 +51,7 @@ class ModelRegionAdmin extends AbstractFrontendAdmin implements EnableFullTextSe
             ]);
     }
 
-    public function isGranted($name, $object = null)
+    public function isGranted($name, ?object $object = null): bool
     {
         if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;

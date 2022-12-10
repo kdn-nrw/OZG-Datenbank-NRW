@@ -30,7 +30,7 @@ class CustomFieldExtension extends AbstractAdminExtension
     use InjectCustomFieldManagerTrait;
     use InjectManagerRegistryTrait;
 
-    public function configureFormFields(FormMapper $form)
+    public function configureFormFields(FormMapper $form): void
     {
         $admin = $form->getAdmin();
         $entityClass = $admin->getClass();
@@ -41,9 +41,10 @@ class CustomFieldExtension extends AbstractAdminExtension
             }
             $keys = $form->keys();
             $addTab = true;
+            $domain = $admin->getTranslationDomain();
             // Optional label for custom field tab/group, e.g. app.epayment.tabs.custom_fields
             $customLabelKey = PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($entityClass, 'tabs') . 'custom_fields';
-            if ($customLabelKey !== $admin->getTranslator()->trans($customLabelKey)) {
+            if ($customLabelKey !== $admin->getTranslator()->trans($customLabelKey, [], $domain)) {
                 $labelKey = $customLabelKey;
             } else {
                 $labelKey = 'app.custom_field.tabs.custom_fields';

@@ -27,5 +27,6 @@ sonata_formatter:
 
 
         twig:
-            service: sonata.formatter.text.twigengine
+            service: sonata.formatter.text.raw
+            #service: sonata.formatter.text.twigengine
             extensions: [] # Twig formatter cannot have extensions

@@ -106,14 +106,14 @@ class MailingContact extends BaseEntity implements HideableEntityInterface
     }
 
     /**
-     * @param int $sendStatus
+     * @param int|null $sendStatus
      */
     public function setSendStatus(?int $sendStatus): void
     {
         $this->sendStatus = (int)$sendStatus;
     }
 
-    public function getSendStatusLabel()
+    public function getSendStatusLabel(): string
     {
         switch ($this->getSendStatus()) {
             case Mailing::STATUS_PREPARED:
@@ -159,14 +159,14 @@ class MailingContact extends BaseEntity implements HideableEntityInterface
     }
 
     /**
-     * @param int $sendAttempts
+     * @param int|null $sendAttempts
      */
     public function setSendAttempts(?int $sendAttempts): void
     {
         $this->sendAttempts = (int) $sendAttempts;
     }
 
-    public function incrementSendAttempts()
+    public function incrementSendAttempts(): void
     {
         $sendAttempts = $this->getSendAttempts() + 1;
         $this->setSendAttempts($sendAttempts);

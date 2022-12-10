@@ -79,7 +79,7 @@ class UTCDateTimeType extends DateTimeType
      * @param string           $value
      * @param AbstractPlatform $platform
      *
-     * @return DateTime|mixed|null
+     * @return DateTime|DateTimeInterface|null
      *
      * @throws ConversionException
      */

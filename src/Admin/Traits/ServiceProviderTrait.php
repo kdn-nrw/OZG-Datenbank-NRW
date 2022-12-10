@@ -86,7 +86,7 @@ trait ServiceProviderTrait
         $queryBuilder = null;
         if ($filterChoices === 'paymentProvider') {
             /** @var EntityManager $em */
-            $em = $this->modelManager->getEntityManager(ServiceProvider::class);
+            $em = $this->getModelManager()->getEntityManager(ServiceProvider::class);
 
             $queryBuilder = $em->createQueryBuilder()
                 ->select('s')

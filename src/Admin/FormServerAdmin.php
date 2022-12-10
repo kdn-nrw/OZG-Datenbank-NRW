@@ -33,7 +33,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
         'app.form_server.entity.form_server_solutions_solution' => 'app.form_server.entity.form_server_solutions',
     ];
 
-    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
@@ -61,7 +61,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
         }
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('app.form_server.tabs.general', ['tab' => true])
@@ -111,13 +111,13 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addDefaultDatagridFilter($filter, 'formServerSolutions.solution');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $list->add('url', 'url');
@@ -127,7 +127,7 @@ class FormServerAdmin extends AbstractAppAdmin implements EnableFullTextSearchAd
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

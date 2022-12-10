@@ -146,9 +146,9 @@ class InquiryManager
     /**
      * @param UserInterface $user
      * @param bool $onlyNew
-     * @return Inquiry[]|array|mixed
+     * @return array|Inquiry[]
      */
-    public function findUserInquiries(UserInterface $user, $onlyNew = true)
+    public function findUserInquiries(UserInterface $user, bool $onlyNew = true)
     {
         /** @var User $user */
         $em = $this->getEntityManager();
@@ -274,7 +274,7 @@ class InquiryManager
     }
 
     /**
-     * Pre fill the inquiry based on the given entity
+     * Pre-fill the inquiry based on the given entity
      *
      * @param Inquiry $inquiry
      * @param BaseEntityInterface $entity

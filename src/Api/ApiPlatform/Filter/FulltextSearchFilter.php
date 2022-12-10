@@ -32,7 +32,7 @@ final class FulltextSearchFilter extends AbstractContextAwareFilter
         if ($property !== self::FULL_TEXT_SEARCH_PROPERTY) {
             return;
         }
-        if (null !== $this->finder && strlen((string) $value) > 0) {
+        if (null !== $this->finder && (string)$value !== '') {
             $matchingRecordIds = $this->finder->findMatchingRecordIds($resourceClass, (string) $value);
             if (empty($matchingRecordIds)) {
                 $matchingRecordIds = [0];

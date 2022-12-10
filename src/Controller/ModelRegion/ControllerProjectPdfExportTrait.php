@@ -13,6 +13,7 @@ namespace App\Controller\ModelRegion;
 
 use App\Entity\ModelRegion\ModelRegionProject;
 use App\Exporter\Pdf\ConceptPdfExporter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Throwable;
@@ -41,13 +42,13 @@ trait ControllerProjectPdfExportTrait
     /**
      * Get the applicant attachment as binary response
      *
+     * @param Request $request
      * @param int|string|null $id
      * @return Response
      */
-    public function exportPdfConceptAction($id = null): Response
+    public function exportPdfConceptAction(Request $request, $id = null): Response
     {
         // This is strange, but used like this in \Sonata\AdminBundle\Controller\CRUDController::showAction too
-        $request = $this->getRequest();
         /** @noinspection SuspiciousAssignmentsInspection */
         $id = (int)$request->get($this->admin->getIdParameter());
         $object = $this->admin->getObject($id);

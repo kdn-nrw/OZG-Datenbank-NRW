@@ -1,9 +1,9 @@
 <div id="suche">
     {% block sonata_sidebar_search %}
-        {% if sonata_admin.adminPool.getOption('search') %}
+        {% if sonata_config.getOption('search') %}
             <form action="{{ path('app_frontend_global_search') }}" method="GET" class="suchform" role="search" id="global-search-form">
                 <button class="btn js-search-toggle" type="submit" id="global-search-submit">
-                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <i class="fas fa-search" aria-hidden="true"></i>
                 </button>
                 <div id="suchleiste" style="display:none">
                     <div class="custom-search-form">

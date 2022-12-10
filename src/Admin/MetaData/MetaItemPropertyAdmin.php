@@ -17,7 +17,7 @@ use App\Entity\MetaData\MetaItemProperty;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -27,7 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class MetaItemPropertyAdmin extends AbstractAppAdmin
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('general', [
@@ -46,7 +46,7 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
         $subject = $this->getSubject();
         $enableFieldSettings = true;
         /** @var MetaItemProperty|null $subject */
-        if (null !== $subject && $subject->getMetaType() !== AbstractMetaItem::META_TYPE_FIELD) {
+        if ($subject->getMetaType() !== AbstractMetaItem::META_TYPE_FIELD) {
             if ($subject->getMetaType() !== AbstractMetaItem::META_TYPE_ADMIN_FIELD) {
                 $enableFieldSettings = false;
             }
@@ -95,7 +95,7 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
         }
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('metaKey', 'string', [
@@ -116,7 +116,7 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('metaType')
@@ -125,7 +125,7 @@ class MetaItemPropertyAdmin extends AbstractAppAdmin
             ->add('description');
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('create');
         $collection->remove('delete');

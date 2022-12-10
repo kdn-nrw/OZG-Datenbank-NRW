@@ -37,7 +37,7 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
         return $years;
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('dataCenter')) {
             $form
@@ -73,20 +73,20 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'dataCenter');
         $filter->add('year',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => $this->getYearChoices(),
             ]
         );
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('dataCenter', null, [
@@ -110,7 +110,7 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('dataCenter')
@@ -124,13 +124,13 @@ class DataCenterConsumptionAdmin extends AbstractAppAdmin
             ->add('comment');
     }
 
-    public function getNewInstance()
+    /**
+     * @inheritDoc
+     */
+    protected function alterNewInstance(object $object): void
     {
-        $object = parent::getNewInstance();
         if ($object instanceof DataCenterConsumption) {
             $object->setYear(date('Y') - 1);
         }
-
-        return $object;
     }
 }

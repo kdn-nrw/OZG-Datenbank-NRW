@@ -33,11 +33,10 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
             if ('orm' !== $attributes[0]['manager_type']) {
                 continue;
             }
-
             $definition = $container->getDefinition($id);
+            $modelOrParameterName = $attributes[0]['model_class'] ?: $definition->getArgument(1);
             $adminClass = $definition->getClass();
-            if ((null !== $modelOrParameterName = $definition->getArgument(1))
-                && is_a($adminClass, AuditedEntityAdminInterface::class, true)) {
+            if (is_a($adminClass, AuditedEntityAdminInterface::class, true) && $modelOrParameterName) {
                 $modelName = $this->getModelName($container, $modelOrParameterName);
                 if (in_array($modelName, $auditedEntities, false)) {
                     $definition->addMethodCall('setEntityAuditEnabled', [true]);

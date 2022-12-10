@@ -13,7 +13,7 @@
     {% set field_name = 'dataCompletenessConfirmed' %}
     {% set completionLabel = object|app_format_property_labels(objectCompletenessInfo.invalid_properties) %}
     <div class="info-box bg-{{ bgClass }}">
-        <span class="info-box-icon"><i class="fa fa-file-text" aria-hidden="true"></i></span>
+        <span class="info-box-icon"><i class="fas fa-file-alt" aria-hidden="true"></i></span>
         <div class="info-box-content">
             <span class="info-box-text">{{ 'app.abstract_onboarding_entity.entity.status_prefix'|trans }} {{ object.statusLabelKey|trans }}</span>
             <span class="info-box-number">{{ objectCompletenessInfo.completed_properties_count }}/{{ objectCompletenessInfo.properties_state|length }} {{ 'app.abstract_onboarding_entity.entity.property_count_append'|trans }}</span>
@@ -25,7 +25,7 @@
                 {% if object.dataCompletenessConfirmed %}
                     <span class="progress-description {% if objectCompletenessInfo.total < 100 %} text-danger{% endif %}">
                         {% if objectCompletenessInfo.total < 100 %}
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
                         {% endif %}
                         {{ 'app.abstract_onboarding_entity.entity.data_completeness_has_been_confirmed'|trans({'commune': object.communeName}) }}
                     </span>

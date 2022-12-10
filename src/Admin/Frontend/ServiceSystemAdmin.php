@@ -16,6 +16,7 @@ use App\Admin\Traits\LaboratoryTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Subject;
 use App\Model\ExportSettings;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -32,7 +33,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
         'app.service_system.entity.situation_subject' => 'app.situation.entity.subject',
     ];
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter->add('serviceKey');
@@ -50,7 +51,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
         $this->addDefaultDatagridFilter($filter, 'laboratories');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name')
@@ -136,7 +137,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name', null, [
@@ -191,7 +192,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
         $this->addLaboratoriesShowFields($show);
     }
 
-    public function isGranted($name, $object = null)
+    public function isGranted($name, ?object $object = null): bool
     {
         if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;
@@ -199,19 +200,18 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
         return parent::isGranted($name, $object);
     }
 
-    public function buildDatagrid()
+    protected function buildDatagrid(): ?DatagridInterface
     {
-        if ($this->datagrid) {
-            return;
-        }
-        parent::buildDatagrid();
+        $datagrid = parent::buildDatagrid();
         /** @var CustomDatagrid $datagrid */
-        $datagrid = $this->datagrid;
-        $modelManager = $this->getModelManager();
-        //$situations = $modelManager->findBy(Situation::class);
-        //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
-        $subjects = $modelManager->findBy(Subject::class);
-        $datagrid->addFilterMenu('situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
+        if ($datagrid && !$datagrid->hasFilterMenu('situation.subject')) {
+            $modelManager = $this->getModelManager();
+            //$situations = $modelManager->findBy(Situation::class);
+            //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
+            $subjects = $modelManager->findBy(Subject::class);
+            $datagrid->addFilterMenu('situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
+        }
+        return $datagrid;
     }
 
 

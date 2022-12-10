@@ -58,7 +58,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         'app.service.entity.service_solutions_solution' => 'app.service.entity.service_solutions',
     ];
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('app.service.tabs.general', [
@@ -366,7 +366,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
 
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter->add('serviceKey');
@@ -390,16 +390,16 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addDefaultDatagridFilter($filter, 'serviceSolutions.solution');
         $filter->add('fimTypes.dataType',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => array_flip(FederalInformationManagementType::$mapTypes)
             ]
         );
         $filter->add('fimTypes.status',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => array_flip(FederalInformationManagementType::$statusChoices)
             ]
@@ -407,7 +407,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->addDefaultDatagridFilter($filter, 'communeTypes');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name')
@@ -439,7 +439,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             ->add('lawShortcuts')
             ->add('relevance1')
             ->add('relevance2')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -491,7 +491,7 @@ class ServiceAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name', null, [

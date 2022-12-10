@@ -14,6 +14,7 @@ namespace App\Controller\MetaData;
 use App\Service\MetaData\InjectMetaDataManagerTrait;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class MetaItemAdminController
@@ -26,7 +27,7 @@ class MetaItemAdminController extends CRUDController
     /**
      * @inheritDoc
      */
-    protected function preList(Request $request)
+    protected function preList(Request $request): ?Response
     {
         $this->metaDataManager->createMetaItems();
         return null;

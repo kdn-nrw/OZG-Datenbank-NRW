@@ -45,8 +45,10 @@ class SearchExtension extends AbstractAdminExtension
         $this->finder = $finder;
     }
 
-
-    public function configureDatagridFilters(DatagridMapper $filter)
+    /**
+     * @phpstan-param DatagridMapper<T> $filter
+     */
+    public function configureDatagridFilters(DatagridMapper $filter): void
     {
         $admin = $filter->getAdmin();
         if ($admin instanceof EnableFullTextSearchAdminInterface) {
@@ -71,7 +73,6 @@ class SearchExtension extends AbstractAdminExtension
                     }
                     $entityClass = $admin->getClass();
                     $dataGrid = $admin->getDatagrid();
-                    /** @var QueryBuilder $qb */
                     $qb = $queryBuilder->getQueryBuilder();
                     $reflect = new \ReflectionClass($entityClass);
                     $props = $reflect->getProperties();

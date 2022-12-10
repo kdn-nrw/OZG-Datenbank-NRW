@@ -27,9 +27,9 @@ abstract class AbstractSearchService
     use InjectApplicationContextHandlerTrait;
 
     /**
-     * @var \Doctrine\Persistence\ManagerRegistry|ManagerRegistry
+     * @var ManagerRegistry
      */
-    protected $registry;
+    protected ManagerRegistry $registry;
 
     /**
      * @param ManagerRegistry $registry

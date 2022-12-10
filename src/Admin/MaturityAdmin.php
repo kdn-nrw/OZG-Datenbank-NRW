@@ -22,7 +22,7 @@ class MaturityAdmin extends AbstractAppAdmin
 {
     use ColorCodedTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('name', TextType::class)
@@ -37,7 +37,7 @@ class MaturityAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

@@ -12,7 +12,7 @@
 namespace App\Form\Type;
 
 use App\Entity\Onboarding\OnboardingDocument;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,7 +30,7 @@ class OnboardingDocumentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $parentAdmin = $options['parent_admin'];
-        /** @var AbstractAdmin|null $parentAdmin */
+        /** @var AdminInterface|null $parentAdmin */
 
         $builder->add('documentType', ChoiceType::class, [
             'label' => 'app.abstract_onboarding_entity.entity.document_type',

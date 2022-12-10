@@ -13,7 +13,11 @@ Extend base template with field help
     {%- block name -%}
         {% apply spaceless %}
             {% if field_description.label is not same as(false) %}
-                {{ field_description.label|trans({}, field_description.translationDomain ?: admin.translationDomain) }}
+                {% if field_description.translationDomain is same as(false) %}
+                    {{ field_description.label }}
+                {% else %}
+                    {{ field_description.label|trans({}, field_description.translationDomain) }}
+                {% endif %}
                 {% include 'MetaData/help-popover.html.twig' with {'fieldMeta': fieldMeta} %}
             {% endif %}
         {% endapply %}
@@ -22,14 +26,14 @@ Extend base template with field help
 <td>
     {%- block field -%}
         {% apply spaceless %}
-            {% set collapse = field_description.options.collapse|default(false) %}
+            {% set collapse = field_description.option('collapse') %}
             {% if collapse %}
                 <div class="sonata-readmore"
                      data-readmore-height="{{ collapse.height|default(40) }}"
                      data-readmore-more="{{ collapse.more|default('read_more')|trans({}, 'SonataAdminBundle') }}"
                      data-readmore-less="{{ collapse.less|default('read_less')|trans({}, 'SonataAdminBundle') }}">
                     {% block field_value %}
-                        {% if field_description.options.safe %}{{ value|raw }}{% else %}{{ value|nl2br }}{% endif %}
+                        {% if field_description.option('safe', false) %}{{ value|raw }}{% else %}{{ value|default('')|nl2br }}{% endif %}
                     {% endblock %}
                 </div>
             {% else %}
@@ -41,8 +45,9 @@ Extend base template with field help
 
 {%- block field_compare -%}
     {% apply spaceless %}
-        {% if(value_compare is defined) %}
+        {% if value_compare is defined %}
             {% set value = value_compare %}
+            {% set object = object_compare %}
             <td>{{ block('field') }}</td>
         {% endif %}
     {% endapply %}

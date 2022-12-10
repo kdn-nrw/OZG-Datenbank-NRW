@@ -25,11 +25,11 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Exception\ModelManagerException;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Validator\ErrorElement;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -44,7 +44,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     use CategoryTrait;
     use OrganisationTrait;
 
-    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
@@ -75,7 +75,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         }
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $now = new DateTime();
         $form
@@ -154,26 +154,26 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('subject');
         $this->addDefaultDatagridFilter($filter, 'categories');
         $this->addDefaultDatagridFilter($filter, 'organisations');
         $filter->add('status',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => array_flip(Mailing::$statusChoices)
             ]
         );
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('createdAt')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'choices' => Mailing::$statusChoices,
                 'catalogue' => 'messages',
@@ -189,11 +189,11 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('createdAt')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'choices' => Mailing::$statusChoices,
                 'catalogue' => 'messages',
@@ -213,7 +213,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $this->addCategoriesShowFields($show);
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         /** @var Mailing $object */
         if (!in_array($object->getStatus(), [
@@ -225,7 +225,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $object->updateSentCount();
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         /** @var Mailing $object */
         if (!in_array($object->getStatus(), [
@@ -263,7 +263,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         foreach ($mailingContacts as $child) {
             if ($object->contactIsBlacklisted($child->getContact())) {
                 try {
-                    $this->modelManager->delete($child);
+                    $this->getModelManager()->delete($child);
                 } catch (ModelManagerException $e) {
                     unset($e);
                 }
@@ -294,7 +294,7 @@ class MailingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
                 $mailingContact->setMailing($object);
                 $mailingContact->setContact($contact);
                 try {
-                    $this->modelManager->create($mailingContact);
+                    $this->getModelManager()->create($mailingContact);
                 } catch (ModelManagerException $e) {
                     unset($e);
                 }

@@ -12,8 +12,8 @@
 namespace App\Twig\Extension;
 
 use App\Service\Mailer\InjectEmailTemplateManagerTrait;
-use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Exception\NoValueException;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Extension\AbstractExtension;

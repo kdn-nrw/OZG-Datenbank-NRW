@@ -16,6 +16,7 @@ use SimpleThings\EntityAudit\Exception\NoRevisionFoundException;
 use SimpleThings\EntityAudit\Exception\NotAuditedException;
 use SimpleThings\EntityAudit\Revision;
 use Sonata\AdminBundle\Model\AuditManager as SonataAuditManager;
+use Sonata\AdminBundle\Model\AuditManagerInterface;
 use Twig\Environment;
 
 /**
@@ -29,7 +30,7 @@ class AuditManager
     use InjectAdminManagerTrait;
 
     /**
-     * @var SonataAuditManager
+     * @var AuditManagerInterface|SonataAuditManager
      */
     protected $sonataAuditManager;
     /**
@@ -38,11 +39,11 @@ class AuditManager
     private $twigEnvironment;
 
     /**
-     * @param SonataAuditManager $sonataAuditManager
+     * @param AuditManagerInterface $sonataAuditManager
      * @param Environment $twigEnvironment
      */
     public function __construct(
-        SonataAuditManager $sonataAuditManager,
+        AuditManagerInterface $sonataAuditManager,
         Environment        $twigEnvironment
     )
     {

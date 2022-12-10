@@ -32,16 +32,16 @@ class RecentSolutionsBlock extends AbstractBlockService
     /**
      * @var Pool
      */
-    protected $adminPool;
+    protected ?Pool $adminPool;
 
     /**
      * @param Environment $twig
-     * @param ManagerInterface $commentManager
+     * @param ManagerInterface $manager
      * @param Pool|null $adminPool
      */
-    public function __construct(Environment $twig, ManagerInterface $commentManager, Pool $adminPool = null)
+    public function __construct(Environment $twig, ManagerInterface $manager, Pool $adminPool = null)
     {
-        $this->manager = $commentManager;
+        $this->manager = $manager;
         $this->adminPool = $adminPool;
         parent::__construct($twig);
     }
@@ -58,21 +58,21 @@ class RecentSolutionsBlock extends AbstractBlockService
         $mode = (string) $blockContext->getSetting('mode');
         $isAdminMode = 'admin' === $mode;
         $admin = $this->adminPool->getAdminByAdminCode($blockContext->getSetting('code'));
-        $criteria = [
-            'mode' => $mode,
-        ];
         $parameters = [
             'settings' => $blockContext->getSettings(),
             'block' => $blockContext->getBlock(),
-            'pager' => $this->manager->getPager($criteria, 1, $blockContext->getSetting('number')),
+            'results' => $this->manager->findLatest(!$isAdminMode, (int) $blockContext->getSetting('number')),
             'admin_pool' => $this->adminPool,
             'admin' => $admin,
             'isAdminMode' => $isAdminMode,
         ];
+        $response = $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
         if ($isAdminMode) {
-            return $this->renderPrivateResponse($blockContext->getTemplate(), $parameters, $response);
+            $response
+                ->setTtl(0)
+                ->setPrivate();
         }
-        return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
+        return $response;
     }
 
     public function configureSettings(OptionsResolver $resolver): void
@@ -82,7 +82,7 @@ class RecentSolutionsBlock extends AbstractBlockService
             'mode' => 'public',
             'title' => null,
             'translation_domain' => null,
-            'icon' => 'fa fa-comments',
+            'icon' => 'fas fa-comments',
             'class' => null,
             'code' => false,
             'code_public' => false,

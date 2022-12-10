@@ -34,14 +34,14 @@ class StatusAdmin extends AbstractAppAdmin
      * @phpstan-param array{_page?: int, _per_page?: int, _sort_by?: string, _sort_order?: string} $sortValues
      * @param array $sortValues
      */
-    protected function configureDefaultSortValues(array &$sortValues)
+    protected function configureDefaultSortValues(array &$sortValues): void
     {
         parent::configureDefaultSortValues($sortValues);
         $sortValues[DatagridInterface::SORT_ORDER] = $sortValues[DatagridInterface::SORT_ORDER] ?? 'ASC';
         $sortValues[DatagridInterface::SORT_BY] = $sortValues[DatagridInterface::SORT_BY] ?? 'level';
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->addDefaultStatusFormFields($form);
         $form
@@ -79,12 +79,12 @@ class StatusAdmin extends AbstractAppAdmin
         $this->addColorFormFields($form);
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name');
@@ -101,7 +101,7 @@ class StatusAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

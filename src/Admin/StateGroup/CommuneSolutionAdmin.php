@@ -40,7 +40,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
     use ContactTrait;
     use DatePickerTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('commune')) {
             $form
@@ -111,7 +111,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $subject = $this->getSubject();
         if ($subject instanceof CommuneSolution && $commune = $subject->getCommune()) {
             /** @var EntityManager $em */
-            $em = $this->modelManager->getEntityManager(Contact::class);
+            $em = $this->getModelManager()->getEntityManager(Contact::class);
 
             $queryBuilder = $em->createQueryBuilder()
                 ->select('c')
@@ -124,7 +124,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
         return null;
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'commune');
         $this->addDefaultDatagridFilter($filter, 'solution');
@@ -147,7 +147,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $filter->add('specializedProcedure');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('commune', null, [
@@ -169,7 +169,7 @@ class CommuneSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('commune', null, [

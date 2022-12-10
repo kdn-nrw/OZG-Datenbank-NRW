@@ -82,6 +82,6 @@ class SecurityRolesType extends AbstractTypeExtension
     public static function getExtendedTypes(): iterable
     {
         // return FormType::class to modify (nearly) every field in the system
-        return [\Sonata\UserBundle\Form\Type\SecurityRolesType::class];
+        return [\App\Sonata\UserBundle\Form\Type\SecurityRolesType::class];
     }
 }

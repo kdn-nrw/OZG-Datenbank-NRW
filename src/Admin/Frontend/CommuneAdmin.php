@@ -24,6 +24,7 @@ use App\Entity\StateGroup\Commune;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -47,7 +48,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         'app.commune.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter->add('organisation.zipCode');
@@ -59,7 +60,6 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
             [
                 'admin_code' => self::class,
             ],
-            null,
             [
                 'expanded' => false,
                 'multiple' => true,
@@ -72,7 +72,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         $filter->add('regionalKey');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addOrganisationOneToOneListFields($list);
@@ -112,7 +112,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('organisation.zipCode')
@@ -195,7 +195,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         return $settings;
     }
 
-    public function toString($object)
+    public function toString(object $object): string
     {
         return $object instanceof Commune
             ? $object->getName()
@@ -210,7 +210,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     private function getConstituencyQueryBuilder(): QueryBuilder
     {
         /** @var EntityManager $em */
-        $em = $this->modelManager->getEntityManager(Commune::class);
+        $em = $this->getModelManager()->getEntityManager(Commune::class);
 
         $queryBuilder = $em->createQueryBuilder()
             ->select('c')
@@ -221,7 +221,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         return $queryBuilder;
     }
 
-    public function isGranted($name, $object = null)
+    public function isGranted($name, ?object $object = null): bool
     {
         if (in_array($name, ['LIST', 'VIEW', 'SHOW', 'EXPORT'])) {
             return true;
@@ -229,24 +229,25 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         return parent::isGranted($name, $object);
     }
 
-    public function buildDatagrid()
+    protected function buildDatagrid(): ?DatagridInterface
     {
-        if ($this->datagrid) {
-            return;
-        }
-        parent::buildDatagrid();
+        $datagrid = parent::buildDatagrid();
         /** @var CustomDatagrid $datagrid */
-        $datagrid = $this->datagrid;
-        $modelManager = $this->getModelManager();
-        //$situations = $modelManager->findBy(Situation::class);
-        //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
-        $filterChoices = $modelManager->findBy(AdministrativeDistrict::class);
-        $datagrid->addFilterMenu(
-            'administrativeDistrict',
-            $filterChoices,
-            'app.commune.entity.administrative_district_placeholder',
-            AdministrativeDistrict::class
-        );
+        if ($datagrid && !$datagrid->hasFilterMenu('administrativeDistrict')) {
+            /** @var CustomDatagrid $datagrid */
+            $datagrid = $this->datagrid;
+            $modelManager = $this->getModelManager();
+            //$situations = $modelManager->findBy(Situation::class);
+            //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
+            $filterChoices = $modelManager->findBy(AdministrativeDistrict::class);
+            $datagrid->addFilterMenu(
+                'administrativeDistrict',
+                $filterChoices,
+                'app.commune.entity.administrative_district_placeholder',
+                AdministrativeDistrict::class
+            );
+        }
+        return $datagrid;
     }
 
 

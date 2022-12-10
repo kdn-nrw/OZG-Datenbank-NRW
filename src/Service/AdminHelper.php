@@ -33,7 +33,6 @@ final class AdminHelper
     {
         $propertyConfiguration = $this->adminManager->getConfigurationForEntityProperty($modelClass, $property);
         $type = null;
-        $fieldType = null;
         $fieldDescriptionOptions = [];
         if (!empty($propertyConfiguration['default_label']) && empty($filterOptions['label'])) {
             $filterOptions['label'] = $propertyConfiguration['default_label'];
@@ -51,7 +50,7 @@ final class AdminHelper
             }
             $fieldDescriptionOptions = ['expanded' => false, 'multiple' => true];
         }
-        $filter->add($property, $type, $filterOptions, $fieldType, $fieldDescriptionOptions);
+        $filter->add($property, $type, $filterOptions, $fieldDescriptionOptions);
     }
 
 }

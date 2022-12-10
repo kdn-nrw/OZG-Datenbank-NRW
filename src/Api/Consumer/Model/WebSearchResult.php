@@ -12,6 +12,7 @@
 namespace App\Api\Consumer\Model;
 
 use App\Api\Annotation\ApiSearchModelAnnotation;
+use Symfony\Component\Mime\MimeTypes;
 
 class WebSearchResult extends AbstractResult
 {
@@ -281,14 +282,13 @@ class WebSearchResult extends AbstractResult
         if ($this->size) {
             $base = log($this->size, 1024);
             $suffixes = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-            $formattedSize = round((1024 ** ($base - floor($base))), 0);
+            $formattedSize = round((1024 ** ($base - floor($base))));
             $this->unmappedData['Größe'] = $formattedSize . ' ' . $suffixes[floor($base)];
         }
-        if ($this->mime && class_exists('\\Symfony\\Component\\Mime\\MimeTypes')) {
-            /** @noinspection PhpFullyQualifiedNameUsageInspection */
-            $mimeTypes = new \Symfony\Component\Mime\MimeTypes();
-            $exts = $mimeTypes->getExtensions($this->mime);
-            $this->unmappedData['Typ'] = strtoupper(implode(', ', $exts));
+        if ($this->mime && class_exists(MimeTypes::class)) {
+            $mimeTypes = new MimeTypes();
+            $extensions = $mimeTypes->getExtensions($this->mime);
+            $this->unmappedData['Typ'] = strtoupper(implode(', ', $extensions));
         }
         return $this->unmappedData;
     }

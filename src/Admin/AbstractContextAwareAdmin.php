@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 
+use App\Admin\Base\AdminTranslatorStrategyTrait;
 use App\Datagrid\CustomDatagrid;
 use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
@@ -21,12 +22,17 @@ use App\Model\ReferenceSettings;
 use App\Service\ApplicationContextHandler;
 use App\Service\InjectAdminHelperTrait;
 use App\Service\InjectAdminManagerTrait;
+use App\Sonata\AdminBundle\Admin\AbstractAdmin;
+use App\Sonata\AdminBundle\Datagrid\OrderByToSelectWalker;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Doctrine\ORM\Query;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
+use Sonata\Form\Type\DateRangePickerType;
+use Sonata\Form\Type\DateTimeRangePickerType;
 use Sonata\AdminBundle\Filter\Persister\FilterPersisterInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 
@@ -37,33 +43,14 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
 {
     use InjectAdminManagerTrait;
     use InjectAdminHelperTrait;
+    use AdminTranslatorStrategyTrait;
 
-    /**
-     * Component responsible for persisting filters.
-     *
-     * @var FilterPersisterInterface|null
-     */
-    private $localFilterPersister;
-
-    /**
-     * Keep local reference to filter persister (parent property is private)
-     * TODO: remove local property, because parent $filterPersister is protected now
-     * @param FilterPersisterInterface|null $filterPersister
-     */
-    public function setFilterPersister(?FilterPersisterInterface $filterPersister = null)
-    {
-        $this->localFilterPersister = $filterPersister;
-        parent::setFilterPersister($filterPersister);
-    }
-
-    public function getDataSourceIterator()
+    public function getDataSourceIterator(): \Iterator
     {
         $datagrid = $this->getDatagrid();
-        /** @noinspection NullPointerExceptionInspection */
         $datagrid->buildPager();
 
         $exportSettings = $this->getProcessedExportSettings();
-        /** @noinspection NullPointerExceptionInspection */
         return $this->getCustomDataSourceIterator($datagrid, $exportSettings);
     }
 
@@ -120,7 +107,7 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
      *
      * @return array|string[]
      */
-    public function getExportFormats()
+    public function getExportFormats(): array
     {
         return $this->getExportSettings()->getFormats();
     }
@@ -135,11 +122,12 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         $fields = [];
         $exportSettings = $this->getExportSettings();
 
+        $domain = $this->getTranslationDomain();
         foreach ($this->getExportFields() as $key => $field) {
             $transLabel = $exportSettings->getCustomLabel($field);
             if (!$transLabel) {
                 $label = $this->getTranslationLabel($field, 'export', 'label');
-                $transLabel = $this->trans($label);
+                $transLabel = $this->getTranslator()->trans($label, [], $domain);
             } else {
                 $label = $field;
             }
@@ -156,15 +144,15 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
         return $exportSettings;
     }
 
-    public function getFilterParameters()
+    /**
+     * Configures a list of default sort values.
+     */
+    protected function configureDefaultSortValues(array &$sortValues): void
     {
-        $parameters = parent::getFilterParameters();
 
-        if (!empty($parameters['_sort_order'])) {
-            $parameters['_sort_order'] = $parameters['_sort_order'] === 'DESC' ? 'DESC' : 'ASC';
+        if (!empty($sortValues['_sort_order'])) {
+            $sortValues['_sort_order'] = $sortValues['_sort_order'] === 'DESC' ? 'DESC' : 'ASC';
         }
-
-        return $parameters;
     }
 
     /**
@@ -223,14 +211,30 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
      * Initialize data grid
      * Clean persistent group filter values
      */
-    public function buildDatagrid()
+    protected function buildDatagrid(): ?DatagridInterface
     {
         if ($this->datagrid) {
-            return;
+            return $this->datagrid;
         }
         parent::buildDatagrid();
-        if ($this->datagrid instanceof CustomDatagrid && $this->localFilterPersister instanceof GroupedSessionFilterPersister) {
+        if ($this->datagrid instanceof CustomDatagrid && $this->hasFilterPersister()
+            && $this->getFilterPersister() instanceof GroupedSessionFilterPersister) {
             $this->datagrid->cleanValues();
         }
+        return $this->datagrid;
+    }
+
+    /**
+     * @param string|null $id
+     * @param array $parameters
+     * @param string|null $domain
+     * @param string|null $locale
+     * @return string
+     * @deprecated use $this->getTranslator()->trans
+     */
+    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null)
+    {
+        $domain = $domain ?: $this->getTranslationDomain();
+        return $this->getTranslator()->trans($id, $parameters, $domain, $locale);
     }
 }

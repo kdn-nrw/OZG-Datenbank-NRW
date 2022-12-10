@@ -65,9 +65,15 @@ file that was distributed with this source code.
                         {% if childAdmin
                             and childAdmin.hasRoute(route_name)
                             and childAdmin.hasAccess(route_name, child) %}
+                            {% if field_description.options.route is defined and field_description.options.route.parameters %}
                             <a href="{{ childAdmin.generateObjectUrl(route_name, child, field_description.options.route.parameters) }}">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <i class="fas fa-pen-square" aria-hidden="true"></i>
                             </a>
+                            {% else %}
+                                <a href="{{ childAdmin.generateObjectUrl(route_name, child) }}">
+                                    <i class="fas fa-pen-square" aria-hidden="true"></i>
+                                </a>
+                            {% endif %}
                         {% endif %}
                     </td>
                 </tr>

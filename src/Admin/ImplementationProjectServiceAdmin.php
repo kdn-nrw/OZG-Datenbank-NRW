@@ -14,16 +14,16 @@ namespace App\Admin;
 use App\Entity\ImplementationStatus;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 
 
 class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('implementationProject')) {
             $form
@@ -31,7 +31,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                     'property' => ['name', 'description'],
                     'required' => true,
                 ], [
-                    'admin_code' => \App\Admin\ImplementationProjectAdmin::class
+                    'admin_code' => ImplementationProjectAdmin::class
                 ]);
         }
         if (!$this->isExcludedFormField('service')) {
@@ -40,7 +40,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                     'property' => 'name',
                     'required' => true,
                 ], [
-                    'admin_code' => \App\Admin\ServiceAdmin::class
+                    'admin_code' => ServiceAdmin::class
                 ]);
         }
         $form
@@ -56,19 +56,19 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $this->addDefaultDatagridFilter($datagridMapper, 'implementationProject');
-        $this->addDefaultDatagridFilter($datagridMapper, 'service');
-        $datagridMapper->add('status');
-        /*$datagridMapper->add('description');*/
+        $this->addDefaultDatagridFilter($filter, 'implementationProject');
+        $this->addDefaultDatagridFilter($filter, 'service');
+        $filter->add('status');
+        /*$filter->add('description');*/
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->add('implementationProject', null, [
-                'admin_code' => \App\Admin\ImplementationProjectAdmin::class,
+                'admin_code' => ImplementationProjectAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -78,7 +78,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                 ]
             ])
             ->add('service', null, [
-                'admin_code' => \App\Admin\ServiceAdmin::class,
+                'admin_code' => ServiceAdmin::class,
                 'sortable' => true, // IMPORTANT! make the column sortable
                 'sort_field_mapping' => [
                     'fieldName' => 'name'
@@ -87,7 +87,7 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                     ['fieldName' => 'service'],
                 ]
             ])
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',
@@ -99,22 +99,22 @@ class ImplementationProjectServiceAdmin extends AbstractAppAdmin implements Enab
                     ['fieldName' => 'status'],
                 ]
             ]);
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('implementationProject', null, [
-                'admin_code' => \App\Admin\ImplementationProjectAdmin::class
+                'admin_code' => ImplementationProjectAdmin::class
             ])
             ->add('service', null, [
-                'admin_code' => \App\Admin\ServiceAdmin::class
+                'admin_code' => ServiceAdmin::class
             ])
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 //'editable' => true,
                 'class' => ImplementationStatus::class,
                 'catalogue' => 'messages',

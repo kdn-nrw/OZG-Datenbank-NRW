@@ -29,7 +29,7 @@ class CustomFieldAdmin extends AbstractAppAdmin
 {
     protected $baseRoutePattern = 'configuration/custom-fields';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('general', [
@@ -71,12 +71,12 @@ class CustomFieldAdmin extends AbstractAppAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('name')

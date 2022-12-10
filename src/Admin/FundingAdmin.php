@@ -23,7 +23,7 @@ class FundingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
 {
     use ImplementationProjectTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('name', TextType::class)
@@ -34,7 +34,7 @@ class FundingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter->add('description');
@@ -44,7 +44,7 @@ class FundingAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

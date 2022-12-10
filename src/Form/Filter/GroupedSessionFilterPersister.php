@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * This filter persister is storing filters in session.
- * Adds groups for
+ * Adds groups for filters of different admins
  */
 final class GroupedSessionFilterPersister implements FilterPersisterInterface
 {

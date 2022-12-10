@@ -174,7 +174,7 @@ class OnboardingManager
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         if (null !== $configuration = $connection->getConfiguration()) {
-            $configuration->setSQLLogger(null);
+            $configuration->setSQLLogger();
         }
         $query = 'SELECT id, commune_id FROM ozg_onboarding WHERE record_type = \'communeinfo\' ORDER BY commune_id ASC';
         $rows = $this->fetchAllAssociative($query);
@@ -227,7 +227,7 @@ class OnboardingManager
         // Use SQL statements to increase performance
         $em = $this->getEntityManager();
         if (null !== $configuration = $em->getConnection()->getConfiguration()) {
-            $configuration->setSQLLogger(null);
+            $configuration->setSQLLogger();
         }
         $ePaymentRepository = $em->getRepository(Epayment::class);
         if (null === $commune) {
@@ -333,7 +333,7 @@ class OnboardingManager
         $removeServices = [];
         foreach ($ePayment->getEpaymentServices() as $ePaymentService) {
             if (null !== $mappedSolution = $ePaymentService->getSolution()) {
-                // Solution does not exist (any more)
+                // Solution does not exist (anymore)
                 if (!in_array($mappedSolution->getId(), $enabledCommuneSolutionIdList, false)) {
                     $removeServices[] = $ePaymentService;
                 } else {

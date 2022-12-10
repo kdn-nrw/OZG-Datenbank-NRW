@@ -14,7 +14,7 @@ file that was distributed with this source code.
         {% endif %}
         <div class="item-collapse-wrap">
             <a class="toggle-link-text" role="button" data-toggle="collapse" href="#collapse-{{ property }}-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ property }}-{{ loop.index }}">
-                {{ 'app.api.common.read_more'|trans }} <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                {{ 'app.api.common.read_more'|trans }} <i class="far fa-plus-square" aria-hidden="true"></i>
             </a>
             <div class="item-teaser">
                 {{ teaserPlain|raw }}
@@ -27,7 +27,7 @@ file that was distributed with this source code.
                 {{ text|trim|raw }}
             {% endif %}
             <a class="toggle-link-text" role="button" data-toggle="collapse" href="#collapse-{{ property }}-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ property }}-{{ loop.index }}">
-                {{ 'app.api.common.read_less'|trans }} <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                {{ 'app.api.common.read_less'|trans }} <i class="far fa-minus-square" aria-hidden="true"></i>
             </a>
         </div>
     {% else %}

@@ -75,7 +75,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         'app.commune.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->tab('default', ['label' => 'app.commune.group.general_data']);
@@ -193,14 +193,14 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $form->end();
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         /** @var Commune $object */
         $this->updateOrganisation($object);
         $this->updateCommuneSolutions($object);
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         /** @var Commune $object */
         $this->updateOrganisation($object);
@@ -210,7 +210,6 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     /**
      * Persist manually added commune solutions
      * @param Commune $object
-     * @throws \Doctrine\ORM\ORMException
      */
     private function updateCommuneSolutions(Commune $object): void
     {
@@ -235,16 +234,14 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $this->automaticDataMapper->addAutoAssignedApplicationServices($dataMap);
     }
 
-    private function updateOrganisation(OrganisationEntityInterface $object)
+    private function updateOrganisation(OrganisationEntityInterface $object): void
     {
         /** @var ModelManager $modelManager */
         $modelManager = $this->getModelManager();
-        /** @var OrganisationEntityInterface $object */
         $organisation = $object->getOrganisation();
         $organisation->setFromReference($object);
         $orgEm = $modelManager->getEntityManager(Organisation::class);
         if (!$orgEm->contains($organisation)) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $orgEm->persist($organisation);
         }
         $contacts = $organisation->getContacts();
@@ -252,13 +249,12 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         foreach ($contacts as $contact) {
             if (!$contactEm->contains($contact)) {
                 $contact->setOrganisation($organisation);
-                /** @noinspection PhpUnhandledExceptionInspection */
                 $contactEm->persist($contact);
             }
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addOrganisationOneToOneDatagridFilters($filter);
@@ -273,7 +269,6 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
             [
                 'admin_code' => self::class,
             ],
-            null,
             [
                 'expanded' => false,
                 'multiple' => true,
@@ -286,7 +281,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         $filter->add('regionalKey');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addOrganisationOneToOneListFields($list);
@@ -326,7 +321,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('organisation.zipCode')
@@ -410,7 +405,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
         return $settings;
     }
 
-    public function toString($object)
+    public function toString(object $object): string
     {
         return $object instanceof Commune
             ? $object->getName()
@@ -425,7 +420,7 @@ class CommuneAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterf
     private function getConstituencyQueryBuilder(): QueryBuilder
     {
         /** @var EntityManager $em */
-        $em = $this->modelManager->getEntityManager(Commune::class);
+        $em = $this->getModelManager()->getEntityManager(Commune::class);
 
         $queryBuilder = $em->createQueryBuilder()
             ->select('c')

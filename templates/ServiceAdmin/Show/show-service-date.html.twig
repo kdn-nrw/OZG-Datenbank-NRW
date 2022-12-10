@@ -21,11 +21,11 @@ file that was distributed with this source code.
         {% set isBackendMode = app_is_backend() %}
         {% if isBackendMode %}
             <a href="{{ path('app_vsm_api_index', apiArguments) }}" target="_blank">
-                <i class="fa fa-search" aria-hidden="true"></i>
+                <i class="fas fa-search" aria-hidden="true"></i>
             </a>
         {% else %}
             <a href="{{ path('frontend_app_vsm_api_index', apiArguments) }}" target="_blank">
-                <i class="fa fa-search" aria-hidden="true"></i>
+                <i class="fas fa-search" aria-hidden="true"></i>
             </a>
         {% endif %}
     {% endif %}

@@ -32,7 +32,7 @@ class ContactAdmin extends AbstractAppAdmin implements AuditedEntityAdminInterfa
     use AddressTrait;
     protected $baseRoutePattern = 'onboarding/contact';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('app.contact.groups.person_data', ['class' => 'col-md-6'])
@@ -84,7 +84,7 @@ class ContactAdmin extends AbstractAppAdmin implements AuditedEntityAdminInterfa
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('firstName');
         $filter->add('lastName');
@@ -93,7 +93,7 @@ class ContactAdmin extends AbstractAppAdmin implements AuditedEntityAdminInterfa
         $this->addAddressDatagridFilters($filter);
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('gender', 'choice', [
@@ -116,7 +116,7 @@ class ContactAdmin extends AbstractAppAdmin implements AuditedEntityAdminInterfa
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             /*->add('gender', 'choice', [

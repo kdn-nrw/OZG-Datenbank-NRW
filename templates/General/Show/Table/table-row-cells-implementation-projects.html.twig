@@ -17,7 +17,7 @@ file that was distributed with this source code.
 {% endif %}
 <td>
     {% if child.projectStartAt %}
-        {{ child.projectStartAt|format_datetime('dd.MM.yyyy') }}
+        {{ child.projectStartAt|sonata_format_datetime('dd.MM.yyyy') }}
     {% endif %}
 </td>
 <td>

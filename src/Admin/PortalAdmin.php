@@ -23,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class PortalAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterface, EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('name', TextType::class)
@@ -42,12 +42,12 @@ class PortalAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfa
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name')
@@ -58,7 +58,7 @@ class PortalAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfa
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

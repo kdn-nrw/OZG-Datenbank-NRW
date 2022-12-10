@@ -16,12 +16,25 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use App\Sonata\UserBundle\Form\Type\SecurityRolesType;
 
 /**
  * Group admin
  */
-class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
+class GroupAdmin extends AbstractAppAdmin
 {
+    protected $formOptions = [
+        'validation_groups' => 'Registration',
+    ];
+
+    protected function createNewInstance(): object
+    {
+        $class = $this->getClass();
+        $object = new $class('', []);
+        $this->appendParentObject($object);
+
+        return $object;
+    }
 
     /**
      * {@inheritdoc}
@@ -35,7 +48,6 @@ class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
                 'admin_code' => self::class,
                 'translation_domain' => 'messages',
             ],
-            null,
             ['expanded' => false, 'multiple' => true]
         );
     }
@@ -46,6 +58,8 @@ class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
     protected function configureListFields(ListMapper $list): void
     {
         parent::configureListFields($list);
+        $list
+            ->add('roles');
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             $list->get('roles')->setTemplate('GroupAdmin/list__roles.html.twig');
@@ -59,7 +73,21 @@ class GroupAdmin extends \Sonata\UserBundle\Admin\Model\GroupAdmin
      */
     protected function configureFormFields(FormMapper $form): void
     {
-        parent::configureFormFields($form);
+        $form
+            ->tab('Group')
+            ->with('General', ['class' => 'col-md-6'])
+            ->add('name')
+            ->end()
+            ->end()
+            ->tab('Security')
+            ->with('Roles', ['class' => 'col-md-12'])
+            ->add('roles', SecurityRolesType::class, [
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
+            ])
+            ->end()
+            ->end();
 
         $form
             ->tab('Group')

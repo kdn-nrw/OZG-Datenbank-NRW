@@ -172,7 +172,7 @@ class SearchController extends AbstractController
     }
 
     /**
-     * Creates the admin list with she searchable admins
+     * Creates the admin list with the searchable admins
      * @return array
      */
     private function createAdminList(): array

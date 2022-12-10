@@ -13,8 +13,8 @@ namespace App\Entity\MetaData;
 
 
 /**
- * Interface for entities with meta data
- * This interface is only used to determine if meta data entries are generated and therefore needs no methods
+ * Interface for entities with metadata
+ * This interface is only used to determine if metadata entries are generated and therefore needs no methods
  */
 interface HasMetaDateEntityInterface
 {

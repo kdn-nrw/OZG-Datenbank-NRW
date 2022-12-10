@@ -29,6 +29,9 @@ use App\Exporter\Source\ServiceListValueFormatter;
 use App\Model\ExportSettings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use Knp\Menu\ItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -55,7 +58,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     use ServiceSystemTrait;
     use SluggableTrait;
 /*
-    protected function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null)
+    protected function configureTabMenu(ItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && $action !== 'edit') {
             return;
@@ -83,7 +86,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
         }
     }*/
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('app.implementation_project.tabs.general', ['tab' => true])
@@ -170,7 +173,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     private function getStatusQueryBuilder(): QueryBuilder
     {
         /** @var EntityManager $em */
-        $em = $this->modelManager->getEntityManager(ImplementationStatus::class);
+        $em = $this->getModelManager()->getEntityManager(ImplementationStatus::class);
 
         /** @var ImplementationProject $subject */
         $subject = $this->getSubject();
@@ -218,7 +221,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                 ]
             );
 
-        $em = $this->modelManager->getEntityManager(Service::class);
+        $em = $this->getModelManager()->getEntityManager(Service::class);
 
         /** @var ImplementationProject $subject */
         $subject = $this->getSubject();
@@ -273,7 +276,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
             });
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('name')
@@ -292,6 +295,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
                     ['fieldName' => 'subject'],
                 ],
                 'enable_filter_add' => true,
+                'virtual_field' => true,
             ])
             ->add('efaType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.implementation_project.entity.efa_type',
@@ -347,7 +351,7 @@ class ImplementationProjectAdmin extends AbstractAppAdmin implements ExtendedSea
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('description')

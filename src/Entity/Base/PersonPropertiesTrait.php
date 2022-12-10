@@ -11,8 +11,8 @@
 
 namespace App\Entity\Base;
 
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Model\UserInterface;
 
 
 /**
@@ -73,15 +73,15 @@ trait PersonPropertiesTrait
     public function setGender($gender): void
     {
         switch ($gender) {
-            case UserInterface::GENDER_MALE:
+            case User::GENDER_MALE:
             case PersonInterface::GENDER_MALE:
                 $this->gender = PersonInterface::GENDER_MALE;
                 break;
-            case UserInterface::GENDER_FEMALE:
+            case User::GENDER_FEMALE:
             case PersonInterface::GENDER_FEMALE:
                 $this->gender = PersonInterface::GENDER_FEMALE;
                 break;
-            case UserInterface::GENDER_UNKNOWN:
+            case User::GENDER_UNKNOWN:
             case PersonInterface::GENDER_OTHER:
                 $this->gender = PersonInterface::GENDER_OTHER;
                 break;

@@ -39,7 +39,7 @@ class RequestAppContextSubscriber implements EventSubscriberInterface
      */
     public function onKernelRequest(RequestEvent $event)
     {
-        if ($event->isMasterRequest()) {
+        if ($event->isMainRequest()) {
             $pathInfo = $event->getRequest()->getPathInfo();
             $this->applicationContextHandler->setApplicationContextFromPathInfo($pathInfo);
         }

@@ -30,7 +30,7 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
     use AddressTrait;
     use ModelTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('app.organisation.groups.basic_data', ['class' => 'col-md-6'])
@@ -81,13 +81,13 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $this->addAddressDatagridFilters($filter);
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name');
         $this->addAddressListFields($list);
@@ -104,7 +104,7 @@ class OrganisationAdmin extends AbstractAppAdmin implements EnableFullTextSearch
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name');
         $this->addAddressShowFields($show);

@@ -21,6 +21,7 @@ use App\Form\Type\CommuneType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Mapper\BaseGroupedMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\BooleanType;
 
@@ -31,7 +32,7 @@ class ReleaseAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmin
 
     protected $baseRoutePattern = 'onboarding/go-live';
 
-    protected function configureFormGroups(FormMapper $form)
+    protected function configureFormGroups(BaseGroupedMapper $form)
     {
         $form
             ->with('general', [
@@ -53,7 +54,7 @@ class ReleaseAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmin
             ->end();
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->configureFormGroups($form);
         $form
@@ -107,7 +108,7 @@ class ReleaseAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmin
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         parent::configureDatagridFilters($filter);
         $this->addDefaultDatagridFilter($filter, 'releaseDate');
@@ -134,7 +135,7 @@ class ReleaseAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         parent::configureShowFields($show);
         $show

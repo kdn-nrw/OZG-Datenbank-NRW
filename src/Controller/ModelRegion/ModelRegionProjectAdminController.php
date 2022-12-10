@@ -39,7 +39,7 @@ class ModelRegionProjectAdminController extends CRUDController
      *
      * @return Response|null
      */
-    protected function preCreate(Request $request, $object)
+    protected function preCreate(Request $request, object $object): ?Response
     {
         if ($object instanceof ModelRegionProject) {
             $this->initializeConceptQueries($object);
@@ -55,7 +55,7 @@ class ModelRegionProjectAdminController extends CRUDController
      *
      * @return Response|null
      */
-    protected function preEdit(Request $request, $object)
+    protected function preEdit(Request $request, object $object): ?Response
     {
         if ($object instanceof ModelRegionProject) {
             $this->initializeConceptQueries($object);

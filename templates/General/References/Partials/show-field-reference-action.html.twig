@@ -5,15 +5,15 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 #}
 {% if action == constant('App\\Model\\EntityReferenceProperty::ACTION_DELETE') %}
-    <i class="fa fa-trash" title="{{ 'app.object_references.actions.delete'|trans }}" aria-hidden="true"></i>
+    <i class="fas fa-trash" title="{{ 'app.object_references.actions.delete'|trans }}" aria-hidden="true"></i>
 {% elseif action == constant('App\\Model\\EntityReferenceProperty::ACTION_REMOVE_MM_REFERENCE') %}
-    <i class="fa fa-chain-broken" title="{{ 'app.object_references.actions.remove_mm'|trans }}" aria-hidden="true"></i>
+    <i class="fas fa-unlink" title="{{ 'app.object_references.actions.remove_mm'|trans }}" aria-hidden="true"></i>
 {% elseif action == constant('App\\Model\\EntityReferenceProperty::ACTION_SET_NULL') %}
-    <i class="fa fa-chain-broken" title="{{ 'app.object_references.actions.set_null'|trans }}" aria-hidden="true"></i>
+    <i class="fas fa-unlink" title="{{ 'app.object_references.actions.set_null'|trans }}" aria-hidden="true"></i>
 {% elseif action == constant('App\\Model\\EntityReferenceProperty::ACTION_ERROR') %}
-    <i class="fa fa-exclamation-triangle" title="{{ 'app.object_references.actions.error'|trans }}" aria-hidden="true"></i>
+    <i class="fas fa-exclamation-triangle" title="{{ 'app.object_references.actions.error'|trans }}" aria-hidden="true"></i>
 {% elseif action == constant('App\\Model\\EntityReferenceProperty::ACTION_UNKNOWN') %}
-    <i class="fa fa-question-circle" title="{{ 'app.object_references.actions.unknown'|trans }}" aria-hidden="true"></i>
+    <i class="fas fa-question-circle" title="{{ 'app.object_references.actions.unknown'|trans }}" aria-hidden="true"></i>
 {% elseif action == constant('App\\Model\\EntityReferenceProperty::ACTION_NOTHING') %}
-    <i class="fa fa-check-circle-o" title="{{ 'app.object_references.actions.nothing'|trans }}" aria-hidden="true"></i>
+    <i class="fas fa-check-circle" title="{{ 'app.object_references.actions.nothing'|trans }}" aria-hidden="true"></i>
 {% endif %}

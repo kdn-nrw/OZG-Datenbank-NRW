@@ -34,18 +34,18 @@ class StatisticsBlock extends AbstractBlockService
     /**
      * @var ProviderLoader
      */
-    protected $providerLoader;
+    protected ProviderLoader $providerLoader;
     /**
      * @var Pool
      */
-    protected $adminPool;
+    protected ?Pool $adminPool;
 
     /**
      * @param Environment $twig
      * @param ProviderLoader $providerLoader
-     * @param Pool $adminPool
+     * @param Pool|null $adminPool
      */
-    public function __construct(Environment $twig, ProviderLoader $providerLoader, Pool $adminPool = null)
+    public function __construct(Environment $twig, ProviderLoader $providerLoader, ?Pool $adminPool = null)
     {
         $this->providerLoader = $providerLoader;
         $this->adminPool = $adminPool;
@@ -61,6 +61,8 @@ class StatisticsBlock extends AbstractBlockService
      */
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
+        $mode = (string) $blockContext->getSetting('mode');
+        $isAdminMode = 'admin' === $mode;
         /** @var AbstractChartJsStatisticsProvider $provider */
         $provider = $this->providerLoader->getProviderByKey($blockContext->getSetting('provider'));
         $parameters = [
@@ -71,10 +73,13 @@ class StatisticsBlock extends AbstractBlockService
             //'provider' => $provider,
             'chartKey' => $provider->getKey()
         ];
-        if ('admin' === $blockContext->getSetting('mode')) {
-            return $this->renderPrivateResponse($blockContext->getTemplate(), $parameters, $response);
+        $response = $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
+        if ($isAdminMode) {
+            $response
+                ->setTtl(0)
+                ->setPrivate();
         }
-        return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
+        return $response;
     }
 
     public function buildEditForm(FormMapper $form, BlockInterface $block)
@@ -126,7 +131,7 @@ class StatisticsBlock extends AbstractBlockService
             'mode' => 'public',
             'title' => null,
             'translation_domain' => null,
-            'icon' => 'fa fa-line-chart',
+            'icon' => 'fas fa-chart-line',
             'class' => null,
             'provider' => null,
             'filters' => null,

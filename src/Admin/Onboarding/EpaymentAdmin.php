@@ -22,9 +22,10 @@ use App\Form\Type\OnboardingContactType;
 use App\Validator\Constraints\OnboardingEpaymentServices;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
+use Sonata\AdminBundle\Mapper\BaseGroupedMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Sonata\Form\Validator\ErrorElement;
@@ -45,7 +46,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
 
     protected $baseRoutePattern = 'onboarding/epaybl';
 
-    protected function configureFormGroups(FormMapper $form)
+    protected function configureFormGroups(BaseGroupedMapper $form)
     {
         $form
             ->with('Mandator', [
@@ -327,7 +328,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
             ->end();
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->configureFormGroups($form);
         $this->addMandatorFormFields($form);
@@ -409,13 +410,13 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
             ->end()
             ->end();
     }
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         parent::configureDatagridFilters($filter);
         $this->addDefaultDatagridFilter($filter, 'paymentOperator');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('commune', null, [
@@ -431,7 +432,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('communeName')
@@ -466,7 +467,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdmi
             ->add('managerNo')
             ->add('applicationName')
             ->add('xFinanceFileRequired')
-            ->add('xFinanceFileDays', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('xFinanceFileDays', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'choices' => Epayment::getDayChoices(),
                 'catalogue' => 'messages',

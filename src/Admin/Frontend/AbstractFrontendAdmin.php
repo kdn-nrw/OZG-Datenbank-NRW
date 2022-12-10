@@ -12,6 +12,7 @@
 namespace App\Admin\Frontend;
 
 use App\Admin\AbstractContextAwareAdmin;
+use App\Admin\Base\AdminTranslatorStrategyTrait;
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableInterface;
@@ -27,8 +28,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface as RoutingUrlGener
  */
 abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implements ContextFrontendAdminInterface
 {
-    use FrontendTranslatorStrategyTrait;
-
     protected $adminBaseRouteName;
     protected $adminBaseRoutePattern;
     /**
@@ -50,6 +49,17 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
      * @var string[]
      */
     protected $disabledRoutes = ['batch', 'create', 'edit', 'delete'];
+
+    /**
+     * @return string|null
+     */
+    protected function getTranslatorNamingPrefix(): ?string
+    {
+        if (null === $this->translatorNamingPrefix) {
+            $this->translatorNamingPrefix = str_replace('\\Frontend', '', get_class($this));
+        }
+        return $this->translatorNamingPrefix;
+    }
 
     /**
      * Initialized the routes and templates for this admin
@@ -80,13 +90,11 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         $this->adminBaseRouteName = $routeName;
         $this->adminBaseRoutePattern = $routePattern;
         $templateRegistry = $this->getTemplateRegistry();
-        if (null !== $templateRegistry) {
-            $listTemplate = $templateRegistry->getTemplate('list');
-            if (strpos($listTemplate, '@SonataAdmin') === 0) {
-                $templateRegistry->setTemplate('list', 'Frontend/Admin/CRUD/list.html.twig');
-            }
-            $templateRegistry->setTemplate('layout', 'Frontend/Admin/base.html.twig');
+        $listTemplate = $templateRegistry->getTemplate('list');
+        if (strpos($listTemplate, '@SonataAdmin') === 0) {
+            $templateRegistry->setTemplate('list', 'Frontend/Admin/CRUD/list.html.twig');
         }
+        $templateRegistry->setTemplate('layout', 'Frontend/Admin/base.html.twig');
     }
 
     /**
@@ -95,7 +103,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
      * @param string $name
      * @return bool
      */
-    public function hasRoute($name)
+    public function hasRoute(string $name): bool
     {
         if (in_array($name, $this->disabledRoutes, false)) {
             return false;
@@ -132,14 +140,14 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         }
     }
 
-    protected function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $this->setDefaultShowGroupLabel($show);
     }
 
     /*
      * TODO: use admin routes instead of disabling routes (see hasRoute)
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         if ($this->adminBaseRoutePattern) {
             $adminRoutesCollection = new RouteCollection(
@@ -156,19 +164,19 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         }
     }*/
 
-    public function update($object)
+    public function update(object $object): object
     {
         // disable update in frontend completely!
         return $object;
     }
 
-    public function create($object)
+    public function create(object $object): object
     {
         // disable create in frontend completely!
         return $object;
     }
 
-    public function delete($object)
+    public function delete(object $object): void
     {
         // disable delete in frontend completely!
     }
@@ -183,7 +191,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         return $settings;
     }
 
-    public function generateObjectUrl($name, $object, array $parameters = [], $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generateObjectUrl(string $name, object $object, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         if ($name === 'show' && $object instanceof SluggableInterface) {
             if (empty($parameters['slug'])) {
@@ -198,13 +206,13 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         return $this->generateUrl($name, $parameters, $referenceType);
     }
 
-    public function generateUrl($name, array $parameters = [], $absolute = RoutingUrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generateUrl(string $name, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         if (in_array($name, ['show', 'list', 'export'], false)) {
             $route = $this->getRoutePrefix() . '_' . $name;
-            return $this->routeGenerator->generate($route, $parameters, $absolute);
+            return $this->getRouteGenerator()->generate($route, $parameters, $referenceType);
         }
-        return parent::generateUrl($name, $parameters, $absolute);
+        return parent::generateUrl($name, $parameters, $referenceType);
     }
 
     abstract protected function getRoutePrefix(): string;
@@ -215,7 +223,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
      * @phpstan-param array{_page?: int, _per_page?: int, _sort_by?: string, _sort_order?: string} $sortValues
      * @param array $sortValues
      */
-    protected function configureDefaultSortValues(array &$sortValues)
+    protected function configureDefaultSortValues(array &$sortValues): void
     {
         parent::configureDefaultSortValues($sortValues);
         if (is_subclass_of($this->getClass(), NamedEntityInterface::class)) {

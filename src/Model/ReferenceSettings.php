@@ -11,12 +11,12 @@
 
 namespace App\Model;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 
 class ReferenceSettings
 {
     /**
-     * @var AbstractAdmin
+     * @var AdminInterface
      */
     protected $admin;
 
@@ -53,17 +53,17 @@ class ReferenceSettings
     protected $entityClass;
 
     /**
-     * @return AbstractAdmin|null
+     * @return AdminInterface|null
      */
-    public function getAdmin(): ?AbstractAdmin
+    public function getAdmin(): ?AdminInterface
     {
         return $this->admin;
     }
 
     /**
-     * @param AbstractAdmin $admin
+     * @param AdminInterface $admin
      */
-    public function setAdmin(AbstractAdmin $admin): void
+    public function setAdmin(AdminInterface $admin): void
     {
         $this->admin = $admin;
     }

@@ -19,6 +19,8 @@ use Sonata\AdminBundle\Translator\LabelTranslatorStrategyInterface;
  * Class AdminTranslatorStrategyTrait
  *
  * @property LabelTranslatorStrategyInterface $labelTranslatorStrategy
+ * @method setLabelTranslatorStrategy(LabelTranslatorStrategyInterface $labelTranslatorStrategy): void
+ * @method getLabelTranslatorStrategy(): LabelTranslatorStrategyInterface
  */
 trait AdminTranslatorStrategyTrait
 {
@@ -32,18 +34,31 @@ trait AdminTranslatorStrategyTrait
      */
     protected $customLabels = [];
 
-    public function getLabelTranslatorStrategy()
+
+    final public function configureAppTranslatorStrategy(): LabelTranslatorStrategyInterface
     {
-        if ($this->labelTranslatorStrategy instanceof PrefixedUnderscoreLabelTranslatorStrategy) {
-            $this->labelTranslatorStrategy->setAdminClass($this->getTranslatorNamingPrefix(), $this->customLabels);
+        try {
+            $translatorStrategy = $this->getLabelTranslatorStrategy();
+        } catch (\Exception $e) {
+            $translatorStrategy = null;
         }
-        return $this->labelTranslatorStrategy;
+        if (!($translatorStrategy instanceof PrefixedUnderscoreLabelTranslatorStrategy)) {
+            $translatorStrategy = new PrefixedUnderscoreLabelTranslatorStrategy();
+            $this->setLabelTranslatorStrategy($translatorStrategy);
+        }
+        $translatorStrategy->setAdminClass($this->getTranslatorNamingPrefix(), $this->customLabels);
+        return $translatorStrategy;
+    }
+
+    final protected function getAppLabelTranslatorStrategy(): LabelTranslatorStrategyInterface
+    {
+        return $this->configureAppTranslatorStrategy();
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getTranslatorNamingPrefix()
+    protected function getTranslatorNamingPrefix(): ?string
     {
         if (null === $this->translatorNamingPrefix) {
             $this->translatorNamingPrefix = get_class($this);

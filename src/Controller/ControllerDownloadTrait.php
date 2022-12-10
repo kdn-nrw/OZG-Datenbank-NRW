@@ -18,8 +18,8 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Throwable;
 
 /**
@@ -51,14 +51,13 @@ trait ControllerDownloadTrait
     /**
      * Get the entity attachment as binary response
      *
+     * @param Request $request
      * @param int|string|null $id
      * @param int|null $documentId
      * @return Response
      */
-    public function downloadAction($id = null, $documentId = null): Response
+    public function downloadAction(Request $request, $id = null, $documentId = null): Response
     {
-        // This is strange, but used like this in \Sonata\AdminBundle\Controller\CRUDController::showAction too
-        $request = $this->getRequest();
         /** @noinspection SuspiciousAssignmentsInspection */
         $id = (int)$request->get($this->admin->getIdParameter());
         /** @noinspection SuspiciousAssignmentsInspection */
@@ -137,6 +136,6 @@ trait ControllerDownloadTrait
         if (method_exists($upload, 'getOriginalName') && $originalName = $upload->getOriginalName()) {
             $fileName = $originalName;
         }
-        return $this->file($uploadFile, $fileName, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+        return $this->file($uploadFile, $fileName);
     }
 }

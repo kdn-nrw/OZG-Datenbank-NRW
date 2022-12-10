@@ -26,7 +26,7 @@ use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -39,20 +39,26 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
 {
-    use AdminTranslatorStrategyTrait;
     use IsExcludedFormField;
     use InjectEventDispatcherTrait;
+
+    /**
+     * The Access mapping.
+     *
+     * @var array<string, string|string[]> [action1 => requiredRole1, action2 => [requiredRole2, requiredRole3]]
+     */
+    protected $accessMapping = [];
 
     /**
      * Label for the default show group header
      * @var string
      */
-    protected $defaultShowGroupLabel = 'object_name';
+    protected string $defaultShowGroupLabel = 'object_name';
 
     /**
      * @var bool
      */
-    private $sortableBehaviourEnabled = false;
+    private bool $sortableBehaviourEnabled = false;
 
     /**
      * Returns the default fields for the given action; used to autoconfigure CRUD display for simple admins
@@ -91,7 +97,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
      * @phpstan-param array{_page?: int, _per_page?: int, _sort_by?: string, _sort_order?: string} $sortValues
      * @param array $sortValues
      */
-    protected function configureDefaultSortValues(array &$sortValues)
+    protected function configureDefaultSortValues(array &$sortValues): void
     {
         if ($this->sortableBehaviourEnabled) {
             $sortValues[DatagridInterface::SORT_ORDER] = $sortValues[DatagridInterface::SORT_ORDER] ?? 'ASC';
@@ -108,7 +114,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
     }
 
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $defaultFields = $this->getDefaultFields('form');
         foreach ($defaultFields as $field => $fieldConfig) {
@@ -118,7 +124,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $defaultFields = $this->getDefaultFields('filter');
         foreach ($defaultFields as $field => $fieldConfig) {
@@ -136,7 +142,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
         }
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $this->addDefaultListFields($list);
         $this->addDefaultListActions($list);
@@ -156,8 +162,9 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
             'delete' => [],
         ];
         if ($this instanceof AuditedEntityAdminInterface && $this->isEntityAuditEnabled()) {
+            $domain = $this->getTranslationDomain();
             $actions['history'] = [
-                'label' => $this->trans('app.common.action_history'),
+                'label' => $this->getTranslator()->trans('app.common.action_history', [], $domain),
                 'template' => 'General/List/action_history.html.twig',
                 'icon' => 'fa-history',
             ];
@@ -199,7 +206,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $this->setDefaultShowGroupLabel($show);
         $defaultFields = $this->getDefaultFields('show');
@@ -209,15 +216,16 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
         }
     }
 
-    public function toString($object)
+    public function toString(object $object): string
     {
         if ($object instanceof CustomEntityLabelInterface) {
-            return $this->trans($object->getLabelKey());
+            $domain = $this->getTranslationDomain();
+            return $this->getTranslator()->trans($object->getLabelKey(), [], $domain);
         }
         return parent::toString($object);
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
         if ($this->isSortableBehaviourEnabled()) {
@@ -227,7 +235,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
         }
     }
 
-    public function getAccessMapping()
+    protected function getAccessMapping(): array
     {
         if (!array_key_exists('move', $this->accessMapping)
             && $this->isSortableBehaviourEnabled() ) {
@@ -239,7 +247,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
     /**
      * @param object $object
      */
-    public function postUpdate($object)
+    protected function postUpdate(object $object): void
     {
         if (null !== $this->eventDispatcher && $object instanceof BaseEntityInterface) {
             $postUpdateEvent = new EntityPostUpdateEvent($this, $object);
@@ -250,7 +258,7 @@ abstract class AbstractAppAdmin extends AbstractContextAwareAdmin
     /**
      * @param object $object
      */
-    public function postPersist($object)
+    protected function postPersist(object $object): void
     {
         if (null !== $this->eventDispatcher && $object instanceof BaseEntityInterface) {
             $postUpdateEvent = new EntityPostCreateEvent($this, $object);

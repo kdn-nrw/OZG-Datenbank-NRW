@@ -33,14 +33,14 @@ class MetaDataVoter extends Voter
      */
     protected $metaCache = [];
 
-    const BASE_ROLE_PREFIX = 'ROLE_APP\ADMIN\METADATA\METAITEMADMIN_';
-    const VIEW = 'VIEW';
-    const EDIT = 'EDIT';
-    const DELETE = 'DELETE';
-    const CREATE = 'CREATE';
-    const LIST = 'LIST';
+    protected const BASE_ROLE_PREFIX = 'ROLE_APP\ADMIN\METADATA\METAITEMADMIN_';
+    protected const VIEW = 'VIEW';
+    protected const EDIT = 'EDIT';
+    protected const DELETE = 'DELETE';
+    protected const CREATE = 'CREATE';
+    protected const LIST = 'LIST';
 
-    protected function supports($attribute, $subject)
+    protected function supports(string $attribute, $subject)
     {
         // if the attribute isn't one we support, return false
         if (!in_array($attribute, [
@@ -72,7 +72,7 @@ class MetaDataVoter extends Voter
         return $this->metaCache['entities'][$entityClassMetaKey] ?? null;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
 

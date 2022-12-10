@@ -15,8 +15,6 @@ namespace App\Entity\Manager;
 
 use App\Entity\Solution;
 use Doctrine\Persistence\ManagerRegistry;
-use Sonata\DatagridBundle\Pager\Doctrine\Pager;
-use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
 use Sonata\Doctrine\Entity\BaseEntityManager;
 
 class SolutionManager extends BaseEntityManager
@@ -30,30 +28,28 @@ class SolutionManager extends BaseEntityManager
         parent::__construct(Solution::class, $registry);
     }
 
-    public function getPager(array $criteria, $page, $limit = 10, array $sort = []): Pager
+    /**
+     * Returns the latest entries
+     * @param bool $isPublic
+     * @param int $limit
+     * @return mixed
+     */
+    public function findLatest(bool $isPublic = true, int $limit = 10)
     {
-        if (!isset($criteria['mode'])) {
-            $criteria['mode'] = 'public';
-        }
-        $parameters = [];
-        $query = $this->getRepository()
+        $queryBuilder = $this->getRepository()
             ->createQueryBuilder('c')
             ->orderby('c.id', 'DESC');
-        if ('public' === $criteria['mode']) {
-            /** @var \Doctrine\ORM\QueryBuilder $query */
-            $query->andWhere(
-                $query->expr()->eq($query->getRootAliases()[0] . '.isPublished', ':isPublished')
+        $parameters = [];
+        if ($isPublic) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->eq($queryBuilder->getRootAliases()[0] . '.isPublished', ':isPublished')
             );
-            $query->setParameter('isPublished', 1);
+            $queryBuilder->setParameter('isPublished', 1);
         }
         if (!empty($parameters)) {
-            $query->setParameters($parameters);
+            $queryBuilder->setParameters($parameters);
         }
-        $pager = new Pager();
-        $pager->setMaxPerPage($limit);
-        $pager->setQuery(new ProxyQuery($query));
-        $pager->setPage($page);
-        $pager->init();
-        return $pager;
+        $queryBuilder->setMaxResults($limit);
+        return $queryBuilder->getQuery()->getResult();
     }
 }

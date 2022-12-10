@@ -24,10 +24,10 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class UserVoter extends Voter
 {
-    const VIEW = 'ROLE_SONATA_USER_ADMIN_USER_VIEW';
-    const EDIT = 'ROLE_SONATA_USER_ADMIN_USER_EDIT';
+    protected const VIEW = 'ROLE_SONATA_USER_ADMIN_USER_VIEW';
+    protected const EDIT = 'ROLE_SONATA_USER_ADMIN_USER_EDIT';
 
-    protected function supports($attribute, $subject)
+    protected function supports(string $attribute, $subject)
     {
         // if the attribute isn't one we support, return false
         if (!in_array($attribute, [self::VIEW, self::EDIT])) {
@@ -42,7 +42,7 @@ class UserVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
 

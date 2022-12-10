@@ -249,7 +249,7 @@ class CommuneInfo extends AbstractOnboardingEntity
      * @param OnboardingCommuneSolution $communeSolution
      * @return self
      */
-    public function addCommuneSolution(EpaymentService $communeSolution): self
+    public function addCommuneSolution(OnboardingCommuneSolution $communeSolution): self
     {
         if (!$this->communeSolutions->contains($communeSolution)) {
             $this->communeSolutions->add($communeSolution);
@@ -263,7 +263,7 @@ class CommuneInfo extends AbstractOnboardingEntity
      * @param OnboardingCommuneSolution $communeSolution
      * @return self
      */
-    public function removeCommuneSolution($communeSolution): self
+    public function removeCommuneSolution(OnboardingCommuneSolution $communeSolution): self
     {
         if ($this->communeSolutions->contains($communeSolution)) {
             $this->communeSolutions->removeElement($communeSolution);

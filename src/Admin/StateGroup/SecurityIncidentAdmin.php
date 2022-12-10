@@ -28,7 +28,7 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
 {
     use DatePickerTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isExcludedFormField('serviceProvider')) {
             $form
@@ -103,36 +103,36 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'serviceProvider');
         $filter->add('subjectType',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => array_flip(SecurityIncident::$subjectTypeChoices)
             ]
         );
         $filter->add('extent',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => array_flip(SecurityIncident::$extentChoices)
             ]
         );
         $filter->add('method',
             null, [
+                'field_type' => ChoiceType::class,
             ],
-            ChoiceType::class,
             [
                 'choices' => array_flip(SecurityIncident::$methodChoices)
             ]
         );
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('serviceProvider', null, [
@@ -172,7 +172,7 @@ class SecurityIncidentAdmin extends AbstractAppAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('serviceProvider')

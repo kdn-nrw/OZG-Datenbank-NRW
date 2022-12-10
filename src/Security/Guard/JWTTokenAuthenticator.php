@@ -69,7 +69,7 @@ class JWTTokenAuthenticator extends BaseAuthenticator
 
         $this->dispatcher->dispatch(new JWTAuthenticatedEvent($preAuthToken->getPayload(), $authToken), Events::JWT_AUTHENTICATED);
 
-        $this->preAuthenticationTokenStorage->setToken(null);
+        $this->preAuthenticationTokenStorage->setToken();
 
         return $authToken;
     }

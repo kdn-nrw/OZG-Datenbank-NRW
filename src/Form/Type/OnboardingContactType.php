@@ -13,7 +13,7 @@ namespace App\Form\Type;
 
 
 use App\Entity\Onboarding\Contact;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -82,7 +82,7 @@ class OnboardingContactType extends AbstractType
                 'required'    => false,
             ]);
         }
-        /** @var AbstractAdmin|null $parentAdmin * /
+        /** @var AdminInterface|null $parentAdmin * /
         $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) use ($parentAdmin) {
             $data = $event->getData();
             if ($data instanceof Contact) {

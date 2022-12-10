@@ -115,9 +115,6 @@ class Release extends AbstractOnboardingEntity
     public function setCompletionRate(int $completionRate): void
     {
         if (null !== $this->releaseDate) {
-            if (null === $this->releaseStatus) {
-                $this->releaseStatus = self::STATUS_NEW;
-            }
             if (!$this->releaseConfirmed) {
                 $this->releaseStatus = self::STATUS_INCOMPLETE;
             } else {

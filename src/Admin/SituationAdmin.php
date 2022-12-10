@@ -21,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class SituationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form->add('name', TextType::class);
         if (!$this->isExcludedFormField('subject')) {
@@ -42,24 +42,24 @@ class SituationAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdm
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper->add('name');
-        $this->addDefaultDatagridFilter($datagridMapper, 'subject');
+        $filter->add('name');
+        $this->addDefaultDatagridFilter($filter, 'subject');
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('name')
             ->add('subject');
-        $this->addDefaultListActions($listMapper);
+        $this->addDefaultListActions($list);
     }
 
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

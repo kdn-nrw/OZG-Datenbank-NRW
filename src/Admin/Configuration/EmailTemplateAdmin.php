@@ -14,9 +14,9 @@ namespace App\Admin\Configuration;
 use App\Admin\AbstractAppAdmin;
 use App\Service\Mailer\InjectEmailTemplateManagerTrait;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -30,7 +30,7 @@ class EmailTemplateAdmin extends AbstractAppAdmin
 
     protected $baseRoutePattern = 'configuration/email-templates';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('general', [
@@ -86,10 +86,10 @@ class EmailTemplateAdmin extends AbstractAppAdmin
             ->end();
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('templateKey', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('templateKey', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => false,
                 'choices' => $this->emailTemplateManager->getEmailTemplatesChoices(),
                 'catalogue' => 'messages'
@@ -108,7 +108,7 @@ class EmailTemplateAdmin extends AbstractAppAdmin
         ]);
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('create');
         $collection->remove('delete');

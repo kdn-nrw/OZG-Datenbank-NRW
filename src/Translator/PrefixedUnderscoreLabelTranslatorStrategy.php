@@ -149,11 +149,19 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
                 break;
         }
         $key = '';
+        // Handle default labels for group headlines (@see \Sonata\AdminBundle\Mapper\BaseGroupedMapper::with)
+        if ($type === 'group') {
+            $type = '';
+            $context = '';
+            $checkPrefix = str_replace('.', '_', $this->prefix);
+            if ($this->prefix && strpos($filteredLabel, $checkPrefix) === 0) {
+                $filteredLabel = str_replace($checkPrefix, '', $filteredLabel);
+            }
+        } elseif ($type === 'label' || $type === 'link') {
+            $type = '';
+        }
         if (!empty($context)) {
             $key .= $context . '.';
-        }
-        if ($type === 'label' || $type === 'link') {
-            $type = '';
         }
         if (!empty($type)) {
             $key .= $type . '_';

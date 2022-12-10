@@ -13,7 +13,7 @@ namespace App\Statistics;
 
 /**
  * Interface for statistics providers
- * Concrete sub-classes must either implement ExportStatisticsProviderInterface or ChartStatisticsProviderInterface
+ * Concrete subclasses must either implement ExportStatisticsProviderInterface or ChartStatisticsProviderInterface
  */
 abstract class AbstractStatisticsProvider
 {

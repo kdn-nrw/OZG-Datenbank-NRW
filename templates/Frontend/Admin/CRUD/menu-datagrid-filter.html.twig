@@ -9,7 +9,7 @@ file that was distributed with this source code.
         {% for filterName, filterMenu in datagrid.filterMenuItems %}
             {% set filterParamName = filterName|replace({'.': '__'}) %}
             {% if filterMenu.choices|length > 20 %}
-                <label for="custom-filter-{{ filterParamName }}"><i class="fa fa-filter" aria-hidden="true"></i>
+                <label for="custom-filter-{{ filterParamName }}"><i class="fas fa-filter" aria-hidden="true"></i>
                     Filter: {{ filterMenu.label|trans }}
                 </label>
                 <select class="form-control" id="custom-filter-{{ filterParamName }}" name="filter[filterParamName][value][]"
@@ -28,7 +28,7 @@ file that was distributed with this source code.
                 {% if 'subject' in filterName %}
                     {% set iconPath = '/img/icons/subject/16/' %}
                 {% endif %}
-                <div class="filter-menu-headline"><i class="fa fa-filter" aria-hidden="true"></i>
+                <div class="filter-menu-headline"><i class="fas fa-filter" aria-hidden="true"></i>
                     Filter: {{ filterMenu.label|trans }}
                 </div>
                 <ul class="filter-menu has-icon">
@@ -44,7 +44,7 @@ file that was distributed with this source code.
                                     <img src="{{ choiceIconPath ~ filterChoice.id ~ '.png' }}" class="icon" alt="{{ filterChoice.name }}">
                                 {% else %}
                                     <span  class="icon" title="{{ filterChoice.name }}">
-                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                        <i class="fas fa-map-marker" aria-hidden="true"></i>
                                     </span>
                                 {% endif %}
                                 <span class="item-label">{{ filterChoice.name }}</span>

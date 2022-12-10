@@ -48,7 +48,7 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
         'app.central_association.entity.organisation_town' => 'app.organisation.entity.town',
     ];
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->tab('default', ['label' => 'app.central_association.tabs.default']);
@@ -62,13 +62,13 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
         $form->end();
     }
 
-    public function preUpdate($object)
+    protected function preUpdate(object $object): void
     {
         /** @var OrganisationEntityInterface $object */
         $this->updateOrganisation($object);
     }
 
-    public function prePersist($object)
+    protected function prePersist(object $object): void
     {
         /** @var OrganisationEntityInterface $object */
         $this->updateOrganisation($object);
@@ -78,12 +78,10 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
     {
         /** @var ModelManager $modelManager */
         $modelManager = $this->getModelManager();
-        /** @var OrganisationEntityInterface $object */
         $organisation = $object->getOrganisation();
         $organisation->setFromReference($object);
         $orgEm = $modelManager->getEntityManager(Organisation::class);
         if (!$orgEm->contains($organisation)) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $orgEm->persist($organisation);
         }
         $contacts = $organisation->getContacts();
@@ -91,13 +89,12 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
         foreach ($contacts as $contact) {
             if (!$contactEm->contains($contact)) {
                 $contact->setOrganisation($organisation);
-                /** @noinspection PhpUnhandledExceptionInspection */
                 $contactEm->persist($contact);
             }
         }
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name')
             ->add('shortName');
@@ -105,7 +102,7 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
         $this->addDefaultDatagridFilter($filter, 'communes');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name')
             ->add('shortName');
@@ -117,7 +114,7 @@ class CentralAssociationAdmin extends AbstractAppAdmin implements EnableFullText
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('name')
             ->add('shortName');

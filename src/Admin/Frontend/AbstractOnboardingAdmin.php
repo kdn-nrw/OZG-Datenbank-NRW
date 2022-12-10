@@ -15,6 +15,7 @@ namespace App\Admin\Frontend;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -32,7 +33,7 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
      */
     protected $disabledRoutes = ['edit'];
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('commune', ModelType::class, [
@@ -59,7 +60,7 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'commune');
         $filter
@@ -76,14 +77,14 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
             ]);
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('commune', null, [
                 'admin_code' => CommuneAdmin::class,
             ])
             ->add('modifiedAt')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,
@@ -95,14 +96,14 @@ abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('commune', null, [
             'admin_code' => CommuneAdmin::class,
         ])
             ->add('modifiedAt')
             ->add('description')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,

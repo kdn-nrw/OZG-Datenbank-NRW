@@ -44,7 +44,7 @@ class AdminManager
     }
 
     /**
-     * This is public so it can be used in admin instances
+     * This is public, so it can be used in admin instances
      *
      * @return CacheItemPoolInterface
      */
@@ -80,7 +80,7 @@ class AdminManager
     /**
      * Returns the entity classes which have an admin service assigned to
      *
-     * @return array<string>|string[]
+     * @return array<string>
      */
     public function getManagedEntityClasses(): array
     {
@@ -178,7 +178,7 @@ class AdminManager
     }
 
     /**
-     * Returns the admin for the given entity class depending the current application context
+     * Returns the admin for the given entity class depending on the current application context
      * @param string $entityClass
      * @return AdminInterface|null
      */

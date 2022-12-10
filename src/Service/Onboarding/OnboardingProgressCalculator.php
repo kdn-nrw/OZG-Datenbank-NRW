@@ -206,9 +206,6 @@ class OnboardingProgressCalculator
                         // addMandatorAccountFormFields
                         'answerUrl1', 'clientId', 'clientPassword',
                     ];
-                } else {
-                   // $additionalProperties = $this->getRequiredPropertiesForCompletionFromMetaData(Commune::class);
-                    //$properties = array_merge($additionalProperties, $properties);
                 }
                 break;
             case EpaymentProject::class:

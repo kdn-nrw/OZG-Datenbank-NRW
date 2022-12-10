@@ -18,7 +18,7 @@ use App\Service\InjectApplicationContextHandlerTrait;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Util\ClassUtils;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -109,7 +109,10 @@ class ReferenceSettingsExtension extends AbstractExtension
             && (null !== $tmpFieldAdmin = $fieldDescription->getAssociationAdmin())
             && $tmpFieldAdmin->getClass() === $entityClass) {
             $refAdmin = $tmpFieldAdmin;
-            $editRouteName = $fieldDescription->getOption('route')['name'];
+            $routeOption = $fieldDescription->getOption('route');
+            if ($routeOption && !empty($routeOption['name'])) {
+                $editRouteName = $routeOption['name'];
+            }
         } else {
             $adminClass = $this->adminManager->getAdminClassForEntityClass($entityClass);
             $refAdmin = $adminClass ? $this->adminManager->getAdminInstance($adminClass) : null;
@@ -119,7 +122,7 @@ class ReferenceSettingsExtension extends AbstractExtension
                 $settings = $refAdmin->getReferenceSettings($this->applicationContextHandler, $editRouteName);
             } else {
                 $showRouteName = 'show';
-                /** @var AbstractAdmin $refAdmin */
+                /** @var AdminInterface $refAdmin */
                 $settings = new ReferenceSettings();
                 $settings->setAdmin($refAdmin);
                 $createShowLink = $refAdmin->hasRoute($showRouteName) && $refAdmin->hasAccess($showRouteName);
