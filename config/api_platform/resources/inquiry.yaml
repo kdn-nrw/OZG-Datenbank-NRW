@@ -1,20 +1,20 @@
 App\Entity\Onboarding\Inquiry:
+  #security: 'is_granted("PERMISSION_API_ONBOARDING")'
   attributes:
-    security: 'is_granted("PERMISSION_API_ONBOARDING")'
     pagination_items_per_page: 25
   ##description: 'Kommunalportal Rückfragen'
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'inquiry:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit Kommunalportal Rückfragen zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit Kommunalportal Rückfragen zurück'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'inquiry:read']
-      openapi_context:
-        summary: 'Gibt einen Eintrag der Kommunalportal Rückfragen zurück'
+      openapiContext:
+        description: 'Gibt einen Eintrag der Kommunalportal Rückfragen zurück'

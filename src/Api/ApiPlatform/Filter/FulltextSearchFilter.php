@@ -9,6 +9,11 @@ use App\Entity\Base\NamedEntityInterface;
 use App\Search\Finder;
 use Doctrine\ORM\QueryBuilder;
 
+/**
+ * Custom API search filter, for searching the full text index table
+ *
+ * @see \ApiPlatform\Doctrine\Orm\Filter\SearchFilter
+ */
 final class FulltextSearchFilter extends AbstractFilter implements SearchFilterInterface
 {
     /**

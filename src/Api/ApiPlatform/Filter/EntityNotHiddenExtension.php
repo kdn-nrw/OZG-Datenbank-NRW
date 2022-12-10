@@ -23,15 +23,15 @@ class EntityNotHiddenExtension implements QueryCollectionExtensionInterface, Que
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
-        if (!$this->supports($resourceClass)) {
-            return;
-        }
-        $rootAlias = $queryBuilder->getRootAliases()[0];
-        $queryBuilder->andWhere(sprintf('%s.hidden = :hidden', $rootAlias))
-            ->setParameter('hidden', false);
+        $this->addWhere($queryBuilder, $resourceClass);
     }
 
     public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, Operation $operation = null, array $context = []): void
+    {
+        $this->addWhere($queryBuilder, $resourceClass);
+    }
+
+    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
         if (!$this->supports($resourceClass)) {
             return;

@@ -58,19 +58,6 @@ final class ConfigureCRUDControllerListener implements EventSubscriberInterface
         } elseif ($controller instanceof CommuneAdminController) {
             $controller->configureCommuneController($request);
         }
-        // Workaround for setting the label translator attributes for the current admin; needed because everything
-        // in Sonata is declared as "final" now...
-        $adminCode = $request->get('_sonata_admin');
-        if ($adminCode) {
-            try {
-                $admin = $this->adminManager->getAdminInstance($adminCode);
-                if ($admin instanceof AbstractContextAwareAdmin) {
-                    $admin->configureAppTranslatorStrategy();
-                }
-            } catch (AdminCodeNotFoundException $e) {
-                // continue since we only set the correct label translator here
-            }
-        }
     }
 
     public static function getSubscribedEvents(): array

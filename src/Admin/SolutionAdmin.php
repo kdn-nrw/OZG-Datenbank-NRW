@@ -471,7 +471,7 @@ class SolutionAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInter
                 'is_tab_field' => $enableTabs,
                 'is_custom_rendered' => $enableTabs,
             ])
-            ->add('serviceSystems', null,[
+            ->add('serviceSystems', null, [
                 'admin_code' => ServiceSystemAdmin::class,
                 'is_custom_field' => $enableTabs,
                 'is_tab_field' => $enableTabs,

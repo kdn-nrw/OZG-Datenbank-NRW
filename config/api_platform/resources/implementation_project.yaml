@@ -7,21 +7,17 @@ App\Entity\ImplementationProject:
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'implementation_project:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit OZG Umsetzungsprojekten zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit OZG Umsetzungsprojekten zurück'
       filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
-  #    post:
-  #      security: 'is_granted("ROLE_ADMIN")'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'implementation_project:read']
       #\ApiPlatform\OpenApi\Factory\OpenApiFactory::collectPaths
-      openapi_context:
-        summary: 'Gibt ein OZG Umsetzungsprojekt zurück'
-  #    put:
-  #      method: 'PUT'
+      openapiContext:
+        description: 'Gibt ein OZG Umsetzungsprojekt zurück'

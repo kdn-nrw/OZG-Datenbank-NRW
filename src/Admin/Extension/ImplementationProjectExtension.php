@@ -22,6 +22,7 @@ use Doctrine\DBAL\Connection;
 use Sonata\AdminBundle\Admin\AbstractAdminExtension;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
@@ -107,16 +108,17 @@ class ImplementationProjectExtension extends AbstractAdminExtension
         $filter->add('communeTypes',
             CallbackFilter::class, [
                 'label' => 'app.service_system.entity.commune_types',
-                'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) {
-                    if (!is_array($value) || !\array_key_exists('value', $value)) {
+                'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, FilterData $data) {
+                    if (!$data->hasValue()) {
                         return false;
                     }
-                    if ($value['value'] instanceof Collection && $value['value']->count() > 0) {
+                    $dataValue = $data->getValue();
+                    if ($dataValue instanceof Collection && $dataValue->count() > 0) {
                         /** @var ModelManager $modelManager */
                         $modelManager = $this->modelManager;
                         $connection = $modelManager->getEntityManager(CommuneType::class)->getConnection();
                         $entityIds = [];
-                        foreach ($value['value'] as $entity) {
+                        foreach ($dataValue as $entity) {
                             /** @var CommuneType $entity */
                             $entityIds[] = $entity->getId();
                         }

@@ -167,7 +167,7 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
         $show->add('specializedProcedures.manufacturers', null, [
             'label' => 'app.specialized_procedure.entity.manufacturers',
             'admin_code' => ManufacturerAdmin::class,
-            'template' => 'General/show-specialized-procedures-manufacturers.html.twig',
+            'template' => 'General/Show/show-specialized-procedures-manufacturers.html.twig',
         ]);
         $show
             ->add('storageTypes', null, [

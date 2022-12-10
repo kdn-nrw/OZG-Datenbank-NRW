@@ -1,20 +1,20 @@
 App\Entity\Onboarding\OnboardingDocument:
+  #security: 'is_granted("PERMISSION_API_ONBOARDING")'
   attributes:
-    security: 'is_granted("PERMISSION_API_ONBOARDING")'
     pagination_items_per_page: 25
   ##description: 'Kommunalportal Basisdaten Dokumente'
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'onboarding_document:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit Kommunalportal Basisdaten Dokumente zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit Kommunalportal Basisdaten Dokumente zurück'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'onboarding_document:read']
-      openapi_context:
-        summary: 'Gibt einen Eintrag der Kommunalportal Basisdaten Dokumente zurück'
+      openapiContext:
+        description: 'Gibt einen Eintrag der Kommunalportal Basisdaten Dokumente zurück'

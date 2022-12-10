@@ -27,6 +27,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
@@ -195,18 +196,18 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
         $filter->add('status',
             CallbackFilter::class, [
                 'label' => 'app.commune_info.entity.status',
-                'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) {
-                    if (!is_array($value) || !\array_key_exists('value', $value)) {
+                'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, FilterData $data) {
+                    if (!$data->hasValue()) {
                         return false;
                     }
-
-                    if (!\is_array($value['value'])) {
-                        $value['value'] = [$value['value']];
+                    $dataValue = $data->getValue();
+                    if (!\is_array($dataValue)) {
+                        $dataValue = [$dataValue];
                     }
-                    $type = $value['type'] ?? NumberOperatorType::TYPE_EQUAL;
+                    $type = $data->getType() ?? NumberOperatorType::TYPE_EQUAL;
                     $operator = NumberFilter::CHOICES[$type] ?? NumberFilter::CHOICES[NumberOperatorType::TYPE_EQUAL];
                     $andConditions = $queryBuilder->expr()->andX();
-                    foreach ($value['value'] as $item) {
+                    foreach ($dataValue as $item) {
                         $andConditions->add(sprintf('%s.%s %s %d', $alias, $field, $operator, (int)$item));
                     }
                     $queryBuilder->andWhere($andConditions);

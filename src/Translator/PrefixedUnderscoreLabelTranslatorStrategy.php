@@ -122,6 +122,9 @@ class PrefixedUnderscoreLabelTranslatorStrategy implements LabelTranslatorStrate
         if (array_key_exists($label, self::$commonTranslations)) {
             return self::$commonTranslations[$label];
         }
+        if ($this->prefix && strpos($label, $this->prefix) === 0) {
+            return $label;
+        }
         $label = str_replace('.', '_', $label);
         $filteredLabel = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $label));
         if ($this->adminKey) {

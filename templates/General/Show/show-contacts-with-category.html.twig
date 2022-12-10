@@ -13,16 +13,23 @@ file that was distributed with this source code.
 
 {% block field %}
     <ul class="sonata-ba-show-many-to-many">
-        {% set route_name = field_description.option('route').name %}
+        {% set routeOption = field_description.option('route') %}
+        {% set route_name = routeOption is null ? 'show' : name %}
         {% for element in value %}
             <li>
                 {% set name = element|render_relation_element(field_description) %}
                 {% if field_description.hasassociationadmin
                     and field_description.associationadmin.hasRoute(route_name)
                     and field_description.associationadmin.hasAccess(route_name, element) %}
-                    <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, field_description.option('route').parameters) }}">
-                        {{ name }}
-                    </a>
+                    {% if routeOption and routeOption.parameters is defined %}
+                        <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, routeOption.parameters) }}">
+                            {{ name }}
+                        </a>
+                    {% else %}
+                        <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element) }}">
+                            {{ name }}
+                        </a>
+                    {% endif %}
                 {% else %}
                     {{ name }}
                 {% endif %}

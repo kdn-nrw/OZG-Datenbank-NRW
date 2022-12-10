@@ -23,7 +23,7 @@ file that was distributed with this source code.
 {% endblock %}
 
 {%- block relation_link -%}
-    {% if field_description.options.route is defined and field_description.options.route.parameters %}
+    {% if field_description.options.route is defined and field_description.options.route.parameters is defined %}
         <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, field_description.options.route.parameters) }}">
             {{- element|render_relation_element(field_description) -}}
         </a>

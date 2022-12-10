@@ -10,21 +10,21 @@ App\Entity\StateGroup\Commune:
     ApiPlatform\Metadata\GetCollection:
 #      uriTemplate: '/grimoire'
 #      status: 301
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'commune:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit Kommunen zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit Kommunen zurück'
       filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
     #    post:
-    #      security: 'is_granted("ROLE_ADMIN")'
+    #      #security: 'is_granted("ROLE_ADMIN")'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'commune:read']
-      openapi_context:
-        summary: 'Gibt eine Kommune zurück'
+      openapiContext:
+        description: 'Gibt eine Kommune zurück'
     #    put:
     #      method: 'PUT'
     # api/config/api_platform/resources.yaml

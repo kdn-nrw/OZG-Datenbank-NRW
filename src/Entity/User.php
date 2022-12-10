@@ -246,9 +246,9 @@ class User extends BaseUser
     }
 
     /**
-     * @param string $website
+     * @param string|null $website
      */
-    public function setWebsite(string $website): void
+    public function setWebsite(?string $website): void
     {
         $this->website = $website;
     }
@@ -286,17 +286,17 @@ class User extends BaseUser
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLocale(): string
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
     /**
-     * @param string $locale
+     * @param string|null $locale
      */
-    public function setLocale(string $locale): void
+    public function setLocale(?string $locale): void
     {
         $this->locale = $locale;
     }
@@ -321,49 +321,49 @@ class User extends BaseUser
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
     /**
-     * @param string $phone
+     * @param string|null $phone
      */
-    public function setPhone(string $phone): void
+    public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getToken(): string
+    public function getToken(): ?string
     {
         return $this->token;
     }
 
     /**
-     * @param string $token
+     * @param string|null $token
      */
-    public function setToken(string $token): void
+    public function setToken(?string $token): void
     {
         $this->token = $token;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTwoStepVerificationCode(): string
+    public function getTwoStepVerificationCode(): ?string
     {
         return $this->twoStepVerificationCode;
     }
 
     /**
-     * @param string $twoStepVerificationCode
+     * @param string|null $twoStepVerificationCode
      */
-    public function setTwoStepVerificationCode(string $twoStepVerificationCode): void
+    public function setTwoStepVerificationCode(?string $twoStepVerificationCode): void
     {
         $this->twoStepVerificationCode = $twoStepVerificationCode;
     }

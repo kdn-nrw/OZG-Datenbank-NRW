@@ -9,6 +9,7 @@ file that was distributed with this source code.
 {{ form_start(searchForm, {'style': 'horizontal', 'attr': {'class': 'form-search', 'id': 'search-admin-builder'}}) }}
 {% set formIterator = searchForm.getIterator() %}
 
+{{ form_errors(searchForm) }}
 {{ form_row(searchForm.adminId) }}
 
 <div class="js-search-active-toggle" style="display: none;">
@@ -40,12 +41,7 @@ file that was distributed with this source code.
     </div>
 </div>
 <div class="js-search-fields-rest" style="display: none;">
-{% for field in formIterator %}
-    {{ form_row(field) }}
-{% endfor %}
+    {{ form_rest(searchForm) }}
 </div>
-
-{{ form_widget(searchForm._token) }}
-{{ form_rest(searchForm) }}
 
 {{ form_end(searchForm, {'render_rest': false}) }}

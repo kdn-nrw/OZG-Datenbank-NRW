@@ -19,6 +19,7 @@ use App\Model\ExportSettings;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 
@@ -107,11 +108,12 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
                 'class' => Status::class,
                 'catalogue' => 'messages',
             ])*/
-            ->add('references', 'string', [
+            ->add('references', FieldDescriptionInterface::TYPE_STRING, [
                 'label' => 'app.service_system.entity.references',
                 'template' => 'ServiceSystemAdmin/list-references.html.twig',
                 'filterParamName' => 'serviceSystem__serviceKey',
                 'referenceLabel' => 'app.service.type_label',
+                'virtual_field' => true,
                 'route' => [
                     'prefix' => 'frontend_app_service',
                     'name' => 'list',

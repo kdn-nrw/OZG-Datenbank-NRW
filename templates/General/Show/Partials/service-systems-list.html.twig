@@ -45,7 +45,7 @@ file that was distributed with this source code.
             {% if refSettings.edit.enabled %}
                 <td>
                     {% if refSettings.admin.hasAccess(refSettings.edit.route, child) %}
-                        {% if field_description.options.route is defined and field_description.options.route.parameters %}
+                        {% if field_description.options.route is defined and field_description.options.route.parameters is defined %}
                             {% set editParameters = field_description.options.route.parameters %}
                         {% else %}
                             {% set editParameters = {'id': child.id} %}

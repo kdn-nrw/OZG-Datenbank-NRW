@@ -7,19 +7,19 @@ App\Entity\Subject:
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'subject:collection:read', 'service-system-situation-subject']
-      openapi_context:
-        summary: 'Gibt eine Liste mit OZG Themenfeldern zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit OZG Themenfeldern zurück'
 #    post:
-#      security: 'is_granted("ROLE_ADMIN")'
+#      #security: 'is_granted("ROLE_ADMIN")'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'subject:read', 'service-system-situation-subject']
-      openapi_context:
-        summary: 'Gibt ein OZG Themenfeld zurück'
+      openapiContext:
+        description: 'Gibt ein OZG Themenfeld zurück'
 #    put:
 #      method: 'PUT'

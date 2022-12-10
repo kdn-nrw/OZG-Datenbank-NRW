@@ -19,7 +19,16 @@ file that was distributed with this source code.
                 <div class="col-xs-12">
                     {% set withAdvancedFilter = false %}
                     {% for filter in admin.datagrid.filters %}
-                        {% set filterActive = ((filter.isActive() and filter.options['show_filter'] is null) or (filter.options['show_filter'] is same as(true))) and not admin.isDefaultFilter(filter.formName) %}
+                        {% set filterActive = (filter.isActive() and filter.options['show_filter'] is null) or (filter.options['show_filter'] is same as(true)) %}
+                        {% if filterActive %}
+                            {# Don't enable filters with default values #}
+                            {% set tmpFilterParams = admin.filterParameters %}
+                            {% set tmpDefault = admin.defaultFilterParameters %}
+                            {% if tmpFilterParams[filter.formName] is defined and tmpDefault[filter.formName] is defined and tmpFilterParams[filter.formName] == tmpDefault[filter.formName] %}
+                                {% set filterActive = false %}
+                            {% endif %}
+                        {% endif %}
+
                         {% set filterVisible = filter.options['show_filter'] is same as(true) or filter.options['show_filter'] is null %}
                         <div class="form-group {% block sonata_list_filter_group_class %}{% endblock %} js-filter-row" id="filter-{{ admin.uniqid }}-{{ filter.name }}" sonata-filter="{{ filterVisible ? 'true' : 'false' }}" style="display: {% if filterActive %}block{% else %}none{% endif %}">
                             {% if filter.label is not same as(false) %}

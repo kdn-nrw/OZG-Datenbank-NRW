@@ -1,20 +1,20 @@
 App\Entity\Onboarding\EpaymentProject:
+  #security: 'is_granted("PERMISSION_API_ONBOARDING")'
   attributes:
-    security: 'is_granted("PERMISSION_API_ONBOARDING")'
     pagination_items_per_page: 25
   ##description: 'Kommunalportal ePayment Projekte'
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'epayment_project:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit Kommunalportal ePayment Projekte zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit Kommunalportal ePayment Projekte zurück'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'epayment_project:read']
-      openapi_context:
-        summary: 'Gibt einen Eintrag der Kommunalportal ePayment Projekte zurück'
+      openapiContext:
+        description: 'Gibt einen Eintrag der Kommunalportal ePayment Projekte zurück'

@@ -7,20 +7,16 @@ App\Entity\Service:
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'service:collection:read', 'service-system-situation-subject']
-      openapi_context:
-        summary: 'Gibt eine Liste mit Leika-Leistungen zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit Leika-Leistungen zurück'
       filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
-  #    post:
-  #      security: 'is_granted("ROLE_ADMIN")'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'service:read', 'service-system-situation-subject']
-      openapi_context:
-        summary: 'Gibt eine Leika-Leistung zurück'
-  #    put:
-  #      method: 'PUT'
+      openapiContext:
+        description: 'Gibt eine Leika-Leistung zurück'

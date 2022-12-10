@@ -1439,7 +1439,10 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
     final public function getUniqId(): string
     {
         if (null === $this->uniqId) {
-            $this->uniqId = sprintf('s%s', uniqid('', true));
+            // DO NOT enable entropy for uniqid! This is mainly used for creating form id's and these must not contain
+            // the dot character.
+            /** @noinspection NonSecureUniqidUsageInspection */
+            $this->uniqId = sprintf('s%s', uniqid());
         }
 
         return $this->uniqId;
@@ -1457,6 +1460,9 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
         return $this->classnameLabel;
     }
 
+    /**
+     * @return mixed[]
+     */
     final public function getPersistentParameters(): array
     {
         $parameters = $this->configurePersistentParameters();

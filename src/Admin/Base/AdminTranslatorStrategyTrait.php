@@ -35,16 +35,21 @@ trait AdminTranslatorStrategyTrait
     protected $customLabels = [];
 
 
-    final public function configureAppTranslatorStrategy(): LabelTranslatorStrategyInterface
+    final public function configureAppTranslatorStrategy(bool $force = false): LabelTranslatorStrategyInterface
     {
-        try {
-            $translatorStrategy = $this->getLabelTranslatorStrategy();
-        } catch (\Exception $e) {
-            $translatorStrategy = null;
-        }
-        if (!($translatorStrategy instanceof PrefixedUnderscoreLabelTranslatorStrategy)) {
+        if ($force) {
             $translatorStrategy = new PrefixedUnderscoreLabelTranslatorStrategy();
             $this->setLabelTranslatorStrategy($translatorStrategy);
+        } else {
+            try {
+                $translatorStrategy = $this->getLabelTranslatorStrategy();
+            } catch (\Exception $e) {
+                $translatorStrategy = null;
+            }
+            if (!($translatorStrategy instanceof PrefixedUnderscoreLabelTranslatorStrategy)) {
+                $translatorStrategy = new PrefixedUnderscoreLabelTranslatorStrategy();
+                $this->setLabelTranslatorStrategy($translatorStrategy);
+            }
         }
         $translatorStrategy->setAdminClass($this->getTranslatorNamingPrefix(), $this->customLabels);
         return $translatorStrategy;

@@ -1,5 +1,10 @@
 # https://api-platform.com/docs/core/security/#hooking-custom-permission-checks-using-voters
 App\Entity\Solution:
+#  properties:
+#    solutionContacts:
+#      #security: 'is_granted("ROLE_ADMIN")'
+#    specializedProcedures:
+#      #security: 'is_granted("ROLE_ADMIN")'
   #shortName: 'Leika-Leistungen'
   ##description: 'Online-Dienste'
   attributes:
@@ -7,20 +12,16 @@ App\Entity\Solution:
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'solution:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit OZG Online-Diensten zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit OZG Online-Diensten zurück'
       filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
-  #    post:
-  #      security: 'is_granted("ROLE_ADMIN")'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'solution:read']
-      openapi_context:
-        summary: 'Gibt einen OZG Online-Dienst zurück'
-  #    put:
-  #      method: 'PUT'
+      openapiContext:
+        description: 'Gibt einen OZG Online-Dienst zurück'

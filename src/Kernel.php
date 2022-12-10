@@ -4,6 +4,7 @@ namespace App;
 
 use App\Api\Consumer\ApiConsumerInterface;
 use App\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
+use App\DependencyInjection\Compiler\AdminTranslatorStrategyCompilerPass;
 use App\DependencyInjection\Compiler\ApiManagerCompilerPass;
 use App\DependencyInjection\Compiler\ChartStatisticsCompilerPass;
 use App\DependencyInjection\Compiler\CustomFieldAdminCompilerPass;
@@ -34,5 +35,6 @@ class Kernel extends BaseKernel
         $container->addCompilerPass(new ChartStatisticsCompilerPass());
         $container->addCompilerPass(new ApiManagerCompilerPass());
         $container->addCompilerPass(new CustomFieldAdminCompilerPass());
+        $container->addCompilerPass(new AdminTranslatorStrategyCompilerPass());
     }
 }

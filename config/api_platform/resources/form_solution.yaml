@@ -1,20 +1,20 @@
 App\Entity\Onboarding\FormSolution:
+  #security: 'is_granted("PERMISSION_API_ONBOARDING")'
   attributes:
-    security: 'is_granted("PERMISSION_API_ONBOARDING")'
     pagination_items_per_page: 25
   ##description: 'Kommunalportal Formsolutions'
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'form_solution:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit Kommunalportal Formsolutions zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit Kommunalportal Formsolutions zurück'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'form_solution:read']
-      openapi_context:
-        summary: 'Gibt einen Eintrag der Kommunalportal Formsolutions zurück'
+      openapiContext:
+        description: 'Gibt einen Eintrag der Kommunalportal Formsolutions zurück'

@@ -7,19 +7,15 @@ App\Entity\StateGroup\CommuneType:
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'commune_type:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit OZG Größenklasse der Kommunen zurück'
-  #    post:
-  #      security: 'is_granted("ROLE_ADMIN")'
+      openapiContext:
+        description: 'Gibt eine Liste mit OZG Größenklasse der Kommunen zurück'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'commune_type:read']
-      openapi_context:
-        summary: 'Gibt eine OZG Größenklasse der Kommunen zurück'
-  #    put:
-  #      method: 'PUT'
+      openapiContext:
+        description: 'Gibt eine OZG Größenklasse der Kommunen zurück'

@@ -21,6 +21,7 @@ use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdminExtension;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
@@ -67,10 +68,11 @@ class SearchExtension extends AbstractAdminExtension
         $admin = $filter->getAdmin();
         $filter
             ->add(self::FILTER_KEY, CallbackFilter::class, [
-                'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, $value) use ($admin) {
-                    if (!$value['value']) {
+                'callback' => function (ProxyQueryInterface $queryBuilder, $alias, $field, FilterData $data) use ($admin) {
+                    if (!$data->hasValue()) {
                         return false;
                     }
+                    $dataValue = $data->getValue();
                     $entityClass = $admin->getClass();
                     $dataGrid = $admin->getDatagrid();
                     $qb = $queryBuilder->getQueryBuilder();
@@ -78,7 +80,7 @@ class SearchExtension extends AbstractAdminExtension
                     $props = $reflect->getProperties();
                     $orConditions = [];
 
-                    $matchingRecordIds = $this->finder->findMatchingRecordIds($entityClass, (string) $value['value']);
+                    $matchingRecordIds = $this->finder->findMatchingRecordIds($entityClass, (string) $dataValue);
                     $extraSearchFields = null;
                     $resultCount = 0;
                     if (null !== $matchingRecordIds) {
@@ -123,7 +125,7 @@ class SearchExtension extends AbstractAdminExtension
                     if (is_a($entityClass, NamedEntityInterface::class, true)) {
                         $addSearchFields['name'] = false;
                     }
-                    $words = array_filter(array_map('trim', explode(' ', $value['value'])));
+                    $words = array_filter(array_map('trim', explode(' ', $dataValue)));
                     if ($resultCount < 6) {
                         foreach ($props as $refProperty) {
                             if ((false !== $docComment = $refProperty->getDocComment())

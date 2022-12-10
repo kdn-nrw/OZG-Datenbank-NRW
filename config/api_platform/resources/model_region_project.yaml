@@ -7,20 +7,16 @@ App\Entity\ModelRegion\ModelRegionProject:
 
   operations:
     ApiPlatform\Metadata\GetCollection:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['collection:read', 'model_region_project:collection:read']
-      openapi_context:
-        summary: 'Gibt eine Liste mit DMR Umsetzungsprojekten zurück'
+      openapiContext:
+        description: 'Gibt eine Liste mit DMR Umsetzungsprojekten zurück'
       filters: ['App\Api\ApiPlatform\Filter\FulltextSearchFilter']
-  #    post:
-  #      security: 'is_granted("ROLE_ADMIN")'
 
     ApiPlatform\Metadata\Get:
-      normalization_context:
+      normalizationContext:
         enable_max_depth: 1
         groups: ['item:read', 'model_region_project:read']
-      openapi_context:
-        summary: 'Gibt ein DMR Umsetzungsprojekt zurück'
-  #    put:
-  #      method: 'PUT'
+      openapiContext:
+        description: 'Gibt ein DMR Umsetzungsprojekt zurück'
