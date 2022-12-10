@@ -4,7 +4,6 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
@@ -27,7 +26,7 @@
         "sonata-project/doctrine-orm-admin-bundle": "5.x-dev",
         "sonata-project/entity-audit-bundle": "^1.0",
         "sonata-project/formatter-bundle": "5.x-dev",
-        "sonata-project/intl-bundle": "3.x-dev",
+        "sonata-project/intl-bundle": "^2.4.13 || ^3.0.2",
         "sonata-project/translation-bundle": "^3.0",
         "sonata-project/user-bundle": "5.x-dev",
         "stof/doctrine-extensions-bundle": "^1.7",
@@ -75,7 +74,8 @@
         },
         "sort-packages": true,
         "allow-plugins": {
-            "symfony/flex": true
+            "symfony/flex": true,
+            "symfony/runtime": true
         }
     },
     "autoload": {
