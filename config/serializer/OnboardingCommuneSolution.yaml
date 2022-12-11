@@ -10,5 +10,7 @@ App\Entity\Onboarding\OnboardingCommuneSolution:
       groups: [ 'item:read' ]
     enabledEpayment:
       groups: [ 'item:read' ]
+    enabledPmPayment:
+      groups: [ 'item:read' ]
     enabledMunicipalPortal:
       groups: [ 'item:read' ]

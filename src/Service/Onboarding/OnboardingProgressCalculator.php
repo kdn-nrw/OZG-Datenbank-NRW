@@ -23,6 +23,7 @@ use App\Entity\Onboarding\EpaymentProject;
 use App\Entity\Onboarding\FormSolution;
 use App\Entity\Onboarding\MonumentAuthority;
 use App\Entity\Onboarding\OnboardingDocument;
+use App\Entity\Onboarding\PmPayment;
 use App\Entity\Onboarding\Release;
 use App\Entity\Onboarding\ServiceAccount;
 use App\Entity\Onboarding\XtaServer;
@@ -153,7 +154,32 @@ class OnboardingProgressCalculator
                         'town' => 'organisation.town',
                     ];
                     foreach ($mapProperties as $property => $metaProperty) {
-                        if (!in_array($property, $properties) && in_array($metaProperty, $additionalProperties)) {
+                        if (!in_array($property, $properties, false)
+                            && in_array($metaProperty, $additionalProperties, false)) {
+                            $properties[] = $property;
+                        }
+                    }
+                }
+                break;
+            case PmPayment::class:
+                if (empty($properties)) {
+                    $properties = [
+                        //'testIpAddress',
+                        'street', 'zipCode', 'town',
+                        'endpointSystemTest', 'passwordSystemTest',
+                        'endpointSystemProduction', 'passwordSystemProduction',
+                        'pmPaymentServices',
+                    ];
+                } else {
+                    $additionalProperties = $this->getRequiredPropertiesForCompletionFromMetaData(Commune::class);
+                    $mapProperties = [
+                        'street' => 'organisation.street',
+                        'zipCode' => 'organisation.zipCode',
+                        'town' => 'organisation.town',
+                    ];
+                    foreach ($mapProperties as $property => $metaProperty) {
+                        if (!in_array($property, $properties, false)
+                            && in_array($metaProperty, $additionalProperties, false)) {
                             $properties[] = $property;
                         }
                     }

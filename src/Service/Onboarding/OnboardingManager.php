@@ -16,10 +16,14 @@ use App\Entity\MetaData\CalculateCompletenessEntityInterface;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\Onboarding\CommuneInfo;
 use App\Entity\Onboarding\Epayment;
+use App\Entity\Onboarding\EpaymentService;
 use App\Entity\Onboarding\FormSolution;
 use App\Entity\Onboarding\MonumentAuthority;
+use App\Entity\Onboarding\PmPayment;
+use App\Entity\Onboarding\PmPaymentService;
 use App\Entity\Onboarding\XtaServer;
 use App\Entity\StateGroup\Commune;
+use Doctrine\DBAL\Exception\InvalidArgumentException;
 
 class OnboardingManager
 {
@@ -162,7 +166,8 @@ class OnboardingManager
     public function updateAllOnboardingSolutions()
     {
         $communeIdList = $this->updateAllCommuneInfoSolutions();
-        $this->updateEpaymenServices();
+        $this->updateEpaymentServices();
+        $this->updatePmPaymentServices();
         return count($communeIdList);
     }
 
@@ -195,6 +200,7 @@ class OnboardingManager
                         'commune_id' => $communeId,
                         'solution_id' => $solutionId,
                         'enabled_epayment' => 0,
+                        'enabled_pm_payment' => 0,
                         'enabled_municipal_portal' => 1,
                         'modified_at' => $dateString,
                         'created_at' => $dateString,
@@ -207,6 +213,7 @@ class OnboardingManager
             'commune_id' => '%d',
             'solution_id' => '%d',
             'enabled_epayment' => '%d',
+            'enabled_pm_payment' => '%d',
             'enabled_municipal_portal' => '%d',
             'modified_at' => '\'%s\'',
             'created_at' => '\'%s\'',
@@ -222,40 +229,89 @@ class OnboardingManager
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\Persistence\Mapping\MappingException
      */
-    public function updateEpaymenServices($commune = null)
+    public function updateEpaymentServices($commune = null)
     {
+        $this->updateEntityCommuneSolutionReferences(
+            Epayment::class,
+            EpaymentService::class,
+            'enabled_epayment',
+            $commune
+        );
+    }
+
+    /**
+     * @param Commune|int|null $commune
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\Persistence\Mapping\MappingException
+     */
+    public function updatePmPaymentServices($commune = null)
+    {
+        $this->updateEntityCommuneSolutionReferences(
+            PmPayment::class,
+            PmPaymentService::class,
+            'enabled_pm_payment',
+            $commune
+        );
+    }
+
+    /**
+     * @param string $entityClass The onboarding entity class
+     * @param string $refEntityClass The entity class containing the references between
+     * @param string $checkSolutionColumn The enable column to be checked in the onboarding solutions table
+     * @param Commune|int|null $commune
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\Persistence\Mapping\MappingException
+     */
+    private function updateEntityCommuneSolutionReferences(
+        string $entityClass,
+        string $refEntityClass,
+        string $checkSolutionColumn,
+        $commune = null
+    ) {
         // Use SQL statements to increase performance
-        $em = $this->getEntityManager();
+        $em = $this->getEntityManager();#
+        $refClassMetaData = $em->getClassMetadata($refEntityClass);
+        $refAssociations = $refClassMetaData->getAssociationsByTargetClass($entityClass);
+        if (empty($refAssociations)) {
+            throw new InvalidArgumentException(sprintf('There is no reference between %s and %s', $entityClass, $refEntityClass));
+        }
+        $refAssociation = current($refAssociations);
+        $foreignKey = $refAssociation['joinColumns'][0]['name'];
+        $refTableName = $em->getClassMetadata($refEntityClass)->getTableName();
         if (null !== $configuration = $em->getConnection()->getConfiguration()) {
             $configuration->setSQLLogger(null);
         }
-        $ePaymentRepository = $em->getRepository(Epayment::class);
+        $repository = $em->getRepository($entityClass);
         if (null === $commune) {
-            $ePaymentResults = $ePaymentRepository->findAll();
+            $results = $repository->findAll();
         } else {
-            $ePaymentResults = $ePaymentRepository->findBy(['commune' => $commune]);
+            $results = $repository->findBy(['commune' => $commune]);
         }
         $now = date_create();
         $now->setTimezone(new \DateTimeZone('UTC'));
         $dateString = $now->format('Y-m-d H:i:s');
         $connection = $this->getEntityManager()->getConnection();
         $mapReferencesToBeCreated = [];
-        foreach ($ePaymentResults as $ePayment) {
-            $communeId = (int)$ePayment->getCommune()->getId();
-            $entityId = (int)$ePayment->getId();
-            $query = 'SELECT solution_id FROM ozg_onboarding_commune_solution WHERE enabled_epayment = 1 AND commune_id = ' . $communeId;
+        foreach ($results as $entity) {
+            $communeId = (int)$entity->getCommune()->getId();
+            $entityId = (int)$entity->getId();
+            $query = 'SELECT solution_id FROM ozg_onboarding_commune_solution WHERE '.$checkSolutionColumn.' = 1 AND commune_id = ' . $communeId;
             $enabledCommuneSolutionIdList = $connection->fetchAllAssociative($query);
             if (!empty($enabledCommuneSolutionIdList)) {
                 $enabledCommuneSolutionIdList = array_column($enabledCommuneSolutionIdList, 'solution_id');
-                //$sql = "SELECT * FROM ozg_onboarding_epayment_service WHERE epayment_id = $ePaymentId AND solution_id NOT IN (".implode(', ', $enabledCommuneSolutionIdList).")";
+                //$sql = "SELECT * FROM ozg_onboarding_epayment_service WHERE epayment_id = $pmPaymentId AND solution_id NOT IN (".implode(', ', $enabledCommuneSolutionIdList).")";
                 //$existingServices = $connection->fetchAllAssociative($sql);
-                $sql = "DELETE FROM ozg_onboarding_epayment_service WHERE epayment_id = $entityId AND solution_id NOT IN (" . implode(', ', $enabledCommuneSolutionIdList) . ")";
+                $sql = "DELETE FROM $refTableName WHERE $foreignKey = $entityId AND solution_id NOT IN (" . implode(', ', $enabledCommuneSolutionIdList) . ")";
                 $this->executeStatement($sql);
-                $referencesToBeCreated = $this->updateSingleEpaymentServices($ePayment, $enabledCommuneSolutionIdList);
+                $referencesToBeCreated = $this->updateSingleEntityServices($entity, $enabledCommuneSolutionIdList);
                 if (!empty($referencesToBeCreated)) {
                     foreach ($referencesToBeCreated as $solutionId) {
                         $mapReferencesToBeCreated[$entityId][$solutionId] = [
-                            'epayment_id' => $entityId,
+                            $foreignKey => $entityId,
                             'solution_id' => $solutionId,
                             'hidden' => 0,
                             'modified_at' => $dateString,
@@ -264,7 +320,7 @@ class OnboardingManager
                     }
                 }
             } else {
-                $sql = sprintf("DELETE FROM ozg_onboarding_epayment_service WHERE epayment_id = %d", $ePayment->getId());
+                $sql = sprintf("DELETE FROM $refTableName WHERE $foreignKey = %d", $entity->getId());
                 $this->executeStatement($sql);
             }
         }
@@ -273,13 +329,13 @@ class OnboardingManager
             $em->clear();
         }
         $fieldTypes = [
-            'epayment_id' => '%d',
+            $foreignKey => '%d',
             'solution_id' => '%d',
             'hidden' => '%d',
             'modified_at' => '\'%s\'',
             'created_at' => '\'%s\'',
         ];
-        $this->createReferences('ozg_onboarding_epayment_service', $mapReferencesToBeCreated, $fieldTypes);
+        $this->createReferences($refTableName, $mapReferencesToBeCreated, $fieldTypes);
     }
 
     /**
@@ -333,7 +389,7 @@ class OnboardingManager
         $removeServices = [];
         foreach ($ePayment->getEpaymentServices() as $ePaymentService) {
             if (null !== $mappedSolution = $ePaymentService->getSolution()) {
-                // Solution does not exist (any more)
+                // Solution does not exist (anymore)
                 if (!in_array($mappedSolution->getId(), $enabledCommuneSolutionIdList, false)) {
                     $removeServices[] = $ePaymentService;
                 } else {
@@ -355,6 +411,67 @@ class OnboardingManager
                 $ePaymentService->setEpayment($ePayment);
                 $ePaymentService->setSolution($entity);
                 $em->persist($ePaymentService);*/
+            }
+        }
+        return $referencesToBeCreated;
+    }
+
+    /**
+     * Update the service references for a single e-payment entity
+     *
+     * @param AbstractOnboardingEntity $entity
+     * @param array<int, int> $enabledCommuneSolutionIdList
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    private function updateSingleEntityServices(AbstractOnboardingEntity $entity, array $enabledCommuneSolutionIdList): array
+    {
+        if ($entity instanceof PmPayment) {
+            return $this->updateSinglePmPaymentServices($entity, $enabledCommuneSolutionIdList);
+        }
+        if ($entity instanceof Epayment) {
+            return $this->updateSingleEpaymentServices($entity, $enabledCommuneSolutionIdList);
+        }
+        return [];
+    }
+
+    /**
+     * Update the service references for a single e-payment entity
+     *
+     * @param PmPayment $pmPayment
+     * @param array<int, int> $enabledCommuneSolutionIdList
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    private function updateSinglePmPaymentServices(PmPayment $pmPayment, array $enabledCommuneSolutionIdList): array
+    {
+        $em = $this->getEntityManager();
+        $serviceSolutionMap = [];
+        $removeServices = [];
+        foreach ($pmPayment->getPmPaymentServices() as $pmPaymentService) {
+            if (null !== $mappedSolution = $pmPaymentService->getSolution()) {
+                // Solution does not exist (anymore)
+                if (!in_array($mappedSolution->getId(), $enabledCommuneSolutionIdList, false)) {
+                    $removeServices[] = $pmPaymentService;
+                } else {
+                    $serviceSolutionMap[$mappedSolution->getId()] = $pmPaymentService;
+                }
+            }
+        }
+        foreach ($removeServices as $removeService) {
+            $pmPayment->removePmPaymentService($removeService);
+            $em->remove($removeService);
+        }
+        $mappedSolutionIds = array_keys($serviceSolutionMap);
+        $referencesToBeCreated = [];
+        foreach ($enabledCommuneSolutionIdList as $entityId) {
+            if (!in_array($entityId, $mappedSolutionIds, false)) {
+                $referencesToBeCreated[] = (int)$entityId;
+                /* Will cause out of memory
+                $pmPaymentService = new PmPaymentService();
+                $pmPaymentService->setPmPayment($pmPayment);
+                $pmPaymentService->setSolution($entity);
+                $em->persist($pmPaymentService);*/
             }
         }
         return $referencesToBeCreated;
@@ -422,7 +539,8 @@ class OnboardingManager
     public function afterSave(AbstractOnboardingEntity $object)
     {
         if ($object instanceof CommuneInfo && null !== $commune = $object->getCommune()) {
-            $this->updateEpaymenServices($commune);
+            $this->updateEpaymentServices($commune);
+            $this->updatePmPaymentServices($commune);
         }
     }
 }

@@ -529,8 +529,8 @@ app:
         paypal: 'PayPal'
         paydirekt: 'Paydirekt'
       admin_account: Einrichtung dezentraler Admin
-      epayment_services: Dienste
-      services_epayment_services: Dienste
+      onboarding_services: Dienste
+      services_onboarding_services: Dienste
     validation:
       invalid_key_length_first: 'Sie haben angegeben, dass die erste Kontierungsangabe eine Länge von {keyLength} Zeichen hat. Bitte machen Sie für den Dienst {solutionName} eine Angabe, die genau dieser Anzahl von Zeichen entspricht'
       invalid_key_length_second: 'Sie haben angegeben, dass die zweite Kontierungsangabe eine Länge von {keyLength} Zeichen hat. Bitte machen Sie für den Dienst {solutionName} eine Angabe, die genau dieser Anzahl von Zeichen entspricht'
@@ -580,6 +580,45 @@ app:
       x_finance_file_required_choices:
         yes: Ja, die Xfinanzdatei-Erzeugung ist gewünscht
         no: Nein, die Xfinanzdatei-Erzeugung ist nicht gewünscht
+  pm_payment:
+    object_name: pmPayment
+    list: pmPayment
+    create: pmPayment erfassen
+    tabs:
+      mandator: Kundenmandant
+      custom_fields: Weitere Daten
+      services: Dienste
+    actions:
+      ask_question: Frage stellen
+      show_questions: Rückfragen
+    groups:
+      general: Basisdaten
+      general_description: ''
+      systems: Systeme
+      pm_payment_services: Dienste
+      services_pm_payment_services: Dienste
+    entity:
+      description: Beschreibung
+      commune: Name des Mandanten
+      commune_name: Kommune
+      official_commune_key: Amtlicher Gemeindeschlüssel
+      street: Straße, Hausnummer
+      zip_code: PLZ
+      town: Ort
+      email: E-Mail-Adresse
+      phone_number: Telefon
+      modified_at: Letzter Eintrag
+      status: Status
+      custom_values: Benutzerdefinierte Werte
+      endpoint: pmPayment Endpunkt
+      password: SALT-Passwort
+      system_test: Testsystem
+      system_production: Produktivsystem
+      endpoint_system_test: 'Testsystem: pmPayment Endpunkt'
+      endpoint_system_production: 'Produktivsystem: pmPayment Endpunkt'
+      password_system_test: 'Testsystem: SALT-Passwort'
+      password_system_production: 'Produktivsystem: SALT-Passwort'
+      pm_payment_services: Dienste
   form_solution:
     object_name: Formsolution
     list: Kommunalportal Formsolutions
@@ -639,7 +678,8 @@ app:
       solution: Dienst
       commune_info: Service Basisdaten
       commune: Kommune
-      enabled_epayment: Dienst nutzen
+      enabled_epayment: Dienst nutzen (ePayBL)
+      enabled_pm_payment: Dienst nutzen (pmPayment)
       enabled_municipal_portal: Im Kommunalportal verfügbar
   onboarding_service:
     object_name: Service Dienst
@@ -796,6 +836,27 @@ app:
       payers: Kostenträger anst
       product_description: Produktbeschreibung/CO-Kontierungssatz psp
       tax_number: Steuer-Kennzeichen stsl
+  pm_payment_service:
+    object_name: pmPayment Dienst
+    list: pmPayment Dienste
+    list_services: Dienste
+    list_services_status: Status der Dienste im pmPayment/Eintrag
+    create: pmPayment Dienst anlegen
+    groups:
+      general: Basisdaten
+      optional: Optional Daten
+      optional_description: '<p>Wenn Sie einen eindeutigen Verwendungszweck wünschen, d.h. dieser soll eine eindeutige Nummer haben, dann geben Sie hier bitte einen Verwendungszweck an):</p>'
+    entity:
+      solution: Dienst
+      pm_payment: pmPayment
+#      pm_payment_tooltip: Achtung, diese Angabe muss exakt mit dem Verwendungszweck in pmPayment übereinstimmen, hierbei ist zwingend auch Groß- und Kleinschreibung zu beachten)
+#      payment_method_prefix_tooltip: z.B. SPERRMUELL)
+#      payment_method_start_nr_tooltip: Sie können bei 1 starten oder auch bei einer anderen Zahl, klären Sie dies bitte mit Ihrer Kasse) (Feldvalidierung: nur positive ganze Zahlen)
+#      payment_method_end_nr_tooltip: Da auch jede abgebrochene Zahlung gezählt wird, wählen Sie bitte eine Range, die groß genug ist!) (Feldvalidierung: nur positive ganze Zahlen)
+      payment_method_name: Name des Bezahlverfahrens
+      payment_method_prefix: Präfix
+      payment_method_start_nr: Startzahl
+      payment_method_end_nr: Endzahl
   service_account:
     object_name: Servicekonto NRW
     list: Servicekonto NRW
@@ -1054,6 +1115,7 @@ app:
         commune_info_update: 'Kommunalportal Basisdaten - Update'
         form_solution_update: 'Kommunalportal Formsolutions - Update'
         epayment_update: 'Kommunalportal ePayBL - Update'
+        pm_payment_update: 'Kommunalportal pmPayment - Update'
         release_update: 'Go-Live - Update'
         onboarding_data_complete_update: 'Onboarding Service Plattformen: Die Kommune XY bestätigt, alle notwendigen Felder ausgefüllt zu haben'
         xta_server_update: 'Service Untere Bauaufsichtsbehörde - Update'

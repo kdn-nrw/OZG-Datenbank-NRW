@@ -7,10 +7,12 @@ simple_things_entity_audit:
     - App\Entity\Onboarding\EpaymentService
     - App\Entity\Onboarding\FormSolution
     - App\Entity\Onboarding\Release
-    - App\Entity\Onboarding\ServiceAccount
     - App\Entity\Onboarding\MonumentAuthority
-    - App\Entity\Onboarding\XtaServer
     - App\Entity\Onboarding\OnboardingDocument
+    - App\Entity\Onboarding\PmPayment
+    - App\Entity\Onboarding\PmPaymentService
+    - App\Entity\Onboarding\ServiceAccount
+    - App\Entity\Onboarding\XtaServer
     - App\Entity\ModelRegion\ModelRegionProject
     - App\Entity\StateGroup\Commune
     - App\Entity\StateGroup\ServiceProvider
