@@ -27,6 +27,7 @@ use App\Model\EmailTemplate\OnboardingDataCompleteUpdateModel;
 use App\Model\EmailTemplate\OnboardingEpaymentUpdateModel;
 use App\Model\EmailTemplate\OnboardingFormSolutionUpdateModel;
 use App\Model\EmailTemplate\OnboardingMonumentAuthorityUpdateModel;
+use App\Model\EmailTemplate\OnboardingPmPaymentUpdateModel;
 use App\Model\EmailTemplate\OnboardingReleaseUpdateModel;
 use App\Model\EmailTemplate\OnboardingServiceAccountUpdateModel;
 use App\Model\EmailTemplate\OnboardingXtaServerUpdateModel;
@@ -259,8 +260,7 @@ class EmailTemplateManager
      */
     public function getEmailTemplateByKey(string $key): ?EmailTemplate
     {
-        $repository = $this->getEntityManager()->getRepository(EmailTemplate::class);
-        return $repository->findOneBy(['templateKey' => $key]);
+        return $this->getEntityManager()->getRepository(EmailTemplate::class)->findOneBy(['templateKey' => $key]);
     }
 
     /**
@@ -285,6 +285,7 @@ class EmailTemplateManager
             OnboardingServiceAccountUpdateModel::TEMPLATE_KEY => OnboardingServiceAccountUpdateModel::class,
             OnboardingCommuneInfoUpdateModel::TEMPLATE_KEY => OnboardingCommuneInfoUpdateModel::class,
             OnboardingEpaymentUpdateModel::TEMPLATE_KEY => OnboardingEpaymentUpdateModel::class,
+            OnboardingPmPaymentUpdateModel::TEMPLATE_KEY => OnboardingPmPaymentUpdateModel::class,
             OnboardingFormSolutionUpdateModel::TEMPLATE_KEY => OnboardingFormSolutionUpdateModel::class,
             OnboardingReleaseUpdateModel::TEMPLATE_KEY => OnboardingReleaseUpdateModel::class,
             OnboardingDataCompleteUpdateModel::TEMPLATE_KEY => OnboardingDataCompleteUpdateModel::class,
@@ -361,6 +362,7 @@ class EmailTemplateManager
                                 $properties['cssClass'] = 'bg-primary';
                             }
                             if ($entity instanceof SluggableInterface) {
+                                /** @noinspection PhpUnhandledExceptionInspection */
                                 $properties['slug'] = 'lorem-ipsum-' . random_int(1, 1000);
                             }
                             $propertyAccessor = PropertyAccess::createPropertyAccessor();
@@ -406,7 +408,7 @@ class EmailTemplateManager
                 $entity = clone $storedEntity;
             }
         } catch (NonUniqueResultException $e) {
-            $entity = null;
+            unset($e);
         }
         return $entity;
     }

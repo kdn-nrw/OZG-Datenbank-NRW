@@ -71,6 +71,26 @@
         }
       }
     }
+    &.three-col {
+      &::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+      .sonata-collection-row {
+        float: left;
+        width: calc(33.333% - 10px);
+        padding: 15px;
+        border: 2px solid $gray-200;
+        margin-bottom: 20px;
+        &:nth-child(2n+1) {
+          clear: left;
+        }
+        &:nth-child(2n+2) {
+          margin-left: 20px;
+        }
+      }
+    }
   }
 }
 .collection-item-delete {
@@ -159,9 +179,20 @@
           border-left: 1px solid #ccc;
           flex: 0 0 25%;
           max-width: 25%;
+          .ct-col-auto {
+            flex: 0 1 auto;
+          }
+          &.ct-col-17 {
+            flex: 0 0 17%;
+            max-width: 17%;
+          }
           &.ct-col-50 {
             flex: 0 0 50%;
             max-width: 50%;
+          }
+          &.ct-col-66 {
+            flex: 0 0 60%;
+            max-width: 60%;
           }
           &.ct-col-75 {
             flex: 0 0 75%;
@@ -280,6 +311,70 @@
     }
     > .help-block {
       order: 0;
+    }
+  }
+}
+.pm-payment-group-systems {
+  @media (min-width: 1200px) {
+    .sonata-ba-collapsed-fields {
+      $label-left-width: 150px;
+      $app-field-table-border-color: #ccc;
+      padding-left: $label-left-width;
+      display: flex;
+      flex-wrap: wrap;
+      border: 1px solid $app-field-table-border-color;
+      position: relative;
+      .help-block {
+        position: absolute;
+        left: 0;
+        text-align: right;
+        width: $label-left-width;
+        font-weight: bold;
+        padding-right: 5px;
+        top: 40px;
+        color: #000;
+      }
+      .form-group {
+        flex: 1 1 50%;
+        border-left: 1px solid $app-field-table-border-color;
+        margin: 0;
+        .sonata-ba-field {
+          padding: 4px 8px;
+        }
+      }
+      .row-1 {
+        border-bottom: 1px solid $app-field-table-border-color;
+        .control-label {
+          display: block;
+          width: 100%;
+          padding: 4px 8px;
+          border-bottom: 1px solid $app-field-table-border-color;
+        }
+      }
+      .form-group-endpoint {
+        .sonata-ba-field {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        }
+        .form-control {
+          order: 1;
+        }
+      }
+      .form-group-password {
+        .help-block {
+          display: none;
+        }
+      }
+      .row-2 {
+        .help-block {
+          top: auto;
+          bottom: 2px;
+        }
+        .control-label {
+          display: none;
+        }
+      }
     }
   }
 }

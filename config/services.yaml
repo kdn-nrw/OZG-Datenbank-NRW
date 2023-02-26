@@ -980,6 +980,36 @@ services:
         filter_persister: App\Form\Filter\GroupedSessionFilterPersister
     public: true
 
+  App\Admin\Onboarding\PmPaymentAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\PmPayment
+      - App\Controller\Onboarding\PmPaymentAdminController
+    tags:
+      - name: sonata.admin
+        manager_type: orm
+        label: app.pm_payment.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
+    public: true
+
+  App\Admin\Onboarding\PmPaymentServiceAdmin:
+    arguments:
+      - ~
+      - App\Entity\Onboarding\PmPaymentService
+      - ~
+    tags:
+      - name:         sonata.admin
+        manager_type: orm
+        label:        app.pm_payment_service.list
+        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
+        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
+        persist_filters: true
+        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
+    public: true
+
   App\Admin\Onboarding\ServiceAccountAdmin:
     tags:
       - name: sonata.admin

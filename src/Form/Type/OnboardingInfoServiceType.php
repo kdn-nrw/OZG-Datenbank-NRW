@@ -62,7 +62,7 @@ class OnboardingInfoServiceType extends AbstractType
             },
             'disabled' => $options['enable_solution_readonly'],
             'row_attr' => [
-                'class' => 'form-group-col ct-col-75',
+                'class' => 'form-group-col ct-col-66',
             ],
         ]);
         $builder->add('enabledEpayment', CheckboxType::class, [
@@ -72,7 +72,17 @@ class OnboardingInfoServiceType extends AbstractType
                 'align_with_widget' => true,
             ],
             'row_attr' => [
-                'class' => 'form-group-col',
+                'class' => 'form-group-col ct-col-17',
+            ],
+        ]);
+        $builder->add('enabledPmPayment', CheckboxType::class, [
+            'label' => 'app.onboarding_commune_solution.entity.enabled_pm_payment',
+            'required' => false,
+            'attr' => [
+                'align_with_widget' => true,
+            ],
+            'row_attr' => [
+                'class' => 'form-group-col ct-col-17',
             ],
         ]);
         /*

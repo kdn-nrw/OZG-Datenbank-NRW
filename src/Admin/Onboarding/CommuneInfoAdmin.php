@@ -102,10 +102,10 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin implements AuditedEntityA
                 'label' => 'app.epayment.tabs.services',
                 'tab' => true,
             ])
-            ->with('epayment_services', [
+            ->with('onboarding_services', [
                 'label' => false,
                 //'class' => 'col-md-12',
-                'class' => 'col-md-12 box-collection-table two-col box-collection-commune-solutions',
+                'class' => 'col-md-12 box-collection-table three-col box-collection-commune-solutions',
             ])
             ->add('communeSolutions', \Symfony\Component\Form\Extension\Core\Type\CollectionType::class, [
                 'label' => 'app.commune_info.entity.commune_solutions',

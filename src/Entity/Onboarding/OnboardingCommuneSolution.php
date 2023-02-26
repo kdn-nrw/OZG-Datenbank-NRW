@@ -63,6 +63,13 @@ class OnboardingCommuneSolution extends BaseEntity implements
     /**
      * @var bool
      *
+     * @ORM\Column(name="enabled_pm_payment", type="boolean")
+     */
+    protected $enabledPmPayment = false;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="enabled_municipal_portal", type="boolean")
      */
     protected $enabledMunicipalPortal = true;
@@ -135,6 +142,22 @@ class OnboardingCommuneSolution extends BaseEntity implements
     public function setEnabledEpayment(bool $enabledEpayment): void
     {
         $this->enabledEpayment = $enabledEpayment;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabledPmPayment(): bool
+    {
+        return $this->enabledPmPayment;
+    }
+
+    /**
+     * @param bool $enabledPmPayment
+     */
+    public function setEnabledPmPayment(bool $enabledPmPayment): void
+    {
+        $this->enabledPmPayment = $enabledPmPayment;
     }
 
     /**

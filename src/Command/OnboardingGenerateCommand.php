@@ -18,6 +18,7 @@ use App\Entity\Onboarding\CommuneInfo;
 use App\Entity\Onboarding\Epayment;
 use App\Entity\Onboarding\FormSolution;
 use App\Entity\Onboarding\MonumentAuthority;
+use App\Entity\Onboarding\PmPayment;
 use App\Entity\Onboarding\Release;
 use App\Entity\Onboarding\ServiceAccount;
 use App\Entity\Onboarding\XtaServer;
@@ -57,6 +58,7 @@ class OnboardingGenerateCommand extends Command
         $importedRowCount = 0;
         $importedRowCount += $this->onboardingManager->createItems(CommuneInfo::class);
         $importedRowCount += $this->onboardingManager->createItems(Epayment::class);
+        $importedRowCount += $this->onboardingManager->createItems(PmPayment::class);
         $this->onboardingManager->updateAllOnboardingSolutions();
         $importedRowCount += $this->onboardingManager->createItems(FormSolution::class);
         $importedRowCount += $this->onboardingManager->createItems(Release::class);
