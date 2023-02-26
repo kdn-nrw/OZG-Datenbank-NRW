@@ -16,7 +16,7 @@ class CommuneInfoAdmin extends AbstractOnboardingAdmin
 {
     protected $baseRoutePattern = 'onboarding/basis';
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_onboarding_commune_info';
     }

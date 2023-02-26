@@ -205,16 +205,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         return $this->generateUrl($name, $parameters, $referenceType);
     }
 
-    public function generateUrl(string $name, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
-    {
-        if (in_array($name, ['show', 'list', 'export'], false)) {
-            $route = $this->getRoutePrefix() . '_' . $name;
-            return $this->getRouteGenerator()->generate($route, $parameters, $referenceType);
-        }
-        return parent::generateUrl($name, $parameters, $referenceType);
-    }
-
-    abstract protected function getRoutePrefix(): string;
+    abstract public function getRoutePrefix(): string;
 
     /**
      * Configures a list of default sort values.

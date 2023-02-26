@@ -357,6 +357,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
     /**
      * @return \Iterator
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function getDataSourceIterator(): \Iterator
     {
@@ -397,6 +398,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function update(object $object): object
     {
@@ -418,6 +420,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function create(object $object): object
     {
@@ -441,6 +444,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function delete(object $object): void
     {
@@ -789,6 +793,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function generateObjectUrl(string $name, object $object, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
     {
@@ -797,11 +802,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
         return $this->generateUrl($name, $parameters, $referenceType);
     }
 
-
-    /**
-     * @final
-     */
-    public function generateUrl(string $name, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
+    final public function generateUrl(string $name, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         return $this->getRouteGenerator()->generateUrl($this, $name, $parameters, $referenceType);
     }
@@ -827,6 +828,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function getFormBuilder(): FormBuilderInterface
     {
@@ -886,6 +888,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
      *
      * @phpstan-return T|null
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function getObject($id): ?object
     {
@@ -1308,9 +1311,8 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @psalm-suppress PossiblyNullArgument Will be solved in NEXT_MAJOR
-     * @final
      */
-    final public function addChild(AdminInterface $child, string $field): void
+    final public function addChild(AdminInterface $child, ?string $field = null): void
     {
         $parentAdmin = $this;
         while ($parentAdmin->isChild() && $parentAdmin->getCode() !== $child->getCode()) {
@@ -1441,10 +1443,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
     }
 
 
-    /**
-     * @final
-     */
-    public function getClassnameLabel(): string
+    final public function getClassnameLabel(): string
     {
         if (null === $this->classnameLabel) {
             throw new \LogicException(sprintf(
@@ -1592,6 +1591,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function isGranted($name, ?object $object = null): bool
     {
@@ -1783,6 +1783,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @final
+     * TODO: remove overridden functions; make final
      */
     public function hasAccess(string $action, ?object $object = null): bool
     {

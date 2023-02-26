@@ -20,18 +20,4 @@ use App\Controller\ControllerDownloadTrait;
 class MonumentAuthorityAdminController extends AbstractOnboardingAdminController
 {
     use ControllerDownloadTrait;
-
-    /**
-     * Contextualize the admin class depends on the current request.
-     *
-     * @throws \RuntimeException
-     */
-    protected function configure()
-    {
-        parent::configure();
-        $templateRegistry = $this->admin->getTemplateRegistry();
-        if (null !== $templateRegistry) {
-            $templateRegistry->setTemplate('edit', 'Onboarding/MonumentAuthority/edit.html.twig');
-        }
-    }
 }

@@ -16,7 +16,7 @@ class DataclearingAdmin extends AbstractOnboardingAdmin
 {
     protected $baseRoutePattern = 'onboarding/dataclearing';
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_onboarding_dataclearing';
     }

@@ -322,7 +322,7 @@ class SolutionAdmin extends AbstractFrontendAdmin implements EnableFullTextSearc
     }
 
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_solution';
     }

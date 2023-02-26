@@ -16,7 +16,7 @@ class EpaymentAdmin extends AbstractOnboardingAdmin
 {
     protected $baseRoutePattern = 'onboarding/epaybl';
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_onboarding_epayment';
     }

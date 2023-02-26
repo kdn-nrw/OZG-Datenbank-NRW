@@ -32,7 +32,9 @@ file that was distributed with this source code.
                         {% endif %}
 
                         {% for form_field_name in form_group.fields|filter(form_field_name => form[form_field_name] is defined) %}
-                            {{ form_row(form[form_field_name]) }}
+                            {% if not form[form_field_name].rendered %}
+                                {{ form_row(form[form_field_name]) }}
+                            {% endif %}
                         {% else %}
                             {% if form_group.empty_message != false %}
                                 {% if form_group.empty_message_translation_domain is defined and form_group.empty_message_translation_domain is same as(false) %}
@@ -56,7 +58,9 @@ file that was distributed with this source code.
                 {% endif %}
 
                 {% for form_field_name in form_group.fields|filter(form_field_name => form[form_field_name] is defined) %}
-                    {{ form_row(form[form_field_name]) }}
+                    {% if not form[form_field_name].rendered %}
+                        {{ form_row(form[form_field_name]) }}
+                    {% endif %}
                 {% else %}
                     {% if form_group.empty_message != false %}
                         {% if form_group.empty_message_translation_domain is defined and form_group.empty_message_translation_domain is same as(false) %}

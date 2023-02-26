@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace App\Admin\Frontend\Extension;
 
+use App\Admin\Extension\ImplementationProjectExtension as BackendImplementationProjectExtension;
 use App\Builder\CustomDatagridBuilder;
 use App\Entity\Subject;
-use Sonata\AdminBundle\Admin\AbstractAdminExtension;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 
 /**
  * Frontend admin extension for custom datagrid filters
  */
-class ImplementationProjectExtension extends AbstractAdminExtension
+class ImplementationProjectExtension extends BackendImplementationProjectExtension
 {
 
     /**
@@ -29,6 +29,7 @@ class ImplementationProjectExtension extends AbstractAdminExtension
      */
     public function configureDatagridFilters(DatagridMapper $filter): void
     {
+        parent::configureDatagridFilters($filter);
         $admin = $filter->getAdmin();
         if (($builder = $admin->getDatagridBuilder()) instanceof CustomDatagridBuilder) {
             /** @var CustomDatagridBuilder $builder */

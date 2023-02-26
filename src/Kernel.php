@@ -7,12 +7,11 @@ use App\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
 use App\DependencyInjection\Compiler\AdminTranslatorStrategyCompilerPass;
 use App\DependencyInjection\Compiler\ApiManagerCompilerPass;
 use App\DependencyInjection\Compiler\ChartStatisticsCompilerPass;
-use App\DependencyInjection\Compiler\CustomFieldAdminCompilerPass;
+use App\DependencyInjection\Compiler\AdminConfigurationCompilerPass;
 use App\Statistics\ChartStatisticsProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
-use Symfony\Component\Routing\RouteCollectionBuilder;
 
 class Kernel extends BaseKernel
 {
@@ -34,7 +33,7 @@ class Kernel extends BaseKernel
         $container->addCompilerPass(new AddAuditEntityCompilerPass());
         $container->addCompilerPass(new ChartStatisticsCompilerPass());
         $container->addCompilerPass(new ApiManagerCompilerPass());
-        $container->addCompilerPass(new CustomFieldAdminCompilerPass());
+        $container->addCompilerPass(new AdminConfigurationCompilerPass());
         $container->addCompilerPass(new AdminTranslatorStrategyCompilerPass());
     }
 }

@@ -16,7 +16,7 @@ class ServiceAccountAdmin extends AbstractOnboardingAdmin
 {
     protected $baseRoutePattern = 'onboarding/servicekonto';
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_onboarding_service_account';
     }

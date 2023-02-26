@@ -203,7 +203,7 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
     }
 
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_servicesystem';
     }

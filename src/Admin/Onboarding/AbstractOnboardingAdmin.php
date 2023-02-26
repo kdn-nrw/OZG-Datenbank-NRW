@@ -17,12 +17,10 @@ use App\Admin\CustomFieldAdminInterface;
 use App\Admin\StateGroup\CommuneAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\DependencyInjection\InjectionTraits\InjectSecurityTrait;
-use App\Entity\MetaData\AbstractMetaItem;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\User;
 use App\Service\MetaData\InjectMetaDataManagerTrait;
 use App\Service\Onboarding\InjectOnboardingManagerTrait;
-use App\Util\SnakeCaseConverter;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -39,7 +37,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormBuilderInterface;
 
 abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements CustomFieldAdminInterface
 {
@@ -53,6 +50,16 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
      * @var bool|int[]
      */
     protected $currentUserCommuneLimits;
+
+    /**
+     * Hook to run after initialization.
+     */
+    protected function configure(): void
+    {
+        parent::configure();
+        $templateRegistry = $this->getTemplateRegistry();
+        $templateRegistry->setTemplate('edit', 'Onboarding/edit.html.twig');
+    }
 
     protected function configureFormFields(FormMapper $form): void
     {
@@ -94,46 +101,6 @@ abstract class AbstractOnboardingAdmin extends AbstractAppAdmin implements Custo
                 'required' => false,
             ]);
         }
-    }
-
-    public function getFormBuilder(): FormBuilderInterface
-    {
-        $formBuilder = parent::getFormBuilder();
-        $metaItem = $this->metaDataManager->getObjectClassMetaData($this->getClass());
-        if (null === $metaItem) {
-            return $formBuilder;
-        }
-
-        $data = [
-            AbstractMetaItem::META_TYPE_GROUP => $this->getFormGroups(),
-            AbstractMetaItem::META_TYPE_TAB => $this->getFormTabs()
-        ];
-        foreach ($data as $metaType => &$metaTypeData) {
-            if (empty($metaTypeData)) {
-                continue;
-            }
-            foreach ($metaTypeData as $name => &$options) {
-                $groupKey = SnakeCaseConverter::camelCaseToSnakeCase(str_replace('.', '_', $name));
-                $metaKey = $metaType . '_' . $groupKey;
-                $property = $metaItem->getMetaItemProperty($metaKey);
-                if (null !== $property) {
-                    $description = $property->getDescription();
-                    if ($options['label'] !== false && $labelKey = $property->getLabelKey()) {
-                        $options['label'] = $this->trans($labelKey);
-                        $options['translation_domain'] = false;
-                    }
-                    if ($description) {
-                        $options['description'] = $description;
-                    }
-                }
-            }
-            unset($options);
-        }
-        unset($metaTypeData);
-        $this->setFormGroups($data[AbstractMetaItem::META_TYPE_GROUP]);
-        $this->setFormTabs($data[AbstractMetaItem::META_TYPE_TAB]);
-
-        return $formBuilder;
     }
 
     /**

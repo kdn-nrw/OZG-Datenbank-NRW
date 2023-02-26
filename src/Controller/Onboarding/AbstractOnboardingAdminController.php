@@ -40,8 +40,6 @@ abstract class AbstractOnboardingAdminController extends CRUDController
         if (!$this->admin) {
             $this->configureAdmin($request);
         }
-        $templateRegistry = $this->admin->getTemplateRegistry();
-        $templateRegistry->setTemplate('edit', 'Onboarding/edit.html.twig');
     }
 
     /**

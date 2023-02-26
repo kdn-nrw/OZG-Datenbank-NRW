@@ -34,6 +34,15 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
     use CommuneTrait;
     use SpecializedProcedureTrait;
 
+    /**
+     * Hook to run after initialization.
+     */
+    protected function configure(): void
+    {
+        parent::configure();
+        $this->classnameLabel = 'efile';
+    }
+
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -194,15 +203,5 @@ class EFileAdmin extends AbstractAppAdmin implements ExtendedSearchAdminInterfac
         $settings->addExcludeFields(['specializedProcedures.manufacturers']);
         $settings->setAdditionFields(['manufacturers']);
         return $settings;
-    }
-
-    /**
-     * Returns the classname label.
-     *
-     * @return string the classname label
-     */
-    public function getClassnameLabel(): string
-    {
-        return 'efile';
     }
 }

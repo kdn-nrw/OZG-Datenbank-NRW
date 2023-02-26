@@ -184,7 +184,7 @@ class ImplementationProjectAdmin extends AbstractFrontendAdmin implements Enable
     }
 
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_implementationproject';
     }

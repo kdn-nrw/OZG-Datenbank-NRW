@@ -43,6 +43,16 @@ class MonumentAuthorityAdmin extends AbstractOnboardingAdmin implements AuditedE
 
     protected $baseRoutePattern = 'onboarding/monument-authority';
 
+    /**
+     * Hook to run after initialization.
+     */
+    protected function configure(): void
+    {
+        parent::configure();
+        $templateRegistry = $this->getTemplateRegistry();
+        $templateRegistry->setTemplate('edit', 'Onboarding/MonumentAuthority/edit.html.twig');
+    }
+
     protected function configureFormGroups(FormMapper $form)
     {
         $form

@@ -44,6 +44,16 @@ class XtaServerAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
 
     protected $baseRoutePattern = 'onboarding/xta';
 
+    /**
+     * Hook to run after initialization.
+     */
+    protected function configure(): void
+    {
+        parent::configure();
+        $templateRegistry = $this->getTemplateRegistry();
+        $templateRegistry->setTemplate('edit', 'Onboarding/Xta/edit.html.twig');
+    }
+
     protected function configureFormGroups(BaseGroupedMapper $form)
     {
         $form

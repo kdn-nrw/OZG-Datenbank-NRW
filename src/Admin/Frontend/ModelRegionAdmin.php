@@ -60,7 +60,7 @@ class ModelRegionAdmin extends AbstractFrontendAdmin implements EnableFullTextSe
     }
 
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_modelregion';
     }

@@ -22,6 +22,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class EFileStorageTypeAdmin extends AbstractAppAdmin implements EnableFullTextSearchAdminInterface
 {
 
+    /**
+     * Hook to run after initialization.
+     */
+    protected function configure(): void
+    {
+        parent::configure();
+        $this->classnameLabel = 'efileStorageType';
+    }
+
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -51,15 +60,5 @@ class EFileStorageTypeAdmin extends AbstractAppAdmin implements EnableFullTextSe
         $show
             ->add('name')
             ->add('description');
-    }
-
-    /**
-     * Returns the classname label.
-     *
-     * @return string the classname label
-     */
-    public function getClassnameLabel(): string
-    {
-        return 'efileStorageType';
     }
 }

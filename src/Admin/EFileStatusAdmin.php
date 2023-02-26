@@ -16,12 +16,11 @@ class EFileStatusAdmin extends StatusAdmin
 {
 
     /**
-     * Returns the classname label.
-     *
-     * @return string the classname label
+     * Hook to run after initialization.
      */
-    public function getClassnameLabel(): string
+    protected function configure(): void
     {
-        return 'efileStatus';
+        parent::configure();
+        $this->classnameLabel = 'efileStatus';
     }
 }

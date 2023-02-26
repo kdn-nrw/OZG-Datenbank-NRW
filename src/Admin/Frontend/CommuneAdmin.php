@@ -230,7 +230,7 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
     }
 
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_commune';
     }

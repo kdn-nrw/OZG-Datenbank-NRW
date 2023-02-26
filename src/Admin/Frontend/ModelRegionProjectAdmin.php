@@ -141,7 +141,7 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
         return parent::isGranted($name, $object);
     }
 
-    protected function getRoutePrefix(): string
+    public function getRoutePrefix(): string
     {
         return 'frontend_app_modelregionproject';
     }
