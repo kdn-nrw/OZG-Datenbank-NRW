@@ -13,11 +13,14 @@ declare(strict_types=1);
 
 namespace App\Admin\Extension;
 
+use App\Admin\AbstractContextAwareAdmin;
 use App\Admin\EnableFullTextSearchAdminInterface;
+use App\Builder\CustomDatagridBuilder;
+use App\Datagrid\CustomDatagrid;
 use App\Datagrid\FulltextSearchDatagridInterface;
 use App\Entity\Base\NamedEntityInterface;
+use App\Form\Filter\GroupedSessionFilterPersister;
 use App\Search\Finder;
-use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdminExtension;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -56,6 +59,16 @@ class SearchExtension extends AbstractAdminExtension
             $keys = $filter->keys();
             $this->addFullTextDatagridFilter($filter);
             $filter->reorder([self::FILTER_KEY] + $keys);
+        }
+        // Clean persisted filter value for grouped session filter persisters
+        if ($admin instanceof AbstractContextAwareAdmin && $admin->hasFilterPersister()#
+            && $admin->getFilterPersister() instanceof GroupedSessionFilterPersister
+            && ($builder = $admin->getDatagridBuilder()) instanceof CustomDatagridBuilder) {
+            /** @var CustomDatagridBuilder $builder */
+            $datagrid = $builder->getCustomDatagrid();
+            if ($datagrid instanceof CustomDatagrid) {
+                $datagrid->cleanValues();
+            }
         }
     }
 

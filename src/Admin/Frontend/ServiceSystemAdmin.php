@@ -202,20 +202,6 @@ class ServiceSystemAdmin extends AbstractFrontendAdmin implements EnableFullText
         return parent::isGranted($name, $object);
     }
 
-    protected function buildDatagrid(): ?DatagridInterface
-    {
-        $datagrid = parent::buildDatagrid();
-        /** @var CustomDatagrid $datagrid */
-        if ($datagrid && !$datagrid->hasFilterMenu('situation.subject')) {
-            $modelManager = $this->getModelManager();
-            //$situations = $modelManager->findBy(Situation::class);
-            //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
-            $subjects = $modelManager->findBy(Subject::class);
-            $datagrid->addFilterMenu('situation.subject', $subjects, 'app.situation.entity.subject', Subject::class);
-        }
-        return $datagrid;
-    }
-
 
     protected function getRoutePrefix(): string
     {

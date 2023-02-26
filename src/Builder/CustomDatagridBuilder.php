@@ -47,6 +47,8 @@ class CustomDatagridBuilder implements DatagridBuilderInterface
 
     private bool $csrfTokenEnabled;
 
+    private CustomDatagrid $customDatagrid;
+
     public function __construct(
         FormFactoryInterface $formFactory,
         FilterFactoryInterface $filterFactory,
@@ -141,6 +143,11 @@ class CustomDatagridBuilder implements DatagridBuilderInterface
         $datagrid->addFilter($filter);
     }
 
+    final public function getCustomDatagrid(): ?CustomDatagrid
+    {
+        return $this->customDatagrid;
+    }
+
     public function getBaseDatagrid(AdminInterface $admin, array $values = []): DatagridInterface
     {
         $pager = $this->getPager($admin->getPagerType());
@@ -158,7 +165,8 @@ class CustomDatagridBuilder implements DatagridBuilderInterface
         }
         /** @phpstan-var ProxyQueryInterface<object> $query */
 
-        return new CustomDatagrid($query, $admin->getList(), $pager, $formBuilder, $values);
+        $this->customDatagrid = new CustomDatagrid($query, $admin->getList(), $pager, $formBuilder, $values);
+        return $this->customDatagrid;
     }
 
     /**

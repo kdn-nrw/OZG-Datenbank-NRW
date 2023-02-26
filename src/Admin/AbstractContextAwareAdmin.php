@@ -200,23 +200,6 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     }
 
     /**
-     * Initialize data grid
-     * Clean persistent group filter values
-     */
-    protected function buildDatagrid(): ?DatagridInterface
-    {
-        if ($this->datagrid) {
-            return $this->datagrid;
-        }
-        parent::buildDatagrid();
-        if ($this->datagrid instanceof CustomDatagrid && $this->hasFilterPersister()
-            && $this->getFilterPersister() instanceof GroupedSessionFilterPersister) {
-            $this->datagrid->cleanValues();
-        }
-        return $this->datagrid;
-    }
-
-    /**
      * @param string|null $id
      * @param array $parameters
      * @param string|null $domain

@@ -194,6 +194,10 @@ services:
         persist_filters: true
     public: true
 
+  App\Admin\Frontend\Extension\CommuneExtension:
+    tags:
+      - { name: sonata.admin.extension, target: App\Admin\Frontend\CommuneAdmin }
+
   App\Admin\ConfidenceLevelAdmin:
     tags:
       - name:         sonata.admin
@@ -354,6 +358,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
         persist_filters: true
     public: true
+
+  App\Admin\Frontend\Extension\ImplementationProjectExtension:
+    tags:
+      - { name: sonata.admin.extension, target: App\Admin\Frontend\ImplementationProjectAdmin }
 
   App\Admin\Extension\ImplementationProjectExtension:
     tags:
@@ -675,6 +683,10 @@ services:
         persist_filters: true
     public: true
 
+  App\Admin\Frontend\Extension\ServiceSystemExtension:
+    tags:
+      - { name: sonata.admin.extension, target: App\Admin\Frontend\ServiceSystemAdmin }
+
   App\Admin\ServiceAdmin:
     calls:
       - [setTemplate, ['show', 'ServiceAdmin/show.html.twig']]
@@ -701,6 +713,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
         persist_filters: true
     public: true
+
+  App\Admin\Frontend\Extension\ServiceExtension:
+    tags:
+      - { name: sonata.admin.extension, target: App\Admin\Frontend\ServiceAdmin }
 
   App\Admin\StateGroup\ServiceProviderAdmin:
     calls:
@@ -783,6 +799,10 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
         persist_filters: true
     public: true
+
+  App\Admin\Frontend\Extension\SolutionExtension:
+    tags:
+      - { name: sonata.admin.extension, target: App\Admin\Frontend\SolutionAdmin }
 
   App\Admin\SubjectAdmin:
     tags:

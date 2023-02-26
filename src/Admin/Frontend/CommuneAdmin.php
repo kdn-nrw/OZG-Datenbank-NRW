@@ -229,27 +229,6 @@ class CommuneAdmin extends AbstractFrontendAdmin implements EnableFullTextSearch
         return parent::isGranted($name, $object);
     }
 
-    protected function buildDatagrid(): ?DatagridInterface
-    {
-        $datagrid = parent::buildDatagrid();
-        /** @var CustomDatagrid $datagrid */
-        if ($datagrid && !$datagrid->hasFilterMenu('administrativeDistrict')) {
-            /** @var CustomDatagrid $datagrid */
-            $datagrid = $this->datagrid;
-            $modelManager = $this->getModelManager();
-            //$situations = $modelManager->findBy(Situation::class);
-            //$datagrid->addFilterMenu('serviceSystem.situation', $situations, 'app.service_system.entity.situation');
-            $filterChoices = $modelManager->findBy(AdministrativeDistrict::class);
-            $datagrid->addFilterMenu(
-                'administrativeDistrict',
-                $filterChoices,
-                'app.commune.entity.administrative_district_placeholder',
-                AdministrativeDistrict::class
-            );
-        }
-        return $datagrid;
-    }
-
 
     protected function getRoutePrefix(): string
     {

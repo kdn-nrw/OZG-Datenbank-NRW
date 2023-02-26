@@ -233,9 +233,8 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @phpstan-var DatagridInterface<ProxyQueryInterface<T>>|null
-     * @private
      */
-    protected ?DatagridInterface $datagrid = null;
+    private ?DatagridInterface $datagrid = null;
 
     private ?ItemInterface $menu = null;
 
@@ -2445,9 +2444,8 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @return DatagridInterface<ProxyQueryInterface<T>>|null
-     * @private
      */
-    protected function buildDatagrid(): ?DatagridInterface
+    private function buildDatagrid(): ?DatagridInterface
     {
         if ($this->loaded['datagrid']) {
             return $this->datagrid;
