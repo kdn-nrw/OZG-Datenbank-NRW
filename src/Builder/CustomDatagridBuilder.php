@@ -15,7 +15,6 @@ namespace App\Builder;
 use App\Datagrid\CustomDatagrid;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Builder\DatagridBuilderInterface;
-use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\PagerInterface;
 use Sonata\AdminBundle\Datagrid\SimplePager;
@@ -23,7 +22,6 @@ use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
@@ -41,25 +39,13 @@ use Symfony\Component\Form\FormFactoryInterface;
  */
 class CustomDatagridBuilder implements DatagridBuilderInterface
 {
-    /**
-     * @var FilterFactoryInterface
-     */
-    private $filterFactory;
+    private FilterFactoryInterface $filterFactory;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
-    /**
-     * @var TypeGuesserInterface
-     */
-    private $guesser;
+    private TypeGuesserInterface $guesser;
 
-    /**
-     * @var bool
-     */
-    private $csrfTokenEnabled;
+    private bool $csrfTokenEnabled;
 
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -159,8 +145,6 @@ class CustomDatagridBuilder implements DatagridBuilderInterface
     {
         $pager = $this->getPager($admin->getPagerType());
 
-        //$pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
-
         $defaultOptions = ['validation_groups' => false];
         if ($this->csrfTokenEnabled) {
             $defaultOptions['csrf_protection'] = false;
@@ -172,6 +156,7 @@ class CustomDatagridBuilder implements DatagridBuilderInterface
         if (!$query instanceof ProxyQueryInterface) {
             throw new \TypeError(sprintf('The admin query MUST implement %s.', ProxyQueryInterface::class));
         }
+        /** @phpstan-var ProxyQueryInterface<object> $query */
 
         return new CustomDatagrid($query, $admin->getList(), $pager, $formBuilder, $values);
     }
@@ -181,7 +166,7 @@ class CustomDatagridBuilder implements DatagridBuilderInterface
      *
      * @throws \RuntimeException If invalid pager type is set
      *
-     * @return PagerInterface<ProxyQueryInterface>
+     * @return PagerInterface<ProxyQueryInterface<object>>
      */
     private function getPager(string $pagerType): PagerInterface
     {
@@ -190,7 +175,7 @@ class CustomDatagridBuilder implements DatagridBuilderInterface
                 return new Pager();
 
             case Pager::TYPE_SIMPLE:
-                /** @var SimplePager<ProxyQueryInterface> $simplePager */
+                /** @var SimplePager<ProxyQueryInterface<object>> $simplePager */
                 $simplePager = new SimplePager();
 
                 return $simplePager;
@@ -199,5 +184,4 @@ class CustomDatagridBuilder implements DatagridBuilderInterface
                 throw new \RuntimeException(sprintf('Unknown pager type "%s".', $pagerType));
         }
     }
-
 }

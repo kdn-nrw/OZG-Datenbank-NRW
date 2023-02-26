@@ -23,10 +23,10 @@ use App\Form\Type\OnboardingContactType;
 use App\Form\Type\OnboardingDocumentType;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Validator\ErrorElement;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -54,7 +54,7 @@ class MonumentAuthorityAdmin extends AbstractOnboardingAdmin implements AuditedE
             ->end();
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->configureFormGroups($form);
         $enableRequiredFields = false;
@@ -198,7 +198,7 @@ class MonumentAuthorityAdmin extends AbstractOnboardingAdmin implements AuditedE
             ->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         parent::configureDatagridFilters($filter);
         $filter
@@ -226,19 +226,19 @@ class MonumentAuthorityAdmin extends AbstractOnboardingAdmin implements AuditedE
             ]);
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('commune', null, [
                 'admin_code' => CommuneAdmin::class,
             ])
-            ->add('applicationType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('applicationType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.monument_authority.entity.application_type',
                 'choices' => array_flip(MonumentAuthority::$applicationTypeChoices),
                 'editable' => false,
                 'catalogue' => 'messages',
             ])
-            ->add('intermediaryOperatorType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('intermediaryOperatorType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.monument_authority.entity.intermediary_operator_type',
                 'choices' => array_flip(MonumentAuthority::$intermediaryOperatorTypeChoices),
                 'editable' => false,
@@ -253,14 +253,14 @@ class MonumentAuthorityAdmin extends AbstractOnboardingAdmin implements AuditedE
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('commune', null, [
                 'admin_code' => CommuneAdmin::class,
             ])
             ->add('modifiedAt')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.commune_info.entity.status',
                 'editable' => false,
                 'choices' => AbstractOnboardingEntity::$statusChoices,
@@ -268,7 +268,7 @@ class MonumentAuthorityAdmin extends AbstractOnboardingAdmin implements AuditedE
             ])
             ->add('customValues');
         $show
-            ->add('applicationType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('applicationType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.monument_authority.entity.application_type',
                 'choices' => array_flip(MonumentAuthority::$applicationTypeChoices),
                 'editable' => false,
@@ -277,7 +277,7 @@ class MonumentAuthorityAdmin extends AbstractOnboardingAdmin implements AuditedE
             ->add('state')
             ->add('authorityCategory')
             ->add('organizationalKey')
-            ->add('intermediaryOperatorType', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('intermediaryOperatorType', FieldDescriptionInterface::TYPE_CHOICE, [
                 'label' => 'app.monument_authority.entity.intermediary_operator_type',
                 'choices' => array_flip(MonumentAuthority::$intermediaryOperatorTypeChoices),
                 'editable' => false,
@@ -292,7 +292,7 @@ class MonumentAuthorityAdmin extends AbstractOnboardingAdmin implements AuditedE
             ->add('osciPrivateKeyPassword');
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
         $collection

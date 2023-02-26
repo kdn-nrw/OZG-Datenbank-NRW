@@ -120,7 +120,7 @@ class PmPaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
         $form->end();
     }
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $this->configureFormGroups($form);
         $this->addMandatorFormFields($form);
@@ -155,7 +155,7 @@ class PmPaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
             ->end();
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('commune', null, [
@@ -170,7 +170,7 @@ class PmPaymentAdmin extends AbstractOnboardingAdmin implements AuditedEntityAdm
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('communeName')

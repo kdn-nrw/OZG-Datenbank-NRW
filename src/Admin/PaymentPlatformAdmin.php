@@ -25,7 +25,7 @@ class PaymentPlatformAdmin extends AbstractAppAdmin implements EnableFullTextSea
 {
     use CommuneTrait;
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('name', TextType::class)
@@ -42,7 +42,7 @@ class PaymentPlatformAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $form->end();
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('name');
         $filter->add('description');
@@ -50,7 +50,7 @@ class PaymentPlatformAdmin extends AbstractAppAdmin implements EnableFullTextSea
         $this->addDefaultDatagridFilter($filter, 'communes');
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('name')
             ->add('manufacturer');
@@ -60,7 +60,7 @@ class PaymentPlatformAdmin extends AbstractAppAdmin implements EnableFullTextSea
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('name')

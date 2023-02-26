@@ -24,6 +24,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Validator\ErrorElement;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -35,7 +36,7 @@ class PmPaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdm
     use AuditedEntityAdminTrait;
     protected $baseRoutePattern = 'onboarding/pm-payment-service';
 
-    protected function configureFormFields(FormMapper $form)
+    protected function configureFormFields(FormMapper $form): void
     {
         $enableRequiredFields = true;
         $parentFieldDescription = $this->getParentFieldDescription();
@@ -126,8 +127,10 @@ class PmPaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdm
      */
     private function getSolutionQueryBuilder(): QueryBuilder
     {
+        /** @var ModelManager $modelManager */
+        $modelManager = $this->getModelManager();
         /** @var EntityManager $em */
-        $em = $this->modelManager->getEntityManager(Solution::class);
+        $em = $modelManager->getEntityManager(Solution::class);
 
         /** @var PmPaymentService $subject */
         $subject = $this->getSubject();
@@ -148,14 +151,14 @@ class PmPaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdm
         return $queryBuilder;
     }
 
-    protected function configureDatagridFilters(DatagridMapper $filter)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->addDefaultDatagridFilter($filter, 'pmPayment');
         $this->addDefaultDatagridFilter($filter, 'solution');
         /*$filter->add('description');*/
     }
 
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('pmPayment', null, [
@@ -184,7 +187,7 @@ class PmPaymentServiceAdmin extends AbstractAppAdmin implements AuditedEntityAdm
     /**
      * @inheritdoc
      */
-    public function configureShowFields(ShowMapper $show)
+    protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('pmPayment', null, [

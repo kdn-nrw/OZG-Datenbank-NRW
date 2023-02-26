@@ -73,7 +73,7 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\ApplicationCategoryAdmin:
+  App\Admin\Application\ApplicationCategoryAdmin:
     tags:
       - name:         sonata.admin
         manager_type: orm

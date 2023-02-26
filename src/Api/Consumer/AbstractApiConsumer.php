@@ -24,7 +24,6 @@ use App\Util\SnakeCaseConverter;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 abstract class AbstractApiConsumer implements ApiConsumerInterface, LoggerAwareInterface

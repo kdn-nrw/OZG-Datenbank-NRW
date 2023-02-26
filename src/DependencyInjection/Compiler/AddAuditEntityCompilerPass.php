@@ -34,7 +34,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
                 continue;
             }
             $definition = $container->getDefinition($id);
-            $modelOrParameterName = $attributes[0]['model_class'] ?: $definition->getArgument(1);
+            $modelOrParameterName = !empty($attributes[0]['model_class']) ? $attributes[0]['model_class'] : $definition->getArgument(1);
             $adminClass = $definition->getClass();
             if (is_a($adminClass, AuditedEntityAdminInterface::class, true) && $modelOrParameterName) {
                 $modelName = $this->getModelName($container, $modelOrParameterName);

@@ -12,7 +12,6 @@
 namespace App\Admin;
 
 use App\Entity\Maturity;
-use App\Entity\ServiceSolution;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -79,7 +78,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 'admin_code' => SolutionAdmin::class
             ])
             /*->add('description')
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
@@ -101,7 +100,7 @@ class ServiceSolutionAdmin extends AbstractAppAdmin implements EnableFullTextSea
                 'admin_code' => SolutionAdmin::class
             ])
             ->add('maturity')/*
-            ->add('status', TemplateRegistryInterface::TYPE_CHOICE, [
+            ->add('status', FieldDescriptionInterface::TYPE_CHOICE, [
                 'editable' => true,
                 'class' => Status::class,
                 'catalogue' => 'messages',
