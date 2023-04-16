@@ -13,10 +13,8 @@ namespace App\Admin;
 
 
 use App\Admin\Base\AdminTranslatorStrategyTrait;
-use App\Datagrid\CustomDatagrid;
 use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
-use App\Form\Filter\GroupedSessionFilterPersister;
 use App\Model\ExportSettings;
 use App\Model\ReferenceSettings;
 use App\Service\ApplicationContextHandler;
@@ -24,10 +22,12 @@ use App\Service\InjectAdminHelperTrait;
 use App\Service\InjectAdminManagerTrait;
 use App\Sonata\AdminBundle\Admin\AbstractAdmin;
 use App\Translator\PrefixedUnderscoreLabelTranslatorStrategy;
-use Doctrine\ORM\Query;
-use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
+
+//use Sonata\AdminBundle\Admin\AbstractAdmin;
+
 /**
  * Class AbstractContextAwareAdmin
  */
@@ -37,53 +37,61 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     use InjectAdminHelperTrait;
     use AdminTranslatorStrategyTrait;
 
-    public function getDataSourceIterator(): \Iterator
+    /**
+     * Create custom query source iterator for exporting collection variables
+     *
+     * @return CustomQuerySourceIterator
+     * @see \Sonata\DoctrineORMAdminBundle\Exporter\DataSource::createIterator
+     */
+    final public function getCustomDataSourceIterator(): CustomQuerySourceIterator
     {
         $datagrid = $this->getDatagrid();
         $datagrid->buildPager();
 
         $exportSettings = $this->getProcessedExportSettings();
-        return $this->getCustomDataSourceIterator($datagrid, $exportSettings);
-    }
-
-    /**
-     * Create custom query source iterator for exporting collection variables
-     *
-     * @param DatagridInterface $datagrid
-     * @param ExportSettings $exportSettings
-     *
-     * @return CustomQuerySourceIterator
-     * @see \Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator
-     */
-    private function getCustomDataSourceIterator(DatagridInterface $datagrid, ExportSettings $exportSettings): CustomQuerySourceIterator
-    {
         ini_set('max_execution_time', 0);
         $datagrid->buildPager();
-        $query = $datagrid->getQuery();
+        $proxyQuery = $datagrid->getQuery();
 
-        $query->select('DISTINCT ' . current($query->getRootAliases()));
-        $query->setFirstResult(null);
-        $query->setMaxResults(null);
-
-        if ($query instanceof ProxyQueryInterface) {
-            $sortBy = $query->getSortBy();
-
-            if (!empty($sortBy)) {
-                $query->addOrderBy($sortBy, $query->getSortOrder());
-                $query = $query->getQuery();
-                $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
-            } else {
-                $query = $query->getQuery();
-            }
-        }
-        /** @var \Doctrine\ORM\Query $query */
         $exportSettings->setContext(ApplicationContextHandler::getDefaultAdminApplicationContext($this));
         return new CustomQuerySourceIterator(
             $this,
-            $query,
+            $this->createDoctrineQuery($proxyQuery),
             $this->adminManager->getCache(),
             $exportSettings
         );
+    }
+
+
+    private function createDoctrineQuery(BaseProxyQueryInterface $query): \Doctrine\ORM\Query
+    {
+        if (!$query instanceof ProxyQueryInterface) {
+            throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
+        }
+
+        $rootAlias = current($query->getQueryBuilder()->getRootAliases());
+
+        // Distinct is needed to iterate, even if group by is used
+        // @see https://github.com/doctrine/orm/issues/5868
+        $query->getQueryBuilder()->distinct();
+        $query->getQueryBuilder()->select($rootAlias);
+
+        $sortBy = $query->getSortBy();
+
+        // AddSelect is needed when exporting the results sorted by a column that is part of ManyToOne relation
+        // @see https://github.com/sonata-project/SonataDoctrineORMAdminBundle/issues/1586
+        if (null !== $sortBy) {
+            $rootAliasSortBy = strstr($sortBy, '.', true);
+
+            if ($rootAliasSortBy !== $rootAlias) {
+                $query->getQueryBuilder()->addSelect($rootAliasSortBy);
+            }
+        }
+
+        $query->setFirstResult(null);
+        $query->setMaxResults(null);
+
+        return $query->getDoctrineQuery();
     }
 
     /**

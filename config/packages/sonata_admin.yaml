@@ -2,6 +2,7 @@
 parameters:
     sonata.intl.locale_detector.request.class: \Sonata\IntlBundle\Locale\RequestStackDetector
 sonata_admin:
+    default_controller: App\Controller\DefaultCRUDController
     title_logo: 'template/logo.svg'
     title: KDN - DWH
     show_mosaic_button: false

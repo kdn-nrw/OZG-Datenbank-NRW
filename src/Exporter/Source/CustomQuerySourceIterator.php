@@ -19,8 +19,7 @@ use App\Model\ExportSettings;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\ORM\Query;
 use Psr\Cache\CacheItemPoolInterface;
-use Sonata\Exporter\Exception\InvalidMethodCallException;
-use Sonata\Exporter\Source\SourceIteratorInterface;
+use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface as RoutingUrlGeneratorInterface;
 
 /**
@@ -30,8 +29,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface as RoutingUrlGener
  * the current function in Sonata\Exporter\Source\DoctrineORMQuerySourceIterator is marked as final and can therefore
  * not be extended
  * => Override whole file to enable caching in "current" function
+ * @see DoctrineORMQuerySourceIterator
  */
-class CustomQuerySourceIterator extends CustomEntityValueProvider implements SourceIteratorInterface
+final class CustomQuerySourceIterator extends CustomEntityValueProvider implements \Iterator
 {
     /**
      * @var Query
@@ -52,18 +52,21 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
     private $admin;
 
     protected $mapUrlProperties = [];
+    private int $batchSize;
 
     /**
      * @param AbstractContextAwareAdmin $admin
      * @param Query $query The Doctrine Query
      * @param CacheItemPoolInterface $cache
      * @param ExportSettings $exportSettings
+     * @param int $batchSize
      */
     public function __construct(
         AbstractContextAwareAdmin $admin,
-        Query $query,
-        CacheItemPoolInterface $cache,
-        ExportSettings $exportSettings
+        Query                     $query,
+        CacheItemPoolInterface    $cache,
+        ExportSettings            $exportSettings,
+        int                       $batchSize = 100
     )
     {
         parent::__construct(
@@ -82,6 +85,7 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
         if (is_a($admin->getClass(), NamedEntityInterface::class, true)) {
             $this->mapUrlProperties['name'] = 'show';
         }
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -125,39 +129,64 @@ class CustomQuerySourceIterator extends CustomEntityValueProvider implements Sou
         return parent::getPropertyValue($propertyPath, $objectOrArray);
     }
 
-    final public function current()
+    public function current()
     {
         $current = $this->iterator->current();
+;
+        $data = $this->getItemData($current);
 
-        $data = $this->getItemData($current[0]);
+        //$this->query->getEntityManager()->getUnitOfWork()->detach($current);
 
-        $this->query->getEntityManager()->getUnitOfWork()->detach($current[0]);
+        if (0 === ($this->getIterator()->key() % $this->batchSize)) {
+            $this->query->getEntityManager()->clear();
+        }
 
         return $data;
     }
 
-    final public function next(): void
+    public function next(): void
     {
-        $this->iterator->next();
+        $this->getIterator()->next();
     }
 
-    final public function key()
+
+    public function key(): mixed
     {
-        return $this->iterator->key();
+        return $this->getIterator()->key();
     }
 
-    final public function valid(): bool
+    public function valid(): bool
     {
         return $this->iterator->valid();
     }
 
-    final public function rewind(): void
+    public function rewind(): void
     {
-        if ($this->iterator) {
-            throw new InvalidMethodCallException('Cannot rewind a Doctrine\ORM\Query');
+        $this->iterator = $this->iterableToIterator($this->query->toIterable());
+        $this->iterator->rewind();
+    }
+
+    /**
+     * @param iterable<mixed> $iterable
+     */
+    private function iterableToIterator(iterable $iterable): \Iterator
+    {
+        if ($iterable instanceof \Iterator) {
+            return $iterable;
+        }
+        if (\is_array($iterable)) {
+            return new \ArrayIterator($iterable);
         }
 
-        $this->iterator = $this->query->iterate();
-        $this->iterator->rewind();
+        return new \ArrayIterator(iterator_to_array($iterable));
+    }
+
+    protected function getIterator(): \Iterator
+    {
+        if (null === $this->iterator) {
+            throw new \LogicException('The iterator MUST be set in the "rewind()" method.');
+        }
+
+        return $this->iterator;
     }
 }

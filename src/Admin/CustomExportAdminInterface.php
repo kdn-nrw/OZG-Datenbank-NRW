@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 
+use App\Exporter\Source\CustomQuerySourceIterator;
 use App\Model\ExportSettings;
 
 /**
@@ -25,4 +26,6 @@ interface CustomExportAdminInterface
      * @return ExportSettings
      */
     public function getExportSettings(): ExportSettings;
+
+    public function getCustomDataSourceIterator(): CustomQuerySourceIterator;
 }

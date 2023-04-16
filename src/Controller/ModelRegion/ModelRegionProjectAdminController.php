@@ -13,19 +13,19 @@ namespace App\Controller\ModelRegion;
 
 
 use App\Controller\ControllerDownloadTrait;
+use App\Controller\DefaultCRUDController;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\ModelRegion\ConceptQueryType;
 use App\Entity\ModelRegion\ModelRegionProject;
 use App\Entity\ModelRegion\ModelRegionProjectConceptQuery;
 use Doctrine\Common\Collections\ArrayCollection;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ModelRegionProjectAdminController
  */
-class ModelRegionProjectAdminController extends CRUDController
+class ModelRegionProjectAdminController extends DefaultCRUDController
 {
     use ControllerDownloadTrait;
     use InjectManagerRegistryTrait;

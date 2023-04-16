@@ -11,8 +11,8 @@
 
 namespace App\Controller\Configuration;
 
+use App\Controller\DefaultCRUDController;
 use App\Service\Mailer\InjectEmailTemplateManagerTrait;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class EmailTemplateAdminController
  *
  */
-class EmailTemplateAdminController extends CRUDController
+class EmailTemplateAdminController extends DefaultCRUDController
 {
     use InjectEmailTemplateManagerTrait;
 

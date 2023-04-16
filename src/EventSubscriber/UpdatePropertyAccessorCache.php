@@ -11,7 +11,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Exporter\Source\CustomEntityValueProvider;
+use App\Admin\CustomExportAdminInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -38,10 +38,10 @@ class UpdatePropertyAccessorCache implements EventSubscriberInterface
      */
     public function updateEntityPropertyCache(SearchIndexEntityEvent $event): void
     {
-        $entity = $event->getObject();
         $admin = $event->getAdmin();
-        $dataSourceIterator = $admin->getDataSourceIterator();
-        if ($dataSourceIterator instanceof CustomEntityValueProvider) {
+        if ($admin instanceof CustomExportAdminInterface) {
+            $entity = $event->getObject();
+            $dataSourceIterator = $admin->getCustomDataSourceIterator();
             $dataSourceIterator->updateCacheItemData($entity);
         }
     }

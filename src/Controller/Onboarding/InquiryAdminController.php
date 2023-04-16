@@ -11,10 +11,10 @@
 
 namespace App\Controller\Onboarding;
 
+use App\Controller\DefaultCRUDController;
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Onboarding\Inquiry;
 use App\Service\Onboarding\InjectInquiryManagerTrait;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Class InquiryAdminController
  *
  */
-class InquiryAdminController extends CRUDController
+class InquiryAdminController extends DefaultCRUDController
 {
     use InquiryControllerTrait;
     use InjectInquiryManagerTrait;

@@ -11,8 +11,8 @@
 
 namespace App\Controller\MetaData;
 
+use App\Controller\DefaultCRUDController;
 use App\Service\MetaData\InjectMetaDataManagerTrait;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class MetaItemAdminController
  *
  */
-class MetaItemAdminController extends CRUDController
+class MetaItemAdminController extends DefaultCRUDController
 {
     use InjectMetaDataManagerTrait;
 

@@ -13,11 +13,11 @@ namespace App\Controller\Onboarding;
 
 
 use App\Admin\Onboarding\AbstractOnboardingAdmin;
+use App\Controller\DefaultCRUDController;
 use App\Entity\Onboarding\AbstractOnboardingEntity;
 use App\Entity\Onboarding\Inquiry;
 use App\Service\Onboarding\InjectOnboardingManagerTrait;
 use App\Service\Onboarding\InquiryManager;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Class AbstractOnboardingAdminController
  */
-abstract class AbstractOnboardingAdminController extends CRUDController
+abstract class AbstractOnboardingAdminController extends DefaultCRUDController
 {
     use InjectOnboardingManagerTrait;
     use InquiryControllerTrait;

@@ -15,7 +15,6 @@ use App\Admin\StateGroup\CommuneAdmin;
 use App\DependencyInjection\InjectionTraits\InjectManagerRegistryTrait;
 use App\Entity\Base\BaseEntityInterface;
 use App\Entity\StateGroup\Commune;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * Class CommuneAdminController
  *
  */
-class CommuneAdminController extends CRUDController
+class CommuneAdminController extends DefaultCRUDController
 {
     use InjectManagerRegistryTrait;
 

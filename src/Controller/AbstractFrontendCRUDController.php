@@ -18,7 +18,6 @@ use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\NamedEntityInterface;
 use App\Entity\Base\SluggableInterface;
 use Behat\Transliterator\Transliterator;
-use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,12 +26,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AbstractFrontendCRUDController
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2020 Gert Hammes
- * @since     2020-08-16
  */
-abstract class AbstractFrontendCRUDController extends CRUDController
+abstract class AbstractFrontendCRUDController extends DefaultCRUDController
 {
     /**
      * Returns the default route name

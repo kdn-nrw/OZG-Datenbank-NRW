@@ -16,10 +16,6 @@ use App\Admin\Frontend\ModelRegionAdmin;
 
 /**
  * Class ModelRegionProjectController
- *
- * @author    Gert Hammes <info@gerthammes.de>
- * @copyright 2020 Gert Hammes
- * @since     2020-08-03
  */
 class ModelRegionController extends AbstractFrontendCRUDController
 {

@@ -80,7 +80,7 @@ class XlsxWriter implements TypedWriterInterface
     /**
      * Create PHPExcel object and set defaults
      */
-    public function open()
+    public function open(): void
     {
         $this->phpExcelObject = new Spreadsheet();
     }
@@ -88,7 +88,7 @@ class XlsxWriter implements TypedWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function write(array $data)
+    public function write(array $data): void
     {
         $this->init($data);
 
@@ -125,7 +125,7 @@ class XlsxWriter implements TypedWriterInterface
     /**
      * Save Excel file
      */
-    public function close()
+    public function close(): void
     {
         $writer = IOFactory::createWriter($this->phpExcelObject, 'Xlsx');
         $writer->save($this->filename);

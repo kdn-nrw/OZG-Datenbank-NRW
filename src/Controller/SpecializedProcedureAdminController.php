@@ -11,13 +11,11 @@
 
 namespace App\Controller;
 
-use Sonata\AdminBundle\Controller\CRUDController;
-
 /**
  * Class SpecializedProcedureAdminController
  *
  */
-class SpecializedProcedureAdminController extends CRUDController
+class SpecializedProcedureAdminController extends DefaultCRUDController
 {
     use ControllerDownloadTrait;
 }

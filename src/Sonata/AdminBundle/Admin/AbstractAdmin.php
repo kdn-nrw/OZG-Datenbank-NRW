@@ -356,10 +356,8 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
 
     /**
      * @return \Iterator
-     * @final
-     * TODO: remove overridden functions; make final
      */
-    public function getDataSourceIterator(): \Iterator
+    final public function getDataSourceIterator(): \Iterator
     {
         $datagrid = $this->getDatagrid();
         $datagrid->buildPager();

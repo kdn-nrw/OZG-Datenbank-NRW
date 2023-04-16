@@ -12,7 +12,7 @@
 namespace App\Controller\StateGroup;
 
 use App\Admin\StateGroup\ServiceProviderAdmin;
-use Sonata\AdminBundle\Controller\CRUDController;
+use App\Controller\DefaultCRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class ServiceProviderAdminController
  *
  */
-class ServiceProviderAdminController extends CRUDController
+class ServiceProviderAdminController extends DefaultCRUDController
 {
 
     /**

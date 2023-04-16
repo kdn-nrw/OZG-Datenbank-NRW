@@ -14,7 +14,6 @@ namespace App\Exporter\Source;
 use App\Model\ExportSettings;
 use Doctrine\Common\Collections\Collection;
 use Psr\Cache\CacheItemPoolInterface;
-use Sonata\Exporter\Source\SourceIteratorInterface;
 
 /**
  * Class CustomResultSetSourceIterator
@@ -24,7 +23,7 @@ use Sonata\Exporter\Source\SourceIteratorInterface;
  * not be extended
  * => Override whole file to enable caching in "current" function
  */
-class CustomResultSetSourceIterator extends CustomEntityValueProvider implements SourceIteratorInterface
+class CustomResultSetSourceIterator extends CustomEntityValueProvider implements \Iterator
 {
     /**
      * @var \ArrayIterator|\Traversable
