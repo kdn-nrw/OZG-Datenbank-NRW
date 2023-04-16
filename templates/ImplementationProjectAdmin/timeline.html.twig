@@ -68,7 +68,7 @@ file that was distributed with this source code.
                                                     {% for item in subjectData.items %}
                                                         {# @var item \App\Entity\ImplementationProject #}
                                                         <li class="list-item">
-                                                            <a class="list-item-action" href="{{ admin.generateObjectUrl('show', item, {'id': item.id}) }}">
+                                                            <a class="list-item-action" href="{{ admin.generateContextObjectUrl('show', item, {'id': item.id}) }}">
                                                                 <i class="fas fa-eye" aria-hidden="true"></i>
                                                                 {{ item.name }}
                                                             </a>

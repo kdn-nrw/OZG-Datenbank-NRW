@@ -6,7 +6,7 @@
         {% set projectRefSettings = app_get_reference_settings(entityClass, field_description) %}
         {% for project in uniqueImplementationProjects %}
             {# @var project \App\Entity\ImplementationProject #}
-            <a href="{{ projectRefSettings.admin.generateObjectUrl('show', project) }}">
+            <a href="{{ projectRefSettings.admin.generateContextObjectUrl('show', project) }}">
                 <i class="fa fa-eye" aria-hidden="true"></i>
                 {{ project ~ '' }}
             </a>

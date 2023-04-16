@@ -66,11 +66,11 @@ file that was distributed with this source code.
                             and childAdmin.hasRoute(route_name)
                             and childAdmin.hasAccess(route_name, child) %}
                             {% if field_description.options.route is defined and field_description.options.route.parameters is defined %}
-                            <a href="{{ childAdmin.generateObjectUrl(route_name, child, field_description.options.route.parameters) }}">
+                            <a href="{{ childAdmin.generateContextObjectUrl(route_name, child, field_description.options.route.parameters) }}">
                                 <i class="fas fa-pen-square" aria-hidden="true"></i>
                             </a>
                             {% else %}
-                                <a href="{{ childAdmin.generateObjectUrl(route_name, child) }}">
+                                <a href="{{ childAdmin.generateContextObjectUrl(route_name, child) }}">
                                     <i class="fas fa-pen-square" aria-hidden="true"></i>
                                 </a>
                             {% endif %}

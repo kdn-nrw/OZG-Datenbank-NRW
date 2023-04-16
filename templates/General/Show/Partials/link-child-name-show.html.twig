@@ -10,7 +10,7 @@ file that was distributed with this source code.
     {% set displayName = child.name %}
 {% endif %}
 {% if refSettings.show.enabled and refSettings.admin.hasAccess(refSettings.show.route, child) %}
-    <a href="{{ refSettings.admin.generateObjectUrl(refSettings.show.route, child, {'id': child.id}) }}"{% if linkClass is defined %} class="{{ linkClass }}" {% endif %}>
+    <a href="{{ refSettings.admin.generateContextObjectUrl(refSettings.show.route, child, {'id': child.id}) }}"{% if linkClass is defined %} class="{{ linkClass }}" {% endif %}>
         {{ displayName|raw }}
     </a>
 {% elseif linkClass is defined %}

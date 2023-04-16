@@ -43,13 +43,6 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
     protected $searchResultActions = ['show'];
 
     /**
-     * List of disabled routes
-     *
-     * @var string[]
-     */
-    protected $disabledRoutes = ['batch', 'create', 'edit', 'delete'];
-
-    /**
      * @return string|null
      */
     protected function getTranslatorNamingPrefix(): ?string
@@ -94,20 +87,6 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
             $templateRegistry->setTemplate('list', 'Frontend/Admin/CRUD/list.html.twig');
         }
         $templateRegistry->setTemplate('layout', 'Frontend/Admin/base.html.twig');
-    }
-
-    /**
-     * Excludes all routes for that require role permissions
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function hasRoute(string $name): bool
-    {
-        if (in_array($name, $this->disabledRoutes, false)) {
-            return false;
-        }
-        return parent::hasRoute($name);
     }
 
     protected function addDefaultListActions(ListMapper $list): void
@@ -163,21 +142,31 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         }
     }*/
 
-    public function update(object $object): object
+    /**
+     * @phpstan-param T $object
+     */
+    protected function prePersist(object $object): void
     {
-        // disable update in frontend completely!
-        return $object;
+        // Prevent any changes in frontend
+        exit;
     }
 
-    public function create(object $object): object
+    /**
+     * @phpstan-param T $object
+     */
+    protected function postPersist(object $object): void
     {
-        // disable create in frontend completely!
-        return $object;
+        // Prevent any changes in frontend
+        exit;
     }
 
-    public function delete(object $object): void
+    /**
+     * @phpstan-param T $object
+     */
+    protected function preRemove(object $object): void
     {
-        // disable delete in frontend completely!
+        // Prevent any changes in frontend
+        exit;
     }
 
     /**
@@ -190,7 +179,7 @@ abstract class AbstractFrontendAdmin extends AbstractContextAwareAdmin implement
         return $settings;
     }
 
-    public function generateObjectUrl(string $name, object $object, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
+    public function generateContextObjectUrl(string $name, object $object, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         if ($name === 'show' && $object instanceof SluggableInterface) {
             if (empty($parameters['slug'])) {

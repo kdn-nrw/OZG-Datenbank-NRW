@@ -8,7 +8,7 @@
 {% set url = actions.url|default(_key) %}
 
 {% if admin.hasAccess('edit', object) and admin.hasRoute(route) %}
-    <a href="{{ admin.generateObjectUrl(route, object, actions.link_parameters|default([])) }}"
+    <a href="{{ admin.generateContextObjectUrl(route, object, actions.link_parameters|default([])) }}"
         {%- block link_attributes -%}
             class="btn btn-sm btn-default view_link {{ actions.class|default('') }}"
             title="{{ label }}"

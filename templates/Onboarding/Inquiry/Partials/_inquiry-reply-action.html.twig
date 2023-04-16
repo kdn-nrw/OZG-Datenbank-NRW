@@ -1,6 +1,6 @@
 {% if showAnswers and object.createdBy != app.user and inquiryAdmin.hasAccess('askQuestion', object) and inquiryAdmin.hasRoute('askQuestion') %}
     <a
-    href="{{ inquiryAdmin.generateObjectUrl('askQuestion', object, actions.link_parameters|default([])) }}"
+    href="{{ inquiryAdmin.generateContextObjectUrl('askQuestion', object, actions.link_parameters|default([])) }}"
     class="link-inline-action link-answer"
     title="{{ 'app.inquiry.actions.ask_question'|trans }}"
     >

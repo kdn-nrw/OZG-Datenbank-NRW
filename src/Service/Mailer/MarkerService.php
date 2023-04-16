@@ -91,10 +91,10 @@ class MarkerService
         $urlEdit = '';
         $urlShow = '';
         if (null !== $admin && $admin->hasRoute('edit') && $entity->getId()) {
-            $urlEdit = $admin->generateObjectUrl('edit', $entity, [], RoutingUrlGeneratorInterface::ABSOLUTE_URL);
+            $urlEdit = $admin->generateContextObjectUrl('edit', $entity, [], RoutingUrlGeneratorInterface::ABSOLUTE_URL);
         }
         if (null !== $admin && $admin->hasRoute('show') && $entity->getId()) {
-            $urlShow = $admin->generateObjectUrl('show', $entity, [], RoutingUrlGeneratorInterface::ABSOLUTE_URL);
+            $urlShow = $admin->generateContextObjectUrl('show', $entity, [], RoutingUrlGeneratorInterface::ABSOLUTE_URL);
         }
         $classLabel = PrefixedUnderscoreLabelTranslatorStrategy::getClassLabelPrefix($entityClass, '') . 'object_name';
         $this->addFieldValueMarker($markers, 'classLabel', $classLabel, $markerGroup);

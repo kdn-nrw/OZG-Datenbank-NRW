@@ -8,7 +8,7 @@
     {% set icon = actions.icon|default('fa-link') %}
     {% set messageCountInfo = object_inquiry_message_count(object, app.user) %}
     <a
-            href="{{ admin.generateObjectUrl(route, object, actions.link_parameters|default([])) }}"
+            href="{{ admin.generateContextObjectUrl(route, object, actions.link_parameters|default([])) }}"
             {%- block link_attributes -%}
                 class="btn btn-sm btn-default view_link {{ actions.class|default('') }}"
                 title="{{ 'app.inquiry.new_inquiries_message_prefix'|trans }} {{ 'app.inquiry.new_inquiries_message'|trans({'count': messageCountInfo.total}) }}"

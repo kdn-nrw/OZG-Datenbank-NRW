@@ -17,7 +17,7 @@ file that was distributed with this source code.
             {% for child in entities %}
                 <li>
                     {% if refSettings.edit.enabled and refSettings.admin.hasAccess(refSettings.edit.route, child) %}
-                        <a href="{{ refSettings.admin.generateObjectUrl(refSettings.edit.route, child, {'id': child.id}) }}">
+                        <a href="{{ refSettings.admin.generateContextObjectUrl(refSettings.edit.route, child, {'id': child.id}) }}">
                             {{ child.name }}
                         </a>
                     {% else %}

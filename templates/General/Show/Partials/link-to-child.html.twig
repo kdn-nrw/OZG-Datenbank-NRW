@@ -12,7 +12,7 @@ file that was distributed with this source code.
     {% else %}
         {% set editParameters = {'id': child.id} %}
     {% endif %}
-    <a href="{{ refSettings.admin.generateObjectUrl(refSettings.edit.route, child, editParameters) }}"{% if linkClass is defined %} class="{{ linkClass }}" {% endif %}>
+    <a href="{{ refSettings.admin.generateContextObjectUrl(refSettings.edit.route, child, editParameters) }}"{% if linkClass is defined %} class="{{ linkClass }}" {% endif %}>
         {% if refSettings.edit.route == 'show' %}
             <i class="fas fa-eye" aria-hidden="true"></i>
         {% else %}

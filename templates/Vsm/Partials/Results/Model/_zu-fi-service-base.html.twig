@@ -11,7 +11,7 @@ file that was distributed with this source code.
         {{ 'app.api.zu_fi.result.service_base'|trans }}:
         {% if results.ozgService %}
             {% set serviceReferenceSettings = app_get_reference_settings(results.ozgService) %}
-            <a href="{{ serviceReferenceSettings.admin.generateObjectUrl('show', results.ozgService, {'id': results.ozgService.id}) }}">
+            <a href="{{ serviceReferenceSettings.admin.generateContextObjectUrl('show', results.ozgService, {'id': results.ozgService.id}) }}">
                 {{ service ~ '' }}
                 <i class="fa fa-eye" aria-hidden="true"></i>
             </a>

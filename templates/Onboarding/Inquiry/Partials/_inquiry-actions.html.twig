@@ -1,7 +1,7 @@
 
 {% if inquiryAdmin.hasAccess('edit', object) and inquiryAdmin.hasRoute('edit') %}
     <a
-        href="{{ inquiryAdmin.generateObjectUrl('edit', object, actions.link_parameters|default([])) }}"
+        href="{{ inquiryAdmin.generateContextObjectUrl('edit', object, actions.link_parameters|default([])) }}"
         class="link-inline-action edit_link"
         title="{{ 'action_edit'|trans({}, 'SonataAdminBundle') }}"
     >
@@ -11,7 +11,7 @@
 
 {% if inquiryAdmin.hasAccess('delete', object) and inquiryAdmin.hasRoute('delete') %}
     <a
-        href="{{ inquiryAdmin.generateObjectUrl('delete', object, actions.link_parameters|default([])) }}"
+        href="{{ inquiryAdmin.generateContextObjectUrl('delete', object, actions.link_parameters|default([])) }}"
         class="link-inline-action delete_link"
         title="{{ 'action_delete'|trans({}, 'SonataAdminBundle') }}"
     >

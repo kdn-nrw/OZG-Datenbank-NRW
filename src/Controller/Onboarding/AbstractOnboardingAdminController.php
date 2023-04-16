@@ -70,7 +70,7 @@ abstract class AbstractOnboardingAdminController extends DefaultCRUDController
         $inquiryAdmin = $this->adminManager->getAdminByEntityClass(Inquiry::class);
         /** @var AbstractOnboardingEntity $object */
         $inquiries = $inquiryManager->findEntityInquiries($object);
-        //$formAction = $this->admin->generateObjectUrl('showQuestions', $object);
+        //$formAction = $this->admin->generateContextObjectUrl('showQuestions', $object);
         // Mark question as read if question is opened by user with limited access or if question is directed at the
         // current user
         $onlyForRecipient = $admin->getCurrentUserCommuneLimits() === true;
@@ -108,7 +108,7 @@ abstract class AbstractOnboardingAdminController extends DefaultCRUDController
         if (!$object || !$this->admin->hasAccess('askQuestion', $object)) {
             throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $id));
         }
-        $formAction = $this->admin->generateObjectUrl('askQuestion', $object);
+        $formAction = $this->admin->generateContextObjectUrl('askQuestion', $object);
 
         $parameters = [];
         if ($filter = $this->admin->getFilterParameters()) {

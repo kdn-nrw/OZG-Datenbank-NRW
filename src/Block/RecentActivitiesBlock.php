@@ -119,7 +119,7 @@ class RecentActivitiesBlock extends AbstractBlockService
                 $items['static_commune_' . $commune->getId()] = [
                     'titlePrefix' => $prefix,
                     'title' => $commune->getName(),
-                    'url' => $admin->generateObjectUrl('show', $commune),
+                    'url' => $admin->generateContextObjectUrl('show', $commune),
                     'isStatic' => true,
                 ];
             }
@@ -132,7 +132,7 @@ class RecentActivitiesBlock extends AbstractBlockService
                 $items['static_model_region_' . $modelRegion->getId()] = [
                     'titlePrefix' => $prefix,
                     'title' => $modelRegion->getName(),
-                    'url' => $admin->generateObjectUrl('show', $modelRegion),
+                    'url' => $admin->generateContextObjectUrl('show', $modelRegion),
                     'isStatic' => true,
                 ];
             }
@@ -146,7 +146,7 @@ class RecentActivitiesBlock extends AbstractBlockService
                 $items['static_service_provider_' . $serviceProvider->getId()] = [
                     'titlePrefix' => $prefix,
                     'title' => $serviceProvider->getName(),
-                    'url' => $admin->generateObjectUrl('show', $serviceProvider),
+                    'url' => $admin->generateContextObjectUrl('show', $serviceProvider),
                     'isStatic' => true,
                 ];
             }
@@ -171,7 +171,7 @@ class RecentActivitiesBlock extends AbstractBlockService
                     $items['static_inquiry_' . $message['id']] = [
                         'titlePrefix' => $titlePrefix,
                         'title' => $text,
-                        'url' => $admin->generateObjectUrl('showQuestions', $referenceObject),
+                        'url' => $admin->generateContextObjectUrl('showQuestions', $referenceObject),
                         'isStatic' => true,
                     ];
                 }
@@ -280,7 +280,7 @@ class RecentActivitiesBlock extends AbstractBlockService
                     $objectLabel = $translatorStrategy->getLabel('object_name');
                     $prefix = $this->translator->trans($objectLabel);
                     $title = '' . $entity;
-                    $url = $admin->generateObjectUrl('show', $entity);
+                    $url = $admin->generateContextObjectUrl('show', $entity);
                     $key = $route . '_' . $entity->getId();
                 } else {
                     $title = $this->translator->trans($admin->getLabel());

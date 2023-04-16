@@ -20,7 +20,7 @@ file that was distributed with this source code.
             #}
             <li>
                 {% if isBackendMode %}
-                    <a href="{{ admin.generateObjectUrl('download', object, {'documentId': child.id}) }}" target="_blank">{{ child.name }}</a>
+                    <a href="{{ admin.generateContextObjectUrl('download', object, {'documentId': child.id}) }}" target="_blank">{{ child.name }}</a>
                 {% else %}
                     <a href="{{ path('frontend_app_modelregionproject_download', {'id': object.id, 'documentId': child.id}) }}" target="_blank">
                         {{ child.name }}

@@ -44,7 +44,7 @@ class OnboardingDocumentType extends AbstractType
                 'download_uri' => static function ($object, $uri) use ($parentAdmin) {
                     /** @var OnboardingDocument|null $object */
                     if (null !== $object && null !== $parentAdmin) {
-                        return $parentAdmin->generateObjectUrl('download', $object->getOnboarding(), ['documentId' => $object->getId()]);
+                        return $parentAdmin->generateContextObjectUrl('download', $object->getOnboarding(), ['documentId' => $object->getId()]);
                     }
                     return $uri;
                 },

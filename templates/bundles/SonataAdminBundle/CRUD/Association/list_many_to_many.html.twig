@@ -10,7 +10,9 @@ file that was distributed with this source code.
 {% extends '@!SonataAdmin/CRUD/Association/list_many_to_many.html.twig' %}
 
 {%- block relation_link -%}
-    {{ parent() }}
+    <a href="{{ field_description.associationadmin.generateContextObjectUrl(route_name, element, route_parameters) }}">
+        {{- element|render_relation_element(field_description) -}}
+    </a>
     {% if element is not null and field_description.options.enable_filter_add is defined and field_description.options.enable_filter_add %}
         {# @var field_description \Sonata\DoctrineORMAdminBundle\Admin\FieldDescription #}
         <a href="#filter-container-{{ admin.uniqid() }}" title="{{ 'app.common.add_filter'|trans }}" class="list-field-filter-add js-filter-add" data-value="{{ element.id }}" data-target="filter-{{ admin.uniqid }}-{{ field_description.name }}" data-container="filter-container-{{ admin.uniqid() }}" data-property="{{ field_description.name }}">

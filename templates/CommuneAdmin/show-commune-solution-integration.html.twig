@@ -67,7 +67,7 @@ file that was distributed with this source code.
                 {% if solutionRefSettings.edit.enabled %}
                     <td>
                         {% if child.solution and solutionRefSettings.admin.hasAccess(solutionRefSettings.edit.route, child) %}
-                            <a href="{{ solutionRefSettings.admin.generateObjectUrl(solutionRefSettings.edit.route, child.solution) }}">
+                            <a href="{{ solutionRefSettings.admin.generateContextObjectUrl(solutionRefSettings.edit.route, child.solution) }}">
                                 {% if solutionRefSettings.edit.route == 'show' %}
                                     <i class="fas fa-eye" aria-hidden="true"></i>
                                 {% else %}

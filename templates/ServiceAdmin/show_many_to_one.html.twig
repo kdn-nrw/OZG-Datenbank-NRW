@@ -13,11 +13,11 @@ file that was distributed with this source code.
         and field_description.associationadmin.hasRoute(route_name)
         and field_description.associationadmin.hasAccess(route_name, value) %}
             {% if field_description.options.route is defined and field_description.options.route.parameters is defined %}
-                <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, value, field_description.options.route.parameters) }}">
+                <a href="{{ field_description.associationadmin.generateContextObjectUrl(route_name, value, field_description.options.route.parameters) }}">
                     {{ value|render_relation_element(field_description) }}
                 </a>
             {% else %}
-                <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, value) }}">
+                <a href="{{ field_description.associationadmin.generateContextObjectUrl(route_name, value) }}">
                     {{ value|render_relation_element(field_description) }}
                 </a>
             {% endif %}

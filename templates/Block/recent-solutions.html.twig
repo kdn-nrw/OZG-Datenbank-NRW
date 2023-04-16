@@ -96,7 +96,7 @@ file that was distributed with this source code.
                             </td>
                             <td>
                                 <a class="list-item-action"
-                                   href="{{ admin.generateObjectUrl('edit', object, {'id': object.id}) }}"
+                                   href="{{ admin.generateContextObjectUrl('edit', object, {'id': object.id}) }}"
                                 >
                                     <i class="fas fa-pen-square" aria-hidden="true"></i>
                                 </a>
@@ -104,7 +104,7 @@ file that was distributed with this source code.
                         {% else %}
                             <td>
                                 <a class="list-item-action"
-                                   href="{{ admin.generateObjectUrl('show', object, {'id': object.id}) }}"
+                                   href="{{ admin.generateContextObjectUrl('show', object, {'id': object.id}) }}"
                                 >
                                     <i class="fas fa-eye" aria-hidden="true"></i>
                                 </a>

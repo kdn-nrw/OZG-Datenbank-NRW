@@ -26,13 +26,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 abstract class AbstractOnboardingAdmin extends AbstractFrontendAdmin
 {
-    /**
-     * List of disabled routes
-     *
-     * @var string[]
-     */
-    protected $disabledRoutes = ['edit'];
-
     protected function configureFormFields(FormMapper $form): void
     {
         $form

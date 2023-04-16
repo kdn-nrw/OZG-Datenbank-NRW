@@ -22,11 +22,11 @@ file that was distributed with this source code.
                     and field_description.associationadmin.hasRoute(route_name)
                     and field_description.associationadmin.hasAccess(route_name, element) %}
                     {% if routeOption and routeOption.parameters is defined %}
-                        <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, routeOption.parameters) }}">
+                        <a href="{{ field_description.associationadmin.generateContextObjectUrl(route_name, element, routeOption.parameters) }}">
                             {{ name }}
                         </a>
                     {% else %}
-                        <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element) }}">
+                        <a href="{{ field_description.associationadmin.generateContextObjectUrl(route_name, element) }}">
                             {{ name }}
                         </a>
                     {% endif %}

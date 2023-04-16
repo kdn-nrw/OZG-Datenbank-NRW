@@ -13,6 +13,7 @@ namespace App\Admin;
 
 
 use App\Admin\Base\AdminTranslatorStrategyTrait;
+use App\Entity\Base\BaseEntityInterface;
 use App\Entity\Base\SluggableInterface;
 use App\Exporter\Source\CustomQuerySourceIterator;
 use App\Model\ExportSettings;
@@ -27,6 +28,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 //use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface as RoutingUrlGeneratorInterface;
 
 /**
  * Class AbstractContextAwareAdmin
@@ -219,5 +221,19 @@ abstract class AbstractContextAwareAdmin extends AbstractAdmin implements Contex
     {
         $domain = $domain ?: $this->getTranslationDomain();
         return $this->getTranslator()->trans($id, $parameters, $domain, $locale);
+    }
+
+    /**
+     * Custom function for generating objects urls while taking the application context into account (FE/BE)
+     *
+     * @param string $name
+     * @param object $object
+     * @param array $parameters
+     * @param int $referenceType
+     * @return string
+     */
+    public function generateContextObjectUrl(string $name, object $object, array $parameters = [], int $referenceType = RoutingUrlGeneratorInterface::ABSOLUTE_PATH): string
+    {
+        return $this->generateObjectUrl($name, $object, $parameters, $referenceType);
     }
 }

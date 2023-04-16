@@ -141,7 +141,7 @@ trait InquiryControllerTrait
             }
             if ($referencedAdmin->hasRoute('showQuestions')
                 && $referencedAdmin->hasAccess('showQuestions', $referencedObject)) {
-                $backUrl = $referencedAdmin->generateObjectUrl('showQuestions', $referencedObject);
+                $backUrl = $referencedAdmin->generateContextObjectUrl('showQuestions', $referencedObject);
             } else {
                 $backUrl = $referencedAdmin->generateUrl('list', $parameters);
             }

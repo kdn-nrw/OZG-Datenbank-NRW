@@ -38,7 +38,7 @@ class ModelRegionDocumentType extends AbstractType
                 'download_uri' => static function ($object, $uri) use ($parentAdmin) {
                     /** @var ModelRegionProjectDocument|null $object */
                     if (null !== $object && null !== $parentAdmin) {
-                        return $parentAdmin->generateObjectUrl('download', $object->getModelRegionProject(), ['documentId' => $object->getId()]);
+                        return $parentAdmin->generateContextObjectUrl('download', $object->getModelRegionProject(), ['documentId' => $object->getId()]);
                     }
                     return $uri;
                 },

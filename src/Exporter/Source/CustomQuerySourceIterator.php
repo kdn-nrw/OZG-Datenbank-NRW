@@ -100,7 +100,7 @@ final class CustomQuerySourceIterator extends CustomEntityValueProvider implemen
             $propertyName = $propertyPath . '';
             if (!empty($this->mapUrlProperties[$propertyName])) {
                 $valueModel = new ExportCellValue($name, $value);
-                $url = $this->admin->generateObjectUrl(
+                $url = $this->admin->generateContextObjectUrl(
                     $this->mapUrlProperties[$propertyName],
                     $entity,
                     [],

@@ -16,7 +16,7 @@ file that was distributed with this source code.
                 Konzeptabfrage
             </h4>
             {% if isBackendMode %}
-                <a class="link-export" href="{{ admin.generateObjectUrl('exportPdfConcept', object, {'id': object.id}) }}" style="display: block;float: right;" target="_blank">
+                <a class="link-export" href="{{ admin.generateContextObjectUrl('exportPdfConcept', object, {'id': object.id}) }}" style="display: block;float: right;" target="_blank">
                     <i class="far fa-file-pdf fa-2x" aria-hidden="true"></i>
                 </a>
             {% else %}

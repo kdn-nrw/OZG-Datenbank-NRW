@@ -104,7 +104,7 @@ final class SearchAction
             foreach ($pager->getCurrentPageResults() as $result) {
                 $link = null;
                 if ($hasShowAction && $admin->hasAccess('show', $result)) {
-                    $link = $admin->generateObjectUrl('show', $result);
+                    $link = $admin->generateContextObjectUrl('show', $result);
                 }
                 $results[] = [
                     'label' => $admin->toString($result),

@@ -17,7 +17,7 @@ Extend base template with custom class
         and admin.hasRoute(route_name)
         and admin.hasAccess(route_name, route_name in ['show', 'edit'] ? object : null)
     %}
-        <a class="sonata-link-identifier" href="{{ admin.generateObjectUrl(route_name, object, route_parameters) }}">
+        <a class="sonata-link-identifier" href="{{ admin.generateContextObjectUrl(route_name, object, route_parameters) }}">
             {%- block field %}
                 {% apply spaceless %}
                     {% if field_description.option('collapse') is not null %}

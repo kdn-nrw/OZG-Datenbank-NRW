@@ -43,7 +43,7 @@ class InquiryAdminController extends DefaultCRUDController
             throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $referenceId));
         }
         $formAction = $this->admin->generateUrl('question', ['referenceSource' => $referenceSource, 'referenceId' => $referenceId]);
-        //$formAction = $this->admin->generateObjectUrl('askQuestion', $object);
+        //$formAction = $this->admin->generateContextObjectUrl('askQuestion', $object);
         /** @var BaseEntityInterface $object */
         return $this->renderAskQuestion($request, $this->inquiryManager, $object, $formAction);
     }
@@ -61,7 +61,7 @@ class InquiryAdminController extends DefaultCRUDController
         if (!$object) {
             throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $id));
         }
-        $formAction = $this->admin->generateObjectUrl('askQuestion', $object);
+        $formAction = $this->admin->generateContextObjectUrl('askQuestion', $object);
         /** @var Inquiry $object */
         return $this->renderAskQuestion($request, $this->inquiryManager, $object, $formAction);
     }

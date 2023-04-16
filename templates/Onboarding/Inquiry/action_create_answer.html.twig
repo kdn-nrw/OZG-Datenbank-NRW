@@ -6,7 +6,7 @@
     {% set url = actions.url|default(_key) %}
     {% set icon = actions.icon|default('fa-link') %}
     <a
-            href="{{ admin.generateObjectUrl(route, object, actions.link_parameters|default([])) }}"
+            href="{{ admin.generateContextObjectUrl(route, object, actions.link_parameters|default([])) }}"
             {%- block link_attributes -%}
                 class="btn btn-sm btn-default view_link {{ actions.class|default('') }}"
                 title="{{ label }}"

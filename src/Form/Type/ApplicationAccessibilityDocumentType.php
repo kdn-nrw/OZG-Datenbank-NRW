@@ -38,7 +38,7 @@ class ApplicationAccessibilityDocumentType extends AbstractType
                 'download_uri' => static function ($object, $uri) use ($parentAdmin) {
                     /** @var ApplicationAccessibilityDocument|null $object */
                     if (null !== $object && null !== $parentAdmin) {
-                        return $parentAdmin->generateObjectUrl('download', $object->getApplication(), ['documentId' => $object->getId()]);
+                        return $parentAdmin->generateContextObjectUrl('download', $object->getApplication(), ['documentId' => $object->getId()]);
                     }
                     return $uri;
                 },

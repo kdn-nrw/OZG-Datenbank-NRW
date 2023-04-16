@@ -39,6 +39,13 @@ class FrontendRouteGenerator implements RouteGeneratorInterface
      */
     private array $loaded = [];
 
+    /**
+     * List of disabled routes (these are always disabled for all frontend admins)
+     *
+     * @var string[]
+     */
+    protected $alwaysDisabledRoutes = ['batch', 'create', 'edit', 'delete'];
+
     public function __construct(RouterInterface $router, RoutesCache $cache)
     {
         $this->router = $router;
@@ -131,6 +138,9 @@ class FrontendRouteGenerator implements RouteGeneratorInterface
 
     public function hasAdminRoute(AdminInterface $admin, string $name): bool
     {
+        if (in_array($name, $this->alwaysDisabledRoutes, false)) {
+            return false;
+        }
         return \array_key_exists($this->getCode($admin, $name), $this->caches);
     }
 
