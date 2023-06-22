@@ -29,7 +29,7 @@ class PageController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->renderPageContent(PageContent::PAGE_ONBOARDING_DVDV);
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 
     protected function renderPageContent(int $pageKey): Response

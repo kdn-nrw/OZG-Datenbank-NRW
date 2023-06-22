@@ -83,7 +83,7 @@ class SearchController extends AbstractController
             ]);
             return $response;
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 
     /**
@@ -105,7 +105,7 @@ class SearchController extends AbstractController
             ]);
             return $response;
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 
     /**
@@ -132,7 +132,7 @@ class SearchController extends AbstractController
             }
             return $this->redirectToRoute('app_search_list', []);
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 
     /**
@@ -168,7 +168,7 @@ class SearchController extends AbstractController
             }
             return $this->redirectToRoute('app_search_list', []);
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 
     /**

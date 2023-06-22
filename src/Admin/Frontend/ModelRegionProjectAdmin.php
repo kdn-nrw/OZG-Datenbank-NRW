@@ -55,7 +55,6 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
             ->add('transferableService')
             ->add('transferableStart');
         $this->addDefaultDatagridFilter($filter, 'modelRegions');
-        $this->addDefaultDatagridFilter($filter, 'solutions');
     }
 
     protected function configureListFields(ListMapper $list)
@@ -123,14 +122,6 @@ class ModelRegionProjectAdmin extends AbstractFrontendAdmin implements EnableFul
         $show->add('documents', null, [
             'template' => 'General/Show/show-attachments.html.twig',
         ]);
-        $show
-            ->add('solutions', null, [
-                'admin_code' => SolutionAdmin::class,
-                'route' => [
-                    'name' => 'show',
-                ],
-                'showServices' => true,
-            ]);
     }
 
     public function isGranted($name, $object = null)

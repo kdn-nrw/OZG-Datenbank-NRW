@@ -42,7 +42,7 @@
                     {% set miActive = (not activeRoutePrefix or menuItem.routePrefix|length > activeRoutePrefix|length) and menuItem.routePrefix in app.request.attributes.get('_route') %}
                     <li class="nav-item{% if miActive %} active{% endif %}">
                         <a href="{{ path(menuItem.routePrefix ~ defaultRouteAppend) }}" class="nav-link">
-                            <i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i>
+                            {#<i class="fa fa-{{ menuItem.icon }}" aria-hidden="true"></i> #}
                             <span>{{ menuItem.label|trans|raw }}</span>
                         </a>
                         {% if miActive %}

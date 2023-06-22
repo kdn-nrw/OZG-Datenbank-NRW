@@ -67,28 +67,6 @@ sonata_admin:
                     translation_domain: 'messages'
                     mode: 'admin'
             -
-                class:    clear-left-md col-xs-12 col-sm-6 col-lg-4
-                position: top                        # zone in the dashboard
-                type:     sonata.admin.block.stats   # block id
-                settings:
-                    code:  App\Admin\Frontend\ServiceSystemAdmin    # admin code - service id
-                    icon:  fa-tasks                  # font awesome icon
-                    text:  app.block.service_system.total
-                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
-                    #filters:                         # filter values
-                    #    status: { value: 4 }
-            -
-                class:    col-xs-12 col-sm-6 col-lg-4
-                position: top                        # zone in the dashboard
-                type:     sonata.admin.block.stats   # block id
-                settings:
-                    code:  App\Admin\Frontend\ServiceSystemAdmin    # admin code - service id
-                    icon:  fa-tasks                  # font awesome icon
-                    text:  app.block.service_system.communal_execution
-                    color: bg-green                 # colors: bg-green, bg-red and bg-aqua
-                    filters:                         # filter values
-                        jurisdictions: { value:  [3] }
-            -
                 class:    col-xs-12 col-sm-6 col-lg-4
                 position: top                        # zone in the dashboard
                 type:     sonata.admin.block.stats   # block id

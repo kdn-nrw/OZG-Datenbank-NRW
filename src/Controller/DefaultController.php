@@ -25,7 +25,7 @@ class DefaultController extends AbstractController
     {
         $redirectRoute = 'sonata_admin_dashboard';
         if (!empty($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'ozg.kdn.de') {
-            $redirectRoute = 'frontend_app_service_list';
+            $redirectRoute = 'frontend_app_modelregion_list';
         }
         $redirectParams = [];
         if ((null !== $user = $this->getUser()) && $this->isGranted('ROLE_SHOW_BACKEND')) {

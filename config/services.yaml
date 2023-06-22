@@ -212,23 +212,6 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\Frontend\CommuneAdmin:
-    arguments:
-      - ~
-      - App\Entity\StateGroup\Commune
-      - ~
-    calls:
-      - [setTemplate, ['show', 'CommuneAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'CommuneAdmin/Frontend/list.html.twig']]
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.commune.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-        persist_filters: true
-    public: true
-
   App\Admin\ConfidenceLevelAdmin:
     arguments:
       - ~
@@ -418,27 +401,9 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\Frontend\ImplementationProjectAdmin:
-    arguments:
-      - ~
-      - App\Entity\ImplementationProject
-      - ~
-    calls:
-      - [setTemplate, ['show', 'ImplementationProjectAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'ImplementationProjectAdmin/Frontend/list.html.twig']]
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.implementation_project.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-        persist_filters: true
-    public: true
-
   App\Admin\Extension\ImplementationProjectExtension:
     tags:
       - { name: sonata.admin.extension, target: App\Admin\ImplementationProjectAdmin }
-      - { name: sonata.admin.extension, target: App\Admin\Frontend\ImplementationProjectAdmin }
 
   App\Admin\JurisdictionAdmin:
     arguments:
@@ -818,23 +783,6 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\Frontend\ServiceSystemAdmin:
-    arguments:
-      - ~
-      - App\Entity\ServiceSystem
-      - ~
-    calls:
-      - [setTemplate, ['show', 'ServiceSystemAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'ServiceSystemAdmin/Frontend/list.html.twig']]
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.service_system.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-        persist_filters: true
-    public: true
-
   App\Admin\ServiceAdmin:
     arguments:
       - ~
@@ -848,23 +796,6 @@ services:
         label:        app.service.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-    public: true
-
-  App\Admin\Frontend\ServiceAdmin:
-    arguments:
-      - ~
-      - App\Entity\Service
-      - ~
-    calls:
-      - [setTemplate, ['show', 'ServiceAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'ServiceAdmin/Frontend/list.html.twig']]
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.service.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-        persist_filters: true
     public: true
 
   App\Admin\StateGroup\ServiceProviderAdmin:
@@ -944,23 +875,7 @@ services:
         label:        app.solution.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-    public: true
-
-  App\Admin\Frontend\SolutionAdmin:
-    arguments:
-      - ~
-      - App\Entity\Solution
-      - ~
-    calls:
-      - [setTemplate, ['show', 'SolutionAdmin/show.html.twig']]
-      - [setTemplate, ['list', 'SolutionAdmin/Frontend/list.html.twig']]
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.solution.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-        persist_filters: true
+        default: true
     public: true
 
   App\Admin\SubjectAdmin:
@@ -1257,47 +1172,6 @@ services:
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
     public: true
 
-  App\Admin\Frontend\CommuneInfoAdmin:
-    arguments:
-      - ~
-      - App\Entity\Onboarding\CommuneInfo
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label:        app.commune_info.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-    public: true
-
-  App\Admin\Frontend\DataclearingAdmin:
-    arguments:
-      - ~
-      - App\Entity\Onboarding\Dataclearing
-      - ~
-    tags:
-      - name: sonata.admin
-        manager_type: orm
-        label: app.dataclearing.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-    public: true
-
-  App\Admin\Frontend\EpaymentAdmin:
-    arguments:
-      - ~
-      - App\Entity\Onboarding\Epayment
-      - ~
-    calls:
-      - [ addChild, [ '@App\Admin\Onboarding\EpaymentServiceAdmin', 'epayment' ] ]
-    tags:
-      - name: sonata.admin
-        manager_type: orm
-        label: app.epayment.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-    public: true
-
   App\Admin\Onboarding\EpaymentServiceAdmin:
     arguments:
       - ~
@@ -1307,21 +1181,6 @@ services:
       - name:         sonata.admin
         manager_type: orm
         label:        app.epayment_service.list
-        label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
-        datagrid_builder: 'App\Builder\CustomDatagridBuilder'
-        persist_filters: true
-        filter_persister: App\Form\Filter\GroupedSessionFilterPersister
-    public: true
-
-  App\Admin\Frontend\ServiceAccountAdmin:
-    arguments:
-      - ~
-      - App\Entity\Onboarding\ServiceAccount
-      - ~
-    tags:
-      - name:         sonata.admin
-        manager_type: orm
-        label: app.service_account.list
         label_translator_strategy: 'App\Translator\PrefixedUnderscoreLabelTranslatorStrategy'
         datagrid_builder: 'App\Builder\CustomDatagridBuilder'
         persist_filters: true
@@ -1443,3 +1302,9 @@ services:
     parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
     autowire: false
     autoconfigure: false
+
+  App\EventListener\Redirect404ToHomepageListener:
+    arguments:
+      - "@router"
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }

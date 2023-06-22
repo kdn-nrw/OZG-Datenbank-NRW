@@ -67,7 +67,7 @@ class VSMController extends AbstractController
             ]);
             return $response;
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 
     public function snippetMapAction(): Response
@@ -78,7 +78,7 @@ class VSMController extends AbstractController
             ]);
             return $response;
         }
-        return $this->redirectToRoute('frontend_app_service_list');
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 
     /**
@@ -144,20 +144,6 @@ class VSMController extends AbstractController
             ]);
             return $response;
         }
-        return $this->redirectToRoute('frontend_app_service_list');
-    }
-
-    /**
-     * @param Request $request
-     * @param string|null $consumerKey
-     * @param string|null $query
-     * @param int $page
-     * @return Response
-     */
-    public function feApiIndexAction(Request $request, ?string $consumerKey = null, ?string $query = null, int $page = 1): Response
-    {
-        $this->baseRoute = 'frontend_app_vsm_api_index';
-        $this->onlyFrontend = true;
-        return $this->apiIndexAction($request, $consumerKey, $query, $page);
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 }

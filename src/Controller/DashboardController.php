@@ -42,12 +42,12 @@ class DashboardController extends AbstractController
         $this->pool = $pool;
     }
 
-    public function indexAction(Request $request, AuthenticationUtils $authenticationUtils): Response
+    public function indexAction(): Response
     {
 //        if ($this->isGranted('ROLE_ADMIN')) {
 //            return $this->redirectToRoute('sonata_admin_dashboard');
 //        }
-
+/*
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
@@ -59,7 +59,7 @@ class DashboardController extends AbstractController
             'admin_pool' => $this->pool,
             'error' => $error,
             'lastUsername' => $lastUsername,
-        ];
-        return $this->render('Frontend/dashboard.html.twig', $parameters);
+        ];*/
+        return $this->redirectToRoute('frontend_app_modelregion_list');
     }
 }
