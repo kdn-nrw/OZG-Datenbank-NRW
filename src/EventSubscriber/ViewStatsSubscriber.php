@@ -60,29 +60,29 @@ class ViewStatsSubscriber implements EventSubscriberInterface
     public function onKernelResponse(ResponseEvent $event): void
     {
         $response = $event->getResponse();
-        if (!($response instanceof RedirectResponse)) {
-            $request = $event->getRequest();
-            $route = $request->attributes->get('_route');
-            $excludeRoutePrefixes = [
-                '_wdt',
-                'api_entrypoint',
-                'admin_app_user',
-                'admin_app_group',
-                'admin_app_api_apiconsumer',
-                'admin_app_metadata_metaitem',
-                'app_statistics_chart',
-            ];
-            $logView = true;
-            foreach ($excludeRoutePrefixes as $checkRoutePrefix) {
-                if (strpos($route, $checkRoutePrefix) !== false) {
-                    $logView = false;
-                    break;
-                }
-            }
-            if ($logView) {
-                $this->createViewEntry($request);
-            }
-        }
+//        if (!($response instanceof RedirectResponse)) {
+//            $request = $event->getRequest();
+//            $route = $request->attributes->get('_route');
+//            $excludeRoutePrefixes = [
+//                '_wdt',
+//                'api_entrypoint',
+//                'admin_app_user',
+//                'admin_app_group',
+//                'admin_app_api_apiconsumer',
+//                'admin_app_metadata_metaitem',
+//                'app_statistics_chart',
+//            ];
+//            $logView = true;
+//            foreach ($excludeRoutePrefixes as $checkRoutePrefix) {
+//                if (strpos($route, $checkRoutePrefix) !== false) {
+//                    $logView = false;
+//                    break;
+//                }
+//            }
+//            if ($logView) {
+//                $this->createViewEntry($request);
+//            }
+//        }
     }
 
     /**
