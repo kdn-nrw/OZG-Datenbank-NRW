@@ -2166,6 +2166,8 @@ app:
       model_regions: Modellregionen
       organisation: Organisation
       service_providers: IT Dienstleister
+      last_login: Letzte Anmeldung
+      enabled: Aktiviert
   custom_field:
     object_name: Benutzerdefiniertes Feld
     list: Benutzerdefinierte Felder

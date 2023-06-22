@@ -115,7 +115,8 @@ class UserAdmin extends AbstractAdmin
             ->add('id')
             ->add('username')
             ->add('email')
-            ->add('groups');
+            ->add('groups')
+            ->add('enabled');
         $filter->add('communes',
             null, [
                 'label' => 'app.user.entity.communes',
@@ -176,7 +177,8 @@ class UserAdmin extends AbstractAdmin
         }
         $list
             ->add('enabled', null, ['editable' => true])
-            ->add('createdAt');
+            ->add('createdAt')
+            ->add('lastLogin');
         $list->add(ListMapper::NAME_ACTIONS, null, [
             'label' => 'app.common.actions',
             'translation_domain' => 'messages',

@@ -20,3 +20,4 @@ app:
       model_regions: Modellregionen
       organisation: Organisation
       service_providers: IT Dienstleister
+      last_login: Letzte Anmeldung
